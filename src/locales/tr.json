@@ -1,0 +1,194 @@
+{
+    "deneme": {
+        "title": "Başlık",
+        "description": "Açıklama"
+    },
+    "login": {
+        "title": "Liderahenk Giriş"
+    },
+    "menu": {
+        "dashboard": "Ön Panel",
+        "computer_management": "İstemci Yönetimi",
+        "user_management": "Kullanıcı Yönetimi",
+        "user_operations": "Kullanıcı İşlemleri",
+        "ad_syncronization": "AD Senkronizasyonu",
+        "group_management": "Grup Yönetimi",
+        "computer_group_management": "İstemci Grup Yönetimi",
+        "user_group_management": "Kullanıcı Grup Yönetimi",
+        "user_authorization": "Kullanıcı Yetkilendirme (Sudo)",
+        "policy_management": "Politika Yönetimi",
+        "reports": "Raporlar",
+        "detailed_agent_report": "Detaylı İstemci Raporu",
+        "executed_task_report": "Çalıştırılan Görevler Raporu",
+        "system_log_report": "Sistem Güncesi Raporu",
+        "control_access_management": "Control Access Management",
+        "eta_message_definitions": "Eta Message Definitions",
+        "registration_templates": "Registration Templates",
+        "script_definitions": "Script Definitions",
+        "system_monitor_definitions": "System Monitoring Definitions",
+        "server_settings": "Server Settings"
+    },
+    "dashboard": {
+        "totalUserCount": "Toplam Kullanıcı Sayısı"
+    },
+    "computer": {
+        "plugins": {
+            "button": {
+                "system": "Sistem",
+                "package": "Paket",
+                "service": "Servis",
+                "script": "Betik",
+                "ssh": "SSH",
+                "security": "Güvenlik",
+                "history": "Geçmiş",
+                "run": "Çalıştır"
+            },
+            "plugin_popover": {
+                "title": "Eklenti Hakkında",
+                "for_schedled_task": "Zamanlanmış görev oluşturmak için butona tıklayınız",
+                "default_description": "Liderahenk Merkezi Yönetim Sistemi",
+                "for_more_info": "Daha fazla bilgi için"
+            },
+            "base_plugin": {
+                "loading_default_text": "Görev gönderildi, lütfen bekleyiniz...",
+                "task_confirm_question": "Görev gönderilecek, emin misiniz?",
+                "scheduled_task_confirm_question": "Zamanlanmış görev gönderilecek, emin misiniz?",
+                "warning": "Uyarı",
+                "yes": "Evet",
+                "no": "Hayır"
+            },
+            "password": {
+                "generate_password": "Parola Üret",
+                "lowercase_message": "Parola en az bir küçük harf içermelidir",
+                "uppercase_message": "Parola en az bir büyük harf içermelidir",
+                "number_message": "Parola en az bir rakam içermelidir",
+                "does_not_support_message": "Parola * karaterini desteklemiyor",
+                "match_password_message": "İki parola eşleşmiyor",
+                "password_length_message": "Parola uzunluğu min 6 karakter olmalıdır",
+                "new_password": "Yeni parola",
+                "confirm_password": "Parolayı onayla",
+                "weak": "Zayıf",
+                "medium": "Orta",
+                "strong": "Güçlü",
+                "password_prompt": "Bir parola girin"
+            },
+            "resource_usage": {
+                "header": "Kaynak Kullanımı",
+                "usage_disk": "Disk Kullanımı",
+                "usage_memory": "Bellek Kullanımı",
+                "used": "Kullanılan",
+                "available": "Boş",
+                "get_data": "Verileri Getir",
+                "total": "Toplam",
+                "view_detail": "Detay Görüntüle",
+                "disk_usage_detail": "Disk Kullanım Detayı",
+                "memory_usage_detail": "Bellek Kullanım Detayı",
+                "disk_partition": "Disk Bölümü",
+                "description": "Anlık Disk ve RAM kullanım bilgilerini gösterir"
+            },
+            "manage_root": {
+                "header": "Root Parola Yönetimi",
+                "lock_root_user": "Root kullanıcısı kilitli",
+                "unlock_root_user": "Root kullanıcısı açık",
+                "password_input_message": "Lütfen root parolasını girin",
+                "confirm_password_input_message": "Lütfen root parolasını tekrar girin",
+                "description": "Root parolasını değiştirebilir ya da root kullanıcısını kilitleyebilirsiniz. Parola uzunluğu min 6 karakter olmalıdır ve en az bir büyük harf, küçük harf ve sayı içermelidir."
+            },
+            "session_and_power_management": {
+                "description": "İstemci kapatılabilir, yeniden başlatılabilir ya da açık oturumlar sonlandırılabilir.",
+                "header": "Oturum ve Güç Yönetimi",
+                "logout": "Oturum Kapat",
+                "restart": "Yeniden Başlat",
+                "poweroff": "Kapat"
+            },
+            "file_management": {
+                "header": "Dosya Yönetimi",
+                "save": "Kaydet",
+                "description": "İstemcideki bir dosyayı düzenleyebilir ya da yeni dosya oluşturabilirsiniz.",
+                "search": "Ara",
+                "file_path": "Dosya Yolu",
+                "favorites": "Favori Dosyalar",
+                "text_type": "Text Tipi",
+                "file_path_warn": "Dosya yolu boş bırakılamaz"
+            },
+            "local_user": {
+                "header": "Yerel Kullanıcı Yönetimi",
+                "description": "İstemcide yerel kullanıcıları yönetebilmeyi sağlar.",
+                "list_users": "Kullanıcıları Listele",
+                "username_validation": "Kullanıcı adı boş bırakılamaz",
+                "home_directory_validation": "Ev dizini boş bırakılamaz",
+                "username": "Kullanıcı Adı",
+                "home_directory": "Ev Dizini",
+                "new_password": "Yeni Parola",
+                "confirm_password": "Parlayı Onayla",
+                "status": "Durum",
+                "groups": "Gruplar",
+                "select_groups": "Grupları Seç",
+                "search_group": "Grup Ara",
+                "active": "Aktif",
+                "passive": "Pasif",
+                "update": "Güncelle",
+                "delete": "Sil",
+                "add": "Ekle",
+                "cancel": "İptal",
+                "add_user": "Kullanıcı Ekle",
+                "home_directory_dialog_content": "Kullanıcı ev dizinini de silmek istiyor musunuz?",
+                "home_directory_dialog_title": "Kulanıcı Ev Dizini Sil"
+            }
+        },
+        "agent_info": {
+            "hostname": "Bilgisayar Adı",
+            "status": "Durum",
+            "location": "Bulunduğu Dizin",
+            "user_domain": "Kullanıcı Domain",
+            "operating_system": "İşletim Sistemi",
+            "processor": "İşlemci",
+            "ip_addr": "IP Adresi",
+            "mac": "MAC Adresi",
+            "created_date": "Oluşturma Tarihi",
+            "agent_version": "Ahenk Versiyonu",
+            "last_logged_user": "Son Oturum",
+            "error_message": "İstemci bilgileri bulunamadı.",
+            "online": "Çevrimiçi",
+            "offline": "Çevrimdışı",
+            "attributes": "Öznitelikler"
+        },
+        "scheduled": {
+            "title": "Zamanlanmış Görev Parametreleri",
+            "scheduled_task_plan": "Zamanlanmış Görev",
+            "schedule": "Zamanlama",
+            "custom": "Özel",
+            "yearly": "Yıllık",
+            "monthly": "Aylık",
+            "weekly": "Haftalık",
+            "daily": "Günlük",
+            "hourly": "Saatlik",
+            "once": "Tek Seferlik",
+            "minute": "Dakika",
+            "hour": "Saat",
+            "day_of_month": "Ayın Günü",
+            "month": "Ay",
+            "day_of_week": "Haftanın Günü",
+            "date": "Tarih",
+            "minute_rule": "Lüften dakika girin",
+            "hour_rule": "Lüften saat girin",
+            "day_of_month_rule": "Lüften ayın gününü girin",
+            "month_rule": "Lüften ay girin",
+            "day_of_week_rule": "Lüften haftanın gününü girin",
+            "save": "Kaydet",
+            "cancel": "İptal",
+            "parameters": "Parametreler",
+            "save_scheduled_task": "Zamanlanmış görev parameterleri kaydedildi",
+            "example": "Örnek; ( 0 15 * * 1 ) her Pazartesi saat 15'te çalışır"
+        },
+        "task": {
+            "selected_agent_warn": "Lütfen bir istemci seçiniz",
+            "cancel_scheduled_task": "Zamanlanmış görev iptal edildi",
+            "send_task_susccess_message": "Görev başarı ile gönderildi",
+            "send_task_offline_message": "Görev başarı ile gönderildi, istemci çevrimiçi olduğunda çalıştırılacaktır",
+            "send_task_group_message": "Görev istemci grubuna  başarı ile gönderildi",
+            "send_task_error_message": "Görev gönderilirken hata oluştu",
+            "toast_summary": "Bildirim"
+        }
+    }
+}

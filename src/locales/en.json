@@ -1,0 +1,196 @@
+{
+    "deneme": {
+        "title": "Title",
+        "description": "Content"
+    },
+    "login": {
+        "title": "Liderahenk Login"
+    },
+    "menu": {
+        "dashboard": "Dashboard",
+        "computer_management": "Computer Management",
+        "user_management": "User Management",
+        "user_operations": "User Operations",
+        "ad_syncronization": "AD Syncronization",
+        "group_management": "Group Management",
+        "computer_group_management": "Computer Group Management",
+        "user_group_management": "User Group Management",
+        "user_authorization": "User Authorization (Sudo)",
+        "policy_management": "Policy Management",
+        "reports": "Reports",
+        "detailed_agent_report": "Detailed Agent Report",
+        "executed_task_report": "Executed Task Report",
+        "system_log_report": "System Log Report",
+        "control_access_management": "Control Access Management",
+        "eta_message_definitions": "Eta Message Definitions",
+        "registration_templates": "Registration Templates",
+        "script_definitions": "Script Definitions",
+        "system_monitor_definitions": "System Monitoring Definitions",
+        "server_settings": "Server Settings"
+
+    },
+    "dashboard": {
+        "totalUserCount": "Total User Count"
+    },
+    "computer": {
+        "plugins": {
+            "button": {
+                "system": "System",
+                "package": "Package",
+                "service": "Service",
+                "script": "Script",
+                "ssh": "SSH",
+                "security": "Security",
+                "history": "History",
+                "run": "Run"
+            },
+            "plugin_popover": {
+                "title": "About Plugin",
+                "for_schedled_task": "Click button for create scheduled task",
+                "default_description": "Liderahenk Centralized Management System",
+                "for_more_info": "For more information"
+            },
+            "base_plugin": {
+                "loading_default_text": "Sent task, please wait...",
+                "task_confirm_question": "The task will be sent, are you sure?",
+                "scheduled_task_confirm_question": "The scheduled task will be sent, are you sure?",
+                "warning": "Warning",
+                "yes": "Yes",
+                "no": "No"
+            },
+            "password": {
+                "generate_password": "Generate Password",
+                "lowercase_message": "Password must contain at least one lower case",
+                "uppercase_message": "Password must contain at least one uppercase",
+                "number_message": "Password must contain at least one number",
+                "does_not_support_message": "Password does not support * characters",
+                "match_password_message": "Two passwords don't match",
+                "password_length_message": "Password must be length is min 6 characters",
+                "new_password": "New password",
+                "confirm_password": "Confirm password",
+                "weak": "Weak",
+                "medium": "Medium",
+                "strong": "Strong",
+                "password_prompt": "Enter a password"
+            },
+            "resource_usage": {
+                "header": "Resource Usage",
+                "usage_disk": "Disk Usage",
+                "usage_memory": "Memory Usage",
+                "used": "Used",
+                "available": "Available",
+                "get_data": "Get Data",
+                "total": "Total",
+                "view_detail": "View Detail",
+                "disk_usage_detail": "Disk Usage Detail",
+                "memory_usage_detail": "Memory Usage Detail",
+                "disk_partition": "Disk Partition",
+                "description": "Shows instant Disk and RAM usage information"
+            },
+            "manage_root": {
+                "header": "Root Password Management",
+                "lock_root_user": "Lock root user",
+                "unlock_root_user": "Unlock root user",
+                "password_input_message": "Please enter root password",
+                "confirm_password_input_message": "Please enter root password again",
+                "description": "You can change root password or lock root user. Password must be length is min 6 characters and must contain at least one lower case, one uppercase and number."
+            },
+            "session_and_power_management": {
+                "description": "The client can be power off, restarted or open sessions can be terminated.",
+                "header": "Session And Power Management",
+                "logout": "Logout",
+                "restart": "Restart",
+                "poweroff": "Power Off"
+            },
+            "file_management": {
+                "header": "File Management",
+                "save": "Save",
+                "description": "You can edit file or create new file on the client.",
+                "search": "Search",
+                "file_path": "File Path",
+                "favorites": "Favorite Files",
+                "text_type": "Text Type",
+                "file_path_warn": "File path is not available"
+            },
+            "local_user": {
+                "header": "Local User Management",
+                "description": "Allows to manage local users on the client.",
+                "list_users": "List Users",
+                "username_validation": "Username is not available",
+                "home_directory_validation": "Home directory is not available",
+                "username": "Username",
+                "home_directory": "Home Directory",
+                "status": "Status",
+                "groups": "Groups",
+                "select_groups": "Select Groups",
+                "search_group": "Search Group",
+                "active": "Active",
+                "passive": "Passive",
+                "update": "Update",
+                "delete": "Delete",
+                "add": "Add",
+                "cancel": "Cancel",
+                "add_user": "Add User",
+                "home_directory_dialog_content": "Do you want to delete the user home directory as well?",
+                "home_directory_dialog_title": "Delete User Home Directory"
+            }
+        },
+        "agent_info": {
+            "hostname": "Hostname",
+            "status": "Status",
+            "location": "Location",
+            "user_domain": "User Domain",
+            "operating_system": "Operating System",
+            "processor": "Processor",
+            "ip_addr": "IP Address",
+            "mac": "MAC Address",
+            "created_date": "Created Date",
+            "agent_version": "Agent Version",
+            "last_logged_user": "Last Session",
+            "error_message": "Not found client information.",
+            "online": "Online",
+            "offline": "Offline",
+            "attributes": "Attributes"
+        },
+        "scheduled": {
+            "title": "Scheduled Task Parameters",
+            "scheduled_task_plan": "Scheduled Task",
+            "schedule": "Schedule",
+            "custom": "Custom",
+            "yearly": "Yearly",
+            "monthly": "Monthly",
+            "weekly": "Weekly",
+            "daily": "Daily",
+            "hourly": "Hourly",
+            "once": "For Once",
+            "minute": "Minute",
+            "hour": "Hour",
+            "day_of_month": "Day Of The Month",
+            "month": "Month",
+            "day_of_week": "Day Of The Week",
+            "date": "Date",
+            "minute_rule": "Please input minute",
+            "hour_rule": "Please input hour",
+            "day_of_month_rule": "Please input day of the month",
+            "month_rule": "Please input month",
+            "day_of_week_rule": "Please input day of the week",
+            "save": "Save",
+            "cancel": "Cancel",
+            "parameters": "Parameters",
+            "save_scheduled_task": "Scheduled task parameters saved",
+            "example": "Example; ( 0 15 * * 1 ) execute on every Monday at 3 PM"
+        },
+        "task": {
+            "selected_agent_warn": "Please select a client",
+            "cancel_scheduled_task": "Scheduled task canceled",
+            "send_task_susccess_message": "Sent task successfully",
+            "send_task_offline_message": "Sent task suscessfully, the task will be run when client is online",
+            "send_task_group_message": "Sent task successfully to client group",
+            "send_task_error_message": "Error occurred while sending the task",
+            "toast_summary": "Notification"
+
+        }
+
+
+    }
+}

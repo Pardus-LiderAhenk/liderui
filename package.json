@@ -1,0 +1,59 @@
+{
+    "name": "liderui",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve --port 8081",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.3",
+        "@ismailbasaran/vuestrophejs": "^1.4.2",
+        "axios": "^0.21.1",
+        "chart.js": "^2.7.3",
+        "core-js": "^3.6.5",
+        "element-plus": "^1.0.2-beta.36",
+        "mitt": "^2.1.0",
+        "primeflex": "^2.0.0",
+        "primeicons": "^4.1.0",
+        "primevue": "^3.5.0",
+        "quill": "^1.3.7",
+        "vue": "^3.0.5",
+        "vue-i18n": "^9.0.0",
+        "vue-router": "4.0.1",
+        "vuex": "^4.0.0"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-plugin-eslint": "~4.5.0",
+        "@vue/cli-plugin-router": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/compiler-sfc": "^3.0.0",
+        "babel-core": "7.0.0-bridge.0",
+        "babel-eslint": "^10.1.0",
+        "babel-jest": "^25.0.0",
+        "eslint": "^6.7.2",
+        "eslint-plugin-vue": "^7.0.0",
+        "node-sass": "5.0.0",
+        "sass-loader": "10.1.1"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/vue3-essential"
+        ],
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "rules": {}
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
+}
