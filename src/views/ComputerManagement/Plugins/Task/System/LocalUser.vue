@@ -55,7 +55,7 @@
                     </ul>
                   </template>
                 </Password>
-                <Button icon="pi pi-key" class="p-button-sm" v-tooltip='$t("computer.plugins.password.generate_password")' @click="generatePassword"/>
+                <Button icon="pi pi-key" class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' @click="generatePassword"/>
               </div>
             </div>
             <div>
@@ -86,7 +86,7 @@
                     </ul>
                   </template>
                 </Password>
-                <Button icon="pi pi-key" class="p-button-sm" v-tooltip='$t("computer.plugins.password.generate_password")' @click="generatePassword"/>
+                <Button icon="pi pi-key" class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' @click="generatePassword"/>
               </div>
             </div>
             <div>

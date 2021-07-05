@@ -85,7 +85,7 @@
           <div class="p-d-flex p-jc-between">
             <div>
               <a class="primary" type="secondary" @click="toggle" v-tooltip.bottom="$t('computer.scheduled.title')"><i class="fas fa-info-circle" ></i></a>
-              <OverlayPanel ref="op" appendTo="body" :showCloseIcon="true" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
+              <OverlayPanel ref="op" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
                 <div><h5>{{ $t('computer.scheduled.title') }}</h5></div>
                 <div><small>- - - - - - - - ->&nbsp; {{$t('computer.scheduled.minute')}} (0-59)</small></div>
                 <div><small>| &nbsp;  - - - - - - - >&nbsp; {{$t('computer.scheduled.hour')}} (0-23)</small></div>
@@ -195,23 +195,23 @@ export default {
       } else if (this.selected.value == "custom") {
         this.setScheduleParameters("", "", "", "", "");
       } else if (this.selected.value == "once") {
-        const d = new Date();
-        this.setScheduleParameters(d.getMinutes().toString(), d.getHours().toString(),	d.getDate().toString(), d.getMonth().toString() + 1, "*");
+        const date = new Date();
+        this.setScheduleParameters(date.getMinutes(), date.getHours(),	date.getDate(), date.getMonth() + 1, "*");
       }
     },
 
     setScheduleParameters(min, hour, dOfMonth, month, dOfWeek) {
-      this.scheduleForm.minute = min;
-      this.scheduleForm.hour = hour;
-      this.scheduleForm.dayOfMonth = dOfMonth;
-      this.scheduleForm.month = month;
-      this.scheduleForm.dayOfWeek = dOfWeek;
+      this.scheduleForm.minute = min.toString();
+      this.scheduleForm.hour = hour.toString();
+      this.scheduleForm.dayOfMonth = dOfMonth.toString();
+      this.scheduleForm.month = month.toString();
+      this.scheduleForm.dayOfWeek = dOfWeek.toString();
     },
 
     changeDate() {
-      const d = this.scheduleForm.date;
-      this.scheduleForm.dayOfMonth = d.getDate().toString();
-      this.scheduleForm.month = (d.getMonth() + 1).toString();
+      const date = this.scheduleForm.date;
+      this.scheduleForm.dayOfMonth = date.getDate().toString();
+      this.scheduleForm.month = (date.getMonth() + 1).toString();
     },
 
     validateForm() {
@@ -262,9 +262,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-form-item {
-  margin-bottom: 20px
-}
 
 .modal-title{
   width: 100%;

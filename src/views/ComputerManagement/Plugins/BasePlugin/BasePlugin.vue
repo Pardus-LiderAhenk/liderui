@@ -19,7 +19,7 @@
       <template #title>
         <div class="p-d-flex p-jc-between">
           <div v-if="$slots.pluginHeader" style="font-size:15px;">
-            <slot name="pluginHeader" ></slot>
+            <slot name="pluginHeader"></slot>
           </div>
           <div v-if="$slots.pluginHeaderButton">
             <slot name="pluginHeaderButton"></slot>
@@ -38,37 +38,29 @@
           <hr style="margin-top:5px">
           <div class="p-grid">
             <div class="p-col p-as-start">
-              <el-popover placement="bottom" :width="popoverWidth" trigger="hover" :title="$t('computer.plugins.plugin_popover.title')" popper-class="plugin-popover"> 
-                <template #reference>
-                  <a class="primary" size="sm" type="secondary"><i class="el el-icon-question"></i></a>
-                </template>
+              <a class="primary" type="secondary" @click="toggle" v-tooltip.right="$t('computer.plugins.plugin_popover.title')"><i class="el el-icon-question" ></i></a>
+              <OverlayPanel ref="op" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
+                <div><h5>{{ $t('computer.plugins.plugin_popover.title') }}</h5></div>
                 <ul>
                   <li><small>{{ pluginDescription }}</small></li>
                   <li><small>{{$t('computer.plugins.plugin_popover.for_schedled_task')}} => &nbsp;<i class="fas fa-clock"></i></small></li>
                 </ul>
-                <el-link :href="pluginUrl" type="primary" target="_blank" icon="el-icon-link">  {{$t('computer.plugins.plugin_popover.for_more_info')}}...</el-link>
-              </el-popover>
+                <a :href="pluginUrl" type="primary" target="_blank" icon="el-icon-link">{{ $t('computer.plugins.plugin_popover.for_more_info') }}...</a>
+              </OverlayPanel>
             </div>
             <div>
-              <el-tag
-                :key="tag"
-                v-for="tag in dynamicTags"
-                :title="$t('computer.scheduled.cancel')"
-                closable
-                :disable-transitions="true"
-                @close="cancelScheduledTask(tag)" 
-                size="small"
-                type="default"
-                effect="plain">
-                <i class="el el-icon-loading"></i> {{tag}}
-              </el-tag>
+               <Button v-if="scheduledParam != null" 
+               :title="$t('computer.scheduled.cancel')" 
+               @click="cancelScheduledTask" 
+               :label="$t('computer.scheduled.scheduled_task_plan')" 
+               icon="el el-icon-loading" class="p-button-text p-button-sm">
+               </Button>
             </div>
             <div class="p-col p-as-end">
               <base-scheduled
               @cancel-scheduled="scheduledTaskOperation" 
               @save-scheduled="scheduledTaskOperation">
             </base-scheduled>
-              <!-- <a class="primary" @click.prevent="showScheduled = true" style="float:right;" :title="$t('computer.scheduled.scheduled_task_plan')"><i class="fa fa-play"></i></a> -->
             </div>
           </div>
         </slot>
@@ -91,7 +83,6 @@ export default {
   name: "base-plugin",
   data() {
     return {
-      dynamicTags: [],
       showScheduled: false,
       scheduled: true,
       scheduledParam: null,
@@ -151,9 +142,7 @@ export default {
       }
       this.$emit("sendTask", this.selectedAgent, this.scheduledParam);
       this.showScheduled = false;
-      if (this.dynamicTags.length > 0) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(''), 1);
-      }
+      
     // global axios post for send task to agent
       var dnList = [];
       var entryList = [];
@@ -199,16 +188,16 @@ export default {
     scheduledTaskOperation(param){
       if (param != null) {
         this.scheduledParam = param;
-        this.dynamicTags = [];
-        this.dynamicTags.push(this.$t('computer.scheduled.scheduled_task_plan'));
-        // this.dynamicTags.push('');
       }
     },
 
-    cancelScheduledTask(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    cancelScheduledTask() {
       this.scheduledParam = null;
       this.$toast.add({severity:'warn', detail: this.$t("computer.task.cancel_scheduled_task"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+    },
+
+    toggle(event) {
+      this.$refs.op.toggle(event);
     },
   },
 
