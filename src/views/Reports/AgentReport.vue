@@ -1,7 +1,7 @@
 <template>
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
-      <h3>Detaylı İstemic Raporu</h3>
+      <h4 class="p-pt-2">Detaylı İstemci Raporu</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -9,7 +9,7 @@
         <InputText
           id="inputComputerName"
           type="text"
-          v-model="filter.computerName"
+          v-model="filter.hostname"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -25,11 +25,14 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+        <label for="inputDN">DN</label>
+        <InputText id="inputDN" type="text" v-model="filter.dn" />
+      </div>
+      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="inputRegistrationDate">Kayıt Tarihi</label>
         <Calendar
           v-model="filter.registrationDate"
           selectionMode="range"
-          :showTime="true"
           :showButtonBar="true"
           :numberOfMonths="2"
           dateFormat="dd/mm/yy"
@@ -60,7 +63,7 @@
         <label for="selectModel">Model</label>
         <Dropdown
           id="selectModel"
-          v-model="filter.brand"
+          v-model="filter.model"
           :options="brands"
           placeholder="Hepsi"
         />
@@ -98,11 +101,11 @@
             <Button
               label="Temizle"
               icon="fas fa-backspace"
-              @click="filterAgents"
+              @click="clearFilterFields"
             />
           </div>
           <div class="p-ml-2">
-            <Button label="Ara" icon="fas fa-search" />
+            <Button label="Ara" icon="fas fa-search" @click="filterAgents" />
           </div>
         </div>
       </div>
@@ -127,18 +130,21 @@
         <Column field="hostname" header="Bilgisayar Adı"></Column>
         <Column header="Mac Adresi">
           <template #body="{data}">
-            {{data.macAddresses.replace(/'/g, '')}}
+            {{ data.macAddresses.replace(/'/g, "") }}
           </template>
         </Column>
         <Column header="IP Adresi">
           <template #body="{data}">
-            {{data.ipAddresses.replace(/'/g, '')}}
+            {{ data.ipAddresses.replace(/'/g, "") }}
           </template>
         </Column>
         <Column field="isOnline" header="Durumu">
-        
           <template #body="{data}">
-            <Badge v-if="data.isOnline" value="Çevrim İçi" severity="success"></Badge>
+            <Badge
+              v-if="data.isOnline"
+              value="Çevrim İçi"
+              severity="success"
+            ></Badge>
             <Badge v-else value="Çevrim Dışı" severity="danger"></Badge>
           </template>
         </Column>
@@ -184,9 +190,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left="">
-          Toplam Sonuç: {{totalElements}}
-        </template>
+        <template #left=""> Toplam Sonuç: {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -194,6 +198,7 @@
 
 <script>
 import axios from "axios";
+import moment from "moment";
 
 export default {
   data() {
@@ -209,6 +214,7 @@ export default {
       processors: [],
       osVersions: [],
       agentVersions: [],
+      getFilterData: true,
       statuses: [
         {
           name: "Hepsi",
@@ -216,18 +222,21 @@ export default {
         },
         {
           name: "Açık",
-          value: "online",
+          value: "ONLINE",
         },
         {
           name: "Kapalı",
-          value: "offline",
+          value: "OFFLINE",
         },
       ],
       filter: {
-        computerName: "",
+        dn: "",
+        hostname: "",
         ipAddress: "",
         macAddress: "",
         registrationDate: "",
+        registrationStartDate: "",
+        registrationEndDate: "",
         status: "ALL",
         brand: "",
         model: "",
@@ -238,7 +247,6 @@ export default {
     };
   },
   mounted() {
-    this.getFilterData();
     this.getAgents();
   },
   methods: {
@@ -253,26 +261,54 @@ export default {
       return propertyValue;
     },
     getAgents(pageNumber = 1, rowNumber = 10) {
-      console.log(pageNumber + " : " + rowNumber);
       this.currentPage = pageNumber;
       var data = new FormData();
       data.append("pageNumber", pageNumber);
       data.append("pageSize", rowNumber);
-      data.append("status", "all");
+      data.append("status", this.filter.status);
+      data.append("dn", this.filter.dn);
+      data.append("hostname", this.filter.hostname);
+      data.append("ipAddress", this.filter.ipAddress);
+      data.append("macAddress", this.filter.macAddress);
+      data.append("registrationStartDate", this.filter.registrationStartDate);
+      data.append("registrationEndDate", this.filter.registrationEndDate);
+      data.append("brand", this.filter.brand);
+      data.append("model", this.filter.model);
+      data.append("processor", this.filter.processor);
+      data.append("osVersion", this.filter.osVersion);
+      data.append("agentVersion", this.filter.agentVersion);
+      if (pageNumber == 1) {
+        data.append("getFilterData", true);
+      }
+      if (this.filter.registrationDate[0] != null) {
+        data.append(
+          "registrationStartDate",
+          moment(this.filter.registrationDate[0])
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss")
+        );
+      }
+      if (this.filter.registrationDate[1] != null) {
+        data.append(
+          "registrationEndDate",
+          moment(this.filter.registrationDate[1])
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss")
+        );
+      }
       axios.post("/lider/agent_info/list", data).then((response) => {
-        this.agents = response.data.content;
-        this.totalElements = response.data.totalElements;
-        this.loadingData = false;
-      });
-    },
-    getFilterData() {
-      axios.post("/lider/agent_info/filterData").then((response) => {
         this.brands = response.data.brands;
         this.models = response.data.models;
         this.processors = response.data.processors;
         this.agentVersions = response.data.agentVersions;
         this.osVersions = response.data.osVersions;
-        console.log(this.brands);
+        this.agents = response.data.agents.content;
+        this.totalElements = response.data.agents.totalElements;
+        this.loadingData = false;
       });
     },
     currentPageChange(newCurrentPage) {
@@ -280,20 +316,49 @@ export default {
       this.getAgents(newCurrentPage);
     },
     onPage(event) {
-      //event.page: New page number
-      //event.first: Index of first record
-      //event.rows: Number of rows to display in new page
-      //event.pageCount: Total number of pages
       this.loadingData = true;
       this.getAgents(event.page + 1, event.rows);
     },
     filterAgents() {
-      console.log(this.filter);
+      if (this.filter.registrationDate[0] != null) {
+        this.filter.registrationStartDate = moment(
+          this.filter.registrationDate[0]
+        )
+          .set("hour", 0)
+          .set("minute", 0)
+          .set("second", 0)
+          .format("DD/MM/YYYY HH:mm:ss");
+      }
+      if (this.filter.registrationDate[1] != null) {
+        this.filter.registrationEndDate = moment(
+          this.filter.registrationDate[1]
+        )
+          .set("hour", 23)
+          .set("minute", 59)
+          .set("second", 59)
+          .format("DD/MM/YYYY HH:mm:ss");
+      }
+      this.getAgents(this.currentPage, this.showedTotalElementCount);
     },
     indexMethod(index) {
       return (this.currentPage - 1) * this.showedTotalElementCount + index + 1;
     },
-    handleRegistrationDateChange(value) {
+    clearFilterFields() {
+      this.filter = {
+        dn: "",
+        hostname: "",
+        ipAddress: "",
+        macAddress: "",
+        registrationDate: "",
+        registrationStartDate: "",
+        registrationEndDate: "",
+        status: "ALL",
+        brand: "",
+        model: "",
+        processor: "",
+        osVersion: "",
+        agentVersion: "",
+      };
     },
   },
 };
