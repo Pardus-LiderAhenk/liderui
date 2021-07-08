@@ -133,7 +133,9 @@
                 "cancel": "İptal",
                 "add_user": "Kullanıcı Ekle",
                 "home_directory_dialog_content": "Kullanıcı ev dizinini de silmek istiyor musunuz?",
-                "home_directory_dialog_title": "Kulanıcı Ev Dizini Sil"
+                "home_directory_dialog_title": "Kulanıcı Ev Dizini Sil",
+                "create_password": "Parola Oluştur",
+                "change_password": "Parola Değiştir"
             }
         },
         "agent_info": {

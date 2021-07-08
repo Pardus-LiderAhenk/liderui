@@ -132,7 +132,9 @@
                 "cancel": "Cancel",
                 "add_user": "Add User",
                 "home_directory_dialog_content": "Do you want to delete the user home directory as well?",
-                "home_directory_dialog_title": "Delete User Home Directory"
+                "home_directory_dialog_title": "Delete User Home Directory",
+                "create_password": "Create Password",
+                "change_password": "Change Password"
             }
         },
         "agent_info": {

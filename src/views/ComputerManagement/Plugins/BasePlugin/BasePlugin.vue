@@ -1,5 +1,4 @@
 <template>
-  <!-- <ConfirmDialog :closable="false"></ConfirmDialog> -->
   <Dialog :header="$t('computer.task.toast_summary')" v-model:visible="showDialog"  :modal="true" @hide="closeTaskDialog">
     <div class="confirmation-content">
       <i :class="scheduledParam == null ? 'pi pi-info-circle p-mr-3': 'pi pi-clock p-mr-3'" style="font-size: 2rem" />
@@ -8,7 +7,7 @@
     </div>
     <template #footer>
       <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="closeTaskDialog" class="p-button-danger p-button-sm"/>
-      <Button :label="$t('computer.plugins.base_plugin.yes')" icon="pi pi-check" @click="confirmTaskDialog" class="p-button-sm" />
+      <Button :label="$t('computer.plugins.base_plugin.yes')" icon="pi pi-check" @click="confirmTaskDialog" class="p-button-sm"/>
     </template>
   </Dialog>
   <div>

@@ -31,11 +31,11 @@
                 <Button icon="fas fa-info-circle" class="p-button-text" @click="toggle($event, 'disk')" :label="$t('computer.plugins.resource_usage.view_detail')"/>
                 <OverlayPanel ref="diskOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
                   <h5 class="text-center">{{$t('computer.plugins.resource_usage.disk_usage_detail')}}</h5>
-                  <el-table :data="disk" size="mini" stripe=true style="width: 100%" class="table-borderless">
-                    <el-table-column property="total" :label="$t('computer.plugins.resource_usage.total')+ ' (GB)'"></el-table-column>
-                    <el-table-column property="used" :label="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></el-table-column>
-                    <el-table-column property="available" :label="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></el-table-column>
-                  </el-table>
+                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  </DataTable>
                   <div style="margin-top:5px">
                     <small style="font-weight:bold;">{{$t('computer.plugins.resource_usage.disk_partition')}}:&nbsp;</small><small>{{ devices }}</small>
                   </div>
@@ -50,11 +50,11 @@
                 <Button icon="fas fa-info-circle" @click="toggle($event, 'memory')" class="p-button-text" :label="$t('computer.plugins.resource_usage.view_detail')"/>
                 <OverlayPanel ref="memoryOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
                   <h5 class="text-center">{{$t('computer.plugins.resource_usage.memory_usage_detail')}}</h5>
-                  <el-table :data="memory" style="width: 100%" size="mini" stripe=true>
-                    <el-table-column property="total" :label="$t('computer.plugins.resource_usage.total') + ' (GB)'"></el-table-column>
-                    <el-table-column property="used" :label="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></el-table-column>
-                    <el-table-column property="available" :label="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></el-table-column>
-                  </el-table>
+                  <DataTable :value="memory" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  </DataTable>
                 </OverlayPanel>
               </div>
             </div>
