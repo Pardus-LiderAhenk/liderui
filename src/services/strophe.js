@@ -1,25 +1,213 @@
 require('@ismailbasaran/vuestrophejs');
+import axios from 'axios';
 
-function onConnect(status)
-{
-    if (status == Strophe.Status.CONNECTING) {
-		console.log('Strophe is connecting.');
-    } else if (status == Strophe.Status.CONNFAIL) {
-		console.log('Strophe failed to connect.');
-    } else if (status == Strophe.Status.DISCONNECTING) {
-		console.log('Strophe is disconnecting.');
-    } else if (status == Strophe.Status.DISCONNECTED) {
-		console.log('Strophe is disconnected.');
-    } else if (status == Strophe.Status.CONNECTED) {
-		console.log('Strophe is connected.');
-	connection.disconnect();
+
+class XmppClinet {
+
+  constructor() {
+    this.connection;
+    this.isXmppConnected = false;
+    this.observers = [];
+  }
+
+  addListener = (key, callback) =>  {
+    this.observers.push({key: key, callback: callback});
+  }
+
+  removeListener = (key) => {
+    this.observers = this.observers.filter( (val) => val.key != key);
+  }
+
+  sendToObservers = (msg) => {
+    this.observers.map( ( observer ) => {
+      observer.callback(msg);
+    });
+  }
+
+
+  connect = () => {
+    axios
+    .post(process.env.VUE_APP_URL + "/api/messaging/getMessagingServerInfo", { })
+    .then(
+      (response) => {
+        console.log('CONNECTION RESPONSE ', response);
+        this.connection = new Strophe.Connection(
+          response.data[1].xmppBoshAddress
+      );
+      this.connection.attach(
+        response.data[0].jid,
+        response.data[0].sid,
+        response.data[0].rid,
+        this.onConnect
+      );
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+
+  onMessage = (msg) => {
+    var to = msg.getAttribute("to");
+    var from = msg.getAttribute("from");
+    var type = msg.getAttribute("type");
+    var elems = msg.getElementsByTagName("body");
+  
+    if (type == "chat" && elems.length > 0) {
+      var body = elems[0];
+      var data = Strophe.xmlunescape(Strophe.getText(body));
+      console.log(data)
+      var response = JSON.parse(data);
+      var type = "INFO";
+      var dnParser = response.commandExecution.dn.split(",");
+      var agentCn = dnParser[0].replace("cn=", "");
+      if (response.result.responseCode == "TASK_ERROR") {
+        type = "ERROR";
+      }
+      console.log(
+        "[" + agentCn + "] Gelen Cevap : " + response.result.responseMessage,
+        type
+      );
+      var reply = $msg({ to: from, from: to, type: "chat" }).cnode(
+        Strophe.copyElement(body)
+      );
+      this.connection.send(reply.tree());
     }
+
+    this.sendToObservers(msg);
+    return true;
+  }
+
+
+  onConnect = (status) => {
+    if (status == Strophe.Status.CONNECTING) {
+      console.log('STROPE CONNECTING');
+    } else if (status == Strophe.Status.CONNFAIL) {
+      this.isXmppConnected = false;
+      console.log("Conn Fail");
+    } else if (status == Strophe.Status.DISCONNECTING) {
+      this.isXmppConnected = false;
+      console.log("Disconnecting");
+    } else if (status == Strophe.Status.DISCONNECTED) {
+      this.isXmppConnected = false;
+      console.log("Disconnected");
+    } else if (status == Strophe.Status.CONNECTED) {
+      console.log('STROPE CONNECTED');
+       this.connection.addHandler(this.onMessage, null, 'message', null, null,  null); 
+      var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
+      this.connection.sendIQ(iq, this.onRoster);
+      this.connection.addHandler(this.onRosterChanged, "jabber:iq:roster", "iq", "set");
+      this.connection.send($pres().tree()); 
+      this.isXmppConnected = true;
+    } else if (status == Strophe.Status.ERROR) {
+      console.log("Error");
+    } else if (status == Strophe.Status.ATTACHED) {
+      console.log("Attached succesfully to connection");
+      this.isXmppConnected = true;
+      
+      
+      this.connection.addHandler(
+        this.onMessage,
+        null,
+        "message",
+        null,
+        null,
+        null
+      );
+      var iq = $iq({ type: "get" }).c("query", { xmlns: "jabber:iq:roster" });
+      this.connection.sendIQ(iq, this.onRoster);
+      this.connection.addHandler(
+            this.onRosterChanged,
+        "jabber:iq:roster",
+        "iq",
+        "set"
+      );
+      this.connection.send($pres().tree());
+    } else {
+      console.log("Sunucuya ulaşılamıyor.", "ERROR");
+    }
+  
+    return this.isXmppConnected;
+  }
+  
+  onRoster = (iq) => {
+    console.log("on roster")
+    console.log(iq)
+    // $(iq)
+    //   .find("item")
+    //   .each(function () {
+    //     var jid = $(this).attr("jid");
+    //     var name = $(this).attr("name") || jid;
+
+    //     // transform jid into an id
+    //     var jid_id = jid_to_id(jid);
+    //   });
+
+    this.connection.addHandler(this.onPresence, null, "presence");
+    this.connection.send($pres().tree());
+  }
+
+  onRosterChanged(iq) {
+    console.log("on roster changed")
+    $(iq).find('item').each(function () {
+        var sub = $(this).attr('subscription');
+        var jid = $(this).attr('jid');
+        var name = $(this).attr('name') || jid;
+        var jid_id =jid_to_id(jid);
+        
+        console.log("Lider MYS yeni kayıt yapılıyor. Kayıt Ad : "+ name,"success");
+    });
+    return true;
+
+  }
+
+
+  onPresence(presence){
+    console.log(presence)
+    // var ptype = $(presence).attr('type');
+    // var from = $(presence).attr('from');
+    // var jid_id = jid_to_id(from);
+    // var name = jid_to_name(from);
+    // var source = jid_to_source(from);
+    
+    // if (ptype === 'subscribe') {
+
+    //     console.log("subscribe","warn");
+
+    // } else if (ptype !== 'error') {
+    //     if (ptype === 'unavailable') {
+    //         console.log(name+" çevrimdışı oldu.","ERROR");
+    //     } else {
+    //         console.log(name+" çevrimiçi oldu.","SUCCESS");
+    //     }
+    // }
+    return true;
 }
 
 
-const connection = new Strophe.Connection("http://192.168.122.138:5280/bosh");
+disconnect = () => {
+  this.connection.disconnect();
+}
 
-connection.connect('lider','123', onConnect);
+isConnected = () => {
+  return this.isXmppConnected;
+}
 
 
-module.exports = connection;
+}
+
+
+var XmppClientManager = (function(){
+  var instance;
+  return {
+      getInstance: function(){
+          if (instance == null) {
+              instance = new XmppClinet();
+          }
+          return instance;
+      }
+ };
+})();
+
+export default XmppClientManager;
