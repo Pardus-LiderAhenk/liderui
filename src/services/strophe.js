@@ -1,6 +1,8 @@
 require('@ismailbasaran/vuestrophejs');
 import axios from 'axios';
 
+import store from '../store/store';
+
 
 class XmppClinet {
 
@@ -30,7 +32,6 @@ class XmppClinet {
     .post(process.env.VUE_APP_URL + "/api/messaging/getMessagingServerInfo", { })
     .then(
       (response) => {
-        console.log('CONNECTION RESPONSE ', response);
         this.connection = new Strophe.Connection(
           response.data[1].xmppBoshAddress
       );
@@ -53,11 +54,10 @@ class XmppClinet {
     var from = msg.getAttribute("from");
     var type = msg.getAttribute("type");
     var elems = msg.getElementsByTagName("body");
-  
+
     if (type == "chat" && elems.length > 0) {
       var body = elems[0];
       var data = Strophe.xmlunescape(Strophe.getText(body));
-      console.log(data)
       var response = JSON.parse(data);
       var type = "INFO";
       var dnParser = response.commandExecution.dn.split(",");
@@ -73,6 +73,11 @@ class XmppClinet {
         Strophe.copyElement(body)
       );
       this.connection.send(reply.tree());
+
+      if (store.getters.selectedAgent.distinguishedName == response.commandExecution.dn) {
+        store.commit("addSelectedAgentMessage",response);
+      }
+
     }
 
     this.sendToObservers(msg);
@@ -164,7 +169,7 @@ class XmppClinet {
 
 
   onPresence(presence){
-    console.log(presence)
+    //console.log(presence)
     // var ptype = $(presence).attr('type');
     // var from = $(presence).attr('from');
     // var jid_id = jid_to_id(from);
