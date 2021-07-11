@@ -33,7 +33,11 @@ const mutations = {
     setSelectedAgent: (state, agent) => (state.selectedAgent = agent),
     setSelectedAgentInfo: (state, agentInfo) => (state.selectedAgentInfo = agentInfo),
     addSelectedAgentMessage: (state, msg) => {
-        state.selectedAgentMessages = state.selectedAgentMessages.filter(val => (val != undefined && val.pluginName != msg.pluginName && val.commandExecution != undefined && val.commandExecution.dn != msg.commandExecution.dn))
+        state.selectedAgentMessages = state.selectedAgentMessages.filter(val => (val != undefined 
+            && val.pluginName != msg.pluginName 
+            && val.commandExecution != undefined 
+            && val.commandExecution.dn != msg.commandExecution.dn
+            && val.commanClsId != msg.commanClsId))
         state.selectedAgentMessages.push(msg)
     },
     clearSelectedAgentMessages: state => (state.selectedAgentMessages = [])
