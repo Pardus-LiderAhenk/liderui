@@ -4,8 +4,8 @@
       :pluginUrl="pluginUrl" 
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @send-task="getResourceUsage"
-      @cancel-task="showTaskDialog = false"
+      @close-task-dialog="showTaskDialog = false"
+      @task-response="getResourceUsage"
       :pluginTask="task"
     >
       <template #pluginHeader>
@@ -73,6 +73,8 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
+import { mapGetters } from "vuex"
+
 export default {
   props : {
     pluginTask: {
@@ -112,6 +114,10 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters(["selectedAgentMessages"]),
+  },
+
   created() {
     this.task = {...this.pluginTask};
   },
@@ -130,39 +136,39 @@ export default {
       this.showTaskDialog = true;
     },
 
-    getResourceUsage() {
-      this.showTaskDialog = false;
-      this.devices = "/dev/sda,/dev/sdb"
-      this.disk = [];
-      var totalDisk = Math.ceil(525456/1000);
-      var usedDisk = (213876/1000).toFixed(2);
-      var availableDisk = (totalDisk - usedDisk).toFixed(2);
+    getResourceUsage(message) {
+      if (message.commandClsId == "RESOURCE_INFO_FETCHER") {
+        var arrg = JSON.parse(message.result.responseDataStr);
+        this.devices = arrg["Device"]
+        this.disk = [];
+        var totalDisk = arrg["Total Disc"]/1000;
+        var usedDisk = (arrg["Usage Disc"]/1000).toFixed(2);
+        var availableDisk = (totalDisk - usedDisk).toFixed(2);
 
-      this.disk.push({
-        total: totalDisk,
-        used: usedDisk,
-        available : availableDisk
-        }
-      );
-      this.memory = [];
-      var totalMemory = Math.ceil(15567/1000);
-      var usedMemory = (12987/1000).toFixed(2);
-      var availableMemory = (totalMemory - usedMemory).toFixed(2);
-      this.memory.push({
-        total: totalMemory,
-        used: usedMemory,
-        available : availableMemory
-        }
-      );
-      let usageMemoryRate = ((usedMemory / totalMemory)*100).toFixed(2);
-      let availableMemoryRate = (100 - usageMemoryRate).toFixed(2);
-      let usageDiskRate = ((usedDisk / totalDisk)*100).toFixed(2);
-      let availableDiskRate = (100 - usageDiskRate).toFixed(2);
+        this.disk.push({
+          total: totalDisk,
+          used: usedDisk,
+          available : availableDisk
+          }
+        );
+        this.memory = [];
+        var totalMemory = arrg["Total Memory"]/1000;
+        var usedMemory = (arrg["Usage"]/1000).toFixed(2);
+        var availableMemory = (totalMemory - usedMemory).toFixed(2);
+        this.memory.push({
+          total: totalMemory,
+          used: usedMemory,
+          available : availableMemory
+          }
+        );
+        let usageMemoryRate = ((usedMemory / totalMemory)*100).toFixed(2);
+        let availableMemoryRate = (100 - usageMemoryRate).toFixed(2);
+        let usageDiskRate = ((usedDisk / totalDisk)*100).toFixed(2);
+        let availableDiskRate = (100 - usageDiskRate).toFixed(2);
 
-      this.renderChartDisk(availableDiskRate, usageDiskRate);
-      this.renderMemoryDisk(availableMemoryRate, usageMemoryRate);
-      // this.toast.success("Kaynak kullanımı bilgileri başarıyla alındı.");
-      
+        this.renderChartDisk(availableDiskRate, usageDiskRate);
+        this.renderMemoryDisk(availableMemoryRate, usageMemoryRate);
+      }
     },
 
     renderChartDisk(availableMemoryRate, usageMemoryRate) {
@@ -221,7 +227,7 @@ export default {
         this.$refs.memoryOp.toggle(event);
       }
     },
-  }
+  },
 };
 </script>
 

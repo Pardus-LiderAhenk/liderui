@@ -15,7 +15,7 @@ const getters = {
 const actions = {
     setSelectedAgent({ commit }, agent) {
         commit("setSelectedAgent", agent);
-        commit("clearSelectedAgentMessages");
+        // commit("clearSelectedAgentMessages");
     },
 
     setSelectedAgentInfo({ commit }, agent) {

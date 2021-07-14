@@ -131,10 +131,17 @@
                 "add": "Add",
                 "cancel": "Cancel",
                 "add_user": "Add User",
+                "edit": "Edit",
                 "home_directory_dialog_content": "Do you want to delete the user home directory as well?",
                 "home_directory_dialog_title": "Delete User Home Directory",
                 "create_password": "Create Password",
                 "change_password": "Change Password"
+            },
+            "file_transfer": {
+                "header": "Share File",
+                "description": "You can share file to client. File size should be smaller than 20 MB",
+                "share_button": "Share File",
+                "invalid_file_size_message": "Invalid file size, file size should be smaller than"
             }
         },
         "agent_info": {
@@ -189,8 +196,8 @@
             "send_task_offline_message": "Sent task suscessfully, the task will be run when client is online",
             "send_task_group_message": "Sent task successfully to client group",
             "send_task_error_message": "Error occurred while sending the task",
-            "toast_summary": "Notification"
-
+            "toast_summary": "Notification",
+            "send_scheduled_task_susccess_message": "Sent scheduled task successfully"
         }
 
 

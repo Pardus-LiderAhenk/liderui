@@ -4,8 +4,7 @@
       :pluginUrl="pluginUrl"
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @send-task="sendTask"
-      @cancel-task="showTaskDialog = false"
+      @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
     >
       <template #pluginHeader>

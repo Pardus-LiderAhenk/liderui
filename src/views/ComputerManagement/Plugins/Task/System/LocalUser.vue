@@ -36,7 +36,7 @@
           <label class="p-col-4"><i class="el el-icon-coin"></i>&nbsp; {{ $t('computer.plugins.local_user.groups') }}</label>
           <div class="p-col-8">
             <div>
-              <MultiSelect v-model="selectedGrop" :options="groups" optionLabel="label"
+              <MultiSelect v-model="selectedGroup" :options="groups" optionLabel="label"
               :placeholder="$t('computer.plugins.local_user.select_groups')" display="chip" :filter="true" 
               :filterPlaceholder="$t('computer.plugins.local_user.search_group')"/>
             </div>
@@ -48,7 +48,7 @@
             <Button 
               @click="status = !status" :value="status"
               :label="status ? $t('computer.plugins.local_user.active'): $t('computer.plugins.local_user.passive')"
-              :icon="status ? 'pi pi-check-circle': 'pi pi-ban'" :
+              :icon="status ? 'pi pi-check-circle': 'pi pi-ban'"
               :class="status ? 'p-button-sm p-button-raised p-button-text p-button-success': 'p-button-sm p-button-text p-button-raised p-button-danger'"
             />
             <Button 
@@ -138,7 +138,7 @@
         <Button class="p-button-sm" 
           :label="selectedUser ? $t('computer.plugins.local_user.update'): $t('computer.plugins.local_user.add')" 
           :icon="selectedUser ? 'pi pi-user-edit': 'pi pi-user-plus'"
-          @click.prevent="sendTaskForLocaUser"
+          @click.prevent="sendTaskForLocaUser(selectedUser ? 'EDIT_USER': 'ADD_USER')"
         />
       </template>
     </Dialog>
@@ -146,15 +146,17 @@
       :pluginUrl="pluginUrl"
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @send-task="sendTask"
-      @cancel-task="showTaskDialog = false"
+      @close-task-dialog="eventTaskDialogManager"
+      @task-response="localUserManagementResponse"
       :pluginTask="task"
+      :executeTask="executeTask"
     >
       <template #pluginHeader>
         {{ $t("computer.plugins.local_user.header") }}
       </template>
       <template #pluginHeaderButton>
         <Button
+          v-if="users"
           icon="pi pi-user-plus"
           class="p-button-sm p-mr-2"
           :title="$t('computer.plugins.local_user.add_user')"
@@ -164,25 +166,33 @@
           icon="pi pi-users"
           class="p-button-sm"
           :title="$t('computer.plugins.local_user.list_users')"
-          @click.prevent="showConfirmDialogForTask"
+          @click.prevent="getUsersList"
         />
       </template>
       <template #default>
         <div>
-          <DataTable :value="users" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-            <Column field="username" header="Username"></Column>
-            <Column field="status" header="Status"></Column>
-            <Column field="home" header="Home Directory"></Column>
+          <DataTable :value="users" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false" :scrollable="true" scrollHeight="300px">
+            <Column field="username" :header="$t('computer.plugins.local_user.username')"></Column>
+            <Column field="home" :header="$t('computer.plugins.local_user.home_directory')"></Column>
+            <Column field="status" :header="$t('computer.plugins.local_user.status')">
+              <template #body="slotProps">
+                <Badge :value="slotProps.data.status" :severity="slotProps.data.status == $t('computer.plugins.local_user.active') ? 'success': 'danger'"></Badge>
+              </template>
+            </Column>
             <Column :exportable="false">
               <template #body="slotProps">
-                <Button icon="pi pi-user-edit" class="p-button-rounded p-mr-2 p-button-sm" 
-                  :title="$t('computer.plugins.local_user.update')"  
-                  @click="editUSer(slotProps.data)" 
-                />
-                <Button icon="pi pi-user-minus" class="p-button-rounded p-button-danger p-button-sm" 
-                  :title="$t('computer.plugins.local_user.delete')"  
-                  @click.prevent="selectedUser=slotProps.data; deleteHomeDialog=true" 
-                />
+                <div class="p-d-flex p-jc-end">
+                  <div>
+                    <Button icon="pi pi-user-edit" class="p-button-rounded p-mr-2 p-button-sm" 
+                      :title="$t('computer.plugins.local_user.edit')"  
+                      @click="editUSer(slotProps.data)" 
+                    />
+                    <Button icon="pi pi-user-minus" class="p-button-rounded p-button-danger p-button-sm" 
+                      :title="$t('computer.plugins.local_user.delete')"  
+                      @click.prevent="selectedUser=slotProps.data; deleteHomeDialog=true" 
+                    />
+                  </div>
+                </div>
               </template>
             </Column>
           </DataTable>
@@ -214,6 +224,7 @@ export default {
     data() {
       return {
         showTaskDialog: false,
+        executeTask: false,
         task: null,
         users: null,
         deleteHomeDialog: false,
@@ -228,43 +239,22 @@ export default {
           confirmPassword: '',
         },
         validationErrors: {},
-        selectedGrop: '',
+        selectedGroup: '',
         passwordErrorMessage: '',
         status: false,
         showPasswordForm: false,
-        groups: [
-          {label: 'sudo'},
-          {label: 'cdrom'},
-          {label: 'plugdev'},
-          {label: 'root'},
-          {label: 'gdm'},
-          {label: 'avahi'},
-          {label: 'pulse'},
-          {label: 'kvm'},
-          {label: 'users'},
-          {label: 'games'},
-          {label: 'syslog'},
-          {label: 'video'},
-       ],
+        groups: [],
       }
     },
 
     created() {
       this.task = {...this.pluginTask};
-      this.getUsersList();
     },
 
     methods: {
       getUsersList(){
-        this.task.commandId = "commandId";
+        this.task.commandId = "GET_USERS";
         this.task.parameterMap = {};
-        this.users = [{
-          "username": "tcolak", "status": "active" ,"home": "/home/tcolak", "id": "1"},
-          {"username": "hkara", "status": "passive" ,"home": "/home/hkara", "id": "2"}]
-        // this.showTaskDialog = true;
-      },
-      
-      showConfirmDialogForTask(){
         this.showTaskDialog = true;
       },
 
@@ -272,44 +262,84 @@ export default {
         this.selectedUser = user;
         this.userForm.username = user.username;
         this.userForm.home = user.home;
-        this.selectedGrop = [{label: "sudo"}, {label: "root"}, {label: "cdrom"}, {label: "gdm"}];
-        if (user.status == "active") {
-          this.status = true;
-        } else{
-          this.status = false;
-        }
+        let parserGroups = user.groups.split(", ");
+        let jsonArray = [];
+        parserGroups.forEach(element => {jsonArray.push({label:element})});
+        this.selectedGroup = jsonArray;
+        this.status = user.status == this.$t('computer.plugins.local_user.active') ? true: false;
         this.showUserDialog = true;
       },
 
       addUser() {
         this.validationErrors = {};
+        this.showUserDialog = true
         this.selectedUser = null;
-        this.showUserDialog = true;
+      },
+
+      sendTaskForLocaUser(commandId) {
+        this.task.commandId = commandId;
+        if (this.validateForm()) {
+          let userGroups = "";
+          if (this.selectedGroup != "") {
+            userGroups = this.selectedGroup.map(function(element){
+            return element.label;
+            }).join(",");
+          }
+          this.task.parameterMap = {
+            "username": commandId == 'EDIT_USER'? this.selectedUser.username : this.userForm.username ,
+            "password": this.userForm.password,
+            "desktop_write_permission": "true",
+            "active": this.status.toString(),
+            "groups": userGroups,
+            "kiosk_mode": "true",
+            "home": this.userForm.home
+          };
+          if (commandId == "EDIT_USER") {
+            this.task.parameterMap["new_username"] = this.userForm.username;
+          }
+          this.showTaskDialog = true;
+          this.validationErrors = {};
+        }
       },
 
       deleteUser(isDeleted) {
-        this.showTaskDialog = true;
-        // this.deleteHomeDialog = false;
         this.task.commandId = "DELETE_USER";
         this.task.parameterMap = {
           "username": this.selectedUser.username,
 					"delete_home": isDeleted,
 					"home": this.selectedUser.home
           };
-        // this.users = this.users.filter(val => val.id !== this.users.id);
+        this.showTaskDialog = true;
       },
 
-      sendTaskForLocaUser(commandId) {
-        this.task.commandId = commandId;
-        if (commandId == "DELETE_USER") {
-          this.task.parameterMap = {
-            "username": user.username,
-            "delete_home": true,
-            "home": user.home
-          };
-        }
-        if (this.validateForm() ) {
-          this.showTaskDialog = true;
+      localUserManagementResponse(message) {
+        if (message.commandClsId == "GET_USERS") {
+          this.users = null;
+          this.groups = [];
+          var arrg = JSON.parse(message.result.responseDataStr);
+          var usersList = [];
+          for (let index = 0; index < arrg['users'].length; index++) {
+            const element =  arrg['users'][index];
+            if (element.user != "root") {
+              usersList.push({
+              "username": element.user,
+              "status": element.is_active == "true"? this.$t('computer.plugins.local_user.active'): this.$t('computer.plugins.local_user.passive'),
+              "home": element.home, 
+              "groups": element.groups
+              });
+            }
+          }
+          this.users = usersList;
+          for (let index = 0; index < arrg['all_groups'].length; index++) {
+            const element = arrg['all_groups'][index];
+            this.groups.push({label: element});
+          }
+        } else if (message.commandClsId == "ADD_USER" || message.commandClsId == "DELETE_USER" || message.commandClsId == "EDIT_USER") {
+          if (message.result.responseCode == "TASK_PROCESSED") {
+            this.task.commandId = "GET_USERS";
+            this.task.parameterMap = {};
+            this.executeTask = true;
+          }
         }
       },
 
@@ -360,20 +390,25 @@ export default {
         this.userForm.password = generatedPassword;
         this.userForm.confirmPassword = generatedPassword;
       },
+
+      eventTaskDialogManager(event) {
+        this.showTaskDialog = false;
+        this.executeTask = false;
+        if (event == "success") {
+          this.deleteHomeDialog = false;
+          this.showUserDialog = false;
+        }
+      }
     },
 
-     watch: {
-       userForm: {
-        handler(){
-          this.validateForm();
-        },
-        deep: true,
+    watch: {
+      userForm: {
+      handler(){
+        this.validateForm();
       },
-      
-      selectedGrop() {
-        console.log(this.selectedGrop)
-      },
-
+      deep: true,
+    },
+    
       showUserDialog() {
         this.showPasswordForm = false;
         if (!this.showUserDialog) {
@@ -381,13 +416,13 @@ export default {
           this.userForm.username = '';
           this.userForm.home = '';
           this.status = true;
-          this.selectedGrop = '';
+          this.selectedGroup = '';
           this.userForm.password = '';
           this.userForm.confirmPassword = '';
         }
       }
     },
-}
+  }
 </script>
 
 <style lang="scss" scoped>

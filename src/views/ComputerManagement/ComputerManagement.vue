@@ -65,7 +65,9 @@
             >
             </Button>
        </div>
-      <component :is="selectedPluginTab"></component>
+       <keep-alive>
+        <component :is="selectedPluginTab"></component>
+      </keep-alive>
     </div>
   </div>
 </template>

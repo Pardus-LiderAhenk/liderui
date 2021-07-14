@@ -132,10 +132,17 @@
                 "add": "Ekle",
                 "cancel": "İptal",
                 "add_user": "Kullanıcı Ekle",
+                "edit": "Düzenle",
                 "home_directory_dialog_content": "Kullanıcı ev dizinini de silmek istiyor musunuz?",
                 "home_directory_dialog_title": "Kulanıcı Ev Dizini Sil",
                 "create_password": "Parola Oluştur",
                 "change_password": "Parola Değiştir"
+            },
+            "file_transfer": {
+                "header": "Dosya Paylaşımı",
+                "description": "İstemciye dosya paylaşımı yapabilirsiniz. Dosya boyutu 20 MB'den küçük olmalıdır.",
+                "share_button": "Dosya Paylaş",
+                "invalid_file_size_message": "Geçersiz dosya boyutu, dosya boyutu 20 MB'den küçük olmalıdır"
             }
         },
         "agent_info": {
@@ -190,7 +197,8 @@
             "send_task_offline_message": "Görev başarı ile gönderildi, istemci çevrimiçi olduğunda çalıştırılacaktır",
             "send_task_group_message": "Görev istemci grubuna  başarı ile gönderildi",
             "send_task_error_message": "Görev gönderilirken hata oluştu",
-            "toast_summary": "Bildirim"
+            "toast_summary": "Bildirim",
+            "send_scheduled_task_susccess_message": "Zamanlanmış görev başarı ile gönderildi"
         }
     }
 }

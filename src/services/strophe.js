@@ -65,10 +65,10 @@ class XmppClinet {
       if (response.result.responseCode == "TASK_ERROR") {
         type = "ERROR";
       }
-      console.log(
-        "[" + agentCn + "] Gelen Cevap : " + response.result.responseMessage,
-        type
-      );
+      // console.log(
+      //   "[" + agentCn + "] Gelen Cevap : " + response.result.responseMessage,
+      //   type
+      // );
       var reply = $msg({ to: from, from: to, type: "chat" }).cnode(
         Strophe.copyElement(body)
       );

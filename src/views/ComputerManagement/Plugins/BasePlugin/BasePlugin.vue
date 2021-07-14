@@ -1,12 +1,12 @@
 <template>
-  <Dialog :header="$t('computer.task.toast_summary')" v-model:visible="showDialog"  :modal="true" @hide="closeTaskDialog">
+  <Dialog :header="$t('computer.task.toast_summary')" v-model:visible="showDialog"  :modal="true" @hide="closeTaskDialog('cancel')">
     <div class="confirmation-content">
       <i :class="scheduledParam == null ? 'pi pi-info-circle p-mr-3': 'pi pi-clock p-mr-3'" style="font-size: 2rem" />
       <span v-if="scheduledParam == null">{{ $t('computer.plugins.base_plugin.task_confirm_question') }}</span>
       <span v-if="scheduledParam">{{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}</span>
     </div>
     <template #footer>
-      <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="closeTaskDialog" class="p-button-danger p-button-sm"/>
+      <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="closeTaskDialog('cancel')" class="p-button-danger p-button-sm"/>
       <Button :label="$t('computer.plugins.base_plugin.yes')" icon="pi pi-check" @click="confirmTaskDialog" class="p-button-sm"/>
     </template>
   </Dialog>
@@ -77,6 +77,7 @@
 
 import { mapGetters } from "vuex"
 import axios from "axios";
+import XmppClientManager  from '@/services/strophe.js';
 
 export default {
   name: "base-plugin",
@@ -107,11 +108,6 @@ export default {
       default: 500,
       description: "Popover width size"
     },
-    // loading: {
-    //   type: Boolean,    
-    //   default: false,
-    //   description: "Show animation while sending task"
-    // },
     showTaskDialog: {
       type: Boolean,    
       default: false,
@@ -122,27 +118,31 @@ export default {
       type: Object,
       description: "Plugin task object for send task",
     },
+    executeTask: {
+      type: Boolean,    
+      default: false,
+      description: "Execute task as automatically",
+    }
   },
 
   computed: {
-    ...mapGetters(["selectedAgent"]),
+    ...mapGetters(["selectedAgent", "selectedAgentMessages"]),
   },
 
   methods: {
-    /**
-     * sendTask event emit when click Yes button on confirm dialog for execute task in agent
-     * @event sendTask
-     */
-    confirmTaskDialog(event){
+    confirmTaskDialog(){
       if (this.selectedAgent == null || this.selectedAgent.type != "AHENK" && this.selectedAgent.type != "GROUP" && this.selectedAgent.type != "WIND0WS_AHENK") {
         this.$toast.add({severity:'warn', detail: this.$t("computer.task.selected_agent_warn"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
-        this.closeTaskDialog(event);
+        this.closeTaskDialog("cancel");
         return;
       }
-      this.$emit("sendTask", this.selectedAgent, this.scheduledParam);
+      this.closeTaskDialog("success");
       this.showScheduled = false;
-      
+      this.executeTaskManager();
+    },
+
     // global axios post for send task to agent
+    executeTaskManager() {
       var dnList = [];
       var entryList = [];
       entryList.push(this.selectedAgent);
@@ -153,15 +153,17 @@ export default {
       task.cronExpression = this.scheduledParam;
       task.dnType = this.selectedAgent.type;
       
-      // console.log(task)
       axios.post(process.env.VUE_APP_URL + "/lider/task/execute",task)
         .then((response) => {
           if (response.data.status == 'OK') {
             if (this.selectedAgent.type == "AHENK") {
               if (this.selectedAgent.online) {
-                this.loading = true;
-                setTimeout(() => this.loading = false, 2000);
-                this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_susccess_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+                if (!task.cronExpression) {
+                  this.loading = true;
+                  this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_susccess_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+                } else {
+                  this.$toast.add({severity:'success', detail: this.$t("computer.task.send_scheduled_task_susccess_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+                }
               } else {
                 this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_offline_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
               }
@@ -177,11 +179,11 @@ export default {
     },
 
     /**
-     * cancelTask event emit when click No or Close button on confirm dialog
-     * @event cancelTask
+     * closeTaskDialog event as 'cancel' and 'success' emit when click No or Close button on confirm dialog
+     * @event closeTaskDialog
      */
     closeTaskDialog(event) {
-      this.$emit("cancelTask", event);
+      this.$emit("closeTaskDialog", event);
     },
 
     scheduledTaskOperation(param){
@@ -204,7 +206,51 @@ export default {
     showTaskDialog() {
       this.showDialog = this.showTaskDialog;
     },
+
+    executeTask(){
+      if (this.executeTask) {
+        this.executeTaskManager();
+        this.closeTaskDialog('success');
+      }
+    }
   },
+
+  /**
+   * taskResponse event emit when response from client
+   * @event taskResponse
+   */
+  mounted(){
+    XmppClientManager.getInstance().addListener('basePluginListener', (msg) => {
+      var to = msg.getAttribute("to");
+      var from = msg.getAttribute("from");
+      var type = msg.getAttribute("type");
+      var elems = msg.getElementsByTagName("body");
+
+      if (type == "chat" && elems.length > 0) {
+        var body = elems[0];
+        var data = Strophe.xmlunescape(Strophe.getText(body));
+        var response = JSON.parse(data);
+        var type = "INFO";
+        var dnParser = response.commandExecution.dn.split(",");
+        var agentCn = dnParser[0].replace("cn=", "");
+        if (response.result.responseCode == "TASK_ERROR") {
+          type = "ERROR";
+        }
+        let responseMessage = response.result.responseMessage;
+        if (response.commandClsId == this.pluginTask.commandId) {
+          if (response.commandExecution.dn == this.selectedAgent.distinguishedName) {
+            this.loading = false
+            if (response.result.responseCode === "TASK_PROCESSED") {
+              this.$toast.add({severity:'success', detail: responseMessage, summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+            } else if (response.result.responseCode === "TASK_ERROR") {
+              this.$toast.add({severity:'error', detail: responseMessage, summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+            }
+            this.$emit("taskResponse", response);
+          }
+        }
+      }
+    });
+  }
 };
 </script>
 

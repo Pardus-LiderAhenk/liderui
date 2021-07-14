@@ -4,8 +4,7 @@
       :pluginUrl="pluginUrl"
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @send-task="sendManageRootTask"
-      @cancel-task="showTaskDialog = false"
+      @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
     >
       <template #pluginHeader>
@@ -150,10 +149,6 @@ export default {
       }
     },
 
-    sendManageRootTask() {
-      this.showTaskDialog = false;
-    },
-    
     lockUserChange() {
       this.validationErrors = {};
       this.passwordForm.password = '';
