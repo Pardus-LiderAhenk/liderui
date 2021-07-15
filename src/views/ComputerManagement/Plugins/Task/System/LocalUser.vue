@@ -171,7 +171,7 @@
       </template>
       <template #default>
         <div>
-          <DataTable :value="users" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false" :scrollable="true" scrollHeight="300px">
+          <DataTable :value="users" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
             <Column field="username" :header="$t('computer.plugins.local_user.username')"></Column>
             <Column field="home" :header="$t('computer.plugins.local_user.home_directory')"></Column>
             <Column field="status" :header="$t('computer.plugins.local_user.status')">
