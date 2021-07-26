@@ -4,8 +4,8 @@
       :pluginUrl="pluginUrl"
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @send-task="sendFileManagementTask"
-      @cancel-task="showTaskDialog = false"
+      @close-task-dialog="showTaskDialog = false;"
+      @task-response="fileManagementResponse"
       :pluginTask="task"
     >
       <template #pluginHeader>
@@ -17,7 +17,7 @@
           icon="fa fa-save"
           class="p-button-raised p-button-sm"
           :title="$t('computer.plugins.file_management.save')"
-          @click.prevent="showConfirmDialogForTask('WRITE_TO_FILE')"
+          @click.prevent="sendTaskFileManagement('WRITE_TO_FILE')"
           >
           </Button>
         </div>
@@ -25,13 +25,6 @@
       <template #default>
         <div class="p-grid  p-flex-column">
           <div class="p-fluid p-formgrid p-grid p-col">
-            <div class="p-field p-col-12 p-md-2">
-              <label>{{$t('computer.plugins.file_management.text_type')}}</label>
-              <Dropdown
-              v-model="selectedTextType" 
-              :options="textType" optionLabel="label"
-              />
-            </div>
             <div class="p-field p-col-12 p-md-4">
               <label>{{$t('computer.plugins.file_management.favorites')}}</label>
               <Dropdown
@@ -41,22 +34,17 @@
               @change="changeFilePath">
               </Dropdown>
             </div>
-            <div class="p-field p-col-12 p-md-6">
+            <div class="p-field p-col-12 p-md-8">
               <label>{{$t('computer.plugins.file_management.file_path')}}</label>
               <div class="p-inputgroup">
                 <InputText type="text" v-model="filePath" :class="pathValidation ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="/tmp/example.txt"/>
-                <Button type="button" class="p-button-sm" :label="$t('computer.plugins.file_management.search')" icon="pi pi-search" @click.prevent="showConfirmDialogForTask('GET_FILE_CONTENT')" />
+                <Button type="button" class="p-button-sm" :label="$t('computer.plugins.file_management.search')" icon="pi pi-search" @click.prevent="sendTaskFileManagement('GET_FILE_CONTENT')" />
               </div>
               <small v-if="pathValidation" class="p-error">{{ $t('computer.plugins.file_management.file_path_warn') }}</small>
             </div>
           </div>
           <div class="p-col">
-            <Editor v-if="selectedTextType.label == 'html'" v-model="fileContent" editorStyle="height: 320px" @text-change="textChange"></Editor>
-            <Editor v-if="selectedTextType.label == 'text'" v-model="fileContent" editorStyle="height: 320px" @text-change="textChange">
-              <template  #toolbar>
-              <span>Text mode</span>
-            </template>
-            </Editor>
+            <Textarea v-model="fileContent"  style="height: 320px; width:100%" />
           </div>
         </div>
       </template>
@@ -67,6 +55,12 @@
 </template>
 
 <script>
+
+/**
+ * File Managament Plugin. Get file content of entered file path and create new file with file content
+ * @see {@link http://www.liderahenk.org/}
+ * 
+ */
 
 export default {
   props: {
@@ -89,7 +83,7 @@ export default {
       pluginDescription: this.$t('computer.plugins.file_management.description'),
       pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/dosya_yonetimi/",
       selectedFilePath: '',
-      filePath: "",
+      filePath: '',
       fileContent: '',
       favorites: [
         {label: 'hosts', value: '/etc/hosts'},
@@ -98,16 +92,12 @@ export default {
         {label: 'sssd.conf', value: '/etc/sssd/sssd.conf'},
         {label: 'sshd_config', value: '/etc/ssh/sshd_config'}
       ],
-      textType: [
-        {label: 'text', value: 'textValue'},
-        {label: 'html', value: 'htmlValue'}
-      ],
       selectedTextType: {label: 'text', value: 'textValue'},
     }
   },
 
   methods: {
-    showConfirmDialogForTask(commandId){
+    sendTaskFileManagement(commandId){
       this.pathValidation = false;
       if (this.filePath == "" || this.filePath == null) {
         this.pathValidation = true;
@@ -125,18 +115,6 @@ export default {
       this.showTaskDialog = true;
     },
 
-    sendFileManagementTask() {
-      this.showTaskDialog = false;
-    },
-
-    textChange(value) {
-      if (this.selectedTextType.label == "html") {
-        this.fileContent = value.htmlValue;
-      } else {
-        this.fileContent = value.textValue;
-      }
-    },
-
     changeFilePath(event){
       if (event.value) {
         this.filePath = this.selectedFilePath.value;
@@ -144,6 +122,15 @@ export default {
         this.filePath = "";
       }
     },
+
+    fileManagementResponse(message) {
+      if (message.commandClsId == "GET_FILE_CONTENT") {
+        var arrg = JSON.parse(message.result.responseDataStr);
+        if (arrg != null) {
+          this.fileContent = arrg["file_content"];
+        }
+      }
+    }
   },
   watch: {
     filePath(){
@@ -152,15 +139,11 @@ export default {
       } else {
         this.pathValidation = false;
       }
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-#scrolling-container {
-  height: 100%;
-  min-height: 100%;
-  overflow-y: auto;
-}
+
 </style>
