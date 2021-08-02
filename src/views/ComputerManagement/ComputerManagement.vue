@@ -5,7 +5,7 @@
                 <el-tab-pane label="İstemciler">
                 <tree-component loadNodeUrl="/lider/computer/getComputers"
                                 loadNodeOuUrl="/lider/computer/getOuDetails"
-                                :treeNodeClick="setSelectedAgent"
+                                :treeNodeClick="setSelectedLiderNode"
                                 >
                 </tree-component>
                 </el-tab-pane>
@@ -119,10 +119,10 @@ export default {
         };
     },
      created() {
-        this.setSelectedAgent(null);
+        this.setSelectedLiderNode(null);
     },
     methods: {
-        ...mapActions(["setSelectedAgent"]),
+        ...mapActions(["setSelectedLiderNode"]),
         setSelectedPluginTab(tab) {
             this.selectedPluginTab = tab;
         },

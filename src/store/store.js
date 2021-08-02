@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import computerManagement from './modules/computerManagement';
+import globalModule from './modules/globalModule';
 import VuexPersistence from 'vuex-persist';
 
 const vuexLocal = new VuexPersistence({
@@ -10,6 +11,6 @@ export default createStore({
   state: {},
   mutations: {},
   actions: {},
-  modules: {computerManagement,},
+  modules: {computerManagement,globalModule,},
   plugins:[vuexLocal.plugin]
 });
