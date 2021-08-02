@@ -141,7 +141,26 @@
                 "header": "Share File",
                 "description": "You can share file to client. File size should be smaller than 20 MB",
                 "share_button": "Share File",
-                "invalid_file_size_message": "Invalid file size, file size should be smaller than"
+                "invalid_file_size_message": "Invalid file size, file size should be smaller than",
+                "destination_folder": "Destination Folder",
+                "add_file": "Add File",
+                "user_permissions": "User Permissions",
+                "group_permissions": "Group Permissions",
+                "other_permissions": "Other Permissions",
+                "read": "Read",
+                "write": "Write",
+                "execute": "Execute"
+            },
+            "ldap_login": {
+                "header": "Client Login Settings",
+                "description": "Allow to clients login with users in OpenLDAP or Active Directory. Return to default settings with Cancel login settings option",
+                "cancel_login_settings": "Cancel login settings",
+                "default_settings": "Return to default settings",
+                "server_address": "Server Address",
+                "domain": "Domain",
+                "server_name": "Server Name",
+                "username": "Username",
+                "get_settings_error_message": "An error occurred while getting LDAP settings"
             }
         },
         "agent_info": {

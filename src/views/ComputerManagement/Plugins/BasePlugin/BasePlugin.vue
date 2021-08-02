@@ -239,7 +239,7 @@ export default {
         let responseMessage = response.result.responseMessage;
         if (response.commandClsId == this.pluginTask.commandId) {
           if (response.commandExecution.dn == this.selectedAgent.distinguishedName) {
-            this.loading = false
+            this.loading = false;
             if (response.result.responseCode === "TASK_PROCESSED") {
               this.$toast.add({severity:'success', detail: responseMessage, summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
             } else if (response.result.responseCode === "TASK_ERROR") {

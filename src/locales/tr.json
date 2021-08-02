@@ -142,7 +142,26 @@
                 "header": "Dosya Paylaşımı",
                 "description": "İstemciye dosya paylaşımı yapabilirsiniz. Dosya boyutu 20 MB'den küçük olmalıdır.",
                 "share_button": "Dosya Paylaş",
-                "invalid_file_size_message": "Geçersiz dosya boyutu, dosya boyutu 20 MB'den küçük olmalıdır"
+                "invalid_file_size_message": "Geçersiz dosya boyutu, dosya boyutu 20 MB'den küçük olmalıdır",
+                "destination_folder": "Hedef Dizin",
+                "add_file": "Dosya Ekle",
+                "user_permissions": "Kullanıcı İzinleri",
+                "group_permissions": "Grup İzinleri",
+                "other_permissions": "Diğer İzinler",
+                "read": "Okuma",
+                "write": "Yazma",
+                "execute": "Çalıştırma"
+            },
+            "ldap_login": {
+                "header": "İtemci Oturum Açma Ayarları",
+                "description": "İstemcilerin OpenLDAP veya Active Directory kullanıcıları ile oturum açmları sağlanır. Oturum açma ayarlarını iptal et seçeneği ile varsayılan ayarlara geri döner",
+                "cancel_login_settings": "Oturum açma ayarlarını iptal et",
+                "default_settings": "Varsayılan ayarlara geri dön",
+                "server_address": "Sunucu Adresi",
+                "domain": "Etki Alanı",
+                "server_name": "Sunucu Adı",
+                "username": "Kullanıcı Adı",
+                "get_settings_error_message": "LDAP ayarları getirilirken hata oluştu"
             }
         },
         "agent_info": {

@@ -52,7 +52,8 @@
           </Button>
         </div>
       </template>
-      <ul style="margin-left: -25px">
+      <template #default>
+      <!-- <ul style="margin-left: -25px"> -->
         <li style="list-style-type: none;">
           <div class="p-grid">
             <div class="p-col-4"><i class="el el-icon-turn-off"></i> {{ $t("computer.agent_info.status") }}</div>
@@ -120,7 +121,8 @@
             <div class="p-col-8">{{ createdDate }}</div>
           </div>
         </li>
-      </ul>
+      <!-- </ul> -->
+      </template>
     </base-plugin>
   </div>
 </template>
@@ -178,6 +180,7 @@ export default {
 
   watch: {
     selectedAgent() {
+      console.log(this.selectedAgent)
       if (this.selectedAgent != null && this.selectedAgent.type == "AHENK") {
         this.getAgentInfo();
       } else {
