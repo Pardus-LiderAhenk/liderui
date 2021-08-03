@@ -126,12 +126,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["selectedAgent", "selectedAgentMessages"]),
+    ...mapGetters(["selectedLiderNode"]),
   },
 
   methods: {
     confirmTaskDialog(){
-      if (this.selectedAgent == null || this.selectedAgent.type != "AHENK" && this.selectedAgent.type != "GROUP" && this.selectedAgent.type != "WIND0WS_AHENK") {
+      if (this.selectedLiderNode == null || this.selectedLiderNode.type != "AHENK" && this.selectedLiderNode.type != "GROUP" && this.selectedLiderNode.type != "WIND0WS_AHENK") {
         this.$toast.add({severity:'warn', detail: this.$t("computer.task.selected_agent_warn"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
         this.closeTaskDialog("cancel");
         return;
@@ -145,19 +145,19 @@ export default {
     executeTaskManager() {
       var dnList = [];
       var entryList = [];
-      entryList.push(this.selectedAgent);
-      dnList.push(this.selectedAgent.distinguishedName);
+      entryList.push(this.selectedLiderNode);
+      dnList.push(this.selectedLiderNode.distinguishedName);
       let task = {...this.pluginTask};
       task.dnList = dnList;
       task.entryList = entryList;
       task.cronExpression = this.scheduledParam;
-      task.dnType = this.selectedAgent.type;
+      task.dnType = this.selectedLiderNode.type;
       
       axios.post(process.env.VUE_APP_URL + "/lider/task/execute",task)
         .then((response) => {
           if (response.data.status == 'OK') {
-            if (this.selectedAgent.type == "AHENK") {
-              if (this.selectedAgent.online) {
+            if (this.selectedLiderNode.type == "AHENK") {
+              if (this.selectedLiderNode.online) {
                 if (!task.cronExpression) {
                   this.loading = true;
                   this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_susccess_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
@@ -168,7 +168,7 @@ export default {
                 this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_offline_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
               }
             }
-            if (this.selectedAgent.type == "GROUP") {
+            if (this.selectedLiderNode.type == "GROUP") {
               this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_group_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
             }
           } else {
@@ -238,7 +238,7 @@ export default {
         }
         let responseMessage = response.result.responseMessage;
         if (response.commandClsId == this.pluginTask.commandId) {
-          if (response.commandExecution.dn == this.selectedAgent.distinguishedName) {
+          if (response.commandExecution.dn == this.selectedLiderNode.distinguishedName) {
             this.loading = false;
             if (response.result.responseCode === "TASK_PROCESSED") {
               this.$toast.add({severity:'success', detail: responseMessage, summary:this.$t("computer.task.toast_summary"), life: this.toastLife});

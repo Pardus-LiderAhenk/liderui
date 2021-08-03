@@ -25,7 +25,7 @@
       @cancel-task="showTaskDialog = false"
       >
       <template #pluginHeader>
-       <i class="fas fa-info-circle"></i> <a href="#" @click.prevent="showAgentInfoModal(true)" style="color:#495057">{{ selectedAgent ? selectedAgent.name: 'Agents' }}</a>
+       <i class="fas fa-info-circle"></i> <a href="#" @click.prevent="showAgentInfoModal(true)" style="color:#495057">{{ selectedLiderNode ? selectedLiderNode.name: 'Agents' }}</a>
       </template>
       <template #pluginHeaderButton>
         <div>
@@ -58,7 +58,7 @@
           <div class="p-grid">
             <div class="p-col-4"><i class="el el-icon-turn-off"></i> {{ $t("computer.agent_info.status") }}</div>
             <div class="p-col-8">
-            <Badge v-if="selectedAgent && selectedAgent.type == 'AHENK'" :value="status" :severity="statusType"></Badge></div>
+            <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK'" :value="status" :severity="statusType"></Badge></div>
           </div>
         </li>
         <li style="list-style-type: none;">
@@ -168,10 +168,10 @@ export default {
     this.task = {...this.pluginTask};
   },
 
-  computed:mapGetters(["selectedAgent"]),
+  computed:mapGetters(["selectedLiderNode"]),
 
   mounted() {
-    if (this.selectedAgent != null && this.selectedAgent.type == "AHENK") {
+    if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
         this.getAgentInfo();
       } else {
         this.setDefaultTable();
@@ -179,9 +179,8 @@ export default {
   },
 
   watch: {
-    selectedAgent() {
-      console.log(this.selectedAgent)
-      if (this.selectedAgent != null && this.selectedAgent.type == "AHENK") {
+    selectedLiderNode() {
+      if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
         this.getAgentInfo();
       } else {
         this.setDefaultTable();
@@ -194,23 +193,23 @@ export default {
 
     getAgentInfo() {
       this.loading = true;
-      this.agentCn = this.selectedAgent.cn;
-      this.location = this.getEntryFolderName(this.selectedAgent.distinguishedName);
-      this.lastLoggedUser = this.selectedAgent.o;
-      if (this.selectedAgent.online) {
+      this.agentCn = this.selectedLiderNode.cn;
+      this.location = this.getEntryFolderName(this.selectedLiderNode.distinguishedName);
+      this.lastLoggedUser = this.selectedLiderNode.o;
+      if (this.selectedLiderNode.online) {
         this.statusType = "success";
         this.status = this.$t('computer.agent_info.online');
       }
       
       const params = new URLSearchParams();
-      params.append("agentJid", this.selectedAgent.uid);
+      params.append("agentJid", this.selectedLiderNode.uid);
       axios
         .post(process.env.VUE_APP_URL + "/select_agent_info/detail", params)
         .then((response) => {
           this.setSelectedAgentInfo(response.data);
           this.loading = false;
           if (response.data != "" && response.data != null) {
-            var selectedAgentProperties = response.data.properties;
+            var selectedLiderNodeProperties = response.data.properties;
             if (response.data.hostname) {
               this.hostname = response.data.hostname;
             }
@@ -221,8 +220,8 @@ export default {
               this.createdDate = response.data.createDate;
             }
             
-            for (let index = 0; index < selectedAgentProperties.length; index++) {
-              let element = selectedAgentProperties[index];
+            for (let index = 0; index < selectedLiderNodeProperties.length; index++) {
+              let element = selectedLiderNodeProperties[index];
               if (element.propertyName == "agentVersion") {
                 if (element.propertValue != "" || element.propertyValue != null) {
                   this.agentVersion = element.propertyValue;
@@ -270,7 +269,7 @@ export default {
       this.statusType = "danger";
       this.status = this.$t('computer.agent_info.offline');
       this.hostname = "";
-      this.location = this.selectedAgent != null ? this.getEntryFolderName(this.selectedAgent.distinguishedName): "";
+      this.location = this.selectedLiderNode != null ? this.getEntryFolderName(this.selectedLiderNode.distinguishedName): "";
       this.userDirectoryDomain = "";
       this.operatingSystem = "";
       this.processor = "";

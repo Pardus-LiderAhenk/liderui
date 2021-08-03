@@ -7,7 +7,7 @@ const getters = {
 }
 
 const actions = {
-    selectedLiderNode({ commit }, node) {
+    setSelectedLiderNode({ commit }, node) {
         commit("setSelectedLiderNode", node);
     },
 }

@@ -74,6 +74,7 @@
                         :showCheckbox="agentGroupModal.showCheckbox"
                         :getCheckedNodes="getCheckedAgentNodes"
                         :renderSearchContent="renderSearchContent"
+                        :treeNodeClick="setSelectedLiderNode"
                 />
             </TabPanel>
             <TabPanel >
@@ -104,6 +105,7 @@
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import axios from 'axios';
 import { useConfirm } from "primevue/useconfirm";
+import { mapActions } from "vuex"
 
 export default {
     setup(){
@@ -175,9 +177,14 @@ export default {
             }
         }
     },
+    created() {
+        this.setSelectedLiderNode(null);
+    },
     methods: {
+        ...mapActions(["setSelectedLiderNode"]),
         treeNodeClick(node) {
             this.selectedNode = node;
+            this.setSelectedLiderNode(node);
         },
         addFolder() {
             axios.post('/lider/computer_groups/addOu', {
@@ -285,7 +292,6 @@ export default {
         }
     
     }, 
-
 }
 </script>
 
