@@ -122,24 +122,30 @@
     </template>
     <template #content>
       <DataTable :value="agents" responsiveLayout="scroll" dataKey="id">
-        <Column>
-          <template #body="{index}">
-            <span>{{ index + 1 }}</span>
+        <template #empty>
+          No agents found.
+        </template>
+        <template #loading>
+          Loading agents...
+        </template>
+        <!-- <Column>
+          <template #body="slotProps">
+            <span>{{ slotProps.index }}</span>
           </template>
-        </Column>
+        </Column> -->
         <Column field="hostname" header="Bilgisayar Adı"></Column>
         <Column header="Mac Adresi">
-          <template #body="{data}">
+          <template #body="{ data }">
             {{ data.macAddresses.replace(/'/g, "") }}
           </template>
         </Column>
         <Column header="IP Adresi">
-          <template #body="{data}">
+          <template #body="{ data }">
             {{ data.ipAddresses.replace(/'/g, "") }}
           </template>
         </Column>
         <Column field="isOnline" header="Durumu">
-          <template #body="{data}">
+          <template #body="{ data }">
             <Badge
               v-if="data.isOnline"
               value="Çevrim İçi"
@@ -149,7 +155,7 @@
           </template>
         </Column>
         <Column header="Marka">
-          <template #body="{data}">
+          <template #body="{ data }">
             {{
               getPropertyValue(
                 data.properties,
@@ -159,25 +165,25 @@
           </template>
         </Column>
         <Column header="İşletim Sistemi">
-          <template #body="{data}">
+          <template #body="{ data }">
             {{ getPropertyValue(data.properties, "os.distributionName") }}
           </template>
         </Column>
         <Column header="Versiyon">
-          <template #body="{data}">
+          <template #body="{ data }">
             {{ getPropertyValue(data.properties, "os.distributionVersion") }}
           </template>
         </Column>
         <Column field="createDate" header="Oluşturulma Tarihi"></Column>
         <Column>
-          <template #body="{data}">
+          <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
               <div>
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
                   icon="pi pi-list"
                   v-tooltip.left="'Agent Details'"
-                  @click="showProjectResultOutputDetailDialog(data)"
+                  @click="showAgentDetailDialog(data.id)"
                 />
               </div>
             </div>
@@ -194,6 +200,83 @@
       </Paginator>
     </template>
   </Card>
+  <Dialog
+    v-model:visible="agentDetailDialog"
+    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+    :style="{ width: '50vw' }"
+  >
+    <template #header>
+      <h3>İstemci Detayı</h3>
+    </template>
+    <h4>Genel Bilgiler</h4>
+    <div class="p-grid">
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Bilgisayar Adı</b></div>
+      <div class="p-col-8">{{selectedAgent.hostname}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>MAC Adresleri</b></div>
+      <div class="p-col-8">{{selectedAgent.macAddresses.replace(/'/g, "")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>JID</b></div>
+      <div class="p-col-8">{{selectedAgent.jid}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>IP Adresleri</b></div>
+      <div class="p-col-8">{{selectedAgent.ipAddresses.replace(/'/g, "")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>İşletim Sistemi Versiyonu</b></div>
+      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "os.distributionVersion")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Ahenk Versiyonu</b></div>
+      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "agentVersion")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Oluşturulma Tarihi</b></div>
+      <div class="p-col-8">{{selectedAgent.createDate}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Güncelleme Tarihi</b></div>
+      <div class="p-col-8">{{selectedAgent.updateDate}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+    </div>
+
+    <h4>Disk ve Bellek Bilgisi</h4>
+    <div class="p-grid">
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Toplam Disk Alanı(GB)</b></div>
+      <div class="p-col-8">{{(getPropertyValue(selectedAgent.properties, "hardware.disk.total")/1000).toFixed(2).toLocaleString("tr-TR")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Kullanılan Disk Alanı(GB)</b></div>
+      <div class="p-col-8">{{(getPropertyValue(selectedAgent.properties, "hardware.disk.used")/1000).toFixed(2).toLocaleString("tr-TR")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Boş Disk Alanı(GB)</b></div>
+      <div class="p-col-8">{{((getPropertyValue(selectedAgent.properties, "hardware.disk.total") - getPropertyValue(selectedAgent.properties, "hardware.disk.used"))/1000).toFixed(2).toLocaleString("tr-TR")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Disk Bölümleri</b></div>
+      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "hardware.disk.partitions")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>RAM(GB)</b></div>
+      <div class="p-col-8">{{(getPropertyValue(selectedAgent.properties, "hardware.memory.total")/1000).toFixed(2).toLocaleString("tr-TR")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+    </div>
+
+    <h4>İşlemci Bilgisi</h4>
+    <div class="p-grid">
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>İşlemci</b></div>
+      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "processor")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Fiziksel Çekirdek Sayısı</b></div>
+      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "hardware.cpu.physicalCoreCount")}}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+    </div>
+
+    <template #footer>
+      <Button
+        label="Close"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="agentDetailDialog = false"
+      />
+    </template>
+  </Dialog>
 </template>
 
 <script>
@@ -215,6 +298,8 @@ export default {
       osVersions: [],
       agentVersions: [],
       getFilterData: true,
+      agentDetailDialog: false,
+      selectedAgent: null,
       statuses: [
         {
           name: "Hepsi",
@@ -250,12 +335,17 @@ export default {
     this.getAgents();
   },
   methods: {
+    showAgentDetailDialog(agentID) {
+      this.selectedAgent = this.agents.filter(
+        (agent) => agent.id === agentID)[0];
+      this.agentDetailDialog = true;
+    },
     getPropertyValue(properties, propertyName) {
       var propertyValue = "";
       const filteredProperties = properties.filter(
         (property) => property.propertyName === propertyName
       );
-      if (filteredProperties != null) {
+      if (filteredProperties != null && filteredProperties.length > 0) {
         propertyValue = filteredProperties[0].propertyValue;
       }
       return propertyValue;
@@ -339,9 +429,6 @@ export default {
           .format("DD/MM/YYYY HH:mm:ss");
       }
       this.getAgents(this.currentPage, this.showedTotalElementCount);
-    },
-    indexMethod(index) {
-      return (this.currentPage - 1) * this.showedTotalElementCount + index + 1;
     },
     clearFilterFields() {
       this.filter = {
