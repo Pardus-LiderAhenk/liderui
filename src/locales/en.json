@@ -161,6 +161,12 @@
                 "server_name": "Server Name",
                 "username": "Username",
                 "get_settings_error_message": "An error occurred while getting LDAP settings"
+            },
+            "xmessage": {
+                "header": "Send Instant Message",
+                "description": "Send instant message to client",
+                "send_message": "Send Message",
+                "message_content_warn": "Message content is not available"
             }
         },
         "agent_info": {
