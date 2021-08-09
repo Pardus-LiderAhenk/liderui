@@ -74,7 +74,7 @@ class XmppClinet {
       );
       this.connection.send(reply.tree());
 
-      if (store.getters.selectedAgent.distinguishedName == response.commandExecution.dn) {
+      if (store.getters.selectedLiderNode.distinguishedName == response.commandExecution.dn) {
         store.commit("addSelectedAgentMessage",response);
       }
 

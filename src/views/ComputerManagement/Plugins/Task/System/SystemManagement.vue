@@ -9,12 +9,12 @@
         <!-- <remote-access v-if="remoteAccessState" class="plugin-card" :pluginTask="pluginTaskRemoteAccess"></remote-access>-->
         <local-user v-if="localUserState" class="plugin-card" :pluginTask="pluginTaskLocalUser"></local-user>
         <ldap-login v-if="ldapLoginState" class="plugin-card" :pluginTask="pluginTaskLdapLogin"></ldap-login>
-        <!--<xmessage v-if="xmessageState" class="plugin-card" :pluginTask="pluginTaskXmessage"></xmessage> -->
+        <xmessage v-if="xmessageState" class="plugin-card" :pluginTask="pluginTaskXmessage"></xmessage>
       </div>
       <div class="p-col-7">
         <resource-usage v-if="resourceUsageState" class="plugin-card" :pluginTask="pluginTaskResourceUsage"></resource-usage>
         <file-management v-if="fileManagementState" class="plugin-card" :pluginTask="pluginTaskFileManagement"></file-management>
-       <!-- <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer> -->
+       <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>
        <!-- <conky v-if="conkyState" class="plugin-card" :pluginTask="pluginTaskConky"></conky> -->
       </div>
     </div>
@@ -30,11 +30,11 @@ import SessionAndPowerManagement from "@/views/ComputerManagement/Plugins/Task/S
 import ManageRoot from "@/views/ComputerManagement/Plugins/Task/System/ManageRoot.vue";
 import LocalUser from "@/views/ComputerManagement/Plugins/Task/System/LocalUser.vue";
 import FileManagement from "@/views/ComputerManagement/Plugins/Task/System/FileManagement.vue";
-// import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTransfer.vue";
+import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTransfer.vue";
 // import RemoteAccess from "@/views/ComputerManagement/Plugins/Task/System/RemoteAccess.vue";
 import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.vue";
 // import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
-// import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
+import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
 
 export default {
   data() {
@@ -71,11 +71,11 @@ export default {
     ManageRoot,
     LocalUser,
     FileManagement,
-    // FileTransfer,
+    FileTransfer,
     // RemoteAccess,
     LdapLogin,
     // Conky,
-    // Xmessage
+    Xmessage
   },
 
   created() {
