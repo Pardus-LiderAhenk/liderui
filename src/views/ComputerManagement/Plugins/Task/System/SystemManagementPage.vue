@@ -22,6 +22,11 @@
 </template>
 
 <script>
+/**
+ * System Management Page. This page include all system plugins
+ * @see {@link http://www.liderahenk.org/}
+ * 
+ */
 import axios from 'axios';
 
 import AgentInfo from "@/views/ComputerManagement/Plugins/Task/System/AgentInfo.vue";

@@ -75,12 +75,12 @@
 
 <script>
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
-import SystemManagement from "@/views/ComputerManagement/Plugins/Task/System/SystemManagement.vue";
-import PackageManagement from "@/views/ComputerManagement/Plugins/Task/Package/PackageManagement.vue";
-import ScriptManagement from "@/views/ComputerManagement/Plugins/Task/Script/ScriptManagement.vue";
-import ServiceManagement from '@/views/ComputerManagement/Plugins/Task/Service/ServiceManagement.vue';
+import SystemManagement from "@/views/ComputerManagement/Plugins/Task/System/SystemManagementPage.vue";
+import PackageManagement from "@/views/ComputerManagement/Plugins/Task/Package/PackageManagementPage.vue";
+import ScriptManagement from "@/views/ComputerManagement/Plugins/Task/Script/ScriptManagementPage.vue";
+import ServiceManagement from '@/views/ComputerManagement/Plugins/Task/Service/ServiceManagementPage.vue';
 import SshConnect from '@/views/ComputerManagement/Plugins/Task/Ssh/SshConnect.vue';
-import SecurityManagement from '@/views/ComputerManagement/Plugins/Task/Security/SecurityManagement.vue';
+import SecurityManagement from '@/views/ComputerManagement/Plugins/Task/Security/SecurityManagementPage.vue';
 import TaskHistory from '@/views/ComputerManagement/Plugins/Task/TaskHistory/TaskHistory.vue'
 import { mapActions } from "vuex";
 
