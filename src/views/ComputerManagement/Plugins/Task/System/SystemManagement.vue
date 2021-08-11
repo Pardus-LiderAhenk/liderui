@@ -15,7 +15,7 @@
         <resource-usage v-if="resourceUsageState" class="plugin-card" :pluginTask="pluginTaskResourceUsage"></resource-usage>
         <file-management v-if="fileManagementState" class="plugin-card" :pluginTask="pluginTaskFileManagement"></file-management>
        <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>
-       <!-- <conky v-if="conkyState" class="plugin-card" :pluginTask="pluginTaskConky"></conky> -->
+       <conky v-if="conkyState" class="plugin-card" :pluginTask="pluginTaskConky"></conky>
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@ import FileManagement from "@/views/ComputerManagement/Plugins/Task/System/FileM
 import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTransfer.vue";
 // import RemoteAccess from "@/views/ComputerManagement/Plugins/Task/System/RemoteAccess.vue";
 import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.vue";
-// import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
+import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
 import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
 
 export default {
@@ -74,7 +74,7 @@ export default {
     FileTransfer,
     // RemoteAccess,
     LdapLogin,
-    // Conky,
+    Conky,
     Xmessage
   },
 
@@ -130,7 +130,6 @@ export default {
           if (element.page == "manage-root") {
             this.pluginTaskManageRoot = element
             this.manageRootState = element.state;
-            console.log(this.pluginTaskManageRoot)
           }
         }
       });

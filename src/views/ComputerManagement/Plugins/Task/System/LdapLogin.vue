@@ -144,7 +144,9 @@ export default {
       } else {
         this.$toast.add({severity:'error', detail: this.$t("computer.plugins.ldap_login.get_settings_error_message"), summary:this.$t("computer.task.toast_summary"), life: 3000});
       }
-    });
+    })
+    .catch((error) => { 
+      this.$toast.add({severity:'error', detail: this.$t('computer.plugins.ldap_login.get_settings_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
   },
 
   computed:mapGetters(["selectedLiderNode"]),

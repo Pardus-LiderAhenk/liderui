@@ -168,6 +168,18 @@
                 "description": "İstemciye anlık mesaj gönderir",
                 "send_message": "Mesaj Gönder",
                 "message_content_warn": "Mesaj içeriği boş bırakılamaz"
+            },
+            "conky": {
+                "header": "Sistem Gözlemcisi",
+                "description": "Conky uygulaması ile metin tabanlı bilgilerin kullanıcıların masaüstünde görüntülenmesini sağlar",
+                "send_template": "Şablon Gönder",
+                "templates": "Şablonlar",
+                "remove_template": "Şablonu kaldır",
+                "select_template": "Şablon Seç",
+                "conky_error_message": "Conky şablonları getirilirken hata oluştu",
+                "warn_select_template": "Lütfen şablon seçiniz",
+                "content": "Şablon İçeriği",
+                "settings": "Şablon Ayarları"
             }
         },
         "agent_info": {
