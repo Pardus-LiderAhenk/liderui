@@ -296,6 +296,11 @@ export default {
         }
     
     }, 
+    watch: {
+        selectedNode(){
+            console.log(this.selectedNode)
+        }
+    }
 }
 </script>
 

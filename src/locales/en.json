@@ -161,6 +161,24 @@
                 "server_name": "Server Name",
                 "username": "Username",
                 "get_settings_error_message": "An error occurred while getting LDAP settings"
+            },
+            "xmessage": {
+                "header": "Send Instant Message",
+                "description": "Send instant message to client",
+                "send_message": "Send Message",
+                "message_content_warn": "Message content is not available"
+            },
+            "conky": {
+                "header": "System Observer",
+                "description": "Allows to text-based information to be displayed on desktop of users with conky desktop application",
+                "send_template": "Send Template",
+                "templates": "Templates",
+                "remove_template": "Remove Template",
+                "select_template": "Select Template",
+                "conky_error_message": "An error occurred while getting conky templates",
+                "warn_select_template": "Please select template",
+                "content": "Template Content",
+                "settings": "Template Settings"
             }
         },
         "agent_info": {

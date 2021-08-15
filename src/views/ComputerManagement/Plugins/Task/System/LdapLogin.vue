@@ -4,7 +4,7 @@
       :pluginUrl="pluginUrl"
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @close-task-dialog="showTaskDialog = false"
+      @close-task-dialog="closeShowTaskDialog"
       @task-response="ldapLoginResponse"
       :pluginTask="task"
     >
@@ -144,10 +144,12 @@ export default {
       } else {
         this.$toast.add({severity:'error', detail: this.$t("computer.plugins.ldap_login.get_settings_error_message"), summary:this.$t("computer.task.toast_summary"), life: 3000});
       }
-    });
+    })
+    .catch((error) => { 
+      this.$toast.add({severity:'error', detail: this.$t('computer.plugins.ldap_login.get_settings_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
   },
 
-  computed:mapGetters(["selectedAgent"]),
+  computed:mapGetters(["selectedLiderNode"]),
 
   methods: {
     sendTaskLoginSettings() {
@@ -156,9 +158,10 @@ export default {
         this.task.commandId = "EXECUTE_LDAP_LOGIN";
         var adminDn = null;
         var adminPassword = null;
-        if (this.selectedAgent != null && this.selectedAgent.type == "AHENK") {
-          adminDn = this.selectedAgent.attributes.entryDN;
-          adminPassword = this.selectedAgent.attributes.userPassword;
+        
+        if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
+          adminDn = this.selectedLiderNode.attributes.entryDN;
+          adminPassword = this.selectedLiderNode.attributes.userPassword;
         }
         this.task.parameterMap = {
           "server-address": this.ldapServer,
@@ -186,8 +189,28 @@ export default {
       }
       this.showTaskDialog = true;
     },
-    ldapLoginResponse(message) {
-      alert("will be update  user domain")
+
+    closeShowTaskDialog(event){
+      this.showTaskDialog = false;
+      if (event == "success") {
+        this.updateUserDirectoryDomain();
+      }
+    },
+
+  // Updated user directory domain field to db by selected dn as OpenLDAP, AD or
+    updateUserDirectoryDomain() {
+      var userDirectoryDomain = null;
+      if (this.task.commandId == "EXECUTE_LDAP_LOGIN") {
+        userDirectoryDomain = "LDAP";
+      } else if (this.task.commandId == "EXECUTE_AD_LOGIN"){
+        userDirectoryDomain = "AD";
+      }
+      const params = new FormData();
+      params.append("dn", this.selectedLiderNode.distinguishedName);
+      params.append("userDirectoryDomain", userDirectoryDomain);
+      axios.post(process.env.VUE_APP_URL + "/ldap_login/update_directory_domain", params)
+      .then((response) => {
+    });
     }
   },
 };
