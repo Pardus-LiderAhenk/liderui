@@ -202,12 +202,16 @@ export default {
             this.modals.folderAdd = false;
         },
         changeFolder() {
-            axios.post('/lider/computer_groups/rename/entry', {
-                oldDn: this.selectedNode.distinguishedName,
-                newName: this.folderName
+            console.log('Folder Will Chaneg', this.selectedNode);
+            axios.post('/lider/computer_groups/rename/entry', null, {
+                params: {
+                    oldDN: this.selectedNode.distinguishedName,
+                    newName: 'ou=' + this.folderName
+                }
             }).then(response => {
-                console.log(response);
-                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, response.data);
+                this.selectedNode.distinguishedName = response.data.distinguishedName;
+                this.selectedNode.name = response.data.name;
+                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
             });
         },
         moveFolder() {

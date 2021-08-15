@@ -26,17 +26,6 @@
         >
       </template>
     </el-popover>
-    <!-- <el-input placeholder="Ara"  class="input-with-select">
-      <template #prepend>
-        <el-select v-model="select" placeholder="Ara">
-          <el-option label="ID" value="1"></el-option>
-          <el-option label="AD" value="2"></el-option>
-        </el-select>
-      </template>
-      <template #append>
-        <el-button icon="el-icon-search"></el-button>
-      </template>
-    </el-input> -->
   </slot>
 
   <!-- <slot name="pagination">
@@ -116,26 +105,6 @@
             :render-content="renderSearchContent"
             empty-text="Kayıt Bulunamadıııı"
             node-key="distinguishedName">
-
-              <!-- <template #default="{ node, data }">
-                <span class="custom-tree-node">
-                   <i v-if="data.type === 'ORGANIZATIONAL_UNIT'"
-                        class="fa fa-folder-open"
-                        style="color:#F2C85B;  font-weight:bold"
-                      ></i>
-                    <img v-if="data.type === 'AHENK'" src="@/assets/images/icons/linux.png" style="width:20px" />
-                    <img v-if="data.type === 'GROUP'" src="@/assets/images/icons/entry_group.gif" style="width:20px" />
-              
-                    <span style="margin-left:5px;">{{node.label}}</span>
-                  
-                  <span style="float:right">
-                    <a
-                      @click="append(data)">
-                      Ekle
-                    </a>
-                  </span>
-                </span>
-              </template> -->
               
               </el-tree>
               </el-collapse-item>
@@ -271,6 +240,10 @@ export default {
   },
   methods: {
     renderContent(h, { node, data, store }) {
+      console.log('RENDERRRRRRRRR');
+      console.log('REnder node', node);
+      console.log('render data', data);
+      console.log('render store', store);
       let linuxIcon = require("@/assets/images/icons/linux.png");
       let groupIcon = require("@/assets/images/icons/entry_group.gif");
       return (
@@ -285,7 +258,7 @@ export default {
           ) : (
             <img src={groupIcon} style="width:20px" />
           )}
-          <span style="margin-left:5px;">{node.label}</span>
+          <span style="margin-left:5px;">{node.data.name}</span>
         </span>
       );
     },
@@ -295,8 +268,8 @@ export default {
         data.append("uid", node.distinguishedName);
 
         axios.post(this.loadNodeOuUrl, data).then((response) => {
-          node.childEntries = node.childEntries || [];
           node.childEntries = response.data;
+          node.childEntries = node.childEntries || [];
           node.isRoot = true;
           this.rootNode = node;
           resolve(node);
@@ -315,10 +288,11 @@ export default {
         });
       }
       if (node.level >= 1) {
+        console.log('LOADING NODE')
         var data = new FormData();
         data.append("uid", node.data.distinguishedName);
         axios.post(this.loadNodeOuUrl, data).then((response) => {
-          console.log('node leve 1 ',response.data);
+          console.log(response.data);
           resolve(response.data);
         });
       }
@@ -332,7 +306,6 @@ export default {
       this.openContextMenu = !this.openContextMenu;
     },
     searchTree() {
-      console.log(this.search.dn);
       axios
         .post("/lider/ldap/searchEntry?searchDn="+ this.search.dn + "&key=" + this.search.type + '&value=' + this.search.text, {})
         .then((response) => {
@@ -343,11 +316,10 @@ export default {
         });
     },
     handleNextClick(val) {
-      console.log(val);
-      console.log(this.$refs.tree);
+     
     },
     load() {
-      console.log('Scrolling baby');
+      // scoll için eklendi
     },
      filterNode(value, data) {
         if (!value) return true;
@@ -358,6 +330,9 @@ export default {
       },
     append(data,node) {
       console.log('append called');
+       if (!node.childEntries) {
+         node.childEntries = []
+       }
       this.$refs.tree.append(data,node);
     },
 
@@ -384,18 +359,4 @@ export default {
     background-color:#2196f3;
     color:white
   }
-  /* ::v-deep  .el-tree--highlight-current {
-    background-color:red;
-    background: red;
-    color:white
-  }
- ::v-deep .el-tree-node.is-current>.el-tree-node__content {
-     background-color:red;
-    background: red;
-    color:white
-  }
-
-  ::v-deep .el-tree-node__content {
-    background: red;
-  } */
 </style>
