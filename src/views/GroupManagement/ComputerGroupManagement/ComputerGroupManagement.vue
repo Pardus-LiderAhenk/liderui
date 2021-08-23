@@ -2,7 +2,7 @@
   <ConfirmDialog></ConfirmDialog>
     <div class="p-grid">
          
-        <div class="p-col-3">
+        <div class="p-col-3" style="min-height:90vh; background-color:#fff;margin-left:10px;margin-top:10px;">
             <Toolbar>
                 <template #left>
                     
@@ -47,14 +47,14 @@
     </Dialog>
     <Dialog header="Taşınacak Klasörü Seçiniz" v-model:visible="modals.moveFolder" :style="{width: '50vw'}" :modal="true">
         <tree-component 
-                ref="tree"
+                ref="movetree"
                 loadNodeUrl="/lider/computer_groups/getGroups"
                 loadNodeOuUrl="/lider/computer_groups/getOuDetails"
-                :treeNodeClick="treeNodeClick"
+                :treeNodeClick="moveTreeNodeClick"
         />
         <template #footer>
             <Button label="Kapat" icon="pi pi-times" @click="modals.folderNameChange = false" class="p-button-text"/>
-            <Button label="Taşı" icon="pi pi-check" @click="changeFolder" autofocus />
+            <Button label="Taşı" icon="pi pi-check" @click="moveFolder" autofocus />
         </template>
     </Dialog>
     <Dialog header="İstemci Grubu Oluştur" v-model:visible="modals.agentGroup" :style="{width: '50vw'}" :modal="true">
@@ -68,13 +68,13 @@
                     </div>
                 </div>
                 <tree-component 
-                        ref="tree"
+                        ref="istemcitree"
                         loadNodeUrl="/lider/computer/getComputers"
                         loadNodeOuUrl="/lider/computer/getOuDetails"
                         :showCheckbox="agentGroupModal.showCheckbox"
                         :getCheckedNodes="getCheckedAgentNodes"
                         :renderSearchContent="renderSearchContent"
-                        :treeNodeClick="setSelectedLiderNode"
+                        :getHalfCheckedNodes="getHalfCheckedNodes"
                 />
             </TabPanel>
             <TabPanel >
@@ -95,8 +95,8 @@
             
         
         <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modals.folderNameChange = false" class="p-button-text"/>
-            <Button label="Oluştur" icon="pi pi-check" @click="changeFolder" autofocus />
+            <Button label="Kapat" icon="pi pi-times" @click="modals.agentGroup = false" class="p-button-text"/>
+            <Button label="Oluştur" icon="pi pi-check" @click="createAgentGroup" autofocus />
         </template>
     </Dialog>
 </template>
@@ -106,21 +106,23 @@ import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import axios from 'axios';
 import { useConfirm } from "primevue/useconfirm";
 import { mapActions } from "vuex"
+import {ref} from 'vue';
 
 export default {
     setup(){
+        const selectedNode = ref(null);
+        const tree = ref(null);
         const confirm = useConfirm();
-         const deleteFolder = () => {
+        const deleteFolder = () => {
             confirm.require({
                 message: 'Bu işlem seçili olan klasörü ve bu klasörün altında yer alan tüm klasör ve grupları silecektir. Bu işlem geri alınamaz.',
                 header: 'Klasör Silme Onay',
                 icon: 'pi pi-exclamation-triangle',
                 accept: () => {
-                   axios.post('/lider/computer_groups/deleteEntry', {
-                       dn: this.selectedNode.distinguishedName
+                   axios.post('/lider/computer_groups/deleteEntry', null, {
+                       params : { dn: selectedNode.value.distinguishedName }
                    }).then(response => {
-                       console.log(response.data);
-                       this.$refs.tree.remove(this.selectedNode);
+                       tree.value.remove(selectedNode.value);
                    });
                 },
                 reject: () => {
@@ -129,14 +131,13 @@ export default {
             });
         }
 
-        return { deleteFolder, };
+        return { deleteFolder, selectedNode, tree };
     },
     components: {
         TreeComponent
     },
     data() {
         return {
-            selectedNode: null,
             moveFolderNode: null,
             modals : {
              folderAdd:false,
@@ -186,6 +187,10 @@ export default {
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
         },
+        moveTreeNodeClick(node) {
+            //*** This method for tree that is created for folder move dialog.  */
+            this.moveFolderNode = node;
+        },
         addFolder() {
             axios.post('/lider/computer_groups/addOu', {
                 parentName: this.selectedNode.distinguishedName,
@@ -202,7 +207,6 @@ export default {
             this.modals.folderAdd = false;
         },
         changeFolder() {
-            console.log('Folder Will Chaneg', this.selectedNode);
             axios.post('/lider/computer_groups/rename/entry', null, {
                 params: {
                     oldDN: this.selectedNode.distinguishedName,
@@ -215,28 +219,51 @@ export default {
             });
         },
         moveFolder() {
-            axios.post('/lider/computer_groups/move/entry', {
-                sourceDN: this.selectedNode.distinguishedName,
-                destinationDN: this.moveFolderNode.distinguishedName
+            axios.post('/lider/computer_groups/move/entry', null ,{
+                params: {
+                    sourceDN: this.selectedNode.distinguishedName,
+                    destinationDN: this.moveFolderNode.distinguishedName
+                }
             }).then(response => {
-                console.log(response);
+                if (response.data) {
+                    this.$refs.tree.remove(this.selectedNode);
+                    this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveFolderNode.distinguishedName));
+                    this.modals.moveFolder = false;
+                    this.$toast.add({severity:'success', summary: 'Klasör Taşındı.', detail:'Başarı ile taşıma yapıldı.', life: 3000});
+                } else {
+                    this.$toast.add({severity:'error', summary: 'HATA', detail:'Taşıma işlemi yapılamadı.', life: 3000});
+                }
+
             });
         },
-        cretaeAgentGroup() {
-            axios.post('/lider/computer_groups/createNewAgentGroup', {
-                groupName: this.groupName,
-                checkedList: this.selectedAgents,
-                selectedOUDN: this.selectedNode.distinguishedName
-            }).then(response => {
-                console.log(resposense.data);
-                this.$refs.tree.append(response.data, this.selectedNode);
+        createAgentGroup() {
+            axios.post('/lider/computer_groups/createNewAgentGroup',{
+                    groupName: this.agentGroupModal.groupName,
+                    checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
+                    selectedOUDN: this.selectedNode.distinguishedName
+                }).then(response => {
+                    if (response.data === "") {
+                        this.$toast.add({severity:'error', summary: 'HATA', detail:'Ekleme başarısız. Lütfen grup adını kontrol edip tekrar deneyiniz.', life: 3000});
+                    } else {
+                        this.$refs.tree.append(response.data, this.selectedNode);
+                        this.agentGroupModal = {
+                                    showCheckbox: true,
+                                    groupName:'',
+                                    checkedNodes: []
+                                }
+                        this.modals.agentGroup = false;
+                        this.$toast.add({severity:'success', summary: 'Yeni Grup.', detail:'Yeni grup başarı ile oluşturuldu.', life: 3000});
+
+                    }
             });
         },
         getCheckedAgentNodes(nodes) {
             this.agentGroupModal.checkedNodes = nodes;
         },
+        getHalfCheckedNodes(nodes) {
+            console.log('HALF CHECKED NODES', nodes);
+        },
         removeAgentFromGroup(node) {
-            console.log(node);
             this.agentGroupModal.checkedNodes = this.agentGroupModal.checkedNodes.filter(
                 agent => {
                     if (agent.distinguishedName != node.distinguishedName) {

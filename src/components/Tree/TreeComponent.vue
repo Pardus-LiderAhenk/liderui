@@ -75,6 +75,7 @@
         @getCheckedNodes="getCheckedNodes"
         @check="nodeCheckClicked"
         node-key="distinguishedName"
+        :getHalfCheckedNodes="getHalfCheckedNodes"
       >
 
         <template #default="{ node, data }">
@@ -164,7 +165,7 @@ export default {
         children: "childEntries",
         label: "name",
         isLeaf: function (data, node) {
-          if (data.hasSubordinates === "TRUE") {
+          if (data.type === "ORGANIZATIONAL_UNIT") {
             return false;
           } else {
             return true;
@@ -186,6 +187,10 @@ export default {
       default: false
     },
     getCheckedNodes: {
+      type:Function,
+      default : () => {}
+    },
+    getHalfCheckedNodes: {
       type:Function,
       default : () => {}
     },
@@ -240,10 +245,6 @@ export default {
   },
   methods: {
     renderContent(h, { node, data, store }) {
-      console.log('RENDERRRRRRRRR');
-      console.log('REnder node', node);
-      console.log('render data', data);
-      console.log('render store', store);
       let linuxIcon = require("@/assets/images/icons/linux.png");
       let groupIcon = require("@/assets/images/icons/entry_group.gif");
       return (
@@ -288,11 +289,9 @@ export default {
         });
       }
       if (node.level >= 1) {
-        console.log('LOADING NODE')
         var data = new FormData();
         data.append("uid", node.data.distinguishedName);
         axios.post(this.loadNodeOuUrl, data).then((response) => {
-          console.log(response.data);
           resolve(response.data);
         });
       }
@@ -309,7 +308,6 @@ export default {
       axios
         .post("/lider/ldap/searchEntry?searchDn="+ this.search.dn + "&key=" + this.search.type + '&value=' + this.search.text, {})
         .then((response) => {
-          console.log("Arama Sonuçları ", response.data);
           this.showSearchForm = false
           this.tabIndex = "search";
           this.searchResults = response.data;
@@ -321,25 +319,48 @@ export default {
     load() {
       // scoll için eklendi
     },
-     filterNode(value, data) {
-        if (!value) return true;
-        return data.name.indexOf(value) !== -1;
-      },
-      nodeCheckClicked() {
-        this.getCheckedNodes(this.$refs.tree.getCheckedNodes());
-      },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.name.indexOf(value) !== -1;
+    },
+    nodeCheckClicked() {
+
+      let clickedNodes = [];
+
+      Promise.all(this.$refs.tree.getCheckedNodes().map(async node => {
+        if ( node.type === "ORGANIZATIONAL_UNIT") {
+          let ouNode = this.$refs.tree.getNode(node.distinguishedName);
+          if(ouNode.childNodes.length <= 0 ) {
+            var data = new FormData();
+            data.append("uid", node.distinguishedName);
+            let response = await axios.post(this.loadNodeOuUrl, data);
+            clickedNodes = clickedNodes.concat(response.data);
+            return response.data;
+          }
+        } else {
+          clickedNodes.push(node);
+          return node;
+        }
+      })).then(result => {
+        
+        this.getCheckedNodes(clickedNodes);
+      });
+    },
+
     append(data,node) {
-      console.log('append called');
-       if (!node.childEntries) {
+       if (node.childEntries && node.childEntries.length <= 0) {
          node.childEntries = []
        }
+
       this.$refs.tree.append(data,node);
     },
 
     remove(node) {
-      this.$refs.tree.remove(node);
+      //this.$refs.tree.setCurrentKey(this.$refs.tree.getCurrentKey());
+      this.$refs.tree.remove(node.distinguishedName);
     },
     updateNode(key,node) {
+      
       this.$refs.tree.updateKeyChildren(key, node);
     },
     getCurrentNode() {
@@ -347,6 +368,9 @@ export default {
     },
     setCheckedNode(key,checked) {
       this.$refs.tree.setChecked(key,checked);
+    },
+    getNode(nodeKey) {
+      return this.$refs.tree.getNode(nodeKey);
     }
   },
   

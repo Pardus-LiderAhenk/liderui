@@ -40,7 +40,6 @@ axios.interceptors.request.use(function(config) {
     if (config.url == '/api/auth/signin') {
         config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     }
-    console.log('Config', config);
     return config;
 }, function(error) {
     return Promise.reject(error);
