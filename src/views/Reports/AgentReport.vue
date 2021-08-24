@@ -116,17 +116,21 @@
       <div class="p-d-flex p-jc-between">
         <div>Sonuçlar</div>
         <div>
-          <Button label="Dışa Aktar" icon="fas fa-file-excel" />
+          <Button
+            label="Dışa Aktar"
+            icon="fas fa-file-excel"
+            @click="exportToExcel()"
+          />
         </div>
       </div>
     </template>
     <template #content>
-      <DataTable :value="agents" responsiveLayout="scroll" dataKey="id">
+      <DataTable :value="agents" responsiveLayout="scroll" dataKey="id" :loading="loading">
         <template #empty>
           No agents found.
         </template>
         <template #loading>
-          Loading agents...
+          Yükleniyor...
         </template>
         <!-- <Column>
           <template #body="slotProps">
@@ -212,28 +216,38 @@
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Bilgisayar Adı</b></div>
-      <div class="p-col-8">{{selectedAgent.hostname}}</div>
+      <div class="p-col-8">{{ selectedAgent.hostname }}</div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>MAC Adresleri</b></div>
-      <div class="p-col-8">{{selectedAgent.macAddresses.replace(/'/g, "")}}</div>
+      <div class="p-col-8">
+        {{ selectedAgent.macAddresses.replace(/'/g, "") }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>JID</b></div>
-      <div class="p-col-8">{{selectedAgent.jid}}</div>
+      <div class="p-col-8">{{ selectedAgent.jid }}</div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>IP Adresleri</b></div>
-      <div class="p-col-8">{{selectedAgent.ipAddresses.replace(/'/g, "")}}</div>
+      <div class="p-col-8">
+        {{ selectedAgent.ipAddresses.replace(/'/g, "") }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>İşletim Sistemi Versiyonu</b></div>
-      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "os.distributionVersion")}}</div>
+      <div class="p-col-8">
+        {{
+          getPropertyValue(selectedAgent.properties, "os.distributionVersion")
+        }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Ahenk Versiyonu</b></div>
-      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "agentVersion")}}</div>
+      <div class="p-col-8">
+        {{ getPropertyValue(selectedAgent.properties, "agentVersion") }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Oluşturulma Tarihi</b></div>
-      <div class="p-col-8">{{selectedAgent.createDate}}</div>
+      <div class="p-col-8">{{ selectedAgent.createDate }}</div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Güncelleme Tarihi</b></div>
-      <div class="p-col-8">{{selectedAgent.updateDate}}</div>
+      <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
     </div>
 
@@ -241,19 +255,65 @@
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Toplam Disk Alanı(GB)</b></div>
-      <div class="p-col-8">{{(getPropertyValue(selectedAgent.properties, "hardware.disk.total")/1000).toFixed(2).toLocaleString("tr-TR")}}</div>
+      <div class="p-col-8">
+        {{
+          (
+            getPropertyValue(selectedAgent.properties, "hardware.disk.total") /
+            1000
+          )
+            .toFixed(2)
+            .toLocaleString("tr-TR")
+        }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Kullanılan Disk Alanı(GB)</b></div>
-      <div class="p-col-8">{{(getPropertyValue(selectedAgent.properties, "hardware.disk.used")/1000).toFixed(2).toLocaleString("tr-TR")}}</div>
+      <div class="p-col-8">
+        {{
+          (
+            getPropertyValue(selectedAgent.properties, "hardware.disk.used") /
+            1000
+          )
+            .toFixed(2)
+            .toLocaleString("tr-TR")
+        }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Boş Disk Alanı(GB)</b></div>
-      <div class="p-col-8">{{((getPropertyValue(selectedAgent.properties, "hardware.disk.total") - getPropertyValue(selectedAgent.properties, "hardware.disk.used"))/1000).toFixed(2).toLocaleString("tr-TR")}}</div>
+      <div class="p-col-8">
+        {{
+          (
+            (getPropertyValue(selectedAgent.properties, "hardware.disk.total") -
+              getPropertyValue(
+                selectedAgent.properties,
+                "hardware.disk.used"
+              )) /
+            1000
+          )
+            .toFixed(2)
+            .toLocaleString("tr-TR")
+        }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Disk Bölümleri</b></div>
-      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "hardware.disk.partitions")}}</div>
+      <div class="p-col-8">
+        {{
+          getPropertyValue(selectedAgent.properties, "hardware.disk.partitions")
+        }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>RAM(GB)</b></div>
-      <div class="p-col-8">{{(getPropertyValue(selectedAgent.properties, "hardware.memory.total")/1000).toFixed(2).toLocaleString("tr-TR")}}</div>
+      <div class="p-col-8">
+        {{
+          (
+            getPropertyValue(
+              selectedAgent.properties,
+              "hardware.memory.total"
+            ) / 1000
+          )
+            .toFixed(2)
+            .toLocaleString("tr-TR")
+        }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
     </div>
 
@@ -261,10 +321,19 @@
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>İşlemci</b></div>
-      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "processor")}}</div>
+      <div class="p-col-8">
+        {{ getPropertyValue(selectedAgent.properties, "processor") }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Fiziksel Çekirdek Sayısı</b></div>
-      <div class="p-col-8">{{getPropertyValue(selectedAgent.properties, "hardware.cpu.physicalCoreCount")}}</div>
+      <div class="p-col-8">
+        {{
+          getPropertyValue(
+            selectedAgent.properties,
+            "hardware.cpu.physicalCoreCount"
+          )
+        }}
+      </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
     </div>
 
@@ -291,7 +360,7 @@ export default {
       showedTotalElementCount: 10,
       currentPage: 1,
       offset: 1,
-      loadingData: true,
+      loading: true,
       brands: [],
       models: [],
       processors: [],
@@ -337,7 +406,8 @@ export default {
   methods: {
     showAgentDetailDialog(agentID) {
       this.selectedAgent = this.agents.filter(
-        (agent) => agent.id === agentID)[0];
+        (agent) => agent.id === agentID
+      )[0];
       this.agentDetailDialog = true;
     },
     getPropertyValue(properties, propertyName) {
@@ -398,15 +468,15 @@ export default {
         this.osVersions = response.data.osVersions;
         this.agents = response.data.agents.content;
         this.totalElements = response.data.agents.totalElements;
-        this.loadingData = false;
+        this.loading = false;
       });
     },
     currentPageChange(newCurrentPage) {
-      this.loadingData = true;
+      this.loading = true;
       this.getAgents(newCurrentPage);
     },
     onPage(event) {
-      this.loadingData = true;
+      this.loading = true;
       this.getAgents(event.page + 1, event.rows);
     },
     filterAgents() {
@@ -429,6 +499,51 @@ export default {
           .format("DD/MM/YYYY HH:mm:ss");
       }
       this.getAgents(this.currentPage, this.showedTotalElementCount);
+    },
+    exportToExcel() {
+      this.loading = true;
+      var data = new FormData();
+      data.append("status", this.filter.status);
+      data.append("dn", this.filter.dn);
+      data.append("hostname", this.filter.hostname);
+      data.append("ipAddress", this.filter.ipAddress);
+      data.append("macAddress", this.filter.macAddress);
+      data.append("registrationStartDate", this.filter.registrationStartDate);
+      data.append("registrationEndDate", this.filter.registrationEndDate);
+      data.append("brand", this.filter.brand);
+      data.append("model", this.filter.model);
+      data.append("processor", this.filter.processor);
+      data.append("osVersion", this.filter.osVersion);
+      data.append("agentVersion", this.filter.agentVersion);
+      if (this.filter.registrationDate[0] != null) {
+        data.append(
+          "registrationStartDate",
+          moment(this.filter.registrationDate[0])
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss")
+        );
+      }
+      if (this.filter.registrationDate[1] != null) {
+        data.append(
+          "registrationEndDate",
+          moment(this.filter.registrationDate[1])
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss")
+        );
+      }
+      axios.post("/lider/agent_info/export", data, {responseType: 'blob'})
+      .then((response) => {
+        let blob = new Blob([response.data]);
+        let link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "Agent Report.xlsx";
+        this.loading = false;
+        link.click();
+      });
     },
     clearFilterFields() {
       this.filter = {
