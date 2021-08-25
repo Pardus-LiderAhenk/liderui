@@ -172,6 +172,11 @@
       <template #default>
         <div>
           <DataTable :value="users" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+            <template #empty>
+              <div class="p-d-flex p-jc-center">
+                <span>Local user not found</span>
+              </div>
+            </template>
             <Column field="username" :header="$t('computer.plugins.local_user.username')"></Column>
             <Column field="home" :header="$t('computer.plugins.local_user.home_directory')"></Column>
             <Column field="status" :header="$t('computer.plugins.local_user.status')">

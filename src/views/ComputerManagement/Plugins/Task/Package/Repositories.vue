@@ -28,7 +28,17 @@
 
 <script>
 export default {
-    
+      props: {
+        pluginTask: {
+        type: Object,
+        description: "Plugin task object",
+        },
+    },
+
+    created() {
+        this.task = {...this.pluginTask};
+        console.log(this.task)
+    },
 }
 </script>
 

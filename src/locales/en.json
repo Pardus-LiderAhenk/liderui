@@ -179,6 +179,29 @@
                 "warn_select_template": "Please select template",
                 "content": "Template Content",
                 "settings": "Template Settings"
+            },
+            "packages":{
+                "header": "Package Install or Uninstall",
+                "description": "Allows to install or uninstall selected package or packages in package repository which entered address",
+                "edit":"Edit",
+                "save": "Save",
+                "get_settings_error_message": "An error occurred while getting respository settings",
+                "update_repo_success_message": "Updated repository address successfully",
+                "update_repo_error_message": "An error occurred while saving repository address",
+                "list_packages": "List Packages",
+                "package_name": "Package Name",
+                "version": "Version",
+                "size": "Size",
+                "package_description": "Description",
+                "send_task_warning": "At least one package must be selected",
+                "selected_packages": "Selected Packages",
+                "repo_address_warn": "Repository address is not available",
+                "select": "Select",
+                "current_page_report_template": "Showing {first} to {last} of {totalRecords} entries",
+                "status": "Status",
+                "view_selected_packages": "View selected packages",
+                "install": "Install",
+                "uninstall": "Uninstall"
             }
         },
         "agent_info": {

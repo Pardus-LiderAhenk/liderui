@@ -1,8 +1,8 @@
 <template>
   <div>
     <br>
-    <packages class="plugin-card" v-if="packagesState" :pluginTask="pluginTaskPackages"></packages>
-    <div class="p-grid">
+    <packages class="plugin-card" v-if="packagesState" :pluginTask1="pluginTaskPackages"></packages>
+    <!-- <div class="p-grid">
       <div class="p-col-5">
         <installed-packages-and-management v-if="installedPackagesAndManagementState" class="plugin-card" :pluginTask="pluginTaskInstalledPackagesAndManagement"></installed-packages-and-management>
         <application-restriction v-if="applicationRestrictionState" class="plugin-card" :pluginTask="pluginTaskApplicationRestriction"></application-restriction>
@@ -10,7 +10,7 @@
       <div class="p-col-7">
         <repositories v-if="repositoriesState" class="plugin-card" :pluginTask="pluginTaskRepositories"></repositories>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -22,10 +22,10 @@
  */
 
 import axios from 'axios';
-import InstalledPackagesAndManagement from "@/views/ComputerManagement/Plugins/Task/Package/InstalledPackagesAndManagement.vue";
+// import InstalledPackagesAndManagement from "@/views/ComputerManagement/Plugins/Task/Package/InstalledPackagesAndManagement.vue";
 import Packages from "@/views/ComputerManagement/Plugins/Task/Package/Packages.vue";
-import Repositories from "@/views/ComputerManagement/Plugins/Task/Package/Repositories.vue";
-import ApplicationRestriction from "@/views/ComputerManagement/Plugins/Task/Package/ApplicationRestriction.vue";
+// import Repositories from "@/views/ComputerManagement/Plugins/Task/Package/Repositories.vue";
+// import ApplicationRestriction from "@/views/ComputerManagement/Plugins/Task/Package/ApplicationRestriction.vue";
 
 
 export default {
@@ -43,10 +43,10 @@ export default {
     };
   },
   components: {
-    InstalledPackagesAndManagement,
+    // InstalledPackagesAndManagement,
     Packages,
-    Repositories,
-    ApplicationRestriction,
+    // Repositories,
+    // ApplicationRestriction,
   },
 
   created() {
