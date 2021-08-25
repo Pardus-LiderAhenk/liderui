@@ -215,6 +215,9 @@ export default {
         if (response.data != null) {
           this.packages = response.data;
           this.loading = false;
+          if(this.packageInfoList.length > 0){
+            this.packageInfoList = [];
+          }
         }
       })
       .catch((error) => { 
