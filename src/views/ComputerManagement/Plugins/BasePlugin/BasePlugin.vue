@@ -230,14 +230,14 @@ export default {
         var body = elems[0];
         var data = Strophe.xmlunescape(Strophe.getText(body));
         var response = JSON.parse(data);
-        var type = "INFO";
-        var dnParser = response.commandExecution.dn.split(",");
-        var agentCn = dnParser[0].replace("cn=", "");
-        if (response.result.responseCode == "TASK_ERROR") {
-          type = "ERROR";
-        }
+        // var type = "INFO";
+        // var dnParser = response.commandExecution.dn.split(",");
+        // var agentCn = dnParser[0].replace("cn=", "");
+        // if (response.result.responseCode == "TASK_ERROR") {
+        //   type = "ERROR";
+        // }
         let responseMessage = response.result.responseMessage;
-        if (response.commandClsId == this.pluginTask.commandId) {
+        if (response.commandClsId === this.pluginTask.commandId) {
           if (response.commandExecution.dn == this.selectedLiderNode.distinguishedName) {
             this.loading = false;
             if (response.result.responseCode === "TASK_PROCESSED") {

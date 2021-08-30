@@ -134,11 +134,9 @@ export default {
   },
   watch: {
     filePath(){
-      if (this.filePath == "" || this.filePath == null) {
-        this.pathValidation = true;
-      } else {
+      if (this.filePath) {
         this.pathValidation = false;
-      }
+      } 
     },
   },
 };

@@ -74,9 +74,9 @@ class XmppClinet {
       );
       this.connection.send(reply.tree());
 
-      if (store.getters.selectedLiderNode.distinguishedName == response.commandExecution.dn) {
-        store.commit("addSelectedAgentMessage",response);
-      }
+      // if (store.getters.selectedLiderNode.distinguishedName == response.commandExecution.dn) {
+      //   store.commit("addSelectedAgentMessage",response);
+      // }
 
     }
 

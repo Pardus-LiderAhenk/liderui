@@ -180,6 +180,29 @@
                 "warn_select_template": "Lütfen şablon seçiniz",
                 "content": "Şablon İçeriği",
                 "settings": "Şablon Ayarları"
+            },
+            "packages":{
+                "header": "Paket Kur Veya Kaldır",
+                "description": "Adresi girilen paket deposundaki seçilen paket ya da paketlerin istemci kurulmasını veya kaldırılması sağlar.",
+                "edit":"Düzenle",
+                "save": "Save",
+                "get_settings_error_message": "Paket depo ayarları getirilirken hata oluştu",
+                "update_repo_success_message": "Paket depo adresi başarıyla güncellendi",
+                "update_repo_error_message": "Paket depo adresi güncellenirken hata oluştu",
+                "list_packages": "Paketleri Listele",
+                "package_name": "Paket Adı",
+                "version": "Versiyon",
+                "size": "Büyüklük",
+                "package_description": "Açıklama",
+                "send_task_warning": "En az bir paket seçilmelidir",
+                "selected_packages": "Seçili Paketler",
+                "repo_address_warn": "Paket depo adresi boş bırakılamaz",
+                "select": "Seç",
+                "current_page_report_template": "Toplam {totalRecords} kayıttan {first}-{last} arası gösteriliyor",
+                "status": "Durum",
+                "view_selected_packages": "Seçili paketleri görüntüle",
+                "install": "Kur",
+                "uninstall": "Kaldır"
             }
         },
         "agent_info": {
