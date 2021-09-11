@@ -74,7 +74,8 @@ export default {
                            
                         },
                         {
-                            label: 'User Group Management'
+                            label: 'User Group Management',
+                            to: '/user_group_management'
                         },
                         {
                             label: 'User Authorization ( Sudo )'

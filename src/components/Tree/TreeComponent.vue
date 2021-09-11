@@ -104,7 +104,7 @@
             :props="treeProps" 
             @node-click="handleTreeClick"
             :render-content="renderSearchContent"
-            empty-text="Kayıt Bulunamadıııı"
+            empty-text="Kayıt Bulunamadı"
             node-key="distinguishedName">
               
               </el-tree>
@@ -220,6 +220,10 @@ export default {
         );
       }
     },
+    isMove : {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -292,6 +296,8 @@ export default {
         var data = new FormData();
         data.append("uid", node.data.distinguishedName);
         axios.post(this.loadNodeOuUrl, data).then((response) => {
+          this.isMove ? 
+          resolve(response.data.filter(node => node.type=="ORGANIZATIONAL_UNIT")):
           resolve(response.data);
         });
       }
