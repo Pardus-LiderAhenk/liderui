@@ -16,7 +16,7 @@
   <ConfirmDialog></ConfirmDialog>
     <div class="p-grid">
          
-        <div class="p-col-3" style="min-height:90vh; background-color:#fff;margin-left:10px;margin-top:10px;">
+        <div class="p-col-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
                 loadNodeUrl="/lider/sudo_groups/getGroups"
@@ -38,8 +38,29 @@
                 </template>
             </tree-component>
         </div>
-        <div class="p-col-9">
-
+        <div class="p-col-9" style="min-height:90vh;">
+                <TabView style="min-height:90vh;">
+                    <TabPanel header="Kayıt Bilgisi">
+                         <DataTable :value="selectedNodeData" responsiveLayout="scroll">
+                            <Column field="label" header="Öznitelik"></Column>
+                            <Column field="value" header="Değer"></Column>
+                        </DataTable>
+                    </TabPanel>
+                    <TabPanel header="Grup Üyeleri">
+                         <DataTable :value="selectedNode ? selectedNode.attributesMultiValues.sudoUser: []" responsiveLayout="scroll">
+                            <Column header="Üye DN">
+                                <template #body="slotProps">
+                                    <span>{{slotProps.data}}</span>
+                                </template>
+                            </Column>
+                            <Column  >
+                                <template #body="slotProps">
+                                    <Button icon="pi pi-times" class="p-button-rounded p-button-danger" @click="deleteSudoUser(slotProps.data)"/>
+                                </template>
+                            </Column>
+                        </DataTable>
+                    </TabPanel>
+                </TabView>
         </div>
     </div>
     <Dialog header="Klasör Ekle" v-model:visible="modals.folderAdd" :style="{width: '50vw'}" :modal="true">
@@ -144,7 +165,9 @@ export default {
             contextMenuItems: [
                 {label: 'View', icon: 'pi pi-fw pi-search'},
                 {label: 'Delete', icon: 'pi pi-fw pi-times'}
-            ]
+            ],
+            selectedNodeData: [],
+            selectedNodeGroupMembers: []
         }
     },
     created() {
@@ -155,6 +178,45 @@ export default {
         treeNodeClick(node) {
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
+
+
+            console.log('Node attributes', node);
+            console.log(node.attributesMultiValues.objectClass);
+
+            let nodeData = [];
+
+            node.attributesMultiValues.objectClass.map(oclas => {
+                nodeData.push({
+                    'label': 'Nesne Sınıfı', 
+                    'value' : oclas
+                })
+            });
+            nodeData.push({
+                'label': 'Ad',
+                'value': node.name,
+            }, 
+            {
+                'label': 'Kayıt DN',
+                'value': node.distinguishedName,
+            },
+            {
+                'label': 'Oluştrulma Tarihi',
+                'value': node.attributes.createTimestamp,
+            },
+            {
+                'label': 'Güncelleme Tarihi',
+                'value': node.attributes.modifyTimestamp,
+            },
+            {
+                'label': 'Oluşturan Kişi',
+                'value': node.attributes.modifiersName,
+
+            });
+
+
+            this.selectedNodeData = nodeData;
+
+
         },
         moveTreeNodeClick(node) {
             //*** This method for tree that is created for folder move dialog.  */
@@ -215,16 +277,20 @@ export default {
             this.$refs.tree.append(data, this.selectedNode);
             this.modals.sudoGroup = false;
         },
+        deleteSudoUser(user) {
+            axios.post('/lider/sudo_groups/delete/sudo/user', null, {
+                params : { uid: user ,dn: this.selectedNode.distinguishedName }
+            }).then(response => {
+                this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
+                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+                this.treeNodeClick(response.data);
+            });
+        },
         handleContenxtMenu(data, node, treenode, tree){
-            console.log('Handle click event ', data);
-            console.log('Handle click node ', node);
-            console.log('Handle click treenode ', treenode);
-            console.log('Handle click tree ', tree);
-
+            
             data.preventDefault();
 
-            this.selectedNode = node;
-            this.setSelectedLiderNode(node);
+            this.treeNodeClick(node);
 
             switch(node.type) {
                 case 'ORGANIZATIONAL_UNIT':
@@ -258,9 +324,7 @@ export default {
             this.$refs.rightMenu.style.position = 'fixed';
             this.$refs.rightMenu.style.margin = '0';
             this.$refs.rightMenu.style.backgroundColor = '0';
-            console.log('Refs', this.$refs)
             this.showContextMenu = !this.showContextMenu;
-            console.log('Handle node click', data);
         }
     },
 }
