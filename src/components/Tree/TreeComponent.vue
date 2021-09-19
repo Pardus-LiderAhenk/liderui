@@ -66,7 +66,7 @@
         :load="loadNode"
         lazy
         @node-click="handleTreeClick"
-        @node-contextmenu="handleContextMenu"
+        @node-contextmenu="nodeContextMenu"
         highlight-current=true
         accordion="true"
         ref="tree"
@@ -115,32 +115,34 @@
   </el-tabs>
 
   <!-- Context Menu -->
-  <div
-    class="el-overlay mycontextmenu"
-    v-show="showContextMenu"
-    @click="closeContextMenu"
-  >
-    <ul class="dropdown-menu show" ref="rightMenu">
-      <p
-        href="#!"
-        class="dropdown-item"
-        data-v-0001a5f9=""
-        data-v-7445dd9c-s=""
-      >
-        <i class="ni ni-single-02" data-v-0001a5f9="" data-v-7445dd9c-s=""></i
-        ><span data-v-0001a5f9="" data-v-7445dd9c-s="">Profil</span>
-      </p>
-      <p
-        href="#!"
-        class="dropdown-item"
-        data-v-0001a5f9=""
-        data-v-7445dd9c-s=""
-      >
-        <i class="ni ni-single-02" data-v-0001a5f9="" data-v-7445dd9c-s=""></i
-        ><span data-v-0001a5f9="" data-v-7445dd9c-s="">Profil</span>
-      </p>
-    </ul>
-  </div>
+  <slot name="contextmenu">
+    <div
+      class="el-overlay mycontextmenu"
+      v-show="showContextMenu"
+      @click="closeContextMenu"
+    >
+      <ul class="dropdown-menu show" ref="rightMenu">
+        <p
+          href="#!"
+          class="dropdown-item"
+          data-v-0001a5f9=""
+          data-v-7445dd9c-s=""
+        >
+          <i class="ni ni-single-02" data-v-0001a5f9="" data-v-7445dd9c-s=""></i
+          ><span data-v-0001a5f9="" data-v-7445dd9c-s="">Profil</span>
+        </p>
+        <p
+          href="#!"
+          class="dropdown-item"
+          data-v-0001a5f9=""
+          data-v-7445dd9c-s=""
+        >
+          <i class="ni ni-single-02" data-v-0001a5f9="" data-v-7445dd9c-s=""></i
+          ><span data-v-0001a5f9="" data-v-7445dd9c-s="">Profil</span>
+        </p>
+      </ul>
+    </div>
+  </slot>
   <!-- Context Menu End -->
 </template>
 
@@ -248,6 +250,11 @@ export default {
       }
   },
   methods: {
+    nodeContextMenu(event,node,treenode,tree){
+      console.log('Node Context Menuye girdim')
+      this.$emit('handleContextMenu', event,node,treenode,tree);
+      
+    },
     renderContent(h, { node, data, store }) {
       let linuxIcon = require("@/assets/images/icons/linux.png");
       let groupIcon = require("@/assets/images/icons/entry_group.gif");
