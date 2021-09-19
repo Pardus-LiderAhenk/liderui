@@ -62,7 +62,7 @@ export default {
     components: {
         TreeComponent
     },
-    props: ['modalVisibleValue','selectedTreeNode'],
+    props: ['modalVisibleValue','selectedTreeNode', 'isEdit'],
     data() {
         return {
             featureDropdownOptions: [
@@ -81,14 +81,63 @@ export default {
     computed: {
         modalVisible: {
             get() {
+                 this.updateRecord();
                 return this.modalVisibleValue;
             },
             set() {
                 this.$emit('modalVisibleValue', false);
             }
-        }
-  },
+        },
+    },
+    beforeUpdate() {
+        
+    },
     methods: {
+        updateRecord() {
+            console.log('İs Edit ? ', this.isEdit);
+            if (this.isEdit) {
+                this.featureData = [];
+                this.groupName = '';
+                if (this.selectedTreeNode.attributesMultiValues.sudoUser) {
+                    this.selectedTreeNode.attributesMultiValues.sudoUser.map(user => {
+                        this.featureData.push(
+                                {
+                                'type': 'sudoUser',
+                                'value': user
+                                }
+                            )
+                    });
+                }
+
+                if (this.selectedTreeNode.attributesMultiValues.sudoCommand) {
+                    this.selectedTreeNode.attributesMultiValues.sudoCommand.map(command => {
+                        this.featureData.push(
+                                {
+                                'type': 'sudoCommand',
+                                'value': command
+                                }
+                            )
+                    });
+                }
+                if(this.selectedTreeNode.attributesMultiValues.sudoHost) {
+                    this.selectedTreeNode.attributesMultiValues.sudoHost.map(host => {
+                        this.featureData.push(
+                                {
+                                'type': 'sudoHost',
+                                'value': host
+                                }
+                            )
+                    });
+                }
+                
+
+                this.groupName = this.selectedTreeNode.name;
+            } else {
+                this.groupName = '';
+                this.featureData = [];
+            }
+            
+        },
         createSudoGroup() {
             let sudoUserList = [];
             let sudoCommandList = [];
@@ -103,19 +152,31 @@ export default {
                     sudoHostList.push(data.value);
                 }
             });
+            console.log('Edit modda mıyız ? ', this.isEdit);
+            let postUrl = this.isEdit ? '/lider/sudo_groups/editSudoGroup' : '/lider/sudo_groups/createSudoGroup'; 
 
-            axios.post('/lider/sudo_groups/createSudoGroup',{
-                    groupName: this.groupName,
-                    selectedOUDN: this.selectedTreeNode.distinguishedName,
-                    sudoUserList: sudoUserList,
-                    sudoCommandList: sudoCommandList,
-                    sudoHostList: sudoHostList
-                }).then(response => {
+
+            let postData = this.isEdit ? {
+                'newName': 'cn=' + this.groupName,
+                'selectedDN': this.selectedTreeNode.distinguishedName,
+                'sudoUserList': sudoUserList,
+                'sudoCommandList': sudoCommandList,
+                'sudoHostList': sudoHostList
+            } : {
+                groupName: this.groupName,
+                selectedOUDN: this.selectedTreeNode.distinguishedName,
+                sudoUserList: sudoUserList,
+                sudoCommandList: sudoCommandList,
+                sudoHostList: sudoHostList
+            };
+
+
+            axios.post(postUrl,postData).then(response => {
                     if (response.data === "") {
                         this.$toast.add({severity:'error', summary: 'HATA', detail:'Ekleme başarısız. Lütfen grup adını kontrol edip tekrar deneyiniz.', life: 3000});
                     } else {
                         console.log('sudo group cevap geldi', response);
-                        this.$emit('sudoGroupCreated', response.data);
+                        this.$emit('sudoGroupCreated', response.data, this.isEdit);
 
                     }
             });

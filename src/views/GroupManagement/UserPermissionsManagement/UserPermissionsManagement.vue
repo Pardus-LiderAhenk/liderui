@@ -102,9 +102,10 @@
     </Dialog>
     <sudo-group-dialog 
         :modalVisibleValue="modals.sudoGroup" 
-        @modalVisibleValue="modals.sudoGroup = $event"
+        @modalVisibleValue="modals.sudoGroup = $event; sudoGruopEdit = false"
         :selectedTreeNode="selectedNode"
-        @sudoGroupCreated="sudoGroupCreated"/>
+        @sudoGroupCreated="sudoGroupCreated"
+        :isEdit="sudoGruopEdit"/>
 </template>
 
 <script>
@@ -167,7 +168,8 @@ export default {
                 {label: 'Delete', icon: 'pi pi-fw pi-times'}
             ],
             selectedNodeData: [],
-            selectedNodeGroupMembers: []
+            selectedNodeGroupMembers: [],
+            sudoGruopEdit: false
         }
     },
     created() {
@@ -272,9 +274,17 @@ export default {
 
             });
         },
-        sudoGroupCreated(data) {
-            console.log('Sudo group oluşturuldu....', data);
-            this.$refs.tree.append(data, this.selectedNode);
+        sudoGroupCreated(data, isEdit) {
+            if (isEdit) {
+                this.isEdit = false;
+                this.selectedNode.attributesMultiValues = data.attributesMultiValues;
+                this.selectedNode.distinguishedName = data.distinguishedName;
+                this.selectedNode.name = data.name;
+                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+                this.treeNodeClick(this.selectedNode);
+            } else {
+                this.$refs.tree.append(data, this.selectedNode);
+            }
             this.modals.sudoGroup = false;
         },
         deleteSudoUser(user) {
@@ -311,7 +321,7 @@ export default {
                     break
                 case 'ROLE':
                     this.contextMenuItems = [
-                        {label: 'Grubu Düzenle'},
+                        {label: 'Grubu Düzenle', command:() => {this.sudoGruopEdit = true; this.modals.sudoGroup = true}},
                         {label: 'Kaydı Taşı', command: () => {this.modals.moveFolder = true}},
                         {label: 'Yetki Grubu Sil',command:() => {this.deleteFolder();}},
                     ]
