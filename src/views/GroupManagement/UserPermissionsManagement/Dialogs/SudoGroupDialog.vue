@@ -94,7 +94,6 @@ export default {
     },
     methods: {
         updateRecord() {
-            console.log('İs Edit ? ', this.isEdit);
             if (this.isEdit) {
                 this.featureData = [];
                 this.groupName = '';
@@ -152,7 +151,6 @@ export default {
                     sudoHostList.push(data.value);
                 }
             });
-            console.log('Edit modda mıyız ? ', this.isEdit);
             let postUrl = this.isEdit ? '/lider/sudo_groups/editSudoGroup' : '/lider/sudo_groups/createSudoGroup'; 
 
 
@@ -175,7 +173,6 @@ export default {
                     if (response.data === "") {
                         this.$toast.add({severity:'error', summary: 'HATA', detail:'Ekleme başarısız. Lütfen grup adını kontrol edip tekrar deneyiniz.', life: 3000});
                     } else {
-                        console.log('sudo group cevap geldi', response);
                         this.$emit('sudoGroupCreated', response.data, this.isEdit);
 
                     }
@@ -187,7 +184,6 @@ export default {
         addNewFeature() {
 
             if (this.selectedFeature === '' || this.featureValue === '') {
-                console.log('Seçmedin')
                 return;
             }
 

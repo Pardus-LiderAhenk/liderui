@@ -181,10 +181,6 @@ export default {
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
 
-
-            console.log('Node attributes', node);
-            console.log(node.attributesMultiValues.objectClass);
-
             let nodeData = [];
 
             node.attributesMultiValues.objectClass.map(oclas => {
@@ -225,7 +221,6 @@ export default {
             this.moveFolderNode = node;
         },
         addFolder() {
-            console.log('selectd node ', this.selectedNode)
             axios.post('/lider/sudo_groups/addOu', {
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
@@ -241,14 +236,12 @@ export default {
             this.modals.folderAdd = false;
         },
         changeFolder() {
-            console.log(this.selectedNode.distinguishedName);
             axios.post('/lider/sudo_groups/rename/entry', null, {
                 params: {
                     oldDN: this.selectedNode.distinguishedName,
                     newName: 'ou=' + this.folderName
                 }
             }).then(response => {
-                console.log('Change Folder Response', response)
                 this.selectedNode.distinguishedName = response.data.distinguishedName;
                 this.selectedNode.name = response.data.name;
                 this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
