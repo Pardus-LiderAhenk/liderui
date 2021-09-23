@@ -22,7 +22,7 @@
         </div>
       </template> 
       <template #default>
-        <Textarea v-model="message"  style="height: 320px; width:100%" />
+        <Textarea v-model="message"  style="height: 320px; width:100%" :class="messageValidation ? 'p-invalid': ''"/>
         <small v-if="messageValidation" class="p-error">{{ $t('computer.plugins.xmessage.message_content_warn') }}</small>
       </template>
       <template #pluginFooter>
@@ -35,6 +35,7 @@
 
 /**
  * Xmessage Plugin. Send instant message to client
+ * commandId: EXECUTE_XMESSAGE
  * @see {@link http://www.liderahenk.org/}
  * 
  */
@@ -82,11 +83,9 @@ export default {
   },
   watch: {
     message(){
-      if (this.message == "" || this.message == null) {
-        this.messageValidation = true;
-      } else {
+      if (this.message != "" || this.message != null) {
         this.messageValidation = false;
-      }
+      } 
     },
   },
 };

@@ -203,7 +203,21 @@
                 "view_selected_packages": "Seçili paketleri görüntüle",
                 "install": "Kur",
                 "uninstall": "Kaldır"
+            },
+            "installed_packages":{
+                "header": "Kurulu Paketlerin Yönetimi",
+                "description": "İstemcideki paketlerin listelenmesini ve seçilen paketlerin kaldırılmasını sağlar.",
+                "uninstall": "Kaldır",
+                "list_packages": "Paketleri Listele",
+                "get_packages_error_message": "Paketler getirilirken hata oluştu",
+                "version": "Versiyon",
+                "package_name": "Paket Adı",
+                "send_task_warning": "En az bir paket seçilmelidir",
+                "selected_packages": "Seçili Paketler",
+                "view_selected_packages": "Seçili paketleri görüntüle",
+                "selected_package_warning": "ahenk ve ahenk-register paketi silinemez"
             }
+            
         },
         "agent_info": {
             "hostname": "Bilgisayar Adı",

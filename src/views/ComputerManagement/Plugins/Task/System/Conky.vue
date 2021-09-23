@@ -35,7 +35,7 @@
               <label>{{$t('computer.plugins.conky.templates')}}</label>
               <Dropdown
                 v-model="selectedTemplate" 
-                :options="templates" optionLabel="label"
+                :options="templates" optionLabel="label" :class="conkyValidation ? 'p-invalid': ''"
                 :showClear="true" :filter="true" :placeholder="$t('computer.plugins.conky.select_template')" filterPlaceholder="Find Template">
               </Dropdown>
               <small v-if="conkyValidation" class="p-error">{{ $t('computer.plugins.conky.warn_select_template') }}</small>
@@ -72,6 +72,7 @@
 
 /**
  * Conky Plugin. Allows to text-based information to be displayed on desktop of users
+ * commandId: EXECUTE_CONKY
  * @see {@link http://www.liderahenk.org/}
  * 
  */

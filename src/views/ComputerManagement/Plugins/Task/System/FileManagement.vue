@@ -58,6 +58,7 @@
 
 /**
  * File Managament Plugin. Get file content of entered file path and create new file with file content
+ * commandId: GET_FILE_CONTENT, WRITE_TO_FILE
  * @see {@link http://www.liderahenk.org/}
  * 
  */

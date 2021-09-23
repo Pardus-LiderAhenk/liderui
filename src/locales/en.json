@@ -202,6 +202,19 @@
                 "view_selected_packages": "View selected packages",
                 "install": "Install",
                 "uninstall": "Uninstall"
+            },
+            "installed_packages":{
+                "header": "Management Of Installed Packages",
+                "description": "Allows to list and uninstall selected packages on client",
+                "uninstall": "Uninstall",
+                "list_packages": "List Packages",
+                "get_packages_error_message": "An error occurred while getting packages",
+                "version": "Version",
+                "package_name": "Package Name",
+                "send_task_warning": "At least one package must be selected",
+                "selected_packages": "Selected Packages",
+                "view_selected_packages": "View selected packages",
+                "selected_package_warning": "Can not be deleted ahenk and ahenk-register"
             }
         },
         "agent_info": {

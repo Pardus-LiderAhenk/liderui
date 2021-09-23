@@ -211,7 +211,8 @@
 
 <script>
 /**
- * local user management plugin 
+ * local user management plugin. Get user list, edit and delete on the client. Add user to client
+ * commandId: GET_USERS, ADD_USER, EDIT_USER, DELETE_USER
  * @see {@link http://www.liderahenk.org/}
  * 
  */

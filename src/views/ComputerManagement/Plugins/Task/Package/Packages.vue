@@ -13,9 +13,9 @@
       <template #pluginHeaderButton>
         <div>
           <Button v-if="packages"
-          icon="pi pi-send"
+          icon="pi pi-caret-right"
           class="p-button-raised p-button-sm"
-          :title="$t('computer.plugins.xmessage.send_message')"
+          :title="$t('computer.plugins.button.run')"
           @click.prevent="sendTaskPackages"
           >
           </Button>
@@ -105,9 +105,6 @@
               </DataTable>
             </OverlayPanel>
           </div>
-          <div class="p-d-flex p-jc-center">
-            <p v-if="taskValidation" class="p-error">{{ $t('computer.plugins.packages.send_task_warning') }}</p>
-          </div>
         </div>
       </template>
       <template #pluginFooter>
@@ -121,20 +118,21 @@ import axios from "axios";
 
 /**
  * Allows to install or remove selected package or packages in package repository which entered address
+ * commandId: PACKAGES
  * @see {@link http://www.liderahenk.org/}
  * 
  */
 
 export default {
   props: {
-    pluginTask1: {
+    pluginTask: {
       type: Object,
       description: "Plugin task object",
     },
   },
 
   created() {
-    this.task = {...this.pluginTask1};
+    this.task = {...this.pluginTask};
   },
 
   data() {
@@ -168,7 +166,7 @@ export default {
     .then((response) => {
       if (response.data.pardusRepoAddress == null || response.data.pardusRepoAddress == "" && response.data.pardusRepoComponent != null || response.data.pardusRepoComponent == "") {
         this.repoForm.url = "http://depo.pardus.org.tr/pardus";
-        this.repoForm.component = "ondokuz main contrib non-free";
+        this.repoForm.component = "yirmibir main contrib non-free";
       } else {
         this.repoForm.url = response.data.pardusRepoAddress;
         this.repoForm.component = response.data.pardusRepoComponent;
@@ -265,9 +263,10 @@ export default {
     sendTaskPackages(){
      if (this.packageInfoList.length > 0) {
       this.task.commandId = "PACKAGES";
-      this.task.parameterMap = {"packageInfoList": this.packageInfoList}
+      this.task.parameterMap = {"packageInfoList": this.packageInfoList};
       this.showTaskDialog = true;
      } else{
+       this.$toast.add({severity:'warn', detail: this.$t('computer.plugins.packages.send_task_warning'), summary:this.$t("computer.task.toast_summary"), life: 3000})
        this.taskValidation = true;
      }
     },
