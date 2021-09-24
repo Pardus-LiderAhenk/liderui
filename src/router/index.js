@@ -6,6 +6,8 @@ import ComputerManagement from '@/views/ComputerManagement/ComputerManagement.vu
 import FullLayout from '@/layouts/FullLayout.vue';
 import ComputerGroupManagement from '@/views/GroupManagement/ComputerGroupManagement/ComputerGroupManagement.vue';
 import UserGroupManagement from '@/views/GroupManagement/UserGroupManagement/UserGroupManagement.vue';
+import UserPermissionsManagement from '@/views/GroupManagement/UserPermissionsManagement/UserPermissionsManagement.vue';
+
 //REPORTS
 import AgentReport from '@/views/Reports/AgentReport.vue';
 
@@ -42,6 +44,14 @@ const routes = [{
                 path: "/user_group_management",
                 name: "UserGroupManagement",
                 components: { default: UserGroupManagement },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/user_permissions_management",
+                name: "UserPermissionsManagement",
+                components: { default: UserPermissionsManagement },
                 meta: {
                     requiresAuth: true,
                 }

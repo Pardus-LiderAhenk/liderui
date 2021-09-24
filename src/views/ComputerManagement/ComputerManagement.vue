@@ -9,7 +9,7 @@
                                 >
                 </tree-component>
                 </el-tab-pane>
-                <el-tab-pane label="Online">Onlineee</el-tab-pane>
+                <el-tab-pane label="Online">Online</el-tab-pane>
             </el-tabs>
       </div>
       <div class="p-col-9">
