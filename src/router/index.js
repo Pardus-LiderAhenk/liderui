@@ -11,6 +11,9 @@ import UserPermissionsManagement from '@/views/GroupManagement/UserPermissionsMa
 //REPORTS
 import AgentReport from '@/views/Reports/AgentReport.vue';
 
+//SETTINGS
+import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
+
 const routes = [{
         path: "/",
         redirect: "/dashboard",
@@ -64,6 +67,14 @@ const routes = [{
                     requiresAuth: true,
                 }
             },
+            {
+                path: '/settings/server_setings',
+                name: 'ServerSettings',
+                components: {default: ServerSettings},
+                meta: {
+                    requiresAuth: true
+                }
+            }
            
         ],
     },

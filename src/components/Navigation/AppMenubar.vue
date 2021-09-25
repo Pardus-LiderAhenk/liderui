@@ -28,6 +28,11 @@
                     <img :src="getImgUrl('tr.png')" style="width:20px;height:20px"/>
                     <span class="pi pi-angle-down"></span>
                 </Button>
+                 <Button type="button" class=" p-button-link" @click="toggleSettings">
+                    <i class="pi pi-cog" style="fontSize: 1.2rem"></i>
+                    <span class="pi pi-angle-down"></span>
+                </Button>
+                <Menu id="overlay_menu" ref="settingsMenu" :model="settingItems" :popup="true" />
                 <Button type="button" class=" p-button-link">
                     <span >İsmail BAŞARAN</span>
                     <span class="layout-topbar-icon pi pi-angle-down"></span>
@@ -101,13 +106,46 @@ export default {
                         }
                     ]
                 }
+            ],
+            settingItems: [
+                {
+					label: 'Arayüz Erişim Ayarları',
+					command: () => {
+						this.$toast.add({severity:'success', summary:'Updated', detail:'Data Updated', life: 3000});
+					}
+				},
+				{
+					label: 'Sunucu Ayarları',
+					to: '/settings/server_setings'
+				},
+                {
+					label: 'Sistem Gözlemcisi Tanımları',
+					command: () => {
+						this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
+					}
+				},
+                {
+					label: 'Betik Tanımları',
+					command: () => {
+						this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
+					}
+				},
+                {
+					label: 'Kayıt Şablonları',
+					command: () => {
+						this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
+					}
+				},
             ]
         }
     },
     methods: {
         getImgUrl: function(path) {
             return require("../../assets/images/flags/" + path);
-        }
+        },
+        toggleSettings(event) {
+            this.$refs.settingsMenu.toggle(event);
+        },
     }
 }
 </script>
@@ -134,5 +172,11 @@ export default {
     }
     ::v-deep .p-menubar .p-submenu-list {
         width: 300px;
+    }
+    .p-menu {
+        min-width: 100px;
+    }
+    .p-button.p-button-icon-only.p-button-rounded {
+        color: #fff
     }
 </style>
