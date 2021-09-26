@@ -13,6 +13,8 @@ import AgentReport from '@/views/Reports/AgentReport.vue';
 
 //SETTINGS
 import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
+import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefinitions/SystemMonitoringDefinitions.vue';
+import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
 
 const routes = [{
         path: "/",
@@ -71,6 +73,22 @@ const routes = [{
                 path: '/settings/server_setings',
                 name: 'ServerSettings',
                 components: {default: ServerSettings},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/settings/system_monitoring_definitions',
+                name: 'SystemMonitoringDefinitions',
+                components: {default: SystemMonitoringDefinitions},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/settings/script_definitions',
+                name: 'ScriptDefinitions',
+                components: {default: ScriptDefinitions},
                 meta: {
                     requiresAuth: true
                 }

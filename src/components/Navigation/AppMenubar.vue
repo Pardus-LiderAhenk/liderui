@@ -120,15 +120,11 @@ export default {
 				},
                 {
 					label: 'Sistem Gözlemcisi Tanımları',
-					command: () => {
-						this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
-					}
+					to:'/settings/system_monitoring_definitions',
 				},
                 {
 					label: 'Betik Tanımları',
-					command: () => {
-						this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
-					}
+					to: '/settings/script_definitions',
 				},
                 {
 					label: 'Kayıt Şablonları',
