@@ -15,6 +15,7 @@ import AgentReport from '@/views/Reports/AgentReport.vue';
 import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
 import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefinitions/SystemMonitoringDefinitions.vue';
 import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
+import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
 
 const routes = [{
         path: "/",
@@ -92,7 +93,15 @@ const routes = [{
                 meta: {
                     requiresAuth: true
                 }
-            }
+            },
+            {
+                path: '/settings/registratin_templates',
+                name: 'RegistrationTemplates',
+                components: {default: RegistrationTemplates},
+                meta: {
+                    requiresAuth: true
+                }
+            },
            
         ],
     },

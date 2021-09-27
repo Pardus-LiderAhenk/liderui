@@ -128,9 +128,7 @@ export default {
 				},
                 {
 					label: 'Kayıt Şablonları',
-					command: () => {
-						this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
-					}
+					to:'/settings/registratin_templates',
 				},
             ]
         }
