@@ -55,7 +55,7 @@
             >
               <template #empty>
                 <div class="p-d-flex p-jc-center">
-                  <span>Packages not found</span>
+                  <span>{{$t('computer.plugins.packages.table_empty_message')}}</span>
                 </div>
               </template>
               <Column field="packageName" :header="$t('computer.plugins.packages.package_name')" headerStyle="width: 17%" filterMatchMode="startsWith" ref="packageName">>

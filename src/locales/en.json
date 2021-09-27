@@ -135,7 +135,8 @@
                 "home_directory_dialog_content": "Do you want to delete the user home directory as well?",
                 "home_directory_dialog_title": "Delete User Home Directory",
                 "create_password": "Create Password",
-                "change_password": "Change Password"
+                "change_password": "Change Password",
+                "table_empty_message": "Local user not found"
             },
             "file_transfer": {
                 "header": "Share File",
@@ -201,11 +202,12 @@
                 "status": "Status",
                 "view_selected_packages": "View selected packages",
                 "install": "Install",
-                "uninstall": "Uninstall"
+                "uninstall": "Uninstall",
+                "table_empty_message": "Package not found"
             },
             "installed_packages":{
                 "header": "Management Of Installed Packages",
-                "description": "Allows to list and uninstall selected packages on client",
+                "description": "Allows to list packages and uninstall selected packages on client",
                 "uninstall": "Uninstall",
                 "list_packages": "List Packages",
                 "get_packages_error_message": "An error occurred while getting packages",
@@ -214,7 +216,27 @@
                 "send_task_warning": "At least one package must be selected",
                 "selected_packages": "Selected Packages",
                 "view_selected_packages": "View selected packages",
-                "selected_package_warning": "Can not be deleted ahenk and ahenk-register"
+                "selected_package_warning": "Can not be deleted ahenk and ahenk-register",
+                "table_empty_message": "Package not found"
+            },
+            "repositories": {
+                "header": "Management Of Repositories",
+                "description": "Allows to list repositories, deleted selected repositories and added new repository address on client",
+                "list_repo": "List Repositories",
+                "add_repo_address": "Add Repository Address",
+                "update": "Update",
+                "repo_address": "Repository Address",
+                "cancel":"Cancel",
+                "save": "Save",
+                "repo_address_warn": "Repository address is not available",
+                "repo_already_added": "Repository address already added",
+                "status": "Status",
+                "view_selected_repositories": "View selected repositories",
+                "selected_repositories": "Selected Repositories",
+                "add": "Add",
+                "delete": "Delete",
+                "table_empty_message": "Repository not found",
+                "send_task_warning": "At least one repository must be selected or at least one repository must be added"
             }
         },
         "agent_info": {

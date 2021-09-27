@@ -174,7 +174,7 @@
           <DataTable :value="users" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
             <template #empty>
               <div class="p-d-flex p-jc-center">
-                <span>Local user not found</span>
+                <span>{{$t('computer.plugins.local_user.table_empty_message')}}</span>
               </div>
             </template>
             <Column field="username" :header="$t('computer.plugins.local_user.username')"></Column>

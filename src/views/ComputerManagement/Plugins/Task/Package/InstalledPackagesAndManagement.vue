@@ -51,7 +51,7 @@
             </template>
               <template #empty>
               <div class="p-d-flex p-jc-center">
-                  <span>Packages not found</span>
+                  <span>{{$t('computer.plugins.installed_packages.table_empty_message')}}</span>
               </div>
               </template>
               <Column field="id" header="#" style="width: 10%"></Column>

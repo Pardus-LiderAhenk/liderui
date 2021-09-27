@@ -136,7 +136,8 @@
                 "home_directory_dialog_content": "Kullanıcı ev dizinini de silmek istiyor musunuz?",
                 "home_directory_dialog_title": "Kulanıcı Ev Dizini Sil",
                 "create_password": "Parola Oluştur",
-                "change_password": "Parola Değiştir"
+                "change_password": "Parola Değiştir",
+                "table_empty_message": "Yerel kullanıcı bulunamadı"
             },
             "file_transfer": {
                 "header": "Dosya Paylaşımı",
@@ -202,7 +203,8 @@
                 "status": "Durum",
                 "view_selected_packages": "Seçili paketleri görüntüle",
                 "install": "Kur",
-                "uninstall": "Kaldır"
+                "uninstall": "Kaldır",
+                "table_empty_message": "Paket bulunamadı"
             },
             "installed_packages":{
                 "header": "Kurulu Paketlerin Yönetimi",
@@ -215,7 +217,27 @@
                 "send_task_warning": "En az bir paket seçilmelidir",
                 "selected_packages": "Seçili Paketler",
                 "view_selected_packages": "Seçili paketleri görüntüle",
-                "selected_package_warning": "ahenk ve ahenk-register paketi silinemez"
+                "selected_package_warning": "ahenk ve ahenk-register paketi silinemez",
+                "table_empty_message": "Paket bulunamadı"
+            },
+            "repositories": {
+                "header": "Depo Yönetimi",
+                "description": "İstemcideki paket depolarının listelenmesini, seçilen paket depolarının silinmesini ve yeni bir paket depo adresi eklenmesini sağlar.",
+                "list_repo": "Depoları Listele",
+                "add_repo_address": "Depo Adresi Ekle",
+                "update": "Güncelle",
+                "repo_address": "Depo Adresi",
+                "cancel": "İptal",
+                "save": "Kaydet",
+                "repo_address_warn": "Paket depo adresi boş bırakılamaz",
+                "repo_already_added": "Depo adresi zaten ekli",
+                "status": "Durum",
+                "view_selected_repositories": "Seçili depoları görüntüle",
+                "selected_repositories": "Seçili Depolar",
+                "add": "Ekle",
+                "delete": "Sil",
+                "table_empty_message": "Paket deposu bulunamadı",
+                "send_task_warning": "En az bir depo adresi seçilmelidir veya en az bir depo adresi eklenmelidir"
             }
             
         },
