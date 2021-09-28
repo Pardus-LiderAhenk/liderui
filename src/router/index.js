@@ -16,6 +16,7 @@ import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
 import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefinitions/SystemMonitoringDefinitions.vue';
 import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
 import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
+import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
 
 const routes = [{
         path: "/",
@@ -98,6 +99,14 @@ const routes = [{
                 path: '/settings/registratin_templates',
                 name: 'RegistrationTemplates',
                 components: {default: RegistrationTemplates},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/settings/console_user_settings',
+                name: 'ConsoleUserSettings',
+                components: {default: ConsoleUserSettings},
                 meta: {
                     requiresAuth: true
                 }

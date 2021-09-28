@@ -110,9 +110,7 @@ export default {
             settingItems: [
                 {
 					label: 'Arayüz Erişim Ayarları',
-					command: () => {
-						this.$toast.add({severity:'success', summary:'Updated', detail:'Data Updated', life: 3000});
-					}
+					to:'/settings/console_user_settings',
 				},
 				{
 					label: 'Sunucu Ayarları',
