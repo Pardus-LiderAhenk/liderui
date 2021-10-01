@@ -186,7 +186,7 @@
                 "header": "Paket Kur Veya Kaldır",
                 "description": "Adresi girilen paket deposundaki seçilen paket ya da paketlerin istemci kurulmasını veya kaldırılması sağlar.",
                 "edit":"Düzenle",
-                "save": "Save",
+                "save": "Kaydet",
                 "get_settings_error_message": "Paket depo ayarları getirilirken hata oluştu",
                 "update_repo_success_message": "Paket depo adresi başarıyla güncellendi",
                 "update_repo_error_message": "Paket depo adresi güncellenirken hata oluştu",
@@ -204,10 +204,11 @@
                 "view_selected_packages": "Seçili paketleri görüntüle",
                 "install": "Kur",
                 "uninstall": "Kaldır",
-                "table_empty_message": "Paket bulunamadı"
+                "table_empty_message": "Paket bulunamadı",
+                "search": "Ara"
             },
             "installed_packages":{
-                "header": "Kurulu Paketlerin Yönetimi",
+                "header": "Kurulu Paket Yönetimi",
                 "description": "İstemcideki paketlerin listelenmesini ve seçilen paketlerin kaldırılmasını sağlar.",
                 "uninstall": "Kaldır",
                 "list_packages": "Paketleri Listele",
@@ -218,7 +219,8 @@
                 "selected_packages": "Seçili Paketler",
                 "view_selected_packages": "Seçili paketleri görüntüle",
                 "selected_package_warning": "ahenk ve ahenk-register paketi silinemez",
-                "table_empty_message": "Paket bulunamadı"
+                "table_empty_message": "Paket bulunamadı",
+                "search": "Ara"
             },
             "repositories": {
                 "header": "Depo Yönetimi",
@@ -237,7 +239,29 @@
                 "add": "Ekle",
                 "delete": "Sil",
                 "table_empty_message": "Paket deposu bulunamadı",
-                "send_task_warning": "En az bir depo adresi seçilmelidir veya en az bir depo adresi eklenmelidir"
+                "send_task_warning": "En az bir depo adresi seçilmelidir veya en az bir depo adresi eklenmelidir",
+                "search": "Ara"
+            },
+            "service_management": {
+                "header": "Servis Yönetimi",
+                "description": "İstemcideki servislerin durumları gözlemlenir. Listelenen servislerin durumlarının başlat, durdur, etkinleştir veya devre dışı bırak olarak değiştirilmesine izin verir.",
+                "list_services": "List Services",
+                "table_empty_message": "Servis bulunamadı",
+                "service_name": "Servis Adı",
+                "status": "Durum",
+                "auto_start": "Otomatik Başlat",
+                "enabled": "Etkin",
+                "disabled": "Etkin Değil",
+                "active": "Aktif",
+                "inactive": "Aktif Değil",
+                "select": "Seç",
+                "view_selected_services": "Seçili servisleri görüntüle",
+                "selected_services": "Seçili Servisler",
+                "selected_service_warning": "ahenk servisi seçilemez",
+                "get_service_error_message": "Servisler getirilirken hata oluştu",
+                "send_task_warning": "En az bir servis seçilmelidir",
+                "change": "Değiştir",
+                "search": "Ara"
             }
             
         },
@@ -275,11 +299,11 @@
             "month": "Ay",
             "day_of_week": "Haftanın Günü",
             "date": "Tarih",
-            "minute_rule": "Lüften dakika girin",
-            "hour_rule": "Lüften saat girin",
+            "minute_rule": "Lütfen dakika girin",
+            "hour_rule": "Lütfen saat girin",
             "day_of_month_rule": "Lüften ayın gününü girin",
-            "month_rule": "Lüften ay girin",
-            "day_of_week_rule": "Lüften haftanın gününü girin",
+            "month_rule": "Lütfen ay girin",
+            "day_of_week_rule": "Lütfen haftanın gününü girin",
             "save": "Kaydet",
             "cancel": "İptal",
             "parameters": "Parametreler",

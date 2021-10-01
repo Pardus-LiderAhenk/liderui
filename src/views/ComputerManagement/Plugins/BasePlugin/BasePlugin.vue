@@ -6,7 +6,7 @@
       <span v-if="scheduledParam">{{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}</span>
     </div>
     <template #footer>
-      <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="closeTaskDialog('cancel')" class="p-button-danger p-button-sm"/>
+      <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="closeTaskDialog('cancel')" class="p-button-text p-button-sm"/>
       <Button :label="$t('computer.plugins.base_plugin.yes')" icon="pi pi-check" @click="confirmTaskDialog" class="p-button-sm"/>
     </template>
   </Dialog>
@@ -153,7 +153,7 @@ export default {
       task.cronExpression = this.scheduledParam;
       task.dnType = this.selectedLiderNode.type;
       
-      axios.post(process.env.VUE_APP_URL + "/lider/task/execute",task)
+      axios.post("/lider/task/execute",task)
         .then((response) => {
           if (response.data.status == 'OK') {
             if (this.selectedLiderNode.type == "AHENK") {

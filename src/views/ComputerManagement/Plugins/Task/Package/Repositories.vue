@@ -57,7 +57,7 @@
         <div class="p-grid p-flex-column">
           <DataTable :value="repositories" class="p-datatable-sm table-no-select-all p-col"
           v-model:selection="selectedRepositories" dataKey="id"
-          selectionMode="multiple" :metaKeySelection="false" style="margin-top: 2em"
+          :metaKeySelection="false" style="margin-top: 2em"
           @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
           v-model:filters="filters"
           >
@@ -65,7 +65,7 @@
             <div class="p-d-flex p-jc-end">
               <span class="p-input-icon-left">
                 <i class="pi pi-search"/>
-                <InputText v-model="filters['global'].value" class="p-inputtext-sm" placeholder="Search" />
+                <InputText v-model="filters['global'].value" class="p-inputtext-sm" :placeholder="$t('computer.plugins.repositories.search')" />
               </span>
             </div>
           </template>
@@ -74,6 +74,7 @@
                 <span>{{$t('computer.plugins.repositories.table_empty_message')}}</span>
             </div>
             </template>
+            <Column selectionMode="multiple" headerStyle="width: 3em"></Column>
             <Column field="id" header="#" style="width: 10%"></Column>
             <Column field="repoAddress" :header="$t('computer.plugins.repositories.repo_address')" style="min-width: 40%"></Column>
           </DataTable>
@@ -83,8 +84,8 @@
              :badge="selectedRepositories.length > 0 ? selectedRepositories.length: '0'" badgeClass="p-badge-danger" />
             <OverlayPanel ref="repositoryOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" :style="{width: '30vw'}" :breakpoints="{'960px': '75vw'}">
               <h5 class="text-center">{{$t('computer.plugins.repositories.selected_repositories')}}</h5>
-              <DataTable :value="selectedRepositories" responsiveLayout="scroll" class="p-datatable-sm">
-                <Column field="repoAddress" :header="$t('computer.plugins.repositories.repo_address')"></Column>
+              <DataTable :value="selectedRepositories" scrollable="true" scrollHeight="400px" class="p-datatable-sm">
+                <Column field="repoAddress" :header="$t('computer.plugins.repositories.repo_address')" style="min-width: 80%"></Column>
                 <Column field="status" :header="$t('computer.plugins.repositories.status')" style="width: 10%">
                   <template #body="slotProps">
                     <Badge
@@ -288,10 +289,14 @@ export default {
 
 <style lang="scss" scoped>
 
-::v-deep(.p-datatable .p-datatable-tbody) {
-  .p-highlight{
-    background: #2196f3;
+::v-deep(.p-datatable .p-column-header-content) {
+  .p-checkbox .p-checkbox-box{
+    display: none !important
   }
+}
+
+::v-deep(.p-datatable .p-column-header-content) {
+  pointer-events: none;
 }
 
 </style>

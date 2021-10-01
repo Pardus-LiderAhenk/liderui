@@ -60,7 +60,7 @@
               </template>
               <Column field="packageName" :header="$t('computer.plugins.packages.package_name')" headerStyle="width: 17%" filterMatchMode="startsWith" ref="packageName">>
                 <template #filter="{filterModel,filterCallback}" v-if="packages">
-                  <InputText  type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
+                  <InputText  type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" :placeholder="$t('computer.plugins.packages.search')"/>
                 </template>        
               </Column>
               <Column field="version" :header="$t('computer.plugins.packages.version')" headerStyle="width: 15%">
@@ -74,14 +74,17 @@
               </Column>
               <Column field="status" :header="$t('computer.plugins.packages.status')" headerStyle="width: 10%">
                 <template #body="slotProps">
-                  <Badge v-if="slotProps.data.tag == 'Install'" severity="success" icon="pi pi-users" :value="slotProps.data.tag"></Badge>
-                  <Badge v-else-if="slotProps.data.tag == 'Uninstall'" severity="danger" :value="slotProps.data.tag"></Badge>
+                  <Badge v-if="slotProps.data.tag == 'Install'" severity="success" icon="pi pi-users"
+                   :value="$t('computer.plugins.packages.install')">
+                   </Badge>
+                  <Badge v-else-if="slotProps.data.tag == 'Uninstall'" severity="danger" :value="$t('computer.plugins.packages.uninstall')"></Badge>
                   <Badge v-else severity="info" value="NA"></Badge>
                 </template>
               </Column>
               <Column :exportable="false" headerStyle="width: 10%">
                 <template #body="slotProps">
-                  <Dropdown v-model="slotProps.data.tag" style="min-width: 100%;" :showClear="true" :class="packageInfoList.length == 0 && taskValidation ? 'p-invalid': ''"
+                  <Dropdown v-model="slotProps.data.tag" style="min-width: 100%;" :showClear="true" 
+                  :class="packageInfoList.length == 0 && taskValidation ? 'p-invalid': ''"
                   :options="[{label: $t('computer.plugins.packages.install'), value: 'Install'},
                   {label: $t('computer.plugins.packages.uninstall'), value: 'Uninstall'}]"
                   optionLabel="label" optionValue="value" :placeholder="$t('computer.plugins.packages.select')" 
@@ -91,10 +94,11 @@
             </DataTable>
           </div>
           <div class="p-col" v-if="packages">
-            <Button type="button" :label="$t('computer.plugins.packages.view_selected_packages')" @click="toggle($event)" icon="pi pi-info-circle" class="p-button-sm" :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" badgeClass="p-badge-danger" />
+            <Button type="button" :label="$t('computer.plugins.packages.view_selected_packages')" @click="toggle($event)" icon="pi pi-info-circle" class="p-button-sm" 
+            :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" badgeClass="p-badge-danger" />
             <OverlayPanel ref="packagesOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
               <h5 class="text-center">{{$t('computer.plugins.packages.selected_packages')}}</h5>
-              <DataTable :value="packageInfoList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+              <DataTable :value="packageInfoList" responsiveLayout="scroll" scrollable="true" scrollHeight="400px" class="p-datatable-sm" :metaKeySelection="false">
                 <Column field="packageName" :header="$t('computer.plugins.packages.package_name')"></Column>
                 <Column field="tag" :header="$t('computer.plugins.packages.status')">
                   <template #body="slotProps">
@@ -162,7 +166,7 @@ export default {
   },
 
   mounted() {
-    axios.get(process.env.VUE_APP_URL + "/lider/config/configurations", null)
+    axios.get("/lider/config/configurations", null)
     .then((response) => {
       if (response.data.pardusRepoAddress == null || response.data.pardusRepoAddress == "" && response.data.pardusRepoComponent != null || response.data.pardusRepoComponent == "") {
         this.repoForm.url = "http://depo.pardus.org.tr/pardus";
@@ -189,7 +193,7 @@ export default {
         const params = new FormData();
         params.append("pardusRepoAddress", this.repoForm.url);
         params.append("pardusRepoComponent", this.repoForm.component);
-        axios.post(process.env.VUE_APP_URL + "/packages/update/repoAddress", params)
+        axios.post("/packages/update/repoAddress", params)
         .then((response) => {
         if (response.data.pardusRepoAddress != null && response.data.pardusRepoComponent != null) {
           this.$toast.add({severity:'success', detail: this.$t('computer.plugins.packages.update_repo_success_message'), summary:this.$t("computer.task.toast_summary"), life: 3000});
@@ -208,7 +212,7 @@ export default {
         params.append("type", this.type.value);
         params.append("url", this.repoForm.url);
         params.append("component", this.repoForm.component);
-        axios.post(process.env.VUE_APP_URL + "/packages/list", params)
+        axios.post("/packages/list", params)
         .then((response) => {
         if (response.data != null) {
           this.packages = response.data;

@@ -4,7 +4,7 @@
       <i class="pi pi-home p-mr-3" style="font-size: 2rem" />
       <span> {{ $t('computer.plugins.local_user.home_directory_dialog_content') }}</span>
       <template #footer>
-        <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="deleteUser(false)" class="p-button-danger p-button-sm"/>
+        <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="deleteUser(false)" class="p-button-text p-button-sm"/>
         <Button :label="$t('computer.plugins.base_plugin.yes')" icon="pi pi-check" @click="deleteUser(true)" class="p-button-sm" />
       </template>
     </Dialog>
@@ -122,7 +122,7 @@
                   </template>
                 </Password>
                 <Button icon="pi pi-key" class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' 
-                  @click="generatePassword" 
+                  @click="generatePassword"
                   :disabled="showPasswordForm ? false : true"
                 />
               </div>
@@ -134,7 +134,7 @@
         </div>
       </div>
       <template #footer>
-        <Button class="p-button-sm p-button-danger" :label="$t('computer.plugins.local_user.cancel')" icon="pi pi-times" @click.prevent="showUserDialog=false"/>
+        <Button class="p-button-sm p-button-text" :label="$t('computer.plugins.local_user.cancel')" icon="pi pi-times" @click.prevent="showUserDialog=false"/>
         <Button class="p-button-sm" 
           :label="selectedUser ? $t('computer.plugins.local_user.update'): $t('computer.plugins.local_user.add')" 
           :icon="selectedUser ? 'pi pi-user-edit': 'pi pi-user-plus'"

@@ -37,7 +37,7 @@
           v-model:selection="selectedPackages" dataKey="id"
           :paginator="true" :rows="10" 
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-          :rowsPerPageOptions="[10,25,50]" selectionMode="multiple" :metaKeySelection="false" style="margin-top: 2em"
+          :rowsPerPageOptions="[10,25,50]" :metaKeySelection="false" style="margin-top: 2em"
           @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
           v-model:filters="filters"
           >
@@ -45,7 +45,7 @@
               <div class="p-d-flex p-jc-end">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
-                  <InputText v-model="filters['global'].value" class="p-inputtext-sm" placeholder="Search" />
+                  <InputText v-model="filters['global'].value" class="p-inputtext-sm" :placeholder="$t('computer.plugins.installed_packages.search')" />
                 </span>
               </div>
             </template>
@@ -54,15 +54,18 @@
                   <span>{{$t('computer.plugins.installed_packages.table_empty_message')}}</span>
               </div>
               </template>
+              <Column selectionMode="multiple" headerStyle="width: 3em"></Column>
               <Column field="id" header="#" style="width: 10%"></Column>
               <Column field="packageName" :header="$t('computer.plugins.installed_packages.package_name')" style="min-width: 40%"></Column>
               <Column field="version" :header="$t('computer.plugins.installed_packages.version')" style="min-width: 50%"></Column>
           </DataTable>
           <div class="p-col" v-if="packages">
-            <Button type="button" :label="$t('computer.plugins.installed_packages.view_selected_packages')" @click="toggle($event)" icon="pi pi-info-circle" class="p-button-sm" :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" badgeClass="p-badge-danger" />
-            <OverlayPanel ref="packagesOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 350px" :breakpoints="{'960px': '75vw'}">
+            <Button type="button" :label="$t('computer.plugins.installed_packages.view_selected_packages')"
+             @click="toggle($event)" icon="pi pi-info-circle" class="p-button-sm"
+             :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" badgeClass="p-badge-danger" />
+            <OverlayPanel ref="packagesOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 400px" :breakpoints="{'960px': '75vw'}">
               <h5 class="text-center">{{$t('computer.plugins.installed_packages.selected_packages')}}</h5>
-              <DataTable :value="packageInfoList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+              <DataTable :value="packageInfoList" responsiveLayout="scroll" scrollable="true" scrollHeight="400px" class="p-datatable-sm" :metaKeySelection="false">
                 <Column field="packageName" :header="$t('computer.plugins.installed_packages.package_name')"></Column>
                 <Column field="version" :header="$t('computer.plugins.installed_packages.version')"></Column>
               </DataTable>
@@ -165,7 +168,7 @@ export default {
         if (message.commandClsId == "INSTALLED_PACKAGES") {
             const params = new FormData();
             params.append("id", message.result.id);
-            axios.post(process.env.VUE_APP_URL + "/command/commandexecutionresult", params)
+            axios.post("/command/commandexecutionresult", params)
             .then((response) => {
                 if (response.data != null) {
                     var packagesList = [];
@@ -206,12 +209,12 @@ export default {
           this.packageInfoList.push(event.data);
         } else {
           for (let index = 0; index < this.selectedPackages.length; index++) {
-          const element = this.selectedPackages[index];
-          if (event.data.packageName === element.packageName && event.data.version === element.version) {
-            this.selectedPackages.splice(index, 1);
+            const element = this.selectedPackages[index];
+            if (event.data.packageName === element.packageName && event.data.version === element.version) {
+              this.selectedPackages.splice(index, 1);
+            }
           }
-        }
-        this.$toast.add({severity:'warn', detail: this.$t('computer.plugins.installed_packages.selected_package_warning'), summary:this.$t("computer.task.toast_summary"), life: 3000})
+          this.$toast.add({severity:'warn', detail: this.$t('computer.plugins.installed_packages.selected_package_warning'), summary:this.$t("computer.task.toast_summary"), life: 3000})
         }
       }
     },
@@ -251,9 +254,13 @@ export default {
     }
 }
 
-::v-deep(.p-datatable .p-datatable-tbody) {
-  .p-highlight{
-    background: #2196f3;
+::v-deep(.p-datatable .p-column-header-content) {
+  .p-checkbox .p-checkbox-box{
+    display: none !important
   }
+}
+
+::v-deep(.p-datatable .p-column-header-content) {
+  pointer-events: none;
 }
 </style>

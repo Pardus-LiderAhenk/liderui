@@ -203,10 +203,11 @@
                 "view_selected_packages": "View selected packages",
                 "install": "Install",
                 "uninstall": "Uninstall",
-                "table_empty_message": "Package not found"
+                "table_empty_message": "Package not found",
+                "search": "Search"
             },
             "installed_packages":{
-                "header": "Management Of Installed Packages",
+                "header": "Installed Package Management",
                 "description": "Allows to list packages and uninstall selected packages on client",
                 "uninstall": "Uninstall",
                 "list_packages": "List Packages",
@@ -217,10 +218,11 @@
                 "selected_packages": "Selected Packages",
                 "view_selected_packages": "View selected packages",
                 "selected_package_warning": "Can not be deleted ahenk and ahenk-register",
-                "table_empty_message": "Package not found"
+                "table_empty_message": "Package not found",
+                "search": "Search"
             },
             "repositories": {
-                "header": "Management Of Repositories",
+                "header": "Repository Management",
                 "description": "Allows to list repositories, deleted selected repositories and added new repository address on client",
                 "list_repo": "List Repositories",
                 "add_repo_address": "Add Repository Address",
@@ -236,7 +238,29 @@
                 "add": "Add",
                 "delete": "Delete",
                 "table_empty_message": "Repository not found",
-                "send_task_warning": "At least one repository must be selected or at least one repository must be added"
+                "send_task_warning": "At least one repository must be selected or at least one repository must be added",
+                "search": "Search"
+            },
+            "service_management": {
+                "header": "Service Management",
+                "description": "The status of services is observed on the client. Allows to status of listed services to be changed as start, stop, enable or disable",
+                "list_services": "List Services",
+                "table_empty_message": "Service not found",
+                "service_name": "Service Nane",
+                "status": "Status",
+                "auto_start": "Auto Start",
+                "enabled": "Enabled",
+                "disabled": "Disabled",
+                "active": "Active",
+                "inactive": "Inactive",
+                "select": "Select",
+                "view_selected_services": "View selected services",
+                "selected_services": "Selected Services",
+                "selected_service_warning": "Can not be selected ahenk service",
+                "get_service_error_message": "An error occurred while getting services",
+                "send_task_warning": "At least one service must be selected",
+                "change": "Change",
+                "search": "Search"
             }
         },
         "agent_info": {

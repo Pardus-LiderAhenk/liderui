@@ -102,7 +102,7 @@
               <small class="info">&nbsp;{{$t('computer.scheduled.parameters')}}:&nbsp;</small><small>&nbsp;{{scheduledParam}}&nbsp;&nbsp;</small>
             </div>
             <div>
-              <Button @click="scheduledTaskOperation(false)" icon="pi pi-times" class="p-button-sm p-button-danger" :label="$t('computer.scheduled.cancel')"></Button>
+              <Button @click="scheduledTaskOperation(false)" icon="pi pi-times" class="p-button-sm p-button-text" :label="$t('computer.scheduled.cancel')"></Button>
               <Button @click="scheduledTaskOperation(true)" icon="pi pi-save" class="p-button-sm" :label="$t('computer.scheduled.save')"></Button>
             </div>
           </div>
