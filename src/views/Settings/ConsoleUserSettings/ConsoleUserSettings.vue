@@ -12,7 +12,7 @@
                                 <h5>Mevcut Konsol Kullanıcıları</h5>
                             </div>
                             <div class="p-col-12 p-d-flex p-jc-end ">
-                                <Button label="Konsol Kullanıcısı Ekle" class="p-mr-2"/>
+                                <Button label="Konsol Kullanıcısı Ekle" class="p-mr-2" @click="addConsoleUserModalVisible = true"/>
                                 <Button  label="Kullanıcının Konsol Yetkisini Sil" />
                             </div>
                             <div class="p-col-12">
@@ -30,10 +30,7 @@
                                     </Column>
                                     <Column field="uid" header="UID"></Column>
                                     <Column field="distinguishedName" header="Kayıt DN"></Column>
-                                    <template #body="slotProps">
-                                        <Button class="p-mr-2" label="Düzenle" @click="editProduct(slotProps.data)"></Button>
-                                        <Button class="p-button-danger" label="Sil"></Button>
-                                    </template>
+                                   
                                 
                                 </DataTable>
                             </div>
@@ -136,6 +133,10 @@
      :modalVisibleValue="roleGroupModalVisible" 
         @modalVisibleValue="roleGroupModalVisible = $event;"
      />
+     <add-console-user-dialog 
+        :modalVisibleValue="addConsoleUserModalVisible" 
+        @modalVisibleValue="addConsoleUserModalVisible = $event;"
+     />
 </template>
 
 <script>
@@ -145,6 +146,7 @@ import AgentGroupDialog from './Dialogs/AgentGroupsDialog.vue';
 import UserDialog from './Dialogs/UsersDialog.vue';
 import UserGroupDialog from './Dialogs/UserGroupsDialog.vue';
 import RoleDialog from './Dialogs/RoleGroupsDialog.vue';
+import AddConsoleUserDialog from './Dialogs/AddConsoleUserDialog.vue';
 
 export default {
     components: {
@@ -153,7 +155,8 @@ export default {
         AgentGroupDialog,
         UserDialog,
         UserGroupDialog,
-        RoleDialog
+        RoleDialog,
+        AddConsoleUserDialog
     },
     data(){
         return {
@@ -222,6 +225,7 @@ export default {
             userModalVisible:false,
             userGroupModalVisible:false,
             roleGroupModalVisible:false,
+            addConsoleUserModalVisible:false,
 
         }
     },
