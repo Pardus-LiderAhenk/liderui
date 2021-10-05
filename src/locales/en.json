@@ -318,7 +318,38 @@
             "toast_summary": "Notification",
             "send_scheduled_task_susccess_message": "Sent scheduled task successfully"
         }
-
-
+    },
+    "settings": {
+        "script_definition": {
+            "title": "Script Definition",
+            "script_list": "Script List",
+            "edit":"Edit",
+            "delete":"Delete",
+            "add":"Add",
+            "save": "Save",
+            "update":"Update",
+            "cancel":"Cancel",
+            "script_name": "Script Name",
+            "script_content": "Script Content",
+            "type": "Type",
+            "created_date":"Created Date",
+            "modified_date": "Modified Date",
+            "table_empty_message":"Script not found",
+            "search":"Search",
+            "create_script": "Create Script",
+            "update_script": "Update Script",
+            "select": "Select",
+            "get_scripts_error_message": "An error occurred while getting scripts",
+            "deleted_script_success_message": "Deleted script successfully",
+            "deleted_script_error_message": "An error occurred while deleting script",
+            "saved_script_success_message": "Saved script successfully",
+            "saved_script_error_message": "An error occurred while ading script",
+            "updated_script_success_message": "Updated script successfully",
+            "updated_script_error_message": "An error occurred while updating script",
+            "script_name_warn": "Script name is not available",
+            "script_content_warn": "Script content is not available",
+            "script_name_unique_warn": "Script name can not be same",
+            "definition": "The listed scripts can be updated or deleted. New script can be saved by entering the Script Name, Script Type and Script Content. Bash, Python, Perl and Ruby options are available as script types for Pardus."
+        }
     }
 }

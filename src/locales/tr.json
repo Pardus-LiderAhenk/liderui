@@ -257,7 +257,7 @@
                 "select": "Seç",
                 "view_selected_services": "Seçili servisleri görüntüle",
                 "selected_services": "Seçili Servisler",
-                "selected_service_warning": "ahenk servisi seçilemez",
+                "selected_service_warning": "Ahenk servisi seçilemez",
                 "get_service_error_message": "Servisler getirilirken hata oluştu",
                 "send_task_warning": "En az bir servis seçilmelidir",
                 "change": "Değiştir",
@@ -319,6 +319,39 @@
             "send_task_error_message": "Görev gönderilirken hata oluştu",
             "toast_summary": "Bildirim",
             "send_scheduled_task_susccess_message": "Zamanlanmış görev başarı ile gönderildi"
+        }
+    },
+    "settings": {
+        "script_definition": {
+            "title": "Betik Tanımlama",
+            "script_list": "Betik Listesi",
+            "edit":"Düzenle",
+            "delete":"Sil",
+            "add":"Ekle",
+            "save": "Kaydet",
+            "update":"Güncelle",
+            "cancel":"İptal",
+            "script_name": "Betik Adı",
+            "script_content": "Betik İçeriği",
+            "type": "Tipi",
+            "created_date":"Oluşturma Tarihi",
+            "modified_date": "Değiştirile Tarihi",
+            "table_empty_message":"Betik bulunamadı",
+            "search":"Ara",
+            "create_script": "Betik Oluştur",
+            "update_script": "Betik Güncelle",
+            "select": "Seç",
+            "get_scripts_error_message": "Betikler getirilirken hata oluştu",
+            "deleted_script_success_message": "Betik başarı ile silindi",
+            "deleted_script_error_message": "Betik silinirken hata oluştu",
+            "saved_script_success_message": "Betik başarı ile kaydedildi",
+            "saved_script_error_message": "Betik kaydedilirken hata oluştu",
+            "updated_script_success_message": "Betik başarı ile güncellendi",
+            "updated_script_error_message": "Betik güncellenirken hata oluştu",
+            "script_name_warn": "Betik adı boş bırakılamaz",
+            "script_content_warn": "Betik içeriği boş bırakılamaz",
+            "script_name_unique_warn": "Betik adı aynı olamaz",
+            "definition":"Listelenen betikler güncellenebilir veya silinebilir. Betik Adı, Betik Türü ve Betik İçeriği girilerek betik kaydedilebilir. Pardus için betik türü olarak Bash, Python, Perl ve Ruby seçenekleri mevcuttur."
         }
     }
 }
