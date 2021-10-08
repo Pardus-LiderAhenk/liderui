@@ -25,11 +25,26 @@
           <div class="p-grid">
             <div class="p-col-6">
               <div>
-                <Chart  type="pie" :data="chartDiskData" with="300" height="150" :options="diskChartOptions"></Chart>
+                <Chart 
+                type="pie" 
+                :data="chartDiskData" 
+                with="300" height="150" 
+                :options="diskChartOptions">
+                </Chart>
               </div>
               <div class="p-grid p-jc-center" style="margin-top:3px">
-                <Button icon="fas fa-info-circle" class="p-button-text" @click="toggle($event, 'disk')" :label="$t('computer.plugins.resource_usage.view_detail')"/>
-                <OverlayPanel ref="diskOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
+                <Button 
+                icon="fas fa-info-circle" 
+                class="p-button-text" 
+                @click="toggle($event, 'disk')" 
+                :label="$t('computer.plugins.resource_usage.view_detail')"
+                />
+                <OverlayPanel 
+                ref="diskOp" 
+                appendTo="body" 
+                :showCloseIcon="false" id="overlay_panel" 
+                style="width: 450px" 
+                :breakpoints="{'960px': '75vw'}">
                   <h5 class="text-center">{{$t('computer.plugins.resource_usage.disk_usage_detail')}}</h5>
                   <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
                     <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
@@ -37,7 +52,10 @@
                     <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
                   </DataTable>
                   <div style="margin-top:5px">
-                    <small style="font-weight:bold;">{{$t('computer.plugins.resource_usage.disk_partition')}}:&nbsp;</small><small>{{ devices }}</small>
+                    <small style="font-weight:bold;">
+                      {{$t('computer.plugins.resource_usage.disk_partition')}}:&nbsp;
+                      </small>
+                      <small>{{ devices }}</small>
                   </div>
                 </OverlayPanel>
               </div>
@@ -47,8 +65,19 @@
                 <Chart type="pie" :data="chartMemoryData" with="300" height="150" :options="memoryChartOptions"></Chart>
               </div>
               <div class="p-grid p-jc-center" style="margin-top:3px">
-                <Button icon="fas fa-info-circle" @click="toggle($event, 'memory')" class="p-button-text" :label="$t('computer.plugins.resource_usage.view_detail')"/>
-                <OverlayPanel ref="memoryOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
+                <Button 
+                icon="fas fa-info-circle" 
+                @click="toggle($event, 'memory')" 
+                class="p-button-text" 
+                :label="$t('computer.plugins.resource_usage.view_detail')"
+                />
+                <OverlayPanel 
+                  ref="memoryOp" 
+                  appendTo="body" 
+                  :showCloseIcon="false" 
+                  id="overlay_panel" 
+                  style="width: 450px" 
+                  :breakpoints="{'960px': '75vw'}">
                   <h5 class="text-center">{{$t('computer.plugins.resource_usage.memory_usage_detail')}}</h5>
                   <DataTable :value="memory" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
                     <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>

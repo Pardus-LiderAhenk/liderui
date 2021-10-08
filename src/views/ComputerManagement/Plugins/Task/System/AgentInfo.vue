@@ -25,7 +25,12 @@
       @cancel-task="showTaskDialog = false"
       >
       <template #pluginHeader>
-       <i class="fas fa-info-circle"></i> <a href="#" @click.prevent="showAgentInfoModal(true)" style="color:#495057">{{ selectedLiderNode ? selectedLiderNode.name: 'Agents' }}</a>
+        <i class="fas fa-info-circle"></i> 
+        <a href="#"
+          @click.prevent="showAgentInfoModal(true)" 
+          style="color:#495057">
+          {{ selectedLiderNode ? selectedLiderNode.name: 'Agents' }}
+        </a>
       </template>
       <template #pluginHeaderButton>
         <div>
@@ -249,7 +254,12 @@ export default {
               }
             }
           } else {
-            this.$toast.add({severity:'error', detail: this.$t("computer.agent_info.error_message"), summary:this.$t("computer.task.toast_summary"), life: 3000});
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.agent_info.error_message"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
             this.setDefaultTable();
           }
         });

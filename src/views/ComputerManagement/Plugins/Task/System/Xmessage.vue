@@ -22,8 +22,12 @@
         </div>
       </template> 
       <template #default>
-        <Textarea v-model="message"  style="height: 320px; width:100%" :class="messageValidation ? 'p-invalid': ''"/>
-        <small v-if="messageValidation" class="p-error">{{ $t('computer.plugins.xmessage.message_content_warn') }}</small>
+        <Textarea v-model="message"  style="height: 320px; width:100%" 
+        :class="messageValidation ? 'p-invalid': ''"
+        />
+        <small v-if="messageValidation" 
+        class="p-error">{{ $t('computer.plugins.xmessage.message_content_warn') }}
+        </small>
       </template>
       <template #pluginFooter>
       </template>

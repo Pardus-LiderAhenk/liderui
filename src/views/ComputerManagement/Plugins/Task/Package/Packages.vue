@@ -31,17 +31,36 @@
               :title="update ? $t('computer.plugins.packages.save'): $t('computer.plugins.packages.edit')"
               :class="update ? 'p-button-sm p-button-success': 'p-button-sm p-button-warning'"
               />
-              <Dropdown style="max-width: 150px;" :class="repoValidation.url || repoValidation.component ? 'p-invalid': ''"
+              <Dropdown style="max-width: 150px;" 
+                :class="repoValidation.url || repoValidation.component ? 'p-invalid': ''"
                 :disabled="!update"
                 v-model="type" 
                 :options="typeList" optionLabel="label">
               </Dropdown>
-              <InputText :disabled="!update" type="text" v-model="repoForm.url" :class="repoValidation.url ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="http://depo.pardus.org.tr/pardus"/>
-              <InputText :disabled="!update" type="text" v-model="repoForm.component" :class="repoValidation.component ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="ondokuz main contrib non-free"/>
-              <Button type="button" class="p-button-sm" :label="$t('computer.plugins.packages.list_packages')" icon="pi pi-list" @click.prevent="getPackagesList" />
+              <InputText 
+              :disabled="!update" 
+              type="text" 
+              v-model="repoForm.url" 
+              :class="repoValidation.url ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+              placeholder="http://depo.pardus.org.tr/pardus"
+              />
+              <InputText 
+              :disabled="!update" 
+              type="text" 
+              v-model="repoForm.component" 
+              :class="repoValidation.component ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+              placeholder="ondokuz main contrib non-free"
+              />
+              <Button type="button" 
+              class="p-button-sm" 
+              :label="$t('computer.plugins.packages.list_packages')" 
+              icon="pi pi-list" @click.prevent="getPackagesList" 
+              />
             </div>
             <div class="p-d-flex p-jc-center">
-              <small v-if="repoValidation.url || repoValidation.component" class="p-error">{{ $t('computer.plugins.packages.repo_address_warn') }}</small>
+              <small v-if="repoValidation.url || repoValidation.component" 
+              class="p-error">{{ $t('computer.plugins.packages.repo_address_warn') }}
+              </small>
             </div>
           </div>
           <div class="p-col">
@@ -58,9 +77,21 @@
                   <span>{{$t('computer.plugins.packages.table_empty_message')}}</span>
                 </div>
               </template>
-              <Column field="packageName" :header="$t('computer.plugins.packages.package_name')" headerStyle="width: 17%" filterMatchMode="startsWith" ref="packageName">>
+              <Column 
+              field="packageName" 
+              :header="$t('computer.plugins.packages.package_name')" 
+              headerStyle="width: 17%" 
+              filterMatchMode="startsWith" 
+              ref="packageName">
+
                 <template #filter="{filterModel,filterCallback}" v-if="packages">
-                  <InputText  type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" :placeholder="$t('computer.plugins.packages.search')"/>
+                  <InputText  
+                  type="text" 
+                  v-model="filterModel.value" 
+                  @keydown.enter="filterCallback()" 
+                  class="p-column-filter" 
+                  :placeholder="$t('computer.plugins.packages.search')"
+                  />
                 </template>        
               </Column>
               <Column field="version" :header="$t('computer.plugins.packages.version')" headerStyle="width: 15%">
@@ -77,7 +108,10 @@
                   <Badge v-if="slotProps.data.tag == 'Install'" severity="success" icon="pi pi-users"
                    :value="$t('computer.plugins.packages.install')">
                    </Badge>
-                  <Badge v-else-if="slotProps.data.tag == 'Uninstall'" severity="danger" :value="$t('computer.plugins.packages.uninstall')"></Badge>
+                  <Badge 
+                    v-else-if="slotProps.data.tag == 'Uninstall'" 
+                    severity="danger" :value="$t('computer.plugins.packages.uninstall')">
+                  </Badge>
                   <Badge v-else severity="info" value="NA"></Badge>
                 </template>
               </Column>
@@ -94,16 +128,46 @@
             </DataTable>
           </div>
           <div class="p-col" v-if="packages">
-            <Button type="button" :label="$t('computer.plugins.packages.view_selected_packages')" @click="toggle($event)" icon="pi pi-info-circle" class="p-button-sm" 
-            :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" badgeClass="p-badge-danger" />
-            <OverlayPanel ref="packagesOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
+            <Button 
+            type="button" 
+            :label="$t('computer.plugins.packages.view_selected_packages')" 
+            @click="toggle($event)" 
+            icon="pi pi-info-circle" 
+            class="p-button-sm" 
+            :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" 
+            badgeClass="p-badge-danger" 
+            />
+            <OverlayPanel 
+            ref="packagesOp"
+            appendTo="body" 
+            :showCloseIcon="false" 
+            id="overlay_panel" 
+            style="width: 450px"
+            :breakpoints="{'960px': '75vw'}"
+            >
               <h5 class="text-center">{{$t('computer.plugins.packages.selected_packages')}}</h5>
-              <DataTable :value="packageInfoList" responsiveLayout="scroll" scrollable="true" scrollHeight="400px" class="p-datatable-sm" :metaKeySelection="false">
+              <DataTable 
+              :value="packageInfoList" 
+              responsiveLayout="scroll" 
+              scrollable="true" 
+              scrollHeight="400px" 
+              class="p-datatable-sm" 
+              :metaKeySelection="false"
+              >
                 <Column field="packageName" :header="$t('computer.plugins.packages.package_name')"></Column>
                 <Column field="tag" :header="$t('computer.plugins.packages.status')">
                   <template #body="slotProps">
-                    <Badge v-if="slotProps.data.tag == 'Install'" severity="success" icon="pi pi-users" :value="$t('computer.plugins.packages.install')"></Badge>
-                    <Badge v-else-if="slotProps.data.tag == 'Uninstall'" severity="danger" :value="$t('computer.plugins.packages.uninstall')"></Badge>
+                    <Badge 
+                    v-if="slotProps.data.tag == 'Install'" 
+                    severity="success" 
+                    icon="pi pi-users" 
+                    :value="$t('computer.plugins.packages.install')">
+                    </Badge>
+                    <Badge 
+                    v-else-if="slotProps.data.tag == 'Uninstall'" 
+                    severity="danger" 
+                    :value="$t('computer.plugins.packages.uninstall')">
+                    </Badge>
                   </template>
                 </Column>
               </DataTable>
@@ -168,7 +232,10 @@ export default {
   mounted() {
     axios.get("/lider/config/configurations", null)
     .then((response) => {
-      if (response.data.pardusRepoAddress == null || response.data.pardusRepoAddress == "" && response.data.pardusRepoComponent != null || response.data.pardusRepoComponent == "") {
+      if (response.data.pardusRepoAddress == null || 
+      response.data.pardusRepoAddress == "" && 
+      response.data.pardusRepoComponent != null || 
+      response.data.pardusRepoComponent == "") {
         this.repoForm.url = "http://depo.pardus.org.tr/pardus";
         this.repoForm.component = "yirmibir main contrib non-free";
       } else {
@@ -177,8 +244,13 @@ export default {
       }
     })
     .catch((error) => { 
-      this.$toast.add({severity:'error', detail: this.$t('computer.plugins.packages.get_settings_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
-  
+      this.$toast.add({
+        severity:'error', 
+        detail: this.$t('computer.plugins.packages.get_settings_error_message')+ " \n"+error, 
+        summary:this.$t("computer.task.toast_summary"), 
+        life: 3000
+        })
+      })
     this.lazyParams = {
       first: 0,
       rows: this.$refs.dt.rows,
@@ -196,11 +268,21 @@ export default {
         axios.post("/packages/update/repoAddress", params)
         .then((response) => {
         if (response.data.pardusRepoAddress != null && response.data.pardusRepoComponent != null) {
-          this.$toast.add({severity:'success', detail: this.$t('computer.plugins.packages.update_repo_success_message'), summary:this.$t("computer.task.toast_summary"), life: 3000});
+          this.$toast.add({
+            severity:'success', 
+            detail: this.$t('computer.plugins.packages.update_repo_success_message'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
         }
       })
     .catch((error) => { 
-      this.$toast.add({severity:'error', detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
+      this.$toast.add({
+        severity:'error', 
+        detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, 
+        summary:this.$t("computer.task.toast_summary"), 
+        life: 3000
+        })})
       }
     this.update = !this.update;  
     },
@@ -224,7 +306,12 @@ export default {
       })
       .catch((error) => { 
         this.loading = false;
-        this.$toast.add({severity:'error', detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        })})
       }
     },
 
@@ -242,7 +329,8 @@ export default {
       var isExist = false;
       if (this.packageInfoList.length > 0) {
         for (let index = 0; index < this.packageInfoList.length; index++) {
-          if (this.packageInfoList[index].packageName == data.packageName && this.packageInfoList[index].version == data.version) {
+          if (this.packageInfoList[index].packageName == data.packageName && 
+          this.packageInfoList[index].version == data.version) {
             if (this.packageInfoList[index].tag != data.tag) {
               this.packageInfoList[index].tag = data.tag;
             }
@@ -270,7 +358,12 @@ export default {
       this.task.parameterMap = {"packageInfoList": this.packageInfoList};
       this.showTaskDialog = true;
      } else{
-       this.$toast.add({severity:'warn', detail: this.$t('computer.plugins.packages.send_task_warning'), summary:this.$t("computer.task.toast_summary"), life: 3000})
+       this.$toast.add({
+         severity:'warn', 
+         detail: this.$t('computer.plugins.packages.send_task_warning'), 
+         summary:this.$t("computer.task.toast_summary"), 
+         life: 3000
+        })
        this.taskValidation = true;
      }
     },

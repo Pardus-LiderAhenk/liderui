@@ -1,17 +1,41 @@
 <template>
   <div>
-    <Dialog :header="$t('computer.plugins.repositories.add_repo_address')" v-model:visible="addRepoAddrDialog" :modal="true" :style="{width: '30vw'}">
+    <Dialog 
+    :header="$t('computer.plugins.repositories.add_repo_address')" 
+    v-model:visible="addRepoAddrDialog" 
+    :modal="true" 
+    :style="{width: '30vw'}"
+    >
       <div class="p-fluid">
         <div class="p-field">
           <label for="newRepoAddr">{{$t('computer.plugins.repositories.repo_address')}}</label>
-          <InputText type="text" v-model="newRepoAddr" :class="validationRepoAddr ? 'p-invalid': ''" placeholder="deb http://depo.pardus.org.tr/pardus yirmibir main contrib non-free"/>
-          <small v-if="validationRepoAddr" class="p-error">{{$t('computer.plugins.repositories.repo_address_warn')}}</small>
-          <small v-if="validationAlreadyExist" class="p-error">{{$t('computer.plugins.repositories.repo_already_added')}}</small>
+          <InputText 
+          type="text"
+          v-model="newRepoAddr" 
+          :class="validationRepoAddr ? 'p-invalid': ''" 
+          placeholder="deb http://depo.pardus.org.tr/pardus yirmibir main contrib non-free"
+          />
+          <small v-if="validationRepoAddr" class="p-error">
+            {{$t('computer.plugins.repositories.repo_address_warn')}}
+          </small>
+          <small v-if="validationAlreadyExist" class="p-error">
+            {{$t('computer.plugins.repositories.repo_already_added')}}
+          </small>
         </div>
       </div>
       <template #footer>
-        <Button :label="$t('computer.plugins.repositories.cancel')" icon="pi pi-times" @click.prevent="addRepoAddrDialog=false" class="p-button-text p-button-sm"/>
-        <Button :label="$t('computer.plugins.repositories.save')" icon="pi pi-save" @click.prevent="addRepoAddress" class="p-button-sm" />
+        <Button 
+        :label="$t('computer.plugins.repositories.cancel')" 
+        icon="pi pi-times" 
+        @click.prevent="addRepoAddrDialog=false" 
+        class="p-button-text p-button-sm"
+        />
+        <Button 
+        :label="$t('computer.plugins.repositories.save')" 
+        icon="pi pi-save" 
+        @click.prevent="addRepoAddress" 
+        class="p-button-sm" 
+        />
       </template>
     </Dialog>
     <base-plugin
@@ -55,7 +79,9 @@
       </template> 
       <template #default>
         <div class="p-grid p-flex-column">
-          <DataTable :value="repositories" class="p-datatable-sm table-no-select-all p-col"
+          <DataTable 
+          :value="repositories" 
+          class="p-datatable-sm table-no-select-all p-col"
           v-model:selection="selectedRepositories" dataKey="id"
           :metaKeySelection="false" style="margin-top: 2em"
           @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
@@ -65,7 +91,11 @@
             <div class="p-d-flex p-jc-end">
               <span class="p-input-icon-left">
                 <i class="pi pi-search"/>
-                <InputText v-model="filters['global'].value" class="p-inputtext-sm" :placeholder="$t('computer.plugins.repositories.search')" />
+                <InputText 
+                v-model="filters['global'].value" 
+                class="p-inputtext-sm" 
+                :placeholder="$t('computer.plugins.repositories.search')" 
+                />
               </span>
             </div>
           </template>
@@ -74,19 +104,44 @@
                 <span>{{$t('computer.plugins.repositories.table_empty_message')}}</span>
             </div>
             </template>
-            <Column selectionMode="multiple" headerStyle="width: 3em"></Column>
+            <Column 
+            selectionMode="multiple" 
+            headerStyle="width: 3em">
+            </Column>
             <Column field="id" header="#" style="width: 10%"></Column>
-            <Column field="repoAddress" :header="$t('computer.plugins.repositories.repo_address')" style="min-width: 40%"></Column>
+            <Column field="repoAddress" 
+            :header="$t('computer.plugins.repositories.repo_address')" 
+            style="min-width: 40%">
+            </Column>
           </DataTable>
           <div class="p-col" v-if="repositories.length > 0">
             <Button type="button" :label="$t('computer.plugins.repositories.view_selected_repositories')"
-             @click="toggle($event)" icon="pi pi-info-circle" class="p-button-sm" 
-             :badge="selectedRepositories.length > 0 ? selectedRepositories.length: '0'" badgeClass="p-badge-danger" />
-            <OverlayPanel ref="repositoryOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" :style="{width: '30vw'}" :breakpoints="{'960px': '75vw'}">
+             @click="toggle($event)" icon="pi pi-info-circle" 
+             class="p-button-sm" 
+             :badge="selectedRepositories.length > 0 ? selectedRepositories.length: '0'"
+              badgeClass="p-badge-danger" 
+            />
+            <OverlayPanel ref="repositoryOp"
+             appendTo="body"
+             :showCloseIcon="false" 
+             id="overlay_panel" 
+             :style="{width: '30vw'}" 
+             :breakpoints="{'960px': '75vw'}"
+             >
               <h5 class="text-center">{{$t('computer.plugins.repositories.selected_repositories')}}</h5>
-              <DataTable :value="selectedRepositories" scrollable="true" scrollHeight="400px" class="p-datatable-sm">
-                <Column field="repoAddress" :header="$t('computer.plugins.repositories.repo_address')" style="min-width: 80%"></Column>
-                <Column field="status" :header="$t('computer.plugins.repositories.status')" style="width: 10%">
+              <DataTable 
+              :value="selectedRepositories" 
+              scrollable="true" 
+              scrollHeight="400px" 
+              class="p-datatable-sm"
+              >
+                <Column field="repoAddress" 
+                :header="$t('computer.plugins.repositories.repo_address')" 
+                style="min-width: 80%">
+                </Column>
+                <Column field="status" 
+                :header="$t('computer.plugins.repositories.status')" 
+                style="width: 10%">
                   <template #body="slotProps">
                     <Badge
                     :value="slotProps.data.status == 'add'? $t('computer.plugins.repositories.add'): $t('computer.plugins.repositories.delete')" 
@@ -201,7 +256,12 @@ export default {
             };
             this.showTaskDialog = true;
           } else {
-            this.$toast.add({severity:'warn', detail: this.$t('computer.plugins.repositories.send_task_warning'), summary:this.$t("computer.task.toast_summary"), life: 3000})
+            this.$toast.add({
+              severity:'warn', 
+              detail: this.$t('computer.plugins.repositories.send_task_warning'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            })
           }
         }
     },
@@ -241,7 +301,7 @@ export default {
           this.selectedRepositories.push({
             "repoAddress": this.newRepoAddr,
             "status": "add"
-          })
+          });
           this.newRepoAddr = "";
         }else{
           this.validationAlreadyExist = true;

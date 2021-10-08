@@ -37,15 +37,21 @@
           v-model:selection="selectedPackages" dataKey="id"
           :paginator="true" :rows="10" 
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-          :rowsPerPageOptions="[10,25,50]" :metaKeySelection="false" style="margin-top: 2em"
-          @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
+          :rowsPerPageOptions="[10,25,50]" 
+          :metaKeySelection="false" 
+          style="margin-top: 2em"
+          @rowSelect="onRowSelect" 
+          @rowUnselect="onRowUnselect"
           v-model:filters="filters"
           >
             <template #header>
               <div class="p-d-flex p-jc-end">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
-                  <InputText v-model="filters['global'].value" class="p-inputtext-sm" :placeholder="$t('computer.plugins.installed_packages.search')" />
+                  <InputText v-model="filters['global'].value" 
+                  class="p-inputtext-sm" 
+                  :placeholder="$t('computer.plugins.installed_packages.search')" 
+                  />
                 </span>
               </div>
             </template>
@@ -60,12 +66,29 @@
               <Column field="version" :header="$t('computer.plugins.installed_packages.version')" style="min-width: 50%"></Column>
           </DataTable>
           <div class="p-col" v-if="packages">
-            <Button type="button" :label="$t('computer.plugins.installed_packages.view_selected_packages')"
-             @click="toggle($event)" icon="pi pi-info-circle" class="p-button-sm"
-             :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" badgeClass="p-badge-danger" />
-            <OverlayPanel ref="packagesOp" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 400px" :breakpoints="{'960px': '75vw'}">
+            <Button type="button" 
+            :label="$t('computer.plugins.installed_packages.view_selected_packages')"
+             @click="toggle($event)" 
+             icon="pi pi-info-circle" class="p-button-sm"
+             :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" 
+             badgeClass="p-badge-danger" 
+             />
+            <OverlayPanel ref="packagesOp" 
+            appendTo="body" 
+            :showCloseIcon="false" 
+            id="overlay_panel" 
+            style="width: 400px" 
+            :breakpoints="{'960px': '75vw'}"
+            >
               <h5 class="text-center">{{$t('computer.plugins.installed_packages.selected_packages')}}</h5>
-              <DataTable :value="packageInfoList" responsiveLayout="scroll" scrollable="true" scrollHeight="400px" class="p-datatable-sm" :metaKeySelection="false">
+              <DataTable 
+              :value="packageInfoList" 
+              responsiveLayout="scroll" 
+              scrollable="true" 
+              scrollHeight="400px" 
+              class="p-datatable-sm" 
+              :metaKeySelection="false"
+              >
                 <Column field="packageName" :header="$t('computer.plugins.installed_packages.package_name')"></Column>
                 <Column field="version" :header="$t('computer.plugins.installed_packages.version')"></Column>
               </DataTable>
@@ -128,7 +151,8 @@ export default {
       var isExist = false;
       if (this.packageInfoList.length > 0) {
         for (let index = 0; index < this.packageInfoList.length; index++) {
-          if (this.packageInfoList[index].packageName == data.packageName && this.packageInfoList[index].version == data.version) {
+          if (this.packageInfoList[index].packageName == data.packageName && 
+          this.packageInfoList[index].version == data.version) {
             isExist = true;
           }
         }
@@ -159,7 +183,12 @@ export default {
             };
             this.showTaskDialog = true;
           } else {
-            this.$toast.add({severity:'warn', detail: this.$t('computer.plugins.installed_packages.send_task_warning'), summary:this.$t("computer.task.toast_summary"), life: 3000})
+            this.$toast.add({
+              severity:'warn', 
+              detail: this.$t('computer.plugins.installed_packages.send_task_warning'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            })
           }
         }
     },
@@ -192,7 +221,13 @@ export default {
                 }
             })
             .catch((error) => { 
-            this.$toast.add({severity:'error', detail: this.$t('computer.plugins.installed_packages.get_packages_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t('computer.plugins.installed_packages.get_packages_error_message')+ " \n"+error, 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            })
+          })
       }
       if (message.commandClsId == "PACKAGE_MANAGEMENT") {
         if (message.result.responseCode == "TASK_PROCESSED") {
@@ -214,7 +249,12 @@ export default {
               this.selectedPackages.splice(index, 1);
             }
           }
-          this.$toast.add({severity:'warn', detail: this.$t('computer.plugins.installed_packages.selected_package_warning'), summary:this.$t("computer.task.toast_summary"), life: 3000})
+          this.$toast.add({
+            severity:'warn', 
+            detail: this.$t('computer.plugins.installed_packages.selected_package_warning'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          })
         }
       }
     },

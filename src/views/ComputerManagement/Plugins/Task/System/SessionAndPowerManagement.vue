@@ -14,7 +14,9 @@
         <div class="p-grid">
           <div class="p-col session">
             <div class="p-grid p-jc-center" style="margin-top:10px">
-              <Button icon="fas fa-sign-out-alt" class="p-button-success" @click.prevent="showConfirmDialogForTask('MANAGE')"></Button>
+              <Button icon="fas fa-sign-out-alt" class="p-button-success" 
+              @click.prevent="showConfirmDialogForTask('MANAGE')">
+              </Button>
             </div>
             <div class="p-grid p-jc-center" style="margin-top:5px">
               <span>{{$t("computer.plugins.session_and_power_management.logout")}}</span>
@@ -22,7 +24,9 @@
           </div>
           <div class="p-col session">
             <div class="p-grid p-jc-center" style="margin-top:10px">
-              <Button icon="fa fa-sync-alt"  @click.prevent="showConfirmDialogForTask('MACHINE_RESTART')"></Button>
+              <Button icon="fa fa-sync-alt"  
+              @click.prevent="showConfirmDialogForTask('MACHINE_RESTART')">
+              </Button>
             </div>
             <div class="p-grid p-jc-center" style="margin-top:5px">
               <span>{{$t("computer.plugins.session_and_power_management.restart")}}</span>
@@ -30,7 +34,9 @@
           </div>
           <div class="p-col session">
             <div class="p-grid p-jc-center" style="margin-top:10px">
-            <Button icon="fa fa-power-off" class="p-button-danger" @click.prevent="showConfirmDialogForTask('MACHINE_SHUTDOWN')"></Button>
+            <Button icon="fa fa-power-off" class="p-button-danger" 
+             @click.prevent="showConfirmDialogForTask('MACHINE_SHUTDOWN')">
+            </Button>
             </div>
             <div class="p-grid p-jc-center" style="margin-top:5px">
               <span>{{$t("computer.plugins.session_and_power_management.poweroff")}}</span>

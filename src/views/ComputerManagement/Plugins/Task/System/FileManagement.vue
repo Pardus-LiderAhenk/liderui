@@ -30,15 +30,26 @@
               <Dropdown
               v-model="selectedFilePath" 
               :options="favorites" optionLabel="label"
-              :showClear="true" :filter="true" :placeholder="$t('computer.plugins.file_management.favorites')" filterPlaceholder="Find File"
+              :showClear="true" :filter="true" 
+              :placeholder="$t('computer.plugins.file_management.favorites')" 
+              filterPlaceholder="Find File"
               @change="changeFilePath">
               </Dropdown>
             </div>
             <div class="p-field p-col-12 p-md-8">
               <label>{{$t('computer.plugins.file_management.file_path')}}</label>
               <div class="p-inputgroup">
-                <InputText type="text" v-model="filePath" :class="pathValidation ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="/tmp/example.txt"/>
-                <Button type="button" class="p-button-sm" :label="$t('computer.plugins.file_management.search')" icon="pi pi-search" @click.prevent="sendTaskFileManagement('GET_FILE_CONTENT')" />
+                <InputText type="text" 
+                v-model="filePath" 
+                :class="pathValidation ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                placeholder="/tmp/example.txt"
+                />
+                <Button type="button"
+                 class="p-button-sm" 
+                 :label="$t('computer.plugins.file_management.search')" 
+                 icon="pi pi-search" 
+                 @click.prevent="sendTaskFileManagement('GET_FILE_CONTENT')" 
+                />
               </div>
               <small v-if="pathValidation" class="p-error">{{ $t('computer.plugins.file_management.file_path_warn') }}</small>
             </div>

@@ -4,7 +4,10 @@
     <div class="p-grid">
       <div class="p-col-5">
         <agent-info class="plugin-card" :pluginTask="pluginTaskResourceUsage"></agent-info>
-        <session-and-power-management v-if="sessionAndPowerState" class="plugin-card" :pluginTask="pluginTaskSessionPowerManagement"></session-and-power-management>
+        <session-and-power-management v-if="sessionAndPowerState" 
+        class="plugin-card" 
+        :pluginTask="pluginTaskSessionPowerManagement">
+        </session-and-power-management>
         <manage-root v-if="manageRootState" class="plugin-card" :pluginTask="pluginTaskManageRoot"></manage-root>
         <!-- <remote-access v-if="remoteAccessState" class="plugin-card" :pluginTask="pluginTaskRemoteAccess"></remote-access>-->
         <local-user v-if="localUserState" class="plugin-card" :pluginTask="pluginTaskLocalUser"></local-user>

@@ -1,58 +1,106 @@
 <template>
   <div>
-    <Dialog :header="$t('computer.plugins.local_user.home_directory_dialog_title')" v-model:visible="deleteHomeDialog" :modal="true" :style="{width: '500px'}">
+    <Dialog 
+    :header="$t('computer.plugins.local_user.home_directory_dialog_title')" 
+    v-model:visible="deleteHomeDialog" 
+    :modal="true" 
+    :style="{width: '500px'}"
+    >
       <i class="pi pi-home p-mr-3" style="font-size: 2rem" />
       <span> {{ $t('computer.plugins.local_user.home_directory_dialog_content') }}</span>
       <template #footer>
-        <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="deleteUser(false)" class="p-button-text p-button-sm"/>
-        <Button :label="$t('computer.plugins.base_plugin.yes')" icon="pi pi-check" @click="deleteUser(true)" class="p-button-sm" />
+        <Button 
+        :label="$t('computer.plugins.base_plugin.no')" 
+        icon="pi pi-times" 
+        @click="deleteUser(false)" 
+        class="p-button-text p-button-sm"
+        />
+        <Button 
+        :label="$t('computer.plugins.base_plugin.yes')" 
+        icon="pi pi-check" 
+        @click="deleteUser(true)" 
+        class="p-button-sm" 
+        />
       </template>
     </Dialog>
-    <Dialog :header="selectedUser ? userForm.username: $t('computer.plugins.local_user.add_user')" v-model:visible="showUserDialog" :modal="true" :style="{width: '500px'}" >
+    <Dialog 
+    :header="selectedUser ? userForm.username: $t('computer.plugins.local_user.add_user')" 
+    v-model:visible="showUserDialog" 
+    :modal="true" 
+    :style="{width: '500px'}" 
+    >
       <div>
         <div class="p-field p-grid">
-          <label class="p-col-4" ><i class="pi pi-user"></i>&nbsp;{{ $t('computer.plugins.local_user.username') }}</label>
+          <label class="p-col-4" >
+            <i class="pi pi-user"></i>&nbsp;{{ $t('computer.plugins.local_user.username') }}
+          </label>
           <div class="p-col-8">
             <div>
-              <InputText v-model="userForm.username" :class="validationErrors.username ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="lider"/>
+              <InputText 
+              v-model="userForm.username" 
+              :class="validationErrors.username ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+              placeholder="lider"/>
             </div>
             <div>
-              <small v-show="validationErrors.username" class="p-error">{{ $t('computer.plugins.local_user.username_validation') }}</small>
+              <small v-show="validationErrors.username" 
+              class="p-error">{{ $t('computer.plugins.local_user.username_validation') }}
+              </small>
             </div>
           </div>
         </div>
         <div class="p-field p-grid">
-          <label class="p-col-4" ><i class="pi pi-home"></i> &nbsp;{{ $t('computer.plugins.local_user.home_directory') }}</label>
+          <label class="p-col-4" >
+            <i class="pi pi-home"></i> &nbsp;{{ $t('computer.plugins.local_user.home_directory') }}
+          </label>
           <div class="p-col-8">
             <div>
-              <InputText v-model="userForm.home" :class="validationErrors.home ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="/home/lider"/>
+              <InputText 
+              v-model="userForm.home" 
+              :class="validationErrors.home ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+              placeholder="/home/lider"
+              />
             </div>
             <div>
-              <small v-show="validationErrors.home" class="p-error">{{ $t('computer.plugins.local_user.home_directory_validation') }}</small>
+              <small v-show="validationErrors.home" 
+              class="p-error">{{ $t('computer.plugins.local_user.home_directory_validation') }}
+              </small>
             </div>
           </div>
         </div>
         <div class="p-field p-grid">
-          <label class="p-col-4"><i class="el el-icon-coin"></i>&nbsp; {{ $t('computer.plugins.local_user.groups') }}</label>
+          <label class="p-col-4">
+            <i class="el el-icon-coin"></i>&nbsp; {{ $t('computer.plugins.local_user.groups') }}
+          </label>
           <div class="p-col-8">
             <div>
-              <MultiSelect v-model="selectedGroup" :options="groups" optionLabel="label"
-              :placeholder="$t('computer.plugins.local_user.select_groups')" display="chip" :filter="true" 
-              :filterPlaceholder="$t('computer.plugins.local_user.search_group')"/>
+              <MultiSelect 
+              v-model="selectedGroup" 
+              :options="groups" 
+              optionLabel="label"
+              :placeholder="$t('computer.plugins.local_user.select_groups')" 
+              display="chip" 
+              :filter="true" 
+              :filterPlaceholder="$t('computer.plugins.local_user.search_group')"
+              />
             </div>
           </div>
         </div>
         <div class="p-field p-grid">
-          <label class="p-col-4"><i class="el el-icon-turn-off"></i> &nbsp;{{ $t('computer.plugins.local_user.status') }}</label>
+          <label class="p-col-4">
+            <i class="el el-icon-turn-off"></i> &nbsp;{{ $t('computer.plugins.local_user.status') }}
+          </label>
           <div class="p-col-8">
             <Button 
-              @click="status = !status" :value="status"
+              @click="status = !status" 
+              :value="status"
               :label="status ? $t('computer.plugins.local_user.active'): $t('computer.plugins.local_user.passive')"
               :icon="status ? 'pi pi-check-circle': 'pi pi-ban'"
               :class="status ? 'p-button-sm p-button-raised p-button-text p-button-success': 'p-button-sm p-button-text p-button-raised p-button-danger'"
             />
             <Button 
-              @click="showPasswordForm = !showPasswordForm" :value="showPasswordForm" style="float:right"
+              @click="showPasswordForm = !showPasswordForm" 
+              :value="showPasswordForm" 
+              style="float:right"
               :label="selectedUser ? $t('computer.plugins.local_user.change_password'): $t('computer.plugins.local_user.create_password')"
               class="p-button-sm p-button-text p-button-raised"
               icon="pi pi-lock"
@@ -60,7 +108,9 @@
           </div>
         </div>
         <div class="p-field p-grid" v-if="showPasswordForm">
-          <label class="p-col-4" ><i class="pi pi-lock"></i> &nbsp;{{ $t('computer.plugins.password.new_password') }}</label>
+          <label class="p-col-4" >
+            <i class="pi pi-lock"></i> &nbsp;{{ $t('computer.plugins.password.new_password') }}
+          </label>
           <div class="p-col-8">
             <div>
               <div class="p-inputgroup">
@@ -86,16 +136,25 @@
                     </ul>
                   </template>
                 </Password>
-                <Button icon="pi pi-key" class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' @click="generatePassword" :disabled="showPasswordForm ? false : true"/>
+                <Button 
+                icon="pi pi-key" 
+                class="p-button-sm" 
+                :title='$t("computer.plugins.password.generate_password")' 
+                @click="generatePassword" :disabled="showPasswordForm ? false : true"
+                />
               </div>
             </div>
             <div>
-              <small v-show="validationErrors.password" class="p-error">{{ passwordErrorMessage }}</small>
+              <small v-show="validationErrors.password" 
+              class="p-error">{{ passwordErrorMessage }}
+              </small>
             </div>
           </div>
         </div>
         <div class="p-field p-grid" v-if="showPasswordForm">
-          <label class="p-col-4" ><i class="pi pi-lock"></i> &nbsp;{{ $t('computer.plugins.password.confirm_password') }}</label>
+          <label class="p-col-4" >
+            <i class="pi pi-lock"></i> &nbsp;{{ $t('computer.plugins.password.confirm_password') }}
+          </label>
           <div class="p-col-8">
             <div >
               <div class="p-inputgroup">
@@ -128,13 +187,21 @@
               </div>
             </div>
             <div>
-              <small v-show="validationErrors.confirmPassword" class="p-error">{{ passwordErrorMessage }}</small>
+              <small v-show="validationErrors.confirmPassword" 
+              class="p-error">
+              {{ passwordErrorMessage }}
+              </small>
             </div>
           </div>
         </div>
       </div>
       <template #footer>
-        <Button class="p-button-sm p-button-text" :label="$t('computer.plugins.local_user.cancel')" icon="pi pi-times" @click.prevent="showUserDialog=false"/>
+        <Button
+         class="p-button-sm p-button-text" 
+         :label="$t('computer.plugins.local_user.cancel')" 
+         icon="pi pi-times" 
+         @click.prevent="showUserDialog=false"
+        />
         <Button class="p-button-sm" 
           :label="selectedUser ? $t('computer.plugins.local_user.update'): $t('computer.plugins.local_user.add')" 
           :icon="selectedUser ? 'pi pi-user-edit': 'pi pi-user-plus'"
@@ -171,7 +238,11 @@
       </template>
       <template #default>
         <div>
-          <DataTable :value="users" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+          <DataTable 
+          :value="users" 
+          responsiveLayout="scroll" 
+          class="p-datatable-sm" 
+          :metaKeySelection="false">
             <template #empty>
               <div class="p-d-flex p-jc-center">
                 <span>{{$t('computer.plugins.local_user.table_empty_message')}}</span>
@@ -181,7 +252,10 @@
             <Column field="home" :header="$t('computer.plugins.local_user.home_directory')"></Column>
             <Column field="status" :header="$t('computer.plugins.local_user.status')">
               <template #body="slotProps">
-                <Badge :value="slotProps.data.status" :severity="slotProps.data.status == $t('computer.plugins.local_user.active') ? 'success': 'danger'"></Badge>
+                <Badge 
+                :value="slotProps.data.status" 
+                :severity="slotProps.data.status == $t('computer.plugins.local_user.active') ? 'success': 'danger'">
+                </Badge>
               </template>
             </Column>
             <Column :exportable="false">

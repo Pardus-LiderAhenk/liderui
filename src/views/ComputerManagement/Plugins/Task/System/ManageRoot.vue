@@ -55,9 +55,17 @@
                     </ul>
                   </template>
                 </Password>
-                <Button icon="pi pi-key" :disabled="lockRootUser ? true : false" class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' @click.prevent="generatePassword"/>
+                <Button 
+                icon="pi pi-key" 
+                :disabled="lockRootUser ? true : false" 
+                class="p-button-sm" 
+                :title='$t("computer.plugins.password.generate_password")'
+                 @click.prevent="generatePassword"
+                 />
               </div>
-              <small v-show="validationErrors.password && !lockRootUser" class="p-error">{{ passwordErrorMessage }}</small>
+              <small v-show="validationErrors.password && !lockRootUser" 
+              class="p-error">{{ passwordErrorMessage }}
+              </small>
             </div>
             <div class="p-field">
               <div class="p-inputgroup">
@@ -87,9 +95,16 @@
                     </ul>
                   </template>
                 </Password>
-                <Button icon="pi pi-key" :disabled="lockRootUser ? true : false" class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' @click.prevent="generatePassword"/>
+                <Button 
+                icon="pi pi-key" 
+                :disabled="lockRootUser ? true : false" 
+                class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' 
+                @click.prevent="generatePassword"
+                />
               </div>
-              <small v-show="validationErrors.confirmPassword && !lockRootUser" class="p-error">{{ confirmPasswordErrorMessage }}</small>
+              <small v-show="validationErrors.confirmPassword && !lockRootUser" 
+              class="p-error">{{ confirmPasswordErrorMessage }}
+              </small>
             </div>
           </div>
         </div>
