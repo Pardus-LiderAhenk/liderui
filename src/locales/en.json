@@ -262,6 +262,10 @@
                 "send_task_warning": "At least one service must be selected",
                 "change": "Change",
                 "search": "Search"
+            },
+            "execute_script": {
+                "header": "Execute Script",
+                "description": "It is a plugin that allows custom written scripts to be execute on client."
             }
         },
         "agent_info": {
@@ -350,6 +354,8 @@
             "script_name_warn": "Script name is not available",
             "script_content_warn": "Script content is not available",
             "script_name_unique_warn": "Script name can not be same",
+            "delete_script_confirm_message": "The script will be deleted, are you sure?",
+            "yes":"Yes",
             "definition": "The listed scripts can be updated or deleted. New script can be saved by entering the Script Name, Script Type and Script Content. Bash, Python, Perl and Ruby options are available as script types for Pardus."
         },
         "system_monitoring_definitions": {
@@ -381,6 +387,8 @@
             "template_name_warn": "Template name is not available",
             "template_content_warn": "Template content is not available",
             "template_name_unique_warn": "Template name can not be same",
+            "delete_template_confirm_message": "The Template will be deleted, are you sure?",
+            "yes":"Yes",
             "definition": "The listed template can be updated or deleted. Allows to text-based information to be displayed on the desktop with Conky application. Template can be saved entering Content and Setting"
         }
     }

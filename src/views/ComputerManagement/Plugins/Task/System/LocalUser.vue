@@ -262,7 +262,7 @@
               <template #body="slotProps">
                 <div class="p-d-flex p-jc-end">
                   <div>
-                    <Button icon="pi pi-user-edit" class="p-button-rounded p-mr-2 p-button-sm" 
+                    <Button icon="pi pi-user-edit" class="p-button-rounded p-mr-2 p-button-sm p-button-warning" 
                       :title="$t('computer.plugins.local_user.edit')"  
                       @click="editUSer(slotProps.data)" 
                     />

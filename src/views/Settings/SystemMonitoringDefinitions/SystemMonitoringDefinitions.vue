@@ -1,7 +1,7 @@
 <template>
   <div class="p-grid">
     <div class="p-col-12">
-      <Card>
+      <Card style="margin-top: 10px">
         <template #title>
           {{ $t("settings.system_monitoring_definitions.title") }}
         </template>
@@ -14,9 +14,7 @@
       <Card>
         <template #title>
           <div class="p-d-flex p-jc-between">
-            <p>
-              {{ $t("settings.system_monitoring_definitions.template_list") }}
-            </p>
+            {{ $t("settings.system_monitoring_definitions.template_list") }}
             <Button
               class="p-button-sm"
               icon="pi pi-plus"
@@ -73,7 +71,7 @@
               <template #body="slotProps">
                 <div class="p-d-flex p-jc-end">
                   <Button
-                    class="p-mr-2 p-button-sm p-button-rounded"
+                    class="p-mr-2 p-button-sm p-button-rounded p-button-warning"
                     icon="pi pi-pencil"
                     :label="$t('settings.system_monitoring_definitions.edit')"
                     @click.prevent="editTemplate(slotProps.data)"
@@ -83,7 +81,7 @@
                     class="p-button-danger p-button-sm p-button-rounded"
                     icon="pi pi-trash"
                     :label="$t('settings.system_monitoring_definitions.delete')"
-                    @click.prevent="deleteTemplate(slotProps.data)"
+                    @click.prevent="deleteTemplateConfirmDialog = true; selectedTemplate = slotProps.data"
                   >
                   </Button>
                 </div>
@@ -94,7 +92,8 @@
       </Card>
     </div>
     <Dialog
-      :header="selectedTemplate ? $t('settings.system_monitoring_definitions.update_template'): $t('settings.system_monitoring_definitions.create_template')"
+      :header="selectedTemplate ? $t('settings.system_monitoring_definitions.update_template'): 
+      $t('settings.system_monitoring_definitions.create_template')"
       :modal="false"
       :style="{ width: '60vw' }"
       :maximizable="true"
@@ -114,11 +113,9 @@
             <small v-if="validationErrors.label" class="p-error">{{
               $t("settings.system_monitoring_definitions.template_name_warn")
             }}</small>
-            <small v-if="validationTemplateLabel" class="p-error">{{
-              $t(
-                "settings.system_monitoring_definitions.template_name_unique_warn"
-              )
-            }}</small>
+            <small v-if="validationTemplateLabel" class="p-error">
+              {{$t("settings.system_monitoring_definitions.template_name_unique_warn")}}
+            </small>
           </div>
           <div class="p-field p-col-12">
             <TabView ref="tabview1">
@@ -163,13 +160,39 @@
           class="p-button-text p-button-sm"
         />
         <Button
-          :label="selectedTemplate ? $t('settings.system_monitoring_definitions.update'):$t('settings.system_monitoring_definitions.save')"
+          :label="selectedTemplate ? $t('settings.system_monitoring_definitions.update'):
+          $t('settings.system_monitoring_definitions.save')"
           :icon="selectedTemplate ? 'el-icon-refresh' : 'pi pi-save'"
           class="p-button-sm"
           @click="templateOperation(selectedTemplate ? 'update' : 'add')"
         />
       </template>
     </Dialog>
+    <Dialog 
+      :header="$t('computer.task.toast_summary')" 
+      v-model:visible="deleteTemplateConfirmDialog"  
+      :modal="true" 
+      @hide="deleteTemplateConfirmDialog = false"
+        >
+          <div class="confirmation-content">
+              <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+              <span>{{ $t('settings.system_monitoring_definitions.delete_template_confirm_message')}}</span>
+          </div>
+          <template #footer>
+          <Button 
+              :label="$t('settings.system_monitoring_definitions.cancel')" 
+              icon="pi pi-times" 
+              @click="deleteTemplateConfirmDialog = false" 
+              class="p-button-text p-button-sm"
+          />
+          <Button 
+              :label="$t('settings.system_monitoring_definitions.yes')"
+              icon="pi pi-check" 
+              @click="deleteTemplate"
+              class="p-button-sm"
+          />
+          </template>
+      </Dialog>
   </div>
 </template>
 
@@ -187,6 +210,7 @@ export default {
   data() {
     return {
       templates: [],
+      deleteTemplateConfirmDialog: false,
       selectedTemplate: null,
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -248,7 +272,7 @@ export default {
           summary: this.$t("computer.task.toast_summary"),
           life: 3000,
         });
-      });
+      })
   },
 
   methods: {
@@ -268,9 +292,10 @@ export default {
       this.showTemplateDialog = true;
     },
 
-    deleteTemplate(data) {
+    deleteTemplate() {
+      this.deleteTemplateConfirmDialog = false;
       const params = {
-        id: data.id,
+        id: this.selectedTemplate.id,
       };
       axios.post("/conky/delete", params).then((response) => {
           if (response.data != null) {
@@ -280,6 +305,7 @@ export default {
             if (index > -1) {
               this.templates.splice(index, 1);
             }
+            this.selectedTemplate = null;
             this.$toast.add({
               severity: "success",
               detail: this.$t("settings.system_monitoring_definitions.deleted_template_success_message"),
@@ -295,7 +321,7 @@ export default {
             summary: this.$t("computer.task.toast_summary"),
             life: 3000,
           });
-        });
+        })
     },
 
     templateOperation(action) {
@@ -373,7 +399,7 @@ export default {
               summary: this.$t("computer.task.toast_summary"),
               life: 3000,
             });
-          });
+          })
       }
     },
 

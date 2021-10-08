@@ -1,7 +1,7 @@
 <template>
     <div class="p-grid">
-        <div class="p-col-12">
-            <Card>
+         <div class="p-col-12" v-if="scriptDefinitionTitle">
+            <Card style="margin-top: 10px">
                 <template #title>
                     {{$t('settings.script_definition.title')}}
                 </template>
@@ -9,12 +9,13 @@
                     {{$t('settings.script_definition.definition')}}
                 </template>
             </Card>
-        </div>
+         </div>
         <div class="p-col-12">
             <Card>
                 <template #title>
                     <div class="p-d-flex p-jc-between">
-                        <p>{{$t('settings.script_definition.script_list')}}</p>
+                        <div v-if="scriptDefinitionTitle">{{$t('settings.script_definition.script_list')}}</div>
+                        <div v-if="!scriptDefinitionTitle"></div>
                         <Button 
                          class="p-button-sm" 
                          icon="pi pi-plus" 
@@ -54,15 +55,22 @@
                         <Column :exportable="false">
                             <template #body="slotProps">
                                 <div class="p-d-flex p-jc-end">
-                                    <Button class="p-mr-2 p-button-sm p-button-rounded" 
-                                    icon="pi pi-pencil"  
-                                    :label="$t('settings.script_definition.edit')" 
-                                    @click.prevent="editScript(slotProps.data)">
+                                    <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
+                                     icon="pi pi-pencil"  
+                                     :label="$t('settings.script_definition.edit')" 
+                                     @click.prevent="editScript(slotProps.data)">
                                     </Button>
-                                    <Button class="p-button-danger p-button-sm p-button-rounded" 
-                                    icon="pi pi-trash" 
-                                    :label="$t('settings.script_definition.delete')"
-                                    @click.prevent="deleteScript(slotProps.data)">
+                                    <Button class="p-button-danger p-mr-2 p-button-sm p-button-rounded" 
+                                     icon="pi pi-trash" 
+                                     :label="$t('settings.script_definition.delete')"
+                                     @click.prevent="deleteScriptConfirmDialog = true; selectedScript = slotProps.data;">
+                                    </Button>
+                                    <Button v-if="executeScriptButton"
+                                     class="p-button-sm p-button-rounded" 
+                                     icon="pi pi-caret-right"
+                                     :label="$t('computer.plugins.button.run')"
+                                     @click.prevent="$emit('executeScript', event)"
+                                    >
                                     </Button>
                                 </div>
                             </template>
@@ -99,16 +107,19 @@
                       optionValue="value"
                       :options="scriptTypes" 
                       optionLabel="label"
-                     :placeholder="$t('settings.script_definition.select')" @change="changeScriptType"
+                     :placeholder="$t('settings.script_definition.select')" 
+                     @change="changeScriptType"
                     />
                 </div>
                 <div class="p-field p-col-12">
                     <label>{{$t('settings.script_definition.script_content')}}</label>
                     <Textarea 
-                    :autoResize="false" style="width:100%; height: 500px;"  
-                    v-model="contents" :class="validationErrors.contents? 'p-invalid':''"
+                    :autoResize="false" 
+                    style="width:100%; height: 500px;"  
+                    v-model="contents" 
+                    :class="validationErrors.contents? 'p-invalid':''"
                     />
-                    <small v-if="validationErrors.contents" 
+                    <small v-if="validationErrors.contents"
                       class="p-error">{{ $t('settings.script_definition.script_content_warn') }}
                     </small>
                 </div>
@@ -128,12 +139,39 @@
                 />
             </template>
         </Dialog>
+        <Dialog 
+            :header="$t('computer.task.toast_summary')" 
+            v-model:visible="deleteScriptConfirmDialog"  
+            :modal="true" 
+            @hide="deleteScriptConfirmDialog = false"
+        >
+            <div class="confirmation-content">
+                <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+                <span>{{ $t('settings.script_definition.delete_script_confirm_message')}}</span>
+            </div>
+            <template #footer>
+            <Button 
+                :label="$t('settings.script_definition.cancel')" 
+                icon="pi pi-times" 
+                @click="deleteScriptConfirmDialog = false" 
+                class="p-button-text p-button-sm"
+            />
+            <Button 
+                :label="$t('settings.script_definition.yes')"
+                icon="pi pi-check" 
+                @click="deleteScript"
+                class="p-button-sm"
+            />
+            </template>
+        </Dialog>
     </div>
 </template>
 
 <script>
 /**
  * Script definition page. The script added, updated or deleted
+ * emit executeScript event
+ * @event executeScript
  * @see {@link http://www.liderahenk.org/}
  * 
  */
@@ -142,12 +180,24 @@ import {FilterMatchMode} from 'primevue/api';
 import axios from "axios";
 
 export default {
+    props: {
+        scriptDefinitionTitle: {
+            type: Boolean,
+            default: true,
+        },
+        executeScriptButton: {
+            type: Boolean,
+            default: false,
+            description: "Display Execute script button"
+        }
+    }, 
     data() {
         return {
+            deleteScriptConfirmDialog: false,
             scripts: [],
             selectedScript: null,
             filters: {
-                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
             showTemplateDialog: false,
             scriptTypes: [
@@ -209,7 +259,6 @@ export default {
             this.label = data.label;
             this.scriptType = type;
             this.contents = data.contents;
-
         },
 
         addNewScript(){
@@ -237,9 +286,11 @@ export default {
             }
         },
 
-        deleteScript(data){
+        deleteScript(){
+            this.deleteScriptConfirmDialog = false;
+            console.log(this.selectedScript)
             const params = {
-                id: data.id
+                id: this.selectedScript.id
             };
             axios.post("/script/delete", params).then((response) => {
                 if (response.data != null) {
@@ -249,11 +300,13 @@ export default {
                     if (index > -1) {
                         this.scripts.splice(index, 1);
                     }
+                    this.selectedScript = null; 
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('settings.script_definition.deleted_script_success_message'), 
                         summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000});
+                        life: 3000
+                    });
                 }
             })
             .catch((error) => { 
@@ -298,7 +351,7 @@ export default {
                             detail: this.$t('settings.script_definition.updated_script_success_message'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
-                            });
+                        });
                     }
                 })
                 .catch((error) => { 
@@ -306,7 +359,9 @@ export default {
                     severity:'error', 
                     detail: this.$t('settings.script_definition.updated_script_error_message')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000})})
+                    life: 3000
+                    })
+                })
             } else{
                 if (!this.validateForm()) {
                     return;
@@ -328,7 +383,8 @@ export default {
                             severity:'success', 
                             detail: this.$t('settings.script_definition.saved_script_success_message'), 
                             summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000})
+                            life: 3000
+                        });
                     }
                 })
                 .catch((error) => { 
@@ -336,7 +392,9 @@ export default {
                     severity:'error', 
                     detail: this.$t('settings.script_definition.saved_script_error_message')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000})})
+                    life: 3000
+                    })
+                })
             }
         },
 

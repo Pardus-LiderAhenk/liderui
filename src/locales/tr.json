@@ -263,6 +263,10 @@
                 "send_task_warning": "En az bir servis seçilmelidir",
                 "change": "Değiştir",
                 "search": "Ara"
+            },
+            "execute_script": {
+                "header": "Betik Çalıştır",
+                "description": "Özel olarak yazılmış betik dosyalarının istemcide çalıştırılmasını sağlayan bir eklentidir."
             }
             
         },
@@ -352,6 +356,8 @@
             "script_name_warn": "Betik adı boş bırakılamaz",
             "script_content_warn": "Betik içeriği boş bırakılamaz",
             "script_name_unique_warn": "Betik adı aynı olamaz",
+            "delete_script_confirm_message": "Betik silinecek, emin misiniz?",
+            "yes":"Evet",
             "definition":"Listelenen betikler güncellenebilir veya silinebilir. Betik Adı, Betik Türü ve Betik İçeriği girilerek betik kaydedilebilir. Pardus için betik türü olarak Bash, Python, Perl ve Ruby seçenekleri mevcuttur."
         },
 
@@ -384,6 +390,8 @@
             "template_name_warn": "Şablon adı boş bırakılamaz",
             "template_content_warn": "Şablon içeriği boş bırakılamaz",
             "template_name_unique_warn": "Şablon adı aynı olamaz",
+            "delete_template_confirm_message": "Şablon silinecek, emin misiniz?",
+            "yes":"Evet",
             "definition":"Listelenen şablonlar güncellenebilir veya silinebilir. Metin tabanlı bilgilerin Conky uygulaması ile kullanıcının masaüstünde görüntülenmesini sağlar. Şablon İçeriği ve  Şablon Ayarı girilerek şablon kaydedilebilir."
         }
     }
