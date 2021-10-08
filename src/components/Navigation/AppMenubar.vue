@@ -55,77 +55,77 @@ export default {
                 {name: 'English', code: 'EN', img: 'us.png'}
             ],
             items: [ {
-                   label:'Computer Management',
+                   label: this.$t('menu.computer_management'),
                    to: '/computermanagement'
                 },
                 {
-                    label: 'User Management',
+                    label: this.$t('menu.user_management'),
                     items: [
                         {
-                            label:'User Operations'
+                            label: this.$t('menu.user_operations')
                             
                         },
                         {
-                            label: 'AD Syncronization'
+                            label: this.$t('menu.ad_syncronization')
                         }
                     ]
                 },
                 {
-                    label: 'Group Management',
+                    label: this.$t('menu.user_management'),
                     items : [
                         {
-                            label:'Computer Group Management',
+                            label:this.$t('menu.group_management'),
                             to: '/computer_group_management'
                            
                         },
                         {
-                            label: 'User Group Management',
+                            label: this.$t('menu.user_group_management'),
                             to: '/user_group_management'
                         },
                         {
-                            label: 'User Authorization ( Sudo )',
+                            label: this.$t('menu.computer_group_management'),
                             to: '/user_permissions_management'
                         },
                         {
-                            label: 'Policy Management'
+                            label: this.$t('menu.policy_management')
                         }
                     ]
                 },
                 {
-                    label: 'Reports',
+                    label: this.$t('menu.reports'),
                     items: [
                         {
-                            label: 'Detailed Agent Report',
+                            label: this.$t('menu.detailed_agent_report'),
                             to: '/reports/agent'
                         },
                         {
-                            label: 'Executed Task Report'
+                            label: this.$t('menu.executed_task_report')
                         }, 
                         {
-                            label: 'Sysem Log Report'
+                            label: this.$t('menu.system_log_report')
                         }
                     ]
                 }
             ],
             settingItems: [
                 {
-					label: 'Arayüz Erişim Ayarları',
+					label: this.$t('menu.console_user_settings'),
 					to:'/settings/console_user_settings',
 				},
 				{
-					label: 'Sunucu Ayarları',
+					label: this.$t('menu.server_settings'),
 					to: '/settings/server_setings'
 				},
                 {
-					label: 'Sistem Gözlemcisi Tanımları',
+					label: this.$t('menu.system_monitoring_definitions'),
 					to:'/settings/system_monitoring_definitions',
 				},
                 {
-					label: 'Betik Tanımları',
+					label: this.$t('menu.script_definitions'),
 					to: '/settings/script_definitions',
 				},
                 {
-					label: 'Kayıt Şablonları',
+					label: this.$t('menu.registration_templates'),
 					to:'/settings/registratin_templates',
 				},
             ]

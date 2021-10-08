@@ -21,12 +21,13 @@
         "detailed_agent_report": "Detailed Agent Report",
         "executed_task_report": "Executed Task Report",
         "system_log_report": "System Log Report",
-        "control_access_management": "Control Access Management",
+        "control_access_management": "Console Access Management",
         "eta_message_definitions": "Eta Message Definitions",
         "registration_templates": "Registration Templates",
         "script_definitions": "Script Definitions",
-        "system_monitor_definitions": "System Monitoring Definitions",
-        "server_settings": "Server Settings"
+        "system_monitoring_definitions": "System Monitoring Definitions",
+        "server_settings": "Server Settings",
+        "console_user_settings": "Console User Settings"
 
     },
     "dashboard": {
@@ -170,7 +171,7 @@
                 "message_content_warn": "Message content is not available"
             },
             "conky": {
-                "header": "System Observer",
+                "header": "System Monitoring",
                 "description": "Allows to text-based information to be displayed on desktop of users with conky desktop application",
                 "send_template": "Send Template",
                 "templates": "Templates",
@@ -350,6 +351,37 @@
             "script_content_warn": "Script content is not available",
             "script_name_unique_warn": "Script name can not be same",
             "definition": "The listed scripts can be updated or deleted. New script can be saved by entering the Script Name, Script Type and Script Content. Bash, Python, Perl and Ruby options are available as script types for Pardus."
+        },
+        "system_monitoring_definitions": {
+            "title": "System Monitoring Template Definition",
+            "template_list": "Template List",
+            "edit":"Edit",
+            "delete":"Delete",
+            "add":"Add",
+            "save": "Save",
+            "update":"Update",
+            "cancel":"Cancel",
+            "template_name": "Template Name",
+            "template_content": "Template Content",
+            "template_settings": "Template Settings",
+            "created_date":"Created Date",
+            "modified_date": "Modified Date",
+            "table_empty_message":"Template not found",
+            "search":"Search",
+            "create_template": "Create Template",
+            "update_template": "Update Template",
+            "select": "Select",
+            "get_templates_error_message": "An error occurred while getting templates",
+            "deleted_template_success_message": "Deleted template successfully",
+            "deleted_template_error_message": "An error occurred while deleting template",
+            "saved_template_success_message": "Saved template successfully",
+            "saved_template_error_message": "An error occurred while ading template",
+            "updated_template_success_message": "Updated template successfully",
+            "updated_template_error_message": "An error occurred while updating template",
+            "template_name_warn": "Template name is not available",
+            "template_content_warn": "Template content is not available",
+            "template_name_unique_warn": "Template name can not be same",
+            "definition": "The listed template can be updated or deleted. Allows to text-based information to be displayed on the desktop with Conky application. Template can be saved entering Content and Setting"
         }
     }
 }

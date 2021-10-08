@@ -15,20 +15,30 @@
                 <template #title>
                     <div class="p-d-flex p-jc-between">
                         <p>{{$t('settings.script_definition.script_list')}}</p>
-                        <Button class="p-button-sm" icon="pi pi-plus" :label="$t('settings.script_definition.add')"
-                         @click="addNewScript"></Button>
+                        <Button 
+                         class="p-button-sm" 
+                         icon="pi pi-plus" 
+                         :label="$t('settings.script_definition.add')"
+                         @click="addNewScript">
+                        </Button>
                     </div>
                 </template>
                 <template #content>
-                    <DataTable :value="scripts" responsiveLayout="scroll" class="p-datatable-sm"
-                    v-model:filters="filters"
+                    <DataTable 
+                    :value="scripts"
+                     responsiveLayout="scroll" 
+                     class="p-datatable-sm"
+                     v-model:filters="filters"
                       dataKey="id"
                     >
                         <template #header>
                             <div class="p-d-flex p-jc-end">
                                 <span class="p-input-icon-left">
                                     <i class="pi pi-search" />
-                                    <InputText v-model="filters['global'].value" class="p-inputtext-sm" :placeholder="$t('settings.script_definition.search')" />
+                                    <InputText v-model="filters['global'].value" 
+                                    class="p-inputtext-sm" 
+                                    :placeholder="$t('settings.script_definition.search')" 
+                                    />
                                 </span>
                             </div>
                         </template>
@@ -44,10 +54,14 @@
                         <Column :exportable="false">
                             <template #body="slotProps">
                                 <div class="p-d-flex p-jc-end">
-                                    <Button class="p-mr-2 p-button-sm p-button-rounded" icon="pi pi-pencil"  :label="$t('settings.script_definition.edit')" 
+                                    <Button class="p-mr-2 p-button-sm p-button-rounded" 
+                                    icon="pi pi-pencil"  
+                                    :label="$t('settings.script_definition.edit')" 
                                     @click.prevent="editScript(slotProps.data)">
                                     </Button>
-                                    <Button class="p-button-danger p-button-sm p-button-rounded" icon="pi pi-trash" :label="$t('settings.script_definition.delete')"
+                                    <Button class="p-button-danger p-button-sm p-button-rounded" 
+                                    icon="pi pi-trash" 
+                                    :label="$t('settings.script_definition.delete')"
                                     @click.prevent="deleteScript(slotProps.data)">
                                     </Button>
                                 </div>
@@ -57,33 +71,61 @@
                 </template>
             </Card>
         </div>
-        <Dialog :header="selectedScript ? $t('settings.script_definition.update_script'):$t('settings.script_definition.create_script')" :modal="false"
-       :style="{ width: '60vw' }"
+        <Dialog 
+        :header="selectedScript ? $t('settings.script_definition.update_script'):$t('settings.script_definition.create_script')" 
+        :modal="false"
+        :style="{ width: '60vw' }"
         :maximizable="true" 
         v-model:visible="showTemplateDialog" >
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col-12 p-md-8">
                     <label>{{$t('settings.script_definition.script_name')}}</label>
-                    <InputText type="text" v-model="label" :class="validationErrors.label || validationScriptLabel? 'p-invalid':''"/>
-                    <small v-if="validationErrors.label" class="p-error">{{ $t('settings.script_definition.script_name_warn') }}</small>
-                    <small v-if="validationScriptLabel" class="p-error">{{ $t('settings.script_definition.script_name_unique_warn') }}</small>
+                    <InputText 
+                    type="text" 
+                    v-model="label" 
+                    :class="validationErrors.label || validationScriptLabel? 'p-invalid':''"
+                    />
+                    <small v-if="validationErrors.label" 
+                      class="p-error">{{ $t('settings.script_definition.script_name_warn') }}
+                    </small>
+                    <small v-if="validationScriptLabel" 
+                      class="p-error">{{ $t('settings.script_definition.script_name_unique_warn') }}
+                    </small>
                 </div>
                 <div class="p-field p-col-12 p-md-4">
                     <label>{{$t('settings.script_definition.type')}}</label>
-                    <Dropdown v-model="scriptType" optionValue="value" :options="scriptTypes" optionLabel="label"
-                     :placeholder="$t('settings.script_definition.select')" @change="changeScriptType"/>
+                    <Dropdown 
+                      v-model="scriptType"
+                      optionValue="value"
+                      :options="scriptTypes" 
+                      optionLabel="label"
+                     :placeholder="$t('settings.script_definition.select')" @change="changeScriptType"
+                    />
                 </div>
                 <div class="p-field p-col-12">
                     <label>{{$t('settings.script_definition.script_content')}}</label>
-                    <Textarea :autoResize="false" style="width:100%; height: 500px;"  v-model="contents" :class="validationErrors.contents? 'p-invalid':''"/>
-                    <small v-if="validationErrors.contents" class="p-error">{{ $t('settings.script_definition.script_content_warn') }}</small>
+                    <Textarea 
+                    :autoResize="false" style="width:100%; height: 500px;"  
+                    v-model="contents" :class="validationErrors.contents? 'p-invalid':''"
+                    />
+                    <small v-if="validationErrors.contents" 
+                      class="p-error">{{ $t('settings.script_definition.script_content_warn') }}
+                    </small>
                 </div>
             </div>
             <template #footer>
-                <Button :label="$t('settings.script_definition.cancel')" icon="pi pi-times" @click="showTemplateDialog = false; selectedScript = null;" class="p-button-text p-button-sm"/>
-                <Button :label="selectedScript ? $t('settings.script_definition.update'): $t('settings.script_definition.save')" 
-                :icon="selectedScript ?'el-icon-refresh': 'pi pi-save'"  class="p-button-sm"
-                @click="scriptOperation(selectedScript ? 'update':'add')"/>
+                <Button 
+                 :label="$t('settings.script_definition.cancel')" 
+                 icon="pi pi-times"
+                 @click="showTemplateDialog = false; selectedScript = null;" 
+                 class="p-button-text p-button-sm"
+                />
+                <Button 
+                :label="selectedScript ? $t('settings.script_definition.update'): $t('settings.script_definition.save')" 
+                :icon="selectedScript ?'el-icon-refresh': 'pi pi-save'"  
+                class="p-button-sm"
+                @click="scriptOperation(selectedScript ? 'update':'add')"
+                />
             </template>
         </Dialog>
     </div>
@@ -142,7 +184,12 @@ export default {
                 }
             })
         .catch((error) => { 
-        this.$toast.add({severity:'error', detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
+        this.$toast.add({
+            severity:'error', 
+            detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+            })})
     },
 
     methods: {
@@ -202,11 +249,21 @@ export default {
                     if (index > -1) {
                         this.scripts.splice(index, 1);
                     }
-                    this.$toast.add({severity:'success', detail: this.$t('settings.script_definition.deleted_script_success_message'), summary:this.$t("computer.task.toast_summary"), life: 3000})
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.script_definition.deleted_script_success_message'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000});
                 }
             })
             .catch((error) => { 
-            this.$toast.add({severity:'error', detail: this.$t('settings.script_definition.deleted_script_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('settings.script_definition.deleted_script_error_message')+ " \n"+error, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+                });
+            })
         },
 
         scriptOperation(action) {
@@ -236,11 +293,20 @@ export default {
                                 element.modifyDate = response.data.modifyDate;
                             }
                         }
-                        this.$toast.add({severity:'success', detail: this.$t('settings.script_definition.updated_script_success_message'), summary:this.$t("computer.task.toast_summary"), life: 3000})
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('settings.script_definition.updated_script_success_message'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                            });
                     }
                 })
                 .catch((error) => { 
-                this.$toast.add({severity:'error', detail: this.$t('settings.script_definition.updated_script_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.updated_script_error_message')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000})})
             } else{
                 if (!this.validateForm()) {
                     return;
@@ -258,11 +324,19 @@ export default {
                     if (response.data != null) {
                         this.showTemplateDialog = false;
                         this.scripts.push(response.data);
-                        this.$toast.add({severity:'success', detail: this.$t('settings.script_definition.saved_script_success_message'), summary:this.$t("computer.task.toast_summary"), life: 3000})
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('settings.script_definition.saved_script_success_message'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000})
                     }
                 })
                 .catch((error) => { 
-                this.$toast.add({severity:'error', detail: this.$t('settings.script_definition.saved_script_error_message')+ " \n"+error, summary:this.$t("computer.task.toast_summary"), life: 3000})})
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.saved_script_error_message')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000})})
             }
         },
 
