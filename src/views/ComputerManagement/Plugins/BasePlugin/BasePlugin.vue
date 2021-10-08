@@ -1,13 +1,34 @@
 <template>
-  <Dialog :header="$t('computer.task.toast_summary')" v-model:visible="showDialog"  :modal="true" @hide="closeTaskDialog('cancel')">
+  <Dialog 
+    :header="$t('computer.task.toast_summary')" 
+    v-model:visible="showDialog"  
+    :modal="true" 
+    @hide="closeTaskDialog('cancel')"
+  >
     <div class="confirmation-content">
-      <i :class="scheduledParam == null ? 'pi pi-info-circle p-mr-3': 'pi pi-clock p-mr-3'" style="font-size: 2rem" />
-      <span v-if="scheduledParam == null">{{ $t('computer.plugins.base_plugin.task_confirm_question') }}</span>
-      <span v-if="scheduledParam">{{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}</span>
+      <i :class="scheduledParam == null ? 'pi pi-info-circle p-mr-3': 'pi pi-clock p-mr-3'" 
+        style="font-size: 2rem" 
+      />
+      <span v-if="scheduledParam == null">
+        {{ $t('computer.plugins.base_plugin.task_confirm_question') }}
+      </span>
+      <span v-if="scheduledParam">
+        {{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}
+      </span>
     </div>
     <template #footer>
-      <Button :label="$t('computer.plugins.base_plugin.no')" icon="pi pi-times" @click="closeTaskDialog('cancel')" class="p-button-text p-button-sm"/>
-      <Button :label="$t('computer.plugins.base_plugin.yes')" icon="pi pi-check" @click="confirmTaskDialog" class="p-button-sm"/>
+      <Button 
+      :label="$t('computer.plugins.base_plugin.no')" 
+      icon="pi pi-times" 
+      @click="closeTaskDialog('cancel')" 
+      class="p-button-text p-button-sm"
+      />
+      <Button 
+       :label="$t('computer.plugins.base_plugin.yes')"
+       icon="pi pi-check" 
+       @click="confirmTaskDialog"
+       class="p-button-sm"
+       />
     </template>
   </Dialog>
   <div>
@@ -37,14 +58,31 @@
           <hr style="margin-top:5px">
           <div class="p-grid">
             <div class="p-col p-as-start">
-              <a class="primary" type="secondary" @click="toggle" v-tooltip.right="$t('computer.plugins.plugin_popover.title')"><i class="el el-icon-question" ></i></a>
-              <OverlayPanel ref="op" appendTo="body" :showCloseIcon="false" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
+              <a class="primary" type="secondary" @click="toggle" 
+              v-tooltip.right="$t('computer.plugins.plugin_popover.title')">
+              <i class="el el-icon-question" ></i>
+              </a>
+              <OverlayPanel ref="op" 
+              appendTo="body" 
+              :showCloseIcon="false" 
+              id="overlay_panel" 
+              style="width: 450px" 
+              :breakpoints="{'960px': '75vw'}"
+              >
                 <div><h5>{{ $t('computer.plugins.plugin_popover.title') }}</h5></div>
                 <ul>
-                  <li><small>{{ pluginDescription }}</small></li>
-                  <li><small>{{$t('computer.plugins.plugin_popover.for_schedled_task')}} => &nbsp;<i class="fas fa-clock"></i></small></li>
+                  <li>
+                    <small>{{ pluginDescription }}</small>
+                  </li>
+                  <li>
+                    <small>
+                      {{$t('computer.plugins.plugin_popover.for_schedled_task')}} => &nbsp;<i class="fas fa-clock"></i>
+                    </small>
+                  </li>
                 </ul>
-                <a :href="pluginUrl" type="primary" target="_blank" icon="el-icon-link">{{ $t('computer.plugins.plugin_popover.for_more_info') }}...</a>
+                <a :href="pluginUrl" type="primary" target="_blank" icon="el-icon-link">
+                  {{ $t('computer.plugins.plugin_popover.for_more_info') }}...
+                </a>
               </OverlayPanel>
             </div>
             <div>
@@ -131,8 +169,16 @@ export default {
 
   methods: {
     confirmTaskDialog(){
-      if (this.selectedLiderNode == null || this.selectedLiderNode.type != "AHENK" && this.selectedLiderNode.type != "GROUP" && this.selectedLiderNode.type != "WIND0WS_AHENK") {
-        this.$toast.add({severity:'warn', detail: this.$t("computer.task.selected_agent_warn"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+      if (this.selectedLiderNode == null || 
+        this.selectedLiderNode.type != "AHENK" && 
+        this.selectedLiderNode.type != "GROUP" && 
+        this.selectedLiderNode.type != "WIND0WS_AHENK") {
+        this.$toast.add({
+          severity:'warn', 
+          detail: this.$t("computer.task.selected_agent_warn"), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: this.toastLife
+        });
         this.closeTaskDialog("cancel");
         return;
       }
@@ -153,27 +199,51 @@ export default {
       task.cronExpression = this.scheduledParam;
       task.dnType = this.selectedLiderNode.type;
       
-      axios.post("/lider/task/execute",task)
-        .then((response) => {
-          if (response.data.status == 'OK') {
-            if (this.selectedLiderNode.type == "AHENK") {
-              if (this.selectedLiderNode.online) {
-                if (!task.cronExpression) {
-                  this.loading = true;
-                  this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_susccess_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
-                } else {
-                  this.$toast.add({severity:'success', detail: this.$t("computer.task.send_scheduled_task_susccess_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
-                }
+      axios.post("/lider/task/execute",task).then((response) => {
+        if (response.data.status == 'OK') {
+          if (this.selectedLiderNode.type == "AHENK") {
+            if (this.selectedLiderNode.online) {
+              if (!task.cronExpression) {
+                this.loading = true;
+                this.$toast.add({
+                  severity:'success', 
+                  detail: this.$t("computer.task.send_task_susccess_message"), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: this.toastLife
+                });
               } else {
-                this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_offline_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+                this.$toast.add({
+                  severity:'success', 
+                  detail: this.$t("computer.task.send_scheduled_task_susccess_message"), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: this.toastLife
+                });
               }
+            } else {
+              this.$toast.add({
+                severity:'success', 
+                detail: this.$t("computer.task.send_task_offline_message"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: this.toastLife
+              });
             }
-            if (this.selectedLiderNode.type == "GROUP") {
-              this.$toast.add({severity:'success', detail: this.$t("computer.task.send_task_group_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
-            }
-          } else {
-            this.$toast.add({severity:'error', detail: this.$t("computer.task.send_task_error_message"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
           }
+          if (this.selectedLiderNode.type == "GROUP") {
+            this.$toast.add({
+              severity:'success', 
+              detail: this.$t("computer.task.send_task_group_message"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: this.toastLife
+            });
+          }
+        } else {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.task.send_task_error_message"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: this.toastLife
+          });
+        }
       });
       this.scheduledParam = null;
     },
@@ -194,7 +264,12 @@ export default {
 
     cancelScheduledTask() {
       this.scheduledParam = null;
-      this.$toast.add({severity:'warn', detail: this.$t("computer.task.cancel_scheduled_task"), summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+      this.$toast.add({
+        severity:'warn', 
+        detail: this.$t("computer.task.cancel_scheduled_task"), 
+        summary:this.$t("computer.task.toast_summary"), 
+        life: this.toastLife
+      });
     },
 
     toggle(event) {
@@ -241,9 +316,19 @@ export default {
           if (response.commandExecution.dn == this.selectedLiderNode.distinguishedName) {
             this.loading = false;
             if (response.result.responseCode === "TASK_PROCESSED") {
-              this.$toast.add({severity:'success', detail: responseMessage, summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+              this.$toast.add({
+                severity:'success', 
+                detail: responseMessage, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: this.toastLife
+              });
             } else if (response.result.responseCode === "TASK_ERROR") {
-              this.$toast.add({severity:'error', detail: responseMessage, summary:this.$t("computer.task.toast_summary"), life: this.toastLife});
+              this.$toast.add({
+                severity:'error', 
+                detail: responseMessage, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: this.toastLife
+              });
             }
             this.$emit("taskResponse", response);
           }
