@@ -246,7 +246,7 @@
             "service_management": {
                 "header": "Servis Yönetimi",
                 "description": "İstemcideki servislerin durumları gözlemlenir. Listelenen servislerin durumlarının başlat, durdur, etkinleştir veya devre dışı bırak olarak değiştirilmesine izin verir.",
-                "list_services": "List Services",
+                "list_services": "Servisleri Listele",
                 "table_empty_message": "Servis bulunamadı",
                 "service_name": "Servis Adı",
                 "status": "Durum",
@@ -266,7 +266,12 @@
             },
             "execute_script": {
                 "header": "Betik Çalıştır",
-                "description": "Özel olarak yazılmış betik dosyalarının istemcide çalıştırılmasını sağlayan bir eklentidir."
+                "description": "Özel olarak yazılmış betik dosyalarının istemcide çalıştırılmasını sağlayan bir eklentidir.",
+                "use_parameter": "Parametre kullanmak istiyor musunuz?",
+                "define_parameter": "Parametre Tanımla",
+                "yes":"Evet",
+                "no":"Hayır",
+                "valiadation_script_params": "Betik parametresi boş bırakılamaz"
             }
             
         },

@@ -17,10 +17,10 @@
                         <div v-if="scriptDefinitionTitle">{{$t('settings.script_definition.script_list')}}</div>
                         <div v-if="!scriptDefinitionTitle"></div>
                         <Button 
-                         class="p-button-sm" 
-                         icon="pi pi-plus" 
-                         :label="$t('settings.script_definition.add')"
-                         @click="addNewScript">
+                            class="p-button-sm" 
+                            icon="pi pi-plus" 
+                            :label="$t('settings.script_definition.add')"
+                            @click="addNewScript">
                         </Button>
                     </div>
                 </template>
@@ -30,12 +30,11 @@
                      responsiveLayout="scroll" 
                      class="p-datatable-sm"
                      v-model:filters="filters"
-                      dataKey="id"
                     >
                         <template #header>
                             <div class="p-d-flex p-jc-end">
                                 <span class="p-input-icon-left">
-                                    <i class="pi pi-search" />
+                                    <i class="pi pi-search"/>
                                     <InputText v-model="filters['global'].value" 
                                     class="p-inputtext-sm" 
                                     :placeholder="$t('settings.script_definition.search')" 
@@ -48,28 +47,29 @@
                                 <span>{{$t('settings.script_definition.table_empty_message')}}</span>
                             </div>
                         </template>
-                        <Column field="label" :header="$t('settings.script_definition.script_name')" style="min-width:12rem"></Column>
-                        <Column field="scriptType" :header="$t('settings.script_definition.type')"></Column>
-                        <Column field="createDate" :header="$t('settings.script_definition.created_date')"></Column>
-                        <Column field="modifyDate" :header="$t('settings.script_definition.modified_date')"></Column>
+                        <Column field="rowIndex" header="#" style="width:5%"></Column>
+                        <Column field="label" :header="$t('settings.script_definition.script_name')" style="width:25%"></Column>
+                        <Column field="scriptType" :header="$t('settings.script_definition.type')" ></Column>
+                        <Column field="createDate" :header="$t('settings.script_definition.created_date')" ></Column>
+                        <Column field="modifyDate" :header="$t('settings.script_definition.modified_date')" ></Column>
                         <Column :exportable="false">
                             <template #body="slotProps">
                                 <div class="p-d-flex p-jc-end">
                                     <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
-                                     icon="pi pi-pencil"  
-                                     :label="$t('settings.script_definition.edit')" 
-                                     @click.prevent="editScript(slotProps.data)">
+                                        icon="pi pi-pencil"  
+                                        :label="$t('settings.script_definition.edit')" 
+                                        @click.prevent="editScript(slotProps.data)">
                                     </Button>
                                     <Button class="p-button-danger p-mr-2 p-button-sm p-button-rounded" 
-                                     icon="pi pi-trash" 
-                                     :label="$t('settings.script_definition.delete')"
-                                     @click.prevent="deleteScriptConfirmDialog = true; selectedScript = slotProps.data;">
+                                        icon="pi pi-trash" 
+                                        :label="$t('settings.script_definition.delete')"
+                                        @click.prevent="deleteScriptConfirmDialog = true; selectedScript = slotProps.data;">
                                     </Button>
                                     <Button v-if="executeScriptButton"
-                                     class="p-button-sm p-button-rounded" 
-                                     icon="pi pi-caret-right"
-                                     :label="$t('computer.plugins.button.run')"
-                                     @click.prevent="$emit('executeScript', event)"
+                                        class="p-button-sm p-button-rounded" 
+                                        icon="pi pi-caret-right"
+                                        :label="$t('computer.plugins.button.run')"
+                                        @click.prevent="$emit('executeScript', slotProps.data)"
                                     >
                                     </Button>
                                 </div>
@@ -170,7 +170,7 @@
 <script>
 /**
  * Script definition page. The script added, updated or deleted
- * emit executeScript event
+ * emit executeScript event for send task to agent
  * @event executeScript
  * @see {@link http://www.liderahenk.org/}
  * 
@@ -227,12 +227,12 @@ export default {
     },
 
     created() {
-        axios.post("/script/list", null)
-            .then((response) => {
-                if (response.data != null) {
-                    this.scripts = response.data;
-                }
-            })
+        axios.post("/script/list", null).then((response) => {
+            if (response.data != null) {
+                this.scripts = response.data;
+                this.updateRowIndex();
+            }
+        })
         .catch((error) => { 
         this.$toast.add({
             severity:'error', 
@@ -288,7 +288,6 @@ export default {
 
         deleteScript(){
             this.deleteScriptConfirmDialog = false;
-            console.log(this.selectedScript)
             const params = {
                 id: this.selectedScript.id
             };
@@ -307,6 +306,7 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
+                    this.updateRowIndex();
                 }
             })
             .catch((error) => { 
@@ -385,6 +385,7 @@ export default {
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
+                        this.updateRowIndex();
                     }
                 })
                 .catch((error) => { 
@@ -420,6 +421,13 @@ export default {
                 }
             }
             return isExist;
+        },
+        
+        updateRowIndex() {
+            for (let index = 0; index < this.scripts.length; index++) {
+                const element = this.scripts[index];
+                element.rowIndex = index + 1;
+            }
         }
     },
 
@@ -430,7 +438,7 @@ export default {
         label(){
             delete this.validationErrors['label'];
             this.validationScriptLabel = false; 
-        }
+        },
     }
 }
 </script>

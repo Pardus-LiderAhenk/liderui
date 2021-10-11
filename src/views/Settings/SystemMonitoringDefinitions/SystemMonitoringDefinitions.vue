@@ -51,10 +51,10 @@
                 </span>
               </div>
             </template>
-            <Column
+            <Column field="rowIndex" header="#" style="width:5%"></Column>
+            <Column style="width:25%"
               field="label"
               :header="$t('settings.system_monitoring_definitions.template_name')"
-              style="min-width: 12rem"
             >
             </Column>
             <Column
@@ -63,8 +63,8 @@
             >
             </Column>
             <Column
-              field="modifyDate"
-              :header="$t('settings.system_monitoring_definitions.modified_date')"
+             field="modifyDate" 
+             :header="$t('settings.system_monitoring_definitions.modified_date')"
             >
             </Column>
             <Column :exportable="false">
@@ -263,6 +263,7 @@ export default {
     axios.post("/conky/list", null) .then((response) => {
         if (response.data != null) {
           this.templates = response.data;
+          this.updateRowIndex();
         }
       })
       .catch((error) => {
@@ -312,6 +313,7 @@ export default {
               summary: this.$t("computer.task.toast_summary"),
               life: 3000,
             });
+            this.updateRowIndex();
           }
         })
         .catch((error) => {
@@ -390,6 +392,7 @@ export default {
                 summary: this.$t("computer.task.toast_summary"),
                 life: 3000,
               });
+              this.updateRowIndex();
             }
           })
           .catch((error) => {
@@ -429,6 +432,13 @@ export default {
       }
       return isExist;
     },
+
+    updateRowIndex() {
+      for (let index = 0; index < this.templates.length; index++) {
+        const element = this.templates[index];
+        element.rowIndex = index + 1;
+      }
+    }
   },
 
   watch: {

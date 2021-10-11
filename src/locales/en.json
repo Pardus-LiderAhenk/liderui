@@ -265,7 +265,12 @@
             },
             "execute_script": {
                 "header": "Execute Script",
-                "description": "It is a plugin that allows custom written scripts to be execute on client."
+                "description": "It is a plugin that allows custom written scripts to be execute on client.",
+                "use_parameter": "Do you want to use parameters?",
+                "define_parameter": "Define Parameter",
+                "yes":"Yes",
+                "no":"No",
+                "valiadation_script_params": "Script parameter is not available"
             }
         },
         "agent_info": {
