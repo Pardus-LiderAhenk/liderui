@@ -71,7 +71,7 @@ export default {
                     ]
                 },
                 {
-                    label: this.$t('menu.user_management'),
+                    label: this.$t('menu.group_management'),
                     items : [
                         {
                             label:this.$t('menu.group_management'),
