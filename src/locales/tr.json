@@ -163,7 +163,8 @@
                 "domain": "Etki Alanı",
                 "server_name": "Sunucu Adı",
                 "username": "Kullanıcı Adı",
-                "get_settings_error_message": "LDAP ayarları getirilirken hata oluştu"
+                "get_settings_error_message": "LDAP ayarları getirilirken hata oluştu",
+                "disable_local_user": "Yerel Kullanıcıyı Devre Dışı Bırak"
             },
             "xmessage": {
                 "header": "Anlık Mesaj Gönder",

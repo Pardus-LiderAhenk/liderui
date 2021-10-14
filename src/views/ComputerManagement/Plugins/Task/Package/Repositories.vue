@@ -245,6 +245,7 @@ export default {
 
     sendTaskRepositoryManagement(commandId){
         this.task.commandId = commandId;
+        this.task.plugin.usesFileTransfer = false;
         if (commandId == "REPOSITORIES") {
             this.task.parameterMap = {};
             this.showTaskDialog = true;

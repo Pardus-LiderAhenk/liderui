@@ -162,7 +162,8 @@
                 "domain": "Domain",
                 "server_name": "Server Name",
                 "username": "Username",
-                "get_settings_error_message": "An error occurred while getting LDAP settings"
+                "get_settings_error_message": "An error occurred while getting LDAP settings",
+                "disable_local_user": "Disable Local User"
             },
             "xmessage": {
                 "header": "Send Instant Message",

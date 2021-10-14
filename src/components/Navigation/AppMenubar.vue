@@ -74,16 +74,15 @@ export default {
                     label: this.$t('menu.group_management'),
                     items : [
                         {
-                            label:this.$t('menu.group_management'),
+                            label:this.$t('menu.computer_group_management'),
                             to: '/computer_group_management'
-                           
                         },
                         {
                             label: this.$t('menu.user_group_management'),
                             to: '/user_group_management'
                         },
                         {
-                            label: this.$t('menu.computer_group_management'),
+                            label: this.$t('menu.user_authorization'),
                             to: '/user_permissions_management'
                         },
                         {

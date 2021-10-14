@@ -160,7 +160,12 @@ export default {
       type: Boolean,    
       default: false,
       description: "Execute task as automatically",
-    }
+    },
+    executeTaskUrl: {
+      type: String,
+      default: "/lider/task/execute",
+      description: "url for execute task"
+    },
   },
 
   computed: {
@@ -199,7 +204,7 @@ export default {
       task.cronExpression = this.scheduledParam;
       task.dnType = this.selectedLiderNode.type;
       
-      axios.post("/lider/task/execute",task).then((response) => {
+      axios.post(this.executeTaskUrl,task).then((response) => {
         if (response.data.status == 'OK') {
           if (this.selectedLiderNode.type == "AHENK") {
             if (this.selectedLiderNode.online) {

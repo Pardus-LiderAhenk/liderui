@@ -230,8 +230,7 @@ export default {
   },
 
   mounted() {
-    axios.get("/lider/config/configurations", null)
-    .then((response) => {
+    axios.get("/packages/repoAddress", null).then((response) => {
       if (response.data.pardusRepoAddress == null || 
       response.data.pardusRepoAddress == "" && 
       response.data.pardusRepoComponent != null || 
@@ -265,8 +264,7 @@ export default {
         const params = new FormData();
         params.append("pardusRepoAddress", this.repoForm.url);
         params.append("pardusRepoComponent", this.repoForm.component);
-        axios.post("/packages/update/repoAddress", params)
-        .then((response) => {
+        axios.post("/packages/update/repoAddress", params).then((response) => {
         if (response.data.pardusRepoAddress != null && response.data.pardusRepoComponent != null) {
           this.$toast.add({
             severity:'success', 

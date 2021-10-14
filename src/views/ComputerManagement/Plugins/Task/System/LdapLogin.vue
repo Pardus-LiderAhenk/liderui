@@ -7,6 +7,7 @@
       @close-task-dialog="closeShowTaskDialog"
       @task-response="ldapLoginResponse"
       :pluginTask="task"
+      executeTaskUrl="/ldapLogin/task/execute"
     >
       <template #pluginHeader>
         {{ $t("computer.plugins.ldap_login.header") }}
@@ -30,46 +31,46 @@
             <div v-if="selectedSetting.key == 'OpenLDAP'">
               <li style="list-style-type: none;">
                 <div class="p-grid">
-                  <div class="p-col-4">{{ $t("computer.plugins.ldap_login.server_address") }}:</div>
-                  <div class="p-col-8"> {{ldapServer}} </div>
+                  <div class="p-col-6">{{ $t("computer.plugins.ldap_login.server_address") }}:</div>
+                  <div class="p-col-6"> {{ldapServer}} </div>
                 </div>
               </li>
               <li style="list-style-type: none;">
                 <div class="p-grid">
-                  <div class="p-col-4">Base DN:</div>
-                  <div class="p-col-8">{{ ldapRootDn }}</div>
+                  <div class="p-col-6">Base DN:</div>
+                  <div class="p-col-6">{{ ldapRootDn }}</div>
                 </div>
               </li> 
+              <li style="list-style-type: none;">
+                <div class="p-grid">
+                  <div class="p-col-6">{{ $t("computer.plugins.ldap_login.disable_local_user") }}:</div>
+                  <div class="p-col-6"> {{disableLocalUser}} </div>
+                </div>
+              </li>
             </div>
             <div v-if="selectedSetting.key == 'AD'">
               <li style="list-style-type: none;">
                 <div class="p-grid">
-                  <div class="p-col-4">{{ $t("computer.plugins.ldap_login.domain") }}:</div>
-                  <div class="p-col-8"> {{adDomainName}} </div>
+                  <div class="p-col-6">{{ $t("computer.plugins.ldap_login.domain") }}:</div>
+                  <div class="p-col-6"> {{adDomainName}} </div>
                 </div>
               </li>
               <li style="list-style-type: none;">
                 <div class="p-grid">
-                  <div class="p-col-4">{{ $t("computer.plugins.ldap_login.server_address") }}:</div>
-                  <div class="p-col-8"> {{adIpAddress}} </div>
+                  <div class="p-col-6">{{ $t("computer.plugins.ldap_login.server_address") }}:</div>
+                  <div class="p-col-6"> {{adIpAddress}} </div>
                 </div>
               </li>
               <li style="list-style-type: none;">
                 <div class="p-grid">
-                  <div class="p-col-4">{{ $t("computer.plugins.ldap_login.server_name") }}:</div>
-                  <div class="p-col-8"> {{adHostName}} </div>
+                  <div class="p-col-6">{{ $t("computer.plugins.ldap_login.server_name") }}:</div>
+                  <div class="p-col-6"> {{adHostName}} </div>
                 </div>
               </li>
               <li style="list-style-type: none;">
                 <div class="p-grid">
-                  <div class="p-col-4">Port:</div>
-                  <div class="p-col-8"> {{adPort}} </div>
-                </div>
-              </li>
-              <li style="list-style-type: none;">
-                <div class="p-grid">
-                  <div class="p-col-4">{{ $t("computer.plugins.ldap_login.username") }}:</div>
-                  <div class="p-col-8"> {{adAdminUserName}} </div>
+                  <div class="p-col-6">{{ $t("computer.plugins.ldap_login.disable_local_user") }}:</div>
+                  <div class="p-col-6"> {{disableLocalUser}} </div>
                 </div>
               </li>
             </div>
@@ -84,6 +85,7 @@
 <script>
 /**
  * Ldap login plugin. This page authentication to OpenLDAP or Active Directory and cancel authentication from directory manager
+ * commandId: EXECUTE_LDAP_LOGIN, EXECUTE_AD_LOGIN, EXECUTE_CANCEL_LDAP_LOGIN
  * @see {@link http://www.liderahenk.org/}
  * 
  */
@@ -115,10 +117,8 @@ export default {
       adIpAddress: "",
       adDomainName: "",
       adHostName: "",
-      adAdminUserName: "",
-      adAdminPassword: "",
-      adPort: "",
       disableLocalUser: null,
+      allowDynamicDNSUpdate: false,
       pluginDescription: this.$t('computer.plugins.ldap_login.description'),
       pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/istemci_oturum_acma_ayarlari/",
     };
@@ -129,18 +129,16 @@ export default {
   },
 
   mounted() {
-    axios.get(process.env.VUE_APP_URL + "/ldap_login/configurations", null)
-    .then((response) => {
+    axios.get("/ldapLogin/configurations", null).then((response) => {
       if (response.data != null) {
         this.ldapServer = response.data.ldapServer;
         this.ldapRootDn = response.data.ldapRootDn;
         this.adIpAddress = response.data.adIpAddress;
         this.adDomainName = response.data.adDomainName;
         this.adHostName = response.data.adHostName;
-        this.adAdminUserName = response.data.adAdminUserName;
-        this.adAdminPassword = response.data.adAdminPassword;
-        this.adPort = response.data.adPort;
         this.disableLocalUser = response.data.disableLocalUser;
+        this.allowDynamicDNSUpdate = response.data.allowDynamicDNSUpdate;
+
       } else {
         this.$toast.add({
           severity:'error', 
@@ -166,30 +164,33 @@ export default {
       this.task.parameterMap = {};
       if (this.selectedSetting.key == "OpenLDAP") {
         this.task.commandId = "EXECUTE_LDAP_LOGIN";
-        var adminDn = null;
-        var adminPassword = null;
+        var agentDn = null;
+        var agentPassword = null;
         
         if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
-          adminDn = this.selectedLiderNode.attributes.entryDN;
-          adminPassword = this.selectedLiderNode.attributes.userPassword;
+          agentDn = this.selectedLiderNode.attributes.entryDN;
+          agentPassword = this.selectedLiderNode.attributes.userPassword;
         }
         this.task.parameterMap = {
           "server-address": this.ldapServer,
 					"dn": this.ldapRootDn,
-					"admin-dn": adminDn,
-					"admin-password": adminPassword,
+					"admin-dn": agentDn,
+					"admin-password": agentPassword,
 					"disableLocalUser": this.disableLocalUser
         }
       } else if (this.selectedSetting.key == "AD") {
         this.task.commandId = "EXECUTE_AD_LOGIN";
+        
+        // set ad_username, admin_password, ad_port params in controller
         this.task.parameterMap = {
           "domain_name": this.adDomainName,
           "hostname": this.adHostName,
           "ip_address": this.adIpAddress,
-          "ad_username": this.adAdminUserName,
-          "admin_password": this.adAdminPassword,
-          "ad_port": this.adPort,
-          "disableLocalUser": this.disableLocalUser
+          "disableLocalUser": this.disableLocalUser,
+          "dynamic_dns_update": this.allowDynamicDNSUpdate,
+          "ad_username": null,
+          "admin_password": null,
+          "ad_port": null
         }
       } else {
         this.task.commandId = "EXECUTE_CANCEL_LDAP_LOGIN";
@@ -218,9 +219,7 @@ export default {
       const params = new FormData();
       params.append("dn", this.selectedLiderNode.distinguishedName);
       params.append("userDirectoryDomain", userDirectoryDomain);
-      axios.post(process.env.VUE_APP_URL + "/ldap_login/update_directory_domain", params)
-      .then((response) => {
-    });
+      axios.post("/ldapLogin/updateDirectoryDomain", params).then((response) => {});
     }
   },
 };
