@@ -54,11 +54,7 @@ export default {
 
   created() {
     axios
-      .post(
-        process.env.VUE_APP_URL + "/getPluginTaskList",
-        {},
-      )
-      .then((response) => {
+      .post("/getPluginTaskList",{},).then((response) => {
         for (let index = 0; index < response.data.length; index++) {
           const element = response.data[index];
           if (element.page == "package-management") {
