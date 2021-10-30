@@ -185,7 +185,7 @@
             },
             "packages":{
                 "header": "Package Install or Uninstall",
-                "description": "Allows to install or uninstall selected package or packages in package repository which entered address",
+                "description": "Allows to the listing of packages from the repository whose address is entered and the install or uninstall of package or packages selected from the listed packages on the client.",
                 "edit":"Edit",
                 "save": "Save",
                 "get_settings_error_message": "An error occurred while getting respository settings",
@@ -322,8 +322,17 @@
                 "open": "Open",
                 "closed": "Closed",
                 "port_task_warn": "At least one port must be selected"
-
-
+            },
+            "usb": {
+                "header": "Device Management",
+                "description": "Allows management of client's device I/O.",
+                "usb": "USB",
+                "printer": "Pinter",
+                "webcam": "Webcam",
+                "mouse_keyboard": "Mouse-Keyboard",
+                "allow": "Allow",
+                "block":"Block",
+                "usb_task_warn": "At least one device must be selected"
             }
         },
         "agent_info": {

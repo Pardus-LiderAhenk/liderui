@@ -186,7 +186,7 @@
             },
             "packages":{
                 "header": "Paket Kur Veya Kaldır",
-                "description": "Adresi girilen paket deposundaki seçilen paket ya da paketlerin istemci kurulmasını veya kaldırılması sağlar.",
+                "description": "Adresi girilen paket deposundaki paketlerin listelenmesini ve listelenen paketlerden seçilen paket ya da paketlerin istemcide kurulmasını veya kaldırılması sağlar.",
                 "edit":"Düzenle",
                 "save": "Kaydet",
                 "get_settings_error_message": "Paket depo ayarları getirilirken hata oluştu",
@@ -323,6 +323,17 @@
                 "open": "Açık",
                 "closed": "Kapalı",
                 "port_task_warn": "En az bir tane port seçmelisiniz"
+            },
+            "usb": {
+                "header": "Aygıt Yönetimi",
+                "description": "İstemcinin I/O aygıtlarının yönetimine izin verir.",
+                "usb": "USB",
+                "printer": "Yazıcı",
+                "webcam": "Web Kamerası",
+                "mouse_keyboard": "Fare-Klavye",
+                "allow": "İzin Ver",
+                "block":"Engelle",
+                "usb_task_warn": "En az bir tane aygıt seçmelisiniz"
             }
             
         },

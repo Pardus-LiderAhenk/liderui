@@ -8,82 +8,117 @@
       :pluginTask="task"
     >
       <template #pluginHeader>
-        {{ $t("computer.plugins.nerwork_management.header") }}
+        {{ $t("computer.plugins.usb.header") }}
       </template>
       <template #pluginHeaderButton>
         <div>
           <Button
-            icon="pi pi-trash"
-            class="p-button-danger p-button-sm p-mr-2"
-            :title="$t('computer.plugins.conky.remove_template')"
-            @click.prevent="sendTaskConky(true)"
-          >
-          </Button>
-          <Button
-            icon="pi pi-send"
-            class="p-button-raised p-button-sm"
-            :title="$t('computer.plugins.conky.send_template')"
-            @click.prevent="sendTaskConky(false)"
+            icon="pi pi-caret-right"
+            class="p-button-sm"
+            :title="$t('computer.plugins.button.run')"
+            @click.prevent="sendTaskUsbManagement"
           >
           </Button>
         </div>
       </template>
       <template #default>
-        <div class="p-grid p-flex-column">
-          <div class="p-fluid p-formgrid p-grid p-col">
-            <div class="p-field p-col-12">
-              <label>{{ $t("computer.plugins.conky.templates") }}</label>
-              <Dropdown
-                v-model="selectedTemplate"
-                :options="templates"
-                optionLabel="label"
-                :class="conkyValidation ? 'p-invalid' : ''"
-                :showClear="true"
-                :filter="true"
-                :placeholder="$t('computer.plugins.conky.select_template')"
-                filterPlaceholder="Find Template"
-              >
-              </Dropdown>
-              <small v-if="conkyValidation" class="p-error">{{
-                $t("computer.plugins.conky.warn_select_template")
-              }}</small>
-            </div>
+        <div class="p-grid">
+          <div class="p-col-5">
+            <Checkbox id="binary" v-model="storageCb" :binary="true" @change="changeCbStorage"/>&nbsp;&nbsp;
+            <i class="fab fa-usb"></i>&nbsp;&nbsp;
+            <label>{{ $t("computer.plugins.usb.usb") }}</label>
           </div>
-          <div class="p-col">
-            <TabView
-              class="tabview-custom"
-              ref="tabview4"
-              v-model:activeIndex="activeIndex"
-            >
-              <TabPanel>
-                <template #header>
-                  <i class="pi pi-comments"></i>
-                  <span>{{ $t("computer.plugins.conky.content") }}</span>
-                </template>
-              </TabPanel>
-              <TabPanel>
-                <template #header>
-                  <i class="pi pi-cog"></i>
-                  <span>{{ $t("computer.plugins.conky.settings") }}</span>
-                </template>
-              </TabPanel>
-            </TabView>
-            <Textarea
-              v-if="selectedTemplate && activeIndex === 0"
-              v-model="selectedTemplate.contents"
-              style="height: 320px; width: 100%"
-            />
-            <Textarea
-              v-if="selectedTemplate && activeIndex === 1"
-              v-model="selectedTemplate.settings"
-              style="height: 320px; width: 100%"
-            />
-            <p v-if="!selectedTemplate" class="p-text-center">
-              {{ $t("computer.plugins.conky.warn_select_template") }}
-            </p>
+          <div class="p-col-3">
+            <Dropdown 
+              v-model="storage" 
+              style="min-width: 100%;" 
+              :disabled="!storageCb"
+              :options="[{
+                label: $t('computer.plugins.usb.allow'), 
+                value: 1
+                },
+                {
+                  label: $t('computer.plugins.usb.block'), 
+                  value: 0
+                }]"
+              optionLabel="label" 
+              optionValue="value" >
+            </Dropdown>
           </div>
         </div>
-      </template>
+        <div class="p-grid p-fluid">
+          <div class="p-col-5">
+            <Checkbox id="binary" v-model="printerCb" :binary="true" @change="changeCbPrinter"/>&nbsp;&nbsp;
+            <i class="fas fa-print"></i>&nbsp;&nbsp;
+            <label>{{ $t("computer.plugins.usb.printer") }}</label>
+          </div>
+          <div class="p-col-3">
+            <Dropdown 
+              v-model="printer" 
+              style="min-width: 100%;" 
+              :disabled="!printerCb"
+              :options="[{
+                label: $t('computer.plugins.usb.allow'), 
+                value: 1
+                },
+                {
+                  label: $t('computer.plugins.usb.block'), 
+                  value: 0
+                }]"
+              optionLabel="label" 
+              optionValue="value" >
+            </Dropdown>
+          </div>
+        </div>
+        <div class="p-grid p-fluid">
+          <div class="p-col-5">
+            <Checkbox id="binary" v-model="webcamCb" :binary="true" @change="changeCbWebcam"/>&nbsp;&nbsp;
+            <i class="fas fa-camera"></i>&nbsp;&nbsp;
+            <label>{{ $t("computer.plugins.usb.webcam") }}</label>
+          </div>
+          <div class="p-col-3">
+            <Dropdown 
+              v-model="webcam" 
+              style="min-width: 100%;" 
+              :disabled="!webcamCb"
+              :options="[{
+                label: $t('computer.plugins.usb.allow'), 
+                value: 1
+                },
+                {
+                  label: $t('computer.plugins.usb.block'), 
+                  value: 0
+                }]"
+              optionLabel="label" 
+              optionValue="value" >
+            </Dropdown>
+          </div>
+        </div>
+        <div class="p-grid p-fluid">
+          <div class="p-col-5">
+            <Checkbox id="binary" v-model="mouseKeyboardCb" :binary="true" @change="changeCbMouseKeyboard"/>&nbsp;&nbsp;
+            <i class="fas fa-keyboard"></i>&nbsp;&nbsp;
+            <label for="storage">{{ $t("computer.plugins.usb.mouse_keyboard") }}</label>
+          </div>
+          <div class="p-col-3">
+            <Dropdown 
+              v-model="mouseKeyboard" 
+              style="min-width: 100%;" 
+              :disabled="!mouseKeyboardCb"
+              :options="[{
+                label: $t('computer.plugins.usb.allow'), 
+                value: 1
+                },
+                {
+                  label: $t('computer.plugins.usb.block'), 
+                  value: 0
+                }]"
+              optionLabel="label" 
+              optionValue="value" >
+            </Dropdown>
+          </div>
+        </div>
+        </template>
       <template #pluginFooter> </template>
     </base-plugin>
   </div>
@@ -91,13 +126,12 @@
 
 <script>
 /**
- * Conky Plugin. Allows to text-based information to be displayed on desktop of users
- * commandId: EXECUTE_CONKY
+ * USB Device Plugin. Allows management of client's device I/O
+ * commandId: MANAGE-USB
  * @see {@link http://www.liderahenk.org/}
  *
  */
 
-import axios from "axios";
 
 export default {
   props: {
@@ -115,81 +149,74 @@ export default {
     return {
       task: null,
       showTaskDialog: false,
-      pluginDescription: this.$t("computer.plugins.nerwork_management.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/guvenlik/ag_yonetimi/",
-      conkyMessage: "",
-      conkyValidation: false,
-      templates: [],
-      selectedTemplate: "",
-      activeIndex: 0,
+      pluginDescription: this.$t("computer.plugins.usb.description"),
+      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/guvenlik/usb_yonetimi/",
+      storageCb: false,
+      storage: 1,
+      printerCb: false,
+      printer: 1,
+      webcamCb: false,
+      webcam: 1,
+      mouseKeyboardCb: false,
+      mouseKeyboard: 1,
     };
   },
-
-  mounted() {
-    const params = new FormData();
-    axios
-      .post(process.env.VUE_APP_URL + "/conky/list", params)
-      .then((response) => {
-        if (response.data != null || response.data != "") {
-          this.templateList = response.data;
-          for (let index = 0; index < response.data.length; index++) {
-            const element = response.data[index];
-            this.templates.push({
-              label: element.label,
-              id: element.id,
-              contents: element.contents,
-              settings: element.settings,
-            });
-          }
-        }
-      })
-      .catch((error) => {
-        this.$toast.add({
-          severity: "error",
-          detail: this.$t("computer.plugins.conky.conky_error_message") +" \n" + error,
-          summary: this.$t("computer.task.toast_summary"),
-          life: 3000,
-        });
-      });
-  },
-
+  
   methods: {
-    sendTaskConky(removeConky) {
-      this.conkyValidation = false;
-      if (!removeConky && !this.selectedTemplate) {
-        this.conkyValidation = true;
-        return true;
+    sendTaskUsbManagement() {
+      this.task.commandId = "MANAGE-USB";
+      let parameterMap = {};
+      if (this.storageCb) {
+        parameterMap.storage = this.storage.toString();
       }
-      this.task.commandId = "EXECUTE_CONKY";
-      this.task.parameterMap = {
-        conkyMessage: this.selectedTemplate
-          ? this.selectedTemplate.settings +
-            "\n" +
-            this.selectedTemplate.contents
-          : "",
-        removeConkyMessage: removeConky,
-      };
+      if (this.printerCb) {
+        parameterMap.printer = this.printer.toString();
+      }
+      if (this.webcamCb) {
+        parameterMap.webcam = this.webcam.toString();
+      }
+      if (this.mouseKeyboardCb) {
+        parameterMap.mouseKeyboard = this.mouseKeyboard.toString();
+      }
+      if (Object.keys(parameterMap).length === 0) {
+        this.$toast.add({
+          severity:'warn', 
+          detail: this.$t('computer.plugins.usb.usb_task_warn'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+        return;
+      }
+      this.task.parameterMap = parameterMap;
       this.showTaskDialog = true;
     },
-  },
-  watch: {
-    selectedTemplate() {
-      if (this.selectedTemplate) {
-        this.conkyValidation = false;
+
+    changeCbWebcam() {
+      if (!this.webcamCb) {
+        this.webcam = 1;
       }
     },
+
+    changeCbStorage() {
+      if (!this.storageCb) {
+        this.storage = 1;
+      }
+    },
+
+    changeCbPrinter() {
+      if (!this.printerCb) {
+        this.printer = 1;
+      }
+    },
+
+    changeCbMouseKeyboard() {
+      if (!this.mouseKeyboardCb) {
+        this.mouseKeyboard = 1;
+      }
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.tabview-custom {
-  i,
-  span {
-    vertical-align: middle;
-  }
-  span {
-    margin: 0 0.5rem;
-  }
-}
 </style>
