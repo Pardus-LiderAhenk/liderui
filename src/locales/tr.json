@@ -334,8 +334,7 @@
                 "allow": "İzin Ver",
                 "block":"Engelle",
                 "usb_task_warn": "En az bir tane aygıt seçmelisiniz"
-            }
-            
+            }           
         },
         "agent_info": {
             "hostname": "Bilgisayar Adı",
@@ -391,6 +390,29 @@
             "send_task_error_message": "Görev gönderilirken hata oluştu",
             "toast_summary": "Bildirim",
             "send_scheduled_task_susccess_message": "Zamanlanmış görev başarı ile gönderildi"
+        },
+        "task_history": {
+            "header": "Görev Geçmişi",
+            "task_name": "Görev Adı",
+            "result":"Sonuç",
+            "sender": "Gönderen",
+            "created_date": "Oluşturma Tarihi",
+            "execution_date": "Çalıştırma Tarihi",
+            "task_detail": "Görev Detayı",
+            "successful": "Başarılı",
+            "failure": "Hatalı",
+            "sent": "Gönderildi",
+            "list_task_history": "Görev Geçmişini Listele",
+            "search":"Ara",
+            "table_task_history_empty_message": "Görev geçmişi bulunamadı",
+            "agent_selected_warn": "Lütfen bir istemci seçiniz",
+            "close": "Kapat",
+            "selected_task_detail": "Seçilen Görevin Detayları",
+            "task_parameters": "Görev Parametreleri",
+            "data_saved": "Görev Çalıştırılması Sonucu Kaydedilen Veriler",
+            "response_message_from_agent": "Ahenkten Gelen Mesaj",
+            "command_id": "Görev Kodu",
+            "export": "Dışa Aktar"
         }
     },
     "settings": {

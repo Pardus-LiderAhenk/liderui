@@ -389,6 +389,29 @@
             "send_task_error_message": "Error occurred while sending the task",
             "toast_summary": "Notification",
             "send_scheduled_task_susccess_message": "Sent scheduled task successfully"
+        },
+        "task_history": {
+            "header": "Task History",
+            "task_name": "Task Name",
+            "result":"Result",
+            "sender": "Sender",
+            "created_date": "Created Date",
+            "execution_date": "Execution Date",
+            "task_detail": "Task Detail",
+            "successful": "Successful",
+            "failure": "Failure",
+            "sent": "Sent",
+            "list_task_history": "List Task History",
+            "search": "Search",
+            "table_task_history_empty_message": "Task history not found",
+            "agent_selected_warn": "Please select a client",
+            "close": "Close",
+            "selected_task_detail": "Selected Task Detail",
+            "task_parameters": "Task Parameters",
+            "data_saved": "Data Saved as a Result of Task Execution",
+            "response_message_from_agent": "Response Message From Agent",
+            "command_id": "Task Code",
+            "export": "Export"
         }
     },
     "settings": {
