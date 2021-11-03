@@ -382,7 +382,7 @@
             "example": "Örnek; ( 0 15 * * 1 ) her Pazartesi saat 15'te çalışır"
         },
         "task": {
-            "selected_agent_warn": "Lütfen bir istemci seçiniz",
+            "selected_agent_warn": "Lütfen bir istemci veya istemci grubu seçiniz",
             "cancel_scheduled_task": "Zamanlanmış görev iptal edildi",
             "send_task_susccess_message": "Görev başarı ile gönderildi",
             "send_task_offline_message": "Görev başarı ile gönderildi, istemci çevrimiçi olduğunda çalıştırılacaktır",
@@ -429,7 +429,7 @@
             "script_content": "Betik İçeriği",
             "type": "Tipi",
             "created_date":"Oluşturma Tarihi",
-            "modified_date": "Değiştirile Tarihi",
+            "modified_date": "Değiştirilme Tarihi",
             "table_empty_message":"Betik bulunamadı",
             "search":"Ara",
             "create_script": "Betik Oluştur",
@@ -482,6 +482,33 @@
             "delete_template_confirm_message": "Şablon silinecek, emin misiniz?",
             "yes":"Evet",
             "definition":"Listelenen şablonlar güncellenebilir veya silinebilir. Metin tabanlı bilgilerin Conky uygulaması ile kullanıcının masaüstünde görüntülenmesini sağlar. Şablon İçeriği ve  Şablon Ayarı girilerek şablon kaydedilebilir."
+        }
+    },
+    "group_management": {
+        "computer_group": {
+            "selected_node_title": "Kayıt Bilgisi",
+            "attribute": "Öznitelik",
+            "value": "Değer",
+            "selected_node_detail": "Seçilen Kayıt Detayı",
+            "node_detail": "Kayıt Detayı",
+            "members_of_group": "Grup Üyeleri",
+            "delete": "Sil",
+            "member": "Üye",
+            "close":"Kapat",
+            "search":"Ara",
+            "member_empty_message": "Üye bulunamadı",
+            "name": "Ad",
+            "node_dn": "Kayıt DN",
+            "type":"Tipi",
+            "created_date":"Oluşturma Tarihi",
+            "modified_date":"Güncelleme Tarihi",
+            "creator_name": "Oluşturan Kişi",
+            "modifier_name": "Güncelleyen Kişi",
+            "objectclass": "Nesne Sınıfı",
+            "delete_member_success_message": "Üye başarı ile silindi",
+            "delete_member_error_message": "Üye silinirken hata oluştu",
+            "delete_member_warning_message": "Grupta en az bir üye olmalıdır",
+            "number_of_member": "Üye Sayısı"
         }
     }
 }

@@ -381,7 +381,7 @@
             "example": "Example; ( 0 15 * * 1 ) execute on every Monday at 3 PM"
         },
         "task": {
-            "selected_agent_warn": "Please select a client",
+            "selected_agent_warn": "Please select a client or client group",
             "cancel_scheduled_task": "Scheduled task canceled",
             "send_task_susccess_message": "Sent task successfully",
             "send_task_offline_message": "Sent task suscessfully, the task will be run when client is online",
@@ -480,6 +480,34 @@
             "delete_template_confirm_message": "The Template will be deleted, are you sure?",
             "yes":"Yes",
             "definition": "The listed template can be updated or deleted. Allows to text-based information to be displayed on the desktop with Conky application. Template can be saved entering Content and Setting"
+        }
+    },
+
+    "group_management": {
+        "computer_group": {
+            "selected_node_title": "Node Information",
+            "attribute": "Attribute",
+            "value": "Value",
+            "selected_node_detail": "Selected Node Detail",
+            "node_detail": "Node Detail",
+            "members_of_group": "Members of Group",
+            "delete": "Delete",
+            "member": "Member",
+            "close":"Close",
+            "search":"Search",
+            "member_empty_message": "Member not found",
+            "name": "Name",
+            "node_dn": "Node DN",
+            "type":"Type",
+            "created_date":"Created Date",
+            "modified_date":"Modified Date",
+            "creator_name": "Creator Name",
+            "modifier_name": "Modifier Name",
+            "objectclass": "Object Class",
+            "delete_member_success_message": "Deleted member successfully",
+            "delete_member_error_message": "An error occurred while deleting member",
+            "delete_member_warning_message": "At least one member must be",
+            "number_of_member": "Number of Member"
         }
     }
 }

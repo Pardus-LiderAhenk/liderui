@@ -1,13 +1,23 @@
 <template>
-  <ConfirmDialog></ConfirmDialog>
-    <div class="p-grid">
-         
-        <div class="p-col-3" style="min-height:90vh; background-color:#fff;margin-left:10px;margin-top:10px;">
+  <!-- <ConfirmDialog></ConfirmDialog> -->
+    <div class="p-grid computer-management">
+        <div class="p-col-3" style="min-height:90vh; background-color:#fff; margin-top:10px;">
             <Toolbar>
                 <template #left>
-                    
-                    <SplitButton @click="modals.folderAdd = true" label="Klasör Ekle" icon="pi pi-check" :model="folderItems" class="p-button-warning"></SplitButton>
-                    <Button label="Yeni Grup" icon="fa fa-users" class="p-mr-2" style="margin-left:5px" @click="modals.agentGroup = true"/>
+                    <SplitButton 
+                        @click="modals.folderAdd = true" 
+                        label="Klasör Ekle" 
+                        icon="pi pi-check" 
+                        :model="folderItems" 
+                        class="p-button-warning">
+                    </SplitButton>
+                    <Button 
+                        label="Yeni Grup" 
+                        icon="fa fa-users" 
+                        class="p-mr-2" 
+                        style="margin-left:5px" 
+                        @click="modals.agentGroup = true"
+                    />
                 </template>
             </Toolbar>
             <tree-component 
@@ -15,10 +25,36 @@
                 loadNodeUrl="/lider/computer_groups/getGroups"
                 loadNodeOuUrl="/lider/computer_groups/getOuDetails"
                 :treeNodeClick="treeNodeClick"
-                />
+            />
         </div>
         <div class="p-col-9">
-
+            <br>
+            <div>
+                <Button
+                    icon="fa fa-sliders-h"
+                    :class="selectedPluginTab == 'system-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('system-management')"
+                    :label="$t('computer.plugins.button.system')"
+                >
+                </Button>
+                <Button
+                    icon="fa fa-cubes"
+                    :class="selectedPluginTab == 'package-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('package-management')"
+                    :label="$t('computer.plugins.button.package')"
+                >
+                </Button>
+                <Button
+                    icon="fa fa-hashtag"
+                    :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('script-management')"
+                    :label="$t('computer.plugins.button.script')"
+                >
+                </Button>
+            </div>
+            <keep-alive>
+                <component :is="selectedPluginTab"></component>
+            </keep-alive>
         </div>
     </div>
     <Dialog header="Klasör Ekle" v-model:visible="modals.folderAdd" :style="{width: '50vw'}" :modal="true">
@@ -103,6 +139,9 @@
 
 <script>
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
+import SystemManagement from "@/views/GroupManagement/ComputerGroupManagement/Plugins/Task/System/SystemManagementPage.vue";
+import PackageManagement from "@/views/GroupManagement/ComputerGroupManagement/Plugins/Task/Package/PackageManagementPage.vue";
+import ScriptManagement from "@/views/GroupManagement/ComputerGroupManagement/Plugins/Task/Script/ScriptManagementPage.vue";
 import axios from 'axios';
 import { useConfirm } from "primevue/useconfirm";
 import { mapActions } from "vuex"
@@ -134,10 +173,14 @@ export default {
         return { deleteFolder, selectedNode, tree };
     },
     components: {
-        TreeComponent
+        TreeComponent,
+        SystemManagement,
+        PackageManagement,
+        ScriptManagement
     },
     data() {
         return {
+            selectedPluginTab: "system-management",
             moveFolderNode: null,
             modals : {
              folderAdd:false,
@@ -183,14 +226,17 @@ export default {
     },
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
+        
         treeNodeClick(node) {
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
         },
+
         moveTreeNodeClick(node) {
             //*** This method for tree that is created for folder move dialog.  */
             this.moveFolderNode = node;
         },
+
         addFolder() {
             axios.post('/lider/computer_groups/addOu', {
                 parentName: this.selectedNode.distinguishedName,
@@ -206,6 +252,7 @@ export default {
             this.folderName = '';
             this.modals.folderAdd = false;
         },
+
         changeFolder() {
             axios.post('/lider/computer_groups/rename/entry', null, {
                 params: {
@@ -218,6 +265,7 @@ export default {
                 this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
             });
         },
+
         moveFolder() {
             axios.post('/lider/computer_groups/move/entry', null ,{
                 params: {
@@ -236,6 +284,7 @@ export default {
 
             });
         },
+
         createAgentGroup() {
             axios.post('/lider/computer_groups/createNewAgentGroup',{
                     groupName: this.agentGroupModal.groupName,
@@ -257,12 +306,15 @@ export default {
                     }
             });
         },
+
         getCheckedAgentNodes(nodes) {
             this.agentGroupModal.checkedNodes = nodes;
         },
+
         getHalfCheckedNodes(nodes) {
             console.log('HALF CHECKED NODES', nodes);
         },
+
         removeAgentFromGroup(node) {
             this.agentGroupModal.checkedNodes = this.agentGroupModal.checkedNodes.filter(
                 agent => {
@@ -274,6 +326,7 @@ export default {
                 }
             )
         }, 
+
          renderSearchContent(h, { node, data, store }) {
             let linuxIcon = require("@/assets/images/icons/linux.png");
             let groupIcon = require("@/assets/images/icons/entry_group.gif");
@@ -309,6 +362,7 @@ export default {
                     h("a", {onClick: () => this.addRemoveAgentToGroup(data,isAppend)}, funcText),
                 ));
         },
+
         addRemoveAgentToGroup(node,isAppend) {
             this.$refs.tree.setCheckedNode(node.distinguishedName, isAppend);
             if (isAppend) {
@@ -320,17 +374,24 @@ export default {
                     }
                 });
             }
-        }
+        },
+
+        setSelectedPluginTab(tab) {
+            this.selectedPluginTab = tab;
+        },
     
     }, 
-    watch: {
-        selectedNode(){
-            console.log(this.selectedNode)
-        }
-    }
 }
 </script>
 
 <style scoped>
+
+.p-button:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.computer-management {
+    background-color: #e7f2f8;
+}
 
 </style>

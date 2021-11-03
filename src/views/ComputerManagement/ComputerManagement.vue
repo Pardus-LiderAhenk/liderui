@@ -4,9 +4,9 @@
            <el-tabs type="border-card" style="height:100%;width:100%">
                 <el-tab-pane label="İstemciler">
                 <tree-component loadNodeUrl="/lider/computer/getComputers"
-                                loadNodeOuUrl="/lider/computer/getOuDetails"
-                                :treeNodeClick="setSelectedLiderNode"
-                                >
+                    loadNodeOuUrl="/lider/computer/getOuDetails"
+                    :treeNodeClick="setSelectedLiderNode"
+                >
                 </tree-component>
                 </el-tab-pane>
                 <el-tab-pane label="Online">Online</el-tab-pane>
@@ -123,6 +123,7 @@ export default {
     },
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
+        
         setSelectedPluginTab(tab) {
             this.selectedPluginTab = tab;
         },

@@ -208,61 +208,59 @@ export default {
       
       const params = new URLSearchParams();
       params.append("agentJid", this.selectedLiderNode.uid);
-      axios
-        .post(process.env.VUE_APP_URL + "/select_agent_info/detail", params)
-        .then((response) => {
-          this.setSelectedAgentInfo(response.data);
-          this.loading = false;
-          if (response.data != "" && response.data != null) {
-            var selectedLiderNodeProperties = response.data.properties;
-            if (response.data.hostname) {
-              this.hostname = response.data.hostname;
-            }
-            if (response.data.userDirectoryDomain) {
-              this.userDirectoryDomain = response.data.userDirectoryDomain;
-            }
-            if (response.data.createDate) {
-              this.createdDate = response.data.createDate;
-            }
-            
-            for (let index = 0; index < selectedLiderNodeProperties.length; index++) {
-              let element = selectedLiderNodeProperties[index];
-              if (element.propertyName == "agentVersion") {
-                if (element.propertValue != "" || element.propertyValue != null) {
-                  this.agentVersion = element.propertyValue;
-                }
-              }
-              if (element.propertyName == "os.name") {
-                if (element.propertValue != "" || element.propertyValue != null) {
-                  this.operatingSystem = element.propertyValue;
-                }
-              }
-              if (element.propertyName == "processor") {
-                if (element.propertValue != "" || element.propertyValue != null) {
-                  this.processor = element.propertyValue;
-                }
-              }
-              if (element.propertyName == "ipAddresses") {
-                if (element.propertValue != "" || element.propertyValue != null) {
-                  this.ipAddress = element.propertyValue.replace(/\'/g, '');
-                }
-              }
-              if (element.propertyName == "macAddresses") {
-                if (element.propertValue != "" || element.propertyValue != null) {
-                  this.macAddresses = element.propertyValue.replace(/\'/g, '');
-                }
-              }
-            }
-          } else {
-            this.$toast.add({
-              severity:'error', 
-              detail: this.$t("computer.agent_info.error_message"), 
-              summary:this.$t("computer.task.toast_summary"), 
-              life: 3000
-            });
-            this.setDefaultTable();
+      axios.post("/select_agent_info/detail", params).then((response) => {
+        this.setSelectedAgentInfo(response.data);
+        this.loading = false;
+        if (response.data != "" && response.data != null) {
+          var selectedLiderNodeProperties = response.data.properties;
+          if (response.data.hostname) {
+            this.hostname = response.data.hostname;
           }
-        });
+          if (response.data.userDirectoryDomain) {
+            this.userDirectoryDomain = response.data.userDirectoryDomain;
+          }
+          if (response.data.createDate) {
+            this.createdDate = response.data.createDate;
+          }
+          
+          for (let index = 0; index < selectedLiderNodeProperties.length; index++) {
+            let element = selectedLiderNodeProperties[index];
+            if (element.propertyName == "agentVersion") {
+              if (element.propertValue != "" || element.propertyValue != null) {
+                this.agentVersion = element.propertyValue;
+              }
+            }
+            if (element.propertyName == "os.name") {
+              if (element.propertValue != "" || element.propertyValue != null) {
+                this.operatingSystem = element.propertyValue;
+              }
+            }
+            if (element.propertyName == "processor") {
+              if (element.propertValue != "" || element.propertyValue != null) {
+                this.processor = element.propertyValue;
+              }
+            }
+            if (element.propertyName == "ipAddresses") {
+              if (element.propertValue != "" || element.propertyValue != null) {
+                this.ipAddress = element.propertyValue.replace(/\'/g, '');
+              }
+            }
+            if (element.propertyName == "macAddresses") {
+              if (element.propertValue != "" || element.propertyValue != null) {
+                this.macAddresses = element.propertyValue.replace(/\'/g, '');
+              }
+            }
+          }
+        } else {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.error_message"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+          this.setDefaultTable();
+        }
+      });
     },
 
     setAgentInfo(property, value) {
