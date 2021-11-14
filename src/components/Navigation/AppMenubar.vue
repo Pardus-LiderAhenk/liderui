@@ -62,7 +62,8 @@ export default {
                     label: this.$t('menu.user_management'),
                     items: [
                         {
-                            label: this.$t('menu.user_operations')
+                            label: this.$t('menu.user_operations'),
+                            to:'/usermanagement'
                             
                         },
                         {
