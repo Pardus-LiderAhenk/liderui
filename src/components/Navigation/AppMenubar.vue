@@ -33,10 +33,11 @@
                     <span class="pi pi-angle-down"></span>
                 </Button>
                 <Menu id="overlay_menu" ref="settingsMenu" :model="settingItems" :popup="true" />
-                <Button type="button" class=" p-button-link">
+                <Button type="button" class=" p-button-link" @click="toggleProfile">
                     <span >İsmail BAŞARAN</span>
                     <span class="layout-topbar-icon pi pi-angle-down"></span>
                 </Button>
+                <Menu id="overlay_menu_profile" ref="profileMenu" :model="profileItems" :popup="true" />
                 
             </template>
         </Menubar>
@@ -127,6 +128,16 @@ export default {
 					label: this.$t('menu.registration_templates'),
 					to:'/settings/registratin_templates',
 				},
+            ],
+            profileItems: [
+                {
+                    label: 'Profili Görüntüle',
+                    to: '/user-profile'
+                },
+                {
+                    label: 'Çıkış',
+                    to: '/logout'
+                }
             ]
         }
     },
@@ -136,6 +147,9 @@ export default {
         },
         toggleSettings(event) {
             this.$refs.settingsMenu.toggle(event);
+        },
+        toggleProfile(event) {
+            this.$refs.profileMenu.toggle(event);
         },
     }
 }
