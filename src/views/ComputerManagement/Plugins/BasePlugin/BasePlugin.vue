@@ -305,7 +305,15 @@ export default {
    * @event taskResponse
    */
   mounted(){
+    let toastSummary = this.$t('computer.task.toast_summary');
+    let toastLife = this.toastLife;
     XmppClientManager.getInstance().addListener('basePluginListener', (msg) => {
+      let selectedDn = null;
+      let selectedNodeType = null;
+      if (this.selectedLiderNode) {
+        selectedDn = this.selectedLiderNode.distinguishedName;
+        selectedNodeType = this.selectedLiderNode.type;
+      }
       var to = msg.getAttribute("to");
       var from = msg.getAttribute("from");
       var type = msg.getAttribute("type");
@@ -322,26 +330,32 @@ export default {
             this.$toast.add({
               severity:'success', 
               detail: responseMessage, 
-              summary: this.$t('computer.task.toast_summary'), 
-              life: this.toastLife
+              summary: toastSummary, 
+              life: toastLife
             });
           } else if (response.result.responseCode === "TASK_ERROR") {
             this.$toast.add({
               severity:'error', 
               detail: responseMessage, 
-              summary: this.$t("computer.task.toast_summary"), 
-              life: this.toastLife
+              summary: toastSummary, 
+              life: toastLife
             });
           }
-          if (response.commandExecution.dn === this.selectedLiderNode.distinguishedName) {
+
+          console.log(selectedDn)
+          if (response.commandExecution.dn === selectedDn) {
             this.$emit("taskResponse", response);
           }
-          if (this.selectedLiderNode.type === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
+          if (selectedNodeType === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
             this.$emit("taskResponse", response);
           }
         }
       }
     });
+  },
+
+  unmounted () {
+    XmppClientManager.getInstance().removeListener('basePluginListener', () => {});
   }
 };
 </script>
