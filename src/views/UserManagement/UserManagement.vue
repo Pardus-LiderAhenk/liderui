@@ -1,18 +1,4 @@
 <template>
-
-    <!---
-        Sudo grup oluşturma ekranı
-        /lider/sudo_groups/createSudoGroup
-        groupName: deneme123
-        selectedOUDN: ou=Role,ou=Groups,dc=liderahenk,dc=org
-        sudoUserList[]: lider
-        sudoUserList[]: test_ldap_user
-        sudoCommandList[]: mycommand
-        sudoHostList[]: myhost
-
-        /lider/sudo_groups/editSudoGroup
-     --->
-
   <ConfirmDialog></ConfirmDialog>
     <div class="p-grid">
          
@@ -39,28 +25,25 @@
             </tree-component>
         </div>
         <div class="p-col-9" style="min-height:90vh;">
-                <TabView style="min-height:90vh;">
-                    <TabPanel header="Kayıt Bilgisi">
-                         <DataTable :value="selectedNodeData" responsiveLayout="scroll">
-                            <Column field="label" header="Öznitelik"></Column>
-                            <Column field="value" header="Değer"></Column>
-                        </DataTable>
-                    </TabPanel>
-                    <TabPanel header="Grup Üyeleri">
-                         <DataTable :value="selectedNode ? selectedNode.attributesMultiValues.sudoUser: []" responsiveLayout="scroll">
-                            <Column header="Üye DN">
-                                <template #body="slotProps">
-                                    <span>{{slotProps.data}}</span>
-                                </template>
-                            </Column>
-                            <Column  >
-                                <template #body="slotProps">
-                                    <Button icon="pi pi-times" class="p-button-rounded p-button-danger" @click="deleteSudoUser(slotProps.data)"/>
-                                </template>
-                            </Column>
-                        </DataTable>
-                    </TabPanel>
-                </TabView>
+            <div class="p-grid">
+                <div class="p-col-4">
+                    <Card>
+                        <template #content>
+                            <PanelMenu :model="menuitems" />
+                        </template>
+                    </Card>
+                </div>
+                <div class="p-col-8">
+                    <Card>
+                        <template #content>
+                            <general-informations v-show="displayFormNumber === 1"></general-informations>
+                            <password-change v-show="displayFormNumber === 2"></password-change>
+                            <user-groups v-show="displayFormNumber === 4"></user-groups>
+                            <user-permission-groups v-show="displayFormNumber === 5"></user-permission-groups>
+                        </template>
+                    </Card>
+                </div>
+            </div>
         </div>
     </div>
     <Dialog header="Klasör Ekle" v-model:visible="modals.folderAdd" :style="{width: '50vw'}" :modal="true">
@@ -100,12 +83,19 @@
             <Button label="Taşı" icon="pi pi-check" @click="moveFolder" autofocus />
         </template>
     </Dialog>
-    <sudo-group-dialog 
-        :modalVisibleValue="modals.sudoGroup" 
-        @modalVisibleValue="modals.sudoGroup = $event; sudoGruopEdit = false"
-        :selectedTreeNode="selectedNode"
-        @sudoGroupCreated="sudoGroupCreated"
-        :isEdit="sudoGruopEdit"/>
+    <Dialog header="Taşınacak Klasörü Seçiniz" v-model:visible="modals.moveRecord" :style="{width: '50vw'}" :modal="true">
+        <tree-component 
+                ref="moverecord"
+                loadNodeUrl="/lider/sudo_groups/getGroups"
+                loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
+                :treeNodeClick="moveTreeNodeClick"
+                :isMove="true"
+        />
+        <template #footer>
+            <Button label="Kapat" icon="pi pi-times" @click="modals.folderNameChange = false" class="p-button-text"/>
+            <Button label="Taşı" icon="pi pi-check" @click="moveRecord" autofocus />
+        </template>
+    </Dialog>
 </template>
 
 <script>
@@ -114,24 +104,24 @@ import axios from 'axios';
 import { useConfirm } from "primevue/useconfirm";
 import { mapActions } from "vuex"
 import {ref} from 'vue';
-import SudoGroupDialog from './Dialogs/SudoGroupDialog.vue';
+
+import GeneralInformations from './Components/GeneralInformations.vue';
+import PasswordChange from './Components/PasswordChange.vue';
+import UserGroups from './Components/UserGroups.vue';
+import UserPermissionGroups from './Components/UserPermissionGroups.vue';
 
 export default {
     setup(){
         const selectedNode = ref(null);
         const tree = ref(null);
         const confirm = useConfirm();
-        const deleteFolder = () => {
+        const deleteUser = () => {
             confirm.require({
-                message: 'Bu işlem seçili olan klasörü ve bu klasörün altında yer alan tüm klasör ve grupları silecektir. Bu işlem geri alınamaz.',
-                header: 'Klasör Silme Onay',
+                message: 'Seçili kayıtlar silinecektir. Emin misiniz?',
+                header: 'Kullanıcı Silme Onay',
                 icon: 'pi pi-exclamation-triangle',
                 accept: () => {
-                   axios.post('/lider/sudo_groups/deleteEntry', null, {
-                       params : { dn: selectedNode.value.distinguishedName }
-                   }).then(response => {
-                       tree.value.remove(selectedNode.value);
-                   });
+                  
                 },
                 reject: () => {
                     confirm.close();
@@ -139,11 +129,14 @@ export default {
             });
         }
 
-        return { deleteFolder, selectedNode, tree };
+        return { deleteUser, selectedNode, tree };
     },
     components: {
         TreeComponent,
-        SudoGroupDialog,
+        GeneralInformations,
+        PasswordChange,
+        UserGroups,
+        UserPermissionGroups,
     },
     data() {
         return {
@@ -152,7 +145,7 @@ export default {
              folderAdd:false,
              folderNameChange: false,
              moveFolder: false,
-             sudoGroup:false
+             moveRecord: false
             },
             folderName:'',
             groupName:'',
@@ -169,7 +162,19 @@ export default {
             ],
             selectedNodeData: [],
             selectedNodeGroupMembers: [],
-            sudoGruopEdit: false
+            sudoGruopEdit: false,
+            menuitems: [
+                {label:'Genel Bilgiler', command:() => this.displayFormNumber = 1},
+                {label:'Parola Sıfırla', command:() => this.displayFormNumber = 2},
+                {label:'Login Geçmişi',command:() => this.displayFormNumber = 3},
+                {label:'Gruplar',command:() => this.displayFormNumber = 4},
+                {label:'Yetki Gurupları',command:() => this.displayFormNumber = 5},
+                {label:'Parola Politikası'},
+                {label:'Politika Geçmişi'},
+                {label:'Taşı', command:() => this.modals.moveRecord = true},
+                {label:'Sil', command: () => this.deleteUser()}
+            ],
+            displayFormNumber: 1
         }
     },
     created() {
@@ -216,6 +221,7 @@ export default {
 
 
         },
+        moveRecord() {},
         moveTreeNodeClick(node) {
             //*** This method for tree that is created for folder move dialog.  */
             this.moveFolderNode = node;
