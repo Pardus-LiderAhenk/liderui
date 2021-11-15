@@ -7,10 +7,10 @@
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.conky.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <div>
           <Button
             icon="pi pi-trash"

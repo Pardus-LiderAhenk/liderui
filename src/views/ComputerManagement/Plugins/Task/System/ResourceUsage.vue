@@ -8,10 +8,10 @@
       @task-response="getResourceUsage"
       :pluginTask="task"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{$t("computer.plugins.resource_usage.header")}}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <Button
           icon="pi pi-chart-line"
           class="p-button-raised p-button-sm"

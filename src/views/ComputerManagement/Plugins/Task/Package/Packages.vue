@@ -7,10 +7,10 @@
       @close-task-dialog="showTaskDialog = false;"
       :pluginTask="task"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.packages.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <div>
           <Button v-if="packages"
           icon="pi pi-caret-right"
@@ -23,13 +23,13 @@
       </template> 
       <template #default>
         <div class="p-grid p-flex-column">
-          <div class="p-fluid p-formgridp-col p-col">
+          <div class="p-fluid p-formgrid p-col">
             <div class="p-inputgroup">
               <Button 
-              @click.prevent="updateRepoAddress" :value="update"
-              :icon="update ? 'pi pi-save': 'pi pi-pencil'"
-              :title="update ? $t('computer.plugins.packages.save'): $t('computer.plugins.packages.edit')"
-              :class="update ? 'p-button-sm p-button-success': 'p-button-sm p-button-warning'"
+                @click.prevent="updateRepoAddress" :value="update"
+                :icon="update ? 'pi pi-save': 'pi pi-pencil'"
+                :title="update ? $t('computer.plugins.packages.save'): $t('computer.plugins.packages.edit')"
+                :class="update ? 'p-button-sm p-button-success': 'p-button-sm p-button-warning'"
               />
               <Dropdown style="max-width: 150px;" 
                 :class="repoValidation.url || repoValidation.component ? 'p-invalid': ''"
@@ -38,23 +38,23 @@
                 :options="typeList" optionLabel="label">
               </Dropdown>
               <InputText 
-              :disabled="!update" 
-              type="text" 
-              v-model="repoForm.url" 
-              :class="repoValidation.url ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
-              placeholder="http://depo.pardus.org.tr/pardus"
+                :disabled="!update" 
+                type="text" 
+                v-model="repoForm.url" 
+                :class="repoValidation.url ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                placeholder="http://depo.pardus.org.tr/pardus"
               />
               <InputText 
-              :disabled="!update" 
-              type="text" 
-              v-model="repoForm.component" 
-              :class="repoValidation.component ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
-              placeholder="ondokuz main contrib non-free"
+                :disabled="!update" 
+                type="text" 
+                v-model="repoForm.component" 
+                :class="repoValidation.component ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                placeholder="ondokuz main contrib non-free"
               />
               <Button type="button" 
-              class="p-button-sm" 
-              :label="$t('computer.plugins.packages.list_packages')" 
-              icon="pi pi-list" @click.prevent="getPackagesList" 
+                class="p-button-sm" 
+                :label="$t('computer.plugins.packages.list_packages')" 
+                icon="pi pi-list" @click.prevent="getPackagesList" 
               />
             </div>
             <div class="p-d-flex p-jc-center">
@@ -65,12 +65,12 @@
           </div>
           <div class="p-col">
             <DataTable :value="packages" class="p-datatable-sm p-datatable-customers"
-            :paginator="true" :rows="10" 
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-            :rowsPerPageOptions="[10,25,50,100]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            :loading="loading"
-            v-model:filters="filters" @filter="onFilter($event)" filterDisplay="row" ref="dt"
+              :paginator="true" :rows="10" 
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+              :rowsPerPageOptions="[10,25,50,100]"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              :loading="loading"
+              v-model:filters="filters" @filter="onFilter($event)" filterDisplay="row" ref="dt"
             >
               <template #empty>
                 <div class="p-d-flex p-jc-center">
@@ -78,12 +78,11 @@
                 </div>
               </template>
               <Column 
-              field="packageName" 
-              :header="$t('computer.plugins.packages.package_name')" 
-              headerStyle="width: 17%" 
-              filterMatchMode="startsWith" 
-              ref="packageName">
-
+                field="packageName" 
+                :header="$t('computer.plugins.packages.package_name')" 
+                headerStyle="width: 17%" 
+                filterMatchMode="startsWith" 
+                ref="packageName">
                 <template #filter="{filterModel,filterCallback}" v-if="packages">
                   <InputText  
                   type="text" 
@@ -118,55 +117,56 @@
               <Column :exportable="false" headerStyle="width: 10%">
                 <template #body="slotProps">
                   <Dropdown v-model="slotProps.data.tag" style="min-width: 100%;" :showClear="true" 
-                  :class="packageInfoList.length == 0 && taskValidation ? 'p-invalid': ''"
-                  :options="[{label: $t('computer.plugins.packages.install'), value: 'Install'},
-                  {label: $t('computer.plugins.packages.uninstall'), value: 'Uninstall'}]"
-                  optionLabel="label" optionValue="value" :placeholder="$t('computer.plugins.packages.select')" 
-                  @change="changeTagPackage(slotProps.data, slotProps.data.tag)"/>
+                    :class="packageInfoList.length == 0 && taskValidation ? 'p-invalid': ''"
+                    :options="[{label: $t('computer.plugins.packages.install'), value: 'Install'},
+                    {label: $t('computer.plugins.packages.uninstall'), value: 'Uninstall'}]"
+                    optionLabel="label" optionValue="value" :placeholder="$t('computer.plugins.packages.select')" 
+                    @change="changeTagPackage(slotProps.data, slotProps.data.tag)"
+                  />
                 </template>
               </Column>
             </DataTable>
           </div>
           <div class="p-col" v-if="packages">
             <Button 
-            type="button" 
-            :label="$t('computer.plugins.packages.view_selected_packages')" 
-            @click="toggle($event)" 
-            icon="pi pi-info-circle" 
-            class="p-button-sm" 
-            :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" 
-            badgeClass="p-badge-danger" 
+              type="button" 
+              :label="$t('computer.plugins.packages.view_selected_packages')" 
+              @click="toggle($event)" 
+              icon="pi pi-info-circle" 
+              class="p-button-sm" 
+              :badge="packageInfoList.length > 0 ? packageInfoList.length: '0'" 
+              badgeClass="p-badge-danger" 
             />
             <OverlayPanel 
-            ref="packagesOp"
-            appendTo="body" 
-            :showCloseIcon="false" 
-            id="overlay_panel" 
-            style="width: 450px"
-            :breakpoints="{'960px': '75vw'}"
+              ref="packagesOp"
+              appendTo="body" 
+              :showCloseIcon="false" 
+              id="overlay_panel" 
+              style="width: 450px"
+              :breakpoints="{'960px': '75vw'}"
             >
               <h5 class="text-center">{{$t('computer.plugins.packages.selected_packages')}}</h5>
               <DataTable 
-              :value="packageInfoList" 
-              responsiveLayout="scroll" 
-              scrollable="true" 
-              scrollHeight="400px" 
-              class="p-datatable-sm" 
-              :metaKeySelection="false"
+                :value="packageInfoList" 
+                responsiveLayout="scroll" 
+                scrollable="true" 
+                scrollHeight="400px" 
+                class="p-datatable-sm" 
+                :metaKeySelection="false"
               >
                 <Column field="packageName" :header="$t('computer.plugins.packages.package_name')"></Column>
                 <Column field="tag" :header="$t('computer.plugins.packages.status')">
                   <template #body="slotProps">
                     <Badge 
-                    v-if="slotProps.data.tag == 'Install'" 
-                    severity="success" 
-                    icon="pi pi-users" 
-                    :value="$t('computer.plugins.packages.install')">
+                      v-if="slotProps.data.tag == 'Install'" 
+                      severity="success" 
+                      icon="pi pi-users" 
+                      :value="$t('computer.plugins.packages.install')">
                     </Badge>
                     <Badge 
-                    v-else-if="slotProps.data.tag == 'Uninstall'" 
-                    severity="danger" 
-                    :value="$t('computer.plugins.packages.uninstall')">
+                      v-else-if="slotProps.data.tag == 'Uninstall'" 
+                      severity="danger" 
+                      :value="$t('computer.plugins.packages.uninstall')">
                     </Badge>
                   </template>
                 </Column>

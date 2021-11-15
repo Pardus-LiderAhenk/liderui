@@ -2,16 +2,22 @@
   <div>
     <br>
     <packages class="plugin-card" v-if="packagesState" :pluginTask="pluginTaskPackages"></packages>
+    <check-package class="plugin-card" 
+          v-if="checkPackageState" 
+          :pluginTask="pluginTaskCheckPackage">
+        </check-package>
     <div class="p-grid">
       <div class="p-col-6">
         <installed-packages-and-management 
-        v-if="installedPackagesAndManagementState" class="plugin-card" 
-        :pluginTask="pluginTaskInstalledPackagesAndManagement">
+          v-if="installedPackagesAndManagementState" class="plugin-card" 
+          :pluginTask="pluginTaskInstalledPackagesAndManagement">
         </installed-packages-and-management>
-        <!-- <application-restriction v-if="applicationRestrictionState" class="plugin-card" :pluginTask="pluginTaskApplicationRestriction"></application-restriction> -->
       </div>
       <div class="p-col-6">
-        <repositories v-if="repositoriesState" class="plugin-card" :pluginTask="pluginTaskRepositories"></repositories>
+        <repositories v-if="repositoriesState" 
+          class="plugin-card" 
+          :pluginTask="pluginTaskRepositories">
+        </repositories>
       </div>
     </div>
   </div>
@@ -28,7 +34,7 @@ import axios from 'axios';
 import InstalledPackagesAndManagement from "@/views/ComputerManagement/Plugins/Task/Package/InstalledPackagesAndManagement.vue";
 import Packages from "@/views/ComputerManagement/Plugins/Task/Package/Packages.vue";
 import Repositories from "@/views/ComputerManagement/Plugins/Task/Package/Repositories.vue";
-// import ApplicationRestriction from "@/views/ComputerManagement/Plugins/Task/Package/ApplicationRestriction.vue";
+import CheckPackage from "@/views/ComputerManagement/Plugins/Task/Package/CheckPackage.vue";
 
 
 export default {
@@ -37,44 +43,43 @@ export default {
       pluginTaskInstalledPackagesAndManagement: null,
       pluginTaskPackages: null,
       pluginTaskRepositories: null,
-      pluginTaskApplicationRestriction: null,
+      pluginTaskCheckPackage: null,
       
       installedPackagesAndManagementState: false,
       packagesState: false,
       repositoriesState: false,
-      applicationRestrictionState: false,
+      checkPackageState: false
     };
   },
   components: {
     InstalledPackagesAndManagement,
     Packages,
     Repositories,
-    // ApplicationRestriction,
+    CheckPackage
   },
 
   created() {
-    axios
-      .post("/getPluginTaskList",{},).then((response) => {
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          if (element.page == "package-management") {
-            this.pluginTaskInstalledPackagesAndManagement = element;
-            this.installedPackagesAndManagementState = element.state;
-          }
-          if (element.page == "repositories") {
-            this.pluginTaskRepositories = element;
-            this.repositoriesState = element.state;
-          }
-          if (element.page == "packages") {
-            this.pluginTaskPackages = element;
-            this.packagesState = element.state;
-          }
-          if (element.page == "application-restriction") {
-            this.pluginTaskApplicationRestriction = element;
-            this.applicationRestrictionState = element.state;
-          }
+    axios.post("/getPluginTaskList",{},).then((response) => {
+      for (let index = 0; index < response.data.length; index++) {
+        const element = response.data[index];
+        if (element.page == "package-management") {
+          this.pluginTaskInstalledPackagesAndManagement = element;
+          this.installedPackagesAndManagementState = element.state;
         }
-      });
+        if (element.page == "repositories") {
+          this.pluginTaskRepositories = element;
+          this.repositoriesState = element.state;
+        }
+        if (element.page == "packages") {
+          this.pluginTaskPackages = element;
+          this.packagesState = element.state;
+        }
+        if (element.page == "check-package") {
+          this.pluginTaskCheckPackage = element;
+          this.checkPackageState = element.state;
+        }
+      }
+    });
   },
 };
 </script>

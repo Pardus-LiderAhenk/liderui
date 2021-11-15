@@ -2,6 +2,10 @@
   <div>
     <br>
     <packages class="plugin-card" v-if="packagesState" :pluginTask="pluginTaskPackages"></packages>
+    <check-package class="plugin-card" 
+      v-if="checkPackageState" 
+      :pluginTask="pluginTaskCheckPackage">
+    </check-package>
   </div>
 </template>
 
@@ -14,18 +18,22 @@
 
 import axios from 'axios';
 import Packages from "@/views/ComputerManagement/Plugins/Task/Package/Packages.vue";
+import CheckPackage from "@/views/ComputerManagement/Plugins/Task/Package/CheckPackage.vue";
 
 
 export default {
   data() {
     return {
       pluginTaskPackages: null,
+      pluginTaskCheckPackage: null,
       
       packagesState: false,
+      checkPackageState: false
     };
   },
   components: {
     Packages,
+    CheckPackage
   },
 
   created() {
@@ -37,6 +45,10 @@ export default {
             this.pluginTaskPackages = element;
             this.packagesState = element.state;
           }
+          if (element.page == "check-package") {
+          this.pluginTaskCheckPackage = element;
+          this.checkPackageState = element.state;
+        }
         }
       });
   },

@@ -244,6 +244,17 @@
                 "send_task_warning": "En az bir depo adresi seçilmelidir veya en az bir depo adresi eklenmelidir",
                 "search": "Ara"
             },
+            "check_package":{
+                "header": "Paket Kontrolü",
+                "description": "Adı ve versiyon bilgisi girilen paketin seçilmiş olan Ahenk/ler içerisinde yüklü olup olmadığını kontrol eder.",
+                "package_name":"Paket Adı",
+                "version":"Versiyon",
+                "result":"Sonuç",
+                "table_empty_message":"Paket bulunamadı",
+                "search":"Ara",
+                "package_name_warn": "Paket adı boş bırakılamaz",
+                "export":"Dışa Aktar"
+            },
             "service_management": {
                 "header": "Servis Yönetimi",
                 "description": "İstemcideki servislerin durumları gözlemlenir. Listelenen servislerin durumlarının başlat, durdur, etkinleştir veya devre dışı bırak olarak değiştirilmesine izin verir.",
@@ -351,7 +362,8 @@
             "error_message": "İstemci bilgileri bulunamadı.",
             "online": "Çevrimiçi",
             "offline": "Çevrimdışı",
-            "attributes": "Öznitelikler"
+            "attributes": "Öznitelikler",
+            "node_detail":"Kayıt Detayı"
         },
         "scheduled": {
             "title": "Zamanlanmış Görev Parametreleri",
@@ -497,7 +509,7 @@
             "close":"Kapat",
             "search":"Ara",
             "member_empty_message": "Üye bulunamadı",
-            "name": "Ad",
+            "name": "Adı",
             "node_dn": "Kayıt DN",
             "type":"Tipi",
             "created_date":"Oluşturma Tarihi",

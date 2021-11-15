@@ -8,10 +8,10 @@
       :pluginTask="task"
       @task-response="networkManagementResponse"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.network_management.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <div>
           <Button
             icon="pi pi-list"

@@ -243,6 +243,17 @@
                 "send_task_warning": "At least one repository must be selected or at least one repository must be added",
                 "search": "Search"
             },
+            "check_package":{
+                "header": "Package Control",
+                "description": "Checks whether the package whose name and version information entered is installed in the selected Agent or Agents.",
+                "package_name":"Package Name",
+                "version":"Version",
+                "result":"Result",
+                "table_empty_message":"Package not found",
+                "search":"Search",
+                "package_name_warn": "Package name is not available",
+                "export":"Export"
+            },
             "service_management": {
                 "header": "Service Management",
                 "description": "The status of services is observed on the client. Allows to status of listed services to be changed as start, stop, enable or disable",
@@ -350,7 +361,8 @@
             "error_message": "Not found client information.",
             "online": "Online",
             "offline": "Offline",
-            "attributes": "Attributes"
+            "attributes": "Attributes",
+            "node_detail":"Node Detail"
         },
         "scheduled": {
             "title": "Scheduled Task Parameters",

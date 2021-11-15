@@ -8,10 +8,10 @@
       @cancel-task="showTaskDialog = false"
       :pluginTask="task"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.file_transfer.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <Button
           icon="pi pi-share-alt"
           class="p-button-raised p-button-sm"

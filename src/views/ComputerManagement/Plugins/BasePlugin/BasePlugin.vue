@@ -35,14 +35,19 @@
     <Card
       v-loading="loading" :element-loading-text="$t('computer.plugins.base_plugin.loading_default_text')"
       element-loading-spinner="fa fa-sync fa-spin" 
-      element-loading-background="rgba(0, 0, 0, 0.7)">
+      element-loading-background="rgba(0, 0, 0, 0.7)"
+    >
+      <template #header v-if="$slots.pluginHeader">
+        <slot name="pluginHeader">
+        </slot>
+      </template>
       <template #title>
         <div class="p-d-flex p-jc-between">
-          <div v-if="$slots.pluginHeader" style="font-size:15px;">
-            <slot name="pluginHeader"></slot>
+          <div v-if="$slots.pluginTitle" style="font-size:15px;">
+            <slot name="pluginTitle"></slot>
           </div>
-          <div v-if="$slots.pluginHeaderButton">
-            <slot name="pluginHeaderButton"></slot>
+          <div v-if="$slots.pluginTitleButton">
+            <slot name="pluginTitleButton"></slot>
           </div>
         </div>
         <hr style="margin-bottom:-5px">
@@ -59,15 +64,15 @@
           <div class="p-grid">
             <div class="p-col p-as-start">
               <a class="primary" type="secondary" @click="toggle" 
-              v-tooltip.right="$t('computer.plugins.plugin_popover.title')">
-              <i class="el el-icon-question" ></i>
+                v-tooltip.right="$t('computer.plugins.plugin_popover.title')">
+                <i class="el el-icon-question"></i>
               </a>
               <OverlayPanel ref="op" 
-              appendTo="body" 
-              :showCloseIcon="false" 
-              id="overlay_panel" 
-              style="width: 450px" 
-              :breakpoints="{'960px': '75vw'}"
+                appendTo="body" 
+                :showCloseIcon="false" 
+                id="overlay_panel" 
+                style="width: 450px" 
+                :breakpoints="{'960px': '75vw'}"
               >
                 <div><h5>{{ $t('computer.plugins.plugin_popover.title') }}</h5></div>
                 <ul>
@@ -87,16 +92,16 @@
             </div>
             <div>
                <Button v-if="scheduledParam != null" 
-               :title="$t('computer.scheduled.cancel')" 
-               @click="cancelScheduledTask" 
-               :label="$t('computer.scheduled.scheduled_task_plan')" 
-               icon="el el-icon-loading" class="p-button-text p-button-sm">
+                :title="$t('computer.scheduled.cancel')" 
+                @click="cancelScheduledTask" 
+                :label="$t('computer.scheduled.scheduled_task_plan')" 
+                icon="el el-icon-loading" class="p-button-text p-button-sm">
                </Button>
             </div>
             <div class="p-col p-as-end">
               <base-scheduled
-              @cancel-scheduled="scheduledTaskOperation" 
-              @save-scheduled="scheduledTaskOperation">
+                @cancel-scheduled="scheduledTaskOperation" 
+                @save-scheduled="scheduledTaskOperation">
             </base-scheduled>
             </div>
           </div>
@@ -310,31 +315,28 @@ export default {
         var body = elems[0];
         var data = Strophe.xmlunescape(Strophe.getText(body));
         var response = JSON.parse(data);
-        // var type = "INFO";
-        // var dnParser = response.commandExecution.dn.split(",");
-        // var agentCn = dnParser[0].replace("cn=", "");
-        // if (response.result.responseCode == "TASK_ERROR") {
-        //   type = "ERROR";
-        // }
         let responseMessage = response.result.responseMessage;
         if (response.commandClsId === this.pluginTask.commandId) {
-          if (response.commandExecution.dn == this.selectedLiderNode.distinguishedName) {
-            this.loading = false;
-            if (response.result.responseCode === "TASK_PROCESSED") {
-              this.$toast.add({
-                severity:'success', 
-                detail: responseMessage, 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: this.toastLife
-              });
-            } else if (response.result.responseCode === "TASK_ERROR") {
-              this.$toast.add({
-                severity:'error', 
-                detail: responseMessage, 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: this.toastLife
-              });
-            }
+          this.loading = false;
+          if (response.result.responseCode === "TASK_PROCESSED") {
+            this.$toast.add({
+              severity:'success', 
+              detail: responseMessage, 
+              summary: this.$t('computer.task.toast_summary'), 
+              life: this.toastLife
+            });
+          } else if (response.result.responseCode === "TASK_ERROR") {
+            this.$toast.add({
+              severity:'error', 
+              detail: responseMessage, 
+              summary: this.$t("computer.task.toast_summary"), 
+              life: this.toastLife
+            });
+          }
+          if (response.commandExecution.dn === this.selectedLiderNode.distinguishedName) {
+            this.$emit("taskResponse", response);
+          }
+          if (this.selectedLiderNode.type === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
             this.$emit("taskResponse", response);
           }
         }

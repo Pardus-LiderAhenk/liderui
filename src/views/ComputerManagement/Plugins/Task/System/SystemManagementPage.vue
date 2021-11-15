@@ -3,7 +3,7 @@
     <br>
     <div class="p-grid">
       <div class="p-col-5">
-        <agent-info class="plugin-card" :pluginTask="pluginTaskResourceUsage"></agent-info>
+        <agent-info class="plugin-card"></agent-info>
         <session-and-power-management v-if="sessionAndPowerState" 
         class="plugin-card" 
         :pluginTask="pluginTaskSessionPowerManagement">

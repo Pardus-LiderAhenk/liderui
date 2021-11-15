@@ -93,7 +93,7 @@ export default {
         ServiceManagement,
         SshConnect,
         SecurityManagement,
-        TaskHistory
+        TaskHistory,
     },
     data() {
         return {

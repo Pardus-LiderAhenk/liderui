@@ -218,10 +218,10 @@
       :pluginTask="task"
       :executeTask="executeTask"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.local_user.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <Button
           v-if="users"
           icon="pi pi-user-plus"

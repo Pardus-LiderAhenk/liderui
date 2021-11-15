@@ -1,21 +1,45 @@
 <template>
   <div>
-    <teleport to='body' >
-      <!-- <base-modal v-if="agentInfoModal" @close="showAgentInfoModal(false)"
-        show=true
-        size="sm"
-        showClose=true
-        >
-        <template #header class="text-center">
-            {{ $t("computer.agent_info.attributes") }} 
-        </template>
-        <template #default>
-          <div>
-            <p>Agent LDAP Attribute Info</p>
-          </div>
-        </template>
-      </base-modal> -->
-    </teleport>
+    <Dialog
+      :header="$t('computer.agent_info.node_detail')" 
+      :modal="true"
+      :style="{ width: '40vw'}"
+      v-model:visible="showAgentInfoDialog">
+        <TabView style="min-height:50vh;">
+          <TabPanel>
+            <template #header>
+                <i class="pi pi-info-circle"></i>
+                <span>
+                    &nbsp;{{ $t('group_management.computer_group.node_detail') }}
+                </span>
+            </template>
+            <DataTable :value="selectedNodeData" responsiveLayout="scroll">
+                <Column field="label" :header="$t('group_management.computer_group.attribute')"></Column>
+                <Column field="value" :header="$t('group_management.computer_group.value')"></Column>
+            </DataTable>
+          </TabPanel>
+          <TabPanel v-if="selectedLiderNode.type == 'AHENK'">
+            <template #header>
+                <i class="pi pi-users"></i>
+                <span>
+                    &nbsp;{{ $t('group_management.computer_group.members_of_group') }}
+                </span>
+            </template>
+            <DataTable :value="selectedNodeData" responsiveLayout="scroll">
+                <Column field="label" :header="$t('group_management.computer_group.attribute')"></Column>
+                <Column field="value" :header="$t('group_management.computer_group.value')"></Column>
+            </DataTable>
+          </TabPanel>
+      </TabView>
+      <template #footer>
+          <Button 
+              :label="$t('group_management.computer_group.close')" 
+              icon="pi pi-times"
+              @click="showAgentInfoDialog = false" 
+              class="p-button-text p-button-sm">
+          </Button>
+      </template>
+    </Dialog>
     <base-plugin
       v-loading="loading" element-loading-text="Veriler alınıyor..."
       element-loading-spinner="fa fa-sync fa-spin"
@@ -23,38 +47,16 @@
       :showTaskDialog="showTaskDialog"
       :pluginTask="task"
       @cancel-task="showTaskDialog = false"
-      >
-      <template #pluginHeader>
-        <i class="fas fa-info-circle"></i> 
-        <a href="#"
-          @click.prevent="showAgentInfoModal(true)" 
-          style="color:#495057">
-          {{ selectedLiderNode ? selectedLiderNode.name: 'Agents' }}
-        </a>
+    >
+      <template #pluginTitle>
+        <p v-if="selectedLiderNode">
+          <i :class="selectedLiderNode.type == 'AHENK'? 'el el-icon-data-line': 'pi pi-folder-open'"></i>&nbsp; {{selectedLiderNode.name}}
+        </p>
+        <p v-else><i class="pi pi-folder-open"></i>&nbsp; Agents</p>
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <div>
-          <Button
-            icon="el-icon-refresh"
-            title="Yenile"
-            class="p-button-sm p-mr-2"
-            @click.prevent="updateAgentInfo"
-          >
-          </Button>
-          <Button
-            icon="el-icon-rank"
-            title="Taşı"
-            class="p-button-sm p-mr-2"
-            @click.prevent="moveAgent"
-          >
-          </Button>
-          <Button
-            icon="pi pi-trash"
-            title="Sil"
-            @click="deleteAgent"
-            class="p-button-danger p-button-sm"
-          >
-          </Button>
+          <SplitButton title="Detail" icon="pi pi-list" @click="showAgentInfoDialog = true" :model="items"></SplitButton>
         </div>
       </template>
       <template #default>
@@ -72,7 +74,7 @@
             <div class="p-col-8">{{ hostname }}</div>
           </div>
         </li>
-         <li style="list-style-type: none;">
+        <li style="list-style-type: none;">
           <div class="p-grid">
             <div class="p-col-4"><i class="el el-icon-location-outline"></i> {{ $t("computer.agent_info.location") }}</div>
             <div class="p-col-8">{{ location }}</div>
@@ -134,7 +136,8 @@
 
 <script>
 import axios from "axios";
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters, mapActions } from "vuex";
+import {FilterMatchMode} from 'primevue/api';
 
 export default {
   
@@ -166,11 +169,42 @@ export default {
       lastLoggedUser: "",
       createdDate: "",
       agentInfoModal: false,
+      showAgentInfoDialog: false,
+      selectedNodeSummaryData: [],
+      attributesMultiValue: false,
+      filters: {},
+      items: [
+                {
+                    label: 'Update',
+                    icon: 'pi pi-refresh',
+                    command: () => {
+                        this.updateAgentInfo()
+                    }
+                },
+                {
+                    label: 'Delete',
+                    icon: 'pi pi-trash',
+                    command: () => {
+                        this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
+                    }
+                },
+                {
+                    label: 'Move',
+                    icon: 'el-icon-rank',
+                    command: () => {
+                        this.moveAgent()
+                    }
+                },
+            ],
     };
   },
 
   created() {
     this.task = {...this.pluginTask};
+
+    this.filters = {
+      'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+    }
   },
 
   computed:mapGetters(["selectedLiderNode"]),
@@ -190,6 +224,8 @@ export default {
       } else {
         this.setDefaultTable();
       }
+
+      this.getSelectedNodeAttribute()
     }
   },
 
@@ -330,6 +366,63 @@ export default {
         this.agentInfoModal = false;
       }
     },
+
+    getSelectedNodeAttribute() {
+      let nodeData = [];
+      let nodeSummaryData = [];
+      
+      nodeSummaryData.push({
+          'label': this.$t('group_management.computer_group.name'),
+          'value': this.selectedLiderNode.name,
+          },
+          {
+              'label': this.$t('group_management.computer_group.type'),
+              'value': this.selectedLiderNode.type,
+          });
+      if (this.selectedLiderNode.type == "GROUP") {
+            nodeSummaryData.push({
+                'label': this.$t('group_management.computer_group.number_of_member'),
+              'value': this.members.length
+            });
+      }
+      nodeData.push({
+          'label': this.$t('group_management.computer_group.name'),
+          'value': this.selectedLiderNode.name,
+          }, 
+          {
+              'label': this.$t('group_management.computer_group.node_dn'),
+              'value': this.selectedLiderNode.distinguishedName,
+          },
+          {
+              'label': this.$t('group_management.computer_group.type'),
+              'value': this.selectedLiderNode.type,
+          },
+          {
+              'label': this.$t('group_management.computer_group.created_date'),
+              'value': this.selectedLiderNode.createDateStr,
+          },
+
+          {
+              'label': this.$t('group_management.computer_group.modified_date'),
+              'value': this.selectedLiderNode.attributes.modifyTimestamp,
+          },
+          {
+              'label': this.$t('group_management.computer_group.creator_name'),
+              'value': this.selectedLiderNode.attributes.creatorsName,
+          },
+          {
+              'label': this.$t('group_management.computer_group.modifier_name'),
+              'value': this.selectedLiderNode.attributes.modifiersName,
+          });
+      this.selectedLiderNode.attributesMultiValues.objectClass.map(oclas => {
+          nodeData.push({
+              'label': this.$t('group_management.computer_group.objectclass'),
+              'value' : oclas
+          })
+      });
+      this.selectedNodeData = nodeData;
+      this.selectedNodeSummaryData = nodeSummaryData;
+    }
   },
 };
 </script>
