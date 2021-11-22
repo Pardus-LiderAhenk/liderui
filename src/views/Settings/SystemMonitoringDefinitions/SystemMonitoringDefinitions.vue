@@ -331,10 +331,6 @@ export default {
         if (!this.validateForm()) {
           return;
         }
-        if (this.isExistTemplateName(this.label, this.selectedTemplate.id)) {
-          this.validationTemplateLabel = true;
-          return;
-        }
         const params = {
           label: this.label,
           contents: this.contents,
@@ -371,10 +367,6 @@ export default {
           });
       } else {
         if (!this.validateForm()) {
-          return;
-        }
-        if (this.isExistTemplateName(this.label, null)) {
-          this.validationTemplateLabel = true;
           return;
         }
         const params = {

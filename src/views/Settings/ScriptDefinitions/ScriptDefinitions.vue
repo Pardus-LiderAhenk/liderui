@@ -324,10 +324,6 @@ export default {
                 if (!this.validateForm()) {
                     return;
                 }
-                if (this.isExistScriptName(this.label, this.selectedScript.id)) {
-                    this.validationScriptLabel = true;
-                    return;
-                }
                 const params = {
                     label: this.label,
                     contents: this.contents,
@@ -364,10 +360,6 @@ export default {
                 })
             } else{
                 if (!this.validateForm()) {
-                    return;
-                }
-                if (this.isExistScriptName(this.label, null)) {
-                    this.validationScriptLabel = true;
                     return;
                 }
                 const params = {
