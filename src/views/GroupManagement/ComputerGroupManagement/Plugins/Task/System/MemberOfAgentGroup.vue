@@ -13,7 +13,10 @@
                             &nbsp;{{ $t('group_management.computer_group.node_detail') }}
                         </span>
                     </template>
-                    <DataTable :value="selectedNodeData" responsiveLayout="scroll">
+                    <DataTable class="p-datatable-sm" 
+                        :value="selectedNodeData" 
+                        responsiveLayout="scroll"
+                    >
                         <Column field="label" :header="$t('group_management.computer_group.attribute')"></Column>
                         <Column field="value" :header="$t('group_management.computer_group.value')"></Column>
                     </DataTable>
@@ -81,24 +84,31 @@
         </Dialog>
         <Card>
             <template #title>
-                <div style="font-size:15px;">
-                    {{ $t("group_management.computer_group.selected_node_title") }}
+                <div class="p-d-flex p-jc-between">
+                    <div style="font-size:15px;">
+                        {{ $t("group_management.computer_group.selected_node_title") }}
+                    </div>
+                    <div>
+                        <Button class="p-button-sm" 
+                            :title="$t('group_management.computer_group.node_detail')" 
+                            @click="showMemberDetail"
+                            icon="pi pi-list">
+                        </Button>
+                    </div>
                 </div>
                 <hr style="margin-bottom:-5px">
             </template>
             <template #content>
                 <div class="p-grid p-flex-column">
                     <div class="p-col">
-                        <DataTable :value="selectedNodeSummaryData" responsiveLayout="scroll">
+                        <DataTable class="p-datatable-sm" 
+                            :value="selectedNodeSummaryData"
+                            responsiveLayout="scroll"
+                        >
                             <Column field="label" :header="$t('group_management.computer_group.attribute')"></Column>
                             <Column field="value" :header="$t('group_management.computer_group.value')"></Column>
                         </DataTable>
                     </div>
-                </div>
-                <div class="p-grid p-col">
-                    <Button class="p-button-link" 
-                    :label="$t('group_management.computer_group.node_detail')" 
-                    @click="showMemberDialog = true"/>
                 </div>
             </template>
         </Card>
@@ -142,6 +152,19 @@ export default {
         initFilters() {
             this.filters = {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            }
+        },
+
+        showMemberDetail() {
+            if (this.selectedLiderNode) {
+                this.showMemberDialog = true;
+            } else {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('group_management.computer_group.select_node_warn'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
         },
 
@@ -236,12 +259,12 @@ export default {
                 },
                 {
                     'label': this.$t('group_management.computer_group.created_date'),
-                    'value': this.selectedLiderNode.attributes.createTimestamp,
+                    'value': this.selectedLiderNode.createDateStr,
                 },
 
                 {
                     'label': this.$t('group_management.computer_group.modified_date'),
-                    'value': this.selectedLiderNode.attributes.modifyTimestamp,
+                    'value': this.selectedLiderNode.modifyDateStr,
                 },
                 {
                     'label': this.$t('group_management.computer_group.creator_name'),

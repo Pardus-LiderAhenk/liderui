@@ -117,10 +117,10 @@
                 <i class="fas fa-info-circle" ></i>
               </a>
               <OverlayPanel 
-              ref="op" appendTo="body" 
-              :showCloseIcon="false" id="overlay_panel" 
-              style="width: 450px" 
-              :breakpoints="{'960px': '75vw'}">
+                ref="op" appendTo="body" 
+                :showCloseIcon="false" id="overlay_panel" 
+                style="width: 450px" 
+                :breakpoints="{'960px': '75vw'}">
                 <div><h5>{{ $t('computer.scheduled.title') }}</h5></div>
                 <div><small>- - - - - - - - ->&nbsp; {{$t('computer.scheduled.minute')}} (0-59)</small></div>
                 <div><small>| &nbsp;  - - - - - - - >&nbsp; {{$t('computer.scheduled.hour')}} (0-23)</small></div>
@@ -131,10 +131,11 @@
                 <div><small style="font-weight:bold">* * * * * username command</small></div>
                 <div><small>{{$t('computer.scheduled.example')}}</small></div>
                 <div>
+                  <i class="pi pi-link"></i>&nbsp;
                   <a 
                     href="https://www.liderahenk.org/" 
-                    type="primary" target="_blank" 
-                    icon="el-icon-link">  {{$t('computer.plugins.plugin_popover.for_more_info')}}...
+                    type="primary" target="_blank">
+                    {{$t('computer.plugins.plugin_popover.for_more_info')}}...
                   </a>
                 </div>
               </OverlayPanel>

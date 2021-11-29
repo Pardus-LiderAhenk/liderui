@@ -104,13 +104,13 @@
                     </div>
                 </div>
                 <tree-component 
-                        ref="istemcitree"
-                        loadNodeUrl="/lider/computer/getComputers"
-                        loadNodeOuUrl="/lider/computer/getOuDetails"
-                        :showCheckbox="agentGroupModal.showCheckbox"
-                        :getCheckedNodes="getCheckedAgentNodes"
-                        :renderSearchContent="renderSearchContent"
-                        :getHalfCheckedNodes="getHalfCheckedNodes"
+                    ref="istemcitree"
+                    loadNodeUrl="/lider/computer/getComputers"
+                    loadNodeOuUrl="/lider/computer/getOuDetails"
+                    :showCheckbox="agentGroupModal.showCheckbox"
+                    :getCheckedNodes="getCheckedAgentNodes"
+                    :renderSearchContent="renderSearchContent"
+                    :getHalfCheckedNodes="getHalfCheckedNodes"
                 />
             </TabPanel>
             <TabPanel >
@@ -127,9 +127,6 @@
                 </DataTable>
             </TabPanel>
         </TabView>
-
-            
-        
         <template #footer>
             <Button label="Kapat" icon="pi pi-times" @click="modals.agentGroup = false" class="p-button-text"/>
             <Button label="Oluştur" icon="pi pi-check" @click="createAgentGroup" autofocus />

@@ -75,8 +75,8 @@
                     </template>
                     <!-- <Column selectionMode="multiple" headerStyle="width: 3em"></Column> -->
                     <Column field="packageName" :header="$t('computer.plugins.check_package.package_name')"></Column>
-                    <Column field="dn" header="DN"></Column>
                     <Column field="version" :header="$t('computer.plugins.check_package.version')"></Column>
+                    <Column field="dn" header="DN"></Column>
                     <Column field="result" :header="$t('computer.plugins.check_package.result')"></Column>
                 </DataTable>
             </div>
@@ -159,32 +159,41 @@ export default {
     },
 
     checkPackageResponse(message) {
-        if (message.commandClsId == "CHECK_PACKAGE") {
-            let responseData = message.result.responseDataStr.split("\n");
-            let responseMessage = message.result.responseMessage;
-            let responsePackageName = responseMessage.split("-")[0].trim();
-            let arrg = JSON.parse(responseData);
-            if (this.isExistPackage("packageName", responsePackageName)) {
-                if (!this.isExistPackage("dn", arrg.dn)) {
-                    this.packages.push({
-                        "packageName": responsePackageName,
-                        "dn": arrg.dn,
-                        "result": arrg.res,
-                        "version": arrg.version.trim("\n")
-                    });
-                }
-            } else{
-                this.packages = [];
-                if (!this.isExistPackage("dn", arrg.dn)) {
-                    this.packages.push({
-                         "packageName": responsePackageName,
-                        "dn": arrg.dn,
-                        "result": arrg.res,
-                        "version": arrg.version.trim("\n")
-                    });
-                }
-            }
+      if (message.commandClsId == "CHECK_PACKAGE") {
+        let responseData = message.result.responseDataStr.split("\n");
+        let responseMessage = message.result.responseMessage;
+        let responsePackageName = responseMessage.split("-")[0].trim();
+        let arrg = JSON.parse(responseData);
+        if (this.isExistPackage("packageName", responsePackageName)) {
+          if (!this.isExistPackage("dn", arrg.dn)) {
+              this.pushPackageList(arrg, responsePackageName);
+          }
+        } else{
+          this.packages = [];
+          if (!this.isExistPackage("dn", arrg.dn)) {
+              this.pushPackageList(arrg, responsePackageName);
+          }
         }
+      }
+    },
+
+    pushPackageList(arrg, responsePackageName) {
+      let result = arrg.res;
+      if (result == 0) {
+          result = "Paket yüklü değil"
+      }
+        if (result == 1) {
+          result = "Paket yüklü"
+      }
+        if (result == 2) {
+          result = "Paket farklı versiyonla yüklü"
+      }
+      this.packages.push({
+          "packageName": responsePackageName,
+          "dn": arrg.dn,
+          "result": result,
+          "version": arrg.version.trim("\n")
+      });
     },
 
     exportCSV() {

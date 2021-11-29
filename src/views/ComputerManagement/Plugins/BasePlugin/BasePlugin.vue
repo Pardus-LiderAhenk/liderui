@@ -18,10 +18,10 @@
     </div>
     <template #footer>
       <Button 
-      :label="$t('computer.plugins.base_plugin.no')" 
-      icon="pi pi-times" 
-      @click="closeTaskDialog('cancel')" 
-      class="p-button-text p-button-sm"
+        :label="$t('computer.plugins.base_plugin.no')" 
+        icon="pi pi-times" 
+        @click="closeTaskDialog('cancel')" 
+        class="p-button-text p-button-sm"
       />
       <Button 
        :label="$t('computer.plugins.base_plugin.yes')"
@@ -32,11 +32,12 @@
     </template>
   </Dialog>
   <div>
-    <Card
+    <!-- <Card
       v-loading="loading" :element-loading-text="$t('computer.plugins.base_plugin.loading_default_text')"
       element-loading-spinner="fa fa-sync fa-spin" 
       element-loading-background="rgba(0, 0, 0, 0.7)"
-    >
+    > -->
+    <Card>
       <template #header v-if="$slots.pluginHeader">
         <slot name="pluginHeader">
         </slot>
@@ -57,7 +58,6 @@
         <slot></slot>
       </div>
       </template>
-      
       <template #footer v-if="$slots.pluginFooter">
         <slot name="pluginFooter">
           <hr style="margin-top:5px">
@@ -85,7 +85,7 @@
                     </small>
                   </li>
                 </ul>
-                <a :href="pluginUrl" type="primary" target="_blank" icon="el-icon-link">
+                <i class="pi pi-link"></i>&nbsp;<a :href="pluginUrl" type="primary" target="_blank">
                   {{ $t('computer.plugins.plugin_popover.for_more_info') }}...
                 </a>
               </OverlayPanel>
@@ -95,8 +95,14 @@
                 :title="$t('computer.scheduled.cancel')" 
                 @click="cancelScheduledTask" 
                 :label="$t('computer.scheduled.scheduled_task_plan')" 
-                icon="el el-icon-loading" class="p-button-text p-button-sm">
+                icon="pi pi-times" class="p-button-text p-button-sm">
                </Button>
+            </div>
+            <div v-if="loading">
+              <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+              <a class="primary">
+                {{$t('computer.plugins.base_plugin.loading_default_text')}}
+              </a>
             </div>
             <div class="p-col p-as-end">
               <base-scheduled
@@ -106,6 +112,7 @@
             </div>
           </div>
         </slot>
+        <!-- <ProgressBar v-if="loading" mode="indeterminate" style="height: .5em" /> -->
       </template>
     </Card>
   </div>
@@ -121,6 +128,7 @@
 import { mapGetters } from "vuex"
 import axios from "axios";
 import XmppClientManager  from '@/services/strophe.js';
+
 
 export default {
   name: "base-plugin",
@@ -254,6 +262,14 @@ export default {
             life: this.toastLife
           });
         }
+      })
+      .catch((error) => {
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t("computer.task.send_task_error_message")+"\n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: this.toastLife
+        });
       });
       this.scheduledParam = null;
     },
@@ -341,8 +357,6 @@ export default {
               life: toastLife
             });
           }
-
-          console.log(selectedDn)
           if (response.commandExecution.dn === selectedDn) {
             this.$emit("taskResponse", response);
           }

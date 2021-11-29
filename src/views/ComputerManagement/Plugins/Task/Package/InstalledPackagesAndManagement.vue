@@ -278,15 +278,6 @@ export default {
     }
 }
 
-::v-deep(.p-progressbar) {
-    height: .5rem;
-    background-color: #D8DADC;
-
-    .p-progressbar-value {
-        background-color: #607D8B;
-    }
-}
-
 ::v-deep(.p-datatable.p-datatable-customers) {
     .p-paginator {
         padding: 1rem;

@@ -128,30 +128,28 @@ export default {
 
   mounted() {
     const params = new FormData();
-    axios
-      .post(process.env.VUE_APP_URL + "/conky/list", params)
-      .then((response) => {
-        if (response.data != null || response.data != "") {
-          this.templateList = response.data;
-          for (let index = 0; index < response.data.length; index++) {
-            const element = response.data[index];
-            this.templates.push({
-              label: element.label,
-              id: element.id,
-              contents: element.contents,
-              settings: element.settings,
-            });
-          }
+    axios.post("/conky/list", params).then((response) => {
+      if (response.data != null || response.data != "") {
+        this.templateList = response.data;
+        for (let index = 0; index < response.data.length; index++) {
+          const element = response.data[index];
+          this.templates.push({
+            label: element.label,
+            id: element.id,
+            contents: element.contents,
+            settings: element.settings,
+          });
         }
-      })
-      .catch((error) => {
-        this.$toast.add({
-          severity: "error",
-          detail: this.$t("computer.plugins.conky.conky_error_message") +" \n" + error,
-          summary: this.$t("computer.task.toast_summary"),
-          life: 3000,
-        });
+      }
+    })
+    .catch((error) => {
+      this.$toast.add({
+        severity: "error",
+        detail: this.$t("computer.plugins.conky.conky_error_message") +" \n" + error,
+        summary: this.$t("computer.task.toast_summary"),
+        life: 3000,
       });
+    });
   },
 
   methods: {

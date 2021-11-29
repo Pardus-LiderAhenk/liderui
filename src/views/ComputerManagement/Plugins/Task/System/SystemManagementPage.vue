@@ -3,7 +3,9 @@
     <br>
     <div class="p-grid">
       <div class="p-col-5">
-        <agent-info class="plugin-card"></agent-info>
+        <agent-info class="plugin-card"
+          :pluginTask="pluginTaskAgentInfo">
+        </agent-info>
         <session-and-power-management v-if="sessionAndPowerState" 
         class="plugin-card" 
         :pluginTask="pluginTaskSessionPowerManagement">
@@ -58,6 +60,7 @@ export default {
       pluginTaskXmessage: null,
       pluginTaskFileTransfer: null,
       pluginTaskRemoteAccess: null,
+      pluginTaskAgentInfo: null,
 
       resourceUsageState: false,
       sessionAndPowerState: false,
@@ -87,60 +90,58 @@ export default {
   },
 
   created() {
-    axios
-      .post(
-        process.env.VUE_APP_URL + "/getPluginTaskList",
-        {},
-      )
-      .then((response) => {
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          if (element.page == "resource-usage") {
-            this.pluginTaskResourceUsage = element;
-            this.resourceUsageState = element.state;
-          }
-          if (element.page == "end-sessions") {
-            this.pluginTaskSessionPowerManagement = element;
-            this.sessionAndPowerState = element.state;
-          }
-          if (element.page == "conky") {
-            this.pluginTaskConky = element;
-            this.conkyState = element.state;
-          }
-          if (element.page == "eta-notify") {
-            this.pluginTaskEtaNotify = element;
-            this.etaNotifyState = element.state;
-          }
-          if (element.page == "file-management") {
-            this.pluginTaskFileManagement = element;
-            this.fileManagementState = element.state;
-          }
-          if (element.page == "local-user") {
-            this.pluginTaskLocalUser = element;
-            this.localUserState = element.state;
-          }
-          if (element.page == "ldap-login") {
-            this.pluginTaskLdapLogin = element;
-            this.ldapLoginState = element.state;
-          }
-          if (element.page == "xmessage") {
-            this.pluginTaskXmessage = element;
-            this.xmessageState = element.state;
-          }
-          if (element.page == "file-transfer") {
-            this.pluginTaskFileTransfer = element;
-            this.fileTransferState = element.state;
-          }
-          if (element.page == "remote-access") {
-            this.pluginTaskRemoteAccess = element;
-            this.remoteAccessState = element.state;
-          }
-          if (element.page == "manage-root") {
-            this.pluginTaskManageRoot = element
-            this.manageRootState = element.state;
-          }
+    axios.post("/getPluginTaskList", {}).then((response) => {
+      for (let index = 0; index < response.data.length; index++) {
+        const element = response.data[index];
+        if (element.page == "resource-usage") {
+          this.pluginTaskResourceUsage = element;
+          this.resourceUsageState = element.state;
         }
-      });
+        if (element.page == "end-sessions") {
+          this.pluginTaskSessionPowerManagement = element;
+          this.sessionAndPowerState = element.state;
+        }
+        if (element.page == "conky") {
+          this.pluginTaskConky = element;
+          this.conkyState = element.state;
+        }
+        if (element.page == "eta-notify") {
+          this.pluginTaskEtaNotify = element;
+          this.etaNotifyState = element.state;
+        }
+        if (element.page == "file-management") {
+          this.pluginTaskFileManagement = element;
+          this.fileManagementState = element.state;
+        }
+        if (element.page == "local-user") {
+          this.pluginTaskLocalUser = element;
+          this.localUserState = element.state;
+        }
+        if (element.page == "ldap-login") {
+          this.pluginTaskLdapLogin = element;
+          this.ldapLoginState = element.state;
+        }
+        if (element.page == "xmessage") {
+          this.pluginTaskXmessage = element;
+          this.xmessageState = element.state;
+        }
+        if (element.page == "file-transfer") {
+          this.pluginTaskFileTransfer = element;
+          this.fileTransferState = element.state;
+        }
+        if (element.page == "remote-access") {
+          this.pluginTaskRemoteAccess = element;
+          this.remoteAccessState = element.state;
+        }
+        if (element.page == "manage-root") {
+          this.pluginTaskManageRoot = element
+          this.manageRootState = element.state;
+        }
+        if (element.page == "move-agent") {
+          this.pluginTaskAgentInfo = element
+        }
+      }
+    });
   },
 };
 </script>
