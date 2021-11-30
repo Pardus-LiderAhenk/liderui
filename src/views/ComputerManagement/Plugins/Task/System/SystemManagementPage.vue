@@ -4,7 +4,10 @@
     <div class="p-grid">
       <div class="p-col-5">
         <agent-info class="plugin-card"
-          :pluginTask="pluginTaskAgentInfo">
+          :pluginTask="pluginTaskAgentInfo"
+          @moveSelectedAgent="moveSelectedAgent"
+          @deleteSelectedAgent="deleteSelectedAgent"
+          @renameSelectedAgent="renameSelectedAgent">
         </agent-info>
         <session-and-power-management v-if="sessionAndPowerState" 
         class="plugin-card" 
@@ -143,6 +146,20 @@ export default {
       }
     });
   },
+
+  methods: {
+    moveSelectedAgent(selectedNode, destinationDn) {
+      this.$emit('moveSelectedAgent', selectedNode, destinationDn,);
+    },
+
+    deleteSelectedAgent(selectedNode) {
+      this.$emit('deleteSelectedAgent', selectedNode);
+    },
+
+    renameSelectedAgent(selectedNode) {
+      this.$emit('renameSelectedAgent', selectedNode);
+    }
+  }
 };
 </script>
 

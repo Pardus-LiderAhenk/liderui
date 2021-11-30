@@ -384,6 +384,8 @@
             "export":"Export",
             "cancel":"Cancel",
             "update":"Update",
+            "update_client": "Update Client",
+            "update_client_confirm_question": "Client information will be updated, are you sure?",
             "move": "Move",
             "delete":"Delete",
             "move_agent":"Move Client",
@@ -403,8 +405,13 @@
             "creator_name": "Creator Name",
             "modifier_name": "Modifier Name",
             "objectclass": "Object Class",
-            "select_node_warn": "Please select a node"
-            
+            "select_node_warn": "Please select a node",
+            "rename": "Rename",
+            "rename_warn": "The client must be online to be able to rename client",
+            "hostname_input_warn": "Hostname is not available",
+            "rename_success": "The hostname will be changed when the client is restarted",
+            "rename_same_hostname_error": "This hostname is already in use. Please enter a different hostname",
+            "rename_error": "An error occured while renaming client"
         },
         "scheduled": {
             "title": "Scheduled Task Parameters",

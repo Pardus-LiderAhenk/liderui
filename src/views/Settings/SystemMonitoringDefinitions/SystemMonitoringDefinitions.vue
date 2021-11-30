@@ -162,7 +162,7 @@
         <Button
           :label="selectedTemplate ? $t('settings.system_monitoring_definitions.update'):
           $t('settings.system_monitoring_definitions.save')"
-          :icon="selectedTemplate ? 'el-icon-refresh' : 'pi pi-save'"
+          :icon="selectedTemplate ? 'pi pi-refresh' : 'pi pi-save'"
           class="p-button-sm"
           @click="templateOperation(selectedTemplate ? 'update' : 'add')"
         />

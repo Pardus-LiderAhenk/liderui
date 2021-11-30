@@ -385,6 +385,8 @@
             "export":"Dışa Aktar",
             "cancel":"İptal",
             "update":"Güncelle",
+            "update_client": "İstemci Güncelle",
+            "update_client_confirm_question": "İstemci bilgilerini güncellemek istediğinizden emin misiniz?",
             "move": "Taşı",
             "delete":"Sil",
             "move_agent": "İstemci Taşı",
@@ -404,7 +406,13 @@
             "creator_name": "Oluşturan Kişi",
             "modifier_name": "Güncelleyen Kişi",
             "objectclass": "Nesne Sınıfı",
-            "select_node_warn": "Lütfen kayıt seçiniz"
+            "select_node_warn": "Lütfen kayıt seçiniz",
+            "rename": "Yeniden Adlandır",
+            "rename_warn": "İstemciyi yeniden adlandırabilmek için istemcinin çevrimiçi olması gerekir",
+            "hostname_input_warn":"Bilgisayar adı boş bırakılamaz",
+            "rename_success":"Bilgisayar adı istemci yeniden başlatıldığında değiştirilecektir",
+            "rename_same_hostname_error": "Bu bilgisayar adı zaten kullanılıyor. Lütfen farklı bir bilgisayar adı giriniz",
+            "rename_error": "İstemci yeniden adlandırılırken hata oluştu"
         },
         "scheduled": {
             "title": "Zamanlanmış Görev Parametreleri",

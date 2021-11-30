@@ -204,7 +204,7 @@
         />
         <Button class="p-button-sm" 
           :label="selectedUser ? $t('computer.plugins.local_user.update'): $t('computer.plugins.local_user.add')" 
-          :icon="selectedUser ? 'pi pi-user-edit': 'pi pi-user-plus'"
+          :icon="selectedUser ? 'pi pi-refresh': 'pi pi-user-plus'"
           @click.prevent="sendTaskForLocaUser(selectedUser ? 'EDIT_USER': 'ADD_USER')"
         />
       </template>

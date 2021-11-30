@@ -54,7 +54,7 @@
         <div>
           <Button
             v-if="repositories.length > 0"
-            icon="el-icon-refresh"
+            icon="pi pi-refresh"
             class="p-button-sm p-mr-2"
             :title="$t('computer.plugins.repositories.update')"
             @click.prevent="sendTaskRepositoryManagement('PACKAGE_SOURCES')"

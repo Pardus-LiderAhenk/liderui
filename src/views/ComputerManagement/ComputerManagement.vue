@@ -3,7 +3,8 @@
       <div class="p-col-3" style="min-height:90vh">
            <el-tabs type="border-card" style="height:100%;width:100%">
                 <el-tab-pane label="İstemciler">
-                <tree-component loadNodeUrl="/lider/computer/getComputers"
+                <tree-component ref="tree"
+                    loadNodeUrl="/lider/computer/getComputers"
                     loadNodeOuUrl="/lider/computer/getOuDetails"
                     :treeNodeClick="setSelectedLiderNode"
                 >
@@ -66,7 +67,12 @@
             </Button>
        </div>
        <keep-alive>
-        <component :is="selectedPluginTab"></component>
+            <component 
+                @moveSelectedAgent="moveSelectedAgent"
+                @deleteSelectedAgent="deleteSelectedAgent"
+                @renameSelectedAgent="renameSelectedAgent"
+                :is="selectedPluginTab">
+            </component>
       </keep-alive>
     </div>
   </div>
@@ -127,6 +133,21 @@ export default {
         setSelectedPluginTab(tab) {
             this.selectedPluginTab = tab;
         },
+
+        moveSelectedAgent(selectedNode, destinationDn) {
+            this.$refs.tree.remove(selectedNode);
+            this.$refs.tree.append(selectedNode, this.$refs.tree.getNode(destinationDn));
+            this.setSelectedLiderNode(null);
+        },
+
+        deleteSelectedAgent(selectedNode) {
+            this.$refs.tree.remove(selectedNode);
+            this.setSelectedLiderNode(null);
+        },
+
+        renameSelectedAgent(selectedNode) {
+            this.$refs.tree.updateNode(selectedNode.distinguishedName, this.selectedNode);
+        }
     },
 
 }

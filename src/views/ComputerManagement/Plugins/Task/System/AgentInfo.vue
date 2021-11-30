@@ -1,15 +1,43 @@
 <template>
   <div>
-      <Dialog :style="{width: '20vw'}"
-        :header="$t('computer.agent_info.delete_client')" 
-        v-model:visible="deleteAgentConfirm"  
+    <Dialog :style="{width: '20vw'}"
+        :header="$t('computer.agent_info.update_client')" 
+        v-model:visible="updateAgentConfirm"  
         :modal="true" 
       >
       <div class="confirmation-content">
+        <span>
+          <i class="fas fa-info-circle" ></i>&nbsp;
+          {{ $t('computer.agent_info.update_client_confirm_question') }}
+        </span>
+      </div>
+      <template #footer>
+        <Button 
+          :label="$t('computer.agent_info.cancel')" 
+          icon="pi pi-times"
+          @click="updateAgentConfirm = false" 
+          class="p-button-text p-button-sm"
+        />
+        <Button 
+          :label="$t('computer.agent_info.yes')"
+          icon="pi pi-check" 
+          @click="updateAgentInfo"
+          class="p-button-sm"
+        />
+      </template>
+    </Dialog>
+    <Dialog :style="{width: '20vw'}"
+      :header="$t('computer.agent_info.delete_client')" 
+      v-model:visible="deleteAgentConfirm"  
+      :modal="true" 
+    >
+      <div class="confirmation-content">
         <span v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedLiderNode.online">
+          <i class="fas fa-info-circle" ></i>&nbsp;
           {{ $t('computer.agent_info.delete_client_confirm_question_online') }}
         </span>
         <span v-else-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && !selectedLiderNode.online">
+          <i class="fas fa-info-circle" ></i>&nbsp;
           {{ $t('computer.agent_info.delete_client_confirm_question_offline') }}
         </span>
       </div>
@@ -24,6 +52,41 @@
           :label="$t('computer.agent_info.yes')"
           icon="pi pi-check" 
           @click="deleteAgent"
+          class="p-button-sm"
+        />
+      </template>
+    </Dialog>
+    <Dialog :style="{width: '20vw'}"
+        :header="$t('computer.agent_info.rename')" 
+        v-model:visible="renameAgentDialog"  
+        :modal="true" 
+      >
+      <div class="p-fluid">
+        <div class="p-field">
+          <label>{{$t('computer.agent_info.hostname')}}</label>
+          <InputText :class="validationRenameAgent ? 'p-inputtext-sm p-invalid': 'p-inputtext-sm'"  
+            placeholder="pardus" v-model="newHostname" type="text" 
+          />
+          <small v-if="validationRenameAgent" class="p-error">
+            {{$t('computer.agent_info.hostname_input_warn')}}
+          </small>
+        </div>
+        <div class="p-field">
+          <i class="fas fa-info-circle" ></i>&nbsp;
+          <span>{{ $t('computer.agent_info.rename_success') }}</span>
+        </div>
+      </div>
+      <template #footer>
+        <Button 
+          :label="$t('computer.agent_info.cancel')" 
+          icon="pi pi-times"
+          @click="renameAgentDialog = false" 
+          class="p-button-text p-button-sm"
+        />
+        <Button 
+          :label="$t('computer.agent_info.update')"
+          icon="pi pi-refresh" 
+          @click="renameAgent"
           class="p-button-sm"
         />
       </template>
@@ -52,7 +115,7 @@
           @click="moveAgentDialog = false" 
           class="p-button-text p-button-sm">
         </Button>
-        <Button class="p-button-sm" autofocus
+        <Button class="p-button-sm"
           :label="$t('computer.agent_info.move')"
           icon="el-icon-rank" 
           @click="moveAgent" 
@@ -367,13 +430,44 @@ export default {
       filters: {},
       selectedAgentInfo: null,
       deleteAgentConfirm: null,
+      renameAgentDialog: false,
+      validationRenameAgent: false,
+      newHostname: "",
+      updateAgentConfirm: false,
       items: [
         {
           label: this.$t('computer.agent_info.update'),
           icon: 'pi pi-refresh',
           command: () => {
             if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
-              this.updateAgentInfo();
+              this.updateAgentConfirm = true;
+            } else {
+              this.$toast.add({
+                severity:'warn', 
+                detail: this.$t("computer.agent_info.select_client_warn"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
+          }
+        },
+        {
+          label: this.$t('computer.agent_info.rename'),
+          icon: 'pi pi-pencil',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
+              if (!this.selectedLiderNode.online) {
+                this.$toast.add({
+                  severity:'warn', 
+                  detail: this.$t("computer.agent_info.rename_warn"), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: 3000
+                });
+                return;
+              }
+              this.renameAgentDialog = true;
+              this.newHostname = "";
+              this.validationRenameAgent = false;
             } else {
               this.$toast.add({
                 severity:'warn', 
@@ -443,11 +537,17 @@ export default {
 
   watch: {
     selectedLiderNode() {
-      console.log(this.selectedLiderNode)
-      if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
+      if (this.selectedLiderNode) {
+        if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
         this.getAgentInfo();
       }
       this.getSelectedNodeAttribute();
+      }
+    },
+    newHostname() {
+      if (this.newHostname.trim()) {
+        this.validationRenameAgent = false;
+      }
     }
   },
 
@@ -612,6 +712,7 @@ export default {
           if (response.data) {
             // TO DO --> computer tree will be updated
             this.moveAgentDialog = false;
+            this.$emit('moveSelectedAgent', this.selectedLiderNode, this.moveFolderNode.distinguishedName);
           }
         })
         .catch((error) => {
@@ -634,6 +735,7 @@ export default {
 
     updateAgentInfo() {
       this.loading = true;
+      this.updateAgentConfirm = false;
       this.task.commandId = "AGENT_INFO";
       const params = new FormData();
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
@@ -652,12 +754,12 @@ export default {
     deleteAgent() {
       this.task.commandId = "DELETE_AGENT";
       const params = new FormData();
+      this.deleteAgentConfirm = false;
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
-      params.append("agentUID", this.selectedLiderNode.cn);
+      params.append("agentUID", this.selectedLiderNode.uid);
       axios.post("/lider/computer/delete/agent", params).then((response) => {
         if (response.data) {
-          // TO DO --> computer tree will be updated
-          this.deleteAgentConfirm = false;
+          this.$emit('deleteSelectedAgent', this.selectedLiderNode);
         } else {
           this.$toast.add({
             severity:'error', 
@@ -668,13 +770,68 @@ export default {
         }
       })
       .catch((error) => { 
-        this.deleteAgentConfirm = false;
         this.$toast.add({
           severity:'error', 
           detail: this.$t("computer.agent_info.delete_client_error")+"\n"+error, 
           summary:this.$t("computer.task.toast_summary"), 
           life: 3000
         });
+      });
+    },
+
+    renameAgent() {
+      if (!this.newHostname.trim()) {
+        this.validationRenameAgent = true;
+        return;
+      }
+      this.task.commandId = "RENAME_ENTRY";
+      this.renameAgentDialog = false;
+      const params = new FormData();
+      params.append("agentDN", this.selectedLiderNode.distinguishedName);
+      params.append("cn", this.selectedLiderNode.cn);
+      params.append("newHostname", this.newHostname);
+      axios.post("/lider/computer/rename/agent", params).then((response) => {
+        if (response.data) {
+          let newDn = this.selectedLiderNode.distinguishedName.replace("cn="+this.selectedLiderNode.cn, "cn="+this.newHostname);
+          this.selectedLiderNode.distinguishedName = newDn;
+          this.selectedLiderNode.name = this.newHostname;
+          this.selectedLiderNode.cn = this.newHostname;
+          this.selectedLiderNode.uid = this.newHostname;
+          this.selectedLiderNode.attributes.uid = this.newHostname;
+          this.selectedLiderNode.attributes.cn = this.newHostname;
+          this.selectedLiderNode.attributes.entryDN = newDn;
+          this.$emit('renameSelectedAgent', this.selectedLiderNode);
+           this.$toast.add({
+            severity:'success', 
+            detail: this.$t("computer.agent_info.rename_success"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 5000
+          });
+        } else {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.delete_client_error"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      })
+      .catch((error) => {
+        if (error.response.status == 409) {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.rename_same_hostname_error"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 5000
+          });
+        } else {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.rename_error")+"\n"+error, 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
       });
     },
 
