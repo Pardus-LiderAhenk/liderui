@@ -19,6 +19,9 @@ import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefiniti
 import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
 import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
 
+// PROFILE
+import UserProfile from '@/views/Profile/Profile.vue';
+
 const routes = [{
         path: "/",
         redirect: "/dashboard",
@@ -120,6 +123,14 @@ const routes = [{
                     requiresAuth: true
                 }
             },
+            {
+                path: '/user-profile',
+                name: 'User Profile',
+                components: {default: UserProfile},
+                meta: {
+                    requiresAuth: true
+                }
+            }
            
         ],
     },
