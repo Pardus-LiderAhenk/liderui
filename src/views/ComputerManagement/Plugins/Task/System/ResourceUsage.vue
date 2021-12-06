@@ -4,8 +4,8 @@
       :pluginUrl="pluginUrl" 
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @send-task="getResourceUsage"
-      @cancel-task="showTaskDialog = false"
+      @close-task-dialog="showTaskDialog = false"
+      @task-response="getResourceUsage"
       :pluginTask="task"
     >
       <template #pluginHeader>
@@ -25,23 +25,39 @@
           <div class="p-grid">
             <div class="p-col-6">
               <div>
-                <Chart  type="pie" :data="chartDiskData" with="300" height="150" :options="diskChartOptions"></Chart>
+                <Chart 
+                type="pie" 
+                :data="chartDiskData" 
+                with="300" height="150" 
+                :options="diskChartOptions">
+                </Chart>
               </div>
               <div class="p-grid p-jc-center" style="margin-top:3px">
-                <el-popover placement="bottom" :width="450" trigger="click">
-                  <template #reference>
-                     <Button icon="fas fa-info-circle" class="p-button-text" :label="$t('computer.plugins.resource_usage.view_detail')"/>
-                  </template>
+                <Button 
+                icon="fas fa-info-circle" 
+                class="p-button-text" 
+                @click="toggle($event, 'disk')" 
+                :label="$t('computer.plugins.resource_usage.view_detail')"
+                />
+                <OverlayPanel 
+                ref="diskOp" 
+                appendTo="body" 
+                :showCloseIcon="false" id="overlay_panel" 
+                style="width: 450px" 
+                :breakpoints="{'960px': '75vw'}">
                   <h5 class="text-center">{{$t('computer.plugins.resource_usage.disk_usage_detail')}}</h5>
-                  <el-table :data="disk" size="mini" stripe=true style="width: 100%" class="table-borderless">
-                    <el-table-column property="total" :label="$t('computer.plugins.resource_usage.total')+ ' (GB)'"></el-table-column>
-                    <el-table-column property="used" :label="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></el-table-column>
-                    <el-table-column property="available" :label="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></el-table-column>
-                  </el-table>
+                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  </DataTable>
                   <div style="margin-top:5px">
-                    <small style="font-weight:bold;">{{$t('computer.plugins.resource_usage.disk_partition')}}:&nbsp;</small><small>{{ devices }}</small>
+                    <small style="font-weight:bold;">
+                      {{$t('computer.plugins.resource_usage.disk_partition')}}:&nbsp;
+                      </small>
+                      <small>{{ devices }}</small>
                   </div>
-                </el-popover>
+                </OverlayPanel>
               </div>
             </div>
             <div class="p-col-6">
@@ -49,17 +65,26 @@
                 <Chart type="pie" :data="chartMemoryData" with="300" height="150" :options="memoryChartOptions"></Chart>
               </div>
               <div class="p-grid p-jc-center" style="margin-top:3px">
-                <el-popover placement="bottom" :width="450" trigger="click">
-                  <template #reference>
-                    <Button icon="fas fa-info-circle" class="p-button-text" :label="$t('computer.plugins.resource_usage.view_detail')"/>
-                  </template>
+                <Button 
+                icon="fas fa-info-circle" 
+                @click="toggle($event, 'memory')" 
+                class="p-button-text" 
+                :label="$t('computer.plugins.resource_usage.view_detail')"
+                />
+                <OverlayPanel 
+                  ref="memoryOp" 
+                  appendTo="body" 
+                  :showCloseIcon="false" 
+                  id="overlay_panel" 
+                  style="width: 450px" 
+                  :breakpoints="{'960px': '75vw'}">
                   <h5 class="text-center">{{$t('computer.plugins.resource_usage.memory_usage_detail')}}</h5>
-                  <el-table :data="memory" style="width: 100%" size="mini" stripe=true>
-                    <el-table-column property="total" :label="$t('computer.plugins.resource_usage.total') + ' (GB)'"></el-table-column>
-                    <el-table-column property="used" :label="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></el-table-column>
-                    <el-table-column property="available" :label="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></el-table-column>
-                  </el-table>
-                </el-popover>
+                  <DataTable :value="memory" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  </DataTable>
+                </OverlayPanel>
               </div>
             </div>
           </div>
@@ -76,6 +101,8 @@
  * Resource usage plugin 
  * @see {@link http://www.liderahenk.org/}
  */
+
+import { mapGetters } from "vuex"
 
 export default {
   props : {
@@ -116,6 +143,10 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters(["selectedAgentMessages"]),
+  },
+
   created() {
     this.task = {...this.pluginTask};
   },
@@ -134,39 +165,39 @@ export default {
       this.showTaskDialog = true;
     },
 
-    getResourceUsage() {
-      this.showTaskDialog = false;
-      this.devices = "/dev/sda,/dev/sdb"
-      this.disk = [];
-      var totalDisk = Math.ceil(525456/1000);
-      var usedDisk = (213876/1000).toFixed(2);
-      var availableDisk = (totalDisk - usedDisk).toFixed(2);
+    getResourceUsage(message) {
+      if (message.commandClsId == "RESOURCE_INFO_FETCHER") {
+        var arrg = JSON.parse(message.result.responseDataStr);
+        this.devices = arrg["Device"]
+        this.disk = [];
+        var totalDisk = arrg["Total Disc"]/1000;
+        var usedDisk = (arrg["Usage Disc"]/1000).toFixed(2);
+        var availableDisk = (totalDisk - usedDisk).toFixed(2);
 
-      this.disk.push({
-        total: totalDisk,
-        used: usedDisk,
-        available : availableDisk
-        }
-      );
-      this.memory = [];
-      var totalMemory = Math.ceil(15567/1000);
-      var usedMemory = (12987/1000).toFixed(2);
-      var availableMemory = (totalMemory - usedMemory).toFixed(2);
-      this.memory.push({
-        total: totalMemory,
-        used: usedMemory,
-        available : availableMemory
-        }
-      );
-      let usageMemoryRate = ((usedMemory / totalMemory)*100).toFixed(2);
-      let availableMemoryRate = (100 - usageMemoryRate).toFixed(2);
-      let usageDiskRate = ((usedDisk / totalDisk)*100).toFixed(2);
-      let availableDiskRate = (100 - usageDiskRate).toFixed(2);
+        this.disk.push({
+          total: totalDisk,
+          used: usedDisk,
+          available : availableDisk
+          }
+        );
+        this.memory = [];
+        var totalMemory = arrg["Total Memory"]/1000;
+        var usedMemory = (arrg["Usage"]/1000).toFixed(2);
+        var availableMemory = (totalMemory - usedMemory).toFixed(2);
+        this.memory.push({
+          total: totalMemory,
+          used: usedMemory,
+          available : availableMemory
+          }
+        );
+        let usageMemoryRate = ((usedMemory / totalMemory)*100).toFixed(2);
+        let availableMemoryRate = (100 - usageMemoryRate).toFixed(2);
+        let usageDiskRate = ((usedDisk / totalDisk)*100).toFixed(2);
+        let availableDiskRate = (100 - usageDiskRate).toFixed(2);
 
-      this.renderChartDisk(availableDiskRate, usageDiskRate);
-      this.renderMemoryDisk(availableMemoryRate, usageMemoryRate);
-      // this.toast.success("Kaynak kullanımı bilgileri başarıyla alındı.");
-      
+        this.renderChartDisk(availableDiskRate, usageDiskRate);
+        this.renderMemoryDisk(availableMemoryRate, usageMemoryRate);
+      }
     },
 
     renderChartDisk(availableMemoryRate, usageMemoryRate) {
@@ -216,8 +247,16 @@ export default {
         }
       }
       return options;
-    }
-  }
+    },
+
+    toggle(event, type) {
+      if (type == "disk") {
+        this.$refs.diskOp.toggle(event);
+      } else {
+        this.$refs.memoryOp.toggle(event);
+      }
+    },
+  },
 };
 </script>
 

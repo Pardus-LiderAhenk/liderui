@@ -1,7 +1,7 @@
 <template>
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
-      <h3>Detaylı İstemic Raporu</h3>
+      <h4 class="p-pt-2">Detaylı İstemci Raporu</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -9,7 +9,7 @@
         <InputText
           id="inputComputerName"
           type="text"
-          v-model="filter.computerName"
+          v-model="filter.hostname"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -25,11 +25,14 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+        <label for="inputDN">DN</label>
+        <InputText id="inputDN" type="text" v-model="filter.dn" />
+      </div>
+      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="inputRegistrationDate">Kayıt Tarihi</label>
         <Calendar
           v-model="filter.registrationDate"
           selectionMode="range"
-          :showTime="true"
           :showButtonBar="true"
           :numberOfMonths="2"
           dateFormat="dd/mm/yy"
@@ -60,7 +63,7 @@
         <label for="selectModel">Model</label>
         <Dropdown
           id="selectModel"
-          v-model="filter.brand"
+          v-model="filter.model"
           :options="brands"
           placeholder="Hepsi"
         />
@@ -98,11 +101,11 @@
             <Button
               label="Temizle"
               icon="fas fa-backspace"
-              @click="filterAgents"
+              @click="clearFilterFields"
             />
           </div>
           <div class="p-ml-2">
-            <Button label="Ara" icon="fas fa-search" />
+            <Button label="Ara" icon="fas fa-search" @click="filterAgents" />
           </div>
         </div>
       </div>
@@ -113,37 +116,50 @@
       <div class="p-d-flex p-jc-between">
         <div>Sonuçlar</div>
         <div>
-          <Button label="Dışa Aktar" icon="fas fa-file-excel" />
+          <Button
+            label="Dışa Aktar"
+            icon="fas fa-file-excel"
+            @click="exportToExcel()"
+          />
         </div>
       </div>
     </template>
     <template #content>
-      <DataTable :value="agents" responsiveLayout="scroll" dataKey="id">
-        <Column>
-          <template #body="{index}">
-            <span>{{ index + 1 }}</span>
+      <DataTable :value="agents" responsiveLayout="scroll" dataKey="id" :loading="loading">
+        <template #empty>
+          No agents found.
+        </template>
+        <template #loading>
+          Yükleniyor...
+        </template>
+        <!-- <Column>
+          <template #body="slotProps">
+            <span>{{ slotProps.index }}</span>
           </template>
-        </Column>
+        </Column> -->
         <Column field="hostname" header="Bilgisayar Adı"></Column>
         <Column header="Mac Adresi">
-          <template #body="{data}">
-            {{data.macAddresses.replace(/'/g, '')}}
+          <template #body="{ data }">
+            {{ data.macAddresses.replace(/'/g, "") }}
           </template>
         </Column>
         <Column header="IP Adresi">
-          <template #body="{data}">
-            {{data.ipAddresses.replace(/'/g, '')}}
+          <template #body="{ data }">
+            {{ data.ipAddresses.replace(/'/g, "") }}
           </template>
         </Column>
         <Column field="isOnline" header="Durumu">
-        
-          <template #body="{data}">
-            <Badge v-if="data.isOnline" value="Çevrim İçi" severity="success"></Badge>
+          <template #body="{ data }">
+            <Badge
+              v-if="data.isOnline"
+              value="Çevrim İçi"
+              severity="success"
+            ></Badge>
             <Badge v-else value="Çevrim Dışı" severity="danger"></Badge>
           </template>
         </Column>
         <Column header="Marka">
-          <template #body="{data}">
+          <template #body="{ data }">
             {{
               getPropertyValue(
                 data.properties,
@@ -153,25 +169,25 @@
           </template>
         </Column>
         <Column header="İşletim Sistemi">
-          <template #body="{data}">
+          <template #body="{ data }">
             {{ getPropertyValue(data.properties, "os.distributionName") }}
           </template>
         </Column>
         <Column header="Versiyon">
-          <template #body="{data}">
+          <template #body="{ data }">
             {{ getPropertyValue(data.properties, "os.distributionVersion") }}
           </template>
         </Column>
         <Column field="createDate" header="Oluşturulma Tarihi"></Column>
         <Column>
-          <template #body="{data}">
+          <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
               <div>
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
                   icon="pi pi-list"
                   v-tooltip.left="'Agent Details'"
-                  @click="showProjectResultOutputDetailDialog(data)"
+                  @click="showAgentDetailDialog(data.id)"
                 />
               </div>
             </div>
@@ -184,16 +200,157 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left="">
-          Toplam Sonuç: {{totalElements}}
-        </template>
+        <template #left=""> Toplam Sonuç: {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
+  <Dialog
+    v-model:visible="agentDetailDialog"
+    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+    :style="{ width: '50vw' }"
+  >
+    <template #header>
+      <h3>İstemci Detayı</h3>
+    </template>
+    <h4>Genel Bilgiler</h4>
+    <div class="p-grid">
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Bilgisayar Adı</b></div>
+      <div class="p-col-8">{{ selectedAgent.hostname }}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>MAC Adresleri</b></div>
+      <div class="p-col-8">
+        {{ selectedAgent.macAddresses.replace(/'/g, "") }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>JID</b></div>
+      <div class="p-col-8">{{ selectedAgent.jid }}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>IP Adresleri</b></div>
+      <div class="p-col-8">
+        {{ selectedAgent.ipAddresses.replace(/'/g, "") }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>İşletim Sistemi Versiyonu</b></div>
+      <div class="p-col-8">
+        {{
+          getPropertyValue(selectedAgent.properties, "os.distributionVersion")
+        }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Ahenk Versiyonu</b></div>
+      <div class="p-col-8">
+        {{ getPropertyValue(selectedAgent.properties, "agentVersion") }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Oluşturulma Tarihi</b></div>
+      <div class="p-col-8">{{ selectedAgent.createDate }}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Güncelleme Tarihi</b></div>
+      <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+    </div>
+
+    <h4>Disk ve Bellek Bilgisi</h4>
+    <div class="p-grid">
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Toplam Disk Alanı(GB)</b></div>
+      <div class="p-col-8">
+        {{
+          (
+            getPropertyValue(selectedAgent.properties, "hardware.disk.total") /
+            1000
+          )
+            .toFixed(2)
+            .toLocaleString("tr-TR")
+        }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Kullanılan Disk Alanı(GB)</b></div>
+      <div class="p-col-8">
+        {{
+          (
+            getPropertyValue(selectedAgent.properties, "hardware.disk.used") /
+            1000
+          )
+            .toFixed(2)
+            .toLocaleString("tr-TR")
+        }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Boş Disk Alanı(GB)</b></div>
+      <div class="p-col-8">
+        {{
+          (
+            (getPropertyValue(selectedAgent.properties, "hardware.disk.total") -
+              getPropertyValue(
+                selectedAgent.properties,
+                "hardware.disk.used"
+              )) /
+            1000
+          )
+            .toFixed(2)
+            .toLocaleString("tr-TR")
+        }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Disk Bölümleri</b></div>
+      <div class="p-col-8">
+        {{
+          getPropertyValue(selectedAgent.properties, "hardware.disk.partitions")
+        }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>RAM(GB)</b></div>
+      <div class="p-col-8">
+        {{
+          (
+            getPropertyValue(
+              selectedAgent.properties,
+              "hardware.memory.total"
+            ) / 1000
+          )
+            .toFixed(2)
+            .toLocaleString("tr-TR")
+        }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+    </div>
+
+    <h4>İşlemci Bilgisi</h4>
+    <div class="p-grid">
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>İşlemci</b></div>
+      <div class="p-col-8">
+        {{ getPropertyValue(selectedAgent.properties, "processor") }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Fiziksel Çekirdek Sayısı</b></div>
+      <div class="p-col-8">
+        {{
+          getPropertyValue(
+            selectedAgent.properties,
+            "hardware.cpu.physicalCoreCount"
+          )
+        }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+    </div>
+
+    <template #footer>
+      <Button
+        label="Close"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="agentDetailDialog = false"
+      />
+    </template>
+  </Dialog>
 </template>
 
 <script>
 import axios from "axios";
+import moment from "moment";
 
 export default {
   data() {
@@ -203,12 +360,15 @@ export default {
       showedTotalElementCount: 10,
       currentPage: 1,
       offset: 1,
-      loadingData: true,
+      loading: true,
       brands: [],
       models: [],
       processors: [],
       osVersions: [],
       agentVersions: [],
+      getFilterData: true,
+      agentDetailDialog: false,
+      selectedAgent: null,
       statuses: [
         {
           name: "Hepsi",
@@ -216,18 +376,21 @@ export default {
         },
         {
           name: "Açık",
-          value: "online",
+          value: "ONLINE",
         },
         {
           name: "Kapalı",
-          value: "offline",
+          value: "OFFLINE",
         },
       ],
       filter: {
-        computerName: "",
+        dn: "",
+        hostname: "",
         ipAddress: "",
         macAddress: "",
         registrationDate: "",
+        registrationStartDate: "",
+        registrationEndDate: "",
         status: "ALL",
         brand: "",
         model: "",
@@ -238,62 +401,166 @@ export default {
     };
   },
   mounted() {
-    this.getFilterData();
     this.getAgents();
   },
   methods: {
+    showAgentDetailDialog(agentID) {
+      this.selectedAgent = this.agents.filter(
+        (agent) => agent.id === agentID
+      )[0];
+      this.agentDetailDialog = true;
+    },
     getPropertyValue(properties, propertyName) {
       var propertyValue = "";
       const filteredProperties = properties.filter(
         (property) => property.propertyName === propertyName
       );
-      if (filteredProperties != null) {
+      if (filteredProperties != null && filteredProperties.length > 0) {
         propertyValue = filteredProperties[0].propertyValue;
       }
       return propertyValue;
     },
     getAgents(pageNumber = 1, rowNumber = 10) {
-      console.log(pageNumber + " : " + rowNumber);
       this.currentPage = pageNumber;
       var data = new FormData();
       data.append("pageNumber", pageNumber);
       data.append("pageSize", rowNumber);
-      data.append("status", "all");
+      data.append("status", this.filter.status);
+      data.append("dn", this.filter.dn);
+      data.append("hostname", this.filter.hostname);
+      data.append("ipAddress", this.filter.ipAddress);
+      data.append("macAddress", this.filter.macAddress);
+      data.append("registrationStartDate", this.filter.registrationStartDate);
+      data.append("registrationEndDate", this.filter.registrationEndDate);
+      data.append("brand", this.filter.brand);
+      data.append("model", this.filter.model);
+      data.append("processor", this.filter.processor);
+      data.append("osVersion", this.filter.osVersion);
+      data.append("agentVersion", this.filter.agentVersion);
+      if (pageNumber == 1) {
+        data.append("getFilterData", true);
+      }
+      if (this.filter.registrationDate[0] != null) {
+        data.append(
+          "registrationStartDate",
+          moment(this.filter.registrationDate[0])
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss")
+        );
+      }
+      if (this.filter.registrationDate[1] != null) {
+        data.append(
+          "registrationEndDate",
+          moment(this.filter.registrationDate[1])
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss")
+        );
+      }
       axios.post("/lider/agent_info/list", data).then((response) => {
-        this.agents = response.data.content;
-        this.totalElements = response.data.totalElements;
-        this.loadingData = false;
-      });
-    },
-    getFilterData() {
-      axios.post("/lider/agent_info/filterData").then((response) => {
         this.brands = response.data.brands;
         this.models = response.data.models;
         this.processors = response.data.processors;
         this.agentVersions = response.data.agentVersions;
         this.osVersions = response.data.osVersions;
-        console.log(this.brands);
+        this.agents = response.data.agents.content;
+        this.totalElements = response.data.agents.totalElements;
+        this.loading = false;
       });
     },
     currentPageChange(newCurrentPage) {
-      this.loadingData = true;
+      this.loading = true;
       this.getAgents(newCurrentPage);
     },
     onPage(event) {
-      //event.page: New page number
-      //event.first: Index of first record
-      //event.rows: Number of rows to display in new page
-      //event.pageCount: Total number of pages
-      this.loadingData = true;
+      this.loading = true;
       this.getAgents(event.page + 1, event.rows);
     },
     filterAgents() {
-      console.log(this.filter);
+      if (this.filter.registrationDate[0] != null) {
+        this.filter.registrationStartDate = moment(
+          this.filter.registrationDate[0]
+        )
+          .set("hour", 0)
+          .set("minute", 0)
+          .set("second", 0)
+          .format("DD/MM/YYYY HH:mm:ss");
+      }
+      if (this.filter.registrationDate[1] != null) {
+        this.filter.registrationEndDate = moment(
+          this.filter.registrationDate[1]
+        )
+          .set("hour", 23)
+          .set("minute", 59)
+          .set("second", 59)
+          .format("DD/MM/YYYY HH:mm:ss");
+      }
+      this.getAgents(this.currentPage, this.showedTotalElementCount);
     },
-    indexMethod(index) {
-      return (this.currentPage - 1) * this.showedTotalElementCount + index + 1;
+    exportToExcel() {
+      this.loading = true;
+      var data = new FormData();
+      data.append("status", this.filter.status);
+      data.append("dn", this.filter.dn);
+      data.append("hostname", this.filter.hostname);
+      data.append("ipAddress", this.filter.ipAddress);
+      data.append("macAddress", this.filter.macAddress);
+      data.append("registrationStartDate", this.filter.registrationStartDate);
+      data.append("registrationEndDate", this.filter.registrationEndDate);
+      data.append("brand", this.filter.brand);
+      data.append("model", this.filter.model);
+      data.append("processor", this.filter.processor);
+      data.append("osVersion", this.filter.osVersion);
+      data.append("agentVersion", this.filter.agentVersion);
+      if (this.filter.registrationDate[0] != null) {
+        data.append(
+          "registrationStartDate",
+          moment(this.filter.registrationDate[0])
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss")
+        );
+      }
+      if (this.filter.registrationDate[1] != null) {
+        data.append(
+          "registrationEndDate",
+          moment(this.filter.registrationDate[1])
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss")
+        );
+      }
+      axios.post("/lider/agent_info/export", data, {responseType: 'blob'})
+      .then((response) => {
+        let blob = new Blob([response.data]);
+        let link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "Agent Report.xlsx";
+        this.loading = false;
+        link.click();
+      });
     },
-    handleRegistrationDateChange(value) {
+    clearFilterFields() {
+      this.filter = {
+        dn: "",
+        hostname: "",
+        ipAddress: "",
+        macAddress: "",
+        registrationDate: "",
+        registrationStartDate: "",
+        registrationEndDate: "",
+        status: "ALL",
+        brand: "",
+        model: "",
+        processor: "",
+        osVersion: "",
+        agentVersion: "",
+      };
     },
   },
 };

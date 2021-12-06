@@ -26,17 +26,6 @@
         >
       </template>
     </el-popover>
-    <!-- <el-input placeholder="Ara"  class="input-with-select">
-      <template #prepend>
-        <el-select v-model="select" placeholder="Ara">
-          <el-option label="ID" value="1"></el-option>
-          <el-option label="AD" value="2"></el-option>
-        </el-select>
-      </template>
-      <template #append>
-        <el-button icon="el-icon-search"></el-button>
-      </template>
-    </el-input> -->
   </slot>
 
   <!-- <slot name="pagination">
@@ -77,7 +66,7 @@
         :load="loadNode"
         lazy
         @node-click="handleTreeClick"
-        @node-contextmenu="handleContextMenu"
+        @node-contextmenu="nodeContextMenu"
         highlight-current=true
         accordion="true"
         ref="tree"
@@ -86,6 +75,7 @@
         @getCheckedNodes="getCheckedNodes"
         @check="nodeCheckClicked"
         node-key="distinguishedName"
+        :getHalfCheckedNodes="getHalfCheckedNodes"
       >
 
         <template #default="{ node, data }">
@@ -114,28 +104,8 @@
             :props="treeProps" 
             @node-click="handleTreeClick"
             :render-content="renderSearchContent"
-            empty-text="Kayıt Bulunamadıııı"
+            empty-text="Kayıt Bulunamadı"
             node-key="distinguishedName">
-
-              <!-- <template #default="{ node, data }">
-                <span class="custom-tree-node">
-                   <i v-if="data.type === 'ORGANIZATIONAL_UNIT'"
-                        class="fa fa-folder-open"
-                        style="color:#F2C85B;  font-weight:bold"
-                      ></i>
-                    <img v-if="data.type === 'AHENK'" src="@/assets/images/icons/linux.png" style="width:20px" />
-                    <img v-if="data.type === 'GROUP'" src="@/assets/images/icons/entry_group.gif" style="width:20px" />
-              
-                    <span style="margin-left:5px;">{{node.label}}</span>
-                  
-                  <span style="float:right">
-                    <a
-                      @click="append(data)">
-                      Ekle
-                    </a>
-                  </span>
-                </span>
-              </template> -->
               
               </el-tree>
               </el-collapse-item>
@@ -145,32 +115,34 @@
   </el-tabs>
 
   <!-- Context Menu -->
-  <div
-    class="el-overlay mycontextmenu"
-    v-show="showContextMenu"
-    @click="closeContextMenu"
-  >
-    <ul class="dropdown-menu show" ref="rightMenu">
-      <p
-        href="#!"
-        class="dropdown-item"
-        data-v-0001a5f9=""
-        data-v-7445dd9c-s=""
-      >
-        <i class="ni ni-single-02" data-v-0001a5f9="" data-v-7445dd9c-s=""></i
-        ><span data-v-0001a5f9="" data-v-7445dd9c-s="">Profil</span>
-      </p>
-      <p
-        href="#!"
-        class="dropdown-item"
-        data-v-0001a5f9=""
-        data-v-7445dd9c-s=""
-      >
-        <i class="ni ni-single-02" data-v-0001a5f9="" data-v-7445dd9c-s=""></i
-        ><span data-v-0001a5f9="" data-v-7445dd9c-s="">Profil</span>
-      </p>
-    </ul>
-  </div>
+  <slot name="contextmenu">
+    <div
+      class="el-overlay mycontextmenu"
+      v-show="showContextMenu"
+      @click="closeContextMenu"
+    >
+      <ul class="dropdown-menu show" ref="rightMenu">
+        <p
+          href="#!"
+          class="dropdown-item"
+          data-v-0001a5f9=""
+          data-v-7445dd9c-s=""
+        >
+          <i class="ni ni-single-02" data-v-0001a5f9="" data-v-7445dd9c-s=""></i
+          ><span data-v-0001a5f9="" data-v-7445dd9c-s="">Profil</span>
+        </p>
+        <p
+          href="#!"
+          class="dropdown-item"
+          data-v-0001a5f9=""
+          data-v-7445dd9c-s=""
+        >
+          <i class="ni ni-single-02" data-v-0001a5f9="" data-v-7445dd9c-s=""></i
+          ><span data-v-0001a5f9="" data-v-7445dd9c-s="">Profil</span>
+        </p>
+      </ul>
+    </div>
+  </slot>
   <!-- Context Menu End -->
 </template>
 
@@ -195,7 +167,7 @@ export default {
         children: "childEntries",
         label: "name",
         isLeaf: function (data, node) {
-          if (data.hasSubordinates === "TRUE") {
+          if (data.type === "ORGANIZATIONAL_UNIT") {
             return false;
           } else {
             return true;
@@ -217,6 +189,10 @@ export default {
       default: false
     },
     getCheckedNodes: {
+      type:Function,
+      default : () => {}
+    },
+    getHalfCheckedNodes: {
       type:Function,
       default : () => {}
     },
@@ -246,6 +222,10 @@ export default {
         );
       }
     },
+    isMove : {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -270,6 +250,11 @@ export default {
       }
   },
   methods: {
+    nodeContextMenu(event,node,treenode,tree){
+      console.log('Node Context Menuye girdim')
+      this.$emit('handleContextMenu', event,node,treenode,tree);
+      
+    },
     renderContent(h, { node, data, store }) {
       let linuxIcon = require("@/assets/images/icons/linux.png");
       let groupIcon = require("@/assets/images/icons/entry_group.gif");
@@ -285,7 +270,7 @@ export default {
           ) : (
             <img src={groupIcon} style="width:20px" />
           )}
-          <span style="margin-left:5px;">{node.label}</span>
+          <span style="margin-left:5px;">{node.data.name}</span>
         </span>
       );
     },
@@ -295,8 +280,8 @@ export default {
         data.append("uid", node.distinguishedName);
 
         axios.post(this.loadNodeOuUrl, data).then((response) => {
-          node.childEntries = node.childEntries || [];
           node.childEntries = response.data;
+          node.childEntries = node.childEntries || [];
           node.isRoot = true;
           this.rootNode = node;
           resolve(node);
@@ -318,7 +303,8 @@ export default {
         var data = new FormData();
         data.append("uid", node.data.distinguishedName);
         axios.post(this.loadNodeOuUrl, data).then((response) => {
-          console.log('node leve 1 ',response.data);
+          this.isMove ? 
+          resolve(response.data.filter(node => node.type=="ORGANIZATIONAL_UNIT")):
           resolve(response.data);
         });
       }
@@ -332,39 +318,62 @@ export default {
       this.openContextMenu = !this.openContextMenu;
     },
     searchTree() {
-      console.log(this.search.dn);
       axios
         .post("/lider/ldap/searchEntry?searchDn="+ this.search.dn + "&key=" + this.search.type + '&value=' + this.search.text, {})
         .then((response) => {
-          console.log("Arama Sonuçları ", response.data);
           this.showSearchForm = false
           this.tabIndex = "search";
           this.searchResults = response.data;
         });
     },
     handleNextClick(val) {
-      console.log(val);
-      console.log(this.$refs.tree);
+     
     },
     load() {
-      console.log('Scrolling baby');
+      // scoll için eklendi
     },
-     filterNode(value, data) {
-        if (!value) return true;
-        return data.name.indexOf(value) !== -1;
-      },
-      nodeCheckClicked() {
-        this.getCheckedNodes(this.$refs.tree.getCheckedNodes());
-      },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.name.indexOf(value) !== -1;
+    },
+    nodeCheckClicked() {
+
+      let clickedNodes = [];
+
+      Promise.all(this.$refs.tree.getCheckedNodes().map(async node => {
+        if ( node.type === "ORGANIZATIONAL_UNIT") {
+          let ouNode = this.$refs.tree.getNode(node.distinguishedName);
+          if(ouNode.childNodes.length <= 0 ) {
+            var data = new FormData();
+            data.append("uid", node.distinguishedName);
+            let response = await axios.post(this.loadNodeOuUrl, data);
+            clickedNodes = clickedNodes.concat(response.data);
+            return response.data;
+          }
+        } else {
+          clickedNodes.push(node);
+          return node;
+        }
+      })).then(result => {
+        
+        this.getCheckedNodes(clickedNodes);
+      });
+    },
+
     append(data,node) {
-      console.log('append called');
+       if (node.childEntries && node.childEntries.length <= 0) {
+         node.childEntries = []
+       }
+
       this.$refs.tree.append(data,node);
     },
 
     remove(node) {
-      this.$refs.tree.remove(node);
+      //this.$refs.tree.setCurrentKey(this.$refs.tree.getCurrentKey());
+      this.$refs.tree.remove(node.distinguishedName);
     },
     updateNode(key,node) {
+      
       this.$refs.tree.updateKeyChildren(key, node);
     },
     getCurrentNode() {
@@ -372,6 +381,9 @@ export default {
     },
     setCheckedNode(key,checked) {
       this.$refs.tree.setChecked(key,checked);
+    },
+    getNode(nodeKey) {
+      return this.$refs.tree.getNode(nodeKey);
     }
   },
   
@@ -384,18 +396,4 @@ export default {
     background-color:#2196f3;
     color:white
   }
-  /* ::v-deep  .el-tree--highlight-current {
-    background-color:red;
-    background: red;
-    color:white
-  }
- ::v-deep .el-tree-node.is-current>.el-tree-node__content {
-     background-color:red;
-    background: red;
-    color:white
-  }
-
-  ::v-deep .el-tree-node__content {
-    background: red;
-  } */
 </style>

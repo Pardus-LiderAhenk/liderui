@@ -4,8 +4,7 @@
       :pluginUrl="pluginUrl"
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @send-task="sendManageRootTask"
-      @cancel-task="showTaskDialog = false"
+      @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
     >
       <template #pluginHeader>
@@ -13,65 +12,101 @@
       </template>
       <template #pluginHeaderButton>
         <Button
-          icon="fa fa-play"
+          icon="pi pi-caret-right"
           class="p-button-raised p-button-sm"
           :title="$t('computer.plugins.button.run')"
-          @click.prevent="showConfirmDialogForTask"
-          >
+          @click.prevent="showConfirmDialogForTask">
         </Button>
       </template>
       <template #default>
         <div>
-          <div>
-            <el-switch
-              v-model="lockRootUser"
-              :active-text="$t('computer.plugins.manage_root.unlock_root_user')"
-              :inactive-text="$t('computer.plugins.manage_root.lock_root_user')"
-              @change="lockUserChange('passwordForm')"
-            >
-            </el-switch>
+          <div class="p-field p-grid">
+            <label class="p-col-fixed" >{{ $t('computer.plugins.manage_root.lock_root_user') }}</label>
+            <div class="p-col">
+              <InputSwitch id="status" @change="lockUserChange" v-model="lockRootUser"/>
+            </div>
           </div>
-          <el-form
-            :model="passwordForm"
-            :rules="passwordFormRules"
-            ref="passwordForm"
-            status-icon
-          >
-            <div style="margin-top: 10px">
-              <el-form-item prop="password">
-                <el-input
-                  :placeholder="$t('computer.plugins.password.new_password')"
-                  v-model="passwordForm.password"
-                  size="small"
-                  class="root-password"
-                  show-password
-                  :disabled="lockRootUser ? false : true"
-                  onpaste="return false"
-                >
-                  <template #prepend>
-                    <el-button :icon="lockRootUser ? 'fa fa-key' : 'fas fa-user-lock'" :title='$t("computer.plugins.password.generate_password")' @click.prevent="generatePassword('passwordForm')"></el-button>
+          <div class="p-fluid">
+            <div class="p-field">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <i :class="lockRootUser ? 'pi pi-lock': 'pi pi-unlock'"></i>
+                </span>
+                <Password 
+                v-model="passwordForm.password" toggleMask 
+                :class="validationErrors.password && !lockRootUser ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                onpaste="return false"
+                strongRegex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})" 
+                :weakLabel="$t('computer.plugins.password.weak')"
+                :mediumLabel="$t('computer.plugins.password.medium')"
+                :strongLabel="$t('computer.plugins.password.strong')"
+                :promptLabel="$t('computer.plugins.password.password_prompt')"
+                :placeholder="$t('computer.plugins.password.new_password')"
+                :disabled="lockRootUser ? true : false">
+                  <template #footer="sp">
+                    {{sp.level}}
+                    <Divider />
+                    <ul class="p-pl-2 p-ml-2 p-mt-0" style="line-height: 1.5">
+                      <li>{{ $t('computer.plugins.password.lowercase_message') }}</li>
+                      <li>{{ $t('computer.plugins.password.uppercase_message') }}</li>
+                      <li>{{ $t('computer.plugins.password.number_message') }}</li>
+                      <li>{{ $t('computer.plugins.password.password_length_message') }}</li>
+                      <li>{{ $t('computer.plugins.password.does_not_support_message') }}</li>
+                    </ul>
                   </template>
-                </el-input>
-              </el-form-item>
+                </Password>
+                <Button 
+                icon="pi pi-key" 
+                :disabled="lockRootUser ? true : false" 
+                class="p-button-sm" 
+                :title='$t("computer.plugins.password.generate_password")'
+                 @click.prevent="generatePassword"
+                 />
+              </div>
+              <small v-show="validationErrors.password && !lockRootUser" 
+              class="p-error">{{ passwordErrorMessage }}
+              </small>
             </div>
-            <div >
-              <el-form-item prop="confirmPassword">
-                <el-input
-                  :placeholder="$t('computer.plugins.password.confirm_password')"
-                  v-model="passwordForm.confirmPassword"
-                  size="small"
-                  show-password
-                  class="root-password"
-                  :disabled="lockRootUser ? false : true"
-                  onpaste="return false"
-                >
-                  <template #prepend>
-                    <el-button :icon="lockRootUser ? 'fa fa-key' : 'fas fa-user-lock'" :title='$t("computer.plugins.password.generate_password")' @click.prevent="generatePassword('passwordForm')"></el-button>
+            <div class="p-field">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <i :class="lockRootUser ? 'pi pi-lock': 'pi pi-unlock'"></i>
+                </span>
+                <Password 
+                v-model="passwordForm.confirmPassword" toggleMask 
+                :class="validationErrors.confirmPassword && !lockRootUser ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                onpaste="return false"
+                strongRegex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})" 
+                :weakLabel="$t('computer.plugins.password.weak')"
+                :mediumLabel="$t('computer.plugins.password.medium')"
+                :strongLabel="$t('computer.plugins.password.strong')"
+                :promptLabel="$t('computer.plugins.password.password_prompt')"
+                :placeholder="$t('computer.plugins.password.confirm_password')"
+                :disabled="lockRootUser ? true : false">
+                  <template #footer="sp">
+                    {{sp.level}}
+                    <Divider />
+                    <ul class="p-pl-2 p-ml-2 p-mt-0" style="line-height: 1.5">
+                      <li>{{ $t('computer.plugins.password.lowercase_message') }}</li>
+                      <li>{{ $t('computer.plugins.password.uppercase_message') }}</li>
+                      <li>{{ $t('computer.plugins.password.number_message') }}</li>
+                      <li>{{ $t('computer.plugins.password.password_length_message') }}</li>
+                      <li>{{ $t('computer.plugins.password.does_not_support_message') }}</li>
+                    </ul>
                   </template>
-                </el-input>
-              </el-form-item>
+                </Password>
+                <Button 
+                icon="pi pi-key" 
+                :disabled="lockRootUser ? true : false" 
+                class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' 
+                @click.prevent="generatePassword"
+                />
+              </div>
+              <small v-show="validationErrors.confirmPassword && !lockRootUser" 
+              class="p-error">{{ confirmPasswordErrorMessage }}
+              </small>
             </div>
-          </el-form>
+          </div>
         </div>
       </template>
       <template #pluginFooter></template>
@@ -91,47 +126,16 @@ export default {
   },
 
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (!/[a-z]/.test(value)) {
-        callback( new Error(this.$t('computer.plugins.password.lowercase_message')+" (a-z)") );
-      } else if (!/[A-Z]/.test(value)) {
-        callback( new Error(this.$t('computer.plugins.password.uppercase_message')+" (A-Z)"));
-      } else if (!/[0-9]/.test(value)) {
-        callback(new Error(this.$t('computer.plugins.password.number_message')+"(0-9)"));
-      } else if (/[*]/.test(value)) {
-        callback(new Error(this.$t('computer.plugins.password.does_not_support_message')));
-      } else {
-        callback();
-      }
-    };
-    var validateMatch = (rule, value, callback) => {
-        if (value != this.passwordForm.password) {
-          callback(new Error(this.$t('computer.plugins.password.match_password_message')));
-        } else {
-        callback();
-      }
-    };
-
     return {
       showTaskDialog: false,
-      lockRootUser: true,
+      lockRootUser: false,
       task: null,
+      validationErrors: {},
+      passwordErrorMessage: '',
+      confirmPasswordErrorMessage: '',
       passwordForm: {
-        password: null,
-        confirmPassword: null,
-      },
-      passwordFormRules: {
-        password: [
-          { required: true, message: this.$t('computer.plugins.manage_root.password_input_message'), trigger: "blur" },
-          { min: 6, message: this.$t('computer.plugins.password.password_length_message'), trigger: "blur" },
-          { validator: validatePass, trigger: "blur" },
-        ],
-        confirmPassword: [
-          { required: true, message: this.$t('computer.plugins.manage_root.confirm_password_input_message'), trigger: "blur" },
-          { min: 6, message: this.$t('computer.plugins.password.password_length_message'), trigger: "blur" },
-          { validator: validatePass, trigger: "blur" },
-          { validator: validateMatch, trigger: "blur" },
-        ],
+        password: '',
+        confirmPassword: '',
       },
       pluginDescription: this.$t('computer.plugins.manage_root.description'),
       pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/root_parola_yonetimi/",
@@ -144,60 +148,93 @@ export default {
 
   methods: {
     showConfirmDialogForTask() {
-      this.$refs["passwordForm"].validate((valid) => {
-        if (!this.lockRootUser) {
-          valid = true;
-          this.$refs["passwordForm"].resetFields();
-        }
-        if (valid) {
-          let rootEntity = "lider_console";
-          this.task.commandId = "SET_ROOT_PASSWORD";
-          this.task.parameterMap = {
-            RootPassword: this.passwordForm.password,
-            lockRootUser: !this.lockRootUser,
-            rootEntity: rootEntity,
-          };
+      let rootEntity = "lider_console";
+      this.task.commandId = "SET_ROOT_PASSWORD";
+      this.task.parameterMap = {
+        RootPassword: this.passwordForm.password,
+        lockRootUser: this.lockRootUser,
+        rootEntity: rootEntity,
+      };
+      if (!this.lockRootUser) {
+        if (this.validateForm()) {
           this.showTaskDialog = true;
-        } else {
-          return false;
         }
-      });
+      } else{
+        this.showTaskDialog = true;
+      }
     },
 
-    sendManageRootTask() {
-      this.showTaskDialog = false;
-    },
-    
-    lockUserChange(formName) {
-      this.$refs[formName].resetFields();
-      this.passwordForm.password = null;
-      this.passwordForm.confirmPassword = null;
+    lockUserChange() {
+      this.validationErrors = {};
+      this.passwordForm.password = '';
+      this.passwordForm.confirmPassword = '';
     },
 
-    generatePassword(formName) {
-      this.$refs[formName].resetFields();
-      if (this.lockRootUser) {
+    generatePassword() {
+      if (!this.lockRootUser) {
         const generatedPassword = GeneratePassword.createPassword(6);
         this.passwordForm.password = generatedPassword;
         this.passwordForm.confirmPassword = generatedPassword;
       }
     },
 
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          return false;
+    validateForm() {
+      if (!this.passwordForm.password.trim()){
+        if (!this.passwordForm.password.trim()){
+          this.validationErrors['password'] = true;
+        } else{
+          delete this.validationErrors['password'];
         }
-      });
+        if (!this.passwordForm.confirmPassword.trim()){
+          this.validationErrors['confirmPassword'] = true;
+        } else{
+          delete this.validationErrors['confirmPassword'];
+        }
+        this.passwordErrorMessage = this.$t('computer.plugins.manage_root.password_input_message');
+        this.confirmPasswordErrorMessage = this.$t('computer.plugins.manage_root.confirm_password_input_message');
+        return;
+      }
+      if (!/[a-z]/.test(this.passwordForm.password)) {
+        this.passwordErrorMessage = this.$t('computer.plugins.password.lowercase_message')+" (a-z)";
+        return;
+      } else if (!/[A-Z]/.test(this.passwordForm.password)) {
+        this.passwordErrorMessage = this.$t('computer.plugins.password.uppercase_message')+" (A-Z)";
+        return;
+      } else if (!/[0-9]/.test(this.passwordForm.password)) {
+        this.passwordErrorMessage = this.$t('computer.plugins.password.number_message')+" (0-9)";
+        return;
+      } else if (/[*]/.test(this.passwordForm.password)) {
+        this.passwordErrorMessage = this.$t('computer.plugins.password.does_not_support_message');
+        return;
+      } else if (this.passwordForm.password.length < 6) {
+        this.passwordErrorMessage = this.$t('computer.plugins.password.password_length_message');
+        return;
+      } else {
+        this.passwordErrorMessage = '';
+        delete this.validationErrors['password'];
+      }
+      if (this.passwordForm.password != this.passwordForm.confirmPassword) {
+        this.validationErrors['confirmPassword'] = true;
+        this.confirmPasswordErrorMessage = this.$t('computer.plugins.password.match_password_message');
+        return;
+      } else {
+        this.confirmPasswordErrorMessage = '';
+        delete this.validationErrors['confirmPassword'];
+      }
+      return !Object.keys(this.validationErrors).length;
+    },
+  },
+
+  watch: {
+    passwordForm: {
+      handler(){
+        this.validateForm();
+     },
+     deep: true,
     },
   },
 };
 </script>
 
 <style scoped>
-/* .root-password {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-} */
 </style>

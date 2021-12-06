@@ -5,9 +5,19 @@ import Login from '@/views/Login/Login.vue';
 import ComputerManagement from '@/views/ComputerManagement/ComputerManagement.vue';
 import FullLayout from '@/layouts/FullLayout.vue';
 import ComputerGroupManagement from '@/views/GroupManagement/ComputerGroupManagement/ComputerGroupManagement.vue';
+import UserGroupManagement from '@/views/GroupManagement/UserGroupManagement/UserGroupManagement.vue';
+import UserPermissionsManagement from '@/views/GroupManagement/UserPermissionsManagement/UserPermissionsManagement.vue';
+import UserManagement from '@/views/UserManagement/UserManagement.vue';
 
 //REPORTS
 import AgentReport from '@/views/Reports/AgentReport.vue';
+
+//SETTINGS
+import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
+import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefinitions/SystemMonitoringDefinitions.vue';
+import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
+import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
+import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
 
 const routes = [{
         path: "/",
@@ -39,11 +49,75 @@ const routes = [{
                 }
             },
             {
+                path: "/usermanagement",
+                name: "UserManagement",
+                components: { default: UserManagement },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/user_group_management",
+                name: "UserGroupManagement",
+                components: { default: UserGroupManagement },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/user_permissions_management",
+                name: "UserPermissionsManagement",
+                components: { default: UserPermissionsManagement },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
                 path: "/reports/agent",
                 name: "AgentReport",
                 components: { default: AgentReport },
                 meta: {
                     requiresAuth: true,
+                }
+            },
+            {
+                path: '/settings/server_setings',
+                name: 'ServerSettings',
+                components: {default: ServerSettings},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/settings/system_monitoring_definitions',
+                name: 'SystemMonitoringDefinitions',
+                components: {default: SystemMonitoringDefinitions},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/settings/script_definitions',
+                name: 'ScriptDefinitions',
+                components: {default: ScriptDefinitions},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/settings/registratin_templates',
+                name: 'RegistrationTemplates',
+                components: {default: RegistrationTemplates},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/settings/console_user_settings',
+                name: 'ConsoleUserSettings',
+                components: {default: ConsoleUserSettings},
+                meta: {
+                    requiresAuth: true
                 }
             },
            

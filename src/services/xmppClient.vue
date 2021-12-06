@@ -1,12 +1,12 @@
 <template>
   <p id="xmppStatus">!!!</p>
   <button @click="checkXmppStatus">Check</button>
+  <h1>asdasdsad</h1>
 </template>
 
 <script>
 import axios from "axios";
 import XMPP from "./xmppClient.js";
-import { useToast } from "vue-toastification";
 
 export default {
   data() {
@@ -16,13 +16,7 @@ export default {
     };
   },
 
-  setup() {
-    const toast = useToast();
-    return {
-      toast,
-    };
-  },
-
+ 
   props: {
     response: Object,
   },
@@ -36,7 +30,7 @@ export default {
             XMPP.loginToMessagingService(response)
         },
         (error) => {
-          this.toast.error("");
+          console.log(error);
         }
       );
   },

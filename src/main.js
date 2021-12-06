@@ -6,7 +6,7 @@ import store from './store/store.js';
 import axios from 'axios';
 import ElementPlus from 'element-plus';
 import i18n from './plugins/i18n';
-import './services/strophe';
+import XmppClientManager  from './services/strophe';
 import "element-plus/lib/theme-chalk/index.css";
 import PrimeVue from './plugins/primevue';
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -40,11 +40,13 @@ axios.interceptors.request.use(function(config) {
     if (config.url == '/api/auth/signin') {
         config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     }
-    console.log('Config', config);
     return config;
 }, function(error) {
     return Promise.reject(error);
 });
+
+
+XmppClientManager.getInstance().connect();
 
 
 app.mount('#app');

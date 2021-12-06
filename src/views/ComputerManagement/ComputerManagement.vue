@@ -4,12 +4,12 @@
            <el-tabs type="border-card" style="height:100%;width:100%">
                 <el-tab-pane label="İstemciler">
                 <tree-component loadNodeUrl="/lider/computer/getComputers"
-                                loadNodeOuUrl="/lider/computer/getOuDetails"
-                                :treeNodeClick="setSelectedAgent"
-                                >
+                    loadNodeOuUrl="/lider/computer/getOuDetails"
+                    :treeNodeClick="setSelectedLiderNode"
+                >
                 </tree-component>
                 </el-tab-pane>
-                <el-tab-pane label="Online">Onlineee</el-tab-pane>
+                <el-tab-pane label="Online">Online</el-tab-pane>
             </el-tabs>
       </div>
       <div class="p-col-9">
@@ -65,7 +65,9 @@
             >
             </Button>
        </div>
-      <component :is="selectedPluginTab"></component>
+       <keep-alive>
+        <component :is="selectedPluginTab"></component>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -73,12 +75,12 @@
 
 <script>
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
-import SystemManagement from "@/views/ComputerManagement/Plugins/Task/System/SystemManagement.vue";
-import PackageManagement from "@/views/ComputerManagement/Plugins/Task/Package/PackageManagement.vue";
-import ScriptManagement from "@/views/ComputerManagement/Plugins/Task/Script/ScriptManagement.vue";
-import ServiceManagement from '@/views/ComputerManagement/Plugins/Task/Service/ServiceManagement.vue';
+import SystemManagement from "@/views/ComputerManagement/Plugins/Task/System/SystemManagementPage.vue";
+import PackageManagement from "@/views/ComputerManagement/Plugins/Task/Package/PackageManagementPage.vue";
+import ScriptManagement from "@/views/ComputerManagement/Plugins/Task/Script/ScriptManagementPage.vue";
+import ServiceManagement from '@/views/ComputerManagement/Plugins/Task/Service/ServiceManagementPage.vue';
 import SshConnect from '@/views/ComputerManagement/Plugins/Task/Ssh/SshConnect.vue';
-import SecurityManagement from '@/views/ComputerManagement/Plugins/Task/Security/SecurityManagement.vue';
+import SecurityManagement from '@/views/ComputerManagement/Plugins/Task/Security/SecurityManagementPage.vue';
 import TaskHistory from '@/views/ComputerManagement/Plugins/Task/TaskHistory/TaskHistory.vue'
 import { mapActions } from "vuex";
 
@@ -117,10 +119,11 @@ export default {
         };
     },
      created() {
-        this.setSelectedAgent(null);
+        this.setSelectedLiderNode(null);
     },
     methods: {
-        ...mapActions(["setSelectedAgent"]),
+        ...mapActions(["setSelectedLiderNode"]),
+        
         setSelectedPluginTab(tab) {
             this.selectedPluginTab = tab;
         },

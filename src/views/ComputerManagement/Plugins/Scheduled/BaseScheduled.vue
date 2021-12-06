@@ -1,20 +1,30 @@
 <template>
   <div>
     <teleport to="body">
-      <Dialog :header='$t("computer.scheduled.title")' v-model:visible="showScheduled" :modal="true" :style="{width: '25vw'}" >
+      <Dialog 
+      :header='$t("computer.scheduled.title")' 
+      v-model:visible="showScheduled" 
+      :modal="true" 
+      :style="{width: '25vw'}" >
         <template #default>
           <div class="p-fluid">
             <div class="p-field p-grid">
               <label class="p-col-12 p-mb-2 p-md-4 p-mb-md-0">{{ $t('computer.scheduled.schedule') }}</label>
               <div class="p-col-12 p-md-8">
-                <Dropdown v-model="selected" :options="scheduledOptions" @change="scheduledSelection" optionLabel="label" style="width: 100%; margin-bottom:4px"/>
+                <Dropdown v-model="selected" 
+                :options="scheduledOptions" 
+                @change="scheduledSelection" 
+                optionLabel="label" style="width: 100%; margin-bottom:4px"/>
               </div>
             </div>
             <div class="p-field p-grid">
               <label class="p-col-12 p-mb-2 p-md-4 p-mb-md-0" >{{ $t('computer.scheduled.minute') }}</label>
               <div class="p-col-12 p-md-8">
                 <div>
-                  <InputText v-model="scheduleForm.minute" :class="validationErrors.minute ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="*"/>
+                  <InputText 
+                  v-model="scheduleForm.minute" 
+                  :class="validationErrors.minute ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                  placeholder="*"/>
                 </div>
                 <div>
                   <small v-show="validationErrors.minute" class="p-error">{{ $t('computer.scheduled.minute_rule') }}</small>
@@ -25,7 +35,10 @@
               <label class="p-col-12 p-mb-2 p-md-4 p-mb-md-0" >{{ $t('computer.scheduled.hour') }}</label>
               <div class="p-col-12 p-md-8">
                 <div>
-                  <InputText v-model="scheduleForm.hour" :class="validationErrors.hour ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="*"/>
+                  <InputText 
+                    v-model="scheduleForm.hour" 
+                    :class="validationErrors.hour ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                    placeholder="*"/>
                 </div>
                 <div>
                   <small v-show="validationErrors.hour" class="p-error">{{ $t('computer.scheduled.hour_rule') }}</small>
@@ -36,10 +49,15 @@
               <label class="p-col-12 p-mb-2 p-md-4 p-mb-md-0" >{{ $t('computer.scheduled.day_of_month') }}</label>
               <div class="p-col-12 p-md-8">
                 <div>
-                  <InputText v-model="scheduleForm.dayOfMonth" :class="validationErrors.dayOfMonth ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="*"/>
+                  <InputText 
+                    v-model="scheduleForm.dayOfMonth" 
+                    :class="validationErrors.dayOfMonth ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                    placeholder="*"/>
                 </div>
                 <div>
-                  <small v-show="validationErrors.dayOfMonth" class="p-error">{{ $t('computer.scheduled.day_of_month_rule') }}</small>
+                  <small 
+                    v-show="validationErrors.dayOfMonth" 
+                    class="p-error">{{ $t('computer.scheduled.day_of_month_rule') }}</small>
                 </div>
               </div>
             </div>
@@ -47,10 +65,16 @@
               <label class="p-col-12 p-mb-2 p-md-4 p-mb-md-0" >{{ $t('computer.scheduled.month') }}</label>
               <div class="p-col-12 p-md-8">
                 <div>
-                  <InputText v-model="scheduleForm.month" :class="validationErrors.month ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="*"/>
+                  <InputText 
+                    v-model="scheduleForm.month" 
+                    :class="validationErrors.month ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                    placeholder="*"/>
                 </div>
                 <div>
-                  <small v-show="validationErrors.month" class="p-error">{{ $t('computer.scheduled.month_rule') }}</small>
+                  <small 
+                    v-show="validationErrors.month" 
+                    class="p-error">{{ $t('computer.scheduled.month_rule') }}
+                  </small>
                 </div>
               </div>
             </div>
@@ -58,7 +82,10 @@
               <label class="p-col-12 p-mb-2 p-md-4 p-mb-md-0" >{{ $t('computer.scheduled.day_of_week') }}</label>
               <div class="p-col-12 p-md-8">
                 <div>
-                  <InputText v-model="scheduleForm.dayOfWeek" :class="validationErrors.dayOfWeek ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" placeholder="*"/>
+                  <InputText 
+                  v-model="scheduleForm.dayOfWeek"
+                  :class="validationErrors.dayOfWeek ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                  placeholder="*"/>
                 </div>
                 <div>
                   <small v-show="validationErrors.dayOfWeek" class="p-error">{{ $t('computer.scheduled.day_of_week_rule') }}</small>
@@ -84,8 +111,16 @@
         <template #footer>
           <div class="p-d-flex p-jc-between">
             <div>
-              <a class="primary" type="secondary" @click="toggle" v-tooltip.bottom="$t('computer.scheduled.title')"><i class="fas fa-info-circle" ></i></a>
-              <OverlayPanel ref="op" appendTo="body" :showCloseIcon="true" id="overlay_panel" style="width: 450px" :breakpoints="{'960px': '75vw'}">
+              <a class="primary" type="secondary" 
+                @click="toggle" 
+                v-tooltip.bottom="$t('computer.scheduled.title')">
+                <i class="fas fa-info-circle" ></i>
+              </a>
+              <OverlayPanel 
+              ref="op" appendTo="body" 
+              :showCloseIcon="false" id="overlay_panel" 
+              style="width: 450px" 
+              :breakpoints="{'960px': '75vw'}">
                 <div><h5>{{ $t('computer.scheduled.title') }}</h5></div>
                 <div><small>- - - - - - - - ->&nbsp; {{$t('computer.scheduled.minute')}} (0-59)</small></div>
                 <div><small>| &nbsp;  - - - - - - - >&nbsp; {{$t('computer.scheduled.hour')}} (0-23)</small></div>
@@ -96,20 +131,39 @@
                 <div><small style="font-weight:bold">* * * * * username command</small></div>
                 <div><small>{{$t('computer.scheduled.example')}}</small></div>
                 <div>
-                  <a href="https://www.liderahenk.org/" type="primary" target="_blank" icon="el-icon-link">  {{$t('computer.plugins.plugin_popover.for_more_info')}}...</a>
+                  <a 
+                    href="https://www.liderahenk.org/" 
+                    type="primary" target="_blank" 
+                    icon="el-icon-link">  {{$t('computer.plugins.plugin_popover.for_more_info')}}...
+                  </a>
                 </div>
               </OverlayPanel>
               <small class="info">&nbsp;{{$t('computer.scheduled.parameters')}}:&nbsp;</small><small>&nbsp;{{scheduledParam}}&nbsp;&nbsp;</small>
             </div>
             <div>
-              <Button @click="scheduledTaskOperation(false)" icon="pi pi-times" class="p-button-sm p-button-danger" :label="$t('computer.scheduled.cancel')"></Button>
-              <Button @click="scheduledTaskOperation(true)" icon="pi pi-save" class="p-button-sm" :label="$t('computer.scheduled.save')"></Button>
+              <Button 
+                @click="scheduledTaskOperation(false)" 
+                icon="pi pi-times" 
+                class="p-button-sm p-button-text" 
+                :label="$t('computer.scheduled.cancel')">
+              </Button>
+              <Button 
+                @click="scheduledTaskOperation(true)" 
+                icon="pi pi-save" 
+                class="p-button-sm" 
+                :label="$t('computer.scheduled.save')">
+              </Button>
             </div>
           </div>
         </template>
       </Dialog>
     </teleport>
-      <a class="primary" @click.prevent="showScheduled = true" style="float:right;" v-tooltip.left="$t('computer.scheduled.scheduled_task_plan')"><i class="fas fa-clock"></i></a>
+      <a class="primary" 
+        @click.prevent="showScheduled = true" 
+        style="float:right;" 
+        v-tooltip.left="$t('computer.scheduled.scheduled_task_plan')">
+        <i class="fas fa-clock"></i>
+      </a>
   </div>
 </template>
 
@@ -158,7 +212,11 @@ export default {
         if (this.validateForm()) {
           this.$emit("saveScheduled", this.getScheduleParam());
           this.showScheduled = false;
-          this.$toast.add({severity:'info', detail: this.$t("computer.scheduled.save_scheduled_task"), summary:this.$t("computer.task.toast_summary"), life: 3000});
+          this.$toast.add({
+            severity:'info', 
+            detail: this.$t("computer.scheduled.save_scheduled_task"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000});
           // this.$refs["scheduleForm"].resetFields();
         }
       } else {
@@ -174,9 +232,18 @@ export default {
 
     getScheduleParam() {
       if (this.selected == "custom" || this.selected == "once") {
-        this.scheduledParam = this.scheduleForm.minute +" "+ this.scheduleForm.hour + " " + this.scheduleForm.dayOfMonth + " " + this.scheduleForm.month + " " + this.scheduleForm.dayOfWeek + " " + this.scheduleForm.date.getFullYear();
+        this.scheduledParam = this.scheduleForm.minute +" "+ 
+        this.scheduleForm.hour + " " + 
+        this.scheduleForm.dayOfMonth + " " + 
+        this.scheduleForm.month + " " + 
+        this.scheduleForm.dayOfWeek + " " + 
+        this.scheduleForm.date.getFullYear();
       } else {
-          this.scheduledParam = this.scheduleForm.minute +" "+ this.scheduleForm.hour + " " + this.scheduleForm.dayOfMonth + " " + this.scheduleForm.month + " " + this.scheduleForm.dayOfWeek;
+          this.scheduledParam = this.scheduleForm.minute +" "+ 
+          this.scheduleForm.hour + " " + 
+          this.scheduleForm.dayOfMonth + " " + 
+          this.scheduleForm.month + " " + 
+          this.scheduleForm.dayOfWeek;
       }
       return this.scheduledParam;
     },
@@ -195,23 +262,23 @@ export default {
       } else if (this.selected.value == "custom") {
         this.setScheduleParameters("", "", "", "", "");
       } else if (this.selected.value == "once") {
-        const d = new Date();
-        this.setScheduleParameters(d.getMinutes().toString(), d.getHours().toString(),	d.getDate().toString(), d.getMonth().toString() + 1, "*");
+        const date = new Date();
+        this.setScheduleParameters(date.getMinutes(), date.getHours(),	date.getDate(), date.getMonth() + 1, "*");
       }
     },
 
     setScheduleParameters(min, hour, dOfMonth, month, dOfWeek) {
-      this.scheduleForm.minute = min;
-      this.scheduleForm.hour = hour;
-      this.scheduleForm.dayOfMonth = dOfMonth;
-      this.scheduleForm.month = month;
-      this.scheduleForm.dayOfWeek = dOfWeek;
+      this.scheduleForm.minute = min.toString();
+      this.scheduleForm.hour = hour.toString();
+      this.scheduleForm.dayOfMonth = dOfMonth.toString();
+      this.scheduleForm.month = month.toString();
+      this.scheduleForm.dayOfWeek = dOfWeek.toString();
     },
 
     changeDate() {
-      const d = this.scheduleForm.date;
-      this.scheduleForm.dayOfMonth = d.getDate().toString();
-      this.scheduleForm.month = (d.getMonth() + 1).toString();
+      const date = this.scheduleForm.date;
+      this.scheduleForm.dayOfMonth = date.getDate().toString();
+      this.scheduleForm.month = (date.getMonth() + 1).toString();
     },
 
     validateForm() {
@@ -262,9 +329,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-form-item {
-  margin-bottom: 20px
-}
 
 .modal-title{
   width: 100%;

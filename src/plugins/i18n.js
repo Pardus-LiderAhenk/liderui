@@ -15,8 +15,8 @@ function loadLocaleMessages() {
 }
 
 const i18n = createI18n({
-    locale: 'en',
-    fallback: 'en',
+    locale: 'tr',
+    fallback: 'tr',
     messages: loadLocaleMessages(),
 });
 
