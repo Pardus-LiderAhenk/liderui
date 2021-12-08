@@ -18,6 +18,7 @@ import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefini
 import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
 import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
 import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
+import AdManagement from '@/views/UserManagement/AdManagement.vue';
 
 // PROFILE
 import UserProfile from '@/views/Profile/Profile.vue';
@@ -55,6 +56,14 @@ const routes = [{
                 path: "/usermanagement",
                 name: "UserManagement",
                 components: { default: UserManagement },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/ad_management",
+                name: "AdManagement",
+                components: { default: AdManagement },
                 meta: {
                     requiresAuth: true,
                 }

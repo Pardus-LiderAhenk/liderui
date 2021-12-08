@@ -1,14 +1,14 @@
 <template>
   <ConfirmDialog></ConfirmDialog>
-    <div class="p-grid">
-         
-        <div class="p-col-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
+    <div class="p-grid user-management">
+        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
                 loadNodeUrl="/lider/sudo_groups/getGroups"
                 loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
+                :searchFields="searchFields"
             >
                 <template #contextmenu>
                     <div
@@ -24,16 +24,16 @@
                 </template>
             </tree-component>
         </div>
-        <div class="p-col-9" style="min-height:90vh;">
+        <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
             <div class="p-grid">
-                <div class="p-col-4">
+                <div class="p-col-12 p-md-6 p-lg-4">
                     <Card>
                         <template #content>
                             <PanelMenu :model="menuitems" />
                         </template>
                     </Card>
                 </div>
-                <div class="p-col-8">
+                <div class="p-col-12 p-md-6 p-lg-8">
                     <Card>
                         <template #content>
                             <general-informations v-show="displayFormNumber === 1"></general-informations>
@@ -174,7 +174,25 @@ export default {
                 {label:'Taşı', command:() => this.modals.moveRecord = true},
                 {label:'Sil', command: () => this.deleteUser()}
             ],
-            displayFormNumber: 1
+            displayFormNumber: 1,
+            searchFields: [
+                {
+                    key: this.$t('tree.id'),
+                    value: "uid"
+                },
+                {
+                    key: this.$t('tree.username'),
+                    value: "cn"
+                },
+                {
+                    key: this.$t('tree.surname'),
+                    value: "sn"
+                },
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                }
+            ],
         }
     },
     created() {
@@ -342,5 +360,8 @@ export default {
 <style scoped>
 .mycontextmenu {
     background-color: rgba(0,0,0,0.0);
+}
+.user-management {
+    background-color: #e7f2f8;
 }
 </style>

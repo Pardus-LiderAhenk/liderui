@@ -1,7 +1,7 @@
 <template>
   <!-- <ConfirmDialog></ConfirmDialog> -->
-    <div class="p-grid computer-management">
-        <div class="p-col-3" style="min-height:90vh; background-color:#fff; margin-top:10px;">
+    <div class="p-grid computer-group-management">
+        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px">
             <Toolbar>
                 <template #left>
                     <SplitButton 
@@ -25,10 +25,10 @@
                 loadNodeUrl="/lider/computer_groups/getGroups"
                 loadNodeOuUrl="/lider/computer_groups/getOuDetails"
                 :treeNodeClick="treeNodeClick"
+                :searchFields="searchFields"
             />
         </div>
-        <div class="p-col-9">
-            <br>
+        <div class="p-col-12 p-md-6 p-lg-9">
             <div>
                 <Button
                     icon="fa fa-sliders-h"
@@ -215,7 +215,17 @@ export default {
                 showCheckbox: true,
                 groupName:'',
                 checkedNodes: []
-            }
+            },
+            searchFields: [
+                {
+                    key: this.$t('tree.name'),
+                    value: "cn"
+                },
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                },
+            ],
         }
     },
     created() {
@@ -387,7 +397,7 @@ export default {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-.computer-management {
+.computer-group-management {
     background-color: #e7f2f8;
 }
 

@@ -1,18 +1,17 @@
 <template>
-  <Dialog 
+  <Dialog :style="{width: '20vw'}"
     :header="$t('computer.task.toast_summary')" 
     v-model:visible="showDialog"  
     :modal="true" 
     @hide="closeTaskDialog('cancel')"
   >
     <div class="confirmation-content">
-      <i :class="scheduledParam == null ? 'pi pi-info-circle p-mr-3': 'pi pi-clock p-mr-3'" 
-        style="font-size: 2rem" 
-      />
       <span v-if="scheduledParam == null">
+        <i class="fas fa-info-circle"></i>&nbsp;
         {{ $t('computer.plugins.base_plugin.task_confirm_question') }}
       </span>
       <span v-if="scheduledParam">
+        <i class="fas fa-clock"></i>&nbsp;
         {{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}
       </span>
     </div>

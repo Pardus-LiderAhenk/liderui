@@ -2,13 +2,13 @@
   <div>
     <br>
     <div class="p-grid">
-      <div class="p-col-6">
+      <div class="p-col-12 p-md-6 p-lg-6">
         <network-management 
         v-if="networkManagementState" class="plugin-card" 
         :pluginTask="pluginTaskNetworkManagement">
         </network-management>
       </div>
-      <div class="p-col-6">
+      <div class="p-col-12 p-md-6 p-lg-6">
         <usb-management v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement"></usb-management>
       </div>
     </div>

@@ -1,31 +1,71 @@
 <template>
   <slot name="search">
-    <el-popover placement="bottom" :width="400" v-model:visible="showSearchForm">
-      <p>Search DN : {{ search.dn }}</p>
-      <el-form status-icon label-position="top" size="small">
-        <el-form-item label="Arama Alanı">
-          <select placeholder="Arama Alanı" v-model="search.type">
-            <option label="Id" value="uid"></option>
-            <option label="Adı" value="cn"></option>
-            <option label="Son Oturum" value="o"></option>
-            <option label="Klasör" value="ou"></option>
-          </select>
-        </el-form-item>
-        <el-form-item label="Arama Cümlesi">
-          <el-input type="text" v-model="search.text"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="searchTree()">Ara</el-button>
-          <el-button @click="showSearchForm = !showSearchForm">Cancel</el-button>
-        </el-form-item>
-      </el-form>
-
-      <template #reference>
-        <el-button icon="el-icon-search" style="width: 100%"
-          >Arama Yap</el-button
-        >
-      </template>
-    </el-popover>
+    <div class="p-fluid p-grid">
+      <div class="p-col-12">
+        <Button type="button" :label="$t('tree.advanced_search')"
+          @click="advancedSearchOpToogle($event)" icon="pi pi-search" 
+          class="p-button-sm  p-button-outlined"
+        />
+      </div>
+    </div>
+    <OverlayPanel ref="advancedSearchOp"
+      appendTo="body"
+      :showCloseIcon="false" 
+      id="overlay_panel" 
+      :style="{width: '25vw'}" 
+      :breakpoints="{'960px': '75vw'}"
+      >
+      <div class="p-grid p-flex-column">
+        <div class="p-col p-fluid">
+           <label>{{$t('tree.search_dn')}}</label>
+            <InputText disabled v-if="selectedNode && (selectedNode.type == 'ORGANIZATIONAL_UNIT' || selectedNode.type == 'CONTAINER')"
+              class="p-inputtext-sm"  
+              type="text" v-model="selectedNode.name">
+            </InputText>
+            <InputText disabled v-else
+              class="p-inputtext-sm"  
+              type="text" v-model="rootNode.name">
+            </InputText>
+        </div>
+        <div class="p-col">
+          <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-5">
+              <label>{{$t('tree.search_field')}}</label>
+              <Dropdown
+                v-model="search.type" 
+                :options="searchFields" 
+                optionValue="value" 
+                optionLabel="key" 
+                placeholder="Select">
+              </Dropdown>
+              <small v-show="searchValidation.type" class="p-error">
+                {{ $t('tree.search_field_warn') }}
+              </small>
+            </div>
+            <div class="p-field p-col-12 p-md-7">
+              <label>{{$t('tree.search_value')}}</label>
+              <InputText 
+                :class="searchValidation.text ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'"  
+                type="text" v-model="search.text">
+              </InputText>
+              <small v-show="searchValidation.text" class="p-error">
+                {{ $t('tree.search_value_warn') }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="p-col">
+          <div class="p-col p-grid p-jc-end">
+            <Button 
+              :label="$t('tree.search')"
+              icon="pi pi-search" 
+              @click="searchTree"
+              class="p-button-sm"
+            />
+          </div>
+        </div>
+      </div>
+    </OverlayPanel>
   </slot>
 
   <!-- <slot name="pagination">
@@ -49,71 +89,141 @@
     </div>
   </slot> -->
 
-
-  <el-tabs style="height: 100%; width: 100%" v-model="tabIndex">
-    <el-tab-pane label="Tree" name="basetree" style="max-height:500px;overflow:auto">
-      <div v-infinite-scroll="load">
-
-  <el-input
-    placeholder="Kayıtları Filtrele"
-    v-model="filterText">
-  </el-input>
-      <el-tree
-        class="filter-tree"
-        :props="treeProps"
-        empty-text="Kayıt Bulunamadı"
-        :render-content="renderContent"
-        :load="loadNode"
-        lazy
-        @node-click="handleTreeClick"
-        @node-contextmenu="nodeContextMenu"
-        highlight-current=true
-        accordion="true"
-        ref="tree"
-        :filter-node-method="filterNode"
-        :show-checkbox="showCheckbox"
-        @getCheckedNodes="getCheckedNodes"
-        @check="nodeCheckClicked"
-        node-key="distinguishedName"
-        :getHalfCheckedNodes="getHalfCheckedNodes"
-      >
-
-        <template #default="{ node, data }">
-          <span class="custom-tree-node">
-            <span>{{ node.label }}</span>
-            <span>
-              <a
-                @click="append(data)">
-                Append
-              </a>
-              <a
-                @click="remove(node, data)">
-                Delete
-              </a>
+  <!-- tabview menu -->
+  <TabView v-model:activeIndex="tabIndex" class="tabview-custom" @tab-click="getOnlineAgents">
+    <TabPanel style="max-height:500px;overflow:auto">
+      <template #header>
+        <i class="fas fa-sitemap"></i>
+        <span>
+            &nbsp;&nbsp;{{ $t('tree.tree') }}
+        </span>
+      </template>
+      <div>
+        <div class="p-fluid">
+          <div class="p-field">
+              <span class="p-input-icon-left">
+                <i class="pi pi-filter-slash" />
+                <InputText v-model="filterText" 
+                  type="text" class="p-inputtext-sm" 
+                  :placeholder="$t('tree.filters_records')">
+                </InputText>
             </span>
-          </span>
-        </template>
-      </el-tree>
+          </div>
+          <div class="p-field">
+            <el-tree
+              class="filter-tree"
+              :props="treeProps"
+              :empty-text="$t('tree.not_found_record')"
+              :render-content="renderContent"
+              :load="loadNode"
+              lazy
+              @node-click="handleTreeClick"
+              @node-contextmenu="nodeContextMenu"
+              highlight-current=true
+              accordion="true"
+              ref="tree"
+              :filter-node-method="filterNode"
+              :show-checkbox="showCheckbox"
+              @getCheckedNodes="getCheckedNodes"
+              @check="nodeCheckClicked"
+              node-key="distinguishedName"
+              :getHalfCheckedNodes="getHalfCheckedNodes"
+            >
+              <template #default="{ node, data }">
+                <span class="custom-tree-node">
+                  <span>{{ node.label }}</span>
+                  <span>
+                    <a
+                      @click="append(data)">
+                      Append
+                    </a>
+                    <a
+                      @click="remove(node, data)">
+                      Delete
+                    </a>
+                  </span>
+                </span>
+              </template>
+            </el-tree>
+          </div>
+        </div>
       </div>
-    </el-tab-pane>
-    <el-tab-pane label="Search" name="search">
-      <el-collapse v-model="activeNames" @change="handleChange">
-         <el-collapse-item title="Arama Sonuları" name="1">
+    </TabPanel>
+    <TabPanel style="max-height:500px;overflow:auto">
+      <template #header>
+        <i class="pi pi-check-circle"></i>
+        <span>
+          &nbsp;&nbsp;{{ $t('tree.search_result') }}
+        </span>
+      </template>
+      <div class="p-fluid">
+        <div class="p-field">
+            <span class="p-input-icon-left">
+              <i class="pi pi-filter-slash" />
+              <InputText v-model="filterSearchText" 
+                type="text" class="p-inputtext-sm" 
+                :placeholder="$t('tree.filters_records')">
+              </InputText>
+          </span>
+        </div>
+        <div class="p-field">
           <el-tree 
+            class="filter-tree"
             :data="searchResults" 
-            :props="treeProps" 
+            :props="treeProps"
+            :load="searchLoadNode"
+            lazy
+            highlight-current=true
+            accordion="true"
+            :filter-node-method="filterNode"
+            ref="searchResultTree"
             @node-click="handleTreeClick"
             :render-content="renderSearchContent"
-            empty-text="Kayıt Bulunamadı"
+            :empty-text="$t('tree.not_found_record')"
             node-key="distinguishedName">
-              
-              </el-tree>
-              </el-collapse-item>
-      </el-collapse>
-    </el-tab-pane>
-    
-  </el-tabs>
-
+          </el-tree>
+        </div>
+      </div>
+    </TabPanel>
+    <TabPanel v-if="isAgentTree" style="max-height:500px;overflow:auto"
+      >
+      <template #header>
+          <i class="pi pi-globe"></i>
+          <span>
+              &nbsp;&nbsp;{{ $t('tree.online_clients') }}
+          </span>
+      </template>
+      <div class="p-fluid">
+        <div class="p-field">
+            <span class="p-input-icon-left">
+              <i class="pi pi-filter-slash" />
+              <InputText v-model="filterOnlineText" 
+                type="text" class="p-inputtext-sm" 
+                :placeholder="$t('tree.filters_records')">
+              </InputText>
+          </span>
+        </div>
+        <div class="p-field">
+          <el-tree 
+            class="filter-tree"
+            :data="onlineAgentResults" 
+            :props="treeProps"
+            lazy
+            highlight-current=true
+            accordion="true"
+            :filter-node-method="filterNode"
+            ref="onlineResultTree"
+            @node-click="handleTreeClick"
+            :render-content="renderSearchContent"
+            :empty-text="$t('tree.not_found_record')"
+            node-key="distinguishedName">
+          </el-tree>
+        </div>
+      </div>
+    </TabPanel>
+  </TabView>
+  <!-- tabview menu end -->
+  
   <!-- Context Menu -->
   <slot name="contextmenu">
     <div
@@ -148,14 +258,14 @@
 
 <script>
 import axios from "axios";
+
 export default {
-  components: {},
+
   props: {
     handleContextMenu: {
       type: Function,
       default: () => {},
     },
-   
     treeNodeClick: {
       type: Function,
       default: (node) => {},
@@ -164,16 +274,16 @@ export default {
       type: Object,
       default: () => {
         return {
-        children: "childEntries",
-        label: "name",
-        isLeaf: function (data, node) {
-          if (data.type === "ORGANIZATIONAL_UNIT") {
-            return false;
-          } else {
-            return true;
-          }
-        },
-      }
+          children: "childEntries",
+          label: "name",
+          isLeaf: function (data, node) {
+            if (data.type === "ORGANIZATIONAL_UNIT" || data.type === null || data.type == "CONTAINER") {
+              return false;
+            } else {
+              return true;
+            }
+          },
+        }
       },
     },
     loadNodeUrl: {
@@ -200,33 +310,67 @@ export default {
       type: Boolean,
       default : false
     },
+    searchNodeUrl: {
+      type: String,
+      default: "/lider/ldap/searchEntry",
+      description: "url for search entry"
+    },
     renderSearchContent: {
       type: Function,
       default: (h, { node, data, store }) => {
-        let linuxIcon = require("@/assets/images/icons/linux.png");
-        let groupIcon = require("@/assets/images/icons/entry_group.gif");
+        let containerIcon = require("@/assets/images/icons/entry_container.gif");
+        let lastSession = null;
+        let isOnline = false;
+        if (data.type === "AHENK") {
+          isOnline = data.online;
+          if (data.attributes.hasOwnProperty("o") && data.attributes["o"]) {
+            lastSession = data.attributes["o"];
+          }
+        }
         return (
           <span class="custom-tree-node">
-            {data.type === "ORGANIZATIONAL_UNIT" ? (
-              <i
-                class="fa fa-folder-open"
-                style="color:#F2C85B;  font-weight:bold"
-              ></i>
-            ) : data.type === "AHENK" ? (
-              <img src={linuxIcon} style="width:20px" />
-            ) : (
-              <img src={groupIcon} style="width:20px" />
-            )}
-            <span style="margin-left:5px;">{node.label}</span>
+          {data.type === "ORGANIZATIONAL_UNIT" || data.type === null ? (
+            <i class="fa fa-folder-open" style="color:#F2C85B;"></i>
+          ) : data.type === "AHENK" && data.attributes.hasOwnProperty("liderDeviceOSType") && data.attributes['liderDeviceOSType'] == 'Linux'? (
+            <i class="fab fa-linux" style="color:#000000;"></i>
+          ) : data.type === "AHENK" && data.attributes.hasOwnProperty("liderDeviceOSType") && data.attributes['liderDeviceOSType'] == 'Windows'? (
+            <i class="fab fa-windows"></i>
+          ) : data.type === "AHENK" ? (
+            <i class="fab fa-linux" style="color:#000000;"></i>
+          ) : data.type === "USER" ? (
+            <i class="fa fa-user"></i>
+          ) : data.type === "GROUP" ? (
+            <i class="fas fa-users"></i>
+          ) : data.type === "CONTAINER" ? (
+            <img src={containerIcon}/>
+          ) : data.type === "ROLE" ? (
+            <i class="fas fa-user-tag"></i>
+          ) : data.type === "WIND0WS_AHENK" ? (
+           <i class="fab fa-windows"></i>
+          ) : ""
+          }
+          <span style="margin-left:5px;">{data.type === "AHENK" && <i class="pi pi-circle-on" style={isOnline?'font-size: 50%; color:#689F38':'font-size: 50%; color:#D32F2F'}></i>} 
+          &nbsp;{data.type === "AHENK" && lastSession? 
+            node.data.name +" ("+lastSession+")":node.data.name}
           </span>
+        </span>
         );
       }
     },
     isMove : {
       type: Boolean,
       default: false
+    },
+    isAgentTree: {
+      type: Boolean,
+      default: false
+    },
+    searchFields: {
+      type: Array,
+      default: () => []
     }
   },
+
   data() {
     return {
       search: {
@@ -236,49 +380,88 @@ export default {
       },
       selectedNode: null,
       treeData: null,
-      searchResults:null,
+      searchResults: null,
+      onlineAgentResults: null,
       activeNames: ['1'],
-      tabIndex: 'basetree',
-      showSearchForm : false,
+      tabIndex: 0,
       filterText:'',
+      filterSearchText: '',
+      filterOnlineText: '',
       rootNode:null,
+      searchValidation: {},
     };
   },
+
   watch: {
-     filterText(val) {
-        this.$refs.tree.filter(val);
-      }
+    filterText(val) {
+      this.$refs.tree.filter(val);
+    },
+
+    filterSearchText(val){
+      this.$refs.searchResultTree.filter(val);
+    },
+
+    filterOnlineText(val){
+      this.$refs.onlineResultTree.filter(val);
+    },
+
+    search: {
+      handler(){
+        this.validateForm();
+      },
+      deep: true,
+    },
   },
+
   methods: {
     nodeContextMenu(event,node,treenode,tree){
-      console.log('Node Context Menuye girdim')
       this.$emit('handleContextMenu', event,node,treenode,tree);
-      
     },
+
     renderContent(h, { node, data, store }) {
-      let linuxIcon = require("@/assets/images/icons/linux.png");
-      let groupIcon = require("@/assets/images/icons/entry_group.gif");
+      let containerIcon = require("@/assets/images/icons/entry_container.gif");
+      let lastSession = null;
+      let isOnline = false;
+      if (data.type === "AHENK") {
+        isOnline = data.online;
+        if (data.attributes.hasOwnProperty("o") && data.attributes["o"]) {
+          lastSession = data.attributes["o"];
+        }
+      }
       return (
         <span class="custom-tree-node">
-          {data.type === "ORGANIZATIONAL_UNIT" ? (
-            <i
-              class="fa fa-folder-open"
-              style="color:#F2C85B;  font-weight:bold"
-            ></i>
+          {data.type === "ORGANIZATIONAL_UNIT" || data.type === null ? (
+            <i class="fa fa-folder-open" style="color:#F2C85B;"></i>
+          ) : data.type === "AHENK" && data.attributes.hasOwnProperty("liderDeviceOSType") && data.attributes['liderDeviceOSType'] == 'Linux'? (
+            <i class="fab fa-linux" style="color:#000000;"></i>
+          ) : data.type === "AHENK" && data.attributes.hasOwnProperty("liderDeviceOSType") && data.attributes['liderDeviceOSType'] == 'Windows'? (
+            <i class="fab fa-windows"></i>
           ) : data.type === "AHENK" ? (
-            <img src={linuxIcon} style="width:20px" />
-          ) : (
-            <img src={groupIcon} style="width:20px" />
-          )}
-          <span style="margin-left:5px;">{node.data.name}</span>
+            <i class="fab fa-linux" style="color:#000000;"></i>
+          ) : data.type === "USER" ? (
+            <i class="fa fa-user"></i>
+          ) : data.type === "GROUP" ? (
+            <i class="fas fa-users"></i>
+          ) : data.type === "CONTAINER" ? (
+            <img src={containerIcon}/>
+          ) : data.type === "ROLE" ? (
+            <i class="fas fa-user-tag"></i>
+          ) : data.type === "WIND0WS_AHENK" ? (
+           <i class="fab fa-windows"></i>
+          ) : ""
+          }
+          <span style="margin-left:5px;">{data.type === "AHENK" && <i class="pi pi-circle-on" style={isOnline?'font-size: 50%; color:#689F38':'font-size: 50%; color:#D32F2F'}></i>} 
+          &nbsp;{this.isAgentTree && data.type === "AHENK" && lastSession? 
+            node.data.name +" ("+lastSession+")":node.data.name}
+          </span>
         </span>
       );
     },
+
     getAgentsByNode: function (node) {
       return new Promise((resolve, reject) => {
         var data = new FormData();
         data.append("uid", node.distinguishedName);
-
         axios.post(this.loadNodeOuUrl, data).then((response) => {
           node.childEntries = response.data;
           node.childEntries = node.childEntries || [];
@@ -288,6 +471,7 @@ export default {
         });
       });
     },
+
     loadNode(node, resolve) {
       if (node.level === 0) {
         axios.post(this.loadNodeUrl, {}).then((response) => {
@@ -309,37 +493,97 @@ export default {
         });
       }
     },
+
+    searchLoadNode(node, resolve) {
+      if (this.searchResults) {
+        if (node.level === 0) {
+          axios.post(this.loadNodeUrl, {}).then((response) => {
+            Promise.all(response.data.map(this.getAgentsByNode)).then(
+              (result) => {
+                this.treeData = result;
+                resolve(result);
+              }
+            );
+          });
+        }
+        if (node.level >= 1) {
+          var data = new FormData();
+          data.append("uid", node.data.distinguishedName);
+          axios.post(this.loadNodeOuUrl, data).then((response) => {
+            this.isMove ? 
+            resolve(response.data.filter(node => node.type=="ORGANIZATIONAL_UNIT")):
+            resolve(response.data);
+          });
+        }
+      }
+    },
+
     handleTreeClick(node) {
       this.selectedNode = node;
       this.treeNodeClick(node);
       this.search.dn = node.distinguishedName;
     },
+
     closeContextMenu() {
       this.openContextMenu = !this.openContextMenu;
     },
+
     searchTree() {
-      axios
-        .post("/lider/ldap/searchEntry?searchDn="+ this.search.dn + "&key=" + this.search.type + '&value=' + this.search.text, {})
-        .then((response) => {
-          this.showSearchForm = false
-          this.tabIndex = "search";
+      if (this.validateForm()) {
+        let searchText = "*"+ this.search.text +"*";
+        let searchDn = null;
+        if (this.selectedNode) {
+          if (this.selectedNode.type == 'ORGANIZATIONAL_UNIT' || this.selectedNode.type == 'CONTAINER') {
+            searchDn = this.selectedNode.distinguishedName;
+          } else {
+            searchDn = this.rootNode.distinguishedName;
+          }
+        } else {
+          searchDn = this.rootNode.distinguishedName;
+        }
+        let params = new FormData();
+        params.append("searchDn", searchDn);
+        params.append("key", this.search.type);
+        params.append("value", searchText);
+        axios.post(this.searchNodeUrl, params).then((response) => {
+          this.tabIndex = 1;
           this.searchResults = response.data;
+          this.$refs.advancedSearchOp.hide();
         });
+      }
     },
+
+    getOnlineAgents() {
+      if (this.tabIndex === 2) {
+        let searchDn = null;
+        let params = new FormData();
+        if (this.selectedNode && this.selectedNode.type == 'ORGANIZATIONAL_UNIT') {
+          searchDn = this.selectedNode.distinguishedName;
+        } else {
+          searchDn = this.rootNode.distinguishedName;
+        }
+        params.append("searchDn", searchDn);
+        axios.post("/lider/computer/searchOnlineEntries", params).then((response) => {
+          this.tabIndex = 2;
+          this.onlineAgentResults = response.data;
+        });
+      }
+    },
+
     handleNextClick(val) {
      
     },
     load() {
       // scoll için eklendi
     },
+
     filterNode(value, data) {
       if (!value) return true;
       return data.name.indexOf(value) !== -1;
     },
+
     nodeCheckClicked() {
-
       let clickedNodes = [];
-
       Promise.all(this.$refs.tree.getCheckedNodes().map(async node => {
         if ( node.type === "ORGANIZATIONAL_UNIT") {
           let ouNode = this.$refs.tree.getNode(node.distinguishedName);
@@ -355,7 +599,6 @@ export default {
           return node;
         }
       })).then(result => {
-        
         this.getCheckedNodes(clickedNodes);
       });
     },
@@ -364,7 +607,6 @@ export default {
        if (node.childEntries && node.childEntries.length <= 0) {
          node.childEntries = []
        }
-
       this.$refs.tree.append(data,node);
     },
 
@@ -384,16 +626,34 @@ export default {
     },
     getNode(nodeKey) {
       return this.$refs.tree.getNode(nodeKey);
-    }
+    },
+
+    advancedSearchOpToogle(event) {
+      this.searchValidation = {};
+      this.$refs.advancedSearchOp.toggle(event);
+    },
+
+    validateForm() {
+      if (!this.search.type){
+        this.searchValidation['type'] = true;
+      } else{
+        delete this.searchValidation['type']
+      }
+      if (!this.search.text.trim()){
+        this.searchValidation['text'] = true;
+      } else{
+        delete this.searchValidation['text']
+      }
+      return !Object.keys(this.searchValidation).length;
+    },
   },
-  
-  
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   ::v-deep .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
     background-color:#2196f3;
     color:white
   }
+
 </style>

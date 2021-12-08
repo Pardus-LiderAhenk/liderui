@@ -7,13 +7,13 @@
           :pluginTask="pluginTaskCheckPackage">
         </check-package>
     <div class="p-grid">
-      <div class="p-col-6">
+      <div class="p-col-12 p-md-6 p-lg-6">
         <installed-packages-and-management 
           v-if="installedPackagesAndManagementState" class="plugin-card" 
           :pluginTask="pluginTaskInstalledPackagesAndManagement">
         </installed-packages-and-management>
       </div>
-      <div class="p-col-6">
+      <div class="p-col-12 p-md-6 p-lg-6">
         <repositories v-if="repositoriesState" 
           class="plugin-card" 
           :pluginTask="pluginTaskRepositories">

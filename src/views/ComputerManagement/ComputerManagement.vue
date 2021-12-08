@@ -1,20 +1,15 @@
 <template>
   <div class="p-grid computer-management">
-      <div class="p-col-3" style="min-height:90vh">
-           <el-tabs type="border-card" style="height:100%;width:100%">
-                <el-tab-pane label="İstemciler">
-                <tree-component ref="tree"
-                    loadNodeUrl="/lider/computer/getComputers"
-                    loadNodeOuUrl="/lider/computer/getOuDetails"
-                    :treeNodeClick="setSelectedLiderNode"
-                >
-                </tree-component>
-                </el-tab-pane>
-                <el-tab-pane label="Online">Online</el-tab-pane>
-            </el-tabs>
+      <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px">
+        <tree-component ref="tree"
+            loadNodeUrl="/lider/computer/getComputers"
+            loadNodeOuUrl="/lider/computer/getOuDetails"
+            :treeNodeClick="setSelectedLiderNode"
+            isAgentTree="true"
+            :searchFields="searchFields">
+        </tree-component>
       </div>
-      <div class="p-col-9">
-      <br>
+      <div class="p-col-12 p-md-6 p-lg-9">
         <div>
             <Button
             icon="fa fa-sliders-h"
@@ -107,10 +102,25 @@ export default {
             treeData: null,
             contextmenuTrigger: false,
             isModal: false,
-            search: {
-                type: null,
-                text: ''
-            },
+            activeIndex: 0,
+            searchFields: [
+                {
+                    key: this.$t('tree.cn'),
+                    value: "cn"
+                },
+                {
+                    key: this.$t('tree.uid'),
+                    value: "uid"
+                },
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                },
+                {
+                    key: this.$t('tree.last_session'),
+                    value: "o"
+                }
+            ],
             defaultTreeProps: {
                 children: 'childEntries',
                 label: 'name',
@@ -153,7 +163,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .p-button:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }

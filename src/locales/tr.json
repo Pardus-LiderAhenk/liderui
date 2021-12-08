@@ -11,7 +11,7 @@
         "computer_management": "İstemci Yönetimi",
         "user_management": "Kullanıcı Yönetimi",
         "user_operations": "Kullanıcı İşlemleri",
-        "ad_syncronization": "AD Senkronizasyonu",
+        "ad_management": "AD Yönetimi",
         "group_management": "Grup Yönetimi",
         "computer_group_management": "İstemci Grup Yönetimi",
         "user_group_management": "Kullanıcı Grup Yönetimi",
@@ -28,6 +28,34 @@
         "system_monitoring_definitions": "Sistem Gözlemcisi Tanımları",
         "server_settings": "Sunucu Ayarları",
         "console_user_settings": "Arayüz Kullanıcı Ayarları"
+    },
+    "tree":{
+        "tree": "Ağaç",
+        "search_result": "Arama Sonucu",
+        "search":"Ara",
+        "advanced_search": "Gelişmiş Arama",
+        "filters_records": "Kayıtları Filtrele",
+        "search_field": "Arama Alanı",
+        "search_value": "Arama Değeri",
+        "cn":"CN",
+        "uid": "UID",
+        "username": "Ad",
+        "surname": "Soyad",
+        "folder": "Klasör",
+        "last_session": "Son Oturum",
+        "id": "Kimlik",
+        "search_field_warn": "Lütfen arama alanı seçiniz",
+        "search_value_warn": "Arama değeri boş bırakılamaz",
+        "search_dn_warn": "Lütfen arama yapmak için klasör veya konteyner(kapsayıcı) seçiniz",
+        "description": "Açıklama",
+        "address": "Adres",
+        "telephone_number": "Telefon Numarası",
+        "objectclass":"Nesne Sınıfı",
+        "name":"Ad",
+        "not_found_record": "Kayıt bulunamadı",
+        "online_clients": "Çevrimiçi İstemciler",
+        "search_dn": "Arama yapmak için seçilen kayıt"
+
     },
     "dashboard": {
         "totalUserCount": "Toplam Kullanıcı Sayısı"
@@ -345,7 +373,7 @@
                 "allow": "İzin Ver",
                 "block":"Engelle",
                 "usb_task_warn": "En az bir tane aygıt seçmelisiniz"
-            }           
+            }
         },
         "agent_info": {
             "hostname": "Bilgisayar Adı",

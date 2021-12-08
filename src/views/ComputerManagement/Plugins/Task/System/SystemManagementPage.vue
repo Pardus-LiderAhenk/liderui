@@ -2,7 +2,7 @@
   <div>
     <br>
     <div class="p-grid">
-      <div class="p-col-5">
+      <div class="p-col-12 p-md-6 p-lg-5">
         <agent-info class="plugin-card"
           :pluginTask="pluginTaskAgentInfo"
           @moveSelectedAgent="moveSelectedAgent"
@@ -19,7 +19,7 @@
         <ldap-login v-if="ldapLoginState" class="plugin-card" :pluginTask="pluginTaskLdapLogin"></ldap-login>
         <xmessage v-if="xmessageState" class="plugin-card" :pluginTask="pluginTaskXmessage"></xmessage>
       </div>
-      <div class="p-col-7">
+      <div class="p-col-12 p-md-6 p-lg-7">
         <resource-usage v-if="resourceUsageState" class="plugin-card" :pluginTask="pluginTaskResourceUsage"></resource-usage>
         <file-management v-if="fileManagementState" class="plugin-card" :pluginTask="pluginTaskFileManagement"></file-management>
        <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>

@@ -11,7 +11,7 @@
         "computer_management": "Computer Management",
         "user_management": "User Management",
         "user_operations": "User Operations",
-        "ad_syncronization": "AD Syncronization",
+        "ad_management": "AD Management",
         "group_management": "Group Management",
         "computer_group_management": "Computer Group Management",
         "user_group_management": "User Group Management",
@@ -28,7 +28,33 @@
         "system_monitoring_definitions": "System Monitoring Definitions",
         "server_settings": "Server Settings",
         "console_user_settings": "Console User Settings"
-
+    },
+    "tree":{
+        "tree": "Tree",
+        "search_result": "Search Result",
+        "search":"Search",
+        "advanced_search": "Advanced Search",
+        "filters_records": "Filters Records",
+        "search_field": "Search Field",
+        "search_value": "Search Value",
+        "cn":"CN",
+        "uid": "UID",
+        "username": "Username",
+        "surname": "Surname",
+        "folder": "Folder",
+        "last_session": "Last Session",
+        "id": "ID",
+        "search_field_warn": "Please select search filed",
+        "search_value_warn": "Search value is not available",
+        "search_dn_warn": "Please select folder or container to search",
+        "description": "Description",
+        "address": "Address",
+        "telephone_number": "Telephone Number",
+        "objectclass":"Object Class",
+        "name": "Name",
+        "not_found_record": "Not found record",
+        "online_clients": "Online Clients",
+        "search_dn": "Selected node to search"
     },
     "dashboard": {
         "totalUserCount": "Total User Count"

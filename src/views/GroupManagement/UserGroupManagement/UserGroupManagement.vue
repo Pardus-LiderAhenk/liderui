@@ -1,8 +1,8 @@
 <template>
   <ConfirmDialog></ConfirmDialog>
-    <div class="p-grid">
+    <div class="p-grid user-group-management">
          
-        <div class="p-col-3" style="min-height:90vh; background-color:#fff;margin-left:10px;margin-top:10px;">
+        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;margin-left:10px;margin-top:10px;">
             <Toolbar>
                 <template #left>
                     
@@ -17,7 +17,7 @@
                 :treeNodeClick="treeNodeClick"
                 />
         </div>
-        <div class="p-col-9">
+        <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh;">
 
         </div>
     </div>
@@ -52,6 +52,7 @@
                 loadNodeOuUrl="/lider/user_groups/getOuDetails"
                 :treeNodeClick="moveTreeNodeClick"
                 :isMove="true"
+                :searchFields="searchFields"
         />
         <template #footer>
             <Button label="Kapat" icon="pi pi-times" @click="modals.folderNameChange = false" class="p-button-text"/>
@@ -176,7 +177,17 @@ export default {
                 showCheckbox: true,
                 groupName:'',
                 checkedNodes: []
-            }
+            },
+            searchFields: [
+                {
+                    key: this.$t('tree.name'),
+                    value: "cn"
+                },
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                },
+            ],
         }
     },
     created() {
@@ -330,5 +341,7 @@ export default {
 </script>
 
 <style scoped>
-
+.user-group-management {
+    background-color: #e7f2f8;
+}
 </style>

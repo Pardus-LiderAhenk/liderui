@@ -2,7 +2,7 @@
   <div>
     <br>
     <div class="p-grid">
-      <div class="p-col-5">
+      <div class="p-col-12 p-md-6 p-lg-5">
         <member-of-agent-group class="plugin-card"></member-of-agent-group>
         <session-and-power-management v-if="sessionAndPowerState" 
         class="plugin-card" 
@@ -12,7 +12,7 @@
         <ldap-login v-if="ldapLoginState" class="plugin-card" :pluginTask="pluginTaskLdapLogin"></ldap-login>
         <usb-management v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement"></usb-management>
       </div>
-      <div class="p-col-7">
+      <div class="p-col-12 p-md-6 p-lg-7">
         <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>
         <conky v-if="conkyState" class="plugin-card" :pluginTask="pluginTaskConky"></conky>
         <xmessage v-if="xmessageState" class="plugin-card" :pluginTask="pluginTaskXmessage"></xmessage>

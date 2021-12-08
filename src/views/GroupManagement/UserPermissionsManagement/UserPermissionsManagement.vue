@@ -14,15 +14,15 @@
      --->
 
   <ConfirmDialog></ConfirmDialog>
-    <div class="p-grid">
-         
-        <div class="p-col-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
+    <div class="p-grid user-permission-management">
+        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
                 loadNodeUrl="/lider/sudo_groups/getGroups"
                 loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
+                :searchFields="searchFields"
             >
                 <template #contextmenu>
                     <div
@@ -38,7 +38,7 @@
                 </template>
             </tree-component>
         </div>
-        <div class="p-col-9" style="min-height:90vh;">
+        <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
                 <TabView style="min-height:90vh;">
                     <TabPanel header="Kayıt Bilgisi">
                          <DataTable :value="selectedNodeData" responsiveLayout="scroll">
@@ -169,7 +169,17 @@ export default {
             ],
             selectedNodeData: [],
             selectedNodeGroupMembers: [],
-            sudoGruopEdit: false
+            sudoGruopEdit: false,
+            searchFields: [
+                {
+                    key: this.$t('tree.name'),
+                    value: "cn"
+                },
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                },
+            ],
         }
     },
     created() {
@@ -336,5 +346,8 @@ export default {
 <style scoped>
 .mycontextmenu {
     background-color: rgba(0,0,0,0.0);
+}
+.user-permission-management {
+    background-color: #e7f2f8;
 }
 </style>

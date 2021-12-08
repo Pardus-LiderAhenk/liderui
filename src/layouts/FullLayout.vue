@@ -1,14 +1,14 @@
 <template>
     <Toast />
-    
-    <div style="width:99%" >
-       <app-menubar />
-        <div >
+    <div class="p-flex-column layout-main-container" >
+        <div>
+            <app-menubar />
+        </div>
+        <div class="p-col-12">
 			<router-view />
 		</div>
 	</div>
 </template>
-
 
 <script>
 import AppMenubar from '../components/Navigation/AppMenubar.vue';

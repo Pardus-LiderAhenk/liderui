@@ -315,10 +315,10 @@
         :pluginTask="task"
         @task-response="responseAgentInfo">
         <template #pluginTitle>
-          <p v-if="selectedLiderNode">
-            <i :class="selectedLiderNode.type == 'AHENK'? 'el el-icon-data-line': 'pi pi-folder-open'"></i>
-              &nbsp; {{selectedLiderNode.name}}
-          </p>
+          <span v-if="selectedLiderNode">
+            <i :class="selectedLiderNode.type == 'AHENK'? 'fab fa-linux': 'pi pi-folder-open'"></i>
+            &nbsp; {{selectedLiderNode.name}}
+          </span>
           <p v-else><i class="pi pi-folder-open"></i>&nbsp; Agents</p>
         </template>
         <template #pluginTitleButton>
@@ -434,6 +434,7 @@ export default {
       validationRenameAgent: false,
       newHostname: "",
       updateAgentConfirm: false,
+      linuxIcon: require("@/assets/images/icons/linux.png"),
       items: [
         {
           label: this.$t('computer.agent_info.update'),
