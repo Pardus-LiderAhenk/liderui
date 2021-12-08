@@ -100,8 +100,9 @@
           <tree-component 
             ref="movetree"
             loadNodeUrl="/lider/computer/getComputers"
-            loadNodeOuUrl="/lider/computer/getOuDetails"
+            loadNodeOuUrl="/lider/computer/getOu"
             :treeNodeClick="moveTreeNodeClick"
+            :searchFields="searchFields"
           />
         </div>
         <div class="p-col p-text-center">
@@ -513,7 +514,13 @@ export default {
         },
       ],
       moveFolderNode: null,
-      moveAgentDialog: false
+      moveAgentDialog: false,
+      searchFields: [
+        {
+          key: this.$t('tree.folder'),
+          value: "ou"
+        },
+      ],
     };
   },
 
