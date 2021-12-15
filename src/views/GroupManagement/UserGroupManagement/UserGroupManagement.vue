@@ -15,6 +15,7 @@
                 loadNodeUrl="/lider/user_groups/getGroups"
                 loadNodeOuUrl="/lider/user_groups/getOuDetails"
                 :treeNodeClick="treeNodeClick"
+                :isMove="true"
                 />
         </div>
         <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh;">

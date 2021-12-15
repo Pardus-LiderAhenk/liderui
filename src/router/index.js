@@ -7,7 +7,8 @@ import FullLayout from '@/layouts/FullLayout.vue';
 import ComputerGroupManagement from '@/views/GroupManagement/ComputerGroupManagement/ComputerGroupManagement.vue';
 import UserGroupManagement from '@/views/GroupManagement/UserGroupManagement/UserGroupManagement.vue';
 import UserPermissionsManagement from '@/views/GroupManagement/UserPermissionsManagement/UserPermissionsManagement.vue';
-import UserManagement from '@/views/UserManagement/UserManagement.vue';
+import UserManagement from '@/views/UserManagement/Ldap/UserManagement.vue';
+
 
 //REPORTS
 import AgentReport from '@/views/Reports/AgentReport.vue';
@@ -18,7 +19,7 @@ import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefini
 import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
 import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
 import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
-import AdManagement from '@/views/UserManagement/AdManagement.vue';
+import AdManagement from '@/views/UserManagement/AD/AdManagement.vue';
 
 // PROFILE
 import UserProfile from '@/views/Profile/Profile.vue';

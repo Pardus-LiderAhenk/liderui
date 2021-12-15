@@ -36,6 +36,10 @@
 </template>
 
 <script>
+/**
+ * User management in AD
+ * @see {@link http://www.liderahenk.org/}
+ */
 export default {
 
     data() {

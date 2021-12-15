@@ -100,9 +100,10 @@
           <tree-component 
             ref="movetree"
             loadNodeUrl="/lider/computer/getComputers"
-            loadNodeOuUrl="/lider/computer/getOu"
+            loadNodeOuUrl="/lider/computer/getOuDetails"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFields"
+            :isMove="true"
           />
         </div>
         <div class="p-col p-text-center">

@@ -387,7 +387,7 @@ export default {
       filterText:'',
       filterSearchText: '',
       filterOnlineText: '',
-      rootNode:null,
+      rootNode: null,
       searchValidation: {},
     };
   },
@@ -414,7 +414,7 @@ export default {
   },
 
   methods: {
-    nodeContextMenu(event,node,treenode,tree){
+    nodeContextMenu(event,node,treenode,tree) {
       this.$emit('handleContextMenu', event,node,treenode,tree);
     },
 
@@ -615,7 +615,6 @@ export default {
       this.$refs.tree.remove(node.distinguishedName);
     },
     updateNode(key,node) {
-      
       this.$refs.tree.updateKeyChildren(key, node);
     },
     getCurrentNode() {
