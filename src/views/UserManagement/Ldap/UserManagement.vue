@@ -173,6 +173,33 @@
         </template>
     </Dialog>
     <!-- Move Selected Node Dialog End -->
+    <!-- Delete Selected Node Dialog -->
+    <Dialog
+        :header="$t('computer.task.toast_summary')" 
+        v-model:visible="modals.deleteNode"  
+        :modal="true" 
+        @hide="modals.deleteNode = false">
+        <div class="confirmation-content">
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+            <span v-if="selectedNode.type == 'USER'">{{ $t('user_management.delete_user_warn')}}</span>
+            <span v-if="selectedNode.type == 'ORGANIZATIONAL_UNIT'">{{ $t('user_management.delete_folder_warn')}}</span>
+        </div>
+        <template #footer>
+        <Button 
+            :label="$t('user_management.cancel')" 
+            icon="pi pi-times" 
+            @click="modals.deleteNode = false" 
+            class="p-button-text p-button-sm"
+        />
+        <Button 
+            :label="$t('user_management.yes')"
+            icon="pi pi-check" 
+            @click="deleteNode"
+            class="p-button-sm"
+        />
+        </template>
+    </Dialog>
+    <!-- Delete Selected Node Dialog End -->
 </template>
 
 <script>
