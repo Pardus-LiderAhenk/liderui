@@ -155,6 +155,7 @@
     <Dialog header="Taşınacak Klasörü Seçiniz" v-model:visible="modals.moveUser" :style="{width: '50vw'}" :modal="true">
         <tree-component 
             ref="movetree"
+            :isMove="true"
             loadNodeUrl="/lider/user/getUsers"
             loadNodeOuUrl="/lider/user/getOuDetails"
             :treeNodeClick="moveTreeNodeClick"
