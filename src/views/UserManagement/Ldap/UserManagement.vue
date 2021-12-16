@@ -137,7 +137,6 @@
                 </div>
                 <div class="p-filed p-col-12">
                     <password-component ref="password" :isSmallInput="true"></password-component>
-                    
                 </div>
             </div>
         </div>
@@ -152,7 +151,9 @@
     </Dialog>
     <!-- Add User Dialog End -->
     <!-- Move Selected Node Dialog -->
-    <Dialog header="Taşınacak Klasörü Seçiniz" v-model:visible="modals.moveUser" :style="{width: '50vw'}" :modal="true">
+    <Dialog :header="$t('user_management.move_user')" 
+        v-model:visible="modals.moveUser" :style="{width: '40vw'}" :modal="true"
+    >
         <tree-component 
             ref="movetree"
             :isMove="true"
@@ -321,7 +322,6 @@ export default {
                 this.userNode = response.data;
             }
         });
-
         this.setSelectedLiderNode(null);
     },
 
@@ -529,27 +529,66 @@ export default {
                 case 'ORGANIZATIONAL_UNIT':
                     if (node.isRoot) {
                         this.contextMenuItems = [
-                            {label: this.$t('user_management.node_detail'), icon:'pi pi-list', command: () => {this.showNodeDetailDialog = true}},
-                            {label: this.$t('user_management.add_user'), icon:"pi pi-user-plus", command: () => {this.modals.addUser = true;}},
-                            {label: this.$t('user_management.add_folder'),icon:"pi pi-folder-open", command: () => {this.validation.folderName = false; this.modals.folderAdd = true}},
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon:'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.add_user'), 
+                                icon:"pi pi-user-plus", 
+                                command: () => {this.modals.addUser = true;}
+                            },
+                            {
+                                label: this.$t('user_management.add_folder'),
+                                icon:"pi pi-folder-open", 
+                                command: () => {this.validation.folderName = false; this.modals.folderAdd = true}
+                            },
                         ]
                     } else {
                         this.contextMenuItems = [
-                            {label: this.$t('user_management.node_detail'), icon: 'pi pi-list', command: () => {this.showNodeDetailDialog = true}},
-                            {label: this.$t('user_management.add_user'), icon:"pi pi-user-plus", command: () => {this.modals.addUser = true}},
-                            {label: this.$t('user_management.add_folder'), icon:"pi pi-folder-open", command: () => {this.validation.folderName = false; this.modals.folderAdd = true}},
-                            {label: this.$t('user_management.delete_folder'), icon:"pi pi-trash", command:() => {this.modals.deleteNode = true;}},
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon: 'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.add_user'), 
+                                icon:"pi pi-user-plus", 
+                                command: () => {this.modals.addUser = true}
+                            },
+                            {
+                                label: this.$t('user_management.add_folder'), 
+                                icon:"pi pi-folder-open", 
+                                command: () => {this.validation.folderName = false; this.modals.folderAdd = true}
+                            },
+                            {
+                                label: this.$t('user_management.delete_folder'), 
+                                icon:"pi pi-trash", 
+                                command:() => {this.modals.deleteNode = true;}
+                            },
                         ]
                     }
                     break
                 case 'USER':
                     this.contextMenuItems = [
-                        {label: this.$t('user_management.node_detail'), icon: 'pi pi-list', command: () => {this.showNodeDetailDialog = true}},
-                        {label: this.$t('user_management.move_user'), icon:"el-icon-rank", command: () => {this.modals.moveUser = true}},
-                        {label: this.$t('user_management.delete_user'), icon:"pi pi-user-minus", command:() => {this.modals.deleteNode = true;}},
+                        {
+                            label: this.$t('user_management.node_detail'), 
+                            icon: 'pi pi-list', 
+                            command: () => {this.showNodeDetailDialog = true}
+                        },
+                        {
+                            label: this.$t('user_management.move_user'), 
+                            icon:"el-icon-rank", 
+                            command: () => {this.modals.moveUser = true}
+                        },
+                        {
+                            label: this.$t('user_management.delete_user'), 
+                            icon:"pi pi-user-minus", 
+                            command:() => {this.modals.deleteNode = true;}
+                        },
                     ]
             }
-
             this.$refs.rightMenu.style.top = data.clientY + 'px';
             this.$refs.rightMenu.style.left = data.clientX + 'px';
             this.$refs.rightMenu.style.position = 'fixed';
