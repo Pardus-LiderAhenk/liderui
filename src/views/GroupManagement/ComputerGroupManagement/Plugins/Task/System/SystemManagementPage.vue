@@ -1,6 +1,5 @@
 <template>
   <div>
-    <br>
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-5">
         <member-of-agent-group class="plugin-card"></member-of-agent-group>

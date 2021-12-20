@@ -1,6 +1,5 @@
 <template>
   <div>
-    <br>
     <service-management class="plugin-card" v-if="serviceManagementState" :pluginTask="pluginTaskServiceManagement"></service-management>
   </div>
 </template>

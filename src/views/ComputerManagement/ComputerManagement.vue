@@ -1,6 +1,6 @@
 <template>
   <div class="p-grid computer-management">
-      <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px">
+      <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px; margin-top:10px;">
         <tree-component ref="tree"
             loadNodeUrl="/lider/computer/getComputers"
             loadNodeOuUrl="/lider/computer/getOuDetails"
@@ -9,66 +9,70 @@
             :searchFields="searchFields">
         </tree-component>
       </div>
-      <div class="p-col-12 p-md-6 p-lg-9">
-        <div>
-            <Button
-            icon="fa fa-sliders-h"
-            :class="selectedPluginTab == 'system-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-            @click="setSelectedPluginTab('system-management')"
-            :label="$t('computer.plugins.button.system')"
-            >
-            </Button>
-            <Button
-            icon="fa fa-cubes"
-            :class="selectedPluginTab == 'package-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-            @click="setSelectedPluginTab('package-management')"
-            :label="$t('computer.plugins.button.package')"
-            >
-            </Button>
-            <Button
-            icon="fa fa-laptop-code"
-            :class="selectedPluginTab == 'service-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-            @click="setSelectedPluginTab('service-management')"
-            :label="$t('computer.plugins.button.service')"
-            >
-            </Button>
-            <Button
-            icon="fa fa-hashtag"
-            :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-            @click="setSelectedPluginTab('script-management')"
-            :label="$t('computer.plugins.button.script')"
-            >
-            </Button>
-            <Button
-            icon="fa fa-terminal"
-            :class="selectedPluginTab == 'ssh-connect' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-            @click="setSelectedPluginTab('ssh-connect')"
-            :label="$t('computer.plugins.button.ssh')"
-            >
-            </Button>
-            <Button
-            icon="fas fa-shield-alt"
-            :class="selectedPluginTab == 'security-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-            @click="setSelectedPluginTab('security-management')"
-            :label="$t('computer.plugins.button.security')"
-            >
-            </Button>
-            <Button
-            icon="fa fa-history"
-            :class="selectedPluginTab == 'task-history' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-            @click="setSelectedPluginTab('task-history')"
-            :label="$t('computer.plugins.button.history')"
-            >
-            </Button>
-       </div>
-       <keep-alive>
-            <component 
-                @moveSelectedAgent="moveSelectedAgent"
-                @deleteSelectedAgent="deleteSelectedAgent"
-                @renameSelectedAgent="renameSelectedAgent"
-                :is="selectedPluginTab">
-            </component>
-      </keep-alive>
+      <div class="p-col-12 p-md-6 p-lg-9" style="margin-top:3px;">
+          <div class="p-grid p-flex-column">
+            <div class="p-col">
+                <Button
+                icon="fa fa-sliders-h"
+                :class="selectedPluginTab == 'system-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                @click="setSelectedPluginTab('system-management')"
+                :label="$t('computer.plugins.button.system')"
+                >
+                </Button>
+                <Button
+                icon="fa fa-cubes"
+                :class="selectedPluginTab == 'package-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                @click="setSelectedPluginTab('package-management')"
+                :label="$t('computer.plugins.button.package')"
+                >
+                </Button>
+                <Button
+                icon="fa fa-laptop-code"
+                :class="selectedPluginTab == 'service-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                @click="setSelectedPluginTab('service-management')"
+                :label="$t('computer.plugins.button.service')"
+                >
+                </Button>
+                <Button
+                icon="fa fa-hashtag"
+                :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                @click="setSelectedPluginTab('script-management')"
+                :label="$t('computer.plugins.button.script')"
+                >
+                </Button>
+                <Button
+                icon="fa fa-terminal"
+                :class="selectedPluginTab == 'ssh-connect' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                @click="setSelectedPluginTab('ssh-connect')"
+                :label="$t('computer.plugins.button.ssh')"
+                >
+                </Button>
+                <Button
+                icon="fas fa-shield-alt"
+                :class="selectedPluginTab == 'security-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                @click="setSelectedPluginTab('security-management')"
+                :label="$t('computer.plugins.button.security')"
+                >
+                </Button>
+                <Button
+                icon="fa fa-history"
+                :class="selectedPluginTab == 'task-history' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                @click="setSelectedPluginTab('task-history')"
+                :label="$t('computer.plugins.button.history')"
+                >
+                </Button>
+        </div>
+        <div class="p-col">
+            <keep-alive>
+                <component 
+                    @moveSelectedAgent="moveSelectedAgent"
+                    @deleteSelectedAgent="deleteSelectedAgent"
+                    @renameSelectedAgent="renameSelectedAgent"
+                    :is="selectedPluginTab">
+                </component>
+            </keep-alive>
+          </div>
+        </div>
     </div>
   </div>
 </template>

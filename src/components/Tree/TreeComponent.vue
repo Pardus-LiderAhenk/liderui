@@ -68,27 +68,6 @@
     </OverlayPanel>
   </slot>
 
-  <!-- <slot name="pagination">
-    <div
-      style="
-        width: 100%;
-        justify-content: flex-end;
-        text-align: right;
-        margin-top: 5px;
-      "
-    >
-      <span style="float: left">Sayfa : 1</span>
-      <el-pagination
-        background
-        layout="prev, next"
-        pager-count="1"
-        :total="1000"
-        @next-click="handleNextClick"
-      >
-      </el-pagination>
-    </div>
-  </slot> -->
-
   <!-- tabview menu -->
   <TabView v-model:activeIndex="tabIndex" class="tabview-custom" @tab-click="getOnlineAgents">
     <TabPanel style="max-height:500px;overflow:auto">
@@ -125,7 +104,7 @@
               :filter-node-method="filterNode"
               :show-checkbox="showCheckbox"
               @getCheckedNodes="getCheckedNodes"
-              @check="nodeCheckClicked"
+              @check="nodeCheckClicked('mainTree')"
               node-key="distinguishedName"
               :getHalfCheckedNodes="getHalfCheckedNodes"
             >
@@ -172,6 +151,10 @@
             :data="searchResults" 
             :props="treeProps"
             :load="searchLoadNode"
+            :show-checkbox="showCheckbox"
+            @getCheckedNodes="getCheckedNodes"
+            @check="nodeCheckClicked('searchTree')"
+            @node-contextmenu="nodeContextMenu"
             lazy
             highlight-current=true
             accordion="true"
@@ -180,6 +163,7 @@
             @node-click="handleTreeClick"
             :render-content="renderSearchContent"
             :empty-text="$t('tree.not_found_record')"
+            :getHalfCheckedNodes="getHalfCheckedNodes"
             node-key="distinguishedName">
           </el-tree>
         </div>
@@ -582,11 +566,15 @@ export default {
       return data.name.indexOf(value) !== -1;
     },
 
-    nodeCheckClicked() {
+    nodeCheckClicked(type) {
+      let ref = this.$refs.tree;
+      if (type == "searchTree") {
+        ref = this.$refs.searchResultTree;
+      }
       let clickedNodes = [];
-      Promise.all(this.$refs.tree.getCheckedNodes().map(async node => {
+      Promise.all(ref.getCheckedNodes().map(async node => {
         if ( node.type === "ORGANIZATIONAL_UNIT") {
-          let ouNode = this.$refs.tree.getNode(node.distinguishedName);
+          let ouNode = ref.getNode(node.distinguishedName);
           if(ouNode.childNodes.length <= 0 ) {
             var data = new FormData();
             data.append("uid", node.distinguishedName);

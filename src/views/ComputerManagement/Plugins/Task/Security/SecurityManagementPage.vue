@@ -1,6 +1,5 @@
 <template>
   <div>
-    <br>
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-6">
         <network-management 

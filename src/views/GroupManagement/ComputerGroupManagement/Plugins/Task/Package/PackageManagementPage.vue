@@ -1,6 +1,5 @@
 <template>
   <div>
-    <br>
     <packages class="plugin-card" v-if="packagesState" :pluginTask="pluginTaskPackages"></packages>
     <check-package class="plugin-card" 
       v-if="checkPackageState" 

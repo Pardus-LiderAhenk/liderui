@@ -1,78 +1,53 @@
 <template>
     <div>
         <Dialog
-            :header="$t('group_management.computer_group.selected_node_detail')" 
+            :header="$t('group_management.computer_group.members_of_group')" 
             :modal="true"
             :style="{ width: '40vw'}"
             v-model:visible="showMemberDialog">
-            <TabView style="min-height:50vh;">
-                <TabPanel>
-                    <template #header>
-                        <i class="pi pi-info-circle"></i>
-                        <span>
-                            &nbsp;{{ $t('group_management.computer_group.node_detail') }}
+            <DataTable  
+                :value="members" class="p-datatable-sm"
+                style="margin-top: 2em"
+                v-model:filters="filters"
+                responsiveLayout="stack" :loading="loading"
+                :paginator="true" :rows="10"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                :rowsPerPageOptions="[10,25,50]">
+                <template #header>
+                    <div class="p-d-flex p-jc-end">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"/>
+                            <InputText 
+                                v-model="filters['global'].value" 
+                                class="p-inputtext-sm" 
+                                :placeholder="$t('group_management.computer_group.search')" 
+                            />
                         </span>
+                    </div>
+                </template>
+                <template #empty>
+                    <div class="p-d-flex p-jc-center">
+                        <span>{{ $t('group_management.computer_group.member_empty_message') }}</span>
+                    </div>
+                </template>
+                <Column field="index" header="#" style="width: 10%"></Column>
+                <Column field="memberDn" 
+                    :header="$t('group_management.computer_group.member')"
+                    style="min-width: 80%">
+                </Column>
+                <Column :exportable="false" style="width: 10%">
+                    <template #body="slotProps">
+                        <div class="p-d-flex p-jc-end">
+                            <Button
+                                class="p-button-sm p-button-danger p-button-rounded"
+                                icon="pi pi-trash"
+                                :title="$t('group_management.computer_group.delete')"
+                                @click.prevent="deleteMemberFromGroup(slotProps.data)">
+                            </Button>
+                        </div>
                     </template>
-                    <DataTable class="p-datatable-sm" 
-                        :value="selectedNodeData" 
-                        responsiveLayout="scroll"
-                    >
-                        <Column field="label" :header="$t('group_management.computer_group.attribute')"></Column>
-                        <Column field="value" :header="$t('group_management.computer_group.value')"></Column>
-                    </DataTable>
-                </TabPanel>
-                <TabPanel v-if="selectedLiderNode.type == 'GROUP'">
-                    <template #header>
-                        <i class="pi pi-users"></i>
-                        <span>
-                            &nbsp;{{ $t('group_management.computer_group.members_of_group') }}
-                        </span>
-                    </template>
-                    <DataTable  
-                        :value="members" class="p-datatable-sm"
-                        style="margin-top: 2em"
-                        v-model:filters="filters"
-                        responsiveLayout="stack" :loading="loading"
-                        :paginator="true" :rows="10"
-                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-                        :rowsPerPageOptions="[10,25,50]">
-                        <template #header>
-                            <div class="p-d-flex p-jc-end">
-                                <span class="p-input-icon-left">
-                                    <i class="pi pi-search"/>
-                                    <InputText 
-                                        v-model="filters['global'].value" 
-                                        class="p-inputtext-sm" 
-                                        :placeholder="$t('group_management.computer_group.search')" 
-                                    />
-                                </span>
-                            </div>
-                        </template>
-                        <template #empty>
-                            <div class="p-d-flex p-jc-center">
-                                <span>{{ $t('group_management.computer_group.member_empty_message') }}</span>
-                            </div>
-                        </template>
-                        <Column field="index" header="#" style="width: 10%"></Column>
-                        <Column field="memberDn" 
-                            :header="$t('group_management.computer_group.member')"
-                            style="min-width: 80%">
-                        </Column>
-                        <Column :exportable="false" style="width: 10%">
-                            <template #body="slotProps">
-                                <div class="p-d-flex p-jc-end">
-                                    <Button
-                                        class="p-button-sm p-button-danger p-button-rounded"
-                                        icon="pi pi-trash"
-                                        :title="$t('group_management.computer_group.delete')"
-                                        @click.prevent="deleteMemberFromGroup(slotProps.data)">
-                                    </Button>
-                                </div>
-                            </template>
-                        </Column>
-                    </DataTable>
-                </TabPanel>
-            </TabView>
+                </Column>
+            </DataTable>
             <template #footer>
                 <Button 
                     :label="$t('group_management.computer_group.close')" 
@@ -90,9 +65,9 @@
                     </div>
                     <div>
                         <Button class="p-button-sm" 
-                            :title="$t('group_management.computer_group.node_detail')" 
+                            :title="$t('group_management.computer_group.members_of_group')" 
                             @click="showMemberDetail"
-                            icon="pi pi-list">
+                            icon="fas fa-users">
                         </Button>
                     </div>
                 </div>
@@ -105,8 +80,13 @@
                             :value="selectedNodeSummaryData"
                             responsiveLayout="scroll"
                         >
-                            <Column field="label" :header="$t('group_management.computer_group.attribute')"></Column>
-                            <Column field="value" :header="$t('group_management.computer_group.value')"></Column>
+                            <template #empty>
+                                <div class="p-d-flex p-jc-center">
+                                    <span>{{$t('group_management.computer_group.selected_node_empty_message')}}</span>
+                                </div>
+                            </template>
+                            <Column field="label" :header="$t('group_management.computer_group.attribute')" style="width:40%"></Column>
+                            <Column field="value" :header="$t('group_management.computer_group.value')" style="width:60%"></Column>
                         </DataTable>
                     </div>
                 </div>
@@ -134,9 +114,9 @@ export default {
             members: [],
             filters: {},
             showMemberDialog: false,
-            selectedNodeData: [],
             selectedNodeSummaryData: [],
-            attributesMultiValue: false
+            attributesMultiValue: false,
+            loading: false
         }
     },
 
@@ -201,6 +181,7 @@ export default {
                     });
                 return;
             }
+            this.loading = true;
             const params = new FormData();
             var dnList = [];
             dnList.push(data.memberDn)
@@ -216,6 +197,7 @@ export default {
                     });
                     this.setSelectedLiderNode(response.data);
                     this.getMemberOfSelectedGroup(this.selectedLiderNode);
+                    this.loading = false;
                 }
             }).catch((error) => {
                 this.$toast.add({
@@ -228,9 +210,7 @@ export default {
         },
 
         getSelectedNodeAttribute() {
-            let nodeData = [];
             let nodeSummaryData = [];
-            
             nodeSummaryData.push({
                 'label': this.$t('group_management.computer_group.name'),
                 'value': this.selectedLiderNode.name,
@@ -241,46 +221,10 @@ export default {
                 });
             if (this.selectedLiderNode.type == "GROUP") {
                  nodeSummaryData.push({
-                     'label': this.$t('group_management.computer_group.number_of_member'),
+                    'label': this.$t('group_management.computer_group.number_of_member'),
                     'value': this.members.length
                  });
             }
-            nodeData.push({
-                'label': this.$t('group_management.computer_group.name'),
-                'value': this.selectedLiderNode.name,
-                }, 
-                {
-                    'label': this.$t('group_management.computer_group.node_dn'),
-                    'value': this.selectedLiderNode.distinguishedName,
-                },
-                {
-                    'label': this.$t('group_management.computer_group.type'),
-                    'value': this.selectedLiderNode.type,
-                },
-                {
-                    'label': this.$t('group_management.computer_group.created_date'),
-                    'value': this.selectedLiderNode.createDateStr,
-                },
-
-                {
-                    'label': this.$t('group_management.computer_group.modified_date'),
-                    'value': this.selectedLiderNode.modifyDateStr,
-                },
-                {
-                    'label': this.$t('group_management.computer_group.creator_name'),
-                    'value': this.selectedLiderNode.attributes.creatorsName,
-                },
-                {
-                    'label': this.$t('group_management.computer_group.modifier_name'),
-                    'value': this.selectedLiderNode.attributes.modifiersName,
-                });
-            this.selectedLiderNode.attributesMultiValues.objectClass.map(oclas => {
-                nodeData.push({
-                    'label': this.$t('group_management.computer_group.objectclass'),
-                    'value' : oclas
-                })
-            });
-            this.selectedNodeData = nodeData;
             this.selectedNodeSummaryData = nodeSummaryData;
         }
     },
@@ -288,10 +232,12 @@ export default {
     watch: {
         selectedLiderNode() {
             this.members = [];
-            if (this.selectedLiderNode != null && this.selectedLiderNode.type == "GROUP") {
-                this.getMemberOfSelectedGroup(this.selectedLiderNode);
+            if (this.selectedLiderNode) {
+                if (this.selectedLiderNode.type == "GROUP") {
+                    this.getMemberOfSelectedGroup(this.selectedLiderNode);
+                }
+                this.getSelectedNodeAttribute();
             }
-            this.getSelectedNodeAttribute();
         }
   },
 }

@@ -1,5 +1,4 @@
 <template>
-<br>
   <div class="plugin-card">
     <Card>
         <template #title>

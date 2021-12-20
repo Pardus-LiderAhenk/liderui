@@ -1,6 +1,5 @@
 <template>
   <div>
-    <br>
     <execute-script class="plugin-card" v-if="executeScriptState" :pluginTask="pluginTaskExecuteScript"></execute-script>
   </div>
 </template>
