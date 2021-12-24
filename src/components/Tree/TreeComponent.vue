@@ -197,6 +197,9 @@
             accordion="true"
             :filter-node-method="filterNode"
             ref="onlineResultTree"
+            :show-checkbox="showCheckbox"
+            @getCheckedNodes="getCheckedNodes"
+            @check="nodeCheckClicked('onlineResultTree')"
             @node-click="handleTreeClick"
             :render-content="renderSearchContent"
             :empty-text="$t('tree.not_found_record')"
@@ -570,7 +573,10 @@ export default {
       let ref = this.$refs.tree;
       if (type == "searchTree") {
         ref = this.$refs.searchResultTree;
+      } else if (type == "onlineResultTree") {
+        ref = this.$refs.onlineResultTree;
       }
+
       let clickedNodes = [];
       Promise.all(ref.getCheckedNodes().map(async node => {
         if ( node.type === "ORGANIZATIONAL_UNIT") {

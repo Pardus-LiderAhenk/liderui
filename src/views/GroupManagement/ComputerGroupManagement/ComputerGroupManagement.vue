@@ -184,6 +184,7 @@
                     :showCheckbox="agentGroupModal.showCheckbox"
                     :getCheckedNodes="getCheckedAgentNodes"
                     :searchFields="searchAgentFields"
+                    isAgentTree="true"
                 />
                 <div class="p-col p-text-center">
                     <small>{{$t('group_management.computer_group.select_client')}}</small>

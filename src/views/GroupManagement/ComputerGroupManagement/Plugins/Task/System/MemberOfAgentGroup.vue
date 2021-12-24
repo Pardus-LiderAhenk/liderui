@@ -64,7 +64,7 @@
                         {{ $t("group_management.computer_group.selected_node_title") }}
                     </div>
                     <div>
-                        <Button class="p-button-sm" 
+                        <Button class="p-button-sm" v-if="selectedLiderNode && selectedLiderNode.type === 'GROUP'"
                             :title="$t('group_management.computer_group.members_of_group')" 
                             @click="showMemberDetail"
                             icon="fas fa-users">
@@ -174,7 +174,7 @@ export default {
         deleteMemberFromGroup(data) {
             if (this.attributesMultiValue == false) {
                 this.$toast.add({
-                        severity:'success', 
+                        severity:'warn', 
                         detail: this.$t('group_management.computer_group.delete_member_warning_message'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
