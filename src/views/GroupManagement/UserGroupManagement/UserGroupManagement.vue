@@ -1,184 +1,307 @@
 <template>
-  <ConfirmDialog></ConfirmDialog>
+    <node-detail :showNodeDetailDialog="showNodeDetailDialog"
+        @close-node-detail-dialog="showNodeDetailDialog = false">
+    </node-detail>
     <div class="p-grid user-group-management">
-         
-        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;margin-left:10px;margin-top:10px;">
-            <Toolbar>
-                <template #left>
-                    
-                    <SplitButton @click="modals.folderAdd = true" label="Klasör Ekle" icon="pi pi-check" :model="folderItems" class="p-button-warning"></SplitButton>
-                    <Button label="Yeni Grup" icon="fa fa-users" class="p-mr-2" style="margin-left:5px" @click="modals.agentGroup = true"/>
-                </template>
-            </Toolbar>
+        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px; margin-top:10px;">
             <tree-component 
                 ref="tree"
                 loadNodeUrl="/lider/user_groups/getGroups"
                 loadNodeOuUrl="/lider/user_groups/getOuDetails"
                 :treeNodeClick="treeNodeClick"
-                :isMove="true"
-                />
+                :searchFields="searchFields"
+                @handleContextMenu="handleContenxtMenu"
+            >
+                <template #contextmenu>
+                    <div
+                        ref="treecontextmenu"
+                        class="el-overlay mycontextmenu"
+                        v-show="showContextMenu"
+                        @click="showContextMenu = false"
+                        >
+                        <div ref="rightMenu">
+                            <Menu :model="contextMenuItems"/>
+                        </div>
+                    </div>
+                </template>
+            </tree-component>
         </div>
-        <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh;">
-
+        <div class="p-col-12 p-md-6 p-lg-9" style="margin-top:3px;">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-5">
+                    <member-of-user-group @delete-member="updateSelectedNode"></member-of-user-group>
+                </div>
+            </div>
         </div>
     </div>
-    <Dialog header="Klasör Ekle" v-model:visible="modals.folderAdd" :style="{width: '50vw'}" :modal="true">
+    <!-- Add Folder Dialog -->
+    <Dialog :header="$t('group_management.add_folder')" v-model:visible="modals.folderAdd" 
+        :style="{width: '30vw'}" :modal="true">
         <div class="p-fluid">
             <div class="p-field">
-                <label for="folderName">Klasör Adı</label>
-                <InputText id="folderName" type="text" v-model="folderName"/>
+                <label for="folderName">{{$t('group_management.folder_name')}}</label>
+                <InputText :class="validation.folderName ? 'p-invalid': ''" type="text" v-model="folderName"/>
+                <small v-if="validation.folderName" class="p-error">
+                    {{ $t('group_management.folder_name_warn')}}
+                </small>
             </div>
         </div>
         <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modals.folderAdd = false" class="p-button-text"/>
-            <Button label="Kaydet" icon="pi pi-check" @click="addFolder" autofocus />
+            <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
+                @click="modals.folderAdd = false" class="p-button-text p-button-sm"
+            />
+            <Button :label="$t('group_management.add')" icon="pi pi-plus"
+                @click="addFolder" class="p-button-sm"
+            />
         </template>
     </Dialog>
-    <Dialog header="Klasör Adını Değiştir" v-model:visible="modals.folderNameChange" :style="{width: '50vw'}" :modal="true">
+    <!-- Add Folder Dialog End-->
+        <!-- Rename Group Dialog -->
+    <Dialog :header="$t('group_management.rename_group')" 
+        v-model:visible="modals.renameGroup" :style="{width: '30vw'}" :modal="true">
         <div class="p-fluid">
             <div class="p-field">
-                <label for="folderName">Klasör Adını Değiştir</label>
-                <InputText id="folderName" type="text" v-model="folderName"/>
+                <label for="folderName">{{$t('group_management.group_name')}}</label>
+                <InputText :class="validation.groupName ? 'p-invalid': ''" type="text" v-model="userGroupModal.groupName"/>
+                <small v-if="validation.groupName" class="p-error">
+                    {{ $t('group_management.group_name_warn')}}
+                </small>
             </div>
         </div>
         <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modals.folderNameChange = false" class="p-button-text"/>
-            <Button label="Güncelle" icon="pi pi-check" @click="changeFolder" autofocus />
+            <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
+                @click="modals.renameGroup = false" class="p-button-text p-button-sm"
+            />
+            <Button :label="$t('group_management.update')" icon="pi pi-refresh"
+                @click="changeGroupName" class="p-button-sm"
+            />
         </template>
     </Dialog>
-    <Dialog header="Taşınacak Klasörü Seçiniz" v-model:visible="modals.moveFolder" :style="{width: '50vw'}" :modal="true">
+    <!-- Rename Group Dialog End -->
+    <!-- Move Selected Node Dialog -->
+    <Dialog :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.move_group')
+        :$t('group_management.move_folder')" 
+        v-model:visible="modals.moveNode" :style="{width: '40vw'}" :modal="true">
         <tree-component 
-                ref="movetree"
-                loadNodeUrl="/lider/user_groups/getGroups"
-                loadNodeOuUrl="/lider/user_groups/getOuDetails"
-                :treeNodeClick="moveTreeNodeClick"
-                :isMove="true"
-                :searchFields="searchFields"
+            ref="movetree"
+            :isMove="true"
+            loadNodeUrl="/lider/user_groups/getGroups"
+            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+            :treeNodeClick="moveTreeNodeClick"
+            :searchFields="searchFolderFields"
         />
+        <div class="p-col p-text-center">
+          <small>{{$t('group_management.select_folder_warn')}}</small>
+        </div>
         <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modals.folderNameChange = false" class="p-button-text"/>
-            <Button label="Taşı" icon="pi pi-check" @click="moveFolder" autofocus />
+            <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
+                @click="modals.moveNode = false" class="p-button-text p-button-sm"
+            />
+            <Button :label="$t('group_management.move')" icon="el-icon-rank" 
+                @click="moveNode" class="p-button-sm"
+            />
         </template>
     </Dialog>
-    <Dialog header="Kullanıcı Grubu Oluştur" v-model:visible="modals.agentGroup" :style="{width: '50vw'}" :modal="true">
+    <!-- Move Selected Node Dialog End -->
+    <!-- Add Group Dialog or Add Client to Group Dialog -->
+    <Dialog :header="modals.addUser? $t('group_management.add_user')
+        :$t('group_management.add_group')"
+         v-model:visible="modals.addGroup" :style="{width: '50vw'}" :modal="true">
         <TabView>
-            <TabPanel header="Grup Bilgileri">
+            <TabPanel :header="$t('group_management.group_info')">
                 <div class="p-fluid">
                     <div class="p-field">
-                        <label for="groupName">Kullanıcı Grup Adı</label>
-                        <InputText id="groupName" type="text" v-model="agentGroupModal.groupName" />
-                        <small id="username1-help"></small>
+                        <label for="userGroupModal.groupName">{{$t('group_management.group_name')}}</label>
+                        <InputText :class="validation.groupName ? 'p-invalid': ''" 
+                            type="text" v-model="userGroupModal.groupName"
+                            :disabled="modals.addUser? true: false"/>
+                        <small v-if="validation.groupName" class="p-error">
+                            {{ $t('group_management.group_name_warn')}}
+                        </small>
                     </div>
                 </div>
                 <tree-component 
-                        ref="istemcitree"
-                        loadNodeUrl="/lider/user_groups/getUsers"
-                        loadNodeOuUrl="/lider/user_groups/getOuDetails"
-                        :showCheckbox="agentGroupModal.showCheckbox"
-                        :getCheckedNodes="getCheckedAgentNodes"
-                        :renderSearchContent="renderSearchContent"
-                        :getHalfCheckedNodes="getHalfCheckedNodes"
+                    ref="usertree"
+                    loadNodeUrl="/lider/user_groups/getUsers"
+                    loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                    :showCheckbox="userGroupModal.showCheckbox"
+                    :getCheckedNodes="getCheckedUserNodes"
+                    :searchFields="searchUserFields"
                 />
+                <div class="p-col p-text-center">
+                    <small>{{$t('group_management.select_user')}}</small>
+                </div>
             </TabPanel>
-            <TabPanel >
+            <TabPanel>
                 <template #header>
-                    <span>Seçili İstemciler <Badge :value="agentGroupModal.checkedNodes.length"></Badge> </span>
+                    <span>{{$t('group_management.selected_users')}}
+                        <Badge :value="userGroupModal.checkedNodes.length"></Badge>
+                    </span>
                 </template>
-                <DataTable :value="agentGroupModal.checkedNodes" responsiveLayout="scroll">
-                    <Column field="distinguishedName" header="Name"></Column>
-                    <Column  >
+                <DataTable :value="userGroupModal.checkedNodes" v-model:filters="filters"
+                    class="p-datatable-sm" style="margin-top: 2em" 
+                    responsiveLayout="stack" :loading="loading"
+                    :paginator="true" :rows="10"
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                    :rowsPerPageOptions="[10,25,50]">
+                    <template #header>
+                        <div class="p-d-flex p-jc-end">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"/>
+                                <InputText 
+                                    v-model="filters['global'].value" 
+                                    class="p-inputtext-sm" 
+                                    :placeholder="$t('group_management.search')" 
+                                />
+                            </span>
+                        </div>
+                    </template>
+                    <Column field="distinguishedName" 
+                        :header="$t('group_management.node_dn')" 
+                        style="min-width: 80%">
+                    </Column>
+                    <Column>
                         <template #body="slotProps">
-                            <Button icon="pi pi-times" class="p-button-rounded p-button-danger" @click="removeAgentFromGroup(slotProps.data)"/>
+                            <div class="p-d-flex p-jc-end">
+                                <Button
+                                    class="p-button-sm p-button-danger p-button-rounded"
+                                    icon="pi pi-trash"
+                                    :title="$t('group_management.delete')"
+                                    @click.prevent="removeAgentFromGroup(slotProps.data)">
+                                </Button>
+                            </div>
                         </template>
                     </Column>
                 </DataTable>
             </TabPanel>
+            <TabPanel v-if="modals.addUser">
+                <template #header>
+                    <span>{{$t('group_management.existing_users')}}
+                        <Badge :value="userGroupModal.existingUsers.length"></Badge>
+                    </span>
+                </template>
+                <DataTable :value="userGroupModal.existingUsers" v-model:filters="filters"
+                    class="p-datatable-sm" style="margin-top: 2em" 
+                    responsiveLayout="stack" :loading="loading"
+                    :paginator="true" :rows="10"
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                    :rowsPerPageOptions="[10,25,50]">
+                    <template #header>
+                        <div class="p-d-flex p-jc-end">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"/>
+                                <InputText 
+                                    v-model="filters['global'].value" 
+                                    class="p-inputtext-sm" 
+                                    :placeholder="$t('group_management.search')" 
+                                />
+                            </span>
+                        </div>
+                    </template>
+                    <Column field="distinguishedName" 
+                        :header="$t('group_management.node_dn')">
+                    </Column>
+                </DataTable>
+            </TabPanel>
         </TabView>
-
-            
-        
         <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modals.agentGroup = false" class="p-button-text"/>
-            <Button label="Oluştur" icon="pi pi-check" @click="createUserGroup" autofocus />
+            <Button :label="$t('user_management.cancel')" icon="pi pi-times" 
+                @click="modals.addGroup = false" class="p-button-text p-button-sm"
+            />
+            <Button :label="$t('user_management.add')" icon="pi pi-user-plus" 
+                @click="groupManagemenet" class="p-button-sm"
+            />
         </template>
     </Dialog>
+    <!-- Add Group Dialog or Add Client to Group Dialog End -->
+    <!-- Delete Selected Node Dialog -->
+    <Dialog :header="$t('computer.task.toast_summary')" 
+        v-model:visible="modals.deleteNode"  
+        :modal="true" 
+        @hide="modals.deleteNode = false">
+        <div class="confirmation-content">
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+            <span v-if="selectedNode.type == 'GROUP'">
+                {{ $t('group_management.delete_group_warn')}}
+            </span>
+            <span v-if="selectedNode.type == 'ORGANIZATIONAL_UNIT'">
+                {{ $t('group_management.delete_folder_warn')}}
+            </span>
+        </div>
+        <template #footer>
+        <Button 
+            :label="$t('user_management.cancel')" 
+            icon="pi pi-times" 
+            @click="modals.deleteNode = false" 
+            class="p-button-text p-button-sm"
+        />
+        <Button 
+            :label="$t('user_management.yes')"
+            icon="pi pi-check" 
+            @click="deleteNode"
+            class="p-button-sm"
+        />
+        </template>
+    </Dialog>
+    <!-- Delete Selected Node Dialog End -->
 </template>
 
 <script>
+
+/**
+ * User Group Management.
+ * @see {@link http://www.liderahenk.org/}
+ * 
+ */
+
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
+import NodeDetail from '@/components/Tree/NodeDetail.vue';
 import axios from 'axios';
-import { useConfirm } from "primevue/useconfirm";
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
+import MemberOfUserGroup from "@/views/GroupManagement/UserGroupManagement/MemberOfUserGroup.vue";
+import {FilterMatchMode} from 'primevue/api';
 
 export default {
-    setup(){
+
+     setup(){
         const selectedNode = ref(null);
         const tree = ref(null);
-        const confirm = useConfirm();
-        const deleteFolder = () => {
-            confirm.require({
-                message: 'Bu işlem seçili olan klasörü ve bu klasörün altında yer alan tüm klasör ve grupları silecektir. Bu işlem geri alınamaz.',
-                header: 'Klasör Silme Onay',
-                icon: 'pi pi-exclamation-triangle',
-                accept: () => {
-                   axios.post('/lider/user_groups/deleteEntry', null, {
-                       params : { dn: selectedNode.value.distinguishedName }
-                   }).then(response => {
-                       tree.value.remove(selectedNode.value);
-                   });
-                },
-                reject: () => {
-                    confirm.close();
-                }
-            });
-        }
+        return { selectedNode, tree };
+    },
 
-        return { deleteFolder, selectedNode, tree };
-    },
     components: {
-        TreeComponent
+        TreeComponent,
+        NodeDetail,
+        MemberOfUserGroup
     },
+
     data() {
         return {
             moveFolderNode: null,
+            showContextMenu: false,
+            showNodeDetailDialog: false,
             modals : {
-             folderAdd:false,
-             folderNameChange: false,
-             moveFolder: false,
-             agentGroup:false
+                folderAdd: false,
+                renameGroup: false,
+                addGroup: false,
+                addUser: false,
+                moveNode: false,
+                deleteNode: false
             },
             folderName:'',
-            groupName:'',
+            validation: {
+                folderName: false,
+                groupName: false
+            },
             selectedAgents: [],
-            folderItems: [
-                {
-                    label: 'Klasör Adını Değiştir',
-                    icon: 'pi pi-refresh',
-                    command: () => {
-                        this.modals.folderNameChange = true;
-                    }
-                },
-                {
-                    label: 'Klasör Sil',
-                    icon: 'pi pi-times',
-                    command: () => {
-                        this.deleteFolder();
-                    }
-                },
-                {
-                    label: 'Klasör Taşı',
-                    icon: 'pi pi-external-link',
-                    command: () => {
-                       this.modals.moveFolder = true;
-                    }
-                },
-            ],
-            agentGroupModal: {
+            userGroupModal: {
                 showCheckbox: true,
                 groupName:'',
-                checkedNodes: []
+                checkedNodes: [],
+                existingUsers: []
             },
+            
             searchFields: [
                 {
                     key: this.$t('tree.name'),
@@ -189,24 +312,288 @@ export default {
                     value: "ou"
                 },
             ],
+            
+            searchUserFields: [
+                 {
+                    key: this.$t('tree.id'),
+                    value: "uid"
+                },
+                {
+                    key: this.$t('tree.username'),
+                    value: "cn"
+                },
+                {
+                    key: this.$t('tree.surname'),
+                    value: "sn"
+                },
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                }
+            ],
+
+            searchFolderFields: [
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                },
+            ],
+
+            filters: {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            }
         }
     },
+
     created() {
         this.setSelectedLiderNode(null);
     },
+
+    computed:mapGetters(["selectedLiderNode"]),
+
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
         treeNodeClick(node) {
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
         },
+
+        handleContenxtMenu(data, node, treenode, tree){
+            data.preventDefault();
+            this.treeNodeClick(node);
+            switch(node.type) {
+                case 'ORGANIZATIONAL_UNIT':
+                    if (node.isRoot) {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('group_management.node_detail'), 
+                                icon:'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('group_management.add_group'), 
+                                icon:"fas fa-users", 
+                                command: () => {this.modals.addUser = false; 
+                                    this.userGroupModal.groupName = '';
+                                    this.modals.addGroup = true;}
+                            },
+                            {
+                                label: this.$t('group_management.add_folder'),
+                                icon:"pi pi-folder-open", 
+                                command: () => {this.validation.folderName = false; this.modals.folderAdd = true}
+                            },
+                        ]
+                    } else {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('group_management.node_detail'), 
+                                icon: 'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('group_management.add_group'), 
+                                icon:"fas fa-users", 
+                                command: () => {this.modals.addUser = false; 
+                                    this.userGroupModal.groupName = '';
+                                    this.modals.addGroup = true; }
+                            },
+                            {
+                                label: this.$t('group_management.add_folder'), 
+                                icon:"pi pi-folder-open", 
+                                command: () => {this.validation.folderName = false;
+                                    this.folderName = ''; 
+                                    this.modals.folderAdd = true;}
+                            },
+                            {
+                                label: this.$t('group_management.move_folder'), 
+                                icon:"el-icon-rank", 
+                                command:() => {this.modals.moveNode = true;}
+                            },
+                            {
+                                label: this.$t('group_management.delete_folder'), 
+                                icon:"pi pi-trash", 
+                                command:() => {this.modals.deleteNode = true;}
+                            },
+                        ]
+                    }
+                    break
+                case 'GROUP':
+                    this.contextMenuItems = [
+                        {
+                            label: this.$t('group_management.node_detail'), 
+                            icon: 'pi pi-list', 
+                            command: () => {this.showNodeDetailDialog = true}
+                        },
+                        {
+                            label: this.$t('group_management.add_user'), 
+                            icon:"pi pi-user-plus", 
+                            command: () => {this.showAddUserDialog()}
+                        },
+                        {
+                            label: this.$t('group_management.rename_group'), 
+                            icon:"pi pi-pencil", 
+                            command: () => {this.modals.renameGroup = true; 
+                                this.validation.groupName = false;
+                                this.userGroupModal.groupName = this.selectedNode.cn}
+                        },
+                        {
+                            label: this.$t('group_management.move_group'), 
+                            icon:"el-icon-rank", 
+                            command: () => {this.modals.moveNode = true}
+                        },
+                        {
+                            label: this.$t('group_management.delete_group'), 
+                            icon:"pi pi-trash", 
+                            command:() => {this.modals.deleteNode = true;}
+                        },
+                    ]
+            }
+            this.$refs.rightMenu.style.top = data.clientY + 'px';
+            this.$refs.rightMenu.style.left = data.clientX + 'px';
+            this.$refs.rightMenu.style.position = 'fixed';
+            this.$refs.rightMenu.style.margin = '0';
+            this.$refs.rightMenu.style.backgroundColor = '0';
+            this.showContextMenu = !this.showContextMenu;
+        },
+
+        showAddUserDialog() {
+            this.userGroupModal.groupName = this.selectedNode.cn;
+            this.modals.addGroup = true;
+            this.modals.addUser = true;
+            this.getMemberOfSelectedGroup();
+        },
+
+        getMemberOfSelectedGroup() {
+            this.userGroupModal.existingUsers = [];
+            for (var key in this.selectedNode.attributesMultiValues) {
+				if (this.selectedNode.attributesMultiValues.hasOwnProperty(key) && key == "member") {
+					if(this.selectedNode.attributesMultiValues[key].length > 1) {
+                        this.attributesMultiValue = true;
+						for(var i = 0; i< this.selectedNode.attributesMultiValues[key].length; i++) {
+                            this.userGroupModal.existingUsers.push({
+                                "distinguishedName": this.selectedNode.attributesMultiValues[key][i],
+                            });
+                        }
+                    } else {
+                        this.attributesMultiValue = false;
+                        this.userGroupModal.existingUsers.push({
+                            "distinguishedName": this.selectedNode.attributesMultiValues[key][0],
+                        });
+                    }
+                }
+            }
+        },
+
+        groupManagemenet() {
+            if (this.userGroupModal.checkedNodes.length === 0) {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('group_management.select_user'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                return;
+            }
+            if (this.modals.addUser) {
+                this.addUserToGroup();
+            } else {
+                this.createUserGroup();
+            }
+        },
+
+        createUserGroup() {
+            if (!this.userGroupModal.groupName.trim()) {
+                this.validation.groupName = true;
+                return;
+            }
+            this.loading = true;
+            axios.post('/lider/user_groups/createNewGroup',{
+                groupName: this.userGroupModal.groupName,
+                checkedEntries: JSON.stringify(this.userGroupModal.checkedNodes),
+                selectedOUDN: this.selectedNode.distinguishedName
+            }).then(response => {
+                    this.loading = false;
+                if (response.data === "") {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.created_group_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else {
+                    this.$refs.tree.append(response.data, this.selectedNode);
+                    this.userGroupModal = {
+                        showCheckbox: true,
+                        groupName:'',
+                        checkedNodes: [],
+                        existingUsers: []
+                    }
+                    this.modals.addGroup = false;
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('group_management.created_group_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            });
+        },
+
+        addUserToGroup() {
+            axios.post("/lider/user_groups/group/existing/addUser",{
+                checkedEntries: JSON.stringify(this.userGroupModal.checkedNodes),
+                groupDN: this.selectedNode.distinguishedName
+            }).then(response => {
+                this.loading = false;
+                if (response.data) {
+                    this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
+                    this.setSelectedLiderNode(response.data);
+                    this.userGroupModal = {
+                        showCheckbox: true,
+                        groupName:'',
+                        checkedNodes: [],
+                        existingUsers: []
+                    }
+                    this.modals.addGroup = false;
+                    this.modals.addUser = false;
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('group_management.add_user_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.add_user_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    
+                }
+            })
+            .catch((error) => {
+                if (error.response.status == "NOT_ACCEPTABLE") {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.select_user'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 5000
+                    });
+                } 
+            });
+        },
+
         moveTreeNodeClick(node) {
             //*** This method for tree that is created for folder move dialog.  */
             this.moveFolderNode = node;
         },
+
         addFolder() {
-            alert(this.folderName);
-            alert(this.selectedNode.distinguishedName);
+            if (!this.folderName.trim()) {
+                this.validation.folderName = true;
+                return;
+            }
             axios.post('/lider/user_groups/addOu', {
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
@@ -216,70 +603,108 @@ export default {
             }).then(response => {
                 this.$refs.tree.append(response.data, this.selectedNode);
                 this.modals.folderAdd = false;
-                this.$toast.add({severity:'success', summary: 'Klasör Oluşturuldu', detail:'Başarı ile eklendi.', life: 3000});
+                this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('group_management.add_folder_success'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             });
             this.folderName = '';
             this.modals.folderAdd = false;
         },
-        changeFolder() {
-            axios.post('/lider/user_groups/rename/entry', null, {
-                params: {
-                    oldDN: this.selectedNode.distinguishedName,
-                    newName: 'ou=' + this.folderName
+
+        changeGroupName() {
+            if (!this.userGroupModal.groupName.trim()) {
+                this.validation.groupName = true;
+                return;
+            }
+            this.modals.renameGroup = false;
+            let params = new FormData();
+            params.append("oldDN", this.selectedNode.distinguishedName);
+            params.append("newName", "cn="+this.userGroupModal.groupName);
+            axios.post('/lider/user_groups/rename/entry', params).then(response => {
+                if (response.data) {
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('group_management.rename_group_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    this.selectedNode.distinguishedName = response.data.distinguishedName;
+                    this.selectedNode.name = response.data.name;
+                    this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+                    this.setSelectedLiderNode(response.data);
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.rename_group_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
-            }).then(response => {
-                this.selectedNode.distinguishedName = response.data.distinguishedName;
-                this.selectedNode.name = response.data.name;
-                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
             });
         },
-        moveFolder() {
-            axios.post('/lider/user_groups/move/entry', null ,{
-                params: {
-                    sourceDN: this.selectedNode.distinguishedName,
-                    destinationDN: this.moveFolderNode.distinguishedName
-                }
-            }).then(response => {
+
+        moveNode() {
+            if (!this.moveFolderNode) {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('group_management.select_folder_warn'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                return;
+            }
+            if (this.moveFolderNode.distinguishedName === this.selectedNode.distinguishedName) {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('group_management.move_node_same_dn_warn'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                return;
+            }
+            let params = new FormData();
+            params.append("sourceDN", this.selectedNode.distinguishedName);
+            params.append("destinationDN", this.moveFolderNode.distinguishedName);
+            this.modals.moveNode = false;
+            axios.post('/lider/user_groups/move/entry', params).then(response => {
                 if (response.data) {
                     this.$refs.tree.remove(this.selectedNode);
-                    this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveFolderNode.distinguishedName));
-                    this.modals.moveFolder = false;
-                    this.$toast.add({severity:'success', summary: 'Klasör Taşındı.', detail:'Başarı ile taşıma yapıldı.', life: 3000});
-                } else {
-                    this.$toast.add({severity:'error', summary: 'HATA', detail:'Taşıma işlemi yapılamadı.', life: 3000});
-                }
-
-            });
-        },
-        createUserGroup() {
-            axios.post('lider/user_groups/createNewGroup',{
-                    groupName: this.agentGroupModal.groupName,
-                    checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
-                    selectedOUDN: this.selectedNode.distinguishedName
-                }).then(response => {
-                    if (response.data === "") {
-                        this.$toast.add({severity:'error', summary: 'HATA', detail:'Ekleme başarısız. Lütfen grup adını kontrol edip tekrar deneyiniz.', life: 3000});
+                    if (this.selectedNode.type === "GROUP") {
+                        this.selectedNode.distinguishedName = "cn="+ this.selectedNode.cn + ","+ this.moveFolderNode.distinguishedName;
                     } else {
-                        this.$refs.tree.append(response.data, this.selectedNode);
-                        this.agentGroupModal = {
-                                    showCheckbox: true,
-                                    groupName:'',
-                                    checkedNodes: []
-                                }
-                        this.modals.agentGroup = false;
-                        this.$toast.add({severity:'success', summary: 'Yeni Grup.', detail:'Yeni grup başarı ile oluşturuldu.', life: 3000});
-
+                        this.selectedNode.distinguishedName = "ou="+ this.selectedNode.ou + ","+ this.moveFolderNode.distinguishedName;
                     }
+                    this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveFolderNode.distinguishedName));
+                    this.setSelectedLiderNode(null);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('group_management.move_node_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.move_node_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
             });
         },
-        getCheckedAgentNodes(nodes) {
-            this.agentGroupModal.checkedNodes = nodes;
+
+        getCheckedUserNodes(nodes) {
+            this.userGroupModal.checkedNodes = nodes;
+            if (nodes.length === 0) {
+                this.userGroupModal.checkedNodes = [];
+            }
         },
-        getHalfCheckedNodes(nodes) {
-            console.log('HALF CHECKED NODES', nodes);
-        },
+
         removeAgentFromGroup(node) {
-            this.agentGroupModal.checkedNodes = this.agentGroupModal.checkedNodes.filter(
+            this.userGroupModal.checkedNodes = this.userGroupModal.checkedNodes.filter(
                 agent => {
                     if (agent.distinguishedName != node.distinguishedName) {
                         return agent;
@@ -289,60 +714,58 @@ export default {
                 }
             )
         }, 
-         renderSearchContent(h, { node, data, store }) {
-            let linuxIcon = require("@/assets/images/icons/linux.png");
-            let groupIcon = require("@/assets/images/icons/entry_group.gif");
-            let iconSource = "fa fa-folder-open";
 
-            if (data.type === "ORGANIZATIONAL_UNIT") {
-                iconSource = "fa fa-folder-open";
-            } else if (data.type === "AHENK") {
-                iconSource = linuxIcon;
-            } else {
-                iconSource = groupIcon;
-            }
-
-            const result = this.agentGroupModal.checkedNodes.map(agent => {
-                if (agent.distinguishedName === data.distinguishedName) {
-                    return true;
+        deleteNode() {
+            let params = new FormData();
+            params.append("dn", this.selectedNode.distinguishedName);
+            this.modals.deleteNode = false;
+            axios.post("/lider/user_groups/deleteEntry", params).then(response => {
+                if (response.data) {
+                    this.$refs.tree.remove(this.selectedNode);
+                    this.setSelectedLiderNode(null);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('group_management.delete_node_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.delete_node_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             });
-
-            let funcText = "Ekle";
-            let isAppend = true;
-            if (result.length > 0) {
-                funcText = "Çıkar";
-                isAppend = false;
-            }
-
-            return h("span", {
-                    class: "custom-tree-node"
-                    }, 
-                    h("img", {src:iconSource, style:"width:20px"}),
-                    h("span", null, node.label), 
-                    h("span", null, 
-                    h("a", {onClick: () => this.addRemoveAgentToGroup(data,isAppend)}, funcText),
-                ));
         },
-        addRemoveAgentToGroup(node,isAppend) {
-            this.$refs.tree.setCheckedNode(node.distinguishedName, isAppend);
-            if (isAppend) {
-                this.agentGroupModal.checkedNodes.push(node);
-            } else {
-                this.agentGroupModal.checkedNodes = this.agentGroupModal.checkedNodes.filter(agent => {
-                    if(agent.distinguishedName !== node.distinguishedName) {
-                        return agent;
-                    }
-                });
+
+        updateSelectedNode(data){
+            if (this.selectedNode && this.selectedNode.type == "GROUP") {
+                this.selectedNode.attributesMultiValues.member = this.selectedLiderNode.attributesMultiValues.member;
+                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
             }
         }
-    
     },
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .user-group-management {
     background-color: #e7f2f8;
+}
+.mycontextmenu {
+    background-color: rgba(0,0,0,0.0);
+}
+::v-deep(.p-paginator) {
+    .p-paginator-current {
+        margin-left: auto;
+    }
+}
+
+::v-deep(.p-datatable.p-datatable-customers) {
+    .p-paginator {
+        padding: 1rem;
+    }
 }
 </style>

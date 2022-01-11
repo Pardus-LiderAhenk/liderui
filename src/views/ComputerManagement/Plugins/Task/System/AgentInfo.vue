@@ -141,8 +141,8 @@
             <DataTable class="p-datatable-sm" 
               :value="selectedNodeData" responsiveLayout="scroll"
             >
-              <Column field="label" :header="$t('group_management.computer_group.attribute')"></Column>
-              <Column field="value" :header="$t('group_management.computer_group.value')"></Column>
+              <Column field="label" :header="$t('group_management.attribute')"></Column>
+              <Column field="value" :header="$t('group_management.value')"></Column>
             </DataTable>
           </TabPanel>
           <TabPanel v-if="selectedLiderNode.type == 'AHENK'">
@@ -305,7 +305,7 @@
       </TabView>
       <template #footer>
           <Button 
-              :label="$t('group_management.computer_group.close')" 
+              :label="$t('group_management.close')" 
               icon="pi pi-times"
               @click="showAgentInfoDialog = false" 
               class="p-button-text p-button-sm">

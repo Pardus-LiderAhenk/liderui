@@ -98,7 +98,7 @@
 <script>
 
 /**
- * Computer Group Managemet.
+ * User Group Management. Member Of User Group component
  * @see {@link http://www.liderahenk.org/}
  * 
  */
@@ -126,7 +126,7 @@ export default {
 
     computed:mapGetters(["selectedLiderNode"]),
 
-      methods: {
+    methods: {
         ...mapActions(["setSelectedLiderNode"]),
 
         initFilters() {
@@ -187,7 +187,7 @@ export default {
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedLiderNode.distinguishedName);
-            axios.post("/lider/computer_groups/delete/group/members", params).then((response) => {
+            axios.post("/lider/user_groups/delete/group/members", params).then((response) => {
                 if (response.data != null) {
                     this.$toast.add({
                         severity:'success', 
@@ -197,6 +197,7 @@ export default {
                     });
                     this.setSelectedLiderNode(response.data);
                     this.getMemberOfSelectedGroup(this.selectedLiderNode);
+                    this.$emit('deleteMember', this.selectedLiderNode);
                     this.loading = false;
                 }
             }).catch((error) => {
@@ -220,10 +221,10 @@ export default {
                     'value': this.selectedLiderNode.type,
                 });
             if (this.selectedLiderNode.type == "GROUP") {
-                 nodeSummaryData.push({
-                    'label': this.$t('group_management.number_of_member'),
-                    'value': this.members.length
-                 });
+                nodeSummaryData.push({
+                'label': this.$t('group_management.number_of_member'),
+                'value': this.members.length
+                });
             }
             this.selectedNodeSummaryData = nodeSummaryData;
         }
@@ -239,7 +240,7 @@ export default {
                 this.getSelectedNodeAttribute();
             }
         }
-  },
+    },
 }
 </script>
 

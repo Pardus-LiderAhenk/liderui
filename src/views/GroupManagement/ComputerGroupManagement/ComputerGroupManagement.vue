@@ -12,7 +12,7 @@
                 :searchFields="searchFields"
                 @handleContextMenu="handleContenxtMenu"
             >
-            <template #contextmenu>
+                <template #contextmenu>
                     <div
                         ref="treecontextmenu"
                         class="el-overlay mycontextmenu"
@@ -60,49 +60,50 @@
         </div>
     </div>
     <!-- Add Folder Dialog -->
-    <Dialog :header="$t('group_management.computer_group.add_folder')" v-model:visible="modals.folderAdd" 
+    <Dialog :header="$t('group_management.add_folder')" v-model:visible="modals.folderAdd" 
         :style="{width: '30vw'}" :modal="true">
         <div class="p-fluid">
             <div class="p-field">
-                <label for="folderName">{{$t('group_management.computer_group.folder_name')}}</label>
+                <label for="folderName">{{$t('group_management.folder_name')}}</label>
                 <InputText :class="validation.folderName ? 'p-invalid': ''" type="text" v-model="folderName"/>
                 <small v-if="validation.folderName" class="p-error">
-                    {{ $t('group_management.computer_group.folder_name_warn')}}
+                    {{ $t('group_management.folder_name_warn')}}
                 </small>
             </div>
         </div>
         <template #footer>
-            <Button :label="$t('group_management.computer_group.cancel')" icon="pi pi-times" 
+            <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
                 @click="modals.folderAdd = false" class="p-button-text p-button-sm"
             />
-            <Button :label="$t('group_management.computer_group.add')" icon="pi pi-plus"
+            <Button :label="$t('group_management.add')" icon="pi pi-plus"
                 @click="addFolder" class="p-button-sm"
             />
         </template>
     </Dialog>
     <!-- Add Folder Dialog End-->
     <!-- Rename Group Dialog -->
-    <Dialog :header="$t('group_management.computer_group.rename_group')" 
+    <Dialog :header="$t('group_management.rename_group')" 
         v-model:visible="modals.renameGroup" :style="{width: '30vw'}" :modal="true">
         <div class="p-fluid">
             <div class="p-field">
-                <label for="folderName">{{$t('group_management.computer_group.group_name')}}</label>
+                <label for="folderName">{{$t('group_management.group_name')}}</label>
                 <InputText :class="validation.groupName ? 'p-invalid': ''" type="text" v-model="agentGroupModal.groupName"/>
                 <small v-if="validation.groupName" class="p-error">
-                    {{ $t('group_management.computer_group.group_name_warn')}}
+                    {{ $t('group_management.group_name_warn')}}
                 </small>
             </div>
         </div>
         <template #footer>
-            <Button :label="$t('group_management.computer_group.cancel')" icon="pi pi-times" 
+            <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
                 @click="modals.renameGroup = false" class="p-button-text p-button-sm"
             />
-            <Button :label="$t('group_management.computer_group.update')" icon="pi pi-refresh"
+            <Button :label="$t('group_management.update')" icon="pi pi-refresh"
                 @click="changeGroupName" class="p-button-sm"
             />
         </template>
     </Dialog>
     <!-- Rename Group Dialog End -->
+    <!-- Delete Selected Node Dialog -->
     <Dialog
         :header="$t('computer.task.toast_summary')" 
         v-model:visible="modals.deleteNode"  
@@ -111,10 +112,10 @@
         <div class="confirmation-content">
             <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
             <span v-if="selectedNode.type == 'GROUP'">
-                {{ $t('group_management.computer_group.delete_group_warn')}}
+                {{ $t('group_management.delete_group_warn')}}
             </span>
             <span v-if="selectedNode.type == 'ORGANIZATIONAL_UNIT'">
-                {{ $t('group_management.computer_group.delete_folder_warn')}}
+                {{ $t('group_management.delete_folder_warn')}}
             </span>
         </div>
         <template #footer>
@@ -135,8 +136,8 @@
     <!-- Delete Selected Node Dialog End -->
     <!-- Move Selected Node Dialog -->
     <Dialog 
-        :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.computer_group.move_group')
-        :$t('group_management.computer_group.move_folder')" 
+        :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.move_group')
+        :$t('group_management.move_folder')" 
         v-model:visible="modals.moveNode" :style="{width: '40vw'}" :modal="true"
     >
         <tree-component 
@@ -148,32 +149,32 @@
             :searchFields="searchFolderFields"
         />
         <div class="p-col p-text-center">
-          <small>{{$t('group_management.computer_group.select_folder_warn')}}</small>
+          <small>{{$t('group_management.select_folder_warn')}}</small>
         </div>
         <template #footer>
-            <Button :label="$t('group_management.computer_group.cancel')" icon="pi pi-times" 
+            <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
                 @click="modals.moveNode = false" class="p-button-text p-button-sm"
             />
-            <Button :label="$t('group_management.computer_group.move')" icon="el-icon-rank" 
+            <Button :label="$t('group_management.move')" icon="el-icon-rank" 
                 @click="moveNode" class="p-button-sm"
             />
         </template>
     </Dialog>
     <!-- Move Selected Node Dialog End -->
     <!-- Add Group Dialog or Add Client to Group Dialog -->
-    <Dialog :header="modals.addClient? $t('group_management.computer_group.add_client')
-        :$t('group_management.computer_group.add_group')"
+    <Dialog :header="modals.addClient? $t('group_management.add_client')
+        :$t('group_management.add_group')"
          v-model:visible="modals.addGroup" :style="{width: '50vw'}" :modal="true">
         <TabView>
-            <TabPanel header="Grup Bilgileri">
+            <TabPanel :header="$t('group_management.group_info')">
                 <div class="p-fluid">
                     <div class="p-field">
-                        <label for="agentGroupModal.groupName">{{$t('group_management.computer_group.group_name')}}</label>
+                        <label for="agentGroupModal.groupName">{{$t('group_management.group_name')}}</label>
                         <InputText :class="validation.groupName ? 'p-invalid': ''" 
                             type="text" v-model="agentGroupModal.groupName"
                             :disabled="modals.addClient? true: false"/>
                         <small v-if="validation.groupName" class="p-error">
-                            {{ $t('group_management.computer_group.group_name_warn')}}
+                            {{ $t('group_management.group_name_warn')}}
                         </small>
                     </div>
                 </div>
@@ -187,12 +188,12 @@
                     isAgentTree="true"
                 />
                 <div class="p-col p-text-center">
-                    <small>{{$t('group_management.computer_group.select_client')}}</small>
+                    <small>{{$t('group_management.select_client')}}</small>
                 </div>
             </TabPanel>
             <TabPanel>
                 <template #header>
-                    <span>{{$t('group_management.computer_group.selected_clients')}}
+                    <span>{{$t('group_management.selected_clients')}}
                          <Badge :value="agentGroupModal.checkedNodes.length"></Badge>
                     </span>
                 </template>
@@ -209,13 +210,13 @@
                                 <InputText 
                                     v-model="filters['global'].value" 
                                     class="p-inputtext-sm" 
-                                    :placeholder="$t('group_management.computer_group.search')" 
+                                    :placeholder="$t('group_management.search')" 
                                 />
                             </span>
                         </div>
                     </template>
                     <Column field="distinguishedName" 
-                        :header="$t('group_management.computer_group.node_dn')" 
+                        :header="$t('group_management.node_dn')" 
                         style="min-width: 80%">
                     </Column>
                     <Column>
@@ -224,7 +225,7 @@
                                 <Button
                                     class="p-button-sm p-button-danger p-button-rounded"
                                     icon="pi pi-trash"
-                                    :title="$t('group_management.computer_group.delete')"
+                                    :title="$t('group_management.delete')"
                                     @click.prevent="removeAgentFromGroup(slotProps.data)">
                                 </Button>
                             </div>
@@ -234,7 +235,7 @@
             </TabPanel>
             <TabPanel v-if="modals.addClient">
                 <template #header>
-                    <span>{{$t('group_management.computer_group.existing_clients')}}
+                    <span>{{$t('group_management.existing_clients')}}
                          <Badge :value="agentGroupModal.existingClients.length"></Badge>
                     </span>
                 </template>
@@ -251,13 +252,13 @@
                                 <InputText 
                                     v-model="filters['global'].value" 
                                     class="p-inputtext-sm" 
-                                    :placeholder="$t('group_management.computer_group.search')" 
+                                    :placeholder="$t('group_management.search')" 
                                 />
                             </span>
                         </div>
                     </template>
                     <Column field="distinguishedName" 
-                        :header="$t('group_management.computer_group.node_dn')">
+                        :header="$t('group_management.node_dn')">
                     </Column>
                 </DataTable>
             </TabPanel>
@@ -277,7 +278,7 @@
 <script>
 
 /**
- * Computer Group Managemet.
+ * Computer Group Management.
  * @see {@link http://www.liderahenk.org/}
  * 
  */
@@ -298,6 +299,7 @@ export default {
         const tree = ref(null);
         return { selectedNode, tree };
     },
+
     components: {
         TreeComponent,
         NodeDetail,
@@ -305,6 +307,7 @@ export default {
         PackageManagement,
         ScriptManagement
     },
+
     data() {
         return {
             selectedPluginTab: "system-management",
@@ -313,13 +316,13 @@ export default {
             showContextMenu: false,
             loading: false,
             modals : {
-             folderAdd: false,
-             renameGroup: false,
-             moveFolder: false,
-             addClient: false,
-             addGroup: false,
-             deleteNode: false,
-             moveNode: false
+                folderAdd: false,
+                renameGroup: false,
+                moveFolder: false,
+                addClient: false,
+                addGroup: false,
+                deleteNode: false,
+                moveNode: false
             },
             folderName:'',
             selectedAgents: [],
@@ -368,9 +371,11 @@ export default {
             }
         }
     },
+
     created() {
         this.setSelectedLiderNode(null);
     },
+
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
         
@@ -387,19 +392,19 @@ export default {
                     if (node.isRoot) {
                         this.contextMenuItems = [
                             {
-                                label: this.$t('group_management.computer_group.node_detail'), 
+                                label: this.$t('group_management.node_detail'), 
                                 icon:'pi pi-list', 
                                 command: () => {this.showNodeDetailDialog = true}
                             },
                             {
-                                label: this.$t('group_management.computer_group.add_group'), 
+                                label: this.$t('group_management.add_group'), 
                                 icon:"fas fa-users", 
                                 command: () => {this.modals.addClient = false; 
                                     this.modals.addGroup = true;
                                     this.agentGroupModal.groupName = '';}
                             },
                             {
-                                label: this.$t('group_management.computer_group.add_folder'),
+                                label: this.$t('group_management.add_folder'),
                                 icon:"pi pi-folder-open", 
                                 command: () => {this.validation.folderName = false; this.modals.folderAdd = true}
                             },
@@ -407,29 +412,31 @@ export default {
                     } else {
                         this.contextMenuItems = [
                             {
-                                label: this.$t('group_management.computer_group.node_detail'), 
+                                label: this.$t('group_management.node_detail'), 
                                 icon: 'pi pi-list', 
                                 command: () => {this.showNodeDetailDialog = true}
                             },
                             {
-                                label: this.$t('group_management.computer_group.add_group'), 
+                                label: this.$t('group_management.add_group'), 
                                 icon:"fas fa-users", 
-                                command: () => {this.modals.addClient = false; this.modals.addGroup = true}
-                            },
-                            {
-                                label: this.$t('group_management.computer_group.add_folder'), 
-                                icon:"pi pi-folder-open", 
-                                command: () => {this.validation.folderName = false; 
-                                    this.modals.folderAdd = true;
+                                command: () => {this.modals.addClient = false; 
+                                    this.modals.addGroup = true;
                                     this.agentGroupModal.groupName = '';}
                             },
                             {
-                                label: this.$t('group_management.computer_group.move_folder'), 
+                                label: this.$t('group_management.add_folder'), 
+                                icon:"pi pi-folder-open", 
+                                command: () => {this.validation.folderName = false; 
+                                    this.modals.folderAdd = true;
+                                    this.folderName = '';}
+                            },
+                            {
+                                label: this.$t('group_management.move_folder'), 
                                 icon:"el-icon-rank", 
                                 command:() => {this.modals.moveNode = true;}
                             },
                             {
-                                label: this.$t('group_management.computer_group.delete_folder'), 
+                                label: this.$t('group_management.delete_folder'), 
                                 icon:"pi pi-trash", 
                                 command:() => {this.modals.deleteNode = true;}
                             },
@@ -439,29 +446,29 @@ export default {
                 case 'GROUP':
                     this.contextMenuItems = [
                         {
-                            label: this.$t('group_management.computer_group.node_detail'), 
+                            label: this.$t('group_management.node_detail'), 
                             icon: 'pi pi-list', 
                             command: () => {this.showNodeDetailDialog = true}
                         },
                         {
-                            label: this.$t('group_management.computer_group.add_client'), 
+                            label: this.$t('group_management.add_client'), 
                             icon:"fab fa-linux", 
                             command: () => {this.showAddClientDialog()}
                         },
                         {
-                            label: this.$t('group_management.computer_group.rename_group'), 
+                            label: this.$t('group_management.rename_group'), 
                             icon:"pi pi-pencil", 
                             command: () => {this.modals.renameGroup = true; 
                                 this.validation.groupName = false;
                                 this.agentGroupModal.groupName = this.selectedNode.cn}
                         },
                         {
-                            label: this.$t('group_management.computer_group.move_group'), 
+                            label: this.$t('group_management.move_group'), 
                             icon:"el-icon-rank", 
                             command: () => {this.modals.moveNode = true}
                         },
                         {
-                            label: this.$t('group_management.computer_group.delete_group'), 
+                            label: this.$t('group_management.delete_group'), 
                             icon:"pi pi-trash", 
                             command:() => {this.modals.deleteNode = true;}
                         },
@@ -481,6 +488,10 @@ export default {
         },
 
         addFolder() {
+            if (!this.folderName.trim()) {
+                this.validation.folderName = true;
+                return;
+            }
             axios.post('/lider/computer_groups/addOu', {
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
@@ -492,7 +503,7 @@ export default {
                 this.modals.folderAdd = false;
                 this.$toast.add({
                     severity:'success', 
-                    detail: this.$t('group_management.computer_group.add_folder_success'), 
+                    detail: this.$t('group_management.add_folder_success'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -514,7 +525,7 @@ export default {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('group_management.computer_group.rename_group_success'), 
+                        detail: this.$t('group_management.rename_group_success'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -525,7 +536,7 @@ export default {
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.computer_group.rename_group_error'), 
+                        detail: this.$t('group_management.rename_group_error'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -537,7 +548,7 @@ export default {
             if (!this.moveFolderNode) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: this.$t('group_management.computer_group.select_folder_warn'), 
+                    detail: this.$t('group_management.select_folder_warn'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -546,7 +557,7 @@ export default {
             if (this.moveFolderNode.distinguishedName === this.selectedNode.distinguishedName) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: this.$t('group_management.computer_group.move_node_same_dn_warn'), 
+                    detail: this.$t('group_management.move_node_same_dn_warn'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -568,14 +579,14 @@ export default {
                     this.setSelectedLiderNode(null);
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('group_management.computer_group.move_node_success'), 
+                        detail: this.$t('group_management.move_node_success'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.computer_group.move_node_error'), 
+                        detail: this.$t('group_management.move_node_error'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -587,7 +598,7 @@ export default {
             if (this.agentGroupModal.checkedNodes.length === 0) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: this.$t('group_management.computer_group.select_client'), 
+                    detail: this.$t('group_management.select_client'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -611,10 +622,11 @@ export default {
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 selectedOUDN: this.selectedNode.distinguishedName
             }).then(response => {
+                this.loading = false;
                 if (response.data === "") {
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.computer_group.created_group_error'), 
+                        detail: this.$t('group_management.created_group_error'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -625,15 +637,24 @@ export default {
                         groupName:'',
                         checkedNodes: []
                     }
-                    this.loading = false;
                     this.modals.addGroup = false;
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('group_management.computer_group.created_group_success'), 
+                        detail: this.$t('group_management.created_group_success'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
+            })
+            .catch((error) => {
+                if (error.response.status == "NOT_ACCEPTABLE") {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.select_client'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 5000
+                    });
+                } 
             });
         },
 
@@ -649,6 +670,7 @@ export default {
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 groupDN: this.selectedNode.distinguishedName
             }).then(response => {
+                this.loading = false;
                 if (response.data) {
                     this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
                     this.setSelectedLiderNode(response.data);
@@ -658,19 +680,18 @@ export default {
                         checkedNodes: [],
                         existingClients: []
                     }
-                    this.loading = false;
                     this.modals.addGroup = false;
                     this.modals.addClient = false;
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('group_management.computer_group.add_client_success'), 
+                        detail: this.$t('group_management.add_client_success'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.computer_group.add_client_error'), 
+                        detail: this.$t('group_management.add_client_error'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -692,7 +713,7 @@ export default {
                     } else {
                         this.attributesMultiValue = false;
                         this.agentGroupModal.existingClients.push({
-                            "distinguishedName": node.attributesMultiValues[key][0],
+                            "distinguishedName": this.selectedNode.attributesMultiValues[key][0],
                         });
                     }
                 }
@@ -709,14 +730,14 @@ export default {
                     this.setSelectedLiderNode(null);
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('group_management.computer_group.delete_node_success'), 
+                        detail: this.$t('group_management.delete_node_success'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.computer_group.delete_node_error'), 
+                        detail: this.$t('group_management.delete_node_error'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -746,15 +767,24 @@ export default {
         setSelectedPluginTab(tab) {
             this.selectedPluginTab = tab;
         },
-    
     }, 
+
+    watch: {
+        selectedLiderNode() {
+            if (this.selectedNode && this.selectedNode.type == "GROUP") {
+                this.selectedNode.attributesMultiValues.member = this.selectedLiderNode.attributesMultiValues.member;
+                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+            }
+            
+        }
+    },
 }
 </script>
 
 <style lang="scss" scoped>
 
 .p-button:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .computer-group-management {
