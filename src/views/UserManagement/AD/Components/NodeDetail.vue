@@ -24,7 +24,7 @@
 
 <script>
 /**
- * This component, node detail in tree by selectedLiderNode. Emit closeNodeDetailDialog event when closed showDetailDialog
+ * This component, node detail in tree by selectedNode for AD tree. Emit closeNodeDetailDialog event when closed showDetailDialog
  * @event closeNodeDetailDialog
  * @see {@link http://www.liderahenk.org/}
  */
@@ -37,6 +37,10 @@ export default {
             type: Boolean,
             default: false
         },
+        selectedNode: {
+            type: Object,
+            description: "Selected tree node",
+        },
     },
 
     data() {
@@ -47,8 +51,6 @@ export default {
         }
     },
 
-    computed:mapGetters(["selectedLiderNode"]),
-
     methods: {
         getSelectedNodeAttribute() {
             let nodeData = [];
@@ -56,13 +58,13 @@ export default {
             
             nodeSummaryData.push({
                 'label': this.$t('node_detail.name'),
-                'value': this.selectedLiderNode.name,
+                'value': this.selectedNode.name,
                 },
                 {
                     'label': this.$t('node_detail.type'),
-                    'value': this.selectedLiderNode.type,
+                    'value': this.selectedNode.type,
                 });
-            if (this.selectedLiderNode.type == "GROUP") {
+            if (this.selectedNode.type == "GROUP") {
                  nodeSummaryData.push({
                      'label': this.$t('node_detail.number_of_member'),
                     'value': this.members.length
@@ -70,38 +72,30 @@ export default {
             }
             nodeData.push({
                 'label': this.$t('node_detail.name'),
-                'value': this.selectedLiderNode.name,
+                'value': this.selectedNode.name,
                 }, 
                 {
                     'label': this.$t('node_detail.node_dn'),
-                    'value': this.selectedLiderNode.distinguishedName,
+                    'value': this.selectedNode.distinguishedName,
                 },
                 {
                     'label': this.$t('node_detail.type'),
-                    'value': this.selectedLiderNode.type,
+                    'value': this.selectedNode.type,
                 },
                 {
                     'label': this.$t('node_detail.created_date'),
-                    'value': this.selectedLiderNode.createDateStr,
+                    'value': this.getFormattedDate(this.selectedNode.attributes.whenCreated),
                 },
 
                 {
                     'label': this.$t('node_detail.modified_date'),
-                    'value': this.selectedLiderNode.modifyDateStr,
-                },
-                {
-                    'label': this.$t('node_detail.creator_name'),
-                    'value': this.selectedLiderNode.attributes.creatorsName,
-                },
-                {
-                    'label': this.$t('node_detail.modifier_name'),
-                    'value': this.selectedLiderNode.attributes.modifiersName,
+                    'value': this.getFormattedDate(this.selectedNode.attributes.whenChanged),
                 },
                 {
                     'label': this.$t('node_detail.description'),
-                    'value': this.selectedLiderNode.attributes.description,
+                    'value': this.selectedNode.attributes.description,
                 });
-            this.selectedLiderNode.attributesMultiValues.objectClass.map(oclas => {
+            this.selectedNode.attributesMultiValues.objectClass.map(oclas => {
                 nodeData.push({
                     'label': this.$t('node_detail.objectclass'),
                     'value' : oclas
@@ -114,7 +108,19 @@ export default {
         closeDetailDialog() {
             this.showDetailDialog = false;
             this.$emit("closeNodeDetailDialog");
-        }
+        },
+
+        getFormattedDate(date) {
+            // "2021 11 29 14 08 25.0Z"
+            let strDate = null;
+            let year = date.substring(0,4);
+            let month = date.substring(4,6);
+            let day = date.substring(6,8);
+            let hour = date.substring(8,10);
+            let minute = date.substring(10,12);
+            strDate = day+"/"+ month+"/"+ year+" "+ hour +":"+minute;
+            return strDate
+        },
     },
 
     watch: {

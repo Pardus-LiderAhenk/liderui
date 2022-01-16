@@ -76,7 +76,8 @@
         "modified_date":"Güncelleme Tarihi",
         "creator_name": "Oluşturan Kişi",
         "modifier_name": "Güncelleyen Kişi",
-        "objectclass": "Nesne Sınıfı"
+        "objectclass": "Nesne Sınıfı",
+        "description":"Açıklama"
     },
     "dashboard": {
         "totalUserCount": "Toplam Kullanıcı Sayısı"
@@ -678,7 +679,15 @@
         "telephone_number_warn":"Telefon numarası boş bırakılamaz",
         "folder_name_warn": "Klasör adı boş bırakılamaz",
         "login":"Oturum Açıldı",
-        "logout":"Oturum Kapatıldı"
+        "logout":"Oturum Kapatıldı",
+        "description":"Açıklama",
+        "ad":{
+            "add_group":"Grup Ekle",
+            "give_console_access": "Konsol Erişimi Ver",
+            "add_to_group": "Gruba Ekle",
+            "node_detail_title": "Seçilen Kayıt Detayı",
+            "error_ad_child_entries":"Seçilen düğümün alt kayıtları getirilirken hata oluştu"
+        }
     },
     "group_management": {
         "selected_node_title": "Kayıt Bilgisi",
@@ -747,6 +756,10 @@
         "select_user": "Lütfen kullanıcı seçiniz",
         "add_user":"Kullanıcı Ekle",
         "add_user_success": "Kullanıcı başarıyla eklendi",
-        "add_user_error": "Kullanıcı eklenirken hata oluştu"
+        "add_user_error": "Kullanıcı eklenirken hata oluştu",
+        "active_policy_list": "Aktif Politika Listesi",
+        "active_policy_empty_message": "Aktif politika bulunamadı",
+        "policy_name": "Politika Adı",
+        "description": "Açıklama"
     }
 }

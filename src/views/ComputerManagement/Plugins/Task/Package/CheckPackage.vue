@@ -42,7 +42,7 @@
             </div>
             <div class="p-field">
                 <DataTable :value="packages" class="p-datatable-sm"
-                     dataKey="id"
+                    dataKey="id"
                     :paginator="true" :rows="10" ref="dt"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
                     :rowsPerPageOptions="[10,25,50]" 

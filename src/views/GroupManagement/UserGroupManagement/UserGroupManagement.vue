@@ -31,6 +31,9 @@
                 <div class="p-col-12 p-md-6 p-lg-5">
                     <member-of-user-group @delete-member="updateSelectedNode"></member-of-user-group>
                 </div>
+                <div class="p-col-12 p-md-6 p-lg-7">
+                    <active-policies></active-policies>
+                </div>
             </div>
         </div>
     </div>
@@ -259,7 +262,8 @@ import NodeDetail from '@/components/Tree/NodeDetail.vue';
 import axios from 'axios';
 import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
-import MemberOfUserGroup from "@/views/GroupManagement/UserGroupManagement/MemberOfUserGroup.vue";
+import MemberOfUserGroup from "@/views/GroupManagement/UserGroupManagement/Components/MemberOfUserGroup.vue";
+import ActivePolicies from "@/views/GroupManagement/UserGroupManagement/Components/ActivePolicies.vue";
 import {FilterMatchMode} from 'primevue/api';
 
 export default {
@@ -273,10 +277,12 @@ export default {
     components: {
         TreeComponent,
         NodeDetail,
-        MemberOfUserGroup
+        MemberOfUserGroup,
+        ActivePolicies
     },
 
     data() {
+     
         return {
             moveFolderNode: null,
             showContextMenu: false,

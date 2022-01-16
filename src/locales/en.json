@@ -77,7 +77,8 @@
         "modifier_name": "Modifier Name",
         "objectclass": "Object Class",
         "number_of_member": "Number of Member",
-        "select_node_warn": "Please select a node"
+        "select_node_warn": "Please select a node",
+        "description":"Description"
     },
     "dashboard": {
         "totalUserCount": "Total User Count"
@@ -675,7 +676,15 @@
         "telephone_number_warn":"Telephone number is not available",
         "folder_name_warn": "Folder name is not available",
         "login":"Login",
-        "logout":"Logout"
+        "logout":"Logout",
+        "description":"Description",
+        "ad":{
+            "add_group":"Add Group",
+            "give_console_access": "Give Console Access",
+            "add_to_group":"Add to Group",
+            "node_detail_title": "Selected Node Detail",
+            "error_ad_child_entries": "An error occurred while getting selected node child entries"
+        }
     },
     "group_management": {
         "selected_node_title": "Node Information",
@@ -744,6 +753,10 @@
         "select_user": "Please select user",
         "add_user":"Add User",
         "add_user_success":"Added user successfully",
-        "add_user_error":"An error occurred while adding user"
+        "add_user_error":"An error occurred while adding user",
+        "active_policy_list": "Active Policy List",
+        "active_policy_empty_message": "Active policy not found",
+        "description":"Description",
+        "policy_name": "Policy Name"
     }
 }
