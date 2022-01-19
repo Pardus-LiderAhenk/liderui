@@ -266,7 +266,7 @@
                 <div class="p-d-flex p-jc-between">
                     <div style="text-align: left">
                         <Button v-if="selectedAgentInfo.sessions.length > 0"
-                            class="p-button-sm" icon="pi pi-external-link"
+                            class="p-button-sm" icon="pi pi-download"
                             :label="$t('computer.agent_info.export')"
                             @click="exportSessionsHistoryCSV($event)">
                         </Button>
@@ -697,6 +697,14 @@ export default {
           'value' : oclas
         })
       });
+      if (this.selectedLiderNode.type == "AHENK" && this.selectedLiderNode.attributesMultiValues.memberOf) {
+          this.selectedLiderNode.attributesMultiValues.memberOf.map(memberOf => {
+              nodeData.push({
+                  'label': this.$t('node_detail.member_of_group'),
+                  'value' : memberOf
+              })
+          });
+      }
       this.selectedNodeData = nodeData;
       this.selectedNodeSummaryData = nodeSummaryData;
     },

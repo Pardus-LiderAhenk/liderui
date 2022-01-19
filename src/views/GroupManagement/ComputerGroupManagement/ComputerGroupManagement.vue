@@ -1,5 +1,6 @@
 <template>
     <node-detail :showNodeDetailDialog="showNodeDetailDialog"
+        :selectedNode="selectedNode"
         @close-node-detail-dialog="showNodeDetailDialog=false">
     </node-detail>
     <div class="p-grid computer-group-management">

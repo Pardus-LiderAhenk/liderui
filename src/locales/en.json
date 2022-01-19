@@ -78,7 +78,8 @@
         "objectclass": "Object Class",
         "number_of_member": "Number of Member",
         "select_node_warn": "Please select a node",
-        "description":"Description"
+        "description":"Description",
+        "member_of_group": "Member Of Group"
     },
     "dashboard": {
         "totalUserCount": "Total User Count"
@@ -678,12 +679,27 @@
         "login":"Login",
         "logout":"Logout",
         "description":"Description",
+        "dn":"DN",
+        "select":"Select",
+        "search_value_warn": "Search value is not available",
+        "search_field_warn": "Please select search filed",
+        "user_not_found":"User not found",
         "ad":{
             "add_group":"Add Group",
             "give_console_access": "Give Console Access",
             "add_to_group":"Add to Group",
             "node_detail_title": "Selected Node Detail",
-            "error_ad_child_entries": "An error occurred while getting selected node child entries"
+            "error_ad_child_entries": "An error occurred while getting selected node child entries",
+            "user_principal_name": "User Principal Name(UPN)",
+            "group_name":"Group Name",
+            "group_name_warn":"Group name is not available",
+            "added_group_success": "Added group successfully",
+            "added_group_error": "An error occurred while adding group",
+            "add_member_to_group": "Add Member to Group",
+            "search_field": "Search Field",
+            "search_value": "Search Value",
+            "user_table_empty_message": "User not found",
+            "group_table_empty_message":"Group not found"
         }
     },
     "group_management": {

@@ -77,7 +77,8 @@
         "creator_name": "Oluşturan Kişi",
         "modifier_name": "Güncelleyen Kişi",
         "objectclass": "Nesne Sınıfı",
-        "description":"Açıklama"
+        "description":"Açıklama",
+        "member_of_group": "Grup Üyesi"
     },
     "dashboard": {
         "totalUserCount": "Toplam Kullanıcı Sayısı"
@@ -681,12 +682,27 @@
         "login":"Oturum Açıldı",
         "logout":"Oturum Kapatıldı",
         "description":"Açıklama",
+        "dn":"DN",
+        "select":"Seç",
+        "search_value_warn": "Arama değeri boş bırakılamaz",
+        "search_field_warn": "Lütfen arama alanı seçiniz",
+        "user_not_found": "Kullanıcı bulunamadı",
         "ad":{
             "add_group":"Grup Ekle",
             "give_console_access": "Konsol Erişimi Ver",
             "add_to_group": "Gruba Ekle",
             "node_detail_title": "Seçilen Kayıt Detayı",
-            "error_ad_child_entries":"Seçilen düğümün alt kayıtları getirilirken hata oluştu"
+            "error_ad_child_entries":"Seçilen düğümün alt kayıtları getirilirken hata oluştu",
+            "user_principal_name": "Kullanıcı Asıl Adı(UPN)",
+            "group_name":"Grup Adı",
+            "group_name_warn":"Grup adı boş bırakılamaz",
+            "added_group_success": "Grup başarıyla eklendi",
+            "added_group_error": "Grup eklenirken hata oluştu",
+            "add_member_to_group": "Gruba Üye Ekle",
+            "search_field": "Arama Alanı",
+            "search_value": "Arama Değeri",
+            "user_table_empty_message":"Kullanıcı bulunamadı",
+            "group_table_empty_message": "Grup bulunamadı"
         }
     },
     "group_management": {

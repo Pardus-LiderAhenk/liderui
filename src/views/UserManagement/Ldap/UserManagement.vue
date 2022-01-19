@@ -1,5 +1,6 @@
 <template>
     <node-detail :showNodeDetailDialog="showNodeDetailDialog"
+        :selectedNode="selectedNode"
         @close-node-detail-dialog="showNodeDetailDialog=false">
     </node-detail>
     <div class="p-grid user-management">
@@ -37,7 +38,7 @@
                             <keep-alive>
                                 <component :is="selectedTabUserMenu"
                                     :selectedNode="selectedNode"
-                                    :userNode="userNode"
+                                    :userLdapBaseDn="userLdapBaseDn"
                                     @updated-user="treeNodeClick">
                                 </component>
                             </keep-alive>
@@ -242,7 +243,7 @@ export default {
         return {
             showNodeDetailDialog: false,
             moveUserNode: null,
-            userNode: null,
+            userLdapBaseDn: null,
             modals: {
                 folderAdd: false,
                 moveUser: false,
@@ -319,7 +320,7 @@ export default {
     created() {
         axios.get("/lider/user/configurations", null).then((response) => {
             if (response.data != null) {
-                this.userNode = response.data;
+                this.userLdapBaseDn = response.data;
             }
         });
         this.setSelectedLiderNode(null);

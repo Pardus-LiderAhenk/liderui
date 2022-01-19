@@ -31,7 +31,7 @@
                 <div class="p-d-flex p-jc-between">
                     <div style="text-align: left">
                         <Button v-if="taskList.length > 0"
-                            class="p-button-sm" icon="pi pi-external-link"
+                            class="p-button-sm" icon="pi pi-download"
                             :label="$t('computer.task_history.export')"
                             @click="exportCSV($event)">
                         </Button>

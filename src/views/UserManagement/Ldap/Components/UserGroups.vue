@@ -113,7 +113,7 @@ export default {
             type: Object,
             description: "Selected tree node",
         },
-        userNode: {
+        userLdapBaseDn: {
             type: Object
         }
     },
@@ -154,7 +154,7 @@ export default {
         getGroupsOfSelectedUser() {
             if (this.selectedNode && this.selectedNode.type === "USER") {
                 let params = new FormData();
-                params.append("searchDn", this.userNode.userGroupLdapBaseDn);
+                params.append("searchDn", this.userLdapBaseDn.userGroupLdapBaseDn);
                 params.append("key", "member");
                 params.append("value", this.selectedNode.distinguishedName);
                 axios.post("/lider/ldap/searchEntry", params).then((response) => {

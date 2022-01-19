@@ -12,7 +12,7 @@
                     <div class="p-d-flex p-jc-between">
                         <div style="text-align: left">
                             <Button v-if="sessions"
-                                class="p-button-sm" icon="pi pi-external-link"
+                                class="p-button-sm" icon="pi pi-download"
                                 :label="$t('user_management.export')"
                                 @click="exportCSV($event)">
                             </Button>
@@ -40,7 +40,11 @@
                     </template>
                 </Column>
                 <Column field="agent.hostname" :header="$t('user_management.hostname')"></Column>
-                <Column field="agent.ipAddresses" :header="$t('user_management.ip_address')"></Column>
+                <Column field="agent.ipAddresses" :header="$t('user_management.ip_address')">
+                    <template #body="slotProps">
+                        {{ slotProps.data.agent.ipAddresses.replace(/'/g, "") }}
+                    </template>
+                </Column>
                 <Column field="sessionEvent" :header="$t('user_management.status')">
                     <template #body="slotProps">
                         <Badge v-if="slotProps.data.sessionEvent == 'LOGIN'" 
