@@ -4,9 +4,21 @@
             :header="$t('node_detail.selected_node_detail')" 
             :modal="true"
             :style="{ width: '40vw'}"
-            v-model:visible="showDetailDialog"
-            @hide="closeDetailDialog">
-            <DataTable class="p-datatable-sm" :value="selectedNodeData" responsiveLayout="scroll">
+            v-model:visible="showDialog"
+            @hide="showDialog = false">
+            <DataTable class="p-datatable-sm" :value="selectedNodeData" 
+             v-model:filters="filters" responsiveLayout="scroll">
+                <template #header>
+                    <div class="p-d-flex p-jc-end">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"/>
+                            <InputText v-model="filters['global'].value" 
+                            class="p-inputtext-sm" 
+                            :placeholder="$t('node_detail.search')" 
+                            />
+                        </span>
+                    </div>
+                </template>
                 <Column field="label" :header="$t('node_detail.attribute')"></Column>
                 <Column field="value" :header="$t('node_detail.value')"></Column>
             </DataTable>
@@ -14,7 +26,7 @@
                 <Button 
                     :label="$t('node_detail.close')" 
                     icon="pi pi-times"
-                    @click="closeDetailDialog" 
+                    @click="showDialog = false" 
                     class="p-button-text p-button-sm">
                 </Button>
             </template>
@@ -29,7 +41,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import { mapGetters } from "vuex";
+import {FilterMatchMode} from 'primevue/api';
 
 export default {
     props: {
@@ -47,7 +59,24 @@ export default {
         return {
             showDetailDialog: false,
             selectedNodeData: [],
-            members : []
+            members : [],
+            filters: {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            },
+        }
+    },
+
+    computed: {
+        showDialog: {
+            get () {
+                return this.showNodeDetailDialog
+            },
+
+            set (value) {
+                if (!value) {
+                    this.$emit('closeNodeDetailDialog')
+                }
+            }
         }
     },
 
@@ -55,7 +84,6 @@ export default {
         getSelectedNodeAttribute() {
             let nodeData = [];
             let nodeSummaryData = [];
-            
             nodeSummaryData.push({
                 'label': this.$t('node_detail.name'),
                 'value': this.selectedNode.name,
@@ -66,7 +94,7 @@ export default {
                 });
             if (this.selectedNode.type == "GROUP") {
                  nodeSummaryData.push({
-                     'label': this.$t('node_detail.number_of_member'),
+                    'label': this.$t('node_detail.number_of_member'),
                     'value': this.members.length
                  });
             }
@@ -95,19 +123,30 @@ export default {
                     'label': this.$t('node_detail.description'),
                     'value': this.selectedNode.attributes.description,
                 });
-            this.selectedNode.attributesMultiValues.objectClass.map(oclas => {
+            this.selectedNode.attributesMultiValues.objectClass.map(objectClass => {
                 nodeData.push({
                     'label': this.$t('node_detail.objectclass'),
-                    'value' : oclas
+                    'value' : objectClass
                 })
             });
+            if (this.selectedNode.type == "USER" && this.selectedNode.attributesMultiValues.memberOf) {
+                this.selectedNode.attributesMultiValues.memberOf.map(memberOf => {
+                    nodeData.push({
+                        'label': this.$t('node_detail.member_of_group'),
+                        'value' : memberOf
+                    })
+                });
+            }
+            if (this.selectedNode.type == "GROUP" && this.selectedNode.attributesMultiValues.member) {
+                this.selectedNode.attributesMultiValues.member.map(member => {
+                    nodeData.push({
+                        'label': this.$t('node_detail.member'),
+                        'value' : member
+                    })
+                });
+            }
             this.selectedNodeData = nodeData;
             this.selectedNodeSummaryData = nodeSummaryData;
-        },
-
-        closeDetailDialog() {
-            this.showDetailDialog = false;
-            this.$emit("closeNodeDetailDialog");
         },
 
         getFormattedDate(date) {
@@ -125,7 +164,6 @@ export default {
 
     watch: {
         showNodeDetailDialog() {
-            this.showDetailDialog = this.showNodeDetailDialog;
             this.getSelectedNodeAttribute();
         },
     }

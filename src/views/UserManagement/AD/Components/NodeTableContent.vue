@@ -16,7 +16,7 @@
                         <DataTable :value="nodes" class="p-datatable-sm p-col"
                             :paginator="true" :rows="10" ref="dt"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-                            :rowsPerPageOptions="[10,25,50,100,500,1000]"  style="margin-top: 2em"
+                            :rowsPerPageOptions="[10,25,50,100]"  style="margin-top: 2em"
                             v-model:filters="filters"
                             responsiveLayout="scroll" :loading="loading"
                         >
@@ -63,7 +63,7 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import axios from "axios";
-import NodeDetail from '@/views/UserManagement/AD/Components/NodeDetail.vue';
+import NodeDetail from '@/views/UserManagement/AD/Dialogs/NodeDetail.vue';
 
 export default {
     props: {

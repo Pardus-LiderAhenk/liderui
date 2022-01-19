@@ -1,8 +1,35 @@
 <template>
+    <!-- context menu Dialog -->
     <node-detail :showNodeDetailDialog="showNodeDetailDialog"
         :selectedNode="selectedNode"
         @close-node-detail-dialog="showNodeDetailDialog = false">
     </node-detail>
+
+    <add-folder-dialog :addFolderDialog="modals.addFolderDialog"
+        :selectedNode="selectedNode"
+        @appendNode="appendNode"
+        @close-ad-dialog="modals.addFolderDialog = false">
+    </add-folder-dialog>
+
+    <add-group-dialog :addGroupDialog="modals.addGroupDialog"
+        :selectedNode="selectedNode"
+        @appendNode="appendNode"
+        @close-ad-dialog="modals.addGroupDialog = false">
+    </add-group-dialog>
+    
+    <add-user-to-selected-group-dialog :addMemberDialog="modals.addMemberDialog"
+        :selectedNode="selectedNode"
+        @updateNode="updateNode"
+        @close-ad-dialog="modals.addMemberDialog = false">
+    </add-user-to-selected-group-dialog>
+
+    <add-selected-user-to-group-dialog :addSelectedUserDialog="modals.addSelectedUserDialog"
+        :selectedNode="selectedNode"
+        @updateNode="updateNode"
+        @close-ad-dialog="modals.addSelectedUserDialog = false">
+    </add-selected-user-to-group-dialog>
+     <!--Context menu Dialog END -->
+
     <div class="p-grid ad-management">
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component ref="tree" class="border-card"
@@ -28,12 +55,14 @@
             </tree-component>
         </div>
         <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
-            <node-table-content v-if="selectedNode && selectedNode.type != 'USER'"
-                :selectedNode="selectedNodeTable">
+            <node-table-content v-if="selectedNodeContent && selectedNodeContent.type != 'USER'"
+                :selectedNode="selectedNodeContent">
             </node-table-content>
+            <user-management v-if="selectedNodeContent && selectedNodeContent.type == 'USER'"
+                :selectedUser="selectedNodeContent">
+            </user-management>
         </div>
     </div>
-    
 </template>
 
 <script>
@@ -43,8 +72,14 @@
  */
 
 import { mapActions } from "vuex"
-import NodeDetail from '@/views/UserManagement/AD/Components/NodeDetail.vue';
 import NodeTableContent from '@/views/UserManagement/AD/Components/NodeTableContent.vue';
+import UserManagement from '@/views/UserManagement/AD/Components/UserManagement.vue';
+import NodeDetail from './Dialogs/NodeDetail.vue';
+import {FilterMatchMode} from 'primevue/api';
+import AddFolderDialog from './Dialogs/AddFolderDialog.vue';
+import AddGroupDialog from './Dialogs/AddGroupDialog.vue';
+import AddUserToSelectedGroupDialog from './Dialogs/AddUserToSelectedGroupDialog.vue';
+import AddSelectedUserToGroupDialog from './Dialogs/AddSelectedUserToGroupDialog.vue';
 
 
 export default {
@@ -53,7 +88,7 @@ export default {
         return {
             showContextMenu: false,
             selectedNode: null,
-            selectedNodeTable: null,
+            selectedNodeContent: null,
             searchFields: [
                 {
                     key: "SAM-Account-Name",
@@ -89,12 +124,26 @@ export default {
                 }
             ],
             showNodeDetailDialog: false,
+            modals: {
+                addGroupDialog: false,
+                addFolderDialog: false,
+                addMemberDialog: false,
+                addSelectedUserDialog: false
+            },
+            filters: {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            },
         };
     },
 
     components: {
         NodeDetail,
-        NodeTableContent
+        NodeTableContent,
+        UserManagement,
+        AddFolderDialog,
+        AddGroupDialog,
+        AddUserToSelectedGroupDialog,
+        AddSelectedUserToGroupDialog
     },
 
     created() {
@@ -102,13 +151,12 @@ export default {
     },
 
     methods:{
-
         ...mapActions(["setSelectedLiderNode"]),
 
         treeNodeClick(node) {
             console.log(node)
             this.selectedNode = node;
-            this.selectedNodeTable = node;
+            this.selectedNodeContent = node;
             this.setSelectedLiderNode(node);
         },
 
@@ -133,12 +181,12 @@ export default {
                             {
                                 label: this.$t('user_management.add_folder'),
                                 icon:"pi pi-folder-open", 
-                                command: () => {this.validation.folderName = false; this.modals.folderAdd = true}
+                                command: () => {this.modals.addFolderDialog = true;}
                             },
                             {
                                 label: this.$t('user_management.ad.add_group'),
                                 icon:"fas fa-users", 
-                                command: () => {this.validation.folderName = false; this.modals.folderAdd = true}
+                                command: () => {this.modals.addGroupDialog = true}
                             },
                         ]
                     }
@@ -158,12 +206,12 @@ export default {
                         {
                             label: this.$t('user_management.add_folder'),
                             icon:"pi pi-folder-open", 
-                            command: () => {this.validation.folderName = false; this.modals.folderAdd = true}
+                            command: () => {this.modals.addFolderDialog = true;}
                         },
                         {
                             label: this.$t('user_management.ad.add_group'),
                             icon:"fas fa-users", 
-                            command: () => {this.validation.folderName = false; this.modals.folderAdd = true}
+                            command: () => {this.modals.addGroupDialog = true;}
                         },
                     ]
                     break
@@ -182,7 +230,7 @@ export default {
                         {
                             label: this.$t('user_management.ad.add_to_group'), 
                             icon:"pi pi-plus", 
-                            command:() => {this.modals.deleteNode = true;}
+                            command:() => {this.modals.addSelectedUserDialog = true;}
                         },
                         {
                             label: this.$t('user_management.delete_user'), 
@@ -206,7 +254,7 @@ export default {
                         {
                             label: this.$t('user_management.ad.add_group'),
                             icon:"fas fa-users",
-                            command:() => {this.modals.deleteNode = true;}
+                            command:() => {this.modals.addGroupDialog = true;}
                         },
                     ]
                     break
@@ -218,9 +266,9 @@ export default {
                             command: () => {this.showNodeDetailDialog = true}
                         },
                         {
-                            label: this.$t('user_management.add_user'), 
+                            label: this.$t('user_management.ad.add_member_to_group'), 
                             icon:"pi pi-user-plus",
-                            command: () => {this.modals.moveUser = true}
+                            command: () => {this.modals.addMemberDialog = true}
                         },
                     ]
                 }
@@ -232,7 +280,14 @@ export default {
             this.showContextMenu = !this.showContextMenu;
         },
 
-        
+        appendNode(node, parentNode) {
+            console.log(node)
+            this.$refs.tree.append(node, parentNode);
+        },
+
+        updateNode(node, selectedNode) {
+            this.selectedNode = node;
+        },
     }
 }
 </script>
