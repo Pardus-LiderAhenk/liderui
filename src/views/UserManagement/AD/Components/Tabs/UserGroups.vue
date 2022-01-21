@@ -1,36 +1,10 @@
 <template>
-    <Dialog :header="$t('user_management.add_to_group')" 
-      v-model:visible="addUserToGroupDialog" 
-      :style="{width: '40vw'}" :modal="true"
-    >
-      <div class="p-grid p-flex-column">
-        <div class="p-col">
-          <tree-component 
-            ref="usergrouptree"
-            loadNodeUrl="/lider/user_groups/getGroups"
-            loadNodeOuUrl="/lider/user_groups/getOuDetails"
-            :treeNodeClick="selectUserGroupNodeClick"
-            :searchFields="searchFields"
-          />
-        </div>
-        <div class="p-col p-text-center">
-          <small>{{$t('user_management.select_group_warn')}}</small>
-        </div>
-      </div>
-      <template #footer>
-        <Button 
-          :label="$t('user_management.cancel')" 
-          icon="pi pi-times"
-          @click="addUserToGroupDialog = false" 
-          class="p-button-text p-button-sm">
-        </Button>
-        <Button class="p-button-sm"
-          :label="$t('user_management.add')"
-          icon="pi pi-plus" 
-          @click="addUserToGroup">
-        </Button>
-      </template>
-    </Dialog>
+    <add-selected-user-to-group-dialog :addSelectedUserDialog="addUserToGroupDialog"
+        :selectedNode="selectedUser"
+        @updateNode="updateNode"
+        @close-ad-dialog="addUserToGroupDialog = false">
+    </add-selected-user-to-group-dialog>
+
     <Dialog 
         :header="$t('computer.task.toast_summary')" 
         v-model:visible="deleteGroupConfirm"  
@@ -106,6 +80,7 @@
 <script>
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import AddSelectedUserToGroupDialog from './../../Dialogs/AddSelectedUserToGroupDialog.vue';
 
 export default {
     props: {
@@ -142,6 +117,10 @@ export default {
         }
     },
 
+    components: {
+        AddSelectedUserToGroupDialog
+    },
+
     mounted() {
         this.getGroupsOfSelectedUser();
     },
@@ -150,6 +129,11 @@ export default {
         selectUserGroupNodeClick(node) {
             this.addUserGroupNode = node;
         },
+
+        updateNode(node){
+            this.$emit('updatedUser', node);
+        },
+        
 
         getGroupsOfSelectedUser() {
             this.groups = [];

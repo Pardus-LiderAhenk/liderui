@@ -23,7 +23,6 @@
 
 <script>
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
-import axios from "axios";
 import GeneralInformations from './Tabs/GeneralInformations.vue';
 import PasswordChange from './Tabs/PasswordChange.vue';
 import SessionHistory from './Tabs/SessionHistory.vue';

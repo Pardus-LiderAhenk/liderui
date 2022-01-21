@@ -687,6 +687,10 @@
         "search_value_warn": "Arama değeri boş bırakılamaz",
         "search_field_warn": "Lütfen arama alanı seçiniz",
         "user_not_found": "Kullanıcı bulunamadı",
+        "logon_name": "Oturum Açma Adı",
+        "logon_name_warn": "Oturum açma adı boş bırakılamaz",
+        "full_name":"Tam Adı",
+        "user_already_exist":"Kullanıcı zaten var",
         "ad":{
             "add_group":"Grup Ekle",
             "give_console_access": "Konsol Erişimi Ver",

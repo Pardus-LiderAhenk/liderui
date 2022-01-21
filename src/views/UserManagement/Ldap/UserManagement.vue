@@ -72,7 +72,7 @@
     <!-- Add Folder Dialog End-->
 
     <!-- Add User Dialog -->
-    <Dialog :header="$t('user_management.add_user')" 
+    <Dialog :header="$t('user_management.add_user')" @hide="cancelAddUserDialog"
         v-model:visible="modals.addUser" :style="{width: '40vw'}" :modal="true">
         <div class="confirmation-content">
             <div class="p-fluid p-formgrid p-grid">
@@ -107,7 +107,7 @@
                     <label for="firstname6">{{$t('user_management.mail_address')}}</label>
                     <span class="p-input-icon-right">
                         <i class="pi pi-envelope" />
-                        <InputText :class="userValidation.uimaild ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
+                        <InputText :class="userValidation.mail ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
                             type="text" v-model="user.mail"
                         />
                         <small v-if="userValidation.mail" class="p-error">
@@ -143,7 +143,7 @@
         </div>
         <template #footer>
             <Button :label="$t('user_management.cancel')" icon="pi pi-times" 
-                @click="modals.addUser = false" class="p-button-text p-button-sm"
+                @click="cancelAddUserDialog" class="p-button-text p-button-sm"
             />
             <Button :label="$t('user_management.add')" icon="pi pi-user-plus" 
                 @click="addUser" class="p-button-sm"
@@ -487,6 +487,18 @@ export default {
                     }
                 });
             }
+        },
+
+        cancelAddUserDialog(){
+            this.modals.addUser = false;
+            this.user.uid = "";
+            this.user.cn = "";
+            this.user.sn = "";
+            this.user.mail = "";
+            this.user.telephoneNumber = "";
+            this.user.homePostalAddress = "";
+            this.user.userPassword = "";
+            this.userValidation = {};
         },
 
         userFormValidation() {

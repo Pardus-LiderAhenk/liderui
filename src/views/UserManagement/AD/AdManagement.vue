@@ -28,6 +28,12 @@
         @updateNode="updateNode"
         @close-ad-dialog="modals.addSelectedUserDialog = false">
     </add-selected-user-to-group-dialog>
+
+    <add-user-dialog :addUserDialog="modals.addUserDialog"
+        :selectedNode="selectedNode"
+        @appendNode="appendNode"
+        @close-ad-dialog="modals.addUserDialog = false">
+    </add-user-dialog>
      <!--Context menu Dialog END -->
 
     <div class="p-grid ad-management">
@@ -72,14 +78,15 @@
  */
 
 import { mapActions } from "vuex"
-import NodeTableContent from '@/views/UserManagement/AD/Components/NodeTableContent.vue';
-import UserManagement from '@/views/UserManagement/AD/Components/UserManagement.vue';
+import NodeTableContent from './Components/NodeTableContent.vue';
+import UserManagement from './Components/UserManagement.vue';
 import NodeDetail from './Dialogs/NodeDetail.vue';
 import {FilterMatchMode} from 'primevue/api';
 import AddFolderDialog from './Dialogs/AddFolderDialog.vue';
 import AddGroupDialog from './Dialogs/AddGroupDialog.vue';
 import AddUserToSelectedGroupDialog from './Dialogs/AddUserToSelectedGroupDialog.vue';
 import AddSelectedUserToGroupDialog from './Dialogs/AddSelectedUserToGroupDialog.vue';
+import AddUserDialog from './Dialogs/AddUserDialog.vue';
 
 
 export default {
@@ -128,7 +135,8 @@ export default {
                 addGroupDialog: false,
                 addFolderDialog: false,
                 addMemberDialog: false,
-                addSelectedUserDialog: false
+                addSelectedUserDialog: false,
+                addUserDialog: false
             },
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
@@ -143,7 +151,8 @@ export default {
         AddFolderDialog,
         AddGroupDialog,
         AddUserToSelectedGroupDialog,
-        AddSelectedUserToGroupDialog
+        AddSelectedUserToGroupDialog,
+        AddUserDialog
     },
 
     created() {
@@ -176,7 +185,7 @@ export default {
                             {
                                 label: this.$t('user_management.add_user'), 
                                 icon:"pi pi-user-plus", 
-                                command: () => {this.modals.addUser = true;}
+                                command: () => {this.modals.addUserDialog = true;}
                             },
                             {
                                 label: this.$t('user_management.add_folder'),
@@ -201,7 +210,7 @@ export default {
                         {
                             label: this.$t('user_management.add_user'), 
                             icon:"pi pi-user-plus", 
-                            command: () => {this.modals.addUser = true;}
+                            command: () => {this.modals.addUserDialog = true;}
                         },
                         {
                             label: this.$t('user_management.add_folder'),
@@ -249,7 +258,7 @@ export default {
                         {
                             label: this.$t('user_management.add_user'), 
                             icon:"pi pi-user-plus", 
-                            command: () => {this.modals.moveUser = true}
+                            command: () => {this.modals.addUserDialog = true}
                         },
                         {
                             label: this.$t('user_management.ad.add_group'),

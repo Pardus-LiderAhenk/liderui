@@ -684,6 +684,10 @@
         "search_value_warn": "Search value is not available",
         "search_field_warn": "Please select search filed",
         "user_not_found":"User not found",
+        "logon_name": "Logon Name",
+        "logon_name_warn": "Logon name is not available",
+        "full_name":"Full Name",
+        "user_already_exist": "User already exists",
         "ad":{
             "add_group":"Add Group",
             "give_console_access": "Give Console Access",
