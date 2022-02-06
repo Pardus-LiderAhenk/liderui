@@ -12,6 +12,7 @@ import UserManagement from '@/views/UserManagement/Ldap/UserManagement.vue';
 
 //REPORTS
 import AgentReport from '@/views/Reports/AgentReport.vue';
+import TaskReport from '@/views/Reports/TaskReport.vue';
 
 //SETTINGS
 import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
@@ -89,6 +90,14 @@ const routes = [{
                 path: "/reports/agent",
                 name: "AgentReport",
                 components: { default: AgentReport },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/reports/task",
+                name: "TaskReport",
+                components: { default: TaskReport },
                 meta: {
                     requiresAuth: true,
                 }

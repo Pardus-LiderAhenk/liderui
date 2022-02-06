@@ -101,7 +101,8 @@ export default {
                             to: '/reports/agent'
                         },
                         {
-                            label: this.$t('menu.executed_task_report')
+                            label: this.$t('menu.executed_task_report'),
+                            to: '/reports/task'
                         }, 
                         {
                             label: this.$t('menu.system_log_report')
