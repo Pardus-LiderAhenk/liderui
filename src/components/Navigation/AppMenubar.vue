@@ -105,7 +105,8 @@ export default {
                             to: '/reports/task'
                         }, 
                         {
-                            label: this.$t('menu.system_log_report')
+                            label: this.$t('menu.system_log_report'),
+                            to: '/reports/logs'
                         }
                     ]
                 }
