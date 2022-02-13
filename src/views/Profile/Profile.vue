@@ -4,8 +4,8 @@
             <PanelMenu class="sideMenu" :model="profileItems" />
         </div>
         <div class="p-col-9">
-            <user-info-form v-show="displayFormName === 1"></user-info-form>
-            <account-info-form v-show="displayFormName === 2"></account-info-form>
+            <user-info-form v-show="displayFormName === 1"  :user="user"></user-info-form>
+            <account-info-form v-show="displayFormName === 2" :user="user"></account-info-form>
             <ui-usage-history v-show="displayFormName === 3"></ui-usage-history>
             <group-info v-show="displayFormName === 4"></group-info>
         </div>
@@ -18,6 +18,7 @@ import UserInfoForm from './components/UserInfoForm.vue';
 import AccountInfoForm from './components/AccountInforForm.vue';
 import UiUsageHistory from './components/UiUsageHistory.vue';
 import GroupInfo from './components/GroupInfo.vue';
+import axios from "axios";
 
 export default {
     components:{
@@ -29,6 +30,7 @@ export default {
     data() {
         return {
             displayFormName: 1,
+            user:null,
             profileItems: [
                 {
                     label: 'Kullanıcı Bilgileri',
@@ -56,7 +58,14 @@ export default {
                 }
             ]
         }
-    }
+    },
+    mounted() {
+        axios.post("/liderConsole/profile", {
+        }).then((response) => {
+            console.log('Yeni geldim paşam')
+            this.user = response.data;
+        });
+    },
 }
 </script>
 
