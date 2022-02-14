@@ -184,10 +184,16 @@ export default {
                     if (index > -1) {
                         this.groups.splice(index, 1);
                     }
+                    let newGroupsDn = [];
+                    if (this.groups){
+                        this.groups.forEach(element => {
+                            newGroupsDn.push(element.distinguishedName);
+                        });
+                    }
                     this.selectedGroup = null;
                     this.deleteGroupConfirm = false;
                     let userNode = {...this.selectedNode};
-                    userNode.attributesMultiValues.memberOf = this.groups;
+                    userNode.attributesMultiValues.memberOf = newGroupsDn;
                     this.$emit('updatedUser', userNode);
                     this.updateRowIndex();
                     this.$toast.add({

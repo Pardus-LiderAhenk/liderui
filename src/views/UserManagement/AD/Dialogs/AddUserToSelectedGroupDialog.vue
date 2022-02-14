@@ -73,7 +73,6 @@
     </div>
 </template>
 
-
 <script>
 /**
  * Add member to selected group as user in AD tree
@@ -160,8 +159,6 @@ export default {
             params.append("key", this.selectedUserField.value);
             params.append("value", this.userSearchValue);
             axios.post('/ad/searchEntryUser', params).then(response => {
-                // this.userSearchValue = '';
-                // this.selectedUserField = null;
                 if (response.data) {
                     this.users = response.data;
                 } else {
@@ -176,13 +173,22 @@ export default {
         },
 
         addUserToGroup(data) {
+            if (this.isExistMember(data.distinguishedName)) {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('user_management.user_already_exist_in_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                return;
+            }
             let params = new FormData();
             params.append("searchDn", "");
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("distinguishedName", data.distinguishedName);
             axios.post('/ad/addMember2ADGroup', params).then(response => {
                 if (response.data) {
-                    this.$emit('updateNode', response.data, this.selectedNode);
+                    this.$emit('updateNode', response.data, null);
                     this.$emit('closeAdDialog');
                     this.$toast.add({
                         severity:'success', 
@@ -200,6 +206,24 @@ export default {
                 }
             });
         },
+
+        isExistMember(userDn) {
+            let isExist = false;
+            for (const key in this.selectedNode.attributesMultiValues) {
+                if (Object.hasOwnProperty.call(this.selectedNode.attributesMultiValues, key)) {
+                    const element = this.selectedNode.attributesMultiValues[key];
+                    if (key == "member" && element.length > 0) {
+                        for (let index = 0; index < element.length; index++) {
+                            const member = element[index];
+                            if(userDn == member) {
+                                isExist = true;
+                            }
+                        }
+                    }
+                }
+            }
+            return isExist;
+        }
     }
 }
 </script>

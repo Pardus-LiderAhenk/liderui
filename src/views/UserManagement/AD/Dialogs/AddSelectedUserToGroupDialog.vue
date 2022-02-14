@@ -171,13 +171,39 @@ export default {
         },
 
         addUserToGroup(data) {
+            if (this.isExistMember(data.distinguishedName)) {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('user_management.user_already_exist_in_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                return;
+            }
             let params = new FormData();
             params.append("searchDn", "");
             params.append("parentName", data.distinguishedName);
             params.append("distinguishedName", this.selectedNode.distinguishedName);
             axios.post('/ad/addMember2ADGroup', params).then(response => {
                 if (response.data) {
-                    this.$emit('updateNode', response.data, this.selectedNode);
+                    let userNode = {...this.selectedNode};
+                    let isExistMemberOf = false;
+                    for (const key in this.selectedNode.attributesMultiValues) {
+                        if (Object.hasOwnProperty.call(this.selectedNode.attributesMultiValues, key)) {
+                            const element = this.selectedNode.attributesMultiValues[key];
+                            if (key == "memberOf" && element.length > 0) {
+                                isExistMemberOf = true;
+                            }
+                        }
+                    }
+                    if (isExistMemberOf) {
+                        userNode.attributesMultiValues.memberOf.push(response.data.distinguishedName);
+                    } else {
+                        userNode.attributesMultiValues.memberOf = [response.data.distinguishedName];
+                    }
+                    
+                    
+                    this.$emit('updateNode', userNode, null);
                     this.$emit('closeAdDialog');
                     this.$toast.add({
                         severity:'success', 
@@ -195,6 +221,24 @@ export default {
                 }
             });
         },
+
+        isExistMember(groupDn) {
+            let isExist = false;
+            for (const key in this.selectedNode.attributesMultiValues) {
+                if (Object.hasOwnProperty.call(this.selectedNode.attributesMultiValues, key)) {
+                    const element = this.selectedNode.attributesMultiValues[key];
+                    if (key == "memberOf" && element.length > 0) {
+                        for (let index = 0; index < element.length; index++) {
+                            const member = element[index];
+                            if(groupDn == member) {
+                                isExist = true;
+                            }
+                        }
+                    }
+                }
+            }
+            return isExist;
+        }
     }
 }
 </script>

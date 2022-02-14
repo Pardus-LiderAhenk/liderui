@@ -1,10 +1,4 @@
 <template>
-    <add-selected-user-to-group-dialog :addSelectedUserDialog="addUserToGroupDialog"
-        :selectedNode="selectedUser"
-        @updateNode="updateNode"
-        @close-ad-dialog="addUserToGroupDialog = false">
-    </add-selected-user-to-group-dialog>
-
     <Dialog 
         :header="$t('computer.task.toast_summary')" 
         v-model:visible="deleteGroupConfirm"  
@@ -32,14 +26,6 @@
     <div class="p-flex-column">
         <div class="p-field">
             <h3>{{$t('user_management.group_list')}}</h3>
-        </div>
-        <div class="p-field p-d-flex p-jc-end" v-if="selectedUser && selectedUser.type == 'USER'">
-            <Button 
-                icon="pi pi-plus"
-                class="p-button-sm"
-                type="button" @click="addUserToGroupDialog = true" 
-                :label="$t('user_management.add_to_group')">
-            </Button>
         </div>
         <div class="p-field">
             <DataTable :value="groups" class="p-datatable-sm" v-model:filters="filters">
@@ -80,7 +66,6 @@
 <script>
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
-import AddSelectedUserToGroupDialog from './../../Dialogs/AddSelectedUserToGroupDialog.vue';
 
 export default {
     props: {
@@ -97,7 +82,6 @@ export default {
         return {
             groups: [],
             addUserGroupNode: null,
-            addUserToGroupDialog: false,
             userGroupLdapBaseDn: null,
             deleteGroupConfirm: false,
             selectedGroup: null,
@@ -117,10 +101,6 @@ export default {
         }
     },
 
-    components: {
-        AddSelectedUserToGroupDialog
-    },
-
     mounted() {
         this.getGroupsOfSelectedUser();
     },
@@ -133,7 +113,6 @@ export default {
         updateNode(node){
             this.$emit('updatedUser', node);
         },
-        
 
         getGroupsOfSelectedUser() {
             this.groups = [];
@@ -148,7 +127,6 @@ export default {
                                     rowIndex: index + 1,
                                     distinguishedName: groupDn
                                 });
-                                
                             }
                         }
                     }
@@ -158,10 +136,12 @@ export default {
 
         deleteUserFromGroup() {
             let params = new FormData();
+            let dnList = [];
+            dnList.push(this.selectedUser.distinguishedName);
             params.append("dn", this.selectedGroup.distinguishedName);
-            params.append("attribute", "member");
-            params.append("value", this.selectedUser.distinguishedName);
-            axios.post("/lider/user/removeAttributeWithValue", params).then((response) => {
+            params.append("dnList[]", dnList);
+
+            axios.post("/ad/deleteMemberFromGroup", params).then((response) => {
                 if (response.data) {
                     let index = this.groups.findIndex(function(item, i){
                         return item.distinguishedName === response.data.distinguishedName;
@@ -169,11 +149,18 @@ export default {
                     if (index > -1) {
                         this.groups.splice(index, 1);
                     }
+                    let newGroupsDn = [];
+                    if (this.groups){
+                        this.groups.forEach(element => {
+                            newGroupsDn.push(element.distinguishedName);
+                        });
+                    }
                     this.selectedGroup = null;
                     this.deleteGroupConfirm = false;
                     let userNode = {...this.selectedUser};
-                    userNode.attributesMultiValues.memberOf = this.groups;
-                    this.$emit('updatedUser', userNode);
+                    userNode.attributesMultiValues.memberOf = newGroupsDn;
+                    this.$emit('updateUser', userNode);
+                    // this.$emit('updateNode', userNode, null);
                     this.updateRowIndex();
                     this.$toast.add({
                         severity:'success', 
@@ -204,62 +191,6 @@ export default {
                 const element = this.groups[index];
                 element.rowIndex = index + 1;
             }
-        },
-
-        addUserToGroup() {
-            if (!this.addUserGroupNode) {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('user_management.select_group_warn'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                return;
-            }
-            if (this.addUserGroupNode && this.addUserGroupNode.type != "GROUP") {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('user_management.select_group_warn'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                return;
-            }
-
-            if (this.isExistMemberInGroup(this.addUserGroupNode.distinguishedName)) {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('user_management.user_already_exist_in_group'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                return;
-            }
-            let params = new FormData();
-            let member = [];
-            member.push(this.selectedUser.distinguishedName);
-            params.append("checkedList[]", member);
-            params.append("groupDN", this.addUserGroupNode.distinguishedName);
-            axios.post("/lider/user_groups/group/existing", params).then((response) => {
-                this.groups.push(response.data);
-                let userNode = {...this.selectedUser};
-                userNode.attributesMultiValues.memberOf = this.groups;
-                this.$emit('updatedUser', userNode);
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('user_management.add_user_to_group_success'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                this.addUserToGroupDialog = false;
-            }).catch((error) => {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('user_management.add_user_to_group_error')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            });
         },
 
         isExistMemberInGroup(dn) {

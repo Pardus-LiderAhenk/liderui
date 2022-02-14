@@ -180,7 +180,6 @@ export default {
                 params.append("uid", this.user.uid);
                 axios.post('/ad/addUser2AD', params).then(response => {
                     if (response.data) {
-                        console.log(response.data)
                         this.$emit('appendNode', response.data, this.selectedNode);
                         this.$emit('closeAdDialog');
                         this.$toast.add({
@@ -206,7 +205,6 @@ export default {
                         });
                     }
                 }).catch((error) => {
-                    console.log(error.response)
                     if(error.response.status == WARNING) {
                         this.$toast.add({
                             severity:'warning', 

@@ -11,7 +11,7 @@
                             <component :is="selectedTabUserMenu"
                                 :selectedUser="user"
                                 :userLdapBaseDn="userLdapBaseDn"
-                                @updated-user="treeNodeClick">
+                                @update-user="updateUser">
                             </component>
                         </keep-alive>
                     </div>
@@ -22,7 +22,11 @@
 </template>
 
 <script>
-import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+/**
+ * This page is user operations. This page contain tabs as GeneralInformations, PasswordChange, SessionHistory and UserGroups
+ * @see {@link http://www.liderahenk.org/}
+ */
+
 import GeneralInformations from './Tabs/GeneralInformations.vue';
 import PasswordChange from './Tabs/PasswordChange.vue';
 import SessionHistory from './Tabs/SessionHistory.vue';
@@ -37,8 +41,15 @@ export default {
         },
     },
 
+    // computed: {
+    //     user: {
+    //         get () {
+    //             return this.selectedUser
+    //         },
+    //     }
+    // },
+
     components: {
-        PasswordComponent,
         GeneralInformations,
         PasswordChange,
         SessionHistory,
@@ -78,18 +89,19 @@ export default {
         }
     },
 
-    
-
     mounted() {
         if (this.selectedUser) {
             this.user = this.selectedUser;
         } else {
-            this.ser = null;
+            this.user = null;
         }
     },
 
     methods: {
-        
+        updateUser(node) {
+            this.user = node;
+            this.$emit('updateNode', this.user, null);
+        }
     },
 
     watch: {

@@ -43,6 +43,10 @@
 
 
 <script>
+/**
+ * Update password component. Uses general password component
+ * @see {@link http://www.liderahenk.org/}
+ */
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import axios from "axios";
 

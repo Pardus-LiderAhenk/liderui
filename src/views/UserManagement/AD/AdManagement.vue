@@ -61,12 +61,15 @@
             </tree-component>
         </div>
         <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
-            <node-table-content v-if="selectedNodeContent && selectedNodeContent.type != 'USER'"
-                :selectedNode="selectedNodeContent">
+            <node-table-content v-if="selectedNode && selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
+                :selectedNode="selectedNode">
             </node-table-content>
-            <user-management v-if="selectedNodeContent && selectedNodeContent.type == 'USER'"
-                :selectedUser="selectedNodeContent">
+            <user-management v-if="selectedNode && selectedNode.type == 'USER'"
+                :selectedUser="selectedNode">
             </user-management>
+            <group-management v-if="selectedNode && selectedNode.type == 'GROUP'"
+                :selectedUser="selectedNode">
+            </group-management>
         </div>
     </div>
 </template>
@@ -79,7 +82,8 @@
 
 import { mapActions } from "vuex"
 import NodeTableContent from './Components/NodeTableContent.vue';
-import UserManagement from './Components/UserManagement.vue';
+import GroupManagement from './Components/GroupManagement.vue';
+import UserManagement from './Components/UserManagement/UserManagement.vue';
 import NodeDetail from './Dialogs/NodeDetail.vue';
 import {FilterMatchMode} from 'primevue/api';
 import AddFolderDialog from './Dialogs/AddFolderDialog.vue';
@@ -95,7 +99,6 @@ export default {
         return {
             showContextMenu: false,
             selectedNode: null,
-            selectedNodeContent: null,
             searchFields: [
                 {
                     key: "SAM-Account-Name",
@@ -152,7 +155,8 @@ export default {
         AddGroupDialog,
         AddUserToSelectedGroupDialog,
         AddSelectedUserToGroupDialog,
-        AddUserDialog
+        AddUserDialog,
+        GroupManagement
     },
 
     created() {
@@ -163,9 +167,7 @@ export default {
         ...mapActions(["setSelectedLiderNode"]),
 
         treeNodeClick(node) {
-            console.log(node)
             this.selectedNode = node;
-            this.selectedNodeContent = node;
             this.setSelectedLiderNode(node);
         },
 
@@ -290,12 +292,12 @@ export default {
         },
 
         appendNode(node, parentNode) {
-            console.log(node)
             this.$refs.tree.append(node, parentNode);
         },
 
         updateNode(node, selectedNode) {
             this.selectedNode = node;
+            this.setSelectedLiderNode(node);
         },
     }
 }

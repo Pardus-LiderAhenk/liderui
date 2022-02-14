@@ -65,7 +65,7 @@ export default {
 
             set (value) {
                 if (!value) {
-                    this.$emit('closeAdDialog')
+                    this.$emit('closeAdDialog');
                 }
             }
         }
