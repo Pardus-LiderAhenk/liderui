@@ -164,7 +164,7 @@ export default {
     methods: {
         addUser() {
             if (this.userFormValidation()) {
-                 if (!this.$refs.password.getPassword()) {
+                if (!this.$refs.password.getPassword()) {
                     this.user.userPassword = this.$refs.password.getPassword();
                     return;
                 }

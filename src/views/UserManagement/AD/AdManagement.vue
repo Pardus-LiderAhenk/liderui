@@ -34,6 +34,11 @@
         @appendNode="appendNode"
         @close-ad-dialog="modals.addUserDialog = false">
     </add-user-dialog>
+
+    <give-console-access-dialog :giveConsoleAccessDialog="modals.giveConsoleAccessDialog"
+        :selectedNode="selectedNode"
+        @close-ad-dialog="modals.giveConsoleAccessDialog = false">
+    </give-console-access-dialog>
      <!--Context menu Dialog END -->
 
     <div class="p-grid ad-management">
@@ -91,6 +96,7 @@ import AddGroupDialog from './Dialogs/AddGroupDialog.vue';
 import AddUserToSelectedGroupDialog from './Dialogs/AddUserToSelectedGroupDialog.vue';
 import AddSelectedUserToGroupDialog from './Dialogs/AddSelectedUserToGroupDialog.vue';
 import AddUserDialog from './Dialogs/AddUserDialog.vue';
+import GiveConsoleAccessDialog from './Dialogs/GiveConsoleAccessDialog.vue';
 
 
 export default {
@@ -139,7 +145,8 @@ export default {
                 addFolderDialog: false,
                 addMemberDialog: false,
                 addSelectedUserDialog: false,
-                addUserDialog: false
+                addUserDialog: false,
+                giveConsoleAccessDialog: false
             },
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
@@ -156,7 +163,8 @@ export default {
         AddUserToSelectedGroupDialog,
         AddSelectedUserToGroupDialog,
         AddUserDialog,
-        GroupManagement
+        GroupManagement,
+        GiveConsoleAccessDialog
     },
 
     created() {
@@ -236,7 +244,7 @@ export default {
                         {
                             label: this.$t('user_management.ad.give_console_access'), 
                             icon:"pi pi-check-square", 
-                            command: () => {this.modals.moveUser = true}
+                            command: () => {this.modals.giveConsoleAccessDialog = true}
                         },
                         {
                             label: this.$t('user_management.ad.add_to_group'), 

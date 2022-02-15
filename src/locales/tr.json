@@ -706,7 +706,10 @@
             "search_field": "Arama Alanı",
             "search_value": "Arama Değeri",
             "user_table_empty_message":"Kullanıcı bulunamadı",
-            "group_table_empty_message": "Grup bulunamadı"
+            "group_table_empty_message": "Grup bulunamadı",
+            "give_console_access_success": "Kullanıcı Lider'e başarıyla aktarıldı ve konsol erişim yetkisi verildi",
+            "give_console_access_error": "Kullanıcı Lider'e aktarılırken hata oluştu",
+            "user_already_exist_in_lider": "Kullanıcı Lider'de zaten var"
         }
     },
     "group_management": {

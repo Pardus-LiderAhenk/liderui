@@ -703,7 +703,10 @@
             "search_field": "Search Field",
             "search_value": "Search Value",
             "user_table_empty_message": "User not found",
-            "group_table_empty_message":"Group not found"
+            "group_table_empty_message":"Group not found",
+            "give_console_access_success": "User successfully moved to Lider and gived console access",
+            "give_console_access_error": "An error occurred while moving user to Lider",
+            "user_already_exist_in_lider": "User already exist in Lider"
         }
     },
     "group_management": {
