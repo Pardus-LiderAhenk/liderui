@@ -52,7 +52,7 @@ import axios from "axios";
 
 export default {
     props: {
-        selectedNode: {
+        selectedUser: {
             type: Object,
             description: "Selected tree node",
         },
@@ -73,7 +73,7 @@ export default {
         updatePassword(){
             this.userPassword = this.$refs.password.getPassword();
             let params = new FormData();
-            params.append("distinguishedName", this.selectedNode.distinguishedName);
+            params.append("distinguishedName", this.selectedUser.distinguishedName);
             params.append("userPassword", this.userPassword);
             axios.post("/ad/updateUserPassword", params).then((response) => {
                 this.$emit('updatedUser', response.data);
@@ -96,7 +96,7 @@ export default {
         },
 
         showUpdatePasswordDialog() {
-            if (this.selectedNode && this.selectedNode.type === "USER") {
+            if (this.selectedUser && this.selectedUser.type === "USER") {
                 this.userPassword = this.$refs.password.getPassword();
                 if (this.userPassword) {
                     this.changePasswordDialog = true;
