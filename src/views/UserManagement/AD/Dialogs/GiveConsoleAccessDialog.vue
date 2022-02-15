@@ -29,7 +29,7 @@
                 <Button :label="$t('user_management.cancel')" icon="pi pi-times" 
                     @click="showDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button :label="$t('user_management.add')" icon="pi pi-plus"
+                <Button :label="$t('user_management.ad.give_console_access')" icon="pi pi-check"
                     @click="giveConsoleAccessToUser" class="p-button-sm"
                 />
             </template>
