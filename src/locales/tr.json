@@ -691,6 +691,8 @@
         "logon_name_warn": "Oturum açma adı boş bırakılamaz",
         "full_name":"Tam Adı",
         "user_already_exist":"Kullanıcı zaten var",
+        "delete_group":"Grup Sil",
+        "selected_delete_node": "Seçili Kaydı Sil",
         "ad":{
             "add_group":"Grup Ekle",
             "give_console_access": "Konsol Erişimi Ver",
@@ -709,7 +711,8 @@
             "group_table_empty_message": "Grup bulunamadı",
             "give_console_access_success": "Kullanıcı Lider'e başarıyla aktarıldı ve konsol erişim yetkisi verildi",
             "give_console_access_error": "Kullanıcı Lider'e aktarılırken hata oluştu",
-            "user_already_exist_in_lider": "Kullanıcı Lider'de zaten var"
+            "user_already_exist_in_lider": "Kullanıcı Lider'de zaten var",
+            "delete_ou_warn": "Organizaston birimine ait kayıt bulunmaktadır. Lütfen organizasyon birim içeriğini kontrol ediniz."
         }
     },
     "group_management": {

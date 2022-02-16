@@ -224,7 +224,7 @@
         :modal="true" 
         @hide="modals.deleteNode = false">
         <div class="confirmation-content">
-            <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
             <span v-if="selectedNode.type == 'GROUP'">
                 {{ $t('group_management.delete_group_warn')}}
             </span>

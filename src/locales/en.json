@@ -688,6 +688,8 @@
         "logon_name_warn": "Logon name is not available",
         "full_name":"Full Name",
         "user_already_exist": "User already exists",
+        "delete_group":"Delete Group",
+        "selected_delete_node":"Selected Delete Node",
         "ad":{
             "add_group":"Add Group",
             "give_console_access": "Give Console Access",
@@ -706,7 +708,8 @@
             "group_table_empty_message":"Group not found",
             "give_console_access_success": "User successfully moved to Lider and gived console access",
             "give_console_access_error": "An error occurred while moving user to Lider",
-            "user_already_exist_in_lider": "User already exist in Lider"
+            "user_already_exist_in_lider": "User already exist in Lider",
+            "delete_ou_warn": "There is a node of the organizationa unit. Please check the organizationa unit contents."
         }
     },
     "group_management": {

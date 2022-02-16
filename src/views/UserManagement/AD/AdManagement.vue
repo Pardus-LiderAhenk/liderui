@@ -39,6 +39,12 @@
         :selectedNode="selectedNode"
         @close-ad-dialog="modals.giveConsoleAccessDialog = false">
     </give-console-access-dialog>
+
+    <delete-node-dialog :deleteNodeDialog="modals.deleteNodeDialog"
+        :selectedNode="selectedNode"
+        @delete-node="deleteNode"
+        @close-ad-dialog="modals.deleteNodeDialog = false">
+    </delete-node-dialog>
      <!--Context menu Dialog END -->
 
     <div class="p-grid ad-management">
@@ -69,7 +75,7 @@
             <node-table-content v-if="selectedNode && selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
                 :selectedNode="selectedNode">
             </node-table-content>
-            <user-management v-if="selectedNode && selectedNode.type == 'USER'"
+            <user-management v-if="selectedNode && selectedNode.type == 'USER'" 
                 :selectedUser="selectedNode">
             </user-management>
             <group-management v-if="selectedNode && selectedNode.type == 'GROUP'"
@@ -97,6 +103,8 @@ import AddUserToSelectedGroupDialog from './Dialogs/AddUserToSelectedGroupDialog
 import AddSelectedUserToGroupDialog from './Dialogs/AddSelectedUserToGroupDialog.vue';
 import AddUserDialog from './Dialogs/AddUserDialog.vue';
 import GiveConsoleAccessDialog from './Dialogs/GiveConsoleAccessDialog.vue';
+import DeleteNodeDialog from './Dialogs/DeleteNodeDialog.vue';
+import axios from "axios";
 
 
 export default {
@@ -105,6 +113,7 @@ export default {
         return {
             showContextMenu: false,
             selectedNode: null,
+            enableDeleteUpdate: false,
             searchFields: [
                 {
                     key: "SAM-Account-Name",
@@ -146,7 +155,8 @@ export default {
                 addMemberDialog: false,
                 addSelectedUserDialog: false,
                 addUserDialog: false,
-                giveConsoleAccessDialog: false
+                giveConsoleAccessDialog: false,
+                deleteNodeDialog: false,
             },
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
@@ -164,10 +174,18 @@ export default {
         AddSelectedUserToGroupDialog,
         AddUserDialog,
         GroupManagement,
-        GiveConsoleAccessDialog
+        GiveConsoleAccessDialog,
+        DeleteNodeDialog
     },
 
     created() {
+        let params = new FormData();
+        params.append("innerPage", "directory-manager");
+        axios.post("/lider/pages/getInnerHtmlPage", params).then((response) => {
+            if (response.data) {
+                this.enableDeleteUpdate = response.data.enableDeleteUpdate;
+            }
+        });
         this.setSelectedLiderNode(null);
     },
 
@@ -233,6 +251,13 @@ export default {
                             command: () => {this.modals.addGroupDialog = true;}
                         },
                     ]
+                    if (this.enableDeleteUpdate == "true") {
+                        this.contextMenuItems.push({
+                            label: this.$t('user_management.delete_folder'), 
+                            icon:"pi pi-trash", 
+                            command:() => {this.modals.deleteNodeDialog = true;}
+                        });
+                    }
                     break
                 case 'USER':
                     this.contextMenuItems = [
@@ -251,12 +276,15 @@ export default {
                             icon:"pi pi-plus", 
                             command:() => {this.modals.addSelectedUserDialog = true;}
                         },
-                        {
+                        
+                    ]
+                    if (this.enableDeleteUpdate == "true") {
+                        this.contextMenuItems.push({
                             label: this.$t('user_management.delete_user'), 
                             icon:"pi pi-user-minus", 
-                            command:() => {this.modals.deleteNode = true;}
-                        },
-                    ]
+                            command:() => {this.modals.deleteNodeDialog = true;}
+                        });
+                    }
                     break
                 case 'CONTAINER':
                     this.contextMenuItems = [
@@ -290,6 +318,13 @@ export default {
                             command: () => {this.modals.addMemberDialog = true}
                         },
                     ]
+                    if (this.enableDeleteUpdate == "true") {
+                        this.contextMenuItems.push({
+                            label: this.$t('user_management.delete_group'), 
+                            icon:"pi pi-trash", 
+                            command:() => {this.modals.deleteNodeDialog = true;}
+                        });
+                    }
                 }
             this.$refs.rightMenu.style.top = data.clientY + 'px';
             this.$refs.rightMenu.style.left = data.clientX + 'px';
@@ -306,6 +341,12 @@ export default {
         updateNode(node, selectedNode) {
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
+        },
+
+        deleteNode(selectedNode) {
+            this.$refs.tree.remove(selectedNode);
+            this.selectedNode = null;
+            this.setSelectedLiderNode(null);
         },
     }
 }

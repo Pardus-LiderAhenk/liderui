@@ -5,7 +5,7 @@
         :modal="true" 
         @hide="changePasswordDialog = false">
         <div class="confirmation-content">
-            <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem"/>
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem"/>
             <span>{{ $t('user_management.change_user_password_confirm_message')}}</span>
         </div>
         <template #footer>
