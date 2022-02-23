@@ -230,27 +230,24 @@ export default {
 
     returnOptionForChart(title) {
       let options = {
-        responsive: true,
+      responsive: true,
+      plugins: {
         legend: {
           display: true,
-          position: "chartArea",
-          // align: "center",
-          // onClick: function() {
-          //   return false;
+          position: "top",
+          align: "center",
+          // labels: {
+          //   boxWidth: 20,
+          //   boxHeight: 10,
           // },
-          labels: {
-            boxWidth: 20,
-            boxHeight: 20,
-          },
-       },
-       plugins: {
-        title: {
-            display: true,
-            align: "center",
-            text: title
-          },
         },
-        maintainAspectRatio: false
+        title: {
+          display: true,
+          align: "center",
+          text: title
+        },
+      },
+      maintainAspectRatio: false
       }
       return options;
     },
