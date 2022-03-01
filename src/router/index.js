@@ -4,11 +4,11 @@ import AuthLayout from '@/layouts/AuthLayout.vue';
 import Login from '@/views/Login/Login.vue';
 import ComputerManagement from '@/views/ComputerManagement/ComputerManagement.vue';
 import FullLayout from '@/layouts/FullLayout.vue';
+
+//GROUP
 import ComputerGroupManagement from '@/views/GroupManagement/ComputerGroupManagement/ComputerGroupManagement.vue';
 import UserGroupManagement from '@/views/GroupManagement/UserGroupManagement/UserGroupManagement.vue';
 import UserPermissionsManagement from '@/views/GroupManagement/UserPermissionsManagement/UserPermissionsManagement.vue';
-import UserManagement from '@/views/UserManagement/Ldap/UserManagement.vue';
-
 
 //REPORTS
 import AgentReport from '@/views/Reports/AgentReport.vue';
@@ -21,10 +21,17 @@ import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefini
 import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
 import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
 import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
-import AdManagement from '@/views/UserManagement/AD/AdManagement.vue';
 
-// PROFILE
+//USER
+import AdManagement from '@/views/UserManagement/AD/AdManagement.vue';
+import AdSynchronization from '@/views/UserManagement/AD/AdSynchronization.vue';
+import UserManagement from '@/views/UserManagement/Ldap/UserManagement.vue';
+
+// LIDER CONSOLE PROFILE
 import UserProfile from '@/views/Profile/Profile.vue';
+
+//POLICY
+import PolicyManagement from '@/views/PolicyManagement/PolicyManagement.vue';
 
 const routes = [{
         path: "/",
@@ -67,6 +74,14 @@ const routes = [{
                 path: "/ad_management",
                 name: "AdManagement",
                 components: { default: AdManagement },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/ad_synchronization",
+                name: "AdSynchronization",
+                components: { default: AdSynchronization },
                 meta: {
                     requiresAuth: true,
                 }
@@ -155,6 +170,14 @@ const routes = [{
                 path: '/user-profile',
                 name: 'User Profile',
                 components: {default: UserProfile},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/policy_management',
+                name: 'Policy Management',
+                components: {default: PolicyManagement},
                 meta: {
                     requiresAuth: true
                 }

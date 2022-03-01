@@ -1,0 +1,208 @@
+<template>
+    <div class="p-grid policy-management">
+        <div class="p-col-12 p-md-6 p-lg-12" style="margin-top: 10px">
+            <Card>
+                <template #title>
+                    {{$t('policy_management.title')}}
+                </template>
+                <template #content>
+                    <p>
+                       Bir eklentide gerçekleştirilebilecek yapılandırma ayarlarının bütünü Ayarı(Profil) ifade eder. 
+                       Bir veya birden fazla ayar(profil) bir araya gelerek politikayı oluşturur. Politika bir kullanıcı grubunun yetki ve kısıtları belirlenir. 
+                       Politikalar kullanıcının oturum açması esnasında Lider'den sorgulanarak uygulanır.
+                    </p>
+                </template>
+            </Card>
+         </div>
+        <div class="p-col-12 p-md-6 p-lg-12">
+            <Card p-m-3 p-mb-7>
+                <template #title>
+                    <div class="p-d-flex p-jc-between">
+                        <div>
+                            {{$t('policy_management.policy_list')}}
+                        </div>
+                        <Button 
+                            class="p-button-sm" 
+                            icon="pi pi-plus" 
+                            :label="$t('policy_management.add')"
+                            @click="modals.addPolicyDialog = true">
+                        </Button>
+                    </div>
+                </template>
+                 <template #content>
+                    <div class="p-grid p-flex-column">
+                        <div class="p-col">
+                            <DataTable :value="policies" class="p-datatable-sm"
+                                :paginator="true" :rows="10" ref="dt"
+                                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                                :rowsPerPageOptions="[10,25,50,100]" style="margin-top: 2em"
+                                v-model:filters="filters"
+                                responsiveLayout="scroll" :loading="loading"
+                            >
+                                <template #header>
+                                    <div class="p-d-flex p-jc-end">
+                                        <span class="p-input-icon-left">
+                                            <i class="pi pi-search"/>
+                                            <InputText v-model="filters['global'].value" 
+                                            class="p-inputtext-sm" 
+                                            :placeholder="$t('policy_management.search')" 
+                                            />
+                                        </span>
+                                    </div>
+                                </template>
+                                <template #empty>
+                                    <div class="p-d-flex p-jc-center">
+                                        <span>{{$t('policy_management.poliy_table_empty_message')}}</span>
+                                    </div>
+                                </template>
+                                <Column field="index" header="#"></Column>
+                                <Column field="label" :header="$t('policy_management.policy_name')" style="width:15%"></Column>
+                                <Column field="createDate" :header="$t('policy_management.created_date')" style="width:15%"></Column>
+                                <Column field="modifyDate" :header="$t('policy_management.modified_date')" style="width:15%"></Column>
+                                <Column field="policyVersion" :header="$t('policy_management.version')" style="width:12%"></Column>
+                                <Column field="active" :header="$t('policy_management.status')" style="width:10%">
+                                    <template #body="slotProps">
+                                        <Badge 
+                                            :value="slotProps.data.active ? $t('policy_management.active'): $t('policy_management.passive')" 
+                                            :severity="slotProps.data.active ? 'success': 'danger'">
+                                        </Badge>
+                                    </template>
+                                </Column>
+                                <Column field="description" :header="$t('policy_management.description')" style="width:15%"></Column>
+                                <Column :exportable="false">
+                                    <template #body="slotProps">
+                                        <div class="p-d-flex p-jc-end">
+                                            <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
+                                                icon="pi pi-pencil"  
+                                                :label="$t('policy_management.edit')" 
+                                                @click.prevent="selectedPolicy = slotProps.data; modals.editPolicyDialog = true;">
+                                            </Button>
+                                            <Button class="p-button-danger p-button-sm p-button-rounded" 
+                                                icon="pi pi-trash" 
+                                                :label="$t('policy_management.delete')"
+                                                @click.prevent="selectedPolicy = slotProps.data; modals.deletePolicyDialog = true;">
+                                            </Button>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </DataTable>
+                        </div>
+                    </div>
+                 </template>
+            </Card>
+        </div>
+<!-- Dialogs START -->
+        <add-policy-dialog 
+            :addPolicyDialog="modals.addPolicyDialog"
+            @close-policy-dialog="modals.addPolicyDialog = false"
+            @append-policy="appendPolicy">
+        </add-policy-dialog>
+
+        <edit-policy-dialog 
+            :editPolicyDialog="modals.editPolicyDialog"
+            :selectedPolicy="selectedPolicy"
+            @close-policy-dialog="modals.editPolicyDialog = false">
+        </edit-policy-dialog>
+
+        <delete-policy-dialog 
+            :deletePolicyDialog="modals.deletePolicyDialog"
+            :selectedPolicy="selectedPolicy"
+            @deleted-policy="deletedPolicy"
+            @close-policy-dialog="modals.deletePolicyDialog = false">
+        </delete-policy-dialog>
+<!-- Dialogs END -->
+    </div>
+</template>
+
+<script>
+/**
+ * User of group policy management. This page contain update, enable or disable, create new policy and delete policy dialogs.
+ * @see {@link http://www.liderahenk.org/}
+ */
+import {FilterMatchMode} from 'primevue/api';
+import AddPolicyDialog from './Dialogs/AddPolicyDialog.vue'
+import EditPolicyDialog from './Dialogs/EditPolicyDialog.vue'
+import DeletePolicyDialog from './Dialogs/DeletePolicyDialog.vue'
+import axios from "axios";
+
+export default {
+    data() {
+        return {
+            policies: null,
+            selectedPolicy: null,
+            filters: {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            },
+            
+            modals: {
+                addPolicyDialog: false,
+                editPolicyDialog: false,
+                deletePolicyDialog: false,
+            },
+        }
+    },
+
+    components: {
+        AddPolicyDialog,
+        EditPolicyDialog,
+        DeletePolicyDialog
+    },
+
+    mounted() {
+        axios.post('/policy/list', null).then(response => {
+            if (response.data) {
+                // console.log(response.data)
+                this.policies = response.data;
+                this.updateRowIndex();
+            } 
+        }).catch((error) => {
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('policy_management.get_policy_error')+ " \n"+error, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
+        });
+    },
+
+    methods:{
+
+        updateRowIndex() {
+            for (let index = 0; index < this.policies.length; index++) {
+                const element = this.policies[index];
+                element.index = index + 1;
+            }
+        },
+
+        editPolicy(selectedPolicy){
+            this.modals.editPolicyDialog = true;
+        },
+
+        appendPolicy(policy){
+            this.policies.push(policy);
+            this.updateRowIndex();
+        },
+
+        deletedPolicy(deletedPolicy) {
+            this.policies = this.policies.filter(policy => policy.id != deletedPolicy.id);
+            this.updateRowIndex();
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.policy-management {
+    background-color: #e7f2f8;
+}
+::v-deep(.p-paginator) {
+    .p-paginator-current {
+        margin-left: auto;
+    }
+}
+::v-deep(.p-datatable.p-datatable-customers) {
+    .p-paginator {
+        padding: 1rem;
+    }
+}
+</style>>

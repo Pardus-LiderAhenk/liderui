@@ -70,6 +70,10 @@ export default {
                         {
                             label: this.$t('menu.ad_management'),
                             to: '/ad_management'
+                        },
+                        {
+                            label: this.$t('menu.ad_synchronization'),
+                            to: '/ad_synchronization'
                         }
                     ]
                 },
@@ -89,7 +93,8 @@ export default {
                             to: '/user_permissions_management'
                         },
                         {
-                            label: this.$t('menu.policy_management')
+                            label: this.$t('menu.policy_management'),
+                            to: '/policy_management'
                         }
                     ]
                 },

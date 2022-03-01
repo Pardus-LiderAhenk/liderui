@@ -27,7 +27,8 @@
         "script_definitions": "Betik Tanımları",
         "system_monitoring_definitions": "Sistem Gözlemcisi Tanımları",
         "server_settings": "Sunucu Ayarları",
-        "console_user_settings": "Arayüz Kullanıcı Ayarları"
+        "console_user_settings": "Arayüz Kullanıcı Ayarları",
+        "ad_synchronization": "AD Senkronizasyonu"
     },
     "tree":{
         "tree": "Ağaç",
@@ -787,5 +788,36 @@
         "active_policy_empty_message": "Aktif politika bulunamadı",
         "policy_name": "Politika Adı",
         "description": "Açıklama"
+    },
+    "policy_management": {
+        "title":"Politika Yönetimi",
+        "policy_list": "Politika Listesi",
+        "policy_name":"Politika Adı",
+        "description":"Açıklama",
+        "status":"Durum",
+        "created_date":"Oluşturma Tarihi",
+        "modified_date":"Değiştirilme Tarihi",
+        "version":"Versiyon",
+        "add":"Ekle",
+        "add_policy": "Politika Ekle",
+        "policy_name_warn": "Politika adı boş bırakılamaz",
+        "cancel":"İptal",
+        "active":"Aktif",
+        "enable": "Aktif Et",
+        "disable": "Pasif Et",
+        "get_policy_error": "Politika listesi getirilirken hata oluştu",
+        "passive":"Pasif",
+        "edit":"Düzenle",
+        "delete":"Sil",
+        "search":"Ara",
+        "poliy_table_empty_message": "Politika bulunamadı",
+        "update":"Güncelle",
+        "add_policy_success": "Politika başarıyla eklendi",
+        "add_policy_error": "Politika eklenirken hata oluştu",
+        "delete_policy": "Politika Sil",
+        "delete_policy_warn": "Politika silinecek, emin misiniz?",
+        "yes":"Evet",
+        "delete_policy_success": "Politika başarıyla silindi",
+        "delete_policy_error": "Politika silinirken hata oluştu"
     }
 }

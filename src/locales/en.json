@@ -27,7 +27,8 @@
         "script_definitions": "Script Definitions",
         "system_monitoring_definitions": "System Monitoring Definitions",
         "server_settings": "Server Settings",
-        "console_user_settings": "Console User Settings"
+        "console_user_settings": "Console User Settings",
+        "ad_synchronization": "AD Synchronization"
     },
     "tree":{
         "tree": "Tree",
@@ -784,5 +785,36 @@
         "active_policy_empty_message": "Active policy not found",
         "description":"Description",
         "policy_name": "Policy Name"
+    },
+    "policy_management": {
+        "title":"Policy Management",
+        "policy_list": "Policy List",
+        "policy_name":"Policy Name",
+        "description":"Description",
+        "status":"Status",
+        "created_date":"Created Date",
+        "modified_date":"Modified Date",
+        "version":"Version",
+        "add":"Add",
+        "add_policy": "Add Policy",
+        "policy_name_warn": "Policy name is not available",
+        "cancel":"Cancel",
+        "active":"Active",
+        "enable": "Enable",
+        "disable":"Disable",
+        "get_policy_error": "An error occured while getting policy list",
+        "passive":"Passive",
+        "edit":"Edit",
+        "delete":"Delete",
+        "search":"Search",
+        "poliy_table_empty_message": "Policy not found",
+        "update":"Update",
+        "add_policy_success": "Added policy successfully",
+        "add_policy_error": "An error occured while adding policy",
+        "delete_policy": "Delete Policy",
+        "delete_policy_warn": "The policy will be deleted, are you sure?",
+        "yes":"Yes",
+        "delete_policy_success": "Deleted policy successfully",
+        "delete_policy_error": "An error occured while deleting policy"
     }
 }
