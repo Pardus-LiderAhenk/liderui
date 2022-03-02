@@ -15,7 +15,7 @@
                     <div class="p-flex p-ac-end p-col-12" style="justify-conten:flex-end; text-align:right;">
                         <span class="p-input-icon-left">
                             <span>Durumu: </span>
-                            <Dropdown v-model="selectedStatus" :options="statusOptions" optionLabel="name" optionValue="value" />
+                            <Dropdown v-model="operationType" :options="statusOptions" optionLabel="name" optionValue="value" />
                         </span>
                     </div>
                 </div>
@@ -25,11 +25,24 @@
                     <p>{{slotProps.index + 1}}</p>
                 </template>
             </Column>
-            <Column field="username" header="Kullanıcı Adı"></Column>
-            <Column field="date" header="Tarih"></Column>
-            <Column field="ip" header="IP Adresi"></Column>
-            <Column field="status" header="Durum"></Column>
+            <Column field="userId" header="Kullanıcı Adı"></Column>
+            <Column field="createDate" header="Tarih"></Column>
+            <Column field="requestIp" header="IP Adresi"></Column>
+            <Column header="Durum">
+                 <template #body="{ data }">
+                    {{ 
+                        data.crudType === 'LOGIN' ? 'Oturum Açıldı' : 'Oturum Kapatıldı'
+                    }}
+                </template>
+            </Column>
         </DataTable>
+        <Paginator
+        :rows="10"
+        :totalRecords="totalElements"
+        :rowsPerPageOptions="[10, 25, 50, 100]"
+        @page="onPage($event)"
+      >
+      </Paginator>
         
     </template>
 </Card>
@@ -38,22 +51,27 @@
 
 <script>
 
+import axios from 'axios';
+
 export default {
     data() {
         return {
-            selectedStatus:'',
+            loading:false,
+            operationType:'all',
+            totalElements:0,
+            currentPage: 1,
             statusOptions: [
                 {
                     name: 'Hepsi',
-                    value: 1
+                    value: 'all'
                 },
                 {
                     name: 'Oturum Açıldı',
-                    value: 2
+                    value: 'login'
                 },
                 {
                     name: 'Oturum Kapatıldı',
-                    value: 3
+                    value: 'logout'
                 }
             ],
             records: [
@@ -77,6 +95,28 @@ export default {
                 }
             ]
         }
+    },
+    methods: {
+        init(){
+            this.getLogs();
+        },
+        onPage(event) {
+            this.loading = true;
+            this.getLogs(event.page + 1, event.rows);
+        },
+        getLogs(pageNumber = 1, rowNumber = 10) {
+            this.currentPage = pageNumber;
+            var data = new FormData();
+            data.append("pageNumber", pageNumber);
+            data.append("pageSize", rowNumber);
+            data.append('operationType',this.operationType);
+
+            axios.post("/operation/login", data).then((response) => {
+                this.records = response.data.content;
+                this.totalElements = response.data.totalElements;
+                this.loading = false;
+            });
+        },
     }
 }
 

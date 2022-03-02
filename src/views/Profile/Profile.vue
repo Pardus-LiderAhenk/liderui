@@ -6,8 +6,8 @@
         <div class="p-col-9">
             <user-info-form v-show="displayFormName === 1"  :user="user"></user-info-form>
             <account-info-form v-show="displayFormName === 2" :user="user"></account-info-form>
-            <ui-usage-history v-show="displayFormName === 3"></ui-usage-history>
-            <group-info v-show="displayFormName === 4"></group-info>
+            <ui-usage-history ref="uiusagecomp" v-show="displayFormName === 3"></ui-usage-history>
+            <group-info :user="user" v-show="displayFormName === 4" ref="groupinfocomp"></group-info>
         </div>
     </div>
 </template>
@@ -56,15 +56,17 @@ export default {
                         this.displayFormName = 4
                     }
                 }
-            ]
+            ],
         }
     },
     mounted() {
         axios.post("/liderConsole/profile", {
         }).then((response) => {
-            console.log('Yeni geldim paşam')
             this.user = response.data;
+            this.$refs.uiusagecomp.init();
+            this.$refs.groupinfocomp.init(response.data);
         });
+        
     },
 }
 </script>
