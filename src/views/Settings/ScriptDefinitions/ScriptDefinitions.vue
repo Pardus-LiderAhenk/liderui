@@ -232,13 +232,12 @@ export default {
                 this.scripts = response.data;
                 this.updateRowIndex();
             }
-        })
-        .catch((error) => { 
-        this.$toast.add({
-            severity:'error', 
-            detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
+        }).catch((error) => { 
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
             });
         });
     },

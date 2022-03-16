@@ -26,7 +26,7 @@
               <div>
                 <Chart 
                   type="pie" 
-                  width="400" height="250"
+                  :width="400" :height="250"
                   :data="chartDiskData" 
                   :options="diskChartOptions">
                 </Chart>
@@ -63,7 +63,7 @@
               <div>
                 <Chart type="pie"
                  :data="chartMemoryData" 
-                  width="400" height="250" 
+                  :width="400" :height="250" 
                   :options="memoryChartOptions">
                 </Chart>
               </div>
