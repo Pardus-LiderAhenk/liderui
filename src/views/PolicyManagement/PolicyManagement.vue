@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TabView ref="tabview1">
+        <TabView>
             <TabPanel>
                 <template #header>
                     <i class="pi pi-list"></i>

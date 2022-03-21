@@ -15,12 +15,12 @@
                     <label for="description">{{$t('policy_management.description')}}</label>
                     <InputText type="text" v-model="description"/>
                 </div>
-                <div class="p-field p-grid">
+                <!-- <div class="p-field p-grid">
                     <InputSwitch v-model="active"/>
                     <div class="p-col">
                         <label class="p-col-fixed" >{{ $t('policy_management.enable') }}</label>
                     </div>
-                </div>
+                </div> -->
             </div>
             <template #footer>
                 <Button :label="$t('policy_management.cancel')" icon="pi pi-times" 

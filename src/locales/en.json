@@ -834,6 +834,9 @@
         "delete_profile": "Delete Profile",
         "delete_profile_warn": "The profile will be deleted, are you sure?",
         "delete_profile_success": "Deleted profile successfully",
-        "delete_profile_error": "An error occured while deleting profile"
+        "delete_profile_error": "An error occured while deleting profile",
+        "select_profile_warn": "Only one profile of the same plugin can be added",
+        "edit_selected_policy": "Edit Selected Policy",
+        "profile_management": "Profile Management"
     }
 }

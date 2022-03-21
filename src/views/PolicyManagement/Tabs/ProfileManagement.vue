@@ -3,11 +3,11 @@
         <div class="p-col-12 p-md-6 p-lg-12">
             <Card>
                 <template #title>
-                    {{$t('policy_management.profile_list')}}
+                    {{$t('policy_management.profile_management')}}
                 </template>
                 <template #content>
                     <p>
-                       Bir eklentide gerçekleştirilebilecek yapılandırma ayarlarının bütününü ifade eder. 
+                       Bir eklentide gerçekleştirilebilecek yapılandırma ayarlarının bütününe Profil denir.
                        Bir veya birden fazla profil bir araya gelerek politikayı oluşturur. Tek başına çalıştırılamaz. 
                        Bir politika üzerine eklendikten sonra kullanılabilir. 
                        Örneğin; Tarayıcı eklentisi için; Lider Arayüz üzerinden eklenti aracılığı ile anasayfa belirleme gibi yapılandırma ayarlarının belirlenip kaydedilmesi ile profil oluşturulabilir.
@@ -16,10 +16,13 @@
             </Card>
         </div>
         <div class="p-col-12 p-md-6 p-lg-12">
-            <Card >
+            <Card>
+                <template #title>
+                    {{$t('policy_management.profile_list')}}
+                </template>
                 <template #content>
                     <DataView :value="plugins" layout="grid" :rows="10" :filters="filters">
-                        <template #header>
+                        <!-- <template #header>
                             <div class="grid grid-nogutter">
                                 <div class="col-6" style="text-align: right">
                                     <span class="p-input-icon-left">
@@ -31,9 +34,9 @@
                                     </span>
                                 </div>
                             </div>
-                        </template>
+                        </template> -->
                         <template #empty>
-                                No customers found.
+                                Not found profile
                             </template>
                         <template #grid="slotProps">
                             <div class="p-col-12 p-md-4">

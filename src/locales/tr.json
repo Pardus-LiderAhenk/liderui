@@ -837,6 +837,9 @@
         "delete_profile": "Profil Sil",
         "delete_profile_warn": "Profil silinecek, emin misiniz?",
         "delete_profile_success": "Profil başarıyla silindi",
-        "delete_profile_error": "Profil silinirken hata oluştu"
+        "delete_profile_error": "Profil silinirken hata oluştu",
+        "select_profile_warn": "Aynı eklentiye ait yalnızca bir tane profil eklenebilir",
+        "edit_selected_policy": "Seçili Politikayı Düzenle",
+        "profile_management": "Profil Yönetimi"
     }
 }

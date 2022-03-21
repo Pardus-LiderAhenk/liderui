@@ -7,8 +7,8 @@
                 </template>
                 <template #content>
                     <p>
-                       Bir eklentide gerçekleştirilebilecek yapılandırma ayarlarının bütünü Profili ifade eder. 
-                       Bir veya birden fazla profil bir araya gelerek politikayı oluşturur. Politika bir kullanıcı grubunun yetki ve kısıtları belirlenir. 
+                       Politika bir kullanıcı grubunun yetki ve kısıtları belirlenir. 
+                       Bir veya birden fazla profil bir araya gelerek politikayı oluşturur. 
                        Politikalar kullanıcının oturum açması esnasında Lider'den sorgulanarak uygulanır.
                     </p>
                 </template>
@@ -73,9 +73,9 @@
                                     <template #body="slotProps">
                                         <div class="p-d-flex p-jc-end">
                                             <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
-                                                icon="pi pi-pencil"  
+                                                icon="pi pi-pencil"
                                                 :label="$t('policy_management.edit')" 
-                                                @click.prevent="selectedPolicy = slotProps.data; modals.editPolicyDialog = true;">
+                                                @click.prevent="editPolicy(slotProps.data)">
                                             </Button>
                                             <Button class="p-button-danger p-button-sm p-button-rounded" 
                                                 icon="pi pi-trash" 
@@ -92,19 +92,20 @@
             </Card>
         </div>
 <!-- Dialogs START -->
-        <add-policy-dialog 
+        <add-policy-dialog v-if="modals.addPolicyDialog"
             :addPolicyDialog="modals.addPolicyDialog"
             @close-policy-dialog="modals.addPolicyDialog = false"
             @append-policy="appendPolicy">
         </add-policy-dialog>
 
-        <edit-policy-dialog 
+        <edit-policy-dialog v-if="modals.editPolicyDialog"
             :editPolicyDialog="modals.editPolicyDialog"
             :selectedPolicy="selectedPolicy"
+            @updated-policy="updatedPolicy"
             @close-policy-dialog="modals.editPolicyDialog = false">
         </edit-policy-dialog>
 
-        <delete-policy-dialog 
+        <delete-policy-dialog v-if="modals.deletePolicyDialog"
             :deletePolicyDialog="modals.deletePolicyDialog"
             :selectedPolicy="selectedPolicy"
             @deleted-policy="deletedPolicy"
@@ -151,7 +152,6 @@ export default {
     mounted() {
         axios.post('/policy/list', null).then(response => {
             if (response.data) {
-                console.log(response.data)
                 this.policies = response.data;
                 this.updateRowIndex();
             } 
@@ -175,6 +175,7 @@ export default {
         },
 
         editPolicy(selectedPolicy){
+            this.selectedPolicy = selectedPolicy;
             this.modals.editPolicyDialog = true;
         },
 
@@ -185,6 +186,12 @@ export default {
 
         deletedPolicy(deletedPolicy) {
             this.policies = this.policies.filter(policy => policy.id != deletedPolicy.id);
+            this.updateRowIndex();
+        },
+
+        updatedPolicy(updatedPolicy) {
+            this.policies = this.policies.filter(policy => policy.id != updatedPolicy.id);
+            this.policies.push(updatedPolicy);
             this.updateRowIndex();
         }
     }

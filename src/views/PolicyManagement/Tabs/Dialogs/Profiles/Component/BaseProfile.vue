@@ -250,7 +250,7 @@ export default {
             });
         },
 
-    // this function is called with ref given by base plugin for updated selectec profile.
+    // this function is called with ref given by base plugin for updated selected profile.
         updateProfile(profileData) {
             if (!this.label.trim()) {
                 this.validation.label = true;
@@ -265,7 +265,6 @@ export default {
 			};
             axios.post('/profile/update', params).then(response => {
                 if (response.data) {
-                    console.log(response.data)
                     this.showPluginProfileDialog = false;
                     this.profiles = this.profiles.filter(profile => profile.id != response.data.id);
                     this.profiles.push(response.data);

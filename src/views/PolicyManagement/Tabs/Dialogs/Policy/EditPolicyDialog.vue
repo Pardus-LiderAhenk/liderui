@@ -1,8 +1,8 @@
 <template>
     <div>
         <!-- Edit Policy Dialog -->
-        <Dialog :header="$t('policy_management.edit')" v-model:visible="showDialog" 
-            :modal="true"  ref="editPolicy" :style="{width: '60vw'}" :class="editDialogClass"
+        <Dialog :header="$t('policy_management.edit_selected_policy')" v-model:visible="showDialog" 
+            :modal="true"  ref="editPolicy" :style="{width: '50vw'}" 
             >
             <div class="p-fluid">
                 <div class="p-fluid p-grid p-field p-formgrid">
@@ -19,91 +19,41 @@
                     </div>
                     <div class="p-field p-col-12 p-md-2">
                         <label for="active">{{ $t('policy_management.status') }}</label>
-                        <Dropdown v-model="active" optionValue="value" optionLabel="label"
-                            :options="[
-                                {label: $t('policy_management.active'), value: true},
-                                {label: $t('policy_management.passive'), value: false}
-                            ]">
-                        </Dropdown>
+                        <div>
+                            <!-- <InputSwitch title="asd" v-model="active"/> -->
+                            <Button value="active" 
+                            @click="active = !active"
+                            :icon="active?'pi pi-check':'pi pi-ban'"
+                            :label="active ? $t('policy_management.active'): $t('policy_management.passive')"
+                            :class="active ? 'p-button-success p-button-sm':'p-button-sm p-button-danger'"/>
+                        </div>
+                        
                     </div>
-                </div>
-                <div class="p-field p-col-12 p-md-3">
-                    <!-- <label for="active">{{ $t('policy_management.profile_list') }}</label> -->
-                    <!-- <SplitButton :label="$t('policy_management.add_profile')" 
-                        icon="pi pi-plus"
-                        @click="save" :model="plugins">
-                    </SplitButton> -->
-                    <Button type="button" icon="pi pi-plus" 
-                        :label="$t('policy_management.add_profile')" 
-                        @click="toggle" aria:haspopup="true" 
-                        aria-controls="overlay_panel">
-                    </Button>
-                    <OverlayPanel ref="opProfileList" appendTo="body" 
-                        :showCloseIcon="false" 
-                        id="overlay_panel" 
-                        style="width: 450px" 
-                        :breakpoints="{'960px': '75vw'}">
-                        <DataTable :value="plugins" responsiveLayout="scroll" class="p-datatable-sm">
-                            <Column field="index" header="#"></Column>
-                            <Column field="plugin.name" :header="$t('policy_management.profile_name')"></Column>
-                            <Column field="plugin.description" :header="$t('policy_management.description')"></Column>
-                            <Column :exportable="false">
-                                <template #body="slotProps">
-                                    <div class="p-d-flex p-jc-end">
-                                        <Button class="p-button-sm p-button-rounded" 
-                                            icon="pi pi-plus"  
-                                            :title="$t('policy_management.add')" 
-                                            @click.prevent="addProfile(slotProps.data)">
-                                        </Button>
-                                    </div>
-                                </template>
-                            </Column>
-                        </DataTable>
-                    </OverlayPanel>
                 </div>
                 <div class="p-field">
                     <DataTable :value="profiles" class="p-datatable-sm" ref="dt"
                         style="margin-top: 2em"
                         v-model:filters="filters"
-                        responsiveLayout="scroll">
-                        <template #header>
-                            <div class="p-d-flex p-jc-end">
-                                <span class="p-input-icon-left">
-                                    <i class="pi pi-search"/>
-                                    <InputText v-model="filters['global'].value" 
-                                    class="p-inputtext-sm" 
-                                    :placeholder="$t('policy_management.search')" 
-                                    />
-                                </span>
-                            </div>
-                        </template>
+                        rowGroupMode="subheader" groupRowsBy="plugin.name"
+                        sortMode="single" sortField="brand" :sortOrder="1"
+                        :scrollable="true" scrollHeight="400px"
+                        responsiveLayout="scroll" v-model:selection="selectedProfiles"
+                        @rowSelect="onRowSelect">
                         <template #empty>
                             <div class="p-d-flex p-jc-center">
-                                <span>{{$t('policy_management.poliy_table_empty_message')}}</span>
+                                <span>{{$t('policy_management.policy_table_empty_message')}}</span>
                             </div>
                         </template>
-                        <Column field="index" header="#"></Column>
-                        <Column field="label" :header="$t('policy_management.profile_name')" style="width:15%"></Column>
-                        <Column field="createDate" :header="$t('policy_management.created_date')" style="width:15%"></Column>
-                        <Column field="modifyDate" :header="$t('policy_management.modified_date')" style="width:15%"></Column>
-                        <Column field="plugin.name" :header="$t('policy_management.plugin_name')" style="width:15%"></Column>
-                        <Column field="description" :header="$t('policy_management.description')" style="width:25%"></Column>
-                        <Column :exportable="false" style="width:10%">
-                            <template #body="slotProps">
-                                <div class="p-d-flex p-jc-end">
-                                    <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
-                                        icon="pi pi-pencil"  
-                                        :label="$t('policy_management.edit')" 
-                                        @click.prevent="deleteProfile(slotProps.data)">
-                                    </Button>
-                                    <Button class="p-button-danger p-button-sm p-button-rounded" 
-                                        icon="pi pi-trash" 
-                                        :label="$t('policy_management.delete')"
-                                        @click.prevent="">
-                                    </Button>
-                                </div>
-                            </template>
-                        </Column>
+                        <Column selectionMode="multiple" headerStyle="width: 3em"></Column>
+                        <Column field="label" :header="$t('policy_management.profile_name')" style="min-width:20%"></Column>
+                        <Column field="createDate" :header="$t('policy_management.created_date')" style="min-width:20%"></Column>
+                        <Column field="modifyDate" :header="$t('policy_management.modified_date')" style="min-width:20%"></Column>
+                        <Column field="description" :header="$t('policy_management.description')" style="min-width:35%"></Column>
+                        <template #groupheader="slotProps">
+                            <i class="pi pi-cog"></i>&nbsp;
+                            <span >{{slotProps.data.plugin.description}}</span>&nbsp;
+                            <span >- {{slotProps.data.plugin.name}}</span>
+                        </template>
                     </DataTable>
                 </div>
             </div>
@@ -112,7 +62,7 @@
                     @click="showDialog = false" class="p-button-text p-button-sm"
                 />
                 <Button :label="$t('policy_management.update')" icon="pi pi-refresh"
-                    @click="addFolder" class="p-button-sm"
+                    @click="updatePolicy" class="p-button-sm"
                 />
             </template>
         </Dialog>
@@ -122,7 +72,7 @@
 
 <script>
 /**
- * Create user policy 
+ * Updated selected policy dialog. Added profile, updated policy with this dialog
  * @see {@link http://www.liderahenk.org/}
  * emits these events
  * @event closePolicyDialog
@@ -131,7 +81,6 @@
 
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
-
 
 export default {
 
@@ -156,7 +105,8 @@ export default {
             active: false,
             plugins: [],
             profiles: null,
-            selectedProfile: null,
+            selectedProfiles: [],
+            expandedRowGroups: null,
             validation: {
                 label: false,
             },
@@ -182,47 +132,60 @@ export default {
     },
 
     mounted() {
-        this.editDialogClass = "p-dialog-maximized";
-        axios.post('/getPluginProfileList', {}).then(response => {
+        // get all profile list by deleted is false
+        axios.post('/profile/allList', null).then(response => {
             if (response.data) {
-                console.log(response.data)
-                this.plugins = response.data;
-                    this.updateRowIndex(this.plugins);
-                for (let index = 0; index < response.data.length; index++) {
-                    const element = response.data[index];
-                    
-                }
+                this.profiles = response.data;
             } 
+        }).catch((error) => {
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('policy_management.get_profile_error')+ " \n"+error, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
         });
+
+        if (this.selectedPolicy) {
+            this.label = this.selectedPolicy.label;
+            this.description = this.selectedPolicy.description;
+            this.active = this.selectedPolicy.active;
+            this.setCheckBoxForSelectedPolicy();
+        }
     },
 
     methods: {
+
         toggle(event) {
             this.$refs.opProfileList.toggle(event);
         },
 
-        addFolder() {
+        updatePolicy() {
             if (!this.label.trim()) {
                 this.validation.label = true;
                 return;
             }
-            let params = new FormData();
-            params.append("parentName", this.selectedNode.distinguishedName);
-            params.append("ou", this.folderName);
+            let params = {
+                "active": this.active,
+                "label": this.label,
+                "description": this.description,
+                "profiles": this.selectedProfiles,
+                "id": this.selectedPolicy.id
+            }
             axios.post('/policy/update', params).then(response => {
                 if (response.data) {
-                    this.$emit('appendNode', response.data, this.selectedNode);
-                    this.$emit('closeAdDialog');
+                    this.$emit('updatedPolicy', response.data);
+                    this.$emit('closePolicyDialog');
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('user_management.add_folder_success'), 
+                        detail: this.$t('policy_management.update_profile_success'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.add_folder_error'), 
+                        detail: this.$t('policy_management.update_profile_error'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -230,36 +193,67 @@ export default {
             });
             this.label = '';
             this.description = '';
+            this.selectedProfiles = [];
         },
 
-        updateRowIndex(array) {
-            for (let index = 0; index < array.length; index++) {
-                const element = array[index];
-                element.index = index + 1;
+        setCheckBoxForSelectedPolicy(){
+            for (let index = 0; index < this.selectedPolicy.profiles.length; index++) {
+                const element = this.selectedPolicy.profiles[index];
+                this.selectedProfiles.push(element)
             }
         },
 
-        getProfileOfSelectedPolicy(){
-            console.log(this.selectedPolicy)
-            this.profiles = this.selectedPolicy.profiles;
-            this.updateRowIndex(this.profiles);
+        onRowSelect(event) {
+            this.selectedProfiles = this.selectedProfiles.filter(profile => profile.id != event.data.id);
+            if (!this.isExistPluginNameInPolicy(event.data.plugin.name)) {
+                this.selectedProfiles.push(event.data);
+            } else {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('policy_management.select_profile_warn'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+        },
 
+        isExistPluginNameInPolicy(pluginName) {
+            let isExist = false;
+            if (this.selectedProfiles.length > 0) {
+                for (let index = 0; index < this.selectedProfiles.length; index++) {
+                    const element = this.selectedProfiles[index];
+                    if (element.plugin.name === pluginName) {
+                        isExist = true;
+                    }
+                }
+                return isExist;
+            }
         }
     },
-
-    watch: {
-        selectedPolicy() {
-            if (this.selectedPolicy) {
-                this.label = this.selectedPolicy.label;
-                this.description = this.selectedPolicy.description;
-                this.active = this.selectedPolicy.active;
-                this.getProfileOfSelectedPolicy();
-            }
-        }
-    }
-    
 }
 </script>
 
 <style lang="scss" scoped>
+.p-rowgroup-footer td {
+    font-weight: 700;
+}
+
+::v-deep(.p-rowgroup-header) {
+    span {
+        font-weight: 700;
+    }
+
+    .p-row-toggler {
+        vertical-align: middle;
+        margin-right: .25rem;
+    }
+}
+::v-deep(.p-datatable .p-column-header-content) {
+  .p-checkbox .p-checkbox-box{
+    display: none !important
+  }
+}
+::v-deep(.p-datatable .p-column-header-content) {
+  pointer-events: none;
+}
 </style>
