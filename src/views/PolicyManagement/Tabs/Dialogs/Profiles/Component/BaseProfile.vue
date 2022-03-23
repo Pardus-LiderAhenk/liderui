@@ -9,6 +9,12 @@
                     {{$t('policy_management.delete_profile_warn') }}
                 </span>
             </div>
+            <div class="p-fluid">
+                <p></p>
+                <small>
+                    Bu profili içeren tüm politikalardan da silinecektir.
+                </small>
+            </div>
             <template #footer>
                 <Button :label="$t('policy_management.cancel')" icon="pi pi-times" 
                     @click="showDeleteProfileDialog = false" class="p-button-text p-button-sm"
@@ -37,8 +43,9 @@
                     <InputText type="text" class="p-inputtext-sm" v-model="description"/>
                 </div>
                 <div class="p-field p-col-12 p-md-12">
+                    <!-- This slot tag contain plugin profile page -->
                     <slot>
-                        <p>profile content</p>
+                        <p> Profile Page Content </p>
                     </slot>
                 </div>
             </div>
@@ -46,11 +53,11 @@
                 <Button :label="$t('policy_management.cancel')" icon="pi pi-times" 
                     @click="showPluginProfileDialog = false" class="p-button-text p-button-sm">
                 </Button>
-                <Button  v-if="profileTitle == $t('policy_management.add')"
+                <Button  v-if="dialogType == 'add'"
                     :label="$t('policy_management.save')" icon="pi pi-save"
                     @click="$emit('saveProfile');" class="p-button-sm">
                 </Button>
-                <Button v-if="profileTitle == $t('policy_management.update')"
+                <Button v-if="dialogType == 'update'"
                     :label="$t('policy_management.update')" 
                     icon="pi pi-refresh"
                     @click="$emit('updateProfile');" class="p-button-sm">
@@ -121,8 +128,8 @@
 * @event saveProfile used to save new profile
 * @event editProfile used to edit selected profile. Show edit profile dialog
 * @event updateProfile used to update selected profile
-* @callback saveProfile used to save profile by parent component with ref
-* @callback updateProfile used to update profile by parent component with ref
+* @function saveProfile used to save profile by parent component with ref
+* @function updateProfile used to update profile by parent component with ref
 */
 
 import {FilterMatchMode} from 'primevue/api';
@@ -132,8 +139,9 @@ export default {
 
     data(){
         return{
+            dialogType: "add",
             profiles: [],
-            profileTitle: this.$t('policy_management.add'),
+            profileTitle: this.$t('policy_management.add_profile'),
             label:'',
             description: '',
             showPluginProfileDialog: false,
@@ -170,12 +178,10 @@ export default {
         },
 
         getProfile() {
-            console.log(this.pluginProfile)
             let params = new FormData();
             params.append("name", this.pluginProfile.plugin.name)
             axios.post('/profile/list', params).then(response => {
                 if (response.data) {
-                    console.log(response.data)
                     this.profiles = response.data;
                     this.updateRowIndex();
                 } 
@@ -197,20 +203,21 @@ export default {
         },
 
         showUpdateProfileDialog(profile) {
+            this.dialogType = "update";
             this.selectedProfile = profile;
             this.validation.label = false;
-            this.profileTitle = this.$t('policy_management.update');
+            this.profileTitle = this.$t('policy_management.edit_selected_profile');
             this.label = profile.label;
             this.description = profile.description;
-            console.log(profile)
             this.showPluginProfileDialog = true;
             this.$emit('editProfile', profile);
         },
 
         showAddProfileDialog() {
+            this.dialogType = "add";
             this.$emit('addProfile');
             this.validation.label = false;
-            this.profileTitle = this.$t('policy_management.add');
+            this.profileTitle = this.$t('policy_management.add_profile');
             this.label = "";
             this.description = "";
             this.showPluginProfileDialog = true;
@@ -256,7 +263,6 @@ export default {
                 this.validation.label = true;
                 return;
             }
-            console.log(this.selectedProfile);
             let params = {
                 "label": this.label,
                 "description": this.description,

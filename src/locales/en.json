@@ -813,6 +813,7 @@
         "add_policy_success": "Added policy successfully",
         "add_policy_error": "An error occured while adding policy",
         "delete_policy": "Delete Policy",
+        "edit_selected_profile": "Edit Selected Profile",
         "delete_policy_warn": "The policy will be deleted, are you sure?",
         "yes":"Yes",
         "delete_policy_success": "Deleted policy successfully",
@@ -837,6 +838,9 @@
         "delete_profile_error": "An error occured while deleting profile",
         "select_profile_warn": "Only one profile of the same plugin can be added",
         "edit_selected_policy": "Edit Selected Policy",
-        "profile_management": "Profile Management"
+        "profile_management": "Profile Management",
+        "plugins":{
+            "login_manager_validation": "At least one of the days allowed must be selected"
+        }
     }
 }

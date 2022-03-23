@@ -813,6 +813,7 @@
         "save": "Kaydet",
         "policy_table_empty_message": "Politika bulunamadı",
         "update":"Güncelle",
+        "edit_selected_profile": "Seçili Profili Düzenle",
         "add_policy_success": "Politika başarıyla eklendi",
         "add_policy_error": "Politika eklenirken hata oluştu",
         "delete_policy": "Politika Sil",
@@ -840,6 +841,9 @@
         "delete_profile_error": "Profil silinirken hata oluştu",
         "select_profile_warn": "Aynı eklentiye ait yalnızca bir tane profil eklenebilir",
         "edit_selected_policy": "Seçili Politikayı Düzenle",
-        "profile_management": "Profil Yönetimi"
+        "profile_management": "Profil Yönetimi",
+        "plugins":{
+            "login_manager_validation": "İzin verilen günlerden en az bir tane seçilmelidir"
+        }
     }
 }

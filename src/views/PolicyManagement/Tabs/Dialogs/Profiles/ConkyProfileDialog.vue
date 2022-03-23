@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Dialog :header="$t('policy_management.profile_list')" 
+        <Dialog :header="pluginProfile.name" 
             v-model:visible="showDialog"
             :style="{width: '50vw'}" :modal="true">
             <base-profile :pluginProfile="pluginProfile" ref="profile"

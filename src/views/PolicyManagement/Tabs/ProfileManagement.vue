@@ -68,6 +68,10 @@
             @close-profile-dialog="modals.scriptProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </script-profile-dialog>
+        <login-manager-profile-dialog v-if="modals.loginManagerProfileDialog" :loginManagerProfileDialog="modals.loginManagerProfileDialog"
+            @close-profile-dialog="modals.loginManagerProfileDialog=false;"
+            :pluginProfile="selectedProfile">
+        </login-manager-profile-dialog>
         <!-- Profile Dialogs END -->
 	</div>
 </template>
@@ -77,6 +81,7 @@ import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import ConkyProfileDialog from './Dialogs/Profiles/ConkyProfileDialog.vue'
 import ScriptProfileDialog from './Dialogs/Profiles/ScriptProfileDialog.vue'
+import LoginManagerProfileDialog from './Dialogs/Profiles/LoginManagerProfileDialog.vue'
 
 export default {
     data() {
@@ -100,7 +105,8 @@ export default {
 
     components: {
         ConkyProfileDialog,
-        ScriptProfileDialog
+        ScriptProfileDialog,
+        LoginManagerProfileDialog
         
     },
 
