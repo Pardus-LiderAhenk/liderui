@@ -59,8 +59,8 @@
                                 <Column field="label" :header="$t('policy_management.policy_name')" style="width:15%"></Column>
                                 <Column field="createDate" :header="$t('policy_management.created_date')" style="width:15%"></Column>
                                 <Column field="modifyDate" :header="$t('policy_management.modified_date')" style="width:15%"></Column>
-                                <Column field="policyVersion" :header="$t('policy_management.version')" style="width:12%"></Column>
-                                <Column field="active" :header="$t('policy_management.status')" style="width:10%">
+                                <Column field="policyVersion" :header="$t('policy_management.version')" style="width:10%"></Column>
+                                <Column field="active" :header="$t('policy_management.status')" style="width:8%">
                                     <template #body="slotProps">
                                         <Badge 
                                             :value="slotProps.data.active ? $t('policy_management.active'): $t('policy_management.passive')" 
@@ -68,18 +68,20 @@
                                         </Badge>
                                     </template>
                                 </Column>
-                                <Column field="description" :header="$t('policy_management.description')" style="width:15%"></Column>
+                                <Column field="profiles.length" :header="$t('policy_management.number_of_profile')" style="width:7%">
+                                </Column>
+                                <Column field="description" :header="$t('policy_management.description')" style="width:20%"></Column>
                                 <Column :exportable="false">
                                     <template #body="slotProps">
                                         <div class="p-d-flex p-jc-end">
                                             <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
                                                 icon="pi pi-pencil"
-                                                :label="$t('policy_management.edit')" 
+                                                :title="$t('policy_management.edit')" 
                                                 @click.prevent="editPolicy(slotProps.data)">
                                             </Button>
                                             <Button class="p-button-danger p-button-sm p-button-rounded" 
                                                 icon="pi pi-trash" 
-                                                :label="$t('policy_management.delete')"
+                                                :title="$t('policy_management.delete')"
                                                 @click.prevent="selectedPolicy = slotProps.data; modals.deletePolicyDialog = true;">
                                             </Button>
                                         </div>

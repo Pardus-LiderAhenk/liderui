@@ -839,6 +839,7 @@
         "select_profile_warn": "Only one profile of the same plugin can be added",
         "edit_selected_policy": "Edit Selected Policy",
         "profile_management": "Profile Management",
+        "number_of_profile": "Number of Profile",
         "plugins":{
             "login_manager_validation": "At least one of the days allowed must be selected"
         }

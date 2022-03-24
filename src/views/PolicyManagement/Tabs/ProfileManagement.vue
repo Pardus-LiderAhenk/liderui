@@ -72,6 +72,10 @@
             @close-profile-dialog="modals.loginManagerProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </login-manager-profile-dialog>
+        <usb-profile-dialog v-if="modals.usbProfileDialog" :usbProfileDialog="modals.usbProfileDialog"
+            @close-profile-dialog="modals.usbProfileDialog=false;"
+            :pluginProfile="selectedProfile">
+        </usb-profile-dialog>
         <!-- Profile Dialogs END -->
 	</div>
 </template>
@@ -82,6 +86,7 @@ import {FilterMatchMode} from 'primevue/api';
 import ConkyProfileDialog from './Dialogs/Profiles/ConkyProfileDialog.vue'
 import ScriptProfileDialog from './Dialogs/Profiles/ScriptProfileDialog.vue'
 import LoginManagerProfileDialog from './Dialogs/Profiles/LoginManagerProfileDialog.vue'
+import UsbProfileDialog from './Dialogs/Profiles/UsbProfileDialog.vue'
 
 export default {
     data() {
@@ -106,7 +111,8 @@ export default {
     components: {
         ConkyProfileDialog,
         ScriptProfileDialog,
-        LoginManagerProfileDialog
+        LoginManagerProfileDialog,
+        UsbProfileDialog
         
     },
 

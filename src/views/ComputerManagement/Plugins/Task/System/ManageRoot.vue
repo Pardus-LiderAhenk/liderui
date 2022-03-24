@@ -54,7 +54,6 @@ export default {
       showTaskDialog: false,
       lockRootUser: false,
       task: null,
-      validationErrors: {},
       passwordErrorMessage: '',
       confirmPasswordErrorMessage: '',
       passwordForm: {
@@ -92,7 +91,6 @@ export default {
     },
 
     lockUserChange() {
-      this.validationErrors = {};
       this.passwordForm.password = '';
       this.passwordForm.confirmPassword = '';
     },

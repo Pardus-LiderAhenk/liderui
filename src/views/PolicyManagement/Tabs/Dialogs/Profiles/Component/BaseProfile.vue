@@ -95,10 +95,10 @@
                 </div>
             </template>
             <Column field="index" header="#"></Column>
-            <Column field="label" :header="$t('policy_management.profile_name')" style="width:20%"></Column>
-            <Column field="createDate" :header="$t('policy_management.created_date')" style="width:20%"></Column>
-            <Column field="modifyDate" :header="$t('policy_management.modified_date')" style="width:20%"></Column>
-            <Column field="description" :header="$t('policy_management.description')" style="width:30%"></Column>
+            <Column field="label" :header="$t('policy_management.profile_name')" style="min-width:20%"></Column>
+            <Column field="createDate" :header="$t('policy_management.created_date')" style="min-width:20%"></Column>
+            <Column field="modifyDate" :header="$t('policy_management.modified_date')" style="min-width:20%"></Column>
+            <Column field="description" :header="$t('policy_management.description')" style="min-width:25%"></Column>
             <Column :exportable="false" style="flex: 0 0 4rem">
                 <template #body="slotProps">
                     <div class="p-d-flex p-jc-end">

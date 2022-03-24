@@ -842,6 +842,7 @@
         "select_profile_warn": "Aynı eklentiye ait yalnızca bir tane profil eklenebilir",
         "edit_selected_policy": "Seçili Politikayı Düzenle",
         "profile_management": "Profil Yönetimi",
+        "number_of_profile": "Profil Sayısı",
         "plugins":{
             "login_manager_validation": "İzin verilen günlerden en az bir tane seçilmelidir"
         }

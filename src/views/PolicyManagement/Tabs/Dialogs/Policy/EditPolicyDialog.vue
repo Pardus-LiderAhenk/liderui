@@ -22,26 +22,42 @@
                         <div>
                             <!-- <InputSwitch title="asd" v-model="active"/> -->
                             <Button value="active" 
-                            @click="active = !active"
-                            :icon="active?'pi pi-check':'pi pi-ban'"
-                            :label="active ? $t('policy_management.active'): $t('policy_management.passive')"
-                            :class="active ? 'p-button-success p-button-sm':'p-button-sm p-button-danger'"/>
+                                @click="active = !active"
+                                :icon="active?'pi pi-check':'pi pi-ban'"
+                                :label="active ? $t('policy_management.active'): $t('policy_management.passive')"
+                                :class="active ? 'p-button-success p-button-sm':'p-button-sm p-button-danger'"
+                            />
                         </div>
                         
                     </div>
                 </div>
                 <div class="p-field">
                     <DataTable :value="profiles" class="p-datatable-sm" ref="dt"
-                        style="margin-top: 2em"
                         v-model:filters="filters"
                         rowGroupMode="subheader" groupRowsBy="plugin.name"
                         sortMode="single" sortField="brand" :sortOrder="1"
                         :scrollable="true" scrollHeight="400px"
                         responsiveLayout="scroll" v-model:selection="selectedProfiles"
-                        @rowSelect="onRowSelect">
+                        @rowSelect="onRowSelect" :expandableRowGroups="true" v-model:expandedRowGroups="expandedRowGroups">
+                        <template #header>
+                            <div class="p-d-flex p-jc-between">
+                                <div style="text-align: left">
+                                    <h5>{{$t('policy_management.profile_list')}}</h5>
+                                </div>
+                                <div class="p-d-flex p-jc-end">
+                                    <span class="p-input-icon-left">
+                                        <i class="pi pi-search"/>
+                                        <InputText v-model="filters['global'].value" 
+                                            class="p-inputtext-sm" 
+                                            :placeholder="$t('policy_management.search')" 
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
                         <template #empty>
-                            <div class="p-d-flex p-jc-center">
-                                <span>{{$t('policy_management.policy_table_empty_message')}}</span>
+                            <div>
+                                <span>{{$t('policy_management.profile_table_empty_message')}}</span>
                             </div>
                         </template>
                         <Column selectionMode="multiple" headerStyle="width: 3em"></Column>
