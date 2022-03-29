@@ -63,13 +63,13 @@
                            <Toolbar class="mb-4">
                                 <template #start>
                                     <div class="field-radiobutton p-mr-2">
-                                            <RadioButton id="typeWhite" name="typeWhite" value="whitelist" v-model="type" @change="changeUsbListType"/>
-                                            <label for="typeWhite"> Beyaz Liste Oluştur</label>
-                                        </div>
-                                        <div class="field-radiobutton p-mr-2">
-                                            <RadioButton id="typeBlack" name="typeBlack" value="blacklist" v-model="type" @change="changeUsbListType"/>
-                                            <label for="typeBlack"> Kara Liste Oluştur</label>
-                                        </div>
+                                        <RadioButton id="typeWhite" name="typeWhite" value="whitelist" v-model="type" @change="changeUsbListType"/>
+                                        <label for="typeWhite"> Beyaz Liste Oluştur</label>
+                                    </div>
+                                    <div class="field-radiobutton p-mr-2">
+                                        <RadioButton id="typeBlack" name="typeBlack" value="blacklist" v-model="type" @change="changeUsbListType"/>
+                                        <label for="typeBlack"> Kara Liste Oluştur</label>
+                                    </div>
                                 </template>
                                 <template #end>
                                     <Button class="p-button-sm" 

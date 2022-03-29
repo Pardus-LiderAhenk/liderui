@@ -60,22 +60,31 @@
             </Card>
         </div>
         <!-- Profile Dialogs START -->
-        <conky-profile-dialog v-if="modals.conkyProfileDialog" :conkyProfileDialog="modals.conkyProfileDialog"
+        <conky-profile-dialog v-if="modals.conkyProfileDialog" 
+            :conkyProfileDialog="modals.conkyProfileDialog"
             @close-profile-dialog="modals.conkyProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </conky-profile-dialog>
-        <script-profile-dialog v-if="modals.scriptProfileDialog" :scriptProfileDialog="modals.scriptProfileDialog"
+        <script-profile-dialog v-if="modals.scriptProfileDialog" 
+            :scriptProfileDialog="modals.scriptProfileDialog"
             @close-profile-dialog="modals.scriptProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </script-profile-dialog>
-        <login-manager-profile-dialog v-if="modals.loginManagerProfileDialog" :loginManagerProfileDialog="modals.loginManagerProfileDialog"
+        <login-manager-profile-dialog v-if="modals.loginManagerProfileDialog" 
+            :loginManagerProfileDialog="modals.loginManagerProfileDialog"
             @close-profile-dialog="modals.loginManagerProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </login-manager-profile-dialog>
-        <usb-profile-dialog v-if="modals.usbProfileDialog" :usbProfileDialog="modals.usbProfileDialog"
+        <usb-profile-dialog v-if="modals.usbProfileDialog" 
+            :usbProfileDialog="modals.usbProfileDialog"
             @close-profile-dialog="modals.usbProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </usb-profile-dialog>
+        <browser-profile-dialog v-if="modals.browserProfileDialog" 
+            :browserProfileDialog="modals.browserProfileDialog"
+            @close-profile-dialog="modals.browserProfileDialog=false;"
+            :pluginProfile="selectedProfile">
+        </browser-profile-dialog>
         <!-- Profile Dialogs END -->
 	</div>
 </template>
@@ -83,10 +92,11 @@
 <script>
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
-import ConkyProfileDialog from './Dialogs/Profiles/ConkyProfileDialog.vue'
-import ScriptProfileDialog from './Dialogs/Profiles/ScriptProfileDialog.vue'
-import LoginManagerProfileDialog from './Dialogs/Profiles/LoginManagerProfileDialog.vue'
-import UsbProfileDialog from './Dialogs/Profiles/UsbProfileDialog.vue'
+import ConkyProfileDialog from './Dialogs/Profiles/ConkyProfileDialog.vue';
+import ScriptProfileDialog from './Dialogs/Profiles/ScriptProfileDialog.vue';
+import LoginManagerProfileDialog from './Dialogs/Profiles/LoginManagerProfileDialog.vue';
+import UsbProfileDialog from './Dialogs/Profiles/UsbProfileDialog.vue';
+import BrowserProfileDialog from './Dialogs/Profiles/Browser/BrowserProfileDialog.vue';
 
 export default {
     data() {
@@ -112,12 +122,12 @@ export default {
         ConkyProfileDialog,
         ScriptProfileDialog,
         LoginManagerProfileDialog,
-        UsbProfileDialog
+        UsbProfileDialog,
+        BrowserProfileDialog
         
     },
 
     mounted() {
-        this.editDialogClass = "p-dialog-maximized";
         axios.post('/getPluginProfileList', {}).then(response => {
             if (response.data) {
                 this.plugins = response.data;
