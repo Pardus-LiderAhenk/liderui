@@ -85,6 +85,11 @@
             @close-profile-dialog="modals.browserProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </browser-profile-dialog>
+        <rsyslog-profile-dialog v-if="modals.rsyslogProfileDialog" 
+            :rsyslogProfileDialog="modals.rsyslogProfileDialog"
+            @close-profile-dialog="modals.rsyslogProfileDialog=false;"
+            :pluginProfile="selectedProfile">
+        </rsyslog-profile-dialog>
         <!-- Profile Dialogs END -->
 	</div>
 </template>
@@ -97,6 +102,7 @@ import ScriptProfileDialog from './Dialogs/Profiles/ScriptProfileDialog.vue';
 import LoginManagerProfileDialog from './Dialogs/Profiles/LoginManagerProfileDialog.vue';
 import UsbProfileDialog from './Dialogs/Profiles/UsbProfileDialog.vue';
 import BrowserProfileDialog from './Dialogs/Profiles/Browser/BrowserProfileDialog.vue';
+import RsyslogProfileDialog from './Dialogs/Profiles/RsyslogProfileDialog.vue';
 
 export default {
     data() {
@@ -123,7 +129,8 @@ export default {
         ScriptProfileDialog,
         LoginManagerProfileDialog,
         UsbProfileDialog,
-        BrowserProfileDialog
+        BrowserProfileDialog,
+        RsyslogProfileDialog
         
     },
 

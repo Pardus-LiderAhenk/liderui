@@ -319,6 +319,14 @@ export default {
                 });
             });
         }
+    },
+
+    watch: {
+        label() {
+            if (this.label.trim()) {
+                this.validation.label = false;
+            }
+        },
     }
 }
 </script>
