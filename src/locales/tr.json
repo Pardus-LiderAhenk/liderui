@@ -787,7 +787,14 @@
         "active_policy_list": "Aktif Politika Listesi",
         "active_policy_empty_message": "Aktif politika bulunamadı",
         "policy_name": "Politika Adı",
-        "description": "Açıklama"
+        "description": "Açıklama",
+        "apply_policy": "Politika Uygula",
+        "apply_policy_success": "Politika başarıyla uygulandı",
+        "apply_policy_error": "Politika uygulanırken hata oluştu",
+        "apply_policy_confirm_message": "Politika uygulanacaktır, emin misiniz?",
+        "assigned_policies":"Atanmış Politikalar",
+        "assigned_policy_empty_message": "Atanmış politika bulunamadı",
+        "yes":"Evet"
     },
     "policy_management": {
         "title":"Politika Yönetimi",
@@ -796,6 +803,7 @@
         "description":"Açıklama",
         "status":"Durum",
         "created_date":"Oluşturma Tarihi",
+        "assigned_date":"Atanma Tarihi",
         "modified_date":"Değiştirilme Tarihi",
         "version":"Versiyon",
         "add":"Ekle",
@@ -843,6 +851,12 @@
         "edit_selected_policy": "Seçili Politikayı Düzenle",
         "profile_management": "Profil Yönetimi",
         "number_of_profile": "Profil Sayısı",
+        "user_applying": "Uygulayan Kullanıcı",
+        "detail_selected_policy": "Seçilen Politika Detayı",
+        "detail_policy": "Politika Detayı",
+        "unassign_policy_confirm_message": "Politika gruptan kaldırılacaktır, emin misiniz?",
+        "unassign_policy_success": "Politika gruptan başarıyla kaldırıldı",
+        "unassign_policy_error": "Politika gruptan kaldırılırken hata oluştu",
         "plugins":{
             "login_manager_validation": "İzin verilen günlerden en az bir tane seçilmelidir"
         }

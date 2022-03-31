@@ -3,6 +3,12 @@
         :selectedNode="selectedNode"
         @close-node-detail-dialog="showNodeDetailDialog = false">
     </node-detail>
+    <apply-policy v-if="modals.applyPolicy" 
+        :selectedNode="selectedNode"
+        :applyPolicyDialog="modals.applyPolicy"
+        @close-policy-dialog="modals.applyPolicy = false"
+        @applied-policy="policy => appliedPolicy = policy">
+    </apply-policy>
     <div class="p-grid user-group-management">
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px; margin-top:10px;">
             <tree-component 
@@ -33,7 +39,7 @@
                     <member-of-user-group @delete-member="updateSelectedNode"></member-of-user-group>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-7">
-                    <active-policies></active-policies>
+                    <assigned-policies :selectedNode="selectedNode" :appliedPolicy="appliedPolicy"></assigned-policies>
                 </div>
             </div>
         </div>
@@ -221,7 +227,7 @@
     <!-- Delete Selected Node Dialog -->
     <Dialog :header="$t('computer.task.toast_summary')" 
         v-model:visible="modals.deleteNode"  
-        :modal="true" 
+        :modal="true" :style="{width: '20vw'}"
         @hide="modals.deleteNode = false">
         <div class="confirmation-content">
             <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
@@ -264,7 +270,8 @@ import axios from 'axios';
 import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
 import MemberOfUserGroup from "@/views/GroupManagement/UserGroupManagement/Components/MemberOfUserGroup.vue";
-import ActivePolicies from "@/views/GroupManagement/UserGroupManagement/Components/ActivePolicies.vue";
+import ApplyPolicy from "@/views/GroupManagement/UserGroupManagement/Components/ApplyPolicy.vue";
+import AssignedPolicies from "@/views/GroupManagement/UserGroupManagement/Components/AssignedPolicies.vue";
 import {FilterMatchMode} from 'primevue/api';
 
 export default {
@@ -279,11 +286,11 @@ export default {
         TreeComponent,
         NodeDetail,
         MemberOfUserGroup,
-        ActivePolicies
+        ApplyPolicy,
+        AssignedPolicies
     },
 
     data() {
-     
         return {
             moveFolderNode: null,
             showContextMenu: false,
@@ -294,7 +301,8 @@ export default {
                 addGroup: false,
                 addUser: false,
                 moveNode: false,
-                deleteNode: false
+                deleteNode: false,
+                applyPolicy: false
             },
             folderName:'',
             validation: {
@@ -308,6 +316,7 @@ export default {
                 checkedNodes: [],
                 existingUsers: []
             },
+            appliedPolicy: null,
             
             searchFields: [
                 {
@@ -452,6 +461,11 @@ export default {
                             label: this.$t('group_management.delete_group'), 
                             icon:"pi pi-trash", 
                             command:() => {this.modals.deleteNode = true;}
+                        },
+                        {
+                            label: this.$t('group_management.apply_policy'), 
+                            icon:"pi pi-play", 
+                            command:() => {this.modals.applyPolicy = true;}
                         },
                     ]
             }
@@ -752,7 +766,7 @@ export default {
                 this.selectedNode.attributesMultiValues.member = this.selectedLiderNode.attributesMultiValues.member;
                 this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
             }
-        }
+        },
     },
 }
 </script>

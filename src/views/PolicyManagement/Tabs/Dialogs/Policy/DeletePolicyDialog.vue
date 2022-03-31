@@ -2,7 +2,7 @@
     <div>
         <!-- Delete Policy Dialog -->
         <Dialog :header="$t('policy_management.delete_policy')" v-model:visible="showDialog" 
-            :style="{width: '30vw'}" :modal="true">
+            :style="{width: '20vw'}" :modal="true">
             <div class="p-fluid">
                 <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
                 <span>

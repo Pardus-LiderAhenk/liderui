@@ -2,7 +2,7 @@
     <div>
         <!-- Delete Profile Dialog -->
         <Dialog :header="$t('policy_management.delete_profile')" v-model:visible="showDeleteProfileDialog" 
-            :style="{width: '30vw'}" :modal="true">
+            :style="{width: '20vw'}" :modal="true">
             <div class="p-fluid">
                 <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
                 <span>
