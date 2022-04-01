@@ -79,7 +79,7 @@
                 :selectedUser="selectedNode">
             </user-management>
             <group-management v-if="selectedNode && selectedNode.type == 'GROUP'"
-                :selectedUser="selectedNode">
+                :selectedNode="selectedNode">
             </group-management>
         </div>
     </div>
@@ -175,7 +175,7 @@ export default {
         AddUserDialog,
         GroupManagement,
         GiveConsoleAccessDialog,
-        DeleteNodeDialog
+        DeleteNodeDialog,
     },
 
     created() {

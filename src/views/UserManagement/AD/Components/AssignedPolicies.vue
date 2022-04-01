@@ -46,7 +46,7 @@
         </template>
     </Dialog>
     <!-- Detail selected policy dialog end -->
-    <!-- unassign policy confirm dialog start -->
+    <!-- unassign policy confir dialog start -->
     <Dialog :header="$t('computer.task.toast_summary')" 
         v-model:visible="unassignPolicyDialog"  
         :modal="true" :style="{width: '20vw'}"
@@ -81,7 +81,7 @@
                         {{ $t("group_management.assigned_policies") }}
                     </div>
                     <div>
-                        <Button class="p-button-sm" v-if="selectedNode && selectedNode.type == 'GROUP'"
+                        <Button class="p-button-sm"
                             :label="$t('group_management.apply_policy')" 
                             @click="applyPolicyDialog = true"
                             icon="pi pi-play">
@@ -132,6 +132,7 @@
                                             :title="$t('group_management.delete')" 
                                             @click.prevent="unassignPolicyDialog = true; selectedPolicy = slotProps.data">
                                         </Button>
+                                        
                                     </div>
                                 </template>
                             </Column>
@@ -151,7 +152,7 @@
 
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
-import ApplyPolicy from "./ApplyPolicy.vue";
+import ApplyPolicy from './ApplyPolicy.vue'
 
 export default {
      props: {
@@ -159,10 +160,6 @@ export default {
             type: Object,
             description: "selected node",
         },
-    },
-
-    components: {
-        ApplyPolicy
     },
 
     data() {
@@ -176,6 +173,16 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
+        }
+    },
+
+    components: {
+        ApplyPolicy
+    },
+
+    mounted() {
+        if (this.selectedNode && this.selectedNode.type == 'GROUP') {
+            this.getAssignedPolices();
         }
     },
 

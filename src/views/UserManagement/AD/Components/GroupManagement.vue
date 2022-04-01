@@ -57,41 +57,48 @@
                 </Button>
             </template>
         </Dialog>
-        <Card>
-            <template #title>
-                <div class="p-d-flex p-jc-between">
-                    <div style="font-size:15px;">
-                        {{ $t("group_management.selected_node_title") }}
-                    </div>
-                    <div>
-                        <Button class="p-button-sm" v-if="selectedLiderNode && selectedLiderNode.type === 'GROUP'"
-                            :title="$t('group_management.members_of_group')" 
-                            @click="showMemberDetail"
-                            icon="fas fa-users">
-                        </Button>
-                    </div>
-                </div>
-                <hr style="margin-bottom:-5px">
-            </template>
-            <template #content>
-                <div class="p-grid p-flex-column">
-                    <div class="p-col">
-                        <DataTable class="p-datatable-sm" 
-                            :value="selectedNodeSummaryData"
-                            responsiveLayout="scroll"
-                        >
-                            <template #empty>
-                                <div class="p-d-flex p-jc-center">
-                                    <span>{{$t('group_management.selected_node_empty_message')}}</span>
-                                </div>
-                            </template>
-                            <Column field="label" :header="$t('group_management.attribute')" style="width:40%"></Column>
-                            <Column field="value" :header="$t('group_management.value')" style="width:60%"></Column>
-                        </DataTable>
-                    </div>
-                </div>
-            </template>
-        </Card>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-5">
+                <Card>
+                    <template #title>
+                        <div class="p-d-flex p-jc-between">
+                            <div style="font-size:15px;">
+                                {{ $t("group_management.selected_node_title") }}
+                            </div>
+                            <div>
+                                <Button class="p-button-sm" v-if="selectedNode && selectedNode.type === 'GROUP'"
+                                    :title="$t('group_management.members_of_group')" 
+                                    @click="showMemberDetail"
+                                    icon="fas fa-users">
+                                </Button>
+                            </div>
+                        </div>
+                        <hr style="margin-bottom:-5px">
+                    </template>
+                    <template #content>
+                        <div class="p-grid p-flex-column">
+                            <div class="p-col">
+                                <DataTable class="p-datatable-sm" 
+                                    :value="selectedNodeSummaryData"
+                                    responsiveLayout="scroll"
+                                >
+                                    <template #empty>
+                                        <div class="p-d-flex p-jc-center">
+                                            <span>{{$t('group_management.selected_node_empty_message')}}</span>
+                                        </div>
+                                    </template>
+                                    <Column field="label" :header="$t('group_management.attribute')" style="width:40%"></Column>
+                                    <Column field="value" :header="$t('group_management.value')" style="width:60%"></Column>
+                                </DataTable>
+                            </div>
+                        </div>
+                    </template>
+                </Card>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-7">
+                <assigned-policies :selectedNode="selectedNode"></assigned-policies>
+            </div>
+        </div>
     </div>  
 </template>
 
@@ -104,39 +111,47 @@
  */
 
 import {FilterMatchMode} from 'primevue/api';
-import { mapGetters, mapActions } from "vuex"
+import AssignedPolicies from "./AssignedPolicies.vue";
+import { mapActions } from "vuex"
 import axios from "axios";
 
 export default {
+    props: {
+        selectedNode: {
+            type: Object,
+            description: "Selected tree node",
+        },
+    },
 
       data() {
         return {
             members: [],
-            filters: {},
             showMemberDialog: false,
             selectedNodeSummaryData: [],
             attributesMultiValue: false,
-            loading: false
+            loading: false,
+            filters: {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            },
         }
     },
 
-    created() {
-        this.initFilters();
+    components: {
+        AssignedPolicies,
     },
 
-    computed:mapGetters(["selectedLiderNode"]),
+    mounted() {
+        if (this.selectedNode && this.selectedNode.type == 'GROUP') {
+            this.getSelectedNodeAttribute();
+            this.getMemberOfSelectedGroup(this.selectedNode);
+        }
+    },
 
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
 
-        initFilters() {
-            this.filters = {
-                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
-            }
-        },
-
         showMemberDetail() {
-            if (this.selectedLiderNode) {
+            if (this.selectedNode) {
                 this.showMemberDialog = true;
             } else {
                 this.$toast.add({
@@ -186,7 +201,7 @@ export default {
             var dnList = [];
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
-            params.append("dn", this.selectedLiderNode.distinguishedName);
+            params.append("dn", this.selectedNode.distinguishedName);
             axios.post("/lider/user_groups/delete/group/members", params).then((response) => {
                 if (response.data != null) {
                     this.$toast.add({
@@ -196,8 +211,8 @@ export default {
                         life: 3000
                     });
                     this.setSelectedLiderNode(response.data);
-                    this.getMemberOfSelectedGroup(this.selectedLiderNode);
-                    this.$emit('deleteMember', this.selectedLiderNode);
+                    this.getMemberOfSelectedGroup(this.selectedNode);
+                    this.$emit('deleteMember', this.selectedNode);
                     this.loading = false;
                 }
             }).catch((error) => {
@@ -214,13 +229,13 @@ export default {
             let nodeSummaryData = [];
             nodeSummaryData.push({
                 'label': this.$t('group_management.name'),
-                'value': this.selectedLiderNode.name,
+                'value': this.selectedNode.name,
                 },
                 {
                     'label': this.$t('group_management.type'),
-                    'value': this.selectedLiderNode.type,
+                    'value': this.selectedNode.type,
                 });
-            if (this.selectedLiderNode.type == "GROUP") {
+            if (this.selectedNode.type == "GROUP") {
                 nodeSummaryData.push({
                 'label': this.$t('group_management.number_of_member'),
                 'value': this.members.length
@@ -231,12 +246,9 @@ export default {
     },
 
     watch: {
-        selectedLiderNode() {
-            this.members = [];
-            if (this.selectedLiderNode) {
-                if (this.selectedLiderNode.type == "GROUP") {
-                    this.getMemberOfSelectedGroup(this.selectedLiderNode);
-                }
+        selectedNode() {
+            if (this.selectedNode) {
+                this.getMemberOfSelectedGroup(this.selectedNode);
                 this.getSelectedNodeAttribute();
             }
         }

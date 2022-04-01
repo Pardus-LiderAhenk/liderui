@@ -3,12 +3,6 @@
         :selectedNode="selectedNode"
         @close-node-detail-dialog="showNodeDetailDialog = false">
     </node-detail>
-    <apply-policy v-if="modals.applyPolicy" 
-        :selectedNode="selectedNode"
-        :applyPolicyDialog="modals.applyPolicy"
-        @close-policy-dialog="modals.applyPolicy = false"
-        @applied-policy="policy => appliedPolicy = policy">
-    </apply-policy>
     <div class="p-grid user-group-management">
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px; margin-top:10px;">
             <tree-component 
@@ -39,7 +33,7 @@
                     <member-of-user-group @delete-member="updateSelectedNode"></member-of-user-group>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-7">
-                    <assigned-policies :selectedNode="selectedNode" :appliedPolicy="appliedPolicy"></assigned-policies>
+                    <assigned-policies :selectedNode="selectedNode"></assigned-policies>
                 </div>
             </div>
         </div>
@@ -270,7 +264,6 @@ import axios from 'axios';
 import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
 import MemberOfUserGroup from "@/views/GroupManagement/UserGroupManagement/Components/MemberOfUserGroup.vue";
-import ApplyPolicy from "@/views/GroupManagement/UserGroupManagement/Components/ApplyPolicy.vue";
 import AssignedPolicies from "@/views/GroupManagement/UserGroupManagement/Components/AssignedPolicies.vue";
 import {FilterMatchMode} from 'primevue/api';
 
@@ -286,7 +279,6 @@ export default {
         TreeComponent,
         NodeDetail,
         MemberOfUserGroup,
-        ApplyPolicy,
         AssignedPolicies
     },
 
@@ -302,7 +294,6 @@ export default {
                 addUser: false,
                 moveNode: false,
                 deleteNode: false,
-                applyPolicy: false
             },
             folderName:'',
             validation: {
@@ -316,7 +307,6 @@ export default {
                 checkedNodes: [],
                 existingUsers: []
             },
-            appliedPolicy: null,
             
             searchFields: [
                 {
@@ -461,11 +451,6 @@ export default {
                             label: this.$t('group_management.delete_group'), 
                             icon:"pi pi-trash", 
                             command:() => {this.modals.deleteNode = true;}
-                        },
-                        {
-                            label: this.$t('group_management.apply_policy'), 
-                            icon:"pi pi-play", 
-                            command:() => {this.modals.applyPolicy = true;}
                         },
                     ]
             }
