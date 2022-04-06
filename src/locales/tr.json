@@ -694,6 +694,7 @@
         "user_already_exist":"Kullanıcı zaten var",
         "delete_group":"Grup Sil",
         "selected_delete_node": "Seçili Kaydı Sil",
+        "selected_dn": "Seçili DN",
         "ad":{
             "add_group":"Grup Ekle",
             "give_console_access": "Konsol Erişimi Ver",
@@ -713,7 +714,17 @@
             "give_console_access_success": "Kullanıcı Lider'e başarıyla aktarıldı ve konsol erişim yetkisi verildi",
             "give_console_access_error": "Kullanıcı Lider'e aktarılırken hata oluştu",
             "user_already_exist_in_lider": "Kullanıcı Lider'de zaten var",
-            "delete_ou_warn": "Organizaston birimine ait kayıt bulunmaktadır. Lütfen organizasyon birim içeriğini kontrol ediniz."
+            "delete_ou_warn": "Organizaston birimine ait kayıt bulunmaktadır. Lütfen organizasyon birim içeriğini kontrol ediniz.",
+            "sync_selected_user": "Kullanıcıları Aktar",
+            "sync_selected_group": "Grupları Aktar",
+            "sync_title": "Seçili Kayıtları OpenLDAP'a Aktar",
+            "sync_user_error": "Seçili kullanıclar OpenLDAP'a aktarılırken hata oluştu",
+            "sync_group_error": "Seçili gruplar OpenLDAP'a aktarılırken hata oluştu",
+            "sync_user_success": "Seçili kullanıclar OpenLDAP'a başarıyla aktarıldı",
+            "sync_group_success": "Seçili gruplar OpenLDAP'a başarıyla aktarıldı",
+            "select_ldap_ou": "Aktarılacak OpenLDAP Dizini Seç",
+            "select_ou": "Dizin Seç",
+            "already_exist_user_in_ldap": "Kullanıcılar OpenLDAP'ta zaten var"
         }
     },
     "group_management": {

@@ -1,50 +1,64 @@
 <template>
     <!-- context menu Dialog -->
-    <node-detail :showNodeDetailDialog="showNodeDetailDialog"
+    <node-detail
+        :showNodeDetailDialog="showNodeDetailDialog"
         :selectedNode="selectedNode"
         @close-node-detail-dialog="showNodeDetailDialog = false">
     </node-detail>
 
-    <add-folder-dialog :addFolderDialog="modals.addFolderDialog"
+    <add-folder-dialog
+        :addFolderDialog="modals.addFolderDialog"
         :selectedNode="selectedNode"
         @appendNode="appendNode"
         @close-ad-dialog="modals.addFolderDialog = false">
     </add-folder-dialog>
 
-    <add-group-dialog :addGroupDialog="modals.addGroupDialog"
+    <add-group-dialog
+        :addGroupDialog="modals.addGroupDialog"
         :selectedNode="selectedNode"
         @appendNode="appendNode"
         @close-ad-dialog="modals.addGroupDialog = false">
     </add-group-dialog>
     
-    <add-user-to-selected-group-dialog :addMemberDialog="modals.addMemberDialog"
+    <add-user-to-selected-group-dialog
+        :addMemberDialog="modals.addMemberDialog"
         :selectedNode="selectedNode"
         @updateNode="updateNode"
         @close-ad-dialog="modals.addMemberDialog = false">
     </add-user-to-selected-group-dialog>
 
-    <add-selected-user-to-group-dialog :addSelectedUserDialog="modals.addSelectedUserDialog"
+    <add-selected-user-to-group-dialog
+        :addSelectedUserDialog="modals.addSelectedUserDialog"
         :selectedNode="selectedNode"
         @updateNode="updateNode"
         @close-ad-dialog="modals.addSelectedUserDialog = false">
     </add-selected-user-to-group-dialog>
 
-    <add-user-dialog :addUserDialog="modals.addUserDialog"
+    <add-user-dialog
+        :addUserDialog="modals.addUserDialog"
         :selectedNode="selectedNode"
         @appendNode="appendNode"
         @close-ad-dialog="modals.addUserDialog = false">
     </add-user-dialog>
 
-    <give-console-access-dialog :giveConsoleAccessDialog="modals.giveConsoleAccessDialog"
+    <give-console-access-dialog
+        :giveConsoleAccessDialog="modals.giveConsoleAccessDialog"
         :selectedNode="selectedNode"
         @close-ad-dialog="modals.giveConsoleAccessDialog = false">
     </give-console-access-dialog>
 
-    <delete-node-dialog :deleteNodeDialog="modals.deleteNodeDialog"
+    <delete-node-dialog
+        :deleteNodeDialog="modals.deleteNodeDialog"
         :selectedNode="selectedNode"
         @delete-node="deleteNode"
         @close-ad-dialog="modals.deleteNodeDialog = false">
     </delete-node-dialog>
+
+    <user-synchronization-dialog v-if="modals.userSyncDialog"
+        :userSyncDialog="modals.userSyncDialog"
+        :selectedNode="selectedNode"
+        @close-ad-dialog="modals.userSyncDialog = false">
+    </user-synchronization-dialog>
      <!--Context menu Dialog END -->
 
     <div class="p-grid ad-management">
@@ -63,24 +77,31 @@
                         class="el-overlay mycontextmenu"
                         v-show="showContextMenu"
                         @click="showContextMenu = false"
-                        >
+                    >
                         <div  ref="rightMenu">
-                            <Menu :model="contextMenuItems" />
+                            <Menu :model="contextMenuItems"/>
                         </div>
                     </div>
                 </template>
             </tree-component>
         </div>
         <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
-            <node-table-content v-if="selectedNode && selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
-                :selectedNode="selectedNode">
-            </node-table-content>
-            <user-management v-if="selectedNode && selectedNode.type == 'USER'" 
-                :selectedUser="selectedNode">
-            </user-management>
-            <group-management v-if="selectedNode && selectedNode.type == 'GROUP'"
-                :selectedNode="selectedNode">
-            </group-management>
+            <div v-if="domainType == 'ACTIVE_DIRECTORY'">
+                <node-table-content v-if="selectedNode && selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
+                    :selectedNode="selectedNode">
+                </node-table-content>
+                <user-management v-if="selectedNode && selectedNode.type == 'USER'" 
+                    :selectedUser="selectedNode">
+                </user-management>
+                <group-management v-if="selectedNode && selectedNode.type == 'GROUP'"
+                    :selectedNode="selectedNode">
+                </group-management>
+            </div>
+            <div v-else>
+                <node-table-content v-if="selectedNode"
+                    :selectedNode="selectedNode">
+                </node-table-content>
+            </div>
         </div>
     </div>
 </template>
@@ -104,6 +125,7 @@ import AddSelectedUserToGroupDialog from './Dialogs/AddSelectedUserToGroupDialog
 import AddUserDialog from './Dialogs/AddUserDialog.vue';
 import GiveConsoleAccessDialog from './Dialogs/GiveConsoleAccessDialog.vue';
 import DeleteNodeDialog from './Dialogs/DeleteNodeDialog.vue';
+import UserSynchronizationDialog from './Dialogs/UserSynchronizationDialog.vue'
 import axios from "axios";
 
 
@@ -113,6 +135,7 @@ export default {
         return {
             showContextMenu: false,
             selectedNode: null,
+            domainType: "LDAP", // LDAP, ACTIVE_DIRECTORY, NONE
             enableDeleteUpdate: false,
             searchFields: [
                 {
@@ -157,6 +180,7 @@ export default {
                 addUserDialog: false,
                 giveConsoleAccessDialog: false,
                 deleteNodeDialog: false,
+                userSyncDialog: false
             },
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
@@ -176,6 +200,7 @@ export default {
         GroupManagement,
         GiveConsoleAccessDialog,
         DeleteNodeDialog,
+        UserSynchronizationDialog,
     },
 
     created() {
@@ -184,6 +209,7 @@ export default {
         axios.post("/lider/pages/getInnerHtmlPage", params).then((response) => {
             if (response.data) {
                 this.enableDeleteUpdate = response.data.enableDeleteUpdate;
+                this.domainType = response.data.domainType;
             }
         });
         this.setSelectedLiderNode(null);
@@ -204,6 +230,47 @@ export default {
                 // case is null for only root dn in ad tree
                 case null:
                     if (node.isRoot) {
+                        if (this.domainType == "ACTIVE_DIRECTORY") {
+                            this.contextMenuItems = [
+                                {
+                                    label: this.$t('user_management.node_detail'), 
+                                    icon:'pi pi-list', 
+                                    command: () => {this.showNodeDetailDialog = true}
+                                },
+                                {
+                                    label: this.$t('user_management.add_user'), 
+                                    icon:"pi pi-user-plus", 
+                                    command: () => {this.modals.addUserDialog = true;}
+                                },
+                                {
+                                    label: this.$t('user_management.add_folder'),
+                                    icon:"pi pi-folder-open", 
+                                    command: () => {this.modals.addFolderDialog = true;}
+                                },
+                                {
+                                    label: this.$t('user_management.ad.add_group'),
+                                    icon:"fas fa-users", 
+                                    command: () => {this.modals.addGroupDialog = true}
+                                },
+                            ]
+                        } else {
+                            this.contextMenuItems = [
+                                {
+                                    label: this.$t('user_management.node_detail'), 
+                                    icon:'pi pi-list', 
+                                    command: () => {this.showNodeDetailDialog = true}
+                                },
+                                {
+                                    label: this.$t('user_management.ad.sync_selected_user'), 
+                                    icon:'pi pi-replay', 
+                                    command: () => {this.modals.userSyncDialog = true}
+                                },
+                            ]
+                        }
+                    }
+                    break
+                case 'ORGANIZATIONAL_UNIT':
+                    if (this.domainType == "ACTIVE_DIRECTORY") {
                         this.contextMenuItems = [
                             {
                                 label: this.$t('user_management.node_detail'), 
@@ -223,107 +290,136 @@ export default {
                             {
                                 label: this.$t('user_management.ad.add_group'),
                                 icon:"fas fa-users", 
-                                command: () => {this.modals.addGroupDialog = true}
+                                command: () => {this.modals.addGroupDialog = true;}
+                            },
+                        ]
+                        if (this.enableDeleteUpdate == "true") {
+                            this.contextMenuItems.push({
+                                label: this.$t('user_management.delete_folder'), 
+                                icon:"pi pi-trash", 
+                                command:() => {this.modals.deleteNodeDialog = true;}
+                            });
+                        }
+                    } else {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon:'pi pi-list', 
+                                command: () => {this.userSyncDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.sync_selected_user'), 
+                                icon:'pi pi-replay', 
+                                command: () => {this.modals.userSyncDialog = true}
                             },
                         ]
                     }
                     break
-                case 'ORGANIZATIONAL_UNIT':
-                    this.contextMenuItems = [
-                        {
-                            label: this.$t('user_management.node_detail'), 
-                            icon:'pi pi-list', 
-                            command: () => {this.showNodeDetailDialog = true}
-                        },
-                        {
-                            label: this.$t('user_management.add_user'), 
-                            icon:"pi pi-user-plus", 
-                            command: () => {this.modals.addUserDialog = true;}
-                        },
-                        {
-                            label: this.$t('user_management.add_folder'),
-                            icon:"pi pi-folder-open", 
-                            command: () => {this.modals.addFolderDialog = true;}
-                        },
-                        {
-                            label: this.$t('user_management.ad.add_group'),
-                            icon:"fas fa-users", 
-                            command: () => {this.modals.addGroupDialog = true;}
-                        },
-                    ]
-                    if (this.enableDeleteUpdate == "true") {
-                        this.contextMenuItems.push({
-                            label: this.$t('user_management.delete_folder'), 
-                            icon:"pi pi-trash", 
-                            command:() => {this.modals.deleteNodeDialog = true;}
-                        });
-                    }
-                    break
                 case 'USER':
-                    this.contextMenuItems = [
-                        {
-                            label: this.$t('user_management.node_detail'), 
-                            icon: 'pi pi-list', 
-                            command: () => {this.showNodeDetailDialog = true}
-                        },
-                        {
-                            label: this.$t('user_management.ad.give_console_access'), 
-                            icon:"pi pi-check-square", 
-                            command: () => {this.modals.giveConsoleAccessDialog = true}
-                        },
-                        {
-                            label: this.$t('user_management.ad.add_to_group'), 
-                            icon:"pi pi-plus", 
-                            command:() => {this.modals.addSelectedUserDialog = true;}
-                        },
-                        
-                    ]
-                    if (this.enableDeleteUpdate == "true") {
-                        this.contextMenuItems.push({
-                            label: this.$t('user_management.delete_user'), 
-                            icon:"pi pi-user-minus", 
-                            command:() => {this.modals.deleteNodeDialog = true;}
-                        });
+                    if (this.domainType == "ACTIVE_DIRECTORY") {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon: 'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.give_console_access'), 
+                                icon:"pi pi-check-square", 
+                                command: () => {this.modals.giveConsoleAccessDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.add_to_group'), 
+                                icon:"pi pi-plus", 
+                                command:() => {this.modals.addSelectedUserDialog = true;}
+                            },
+                            
+                        ]
+                        if (this.enableDeleteUpdate == "true") {
+                            this.contextMenuItems.push({
+                                label: this.$t('user_management.delete_user'), 
+                                icon:"pi pi-user-minus", 
+                                command:() => {this.modals.deleteNodeDialog = true;}
+                            });
+                        }
+                    } else {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon:'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.sync_selected_user'), 
+                                icon:'pi pi-replay', 
+                                command: () => {this.modals.userSyncDialog = true}
+                            },
+                        ]
                     }
                     break
                 case 'CONTAINER':
-                    this.contextMenuItems = [
-                        {
-                            label: this.$t('user_management.node_detail'), 
-                            icon: 'pi pi-list', 
-                            command: () => {this.showNodeDetailDialog = true}
-                        },
-                        {
-                            label: this.$t('user_management.add_user'), 
-                            icon:"pi pi-user-plus", 
-                            command: () => {this.modals.addUserDialog = true}
-                        },
-                        {
-                            label: this.$t('user_management.ad.add_group'),
-                            icon:"fas fa-users",
-                            command:() => {this.modals.addGroupDialog = true;}
-                        },
-                    ]
+                    if (this.domainType == "ACTIVE_DIRECTORY") {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon: 'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.add_user'), 
+                                icon:"pi pi-user-plus", 
+                                command: () => {this.modals.addUserDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.add_group'),
+                                icon:"fas fa-users",
+                                command:() => {this.modals.addGroupDialog = true;}
+                            },
+                        ]
+                    } else {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon:'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.sync_selected_user'), 
+                                icon:'pi pi-replay', 
+                                command: () => {this.modals.userSyncDialog = true}
+                            },
+                        ]
+                    }
                     break
                 case 'GROUP':
-                    this.contextMenuItems = [
-                        {
-                            label: this.$t('user_management.node_detail'), 
-                            icon: 'pi pi-list', 
-                            command: () => {this.showNodeDetailDialog = true}
-                        },
-                        {
-                            label: this.$t('user_management.ad.add_member_to_group'), 
-                            icon:"pi pi-user-plus",
-                            command: () => {this.modals.addMemberDialog = true}
-                        },
-                    ]
-                    if (this.enableDeleteUpdate == "true") {
-                        this.contextMenuItems.push({
-                            label: this.$t('user_management.delete_group'), 
-                            icon:"pi pi-trash", 
-                            command:() => {this.modals.deleteNodeDialog = true;}
-                        });
+                    if (this.domainType == "ACTIVE_DIRECTORY") {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon: 'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.add_member_to_group'), 
+                                icon:"pi pi-user-plus",
+                                command: () => {this.modals.addMemberDialog = true}
+                            },
+                        ]
+                        if (this.enableDeleteUpdate == "true") {
+                            this.contextMenuItems.push({
+                                label: this.$t('user_management.delete_group'), 
+                                icon:"pi pi-trash", 
+                                command:() => {this.modals.deleteNodeDialog = true;}
+                            });
+                        }
+                    } else {
+                        this.contextMenuItems = [
+                            {
+                                label: this.$t('user_management.node_detail'), 
+                                icon:'pi pi-list', 
+                                command: () => {this.showNodeDetailDialog = true}
+                            },
+                        ]
                     }
                 }
             this.$refs.rightMenu.style.top = data.clientY + 'px';

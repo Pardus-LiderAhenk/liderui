@@ -71,10 +71,6 @@ export default {
                             label: this.$t('menu.ad_management'),
                             to: '/ad_management'
                         },
-                        {
-                            label: this.$t('menu.ad_synchronization'),
-                            to: '/ad_synchronization'
-                        }
                     ]
                 },
                 {

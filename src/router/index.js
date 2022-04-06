@@ -24,7 +24,6 @@ import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUse
 
 //USER
 import AdManagement from '@/views/UserManagement/AD/AdManagement.vue';
-// import AdSynchronization from '@/views/UserManagement/AD/AdSynchronization.vue';
 import UserManagement from '@/views/UserManagement/Ldap/UserManagement.vue';
 
 // LIDER CONSOLE PROFILE
@@ -78,14 +77,6 @@ const routes = [{
                     requiresAuth: true,
                 }
             },
-            // {
-            //     path: "/ad_synchronization",
-            //     name: "AdSynchronization",
-            //     components: { default: AdSynchronization },
-            //     meta: {
-            //         requiresAuth: true,
-            //     }
-            // },
             {
                 path: "/user_group_management",
                 name: "UserGroupManagement",

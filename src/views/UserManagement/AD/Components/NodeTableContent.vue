@@ -6,8 +6,10 @@
     <div>
         <Card>
             <template #title>
-                <div style="font-size:15px;">
-                    {{$t('user_management.ad.node_detail_title')}}
+                <div class="p-d-flex p-jc-between">
+                    <div style="font-size:15px;">
+                        {{$t('user_management.ad.node_detail_title')}}
+                    </div>
                 </div>
             </template>
             <template #content>
@@ -18,7 +20,7 @@
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
                             :rowsPerPageOptions="[10,25,50,100]"  style="margin-top: 2em"
                             v-model:filters="filters"
-                            responsiveLayout="scroll" :loading="loading"
+                            responsiveLayout="scroll"
                         >
                             <template #header>
                                 <div class="p-d-flex p-jc-end">
@@ -81,7 +83,7 @@ export default {
         return {
             selectedNodeTable: null,
             showNodeDetailDialog: false,
-            nodes: null,
+            nodes: [],
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
@@ -92,30 +94,34 @@ export default {
         if (this.selectedNode) {
             this.getChildEntries();
         } else {
-            this.nodes = null;
+            this.nodes = [];
         }
     },
 
     methods: {
         getChildEntries() {
-
-            let params = new FormData();
-            params.append("distinguishedName", this.selectedNode.distinguishedName);
-            params.append("name", this.selectedNode.name);
-            params.append("parent", this.selectedNode.parent);
-            axios.post('/ad/getChildEntries', params).then(response => {
-                if (response.data) {
-                    this.nodes = response.data;
-                }
-            })
-            .catch((error) => {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('user_management.ad.error_ad_child_entries'),
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
+            this.nodes = [];
+            if (this.selectedNode.type != "USER" && this.selectedNode.type != "GROUP") {
+                let params = new FormData();
+                params.append("distinguishedName", this.selectedNode.distinguishedName);
+                params.append("name", this.selectedNode.name);
+                params.append("parent", this.selectedNode.parent);
+                axios.post('/ad/getChildEntries', params).then(response => {
+                    if (response.data) {
+                        this.nodes = response.data;
+                    }
+                })
+                .catch((error) => {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.ad.error_ad_child_entries'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 });
-            });       
+            } else {
+                this.nodes.push(this.selectedNode);
+            }
         },
 
         selectedNodeDetail(node) {
