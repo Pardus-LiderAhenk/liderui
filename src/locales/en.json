@@ -721,7 +721,8 @@
             "sync_group_success": "Moved group successfully",
             "select_ldap_ou": "Select OpenLDAP Directory to Synchronization",
             "select_ou": "Select Directory",
-            "already_exist_user_in_ldap": "Already exist users in OpenDLAP"
+            "already_exist_user_in_ldap": "Already exist users in OpenDLAP",
+            "already_exist_group_in_ldap": "Already exist groups in OpenDLAP"
         }
     },
     "group_management": {

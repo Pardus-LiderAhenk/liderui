@@ -59,6 +59,12 @@
         :selectedNode="selectedNode"
         @close-ad-dialog="modals.userSyncDialog = false">
     </user-synchronization-dialog>
+
+    <group-synchronization-dialog v-if="modals.groupSyncDialog"
+        :groupSyncDialog="modals.groupSyncDialog"
+        :selectedNode="selectedNode"
+        @close-ad-dialog="modals.groupSyncDialog = false">
+    </group-synchronization-dialog>
      <!--Context menu Dialog END -->
 
     <div class="p-grid ad-management">
@@ -126,6 +132,7 @@ import AddUserDialog from './Dialogs/AddUserDialog.vue';
 import GiveConsoleAccessDialog from './Dialogs/GiveConsoleAccessDialog.vue';
 import DeleteNodeDialog from './Dialogs/DeleteNodeDialog.vue';
 import UserSynchronizationDialog from './Dialogs/UserSynchronizationDialog.vue'
+import GroupSynchronizationDialog from './Dialogs/GroupSynchronizationDialog.vue'
 import axios from "axios";
 
 
@@ -180,7 +187,8 @@ export default {
                 addUserDialog: false,
                 giveConsoleAccessDialog: false,
                 deleteNodeDialog: false,
-                userSyncDialog: false
+                userSyncDialog: false,
+                groupSyncDialog: false
             },
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
@@ -201,6 +209,7 @@ export default {
         GiveConsoleAccessDialog,
         DeleteNodeDialog,
         UserSynchronizationDialog,
+        GroupSynchronizationDialog
     },
 
     created() {
@@ -265,6 +274,11 @@ export default {
                                     icon:'pi pi-replay', 
                                     command: () => {this.modals.userSyncDialog = true}
                                 },
+                                {
+                                    label: this.$t('user_management.ad.sync_selected_group'), 
+                                    icon:'pi pi-replay', 
+                                    command: () => {this.modals.groupSyncDialog = true}
+                                },
                             ]
                         }
                     }
@@ -311,6 +325,11 @@ export default {
                                 label: this.$t('user_management.ad.sync_selected_user'), 
                                 icon:'pi pi-replay', 
                                 command: () => {this.modals.userSyncDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.sync_selected_group'), 
+                                icon:'pi pi-replay', 
+                                command: () => {this.modals.groupSyncDialog = true}
                             },
                         ]
                     }
@@ -388,6 +407,11 @@ export default {
                                 icon:'pi pi-replay', 
                                 command: () => {this.modals.userSyncDialog = true}
                             },
+                            {
+                                label: this.$t('user_management.ad.sync_selected_group'), 
+                                icon:'pi pi-replay', 
+                                command: () => {this.modals.groupSyncDialog = true}
+                            },
                         ]
                     }
                     break
@@ -418,6 +442,11 @@ export default {
                                 label: this.$t('user_management.node_detail'), 
                                 icon:'pi pi-list', 
                                 command: () => {this.showNodeDetailDialog = true}
+                            },
+                            {
+                                label: this.$t('user_management.ad.sync_selected_group'), 
+                                icon:'pi pi-replay', 
+                                command: () => {this.modals.groupSyncDialog = true}
                             },
                         ]
                     }

@@ -1,13 +1,13 @@
 <template>
     <div>
         <Dialog :header="$t('user_management.ad.select_ldap_ou')" 
-        v-model:visible="ldapUserOuDialog" :style="{width: '40vw'}" :modal="true"
+        v-model:visible="ldapGroupOuDialog" :style="{width: '40vw'}" :modal="true"
         >
             <tree-component 
                 ref="movetree"
                 :isMove="true"
-                loadNodeUrl="/lider/user/getUsers"
-                loadNodeOuUrl="/lider/user/getOuDetails"
+                loadNodeUrl="/lider/user_groups/getGroups"
+                loadNodeOuUrl="/lider/user_groups/getOuDetails"
                 :treeNodeClick="node => selectedLdapOuDn = node.distinguishedName"
                 :searchFields="searchFolderFields"
             />
@@ -16,21 +16,21 @@
             </div>
             <template #footer>
                 <Button :label="$t('user_management.cancel')" icon="pi pi-times" 
-                    @click="ldapUserOuDialog = false" class="p-button-text p-button-sm"
+                    @click="ldapGroupOuDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button :label="$t('user_management.ad.sync_selected_user')" icon="pi pi-replay" 
-                    @click="syncUserToLDAP" class="p-button-sm"
+                <Button :label="$t('user_management.ad.sync_selected_group')" icon="pi pi-replay" 
+                    @click="syncGroupToLDAP" class="p-button-sm"
                 />
             </template>
         </Dialog>
         <Dialog :header="$t('user_management.ad.sync_title')" v-model:visible="showDialog" 
             :style="{width: '50vw'}" :modal="true">
             
-            <DataTable :value="users" class="p-datatable-sm p-col"
+            <DataTable :value="groups" class="p-datatable-sm p-col"
                 :paginator="true" :rows="10" ref="dt"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
                 :rowsPerPageOptions="[10,25,50,100]"  style="margin-top: 2em"
-                v-model:filters="filters" v-model:selection="selectedUsers"
+                v-model:filters="filters" v-model:selection="selectedGroups"
                 responsiveLayout="scroll" :loading="loading" 
             >
                 <template #header>
@@ -87,10 +87,9 @@ export default {
             description: "Selected tree node",
         },
 
-        userSyncDialog: {
+        groupSyncDialog: {
             type: Boolean,
             default: false,
-            description: "Selected tree node",
         },
     },
 
@@ -99,11 +98,11 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
-            users: [],
-            selectedUsers: null,
+            groups: [],
+            selectedGroups: null,
             loading: false,
             selectedLdapOuDn: null,
-            ldapUserOuDialog: false,
+            ldapGroupOuDialog: false,
             searchFolderFields: [
                 {
                     key: this.$t('tree.folder'),
@@ -116,7 +115,7 @@ export default {
     computed: {
         showDialog: {
             get () {
-                return this.userSyncDialog;
+                return this.groupSyncDialog;
             },
 
             set (value) {
@@ -129,23 +128,23 @@ export default {
 
     mounted() {
         if (this.selectedNode) {
-            this.getChildUser();
+            this.getChildGroup();
         } else {
-            this.users = [];
+            this.groups = [];
         }
     },
 
     methods: {
-        getChildUser() {
+        getChildGroup() {
             if (this.selectedNode.type == "ORGANIZATIONAL_UNIT" || this.selectedNode.type == "CONTAINER" || this.selectedNode.isRoot) {
                 this.loading = true;
                 let params = new FormData();
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
-                params.append("value", "user");
-                axios.post('/ad/getChildUser', params).then(response => {
+                params.append("value", "group");
+                axios.post('/ad/getChildGroup', params).then(response => {
                     if (response.data) {
-                        this.users = response.data;
+                        this.groups = response.data;
                         this.loading = false;
                     }
                 }).catch((error) => {
@@ -157,25 +156,25 @@ export default {
                     });
                 });    
             } 
-            if (this.selectedNode.type == 'USER') {
-                this.users.push(this.selectedNode);
+            if (this.selectedNode.type == 'GROUP') {
+                this.groups.push(this.selectedNode);
             }
         },
 
         showLdapOuDialog() {
-            if (!this.selectedUsers) {
+            if (!this.selectedGroups) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: this.$t('user_management.select_user_warn'),
+                    detail: this.$t('user_management.select_group_warn'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
                 return;
             }
-            this.ldapUserOuDialog = true;
+            this.ldapGroupOuDialog = true;
         },
 
-        syncUserToLDAP() {
+        syncGroupToLDAP() {
             if (!this.selectedLdapOuDn) {
                 this.$toast.add({
                     severity:'warn', 
@@ -185,23 +184,23 @@ export default {
                 });
                 return;
             }
-            this.ldapUserOuDialog = false;
+            this.ldapGroupOuDialog = false;
             let params = {
                 "distinguishedName": this.selectedLdapOuDn,
-                "childEntries": this.selectedUsers
+                "childEntries": this.selectedGroups
             };
-            axios.post('/ad/syncUserFromAd2Ldap', params).then(response => {
+            axios.post('/ad/syncGroupFromAd2Ldap', params).then(response => {
                 if (response.data.length == 0) {
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('user_management.ad.sync_user_success'),
+                        detail: this.$t('user_management.ad.sync_group_success'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'warn', 
-                        detail: this.$t('user_management.ad.already_exist_user_in_ldap'),
+                        detail: this.$t('user_management.ad.already_exist_group_in_ldap'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -209,7 +208,7 @@ export default {
             }).catch((error) => {
                 this.$toast.add({
                     severity:'error', 
-                    detail: this.$t('user_management.ad.sync_user_error'),
+                    detail: this.$t('user_management.ad.sync_group_error'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -221,7 +220,7 @@ export default {
     watch: {
         selectedNode() {
             if (this.selectedNode) {
-                this.getChildUser();
+                this.getChildGroup();
             }
         },
     }

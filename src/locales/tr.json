@@ -724,7 +724,8 @@
             "sync_group_success": "Seçili gruplar OpenLDAP'a başarıyla aktarıldı",
             "select_ldap_ou": "Aktarılacak OpenLDAP Dizini Seç",
             "select_ou": "Dizin Seç",
-            "already_exist_user_in_ldap": "Kullanıcılar OpenLDAP'ta zaten var"
+            "already_exist_user_in_ldap": "Kullanıcılar OpenLDAP'ta zaten var",
+            "already_exist_group_in_ldap": "Gruplar OpenLDAP'ta zaten var"
         }
     },
     "group_management": {
