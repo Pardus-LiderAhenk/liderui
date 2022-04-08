@@ -8,19 +8,21 @@
             <span>{{ $t("login.title") }}</span>
         </div>
         <div class="p-col-12">
-             <div class="card">
-                <div class="p-fluid">
-                    <span class="p-field p-input-icon-left">
-                        <i class="pi pi-user" />
-                        <InputText type="text" v-model="username" placeholder="Username" />
-                    </span>
-                    <span class="p-field p-input-icon-left">
-                        <i class="pi pi-lock" />
-                        <InputText type="password" v-model="password" placeholder="Password" />
-                    </span>
-                     <Button label="Login" class="p-button-primary" @click="login()"/>
+             <form @submit.prevent="login()" class="p-fluid">
+                <div class="card">
+                    <div class="p-fluid">
+                        <span class="p-field p-input-icon-left">
+                            <i class="pi pi-user" />
+                            <InputText type="text" v-model="username" placeholder="Username" />
+                        </span>
+                        <span class="p-field p-input-icon-left">
+                            <i class="pi pi-lock" />
+                            <InputText type="password" v-model="password" placeholder="Password" />
+                        </span>
+                        <Button type="submit" label="Login" class="p-mt-2" />
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
      </div>
 </template>
@@ -46,6 +48,7 @@ export default {
                 (response) => {
                     console.log(response.data.token);
                     localStorage.setItem("auth_token", response.data.token);
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
                     this.$router.push("/dashboard");
                 },
                 (error) => {

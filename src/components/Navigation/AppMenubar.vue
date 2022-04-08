@@ -7,34 +7,19 @@
                     </router-link>
             </template>
             <template #end>
-               <!-- <Dropdown v-model="selectedCountry" :options="countries"  >
-                    <template #value="slotProps">
-                        <div class="country-item country-item-value" v-if="slotProps.value">
-                            <img :src="getImgUrl(slotProps.value.img)" style="width:15px;height:15px"/>
-                             
-                        </div>
-                        <span v-else>
-                            {{slotProps.placeholder}}
-                        </span>
-                    </template>
-                    <template #option="slotProps">
-                        <div class="country-item">
-                            <img :src="getImgUrl(slotProps.option.img)" style="width:30px;height:30px"/>
-                            
-                        </div>
-                    </template>
-                </Dropdown> -->
-                 <Button type="button" class=" p-button-link">
-                    <img :src="getImgUrl('tr.png')" style="width:20px;height:20px"/>
+               
+                 <Button type="button" class=" p-button-link" @click="toggleLanguage">
+                    <img :src="getImgUrl($i18n.locale == 'tr' ? 'tr.png' : 'us.png')" style="width:20px;height:20px"/>
                     <span class="pi pi-angle-down"></span>
                 </Button>
-                 <Button type="button" class=" p-button-link" @click="toggleSettings">
+                <Menu id="overlay_menu_lang" ref="languageMenu" :model="languages" :popup="true" />
+                <Button type="button" class=" p-button-link" @click="toggleSettings">
                     <i class="pi pi-cog" style="fontSize: 1.2rem"></i>
                     <span class="pi pi-angle-down"></span>
                 </Button>
                 <Menu id="overlay_menu" ref="settingsMenu" :model="settingItems" :popup="true" />
                 <Button type="button" class=" p-button-link" @click="toggleProfile">
-                    <span >İsmail BAŞARAN</span>
+                    <i class="pi pi-user" style="fontSize: 1.2rem"></i>
                     <span class="layout-topbar-icon pi pi-angle-down"></span>
                 </Button>
                 <Menu id="overlay_menu_profile" ref="profileMenu" :model="profileItems" :popup="true" />
@@ -45,15 +30,13 @@
 
 <script>
 export default {
-    components: {
-        
-    },
+    
     data() {
         return {
             selectedCountry: {name: 'Turkish', code: 'TR', img: 'tr.png'},
-            countries: [
-                {name: 'Turkish', code: 'TR', img: 'tr.png'},
-                {name: 'English', code: 'EN', img: 'us.png'}
+            languages: [
+                {label:'TR', icon:'../../assets/images/flags/tr.png', command: () => this.$i18n.locale = 'tr'},
+                {label:'EN', icon:'../../assets/images/flags/us.png', command: () => this.$i18n.locale = 'en'}
             ],
             items: [ {
                    label: this.$t('menu.computer_management'),
@@ -141,7 +124,9 @@ export default {
                 },
                 {
                     label: 'Çıkış',
-                    to: '/logout'
+                    command: () => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err));
+                    }
                 }
             ]
         }
@@ -155,6 +140,9 @@ export default {
         },
         toggleProfile(event) {
             this.$refs.profileMenu.toggle(event);
+        },
+        toggleLanguage(event) {
+            this.$refs.languageMenu.toggle(event);
         },
     }
 }
