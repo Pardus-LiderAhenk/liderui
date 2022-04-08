@@ -196,31 +196,21 @@ export default {
                         this.user.homePostalAddress = "";
                         this.user.userPassword = "";
                         this.user.name = "";
-                    } else {
+                    } if(response.status == 208) {
                         this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('user_management.add_user_error'), 
+                            severity:'warn', 
+                            detail: this.$t('user_management.user_already_exist'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
                     }
                 }).catch((error) => {
-                    if(error.response.status == WARNING) {
-                        this.$toast.add({
-                            severity:'warning', 
-                            detail: this.$t('user_management.user_already_exist'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    } else {
-                         this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('user_management.add_user_error'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-                   
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.add_user_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 });
             }
         },

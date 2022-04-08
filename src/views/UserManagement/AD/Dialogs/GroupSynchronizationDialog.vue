@@ -25,7 +25,6 @@
         </Dialog>
         <Dialog :header="$t('user_management.ad.sync_title')" v-model:visible="showDialog" 
             :style="{width: '50vw'}" :modal="true">
-            
             <DataTable :value="groups" class="p-datatable-sm p-col"
                 :paginator="true" :rows="10" ref="dt"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
@@ -46,8 +45,8 @@
                         <span class="p-input-icon-left">
                             <i class="pi pi-search"/>
                             <InputText v-model="filters['global'].value" 
-                            class="p-inputtext-sm" 
-                            :placeholder="$t('user_management.search')" 
+                                class="p-inputtext-sm" 
+                                :placeholder="$t('user_management.search')" 
                             />
                         </span>
                         </div>
@@ -55,7 +54,7 @@
                 </template>
                 <template #empty>
                     <div class="p-d-flex p-jc-center">
-                        <span>{{$t('user_management.ad.user_table_empty_message')}}</span>
+                        <span>{{$t('user_management.ad.group_table_empty_message')}}</span>
                     </div>
                 </template>
                 <Column selectionMode="multiple" headerStyle="width: 3em"></Column>
