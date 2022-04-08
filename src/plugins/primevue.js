@@ -95,6 +95,8 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import Editor from 'primevue/editor'
 
+import LiderConfirmDialogVue from '../components/LiderConfirmDialog/LiderConfirmDialog.vue';
+
 
 
 export default {
@@ -185,5 +187,6 @@ export default {
         app.component('TreeTable', TreeTable);
         app.component('TriStateCheckbox', TriStateCheckbox);
         app.component('Editor', Editor);
+        app.component('LiderConfirmDialog', LiderConfirmDialogVue);
     },
 };

@@ -11,15 +11,17 @@
                     ref="agentsTree"
                     loadNodeUrl="/lider/user_groups/getGroups"
                     loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                    :searchFields="searchFields"
+                    :treeNodeClick="setSelectedNode"
                 />
             </div>
             <div class="p-col-12">
                <div class="p-field-radiobutton">
-                    <RadioButton  value="1" v-model="userPermissionChoise" />
+                    <RadioButton  value="read" v-model="userPermissionChoise" />
                     <label >Seçili klasör ve alt klasörlerini sadece okuma yetkisi ver</label>
                 </div>
                 <div class="p-field-radiobutton">
-                    <RadioButton  value="2" v-model="userPermissionChoise" />
+                    <RadioButton  value="write" v-model="userPermissionChoise" />
                     <label >Seçili klasör ve alt klasörlerini okuma ve yazma yetkisi ver</label>
                 </div>
             </div>
@@ -27,7 +29,7 @@
 
          <template #footer>
             <Button label="Kapat" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
-            <Button label="Ekle" icon="pi pi-check" @click="addUsersToData" autofocus />
+            <Button label="Ekle" icon="pi pi-check" @click="addAccessRule" autofocus />
         </template>
        
     </Dialog>
@@ -42,7 +44,19 @@ export default {
     },
     data() {
         return {
-            userPermissionChoise: 1
+            userPermissionChoise: 'read',
+            selectedNode: null,
+            searchFields: [
+                {
+                    key: this.$t('tree.name'),
+                    value: "cn"
+                },
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                },
+            ],
+
         }
     },
     props: ['modalVisibleValue'],
@@ -55,6 +69,15 @@ export default {
                 this.$emit('modalVisibleValue', false);
             }
         },
+    },
+    methods: {
+        setSelectedNode(node) {
+            this.selectedNode = node;
+        },
+        addAccessRule() {
+            this.$emit('addOlcAccessRule', this.selectedNode.distinguishedName, this.userPermissionChoise);
+            this.modalVisible = false;
+        }
     }
 }
 </script>
