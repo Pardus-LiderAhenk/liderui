@@ -76,7 +76,10 @@
                         </small>
                     </div>
                     <div class="p-filed p-col-12">
-                        <password-component ref="password" :isSmallInput="true"></password-component>
+                        <password-component ref="password" 
+                            :isSmallInput="true"
+                            :passwordLength="8">
+                        </password-component>
                     </div>
                 </div>
             </div>
@@ -165,9 +168,9 @@ export default {
         addUser() {
             if (this.userFormValidation()) {
                 if (!this.$refs.password.getPassword()) {
-                    this.user.userPassword = this.$refs.password.getPassword();
                     return;
                 }
+                this.user.userPassword = this.$refs.password.getPassword();
                 let params = new FormData();
                 params.append("parentName", this.selectedNode.distinguishedName);
                 params.append("name", this.user.name);

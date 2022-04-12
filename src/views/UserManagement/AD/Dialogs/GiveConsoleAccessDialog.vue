@@ -13,7 +13,10 @@
                     </div>
                 </div>
                 <div class="p-field">
-                    <password-component ref="password" :isSmallInput="true"></password-component>
+                    <password-component ref="password" 
+                        :isSmallInput="true"
+                        :passwordLength="8">
+                    </password-component>
                 </div>
                 <div>
                     <small>* Dizin yapısında bulunan kullanıcıların Lider Arayüzü(Konsol erişimi) kullanması için Lider'e aktarılması gerekmektedir</small>
@@ -82,11 +85,10 @@ export default {
 
     methods: {
         giveConsoleAccessToUser() {
-            let userPassword = null;
             if (!this.$refs.password.getPassword()) {
-                userPassword = this.$refs.password.getPassword();
                 return;
             }
+            let userPassword = this.$refs.password.getPassword();
             let childEntries = [];
             childEntries.push({
                 "distinguishedName" : this.selectedNode.distinguishedName

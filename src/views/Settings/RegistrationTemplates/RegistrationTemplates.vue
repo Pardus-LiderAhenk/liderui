@@ -103,7 +103,7 @@
             </Card>
         </div>
     </div>
-    <Dialog header="Organizsayon Birimi Seç" 
+    <Dialog header="Organizasyon Birimi Seç" 
         v-model:visible="agentOuDialog" 
         :style="{width: '40vw'}" :modal="true"
     >

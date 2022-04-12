@@ -214,4 +214,4 @@ export default {
         padding: 1rem;
     }
 }
-</style>>
+</style>

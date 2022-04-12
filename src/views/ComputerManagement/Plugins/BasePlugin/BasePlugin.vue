@@ -1,4 +1,9 @@
 <template>
+  <base-scheduled v-if="showScheduled"
+    @close-scheduled="showScheduled = false" 
+    @save-scheduled="scheduledTaskOperation"
+    :showScheduled="showScheduled">
+  </base-scheduled>
   <Dialog :style="{width: '20vw'}"
     :header="$t('computer.task.toast_summary')" 
     v-model:visible="showDialog"  
@@ -91,10 +96,10 @@
             </div>
             <div>
                <Button v-if="scheduledParam != null" 
-                :title="$t('computer.scheduled.cancel')" 
                 @click="cancelScheduledTask" 
-                :label="$t('computer.scheduled.scheduled_task_plan')" 
-                icon="pi pi-times" class="p-button-text p-button-sm">
+                :label="$t('computer.scheduled.cancel')" 
+                icon="pi pi-times" class="p-button-text p-button-sm"
+                v-tooltip.left="$t('computer.scheduled.title')+': \n' + scheduledParam">
                </Button>
             </div>
             <div v-if="loading">
@@ -104,10 +109,13 @@
               </a>
             </div>
             <div class="p-col p-as-end">
-              <base-scheduled
-                @cancel-scheduled="scheduledTaskOperation" 
-                @save-scheduled="scheduledTaskOperation">
-            </base-scheduled>
+              <a class="primary" 
+                @click.prevent="showScheduled = true" 
+                style="float:right;" 
+                v-tooltip.left="$t('computer.scheduled.scheduled_task_plan')">
+                <i class="fas fa-clock"></i>
+              </a>
+              
             </div>
           </div>
         </slot>
@@ -282,6 +290,7 @@ export default {
     },
 
     scheduledTaskOperation(param){
+      this.showScheduled = false;
       if (param != null) {
         this.scheduledParam = param;
       }
