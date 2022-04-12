@@ -566,4 +566,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
+    }
+}
+</style>

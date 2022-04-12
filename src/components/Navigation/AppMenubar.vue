@@ -91,6 +91,10 @@ export default {
                         {
                             label: this.$t('menu.system_log_report'),
                             to: '/reports/logs'
+                        },
+                        {
+                            label: this.$t('menu.scheduled_task_report'),
+                            to: '/reports/scheduled'
                         }
                     ]
                 }

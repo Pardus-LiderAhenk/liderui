@@ -14,8 +14,7 @@
                 </div>
                 <div class="p-field">
                     <password-component ref="password" 
-                        :isSmallInput="true"
-                        :passwordLength="8">
+                        :isSmallInput="true">
                     </password-component>
                 </div>
                 <div>

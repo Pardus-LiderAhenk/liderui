@@ -1,7 +1,12 @@
 <template>
+  <base-scheduled v-if="showScheduled"
+    @close-scheduled="showScheduled = false" 
+    @save-scheduled="updateScheduledTask"
+    :showScheduled="showScheduled">
+  </base-scheduled>
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
-      <h4 class="p-pt-2">Çalıştırılan Görevler Raporu</h4>
+      <h4 class="p-pt-2">Zamanlanmış Görevler Raporu</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
       
@@ -62,7 +67,7 @@
       <DataTable :value="tasks" responsiveLayout="scroll" dataKey="id" :loading="loading">
         <template #empty>
           <div class="p-d-flex p-jc-center">
-            Görev bulunamadı...
+            Zamanlanmış görev bulunamadı
           </div>
         </template>
         <template #loading>
@@ -80,10 +85,8 @@
           </template>
         </Column>
         <Column field="createDate" header="Oluşturulma Tarihi">
-         
         </Column>
         <Column field="commandOwnerUid" header="Gönderen">
-          
         </Column>
         <Column header="Toplam">
           <template #body="{ data }">
@@ -107,22 +110,35 @@
                 {{ data.failedTaskCount }}
             </template>
         </Column>
-        <Column header="Zamanlı Çalıştırılan">
+        <Column header="Durum">
             <template #body="{data}">
-                {{
-                    data.task.cronExpression != null ? 'EVET': 'HAYIR'
-                }}
+              <Badge 
+                  :value="data.task.deleted ? 'Pasif': 'Aktif'" 
+                  :severity="data.task.deleted ? 'danger': 'success'">
+              </Badge>
             </template>
         </Column>
         <Column>
           <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
               <div>
+                <Button :disabled="data.task.deleted"
+                  class="p-button-sm p-button-warning p-button-rounded p-mr-2 "
+                  icon="pi pi-pencil"
+                  v-tooltip.bottom="'Düzenle'"
+                  @click="showTaskDetailDialog(data.id); showScheduled = true;"
+                />
+                <Button :disabled="data.task.deleted"
+                  class="p-button-sm p-button-danger p-button-rounded p-mr-2 "
+                  icon="pi pi-times"
+                  v-tooltip.bottom="'İptal Et'"
+                  @click="showTaskDetailDialog(data.id); cancelScheduledTaskDialog = true;"
+                />
                 <Button
-                  class="p-button-sm p-button-raised p-button-rounded"
+                  class="p-button-sm p-button-rounded"
                   icon="pi pi-list"
-                  v-tooltip.left="'Task Details'"
-                  @click="showTaskDetailDialog(data.id)"
+                  v-tooltip.bottom="'Detay Göster'"
+                  @click="showTaskDetailDialog(data.id); this.scheduledTaskDetailDialog = true;"
                 />
               </div>
             </div>
@@ -140,187 +156,128 @@
     </template>
   </Card>
   <Dialog
-    v-model:visible="taskDetailDialog"
-    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-    :style="{ width: '50vw' }"
+    v-model:visible="scheduledTaskDetailDialog"
+    :style="{ width: '40vw' }"
+    :modal="true"
+    header="Seçilen Zamanlanmış Görevin Detayları"
   >
-    <template #header>
-      <h3>Görev Gönderilen Ahenk Listesi</h3>
-    </template>
-    
-     <DataTable :value="selectedTask.commandExecutions" responsiveLayout="scroll">
-
-        <Column field="uid" header="Bilgisayar Adı"></Column>
-        <Column field="createDate" header="Gönderilme Tarihi"></Column>
-        <Column header="Çalıştırılma Tarihi">
-          <template #body="{data}">
-                {{
-                    data.commandExecutionResults.length > 0 ? 
-                    data.commandExecutionResults[0].createDate : ''
-                }}
-            </template>
-        </Column>
-        <Column header="Sonuç">
-          <template #body="{data}">
-                {{
-                    data.commandExecutionResults.length > 0 ? 
-                    (data.commandExecutionResults[0].responseCode == "TASK_PROCESSED" ? 'BAŞARILI' : 'HATA')   : ''
-                }}
-            </template>
-        </Column>
-         <Column header="Cevap">
-          <template #body="{ data }">
-            <div class="p-d-flex p-jc-end">
-              <div>
-                <Button
-                  class="p-button-sm p-button-raised p-button-rounded"
-                  icon="pi pi-list"
-                  v-tooltip.left="'Task Details'"
-                  @click="showTaskExecutionsResultDialog(data.id)"
-                />
-              </div>
-            </div>
-          </template>
-        </Column>
-     </DataTable>
-    
-    <template #footer>
-      <Button
-        label="Close"
-        icon="pi pi-times"
-        class="p-button-text"
-        @click="taskDetailDialog = false"
-      />
-    </template>
-  </Dialog >
-
-  <Dialog
-    v-model:visible="taskExecutionsResultDialog"
-    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-    :style="{ width: '50vw' }"
-  >
-    <template #header>
-      <h3>Seçilen Görevin Detayları</h3>
-    </template>
-
-    <h4>Detay</h4>
-
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Görev Adı</b></div>
       <div class="p-col-8">
-        {{ selectedTask.task.plugin.description }}
+        {{ selectedCommand.task.plugin.description }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Çalıştırma Sonucu</b></div>
+      <div class="p-col-4"><b>Durum</b></div>
       <div class="p-col-8">
-        {{ selectedTaskExecutionResult.responseCode == "TASK_PROCESSED" ? 'BAŞARILI' : 'HATA' }}
+        <Badge 
+            :value="selectedCommand.task.deleted ? 'Pasif': 'Aktif'" 
+            :severity="selectedCommand.task.deleted ? 'danger': 'success'">
+        </Badge>
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Görev ID</b></div>
+      <div class="p-col-8">
+        {{ selectedCommand.task.id }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>Oluşturulma Tarihi</b></div>
       <div class="p-col-8">
-        {{ selectedTask.createDate }}
+        {{ selectedCommand.createDate }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Çalıştırılma Tarihi</b></div>
+      <div class="p-col-4"><b>Güncelleme Tarihi</b></div>
       <div class="p-col-8">
-        {{ selectedTaskExecutionResult.createDate }}
+        {{ selectedCommand.task.modifyDate }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Gönderen</b></div>
+      <div class="p-col-8">
+        {{ selectedCommand.commandOwnerUid }}
+      </div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <div class="p-col-4"><b>Zamanlanmış Görev Parametreleri</b></div>
+      <div class="p-col-8">
+        {{ selectedCommand.task.cronExpression }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
     </div>
-
-
-    <h4>Gönderilen Görev Parametreleri</h4>
-
-    <div class="p-grid">
-      <template v-for="(parameterKey, index) in Object.keys(selectedTask.task.parameterMap)" :key="index + 'param' " >
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b>{{ parameterKey }}</b></div>
-        <div class="p-col-8">
-          {{ selectedTask.task.parameterMap[parameterKey] }}
-        </div>
-      </template>
-    </div>
-
-
-    <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-    <h4>Görev Çalıştırılması Sonucunda Kaydedilen Veriler </h4>
-
-    <div class="p-grid" v-if="selectedTaskExecutionResult.commandExecutionResults && selectedTaskExecutionResult.commandExecutionResults.length > 0">
-      <template v-if="selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr != 'null' ">
-         <template v-for="(parameterKey, index) in Object.keys(JSON.parse(selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr))" :key="index + 'param' " >
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{ parameterKey }}</b></div>
-            <div class="p-col-8" >
-              {{ JSON.parse(selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr)[parameterKey] }}
-            </div>
-        </template>
-      </template>
-       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b>Ahenkten Gelen Mesaj</b></div>
-        <div class="p-col-8">
-          {{ selectedTaskExecutionResult.commandExecutionResults[0].responseMessage }}
-        </div>
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-    </div>
-
-
      <template #footer>
       <Button
-        label="Close"
+        label="Kapat"
         icon="pi pi-times"
-        class="p-button-text"
-        @click="taskExecutionsResultDialog = false"
+        class="p-button-sm p-button-text"
+        @click="scheduledTaskDetailDialog = false"
       />
     </template>
-
+  </Dialog>
+  <Dialog header="Zamanlanmış Görevi İptal Et" v-model:visible="cancelScheduledTaskDialog" 
+    :style="{width: '20vw'}" :modal="true">
+    <div class="p-fluid">
+        <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+        <span>
+          Zamanlanmış görev iptal edilecektir, emin misiniz?
+        </span>
+    </div>
+    <template #footer>
+        <Button label="İptal" icon="pi pi-times" 
+            @click="cancelScheduledTaskDialog = false" class="p-button-text p-button-sm"
+        />
+        <Button label="Evet" icon="pi pi-check"
+            @click="cancelScheduledTask" class="p-button-sm"
+        />
+    </template>
   </Dialog>
 </template>
 
 <script>
+
+/**
+ * Scheduled task report. Update and cancel scheduled task with this page
+ * @see {@link http://www.liderahenk.org/}
+ */
+
 import axios from "axios";
 import moment from "moment";
 
 export default {
   data() {
     return {
-        tasks: [],
-        totalElements: 0,
-        showedTotalElementCount: 10,
-        currentPage: 1,
-        offset: 1,
-        loading: true,
-        getFilterData: true,
-        taskDetailDialog: false,
-        taskExecutionsResultDialog: false,
-        selectedTask: null,
-        selectedTaskExecutionResult: null,
-        plugins:[],
-        filter: {
-            taskSendDate: '',
-            taskSendStartDate:'',
-            taskSendEndDate:'',
-            task:null
-        },
+      tasks: [],
+      totalElements: 0,
+      showedTotalElementCount: 10,
+      currentPage: 1,
+      offset: 1,
+      loading: true,
+      getFilterData: true,
+      taskDetailDialog: false,
+      scheduledTaskDetailDialog: false,
+      selectedCommand: null,
+      plugins:[],
+      showScheduled: false,
+      cancelScheduledTaskDialog: false,
+      filter: {
+        taskSendDate: '',
+        taskSendStartDate:'',
+        taskSendEndDate:'',
+        task:null
+      },
     };
   },
+
   mounted() {
     this.getTasks();
     this.getPlugins();
   },
+
   methods: {
     showTaskDetailDialog(taskId) {
-      this.selectedTask = this.tasks.filter(
+      this.selectedCommand = this.tasks.filter(
         (task) => task.id === taskId
       )[0];
-      this.taskDetailDialog = true;
     },
-    showTaskExecutionsResultDialog(id){
-      this.selectedTaskExecutionResult = this.selectedTask.commandExecutions.filter(
-        (executionResult) => executionResult.id === id
-      )[0];
-      this.taskExecutionsResultDialog = true;
-    },
+
     getTasks(pageNumber = 1, rowNumber = 10) {
       this.currentPage = pageNumber;
       var data = new FormData();
@@ -355,13 +312,12 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/lider/executedTaskReport/list/", data).then((response) => {
+      axios.post("/lider/scheduledTaskReport/list/", data).then((response) => {
         this.tasks = response.data.content;
         this.totalElements = response.data.totalElements;
         this.loading = false;
         let successfullTaskCount = 0;
         let failedTaskCount = 0;
-
         this.tasks = this.tasks.map( task => {
           task.commandExecutions.map( commandExecution => {
             if(commandExecution.commandExecutionResults != null && commandExecution.commandExecutionResults.length != 0) {
@@ -380,8 +336,7 @@ export default {
 
           successfullTaskCount = 0;
           failedTaskCount = 0;
-
-
+          
           return task;
 
         }, [successfullTaskCount, failedTaskCount]);
@@ -443,12 +398,12 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/lider/executedTaskReport/export", data, {responseType: 'blob'})
+      axios.post("/lider/scheduledTaskReport/export", data, {responseType: 'blob'})
       .then((response) => {
         let blob = new Blob([response.data]);
         let link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
-        link.download = "Tasks_Report.xlsx";
+        link.download = "Scheduled_Tasks_Report.xlsx";
         this.loading = false;
         link.click();
       });
@@ -463,7 +418,6 @@ export default {
     },
     getPlugins(){
         // /lider/executedTaskReport/plugins
-
         axios.post("/lider/executedTaskReport/plugins", {}).then((response) => {
             this.plugins = response.data;
         });
@@ -478,8 +432,59 @@ export default {
       } else {
         return ''
       }
-
     },
+
+    updateScheduledTask(scheduledParam) {
+      var params = new FormData();
+      params.append("id", this.selectedCommand.id);
+      params.append("cronExpression", scheduledParam);
+      axios.post("/lider/scheduledTask/update", params).then((response) => {
+        if (response.status == 200 && response.data != null) {
+          this.tasks = this.tasks.filter(command => command.id != response.data.id);
+          this.tasks.push(response.data);
+          this.$toast.add({
+            severity:'success', 
+            detail: "Zamanlanmış görev başarıyla güncellendi", 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      })
+      .catch((error) => {
+        this.$toast.add({
+          severity:'error', 
+          detail: "Zamanlanmış görev güncellenirken hata oluştu \n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      });
+    },
+
+    cancelScheduledTask() {
+      var params = new FormData();
+      params.append("id", this.selectedCommand.id);
+      axios.post("/lider/scheduledTask/cancel", params).then((response) => {
+        if (response.status == 200 && response.data != null) {
+          this.tasks = this.tasks.filter(command => command.id != response.data.id);
+          this.tasks.push(response.data);
+          this.$toast.add({
+            severity:'success', 
+            detail: "Zamanlanmış görev başarıyla iptal edildi", 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      })
+      .catch((error) => {
+        this.$toast.add({
+          severity:'error', 
+          detail: "Zamanlanmış görev iptal edilirken hata oluştu \n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      });
+      this.cancelScheduledTaskDialog = false;
+    }
   },
 };
 </script>

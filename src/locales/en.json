@@ -28,7 +28,8 @@
         "system_monitoring_definitions": "System Monitoring Definitions",
         "server_settings": "Server Settings",
         "console_user_settings": "Console User Settings",
-        "ad_synchronization": "AD Synchronization"
+        "ad_synchronization": "AD Synchronization",
+        "scheduled_task_report": "Scheduled Task Report"
     },
     "tree":{
         "tree": "Tree",

@@ -14,6 +14,7 @@ import UserPermissionsManagement from '@/views/GroupManagement/UserPermissionsMa
 import AgentReport from '@/views/Reports/AgentReport.vue';
 import TaskReport from '@/views/Reports/TaskReport.vue';
 import LogReport from '@/views/Reports/SystemLogReport.vue';
+import ScheduledTaskReport from '@/views/Reports/ScheduledTaskReport.vue';
 
 //SETTINGS
 import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
@@ -113,6 +114,14 @@ const routes = [{
                 path: "/reports/logs",
                 name: "LogReport",
                 components: { default: LogReport },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/reports/scheduled",
+                name: "ScheduledReport",
+                components: { default: ScheduledTaskReport },
                 meta: {
                     requiresAuth: true,
                 }
