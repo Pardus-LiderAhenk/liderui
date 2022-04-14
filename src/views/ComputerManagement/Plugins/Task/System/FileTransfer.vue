@@ -4,9 +4,9 @@
       :pluginUrl="pluginUrl"
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
-      @send-task="sendManageRootTask"
-      @cancel-task="showTaskDialog = false"
+      @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.file_transfer.header") }}
@@ -22,26 +22,25 @@
       </template>
       <template #default>
         <div class="p-grid p-flex-column">
-          <div class="p-col" >
+          <div class="p-col">
             <FileUpload
-              name="demo[]"
-              mode="basic"
+            name="demo[]"
               :maxFileSize="20000000"
               fileLimit="1"
               :chooseLabel="$t('computer.plugins.file_transfer.add_file')"
               :showUploadButton="false"
               :showCancelButton="false"
               @select="onUpload"
-              @uploader="asd"
-              :customUpload="true"
+              @remove="encodedFile = null;"
+              url="./local"
               :invalid_file_size_message="'{0}: '+$t('computer.plugins.file_transfer.share_button')+' {1}'"
-              >
+            >
             </FileUpload>
           </div>
           <div class="p-grid p-formgrid p-fluid p-col">
             <div class="p-field p-col">
               <label>{{$t('computer.plugins.file_transfer.destination_folder')}}</label>
-                <InputText id="firstname4" type="text" class="p-inputtext-sm" placeholder="/tmp/example"/>
+                <InputText type="text" v-model="remotePath" class="p-inputtext-sm" placeholder="/tmp/example"/>
             </div>
           </div>
           <div class="p-col">
@@ -126,12 +125,14 @@ export default {
   data() {
     return {
       demo: [],
+      file: null,
+      executeTaskUrl:"/file_transfer/task/execute",
       showTaskDialog: false,
       task: null,
       localPath: '',
       remotePath: '',
       fileName: '',
-      encodedFile: '',
+      encodedFile: null,
       validationErrors: {},
       readUser: false,
       writeUser: false,
@@ -154,25 +155,34 @@ export default {
   },
 
   methods:{
-    onUpload(event){
-      console.log(event)
+    async onUpload(event){
+      var selectedFile = event.files[0];
       this.fileName = event.files[0].name;
-      var reader = new FileReader();
-      // var selectedFile = this.files[0];
-      reader.onload = function () {
-        var comma = this.result.indexOf(',');
-        this.encodedFile = this.result.substr(comma + 1);
-      }
-      reader.readAsDataURL(this.fileName);
-      console.log(this.encodedFile)
-      console.log(this.demo)
+      const response = await this.readFileOne(selectedFile);
+      this.encodedFile = response;
     },
 
-    asd(event){
-      console.log(event)
+    readFileOne(file) {
+      return new Promise((resolve, reject)=> {
+        var reader = new FileReader();
+        reader.onload = function () {
+          var comma = this.result.indexOf(',');
+          resolve(this.result.substr(comma + 1));
+        }
+        reader.readAsDataURL(file);
+      });
     },
 
     sendTaskFileTransfer() {
+      if (!this.encodedFile) {
+        this.$toast.add({
+          severity:'warn', 
+          detail: "Lütfen dosya seçiniz", 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: this.toastLife
+        });
+        return;
+      }
       this.task.parameterMap = {};
       if (this.readUser || this.writeUser || this.executeUser || !this.ownerUser.trim()) {
         this.task.parameterMap.editUserPermissions = true;
@@ -199,9 +209,10 @@ export default {
       }
       this.task.parameterMap.fileName = this.fileName;
       this.task.parameterMap.localPath = this.remotePath;
-      this.task.parameterMap.encodedFile = encodedFile;
+      this.task.parameterMap.encodedFile = this.encodedFile;
+      this.showTaskDialog = true;
     }
-  }
+  },
 };
 </script>
 
