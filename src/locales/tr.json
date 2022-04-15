@@ -212,7 +212,7 @@
                 "execute": "Çalıştırma"
             },
             "ldap_login": {
-                "header": "İstemci Oturum Açma Ayarları",
+                "header": "İtemci Oturum Açma Ayarları",
                 "description": "İstemcilerin OpenLDAP veya Active Directory kullanıcıları ile oturum açmları sağlanır. Oturum açma ayarlarını iptal et seçeneği ile varsayılan ayarlara geri döner",
                 "cancel_login_settings": "Oturum açma ayarlarını iptal et",
                 "default_settings": "Varsayılan ayarlara geri dön",
