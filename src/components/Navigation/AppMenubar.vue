@@ -2,7 +2,7 @@
      <Menubar :model="items" style="background-color:#20639B; color:#fff">
             <template #start>
                  <router-link to="/">
-                        <img alt="Logo" src="../../assets/images/LiderAhenk-Logo-01.png" style="width:140px" />
+                        <img alt="Logo" src="../../assets/images/liderahenk-logo.png" style="width:140px" />
                         
                     </router-link>
             </template>
