@@ -29,14 +29,22 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { mapActions } from 'vuex';
+
 export default {
     
     data() {
         return {
-            selectedCountry: {name: 'Turkish', code: 'TR', img: 'tr.png'},
             languages: [
-                {label:'TR', icon:'../../assets/images/flags/tr.png', command: () => this.$i18n.locale = 'tr'},
-                {label:'EN', icon:'../../assets/images/flags/us.png', command: () => this.$i18n.locale = 'en'}
+                {label:'TR', icon:'../../assets/images/flags/tr.png', command: () => {
+                    this.$i18n.locale = 'tr';
+                    this.updateUserLanguage('tr');
+                }},
+                {label:'EN', icon:'../../assets/images/flags/us.png', command: () => {
+                    this.$i18n.locale = 'en';
+                    this.updateUserLanguage('en');
+                }}
             ],
             items: [ {
                    label: this.$t('menu.computer_management'),
@@ -136,6 +144,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'updateUserLang',
+        ]),
         getImgUrl: function(path) {
             return require("../../assets/images/flags/" + path);
         },
@@ -146,8 +157,17 @@ export default {
             this.$refs.profileMenu.toggle(event);
         },
         toggleLanguage(event) {
+            console.log('LANGUAGE', event);
             this.$refs.languageMenu.toggle(event);
         },
+        updateUserLanguage(lang){
+            let data = new FormData();
+            data.append('langName', lang);
+            axios.post('/changeLanguage', data);
+
+            // UPDATE USER STATE
+            this.$store.dispatch("updateUserLang", lang);
+        }
     }
 }
 </script>

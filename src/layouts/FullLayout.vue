@@ -21,7 +21,13 @@ export default {
         return {
            
         }
-    }
+    },
+    mounted() {
+        if (this.$store.getters.getUser) {
+           this.$i18n.locale = this.$store.getters.getUser.attributesMultiValues.preferredLanguage[0];
+        }
+        
+    },
 }
 </script>
 

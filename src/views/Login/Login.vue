@@ -1,5 +1,6 @@
 <template>
      <div class="p-grid login-form-container">
+         <Toast />
         <div class="p-col-12 login-form-header">
             <img
             src="@/assets/images/liderahenk_icon.svg"
@@ -28,8 +29,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
     data() {
         return {
@@ -39,22 +38,18 @@ export default {
     },
     methods: {
         login() {
-             axios
-                .post(process.env.VUE_APP_URL + "/api/auth/signin", {
-                        username: this.username,
-                        password: this.password,
-                })
-                .then(
-                (response) => {
-                    console.log(response.data.token);
-                    localStorage.setItem("auth_token", response.data.token);
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
-                    this.$router.push("/dashboard");
-                },
-                (error) => {
-                    this.toast.error("Kullanıcı adı veya şifre hatalı");
-                }
-                );
+
+         this.$store.dispatch("login", { username:this.username, password:this.password })
+        .then((response) => {
+
+            this.$router.push("/dashboard");
+          
+        }).catch(err => {
+            this.$toast.add({ severity: 'error', summary: 'HATA', detail: '"Kullanıcı adı veya şifre hatalı"', life: 3000});
+            console.log(err)
+        });
+
+            
         }
     },
 }

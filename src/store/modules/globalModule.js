@@ -4,10 +4,12 @@ const state = {
     selectedLiderNode: null,
     status: '',
 	token: localStorage.getItem('token') || '',
+    user: {}
 }
 
 const getters = {
     selectedLiderNode: state => state.selectedLiderNode,
+    getUser: state => state.user
 }
 
 const actions = {
@@ -21,7 +23,30 @@ const actions = {
             delete axios.defaults.headers.common['Authorization']
             resolve()
         })
+    },
+    login({ commit }, user) {
+        return new Promise((resolve, reject) => {
+            axios.post(process.env.VUE_APP_URL + "/api/auth/signin", user).then(
+                (response) => {
+                    localStorage.setItem("auth_token", response.data.token);
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+                    axios.post("/liderConsole/profile", {}).then((userresponse) => {
+                        commit('auth_success', {token:response.data.token,user:userresponse.data});
+                        resolve(userresponse);
+                    });
+
+                },
+                (error) => {
+                    reject(error);
+                }
+                );
+        })
+    },
+    updateUserLang({commit}, lang) {
+        commit('update_user_lang', lang);
+        console.log('Kullanıcı lang action çalıştırıldı')
     }
+
 }
 
 const mutations = {
@@ -29,9 +54,11 @@ const mutations = {
     auth_request(state) {
         state.status = 'loading'
     },
-    auth_success(state, token) {
-        state.status = 'success'
-        state.token = token
+    auth_success(state, {token, user}) {
+        state.status = 'success';
+        state.token = token;
+        console.log('Login olan kullanıcıyı setliyorum', user, token);
+        state.user = user;
     },
     auth_error(state) {
         state.status = 'error'
@@ -39,6 +66,11 @@ const mutations = {
     logout(state) {
         state.status = ''
         state.token = ''
+    },
+    update_user_lang(state, lang) {
+        if (state.user) {
+            state.user.attributesMultiValues.preferredLanguage[0] = lang;
+        }
     }
 }
 
