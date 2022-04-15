@@ -23,7 +23,7 @@ export default {
         }
     },
     mounted() {
-        if (this.$store.getters.getUser) {
+        if (this.$store.getters.getUser && this.$store.getters.getUser.attributesMultiValues && this.$store.getters.getUser.attributesMultiValues.preferredLanguage) {
            this.$i18n.locale = this.$store.getters.getUser.attributesMultiValues.preferredLanguage[0];
         }
         

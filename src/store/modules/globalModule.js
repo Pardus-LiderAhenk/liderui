@@ -44,7 +44,6 @@ const actions = {
     },
     updateUserLang({commit}, lang) {
         commit('update_user_lang', lang);
-        console.log('Kullanıcı lang action çalıştırıldı')
     }
 
 }
@@ -57,7 +56,6 @@ const mutations = {
     auth_success(state, {token, user}) {
         state.status = 'success';
         state.token = token;
-        console.log('Login olan kullanıcıyı setliyorum', user, token);
         state.user = user;
     },
     auth_error(state) {

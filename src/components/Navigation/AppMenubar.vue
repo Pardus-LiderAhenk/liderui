@@ -157,7 +157,6 @@ export default {
             this.$refs.profileMenu.toggle(event);
         },
         toggleLanguage(event) {
-            console.log('LANGUAGE', event);
             this.$refs.languageMenu.toggle(event);
         },
         updateUserLanguage(lang){
