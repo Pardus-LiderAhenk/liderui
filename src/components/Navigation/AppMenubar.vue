@@ -2,7 +2,7 @@
      <Menubar :model="items" style="background-color:#20639B; color:#fff">
             <template #start>
                  <router-link to="/">
-                        <img alt="Logo" src="../../assets/images/LiderAhenk-Logo-01.png" style="width:140px" />
+                        <img alt="Logo" src="../../assets/images/liderahenk-logo.png" style="width:140px" />
                         
                     </router-link>
             </template>
@@ -48,7 +48,7 @@ export default {
             ],
             items: [ {
                    label: this.$t('menu.computer_management'),
-                   to: '/computermanagement'
+                   to: '/computer_management_tabs'
                 },
                 {
                     label: this.$t('menu.user_management'),

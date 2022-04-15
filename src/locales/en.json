@@ -113,7 +113,8 @@
                 "ssh": "SSH",
                 "security": "Security",
                 "history": "History",
-                "run": "Run"
+                "run": "Run",
+                "remote_access": "Remote Access"
             },
             "plugin_popover": {
                 "title": "About Plugin",
@@ -399,6 +400,12 @@
                 "allow": "Allow",
                 "block":"Block",
                 "usb_task_warn": "At least one device must be selected"
+            },
+            "remote_access": {
+                "header": "Remote Access",
+                "description": "Provides remote desktop access and ssh to clients",
+                "remote_destktop_access": "Remote Desktop Access",
+                "remote_access_options": "Remote desktop access options"
             }
         },
         "agent_info": {

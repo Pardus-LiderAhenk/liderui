@@ -113,7 +113,8 @@
                 "ssh": "SSH",
                 "security": "Güvenlik",
                 "history": "Geçmiş",
-                "run": "Çalıştır"
+                "run": "Çalıştır",
+                "remote_access": "Uzak Erişim"
             },
             "plugin_popover": {
                 "title": "Eklenti Hakkında",
@@ -401,6 +402,12 @@
                 "allow": "İzin Ver",
                 "block":"Engelle",
                 "usb_task_warn": "En az bir tane aygıt seçmelisiniz"
+            },
+            "remote_access": {
+                "header": "Uzak Erişim",
+                "description": "İstemcilere uzak masaüstü ve ssh erişimi sağlar",
+                "remote_destktop_access": "Uzak Masaüstü Erişimi",
+                "remote_access_options": "Uzak masaüstü erişim seçenekleri"
             }
         },
         "agent_info": {
