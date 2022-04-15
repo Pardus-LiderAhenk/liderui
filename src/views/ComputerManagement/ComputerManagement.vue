@@ -14,52 +14,52 @@
           <div class="p-grid p-flex-column">
             <div class="p-col">
                 <Button
-                icon="fa fa-sliders-h"
-                :class="selectedPluginTab == 'system-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                @click="setSelectedPluginTab('system-management')"
-                :label="$t('computer.plugins.button.system')"
+                    icon="fa fa-sliders-h"
+                    :class="selectedPluginTab == 'system-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('system-management')"
+                    :label="$t('computer.plugins.button.system')"
                 >
                 </Button>
                 <Button
-                icon="fa fa-cubes"
-                :class="selectedPluginTab == 'package-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                @click="setSelectedPluginTab('package-management')"
-                :label="$t('computer.plugins.button.package')"
+                    icon="fa fa-cubes"
+                    :class="selectedPluginTab == 'package-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('package-management')"
+                    :label="$t('computer.plugins.button.package')"
                 >
                 </Button>
                 <Button
-                icon="fa fa-laptop-code"
-                :class="selectedPluginTab == 'service-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                @click="setSelectedPluginTab('service-management')"
-                :label="$t('computer.plugins.button.service')"
+                    icon="fa fa-laptop-code"
+                    :class="selectedPluginTab == 'service-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('service-management')"
+                    :label="$t('computer.plugins.button.service')"
                 >
                 </Button>
                 <Button
-                icon="fa fa-hashtag"
-                :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                @click="setSelectedPluginTab('script-management')"
-                :label="$t('computer.plugins.button.script')"
+                    icon="fa fa-hashtag"
+                    :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('script-management')"
+                    :label="$t('computer.plugins.button.script')"
                 >
                 </Button>
                 <Button
-                icon="fa fa-terminal"
-                :class="selectedPluginTab == 'ssh-connect' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                @click="setSelectedPluginTab('ssh-connect')"
-                :label="$t('computer.plugins.button.ssh')"
+                    icon="fas fa-shield-alt"
+                    :class="selectedPluginTab == 'security-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('security-management')"
+                    :label="$t('computer.plugins.button.security')"
                 >
                 </Button>
                 <Button
-                icon="fas fa-shield-alt"
-                :class="selectedPluginTab == 'security-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                @click="setSelectedPluginTab('security-management')"
-                :label="$t('computer.plugins.button.security')"
+                    icon="fa fa-laptop"
+                    :class="selectedPluginTab == 'remote-access' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('remote-access')"
+                    :label="$t('computer.plugins.button.remote_access')"
                 >
                 </Button>
                 <Button
-                icon="fa fa-history"
-                :class="selectedPluginTab == 'task-history' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                @click="setSelectedPluginTab('task-history')"
-                :label="$t('computer.plugins.button.history')"
+                    icon="fa fa-history"
+                    :class="selectedPluginTab == 'task-history' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                    @click="setSelectedPluginTab('task-history')"
+                    :label="$t('computer.plugins.button.history')"
                 >
                 </Button>
         </div>
@@ -85,7 +85,7 @@ import SystemManagement from "@/views/ComputerManagement/Plugins/Task/System/Sys
 import PackageManagement from "@/views/ComputerManagement/Plugins/Task/Package/PackageManagementPage.vue";
 import ScriptManagement from "@/views/ComputerManagement/Plugins/Task/Script/ScriptManagementPage.vue";
 import ServiceManagement from '@/views/ComputerManagement/Plugins/Task/Service/ServiceManagementPage.vue';
-import SshConnect from '@/views/ComputerManagement/Plugins/Task/Ssh/SshConnect.vue';
+import RemoteAccess from '@/views/ComputerManagement/Plugins/Task/RemoteAccess/RemoteAccessPage.vue';
 import SecurityManagement from '@/views/ComputerManagement/Plugins/Task/Security/SecurityManagementPage.vue';
 import TaskHistory from '@/views/ComputerManagement/Plugins/Task/TaskHistory/TaskHistory.vue'
 import { mapActions } from "vuex";
@@ -97,7 +97,7 @@ export default {
         PackageManagement,
         ScriptManagement,
         ServiceManagement,
-        SshConnect,
+        RemoteAccess,
         SecurityManagement,
         TaskHistory,
     },

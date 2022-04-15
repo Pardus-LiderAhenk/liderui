@@ -179,7 +179,7 @@ export default {
           severity:'warn', 
           detail: "Lütfen dosya seçiniz", 
           summary:this.$t("computer.task.toast_summary"), 
-          life: this.toastLife
+          life: 3000
         });
         return;
       }
