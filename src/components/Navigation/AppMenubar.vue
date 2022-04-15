@@ -48,7 +48,7 @@ export default {
             ],
             items: [ {
                    label: this.$t('menu.computer_management'),
-                   to: '/computermanagement'
+                   to: '/computer_management_tabs'
                 },
                 {
                     label: this.$t('menu.user_management'),

@@ -1,13 +1,14 @@
 <template>
   <div class="p-grid computer-management">
       <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px; margin-top:10px;">
-        <tree-component ref="tree"
-            loadNodeUrl="/lider/computer/getComputers"
-            loadNodeOuUrl="/lider/computer/getOuDetails"
-            :treeNodeClick="setSelectedLiderNode"
-            isAgentTree="true"
-            :searchFields="searchFields">
-        </tree-component>
+          
+                <tree-component ref="tree"
+                    loadNodeUrl="/lider/computer/getComputers"
+                    loadNodeOuUrl="/lider/computer/getOuDetails"
+                    :treeNodeClick="setSelectedLiderNode"
+                    isAgentTree="true"
+                    :searchFields="searchFields">
+                </tree-component>
       </div>
       <div class="p-col-12 p-md-6 p-lg-9" style="margin-top:3px;">
           <div class="p-grid p-flex-column">
@@ -102,6 +103,7 @@ export default {
     },
     data() {
         return {
+            activeName:null,
             selectedPluginTab: "system-management",
             treeData: null,
             contextmenuTrigger: false,
@@ -161,6 +163,9 @@ export default {
 
         renameSelectedAgent(selectedNode) {
             this.$refs.tree.updateNode(selectedNode.distinguishedName, this.selectedNode);
+        },
+        groupTabClicked(e) {
+            console.log('Group Tab clicked', e);
         }
     },
 
