@@ -1,14 +1,7 @@
 <template>
-<Card>
-    <template #title>
-        Lider Arayüz Kullanım Geçmişi
-    </template>
-    <template #content>
-
-        <DataTable :value="records" responsiveLayout="scroll"
-            dataKey="id"
-            filterDisplay="row" 
-            showGridlines
+    <div>
+         <h3>Lider Arayüz Kullanım Geçmişi</h3>
+        <DataTable :value="records" responsiveLayout="scroll" class="p-datatable-sm"
             >
             <template #header>
                 <div class="p-d-flex p-ac-end p-grid" style="justify-content:flex-end;">
@@ -43,9 +36,7 @@
         @page="onPage($event)"
       >
       </Paginator>
-        
-    </template>
-</Card>
+    </div>
 </template>
 
 
@@ -74,26 +65,7 @@ export default {
                     value: 'logout'
                 }
             ],
-            records: [
-                {
-                    username: 'lider',
-                    date: '20/10/2021 13:41:50',
-                    ip: '172.26.140.30',
-                    status: 'Oturum Açıldı'
-                },
-                {
-                    username: 'lider',
-                    date: '20/10/2021 13:41:50',
-                    ip: '172.26.140.30',
-                    status: 'Oturum Açıldı'
-                },
-                {
-                    username: 'lider',
-                    date: '20/10/2021 13:41:50',
-                    ip: '172.26.140.30',
-                    status: 'Oturum Açıldı'
-                }
-            ]
+            records: []
         }
     },
     methods: {
@@ -121,3 +93,11 @@ export default {
 }
 
 </script>
+
+<style lang="scss" scoped>
+::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
+    }
+}
+</style>

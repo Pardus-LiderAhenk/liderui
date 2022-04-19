@@ -17,15 +17,13 @@
       >
       <div class="p-grid p-flex-column">
         <div class="p-col p-fluid">
-           <label>{{$t('tree.search_dn')}}</label>
-            <InputText disabled v-if="selectedNode && (selectedNode.type == 'ORGANIZATIONAL_UNIT' || selectedNode.type == 'CONTAINER')"
-              class="p-inputtext-sm"  
-              type="text" v-model="selectedNode.name">
-            </InputText>
-            <InputText disabled v-else
-              class="p-inputtext-sm"  
-              type="text" v-model="rootNode.name">
-            </InputText>
+           <label style="font-weight: bold;">{{$t('tree.search_dn')}}:</label>
+              <a v-if="selectedNode && (selectedNode.type == 'ORGANIZATIONAL_UNIT' || selectedNode.type == 'CONTAINER')">
+                &nbsp;{{selectedNode.name}}
+              </a>
+              <a v-else>
+                &nbsp;{{rootNode.name}}
+              </a>
         </div>
         <div class="p-col">
           <div class="p-fluid p-formgrid p-grid">

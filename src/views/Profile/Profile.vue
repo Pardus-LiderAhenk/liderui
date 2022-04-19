@@ -1,15 +1,19 @@
 <template>
-    <div class="p-grid">
-        <div class="p-col-3 ">
-            <PanelMenu class="sideMenu" :model="profileItems" />
-        </div>
-        <div class="p-col-9">
-            <user-info-form v-show="displayFormName === 1"  :user="user"></user-info-form>
-            <account-info-form v-show="displayFormName === 2" :user="user"></account-info-form>
-            <ui-usage-history ref="uiusagecomp" v-show="displayFormName === 3"></ui-usage-history>
-            <group-info :user="user" v-show="displayFormName === 4" ref="groupinfocomp"></group-info>
-        </div>
-    </div>
+    <Card>
+        <template #content>
+            <div class="p-grid">
+                <div class="p-col-3 ">
+                    <PanelMenu class="sideMenu" :model="profileItems" />
+                </div>
+                <div class="p-col-9">
+                    <user-info-form v-show="displayFormName === 1"  :user="user"></user-info-form>
+                    <account-info-form v-show="displayFormName === 2" :user="user"></account-info-form>
+                    <ui-usage-history ref="uiusagecomp" v-show="displayFormName === 3"></ui-usage-history>
+                    <group-info :user="user" v-show="displayFormName === 4" ref="groupinfocomp"></group-info>
+                </div>
+            </div>
+        </template>
+    </Card>
 </template>
 
 <script>

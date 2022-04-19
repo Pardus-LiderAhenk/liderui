@@ -149,6 +149,11 @@ export default {
             this.passwordForm.confirmPassword = generatePassword;
         },
 
+        setPassword() {
+            this.passwordForm.password = '';
+            this.passwordForm.confirmPassword = '';
+        },
+
         validateForm() {
             if (!this.passwordForm.password.trim()){
                 if (!this.passwordForm.password.trim()){

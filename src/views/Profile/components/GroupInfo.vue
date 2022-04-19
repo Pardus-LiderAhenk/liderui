@@ -3,9 +3,6 @@
         <div class="p-col-12">
             <h3>Kullanıcı Grup Bilgileri</h3>
         </div>
-
-
-       
         <div class="p-col-12 p-md-12">
             <Panel header="Kullanıcı Grup Bilgileri">
                 <template v-if="user !== null">
@@ -25,8 +22,6 @@
                 <Divider type="dashed"/>
             </Panel>
        </div>  
-        
-        
     </div>
 </template>
 
