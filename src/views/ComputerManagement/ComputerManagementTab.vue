@@ -19,11 +19,11 @@
                 </Button>
             </div>
             <div class="p-col">
-                <keep-alive>
+                <!-- <keep-alive> -->
                     <component 
                         :is="selectedTab">
                     </component>
-                </keep-alive>
+                <!-- </keep-alive> -->
             </div>
         </div>
     </div>
