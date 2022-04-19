@@ -2,9 +2,10 @@
   <div>
     <packages class="plugin-card" v-if="packagesState" :pluginTask="pluginTaskPackages"></packages>
     <check-package class="plugin-card" 
-          v-if="checkPackageState" 
-          :pluginTask="pluginTaskCheckPackage">
-        </check-package>
+      v-if="checkPackageState" 
+      :pluginTask="pluginTaskCheckPackage"
+    >
+    </check-package>
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-6">
         <installed-packages-and-management 

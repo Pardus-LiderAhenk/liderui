@@ -1,6 +1,6 @@
 <template>
   <div class="p-grid computer-management">
-      <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px; margin-top:10px;">
+      <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;">
           
                 <tree-component ref="tree"
                     loadNodeUrl="/lider/computer/getComputers"

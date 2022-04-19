@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import store from '../store/store';
 
-
 class XmppClinet {
 
   constructor() {
@@ -108,7 +107,7 @@ class XmppClinet {
     } else if (status == Strophe.Status.ERROR) {
       console.log("Error");
     } else if (status == Strophe.Status.ATTACHED) {
-      console.log("Attached succesfully to connection");
+      // console.log("Attached succesfully to connection");
       this.isXmppConnected = true;
       
       
@@ -137,8 +136,6 @@ class XmppClinet {
   }
   
   onRoster = (iq) => {
-    console.log("on roster")
-    console.log(iq)
     // $(iq)
     //   .find("item")
     //   .each(function () {
@@ -154,19 +151,14 @@ class XmppClinet {
   }
 
   onRosterChanged(iq) {
-    console.log("on roster changed")
     $(iq).find('item').each(function () {
         var sub = $(this).attr('subscription');
         var jid = $(this).attr('jid');
         var name = $(this).attr('name') || jid;
         var jid_id =jid_to_id(jid);
-        
-        console.log("Lider MYS yeni kayıt yapılıyor. Kayıt Ad : "+ name,"success");
     });
     return true;
-
   }
-
 
   onPresence(presence){
     //console.log(presence)
@@ -198,10 +190,7 @@ disconnect = () => {
 isConnected = () => {
   return this.isXmppConnected;
 }
-
-
 }
-
 
 var XmppClientManager = (function(){
   var instance;

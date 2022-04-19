@@ -28,7 +28,7 @@
  */
 import axios from 'axios';
 
-import MemberOfAgentGroup from "@/views/GroupManagement/ComputerGroupManagement/Plugins/Task/System/MemberOfAgentGroup.vue";
+import MemberOfAgentGroup from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/System/MemberOfAgentGroup.vue";
 import SessionAndPowerManagement from "@/views/ComputerManagement/Plugins/Task/System/SessionAndPowerManagement.vue";
 import ManageRoot from "@/views/ComputerManagement/Plugins/Task/System/ManageRoot.vue";
 import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTransfer.vue";

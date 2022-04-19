@@ -146,7 +146,9 @@ export default {
       scheduledParam: null,
       showDialog: false,
       toastLife: 5000,
-      loading: false
+      loading: false,
+      selectedNode: null,
+      
     }
   },
 
@@ -186,27 +188,48 @@ export default {
       default: "/lider/task/execute",
       description: "url for execute task"
     },
+    listenerName: {
+      type: String,
+      default: "basePluginListener",
+      description: "listener for plugin"
+    },
   },
 
   computed: {
-    ...mapGetters(["selectedLiderNode"]),
+    ...mapGetters(["selectedLiderNode", "selectedNodeType", "selectedComputerGroupNode"]),
   },
 
   methods: {
     confirmTaskDialog(){
-      if (this.selectedLiderNode == null || 
-        this.selectedLiderNode.type != "AHENK" && 
-        this.selectedLiderNode.type != "GROUP" && 
-        this.selectedLiderNode.type != "WIND0WS_AHENK") {
-        this.$toast.add({
-          severity:'warn', 
-          detail: this.$t("computer.task.selected_agent_warn"), 
-          summary:this.$t("computer.task.toast_summary"), 
-          life: this.toastLife
-        });
-        this.closeTaskDialog("cancel");
-        return;
+      if (this.selectedNodeType == "computer") {
+        this.selectedNode = this.selectedLiderNode;
+        if (this.selectedLiderNode == null || 
+          this.selectedLiderNode.type != "AHENK" && 
+          this.selectedLiderNode.type != "WIND0WS_AHENK") {
+          this.$toast.add({
+            severity:'warn', 
+            detail: this.$t("computer.task.selected_agent_warn"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: this.toastLife
+          });
+          this.closeTaskDialog("cancel");
+          return;
+        }
+      } else if (this.selectedNodeType == "computerGroup") {
+        this.selectedNode = this.selectedComputerGroupNode;
+         if (this.selectedComputerGroupNode == null || 
+          this.selectedComputerGroupNode.type != "GROUP") {
+          this.$toast.add({
+            severity:'warn', 
+            detail: this.$t("computer.task.selected_agent_group_warn"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: this.toastLife
+          });
+          this.closeTaskDialog("cancel");
+          return;
+        }
       }
+
       this.closeTaskDialog("success");
       this.showScheduled = false;
       this.executeTaskManager();
@@ -216,18 +239,18 @@ export default {
     executeTaskManager() {
       var dnList = [];
       var entryList = [];
-      entryList.push(this.selectedLiderNode);
-      dnList.push(this.selectedLiderNode.distinguishedName);
+      entryList.push(this.selectedNode);
+      dnList.push(this.selectedNode.distinguishedName);
       let task = {...this.pluginTask};
       task.dnList = dnList;
       task.entryList = entryList;
       task.cronExpression = this.scheduledParam;
-      task.dnType = this.selectedLiderNode.type;
+      task.dnType = this.selectedNode.type;
       
       axios.post(this.executeTaskUrl,task).then((response) => {
         if (response.data.status == 'OK') {
-          if (this.selectedLiderNode.type == "AHENK") {
-            if (this.selectedLiderNode.online) {
+          if (this.selectedNode.type == "AHENK") {
+            if (this.selectedNode.online) {
               if (!task.cronExpression) {
                 this.loading = true;
                 this.$toast.add({
@@ -253,7 +276,7 @@ export default {
               });
             }
           }
-          if (this.selectedLiderNode.type == "GROUP") {
+          if (this.selectedNode.type == "GROUP") {
             this.$toast.add({
               severity:'success', 
               detail: this.$t("computer.task.send_task_group_message"), 
@@ -331,25 +354,31 @@ export default {
   mounted(){
     let toastSummary = this.$t('computer.task.toast_summary');
     let toastLife = this.toastLife;
-    XmppClientManager.getInstance().addListener('basePluginListener', (msg) => {
+    XmppClientManager.getInstance().addListener(this.listenerName, (msg) => {
       let selectedDn = null;
-      let selectedNodeType = null;
-      if (this.selectedLiderNode) {
-        selectedDn = this.selectedLiderNode.distinguishedName;
-        selectedNodeType = this.selectedLiderNode.type;
+      let nodeType = null;
+      if (this.selectedNodeType == "computer") {
+        if (this.selectedLiderNode) {
+          selectedDn = this.selectedLiderNode.distinguishedName;
+          nodeType 
+          nodeType = this.selectedLiderNode.type;
+        }
+      } else if (this.selectedNodeType == "computerGroup") {
+        if (this.selectedComputerGroupNode) {
+          selectedDn = this.selectedComputerGroupNode.distinguishedName;
+          nodeType = this.selectedComputerGroupNode.type;
+        }
       }
       var to = msg.getAttribute("to");
       var from = msg.getAttribute("from");
       var type = msg.getAttribute("type");
       var elems = msg.getElementsByTagName("body");
-
       if (type == "chat" && elems.length > 0) {
         var body = elems[0];
         var data = Strophe.xmlunescape(Strophe.getText(body));
         var response = JSON.parse(data);
         let responseMessage = response.result.responseMessage;
         if (response.commandClsId === this.pluginTask.commandId) {
-          this.loading = false;
           if (response.result.responseCode === "TASK_PROCESSED") {
             this.$toast.add({
               severity:'success', 
@@ -365,10 +394,11 @@ export default {
               life: toastLife
             });
           }
+          this.loading = false;
           if (response.commandExecution.dn === selectedDn) {
             this.$emit("taskResponse", response);
           }
-          if (selectedNodeType === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
+          if (nodeType === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
             this.$emit("taskResponse", response);
           }
         }
@@ -377,7 +407,7 @@ export default {
   },
 
   unmounted () {
-    XmppClientManager.getInstance().removeListener('basePluginListener', () => {});
+    XmppClientManager.getInstance().removeListener(this.listenerName, () => {});
   }
 };
 </script>

@@ -2,13 +2,8 @@ import { createRouter, createWebHashHistory, createWebHistory } from "vue-router
 import Dashboard from '@/views/Dashboard/Dashboard.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import Login from '@/views/Login/Login.vue';
-import ComputerManagement from '@/views/ComputerManagement/ComputerManagement.vue';
+import ComputerManagementTab from '@/views/ComputerManagement/ComputerManagementTab.vue';
 import FullLayout from '@/layouts/FullLayout.vue';
-
-//GROUP
-import ComputerGroupManagement from '@/views/GroupManagement/ComputerGroupManagement/ComputerGroupManagement.vue';
-import UserGroupManagement from '@/views/GroupManagement/UserGroupManagement/UserGroupManagement.vue';
-import UserPermissionsManagement from '@/views/GroupManagement/UserPermissionsManagement/UserPermissionsManagement.vue';
 
 //REPORTS
 import AgentReport from '@/views/Reports/AgentReport.vue';
@@ -24,8 +19,7 @@ import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/Regist
 import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
 
 //USER
-import AdManagement from '@/views/UserManagement/AD/AdManagement.vue';
-import UserManagement from '@/views/UserManagement/Ldap/UserManagement.vue';
+import UserManagementTab from '@/views/UserManagement/UserManagementTab.vue';
 
 // LIDER CONSOLE PROFILE
 import UserProfile from '@/views/Profile/Profile.vue';
@@ -47,49 +41,17 @@ const routes = [{
                 }
             },
             {
-                path: "/computermanagement",
+                path: "/computer",
                 name: "ComputerManagement",
-                components: { default: ComputerManagement },
+                components: { default: ComputerManagementTab },
                 meta: {
                     requiresAuth: true,
                 }
             },
             {
-                path: "/computer_group_management",
-                name: "ComputerGroupManagement",
-                components: { default: ComputerGroupManagement },
-                meta: {
-                    requiresAuth: true,
-                }
-            },
-            {
-                path: "/usermanagement",
+                path: "/user",
                 name: "UserManagement",
-                components: { default: UserManagement },
-                meta: {
-                    requiresAuth: true,
-                }
-            },
-            {
-                path: "/ad_management",
-                name: "AdManagement",
-                components: { default: AdManagement },
-                meta: {
-                    requiresAuth: true,
-                }
-            },
-            {
-                path: "/user_group_management",
-                name: "UserGroupManagement",
-                components: { default: UserGroupManagement },
-                meta: {
-                    requiresAuth: true,
-                }
-            },
-            {
-                path: "/user_permissions_management",
-                name: "UserPermissionsManagement",
-                components: { default: UserPermissionsManagement },
+                components: { default: UserManagementTab },
                 meta: {
                     requiresAuth: true,
                 }
@@ -167,7 +129,7 @@ const routes = [{
                 }
             },
             {
-                path: '/user-profile',
+                path: '/user_profile',
                 name: 'User Profile',
                 components: {default: UserProfile},
                 meta: {
@@ -175,7 +137,7 @@ const routes = [{
                 }
             },
             {
-                path: '/policy_management',
+                path: '/policy',
                 name: 'Policy Management',
                 components: {default: PolicyManagement},
                 meta: {

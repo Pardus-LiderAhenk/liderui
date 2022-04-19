@@ -64,7 +64,7 @@
                         {{ $t("group_management.selected_node_title") }}
                     </div>
                     <div>
-                        <Button class="p-button-sm" v-if="selectedLiderNode && selectedLiderNode.type === 'GROUP'"
+                        <Button class="p-button-sm" v-if="selectedComputerGroupNode && selectedComputerGroupNode.type === 'GROUP'"
                             :title="$t('group_management.members_of_group')" 
                             @click="showMemberDetail"
                             icon="fas fa-users">
@@ -124,10 +124,10 @@ export default {
         this.initFilters();
     },
 
-    computed:mapGetters(["selectedLiderNode"]),
+    computed:mapGetters(["selectedComputerGroupNode"]),
 
       methods: {
-        ...mapActions(["setSelectedLiderNode"]),
+        ...mapActions(["setSelectedComputerGroupNode"]),
 
         initFilters() {
             this.filters = {
@@ -136,7 +136,7 @@ export default {
         },
 
         showMemberDetail() {
-            if (this.selectedLiderNode) {
+            if (this.selectedComputerGroupNode) {
                 this.showMemberDialog = true;
             } else {
                 this.$toast.add({
@@ -186,7 +186,7 @@ export default {
             var dnList = [];
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
-            params.append("dn", this.selectedLiderNode.distinguishedName);
+            params.append("dn", this.selectedComputerGroupNode.distinguishedName);
             axios.post("/lider/computer_groups/delete/group/members", params).then((response) => {
                 if (response.data != null) {
                     this.$toast.add({
@@ -195,8 +195,8 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                    this.setSelectedLiderNode(response.data);
-                    this.getMemberOfSelectedGroup(this.selectedLiderNode);
+                    this.setSelectedComputerGroupNode(response.data);
+                    this.getMemberOfSelectedGroup(this.selectedComputerGroupNode);
                     this.loading = false;
                 }
             }).catch((error) => {
@@ -213,13 +213,13 @@ export default {
             let nodeSummaryData = [];
             nodeSummaryData.push({
                 'label': this.$t('group_management.name'),
-                'value': this.selectedLiderNode.name,
+                'value': this.selectedComputerGroupNode.name,
                 },
                 {
                     'label': this.$t('group_management.type'),
-                    'value': this.selectedLiderNode.type,
+                    'value': this.selectedComputerGroupNode.type,
                 });
-            if (this.selectedLiderNode.type == "GROUP") {
+            if (this.selectedComputerGroupNode.type == "GROUP") {
                  nodeSummaryData.push({
                     'label': this.$t('group_management.number_of_member'),
                     'value': this.members.length
@@ -230,11 +230,11 @@ export default {
     },
 
     watch: {
-        selectedLiderNode() {
+        selectedComputerGroupNode() {
             this.members = [];
-            if (this.selectedLiderNode) {
-                if (this.selectedLiderNode.type == "GROUP") {
-                    this.getMemberOfSelectedGroup(this.selectedLiderNode);
+            if (this.selectedComputerGroupNode) {
+                if (this.selectedComputerGroupNode.type == "GROUP") {
+                    this.getMemberOfSelectedGroup(this.selectedComputerGroupNode);
                 }
                 this.getSelectedNodeAttribute();
             }

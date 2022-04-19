@@ -506,7 +506,8 @@
             "example": "Örnek; ( 0 15 * * 1 ) her Pazartesi saat 15'te çalışır"
         },
         "task": {
-            "selected_agent_warn": "Lütfen bir istemci veya istemci grubu seçiniz",
+            "selected_agent_warn": "Lütfen bir istemci seçiniz",
+            "selected_agent_group_warn": "Lütfen bir istemci grubu seçiniz",
             "cancel_scheduled_task": "Zamanlanmış görev iptal edildi",
             "send_task_susccess_message": "Görev başarı ile gönderildi",
             "send_task_offline_message": "Görev başarı ile gönderildi, istemci çevrimiçi olduğunda çalıştırılacaktır",

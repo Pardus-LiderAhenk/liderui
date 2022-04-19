@@ -504,7 +504,8 @@
             "example": "Example; ( 0 15 * * 1 ) execute on every Monday at 3 PM"
         },
         "task": {
-            "selected_agent_warn": "Please select a client or client group",
+            "selected_agent_warn": "Please select a client",
+            "selected_agent_group_warn": "Please select a client group",
             "cancel_scheduled_task": "Scheduled task canceled",
             "send_task_susccess_message": "Sent task successfully",
             "send_task_offline_message": "Sent task suscessfully, the task will be run when client is online",

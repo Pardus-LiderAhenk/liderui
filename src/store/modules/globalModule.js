@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const state = {
     selectedLiderNode: null,
+    selectedComputerGroupNode: null,
+    selectedNodeType: "computer",
     status: '',
 	token: localStorage.getItem('token') || '',
     user: {}
@@ -9,12 +11,20 @@ const state = {
 
 const getters = {
     selectedLiderNode: state => state.selectedLiderNode,
+    selectedComputerGroupNode: state => state.selectedComputerGroupNode,
+    selectedNodeType: state => state.selectedNodeType,
     getUser: state => state.user
 }
 
 const actions = {
     setSelectedLiderNode({ commit }, node) {
         commit("setSelectedLiderNode", node);
+    },
+    setSelectedComputerGroupNode({ commit }, node) {
+        commit("setSelectedComputerGroupNode", node);
+    },
+    setSelectedNodeType({ commit }, node) {
+        commit("setSelectedNodeType", node);
     },
     logout({ commit }) {
         return new Promise((resolve, reject) => {
@@ -50,6 +60,8 @@ const actions = {
 
 const mutations = {
     setSelectedLiderNode: (state, node) => (state.selectedLiderNode = node),
+    setSelectedComputerGroupNode: (state, node) => (state.selectedComputerGroupNode = node),
+    setSelectedNodeType: (state, node) => (state.selectedNodeType = node),
     auth_request(state) {
         state.status = 'loading'
     },

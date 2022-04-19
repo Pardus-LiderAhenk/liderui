@@ -48,42 +48,15 @@ export default {
             ],
             items: [ {
                    label: this.$t('menu.computer_management'),
-                   to: '/computer_management_tabs'
+                   to: '/computer'
                 },
                 {
                     label: this.$t('menu.user_management'),
-                    items: [
-                        {
-                            label: this.$t('menu.user_operations'),
-                            to:'/usermanagement'
-                            
-                        },
-                        {
-                            label: this.$t('menu.ad_management'),
-                            to: '/ad_management'
-                        },
-                    ]
+                    to:'/user'
                 },
                 {
-                    label: this.$t('menu.group_management'),
-                    items : [
-                        {
-                            label:this.$t('menu.computer_group_management'),
-                            to: '/computer_group_management'
-                        },
-                        {
-                            label: this.$t('menu.user_group_management'),
-                            to: '/user_group_management'
-                        },
-                        {
-                            label: this.$t('menu.user_authorization'),
-                            to: '/user_permissions_management'
-                        },
-                        {
-                            label: this.$t('menu.policy_management'),
-                            to: '/policy_management'
-                        }
-                    ]
+                    label: this.$t('menu.policy_management'),
+                    to: '/policy'
                 },
                 {
                     label: this.$t('menu.reports'),
@@ -132,7 +105,7 @@ export default {
             profileItems: [
                 {
                     label: 'Profili Görüntüle',
-                    to: '/user-profile'
+                    to: '/user_profile'
                 },
                 {
                     label: 'Çıkış',
