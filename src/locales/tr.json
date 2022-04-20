@@ -921,6 +921,7 @@
             "disk_partitions":"Disk Bölümleri",
             "processor_information":"İşlemci Bilgisi",
             "number_of_physical_cores":"Fiziksel Çekirdek Sayısı"
+
         },
         "task_report":{
             "task_report":"Çalıştırılan Görev Raporu",
@@ -937,7 +938,23 @@
             "scheduled_task":"Zamanlanmış Görev",
             "clear": "Temizle",
             "search": "Ara",
-            "export": "Dışa Aktar"
+            "export": "Dışa Aktar",
+            "computer_name":"Bilgisayar Adı",
+            "execution_date":"Çalıştırılma Tarihi",
+            "answer":"Cevap",
+            "task_cant_find":"Görev Bulunamadı",
+            "loading":"Yükleniyor",
+            "selected_task_detail":"Seçilen Görevin Detayları",
+            "detail":"Detay",
+            "task_name":"Görev Adı",
+            "execution_result":"Çalıştırma Sonucu",
+            "sended_task_parameter":"Gönderilen Görev Parametreleri",
+            "data_saved_as_a_result_of_task_execution":"Görev Çalıştırılması Sonucunda Kaydedilen Veriler",
+            "message_from_ahenk":"Ahenkten Gelen Mesaj",
+            "task_detail":"Görev Detayı",
+            "total_result":"Toplam Sonuç",
+            "task_sent_ahenk_list":"Görev Gönderilen Ahenk Listesi"
+
         },
         "system_log_report":{
             "system_log_report":"Sistem Güncesi Raporu",

@@ -1,12 +1,12 @@
 <template>
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
-      <h4 class="p-pt-2">Çalıştırılan Görevler Raporu</h4>
+      <h4 class="p-pt-2">{{$t('reports.task_report.task_report')}}</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
       
       <div class="p-field p-col-12 p-lg-4 p-md-6 p-sm-12">
-        <label for="inputRegistrationDate">Gönderilme Tarihi</label>
+        <label for="inputRegistrationDate">{{$t('reports.task_report.posted_date')}}</label>
         <Calendar
           v-model="filter.taskSendDate"
           selectionMode="range"
@@ -19,7 +19,7 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-4 p-md-6 p-sm-12">
-        <label for="inputStatus">Görev</label>
+        <label for="inputStatus">{{$t('reports.task_report.task')}}</label>
         <Dropdown
           v-model="filter.task"
           :options="plugins"
@@ -33,13 +33,16 @@
         <div class="p-d-flex p-jc-end">
           <div>
             <Button
-              label="Temizle"
+              :label="$t('reports.task_report.clear')"
               icon="fas fa-backspace"
               @click="clearFilterFields"
             />
           </div>
           <div class="p-ml-2">
-            <Button label="Ara" icon="fas fa-search" @click="filterAgents" />
+            <Button 
+            :label="$t('reports.task_report.search')" 
+            icon="fas fa-search" 
+            @click="filterAgents" />
           </div>
         </div>
       </div>
@@ -48,10 +51,10 @@
   <Card class="p-m-3 p-mb-7">
     <template #title>
       <div class="p-d-flex p-jc-between">
-        <div>Sonuçlar</div>
+        <div>{{$t('reports.task_report.results')}}</div>
         <div>
           <Button
-            label="Dışa Aktar"
+            :label="$t('reports.task_report.export')"
             icon="fas fa-file-excel"
             @click="exportToExcel()"
           />
@@ -62,52 +65,52 @@
       <DataTable :value="tasks" responsiveLayout="scroll" dataKey="id" :loading="loading">
         <template #empty>
           <div class="p-d-flex p-jc-center">
-            Görev bulunamadı...
+            {{$t('reports.task_report.task_cant_find')}}...
           </div>
         </template>
         <template #loading>
-          Yükleniyor...
+          {{$t('reports.task_report.loading')}}...
         </template>
         <Column header="#">
           <template #body="{index}">
             <span>{{ index + 1 }}</span>
             </template>
         </Column>
-        <Column field="task.plugin.description" header="Eklenti"></Column>
-        <Column header="Görev">
+        <Column field="task.plugin.description" :header="$t('reports.task_report.plugin')"></Column>
+        <Column :header="$t('reports.task_report.task')">
           <template #body="{ data }">
             {{ getTaskName(data)}}
           </template>
         </Column>
-        <Column field="createDate" header="Oluşturulma Tarihi">
+        <Column field="createDate" :header="$t('reports.task_report.create_date')">
          
         </Column>
-        <Column field="commandOwnerUid" header="Gönderen">
+        <Column field="commandOwnerUid" :header="$t('reports.task_report.sender')">
           
         </Column>
-        <Column header="Toplam">
+        <Column :header="$t('reports.task_report.sender')">
           <template #body="{ data }">
             {{
              data.uidList.length
             }}
           </template>
         </Column>
-        <Column header="Başarılı">
+        <Column :header="$t('reports.task_report.total')">
           <template #body="{ data }">
             {{ data.successfullTaskCount  }}
           </template>
         </Column>
-        <Column header="Bekleyen">
+        <Column :header="$t('reports.task_report.waiting')">
           <template #body="{ data }">
             {{ data.waitingTaskCount }}
           </template>
         </Column>
-        <Column header="Hata">
+        <Column :header="$t('reports.task_report.error')">
             <template #body="{ data }">
                 {{ data.failedTaskCount }}
             </template>
         </Column>
-        <Column header="Zamanlı Çalıştırılan">
+        <Column :header="$t('reports.task_report.scheduled_task')">
             <template #body="{data}">
                 {{
                     data.task.cronExpression != null ? 'EVET': 'HAYIR'
@@ -121,7 +124,7 @@
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
                   icon="pi pi-list"
-                  v-tooltip.left="'Task Details'"
+                  v-tooltip.left="$t('reports.task_report.task_detail')"
                   @click="showTaskDetailDialog(data.id)"
                 />
               </div>
@@ -135,7 +138,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left=""> Toplam Sonuç: {{ totalElements }} </template>
+        <template #left=""> {{$t('reports.task_report.total_result')}}: {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -145,14 +148,14 @@
     :style="{ width: '50vw' }"
   >
     <template #header>
-      <h3>Görev Gönderilen Ahenk Listesi</h3>
+      <h3>{{$t('reports.task_report.task_sent_ahenk_list')}}</h3>
     </template>
     
      <DataTable :value="selectedTask.commandExecutions" responsiveLayout="scroll">
 
-        <Column field="uid" header="Bilgisayar Adı"></Column>
-        <Column field="createDate" header="Gönderilme Tarihi"></Column>
-        <Column header="Çalıştırılma Tarihi">
+        <Column field="uid" :header="$t('reports.task_report.computer_name')"></Column>
+        <Column field="createDate" :header="$t('reports.task_report.posted_date')"></Column>
+        <Column :header="$t('reports.task_report.execution_date')">
           <template #body="{data}">
                 {{
                     data.commandExecutionResults.length > 0 ? 
@@ -160,7 +163,7 @@
                 }}
             </template>
         </Column>
-        <Column header="Sonuç">
+        <Column :header="$t('reports.task_report.results')">
           <template #body="{data}">
                 {{
                     data.commandExecutionResults.length > 0 ? 
@@ -168,7 +171,7 @@
                 }}
             </template>
         </Column>
-         <Column header="Cevap">
+         <Column :header="$t('reports.task_report.answer')">
           <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
               <div>
@@ -200,29 +203,29 @@
     :style="{ width: '50vw' }"
   >
     <template #header>
-      <h3>Seçilen Görevin Detayları</h3>
+      <h3>{{$t('reports.task_report.selected_task_detail')}}</h3>
     </template>
 
-    <h4>Detay</h4>
+    <h4>{{$t('reports.task_report.detail')}}</h4>
 
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Görev Adı</b></div>
+      <div class="p-col-4"><b>{{$t('reports.task_report.task_name')}}</b></div>
       <div class="p-col-8">
         {{ selectedTask.task.plugin.description }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Çalıştırma Sonucu</b></div>
+      <div class="p-col-4"><b>{{$t('reports.task_report.execution_result')}}</b></div>
       <div class="p-col-8">
         {{ selectedTaskExecutionResult.responseCode == "TASK_PROCESSED" ? 'BAŞARILI' : 'HATA' }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Oluşturulma Tarihi</b></div>
+      <div class="p-col-4"><b>{{$t('reports.task_report.create_date')}}</b></div>
       <div class="p-col-8">
         {{ selectedTask.createDate }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Çalıştırılma Tarihi</b></div>
+      <div class="p-col-4"><b>{{$t('reports.task_report.execution_date')}}</b></div>
       <div class="p-col-8">
         {{ selectedTaskExecutionResult.createDate }}
       </div>
@@ -230,7 +233,7 @@
     </div>
 
 
-    <h4>Gönderilen Görev Parametreleri</h4>
+    <h4>{{$t('reports.task_report.sended_task_parameter')}}</h4>
 
     <div class="p-grid">
       <template v-for="(parameterKey, index) in Object.keys(selectedTask.task.parameterMap)" :key="index + 'param' " >
@@ -244,7 +247,7 @@
 
 
     <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-    <h4>Görev Çalıştırılması Sonucunda Kaydedilen Veriler </h4>
+    <h4>{{$t('reports.task_report.data_saved_as_a_result_of_task_execution')}}</h4>
 
     <div class="p-grid" v-if="selectedTaskExecutionResult.commandExecutionResults && selectedTaskExecutionResult.commandExecutionResults.length > 0">
       <template v-if="selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr != 'null' ">
@@ -257,7 +260,7 @@
         </template>
       </template>
        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b>Ahenkten Gelen Mesaj</b></div>
+        <div class="p-col-4"><b>{{$t('reports.task_report.message_from_ahenk')}}</b></div>
         <div class="p-col-8">
           {{ selectedTaskExecutionResult.commandExecutionResults[0].responseMessage }}
         </div>

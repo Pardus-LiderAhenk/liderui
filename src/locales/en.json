@@ -918,7 +918,7 @@
             "disk_partitions":"Disk Partitions",
             "processor_information":"Agent Information",
             "number_of_physical_cores":"Number of Pyhsical Cores"
-        
+
         },
         "task_report":{
             "task_report":"Task Report",
@@ -935,7 +935,23 @@
             "scheduled_task":"Scheduled Task",
             "clear": "Clear",
             "search": "Search",
-            "export": "Export"
+            "export": "Export",
+            "computer_name":"Computer Name",
+            "execution_date":"Execution Date",
+            "answer":"Answer",
+            "task_cant_find":"Task Can't Find",
+            "loading":"loading",
+            "selected_task_detail":"Selected Task Detail",
+            "detail":"Detail",
+            "task_name":"Task Name",
+            "execution_result":"Execution Result",
+            "sended_task_parameter":"Sended Task Parameter",
+            "data_saved_as_a_result_of_task_execution":"Data Saved as a result of Task Execution",
+            "message_from_ahenk":"Message From Ahenk",
+            "task_detail":"Task Detail",
+            "total_result":"Total Result",
+            "task_sent_ahenk_list":"Task Sent Ahenk List"
+
         },
         "system_log_report":{
             "system_log_report":"System Log Report",
