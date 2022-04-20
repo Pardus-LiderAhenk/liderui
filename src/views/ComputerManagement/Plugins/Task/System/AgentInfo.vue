@@ -405,7 +405,7 @@
 
 <script>
 import axios from "axios";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import {FilterMatchMode} from 'primevue/api';
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 
@@ -561,7 +561,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setSelectedAgentInfo"]),
 
     getAgentInfo() {
       this.agentCn = this.selectedLiderNode.cn;
@@ -570,7 +569,6 @@ export default {
       axios.post("/select_agent_info/detail", params).then((response) => {
         if (response.data != "" && response.data != null) {
         this.selectedAgentInfo = response.data;
-        this.setSelectedAgentInfo(response.data);
         } else {
           this.selectedAgentInfo = null;
           this.$toast.add({

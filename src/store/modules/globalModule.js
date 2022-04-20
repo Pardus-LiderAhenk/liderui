@@ -3,10 +3,10 @@ import axios from 'axios';
 const state = {
     selectedLiderNode: null,
     selectedComputerGroupNode: null,
-    selectedNodeType: "computer",
+    selectedNodeType: null,
     status: '',
 	token: localStorage.getItem('token') || '',
-    user: {}
+    user: {},
 }
 
 const getters = {
@@ -55,7 +55,6 @@ const actions = {
     updateUserLang({commit}, lang) {
         commit('update_user_lang', lang);
     }
-
 }
 
 const mutations = {
@@ -76,12 +75,16 @@ const mutations = {
     logout(state) {
         state.status = ''
         state.token = ''
+        state.user = {}
+        state.selectedLiderNode = null
+        state.selectedComputerGroupNode = null
+        state.selectedNodeType = null
     },
     update_user_lang(state, lang) {
         if (state.user) {
             state.user.attributesMultiValues.preferredLanguage[0] = lang;
         }
-    }
+    },
 }
 
 export default { state, getters, actions, mutations }

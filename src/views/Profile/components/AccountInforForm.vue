@@ -62,6 +62,7 @@ export default {
             var day = date.slice(6,8);
             return day + "/" + month + "/" + year; 
         },
+
         updatePassword() {
 
             if (this.oldPassword == "" || this.oldPassword == null) {
@@ -99,8 +100,9 @@ export default {
             }).then((response) => {
                 this.oldPassword = null;
                 this.newPassword = null;
-                this.newPasswordAgain = null;
+                this.$refs.password.setPasswordForm('', '');
                 // FIXME Burada logout edilecek. ?
+                this.$store.dispatch("logout").then(() => this.$router.push("/login"));
 
                 this.$toast.add({
                     severity:'success', 
@@ -110,15 +112,6 @@ export default {
                 });
             });
         },
-        contains(rootPassword, allowedChars) {
-            for (let i = 0; i < rootPassword.length; i++) {
-                var char = rootPassword.charAt(i);
-                if (allowedChars.indexOf(char) >= 0){
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 }
 
