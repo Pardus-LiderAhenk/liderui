@@ -1,11 +1,11 @@
 <template>
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
-      <h4 class="p-pt-2">Detaylı İstemci Raporu</h4>
+      <h4 class="p-pt-2">{{$t('reports.detailed_agent_report.detailed_agent_report')}}</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputComputerName">Bilgisayar Adı</label>
+        <label for="inputComputerName">{{$t('reports.detailed_agent_report.computer_name')}}</label>
         <InputText
           id="inputComputerName"
           type="text"
@@ -13,11 +13,11 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputIPAdress">IP Adresi</label>
+        <label for="inputIPAdress">{{$t('reports.detailed_agent_report.ip_address')}}</label>
         <InputText id="inputIPAdress" type="text" v-model="filter.ipAddress" />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputMacAddress">Mac Adresi</label>
+        <label for="inputMacAddress">{{$t('reports.detailed_agent_report.mac_address')}}</label>
         <InputText
           id="inputMacAddress"
           type="text"
@@ -25,11 +25,11 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputDN">DN</label>
+        <label for="inputDN">{{$t('reports.detailed_agent_report.dn')}}</label>
         <InputText id="inputDN" type="text" v-model="filter.dn" />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputRegistrationDate">Kayıt Tarihi</label>
+        <label for="inputRegistrationDate">{{$t('reports.detailed_agent_report.registiration_date')}}</label>
         <Calendar
           v-model="filter.registrationDate"
           selectionMode="range"
@@ -42,7 +42,7 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputStatus">Durumu</label>
+        <label for="inputStatus">{{$t('reports.detailed_agent_report.status')}}</label>
         <Dropdown
           v-model="filter.status"
           :options="statuses"
@@ -51,61 +51,65 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectBrand">Marka</label>
+        <label for="selectBrand">{{$t('reports.detailed_agent_report.brand')}}</label>
         <Dropdown
           id="selectBrand"
           v-model="filter.brand"
           :options="brands"
-          placeholder="Hepsi"
+          :placeholder="$t('reports.detailed_agent_report.all')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectModel">Model</label>
+        <label for="selectModel">{{$t('reports.detailed_agent_report.model')}}</label>
         <Dropdown
           id="selectModel"
           v-model="filter.model"
           :options="brands"
-          placeholder="Hepsi"
+          :placeholder="$t('reports.detailed_agent_report.all')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectProcessor">İşlemci</label>
+        <label for="selectProcessor">{{$t('reports.detailed_agent_report.processor')}}</label>
         <Dropdown
           id="selectProcessor"
           v-model="filter.processor"
           :options="processors"
-          placeholder="Hepsi"
+          :placeholder="$t('reports.detailed_agent_report.all')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectOSVersion">İşletim Sistemi Versiyonu</label>
+        <label for="selectOSVersion">{{$t('reports.detailed_agent_report.operating_system_version')}}</label>
         <Dropdown
           id="selectOSVersion"
           v-model="filter.osVersion"
           :options="osVersions"
-          placeholder="Hepsi"
+          :placeholder="$t('reports.detailed_agent_report.all')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectAgentVersion">Ahenk Versiyonu</label>
+        <label for="selectAgentVersion">{{$t('reports.detailed_agent_report.ahenk_version')}}</label>
         <Dropdown
           id="selectAgentVersion"
           v-model="filter.agentVersion"
           :options="agentVersions"
-          placeholder="Hepsi"
+          :placeholder="$t('reports.detailed_agent_report.all')"
         />
       </div>
       <div class="p-field p-col-12 p-text-right">
         <div class="p-d-flex p-jc-end">
           <div>
             <Button
-              label="Temizle"
+              :label="$t('reports.detailed_agent_report.clear')"
               icon="fas fa-backspace"
               @click="clearFilterFields"
             />
           </div>
           <div class="p-ml-2">
-            <Button label="Ara" icon="fas fa-search" @click="filterAgents" />
+            <Button
+              :label="$t('reports.detailed_agent_report.search')"
+              icon="fas fa-search" 
+              @click="filterAgents" 
+              />
           </div>
         </div>
       </div>
@@ -114,10 +118,10 @@
   <Card class="p-m-3 p-mb-7">
     <template #title>
       <div class="p-d-flex p-jc-between">
-        <div>Sonuçlar</div>
+        <div>{{$t('reports.detailed_agent_report.results')}}</div>
         <div>
           <Button
-            label="Dışa Aktar"
+            :label="$t('reports.detailed_agent_report.export')"
             icon="fas fa-file-excel"
             @click="exportToExcel()"
           />
@@ -127,28 +131,32 @@
     <template #content>
       <DataTable :value="agents" responsiveLayout="scroll" dataKey="id" :loading="loading">
         <template #empty>
-          No agents found.
+          <div class="p-d-flex p-jc-center">
+            <span>{{$t('reports.detailed_agent_report.agent_not_found')}}</span>
+          </div>
         </template>
         <template #loading>
-          Yükleniyor...
+          <div class="p-d-flex p-jc-center">
+            <span>{{$t('reports.detailed_agent_report.loading')}}...</span>
+          </div>
         </template>
         <!-- <Column>
           <template #body="slotProps">
             <span>{{ slotProps.index }}</span>
           </template>
         </Column> -->
-        <Column field="hostname" header="Bilgisayar Adı"></Column>
-        <Column header="Mac Adresi">
+        <Column field="hostname" :header="$t('reports.detailed_agent_report.computer_name')"></Column>
+        <Column :header="$t('reports.detailed_agent_report.mac_address')">
           <template #body="{ data }">
             {{ data.macAddresses.replace(/'/g, "") }}
           </template>
         </Column>
-        <Column header="IP Adresi">
+        <Column :header="$t('reports.detailed_agent_report.ip_address')">
           <template #body="{ data }">
             {{ data.ipAddresses.replace(/'/g, "") }}
           </template>
         </Column>
-        <Column field="isOnline" header="Durumu">
+        <Column field="isOnline" :header="$t('reports.detailed_agent_report.status')">
           <template #body="{ data }">
             <Badge
               v-if="data.isOnline"
@@ -158,7 +166,7 @@
             <Badge v-else value="Çevrim Dışı" severity="danger"></Badge>
           </template>
         </Column>
-        <Column header="Marka">
+        <Column :header="$t('reports.detailed_agent_report.brand')">
           <template #body="{ data }">
             {{
               getPropertyValue(
@@ -168,17 +176,17 @@
             }}
           </template>
         </Column>
-        <Column header="İşletim Sistemi">
+        <Column :header="$t('reports.detailed_agent_report.operating_system')">
           <template #body="{ data }">
             {{ getPropertyValue(data.properties, "os.distributionName") }}
           </template>
         </Column>
-        <Column header="Versiyon">
+        <Column :header="$t('reports.detailed_agent_report.version')">
           <template #body="{ data }">
             {{ getPropertyValue(data.properties, "os.distributionVersion") }}
           </template>
         </Column>
-        <Column field="createDate" header="Oluşturulma Tarihi"></Column>
+        <Column field="createDate" :header="$t('reports.detailed_agent_report.create_date')"></Column>
         <Column>
           <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
@@ -210,15 +218,15 @@
     :style="{ width: '50vw' }"
   >
     <template #header>
-      <h3>İstemci Detayı</h3>
+      <h3>{{$t('reports.detailed_agent_report.agent_detail')}}</h3>
     </template>
-    <h4>Genel Bilgiler</h4>
+    <h4>{{$t('reports.detailed_agent_report.general_information')}}</h4>
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Bilgisayar Adı</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.computer_name')}}</b></div>
       <div class="p-col-8">{{ selectedAgent.hostname }}</div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>MAC Adresleri</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.mac_address')}}</b></div>
       <div class="p-col-8">
         {{ selectedAgent.macAddresses.replace(/'/g, "") }}
       </div>
@@ -226,35 +234,35 @@
       <div class="p-col-4"><b>JID</b></div>
       <div class="p-col-8">{{ selectedAgent.jid }}</div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>IP Adresleri</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ip_address')}}</b></div>
       <div class="p-col-8">
         {{ selectedAgent.ipAddresses.replace(/'/g, "") }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>İşletim Sistemi Versiyonu</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.operating_system_version')}}</b></div>
       <div class="p-col-8">
         {{
           getPropertyValue(selectedAgent.properties, "os.distributionVersion")
         }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Ahenk Versiyonu</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ahenk_version')}}</b></div>
       <div class="p-col-8">
         {{ getPropertyValue(selectedAgent.properties, "agentVersion") }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Oluşturulma Tarihi</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.create_date')}}</b></div>
       <div class="p-col-8">{{ selectedAgent.createDate }}</div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Güncelleme Tarihi</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.update_date')}}</b></div>
       <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
     </div>
 
-    <h4>Disk ve Bellek Bilgisi</h4>
+    <h4>{{$t('reports.detailed_agent_report.disk_and_memory_information')}}</h4>
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Toplam Disk Alanı(GB)</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.total_disk_space')}}</b></div>
       <div class="p-col-8">
         {{
           (
@@ -266,7 +274,7 @@
         }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Kullanılan Disk Alanı(GB)</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.used_disk_space')}}</b></div>
       <div class="p-col-8">
         {{
           (
@@ -278,7 +286,7 @@
         }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Boş Disk Alanı(GB)</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.free_disk_space')}}</b></div>
       <div class="p-col-8">
         {{
           (
@@ -294,7 +302,7 @@
         }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Disk Bölümleri</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.disk_partitions')}}</b></div>
       <div class="p-col-8">
         {{
           getPropertyValue(selectedAgent.properties, "hardware.disk.partitions")
@@ -317,15 +325,15 @@
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
     </div>
 
-    <h4>İşlemci Bilgisi</h4>
+    <h4>{{$t('reports.detailed_agent_report.processor_information')}}</h4>
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>İşlemci</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.processor')}}</b></div>
       <div class="p-col-8">
         {{ getPropertyValue(selectedAgent.properties, "processor") }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Fiziksel Çekirdek Sayısı</b></div>
+      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.number_of_physical_cores')}}</b></div>
       <div class="p-col-8">
         {{
           getPropertyValue(
@@ -371,15 +379,15 @@ export default {
       selectedAgent: null,
       statuses: [
         {
-          name: "Hepsi",
+          name: this.$t('reports.detailed_agent_report.all'),
           value: "ALL",
         },
         {
-          name: "Açık",
+          name: this.$t('reports.detailed_agent_report.online'),
           value: "ONLINE",
         },
         {
-          name: "Kapalı",
+          name: this.$t('reports.detailed_agent_report.offline'),
           value: "OFFLINE",
         },
       ],
