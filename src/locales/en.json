@@ -951,10 +951,11 @@
             "task_detail":"Task Detail",
             "total_result":"Total Result",
             "task_sent_ahenk_list":"Task Sent Ahenk List"
-
+            
         },
         "system_log_report":{
             "system_log_report":"System Log Report",
+            "system_log":"System Log",
             "logs_date":"Logs Date",
             "logs_type":"Logs Type",
             "filter_area":"Filter Area",
@@ -965,7 +966,12 @@
             "ip_address":"IP Address",
             "clear": "Clear",
             "search": "Search",
-            "export": "Export"
+            "export": "Export",
+            "task_cant_find":"Task Can't Find",
+            "loading":"Loading",
+            "total_result":"Total Result",
+            "selected_system_log_detail":"Selected System Log Detail",
+            "log_id":"Log ID"
         },
         "scheduled_task_report":{
             "scheduled_task_report":"Scheduled Task Report",
@@ -984,7 +990,19 @@
             "passive":"Passive",
             "clear": "Clear",
             "search": "Search",
-            "export": "Export"
+            "export": "Export",
+            "scheduled_task_doesnt_exist":"Scheduled Task Doesn't Exist",
+            "loading":"Yükleniyor",
+            "edit":"Edit",
+            "cancel":"Cancel",
+            "show_details":"Show Details",
+            "total_result":"Total Result",
+            "selected_scheduled_task_details":"Selected Scheduled Task Details",
+            "task_id":"Task ID",
+            "update_date":"Update Date",
+            "scheduled_task_parameters":"Scheduled Task Parameters",
+            "scheduled_task_will_be_canceled_are_you_sure":"The scheduled task will be cancelled, are you sure?"
+
         }
     }
 }

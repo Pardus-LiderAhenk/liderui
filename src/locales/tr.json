@@ -958,24 +958,31 @@
         },
         "system_log_report":{
             "system_log_report":"Sistem Güncesi Raporu",
-            "logs_date":"Oluşturulma Tarihi",
+            "system_log":"Sistem Güncesi",
+            "logs_date":"Günce Tarihi",
             "logs_type":"Günce Tipi",
-            "filter_area":"Filtre Alanı            ",
+            "filter_area":"Filtre Alanı",
             "username":"Kullanıcı Adı",
             "results":"Sonuçlar",
             "create_date":"Oluşturulma Tarihi",
             "message":"Mesaj",
             "ip_address":"IP Adresi",
-            "clear": "Temizle",
-            "search": "Ara",
-            "export": "Dışa Aktar"
+            "clear":"Temizle",
+            "search":"Ara",
+            "export":"Dışa Aktar",
+            "task_cant_find":"Görev Bulunamadı",
+            "loading":"Yükleniyor",
+            "total_result":"Toplam Sonuç",
+            "selected_system_log_detail":"Seçilen Sistem Güncesi Detayı",
+            "log_id":"Günce ID"
+
         },
         "scheduled_task_report":{
             "scheduled_task_report":"Zamanlanmış Görev Raporu",
             "task":"Görev",
             "posted_date":"Gönderilme Tarihi",
             "results":"Sonuçlar",
-            "plugins":"Eklenti",
+            "plugin":"Eklenti",
             "create_date":"Oluşturulma Tarihi",
             "sender":"Gönderen",
             "total":"Toplam",
@@ -987,7 +994,20 @@
             "passive":"Pasif",
             "clear": "Temizle",
             "search": "Ara",
-            "export": "Dışa Aktar"
+            "export": "Dışa Aktar",
+            "scheduled_task_doesnt_exist":"Zamanlanmış görev bulunamadı",
+            "loading":"Yükleniyor",
+            "edit":"Düzenle",
+            "cancel":"İptal",
+            "show_details":"Detayları Göster",
+            "total_result":"Toplam Sonuç",
+            "selected_scheduled_task_details":"Seçilen Zamanlanmış Görevin Detayları",
+            "task_id":"Görev ID",
+            "update_date":"Güncelleme Tarihi",
+            "scheduled_task_parameters":"Zamanlanmış Görev Parametreleri",
+            "scheduled_task_will_be_canceled_are_you_sure":"Zamanlanmış görev iptal edilecektir, emin misiniz?"
+
+
         }
     }
 }

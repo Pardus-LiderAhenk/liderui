@@ -1,12 +1,12 @@
 <template>
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
-      <h4 class="p-pt-2">Sistem Güncesi</h4>
+      <h4 class="p-pt-2">{{$t('reports.system_log_report.system_log')}}</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
       
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputRegistrationDate">Günce Tarihi</label>
+        <label for="inputRegistrationDate">{{$t('reports.system_log_report.logs_date')}}</label>
         <Calendar
           v-model="filter.logCreateDate"
           selectionMode="range"
@@ -19,7 +19,7 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputStatus">Günce Tipi</label>
+        <label for="inputStatus">{{$t('reports.system_log_report.logs_type')}}</label>
         <Dropdown
           v-model="filter.operationType"
           :options="operationTypes"
@@ -29,15 +29,15 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputDN">Filtre Alanı</label>
+        <label for="inputDN">{{$t('reports.system_log_report.filter_area')}}</label>
         <Dropdown  v-model="filter.field" :options="filter.filterTextType" optionLabel="text" optionValue="value"></Dropdown>
       </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
             <label for="inputDN">{{
-                filter.field !== 'requestIp' ? 'Kullanıcı Adı' : 'Ip Adresi'
+                filter.field !== 'requestIp' ? $t('reports.system_log_report.username') : $t('reports.system_log_report.ip_address')
               }}</label>
             <div class="p-inputgroup">
-                <InputText :placeholder="filter.field !== 'requestIp' ? 'Kullanıcı': 'Ip Addres' " v-model="filter.searchText" />
+                <InputText :placeholder="filter.field !== 'requestIp' ? $t('reports.system_log_report.username'): $t('reports.system_log_report.ip_address') " v-model="filter.searchText" />
                 <Button v-show="filter.field !== 'requestIp' "  icon="pi pi-sitemap" class="p-button-primary" @click="searchTextDialog = true"/>
             </div>
         </div>
@@ -45,13 +45,16 @@
         <div class="p-d-flex p-jc-end">
           <div>
             <Button
-              label="Temizle"
+            :label="$t('reports.system_log_report.clear')"
               icon="fas fa-backspace"
               @click="clearFilterFields"
             />
           </div>
           <div class="p-ml-2">
-            <Button label="Ara" icon="fas fa-search" @click="filterAgents" />
+            <Button 
+            :label="$t('reports.system_log_report.search')"
+            icon="fas fa-search" 
+            @click="filterAgents" />
           </div>
         </div>
       </div>
@@ -60,10 +63,10 @@
   <Card class="p-m-3 p-mb-7">
     <template #title>
       <div class="p-d-flex p-jc-between">
-        <div>Sonuçlar</div>
+        <div>{{$t('reports.system_log_report.results')}}</div>
         <div>
           <Button
-            label="Dışa Aktar"
+            :label="$t('reports.system_log_report.export')"
             icon="fas fa-file-excel"
             @click="exportToExcel()"
           />
@@ -73,10 +76,10 @@
     <template #content>
       <DataTable :value="logs" responsiveLayout="scroll" dataKey="id" :loading="loading">
         <template #empty>
-          Görev bulunamadı...
+          {{$t('reports.system_log_report.task_cant_find')}}...
         </template>
         <template #loading>
-          Yükleniyor...
+           {{$t('reports.system_log_report.loading')}}...
         </template>
         <Column header="#">
           <template #body="{index}">
@@ -88,10 +91,10 @@
               {{ getOpetarionType(data.crudType)}}
           </template>
         </Column>
-        <Column field="createDate" header="Oluşturulma Tarihi"></Column>
-        <Column field="logMessage" header="Mesaj"></Column>
-        <Column field="userId" header="Kullanıcı Adı"></Column>
-        <Column field="requestIp" header="IP Adresi"></Column>
+        <Column field="createDate" :header="$t('reports.system_log_report.create_date')"></Column>
+        <Column field="logMessage" :header="$t('reports.system_log_report.message')"></Column>
+        <Column field="userId" :header="$t('reports.system_log_report.username')"></Column>
+        <Column field="requestIp" :header="$t('reports.system_log_report.ip_address')"></Column>
         <Column>
           <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
@@ -113,7 +116,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left=""> Toplam Sonuç: {{ totalElements }} </template>
+        <template #left=""> {{$t('reports.system_log_report.total_result')}} : {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -125,37 +128,37 @@
     :style="{ width: '50vw' }"
   >
     <template #header>
-      <h3>Seçilen Sistem Güncesi Detayı</h3>
+      <h3> {{$t('reports.system_log_report.selected_system_log_detail')}}</h3>
     </template>
 
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Günce ID</b></div>
+      <div class="p-col-4"><b> {{$t('reports.system_log_report.log_id')}}</b></div>
       <div class="p-col-8">
         {{ selectedLog.id }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Günce Tipi</b></div>
+      <div class="p-col-4"><b> {{$t('reports.system_log_report.logs_type')}}</b></div>
       <div class="p-col-8">
         {{ getOpetarionType(selectedLog.crudType) }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Oluşturma Tarihi</b></div>
+      <div class="p-col-4"><b> {{$t('reports.system_log_report.create_date')}}</b></div>
       <div class="p-col-8">
         {{ selectedLog.createDate }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Mesaj</b></div>
+      <div class="p-col-4"><b> {{$t('reports.system_log_report.message')}}</b></div>
       <div class="p-col-8">
         {{ selectedLog.logMessage }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Kullanıcı Adı</b></div>
+      <div class="p-col-4"><b> {{$t('reports.system_log_report.username')}}</b></div>
       <div class="p-col-8">
         {{ selectedLog.userId }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>IP Adresi</b></div>
+      <div class="p-col-4"><b> {{$t('reports.system_log_report.ip_address')}}</b></div>
       <div class="p-col-8">
         {{ selectedLog.requestIp }}
       </div>

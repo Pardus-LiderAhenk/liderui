@@ -167,7 +167,7 @@
           <template #body="{data}">
                 {{
                     data.commandExecutionResults.length > 0 ? 
-                    (data.commandExecutionResults[0].responseCode == "TASK_PROCESSED" ? 'BAŞARILI' : 'HATA')   : ''
+                    (data.commandExecutionResults[0].responseCode == "TASK_PROCESSED" ? $t('reports.task_report.successful') : $t('reports.task_report.error'))   : ''
                 }}
             </template>
         </Column>

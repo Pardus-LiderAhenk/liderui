@@ -6,12 +6,12 @@
   </base-scheduled>
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
-      <h4 class="p-pt-2">Zamanlanmış Görevler Raporu</h4>
+      <h4 class="p-pt-2">{{$t('reports.scheduled_task_report.scheduled_task_report')}}</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
       
       <div class="p-field p-col-12 p-lg-4 p-md-6 p-sm-12">
-        <label for="inputRegistrationDate">Gönderilme Tarihi</label>
+        <label for="inputRegistrationDate">{{$t('reports.scheduled_task_report.posted_date')}}</label>
         <Calendar
           v-model="filter.taskSendDate"
           selectionMode="range"
@@ -24,7 +24,7 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-4 p-md-6 p-sm-12">
-        <label for="inputStatus">Görev</label>
+        <label for="inputStatus">{{$t('reports.scheduled_task_report.task')}}</label>
         <Dropdown
           v-model="filter.task"
           :options="plugins"
@@ -38,13 +38,16 @@
         <div class="p-d-flex p-jc-end">
           <div>
             <Button
-              label="Temizle"
+              :label="$t('reports.scheduled_task_report.clear')"
               icon="fas fa-backspace"
               @click="clearFilterFields"
             />
           </div>
           <div class="p-ml-2">
-            <Button label="Ara" icon="fas fa-search" @click="filterAgents" />
+            <Button
+            :label="$t('reports.scheduled_task_report.search')" 
+            icon="fas fa-search" 
+            @click="filterAgents" />
           </div>
         </div>
       </div>
@@ -53,10 +56,10 @@
   <Card class="p-m-3 p-mb-7">
     <template #title>
       <div class="p-d-flex p-jc-between">
-        <div>Sonuçlar</div>
+        <div>{{$t('reports.scheduled_task_report.results')}}</div>
         <div>
           <Button
-            label="Dışa Aktar"
+            :label="$t('reports.scheduled_task_report.export')"
             icon="fas fa-file-excel"
             @click="exportToExcel()"
           />
@@ -67,53 +70,53 @@
       <DataTable :value="tasks" responsiveLayout="scroll" dataKey="id" :loading="loading">
         <template #empty>
           <div class="p-d-flex p-jc-center">
-            Zamanlanmış görev bulunamadı
+            {{$t('reports.scheduled_task_report.scheduled_task_doesnt_exist')}}
           </div>
         </template>
         <template #loading>
-          Yükleniyor...
+          {{$t('reports.scheduled_task_report.loading')}}...
         </template>
         <Column header="#">
           <template #body="{index}">
             <span>{{ index + 1 }}</span>
             </template>
         </Column>
-        <Column field="task.plugin.description" header="Eklenti"></Column>
-        <Column header="Görev">
+        <Column field="task.plugin.description" :header="$t('reports.scheduled_task_report.plugin')"></Column>
+        <Column :header="$t('reports.scheduled_task_report.task')">
           <template #body="{ data }">
             {{ getTaskName(data)}}
           </template>
         </Column>
-        <Column field="createDate" header="Oluşturulma Tarihi">
+        <Column field="createDate" :header="$t('reports.scheduled_task_report.create_date')">
         </Column>
-        <Column field="commandOwnerUid" header="Gönderen">
+        <Column field="commandOwnerUid" :header="$t('reports.scheduled_task_report.sender')">
         </Column>
-        <Column header="Toplam">
+        <Column :header="$t('reports.scheduled_task_report.total')">
           <template #body="{ data }">
             {{
              data.uidList.length
             }}
           </template>
         </Column>
-        <Column header="Başarılı">
+        <Column :header="$t('reports.scheduled_task_report.successful')">
           <template #body="{ data }">
             {{ data.successfullTaskCount  }}
           </template>
         </Column>
-        <Column header="Bekleyen">
+        <Column :header="$t('reports.scheduled_task_report.waiting')">
           <template #body="{ data }">
             {{ data.waitingTaskCount }}
           </template>
         </Column>
-        <Column header="Hata">
+        <Column :header="$t('reports.scheduled_task_report.error')">
             <template #body="{ data }">
                 {{ data.failedTaskCount }}
             </template>
         </Column>
-        <Column header="Durum">
+        <Column :header="$t('reports.scheduled_task_report.status')">
             <template #body="{data}">
               <Badge 
-                  :value="data.task.deleted ? 'Pasif': 'Aktif'" 
+                  :value="data.task.deleted ? $t('reports.scheduled_task_report.passive'): $t('reports.scheduled_task_report.active')" 
                   :severity="data.task.deleted ? 'danger': 'success'">
               </Badge>
             </template>
@@ -125,19 +128,19 @@
                 <Button :disabled="data.task.deleted"
                   class="p-button-sm p-button-warning p-button-rounded p-mr-2 "
                   icon="pi pi-pencil"
-                  v-tooltip.bottom="'Düzenle'"
+                  v-tooltip.bottom="$t('reports.scheduled_task_report.edit')"
                   @click="showTaskDetailDialog(data.id); showScheduled = true;"
                 />
                 <Button :disabled="data.task.deleted"
                   class="p-button-sm p-button-danger p-button-rounded p-mr-2 "
                   icon="pi pi-times"
-                  v-tooltip.bottom="'İptal Et'"
+                  v-tooltip.bottom="$t('reports.scheduled_task_report.cancel')"
                   @click="showTaskDetailDialog(data.id); cancelScheduledTaskDialog = true;"
                 />
                 <Button
                   class="p-button-sm p-button-rounded"
                   icon="pi pi-list"
-                  v-tooltip.bottom="'Detay Göster'"
+                  v-tooltip.bottom="$t('reports.scheduled_task_report.show_details')"
                   @click="showTaskDetailDialog(data.id); this.scheduledTaskDetailDialog = true;"
                 />
               </div>
@@ -151,7 +154,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left=""> Toplam Sonuç: {{ totalElements }} </template>
+        <template #left=""> {{$t('reports.scheduled_task_report.total_result')}} : {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -159,16 +162,16 @@
     v-model:visible="scheduledTaskDetailDialog"
     :style="{ width: '40vw' }"
     :modal="true"
-    header="Seçilen Zamanlanmış Görevin Detayları"
+    :header="$t('reports.scheduled_task_report.selected_scheduled_task_details')"
   >
     <div class="p-grid">
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Görev Adı</b></div>
+      <div class="p-col-4"><b>{{$t('reports.scheduled_task_report.task')}}</b></div>
       <div class="p-col-8">
         {{ selectedCommand.task.plugin.description }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Durum</b></div>
+      <div class="p-col-4"><b>{{$t('reports.scheduled_task_report.status')}}</b></div>
       <div class="p-col-8">
         <Badge 
             :value="selectedCommand.task.deleted ? 'Pasif': 'Aktif'" 
@@ -176,28 +179,28 @@
         </Badge>
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Görev ID</b></div>
+      <div class="p-col-4"><b>{{$t('reports.scheduled_task_report.task_id')}}</b></div>
       <div class="p-col-8">
         {{ selectedCommand.task.id }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Oluşturulma Tarihi</b></div>
+      <div class="p-col-4"><b>{{$t('reports.scheduled_task_report.create_date')}}</b></div>
       <div class="p-col-8">
         {{ selectedCommand.createDate }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Güncelleme Tarihi</b></div>
+      <div class="p-col-4"><b>{{$t('reports.scheduled_task_report.update_date')}}</b></div>
       <div class="p-col-8">
         {{ selectedCommand.task.modifyDate }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Gönderen</b></div>
+      <div class="p-col-4"><b>{{$t('reports.scheduled_task_report.sender')}}</b></div>
       <div class="p-col-8">
         {{ selectedCommand.commandOwnerUid }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>Zamanlanmış Görev Parametreleri</b></div>
+      <div class="p-col-4"><b>{{$t('reports.scheduled_task_report.scheduled_task_parameters')}}</b></div>
       <div class="p-col-8">
         {{ selectedCommand.task.cronExpression }}
       </div>
@@ -217,7 +220,7 @@
     <div class="p-fluid">
         <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
         <span>
-          Zamanlanmış görev iptal edilecektir, emin misiniz?
+          {{$t('reports.scheduled_task_report.scheduled_task_will_be_canceled_are_you_sure')}}
         </span>
     </div>
     <template #footer>
