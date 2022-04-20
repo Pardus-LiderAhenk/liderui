@@ -878,6 +878,7 @@
         "unassign_policy_confirm_message": "Politika gruptan kaldırılacaktır, emin misiniz?",
         "unassign_policy_success": "Politika gruptan başarıyla kaldırıldı",
         "unassign_policy_error": "Politika gruptan kaldırılırken hata oluştu",
+        "selected_profile_warn": "En az bir profil seçilmelidir",
         "plugins":{
             "login_manager_validation": "İzin verilen günlerden en az bir tane seçilmelidir"
         }

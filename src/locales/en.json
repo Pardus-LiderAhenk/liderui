@@ -875,6 +875,7 @@
         "unassign_policy_confirm_message": "The policy will be deleted, are you sure?",
         "unassign_policy_success": "Deteleted policy in group successfully",
         "unassign_policy_error": "An error occured while deleting policy in group",
+        "selected_profile_warn": "At least one profile must be selected",
         "plugins":{
             "login_manager_validation": "At least one of the days allowed must be selected"
         }
