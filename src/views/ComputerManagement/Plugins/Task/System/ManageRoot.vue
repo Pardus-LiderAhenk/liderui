@@ -26,7 +26,7 @@
               <InputSwitch id="status" @change="lockUserChange" v-model="lockRootUser"/>
             </div>
           </div>
-          <password-component ref="password"></password-component>
+          <password-component :disabled="disabled" ref="password"></password-component>
         </div>
       </template>
       <template #pluginFooter></template>
@@ -56,6 +56,7 @@ export default {
       task: null,
       passwordErrorMessage: '',
       confirmPasswordErrorMessage: '',
+      disabled: false,
       passwordForm: {
         password: '',
         confirmPassword: '',
@@ -91,8 +92,15 @@ export default {
     },
 
     lockUserChange() {
-      this.passwordForm.password = '';
-      this.passwordForm.confirmPassword = '';
+      if (this.lockRootUser) {
+        this.disabled = true;
+        this.passwordForm.password = '';
+        this.passwordForm.confirmPassword = '';
+        this.$refs.password.setPasswordForm('', '');
+      } else {
+        this.disabled = false;
+      }
+      
     },
   },
 };

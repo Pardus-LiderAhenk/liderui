@@ -6,7 +6,8 @@
                 <label for="city">{{$t("password.new_password")}}</label>
                 <div class="p-inputgroup">
                     <Password @update:modelValue="getPassword"
-                        v-model="passwordForm.password" :toggleMask="toogleMask"
+                        v-model="passwordForm.password" :toggleMask="toogleMask" 
+                        :disabled="disabled"
                         :class="passwordClass"
                         onpaste="return false"
                         :strongRegex="strongRegex" 
@@ -29,9 +30,9 @@
                     </Password>
                     <Button 
                         icon="pi pi-key" 
-                        :disabled="lockRootUser ? true : false" 
                         class="p-button-sm" :title='$t("password.generate_password")' 
                         @click.prevent="generatePassword"
+                        :disabled="disabled"
                     />
                 </div>
                 <small v-show="validationErrors.password" 
@@ -44,6 +45,7 @@
                     <Password @update:modelValue="getPassword"
                         v-model="passwordForm.confirmPassword" :toggleMask="toogleMask" 
                         :class="passwordConfirmClass" 
+                        :disabled="disabled"
                         onpaste="return false"
                         :strongRegex="strongRegex" 
                         :weakLabel="$t('password.weak')"
@@ -65,9 +67,9 @@
                     </Password>
                     <Button 
                         icon="pi pi-key" 
-                        :disabled="lockRootUser ? true : false" 
                         class="p-button-sm" :title='$t("password.generate_password")' 
                         @click.prevent="generatePassword"
+                        :disabled="disabled"
                     />
                 </div>
                 <small v-show="validationErrors.confirmPassword" 
@@ -111,6 +113,12 @@ export default {
             default: true,
             description: "Toogle mask for password"
         },
+
+        disabled: {
+            type: Boolean,
+            default: false,
+            description: "Disabled password input"
+        },
         
     },
 
@@ -149,22 +157,31 @@ export default {
             this.passwordForm.confirmPassword = generatePassword;
         },
 
-        setPassword() {
-            this.passwordForm.password = '';
-            this.passwordForm.confirmPassword = '';
+        async setPasswordForm(password, confirmPassword) {
+            await this.setPassword(password, confirmPassword);
+            delete this.validationErrors['password'];
+            delete this.validationErrors['confirmPassword'];
+        },
+
+        setPassword(password, confirmPassword) {
+            return new Promise((resolve, reject)=> {
+                this.passwordForm.password = password;
+                this.passwordForm.confirmPassword = confirmPassword;
+                resolve(true);
+            });
         },
 
         validateForm() {
             if (!this.passwordForm.password.trim()){
                 if (!this.passwordForm.password.trim()){
-                this.validationErrors['password'] = true;
+                    this.validationErrors['password'] = true;
                 } else{
-                delete this.validationErrors['password'];
+                    delete this.validationErrors['password'];
                 }
                 if (!this.passwordForm.confirmPassword.trim()){
-                this.validationErrors['confirmPassword'] = true;
+                    this.validationErrors['confirmPassword'] = true;
                 } else{
-                delete this.validationErrors['confirmPassword'];
+                    delete this.validationErrors['confirmPassword'];
                 }
                 this.passwordErrorMessage = this.$t('password.password_input_message');
                 this.confirmPasswordErrorMessage = this.$t('password.confirm_password_input_message');
