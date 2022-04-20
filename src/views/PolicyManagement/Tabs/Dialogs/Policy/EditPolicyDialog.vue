@@ -188,6 +188,15 @@ export default {
                 "profiles": this.selectedProfiles,
                 "id": this.selectedPolicy.id
             }
+            if (this.active && this.selectedProfiles.length == 0) {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('policy_management.selected_profile_warn'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                return;
+            }
             axios.post('/policy/update', params).then(response => {
                 if (response.data) {
                     this.$emit('updatedPolicy', response.data);
