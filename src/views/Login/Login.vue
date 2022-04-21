@@ -20,10 +20,10 @@
                             <InputText type="text" 
                                 v-model="username" 
                                 :class="validation.username ? 'p-invalid ':''" 
-                                placeholder="Username" 
+                                :placeholder="$t('login.username')" 
                             />
                             <small v-if="validation.username" class="p-error">
-                                Kullanıcı adı boş bırakılamaz
+                                {{$t('login.username_warn')}}
                             </small>
                         </span>
                         <span class="p-field p-input-icon-left">
@@ -31,15 +31,22 @@
                             <InputText type="password" 
                                 :class="validation.password ? 'p-invalid ':''" 
                                 v-model="password" 
-                                placeholder="Password" 
+                                :placeholder="$t('login.password')" 
                             />
                             <small v-if="validation.password" class="p-error">
-                                Parola boş bırakılamaz
+                                {{$t('login.password_warn')}}
                             </small>
                         </span>
                         <div class="p-fluid">
-                            <Button type="submit" label="Giriş Yap" class="p-mt-2 p-field" />
-                            <Button label="Parolamı Unuttum" @click="forgotPassword" class="p-button-link p-field" />
+                            <Button 
+                            type="submit" 
+                            :label="$t('login.sign_in')" 
+                            class="p-mt-2 p-field"
+                            />
+                            <Button 
+                            :label="$t('login.forgot_password')" 
+                            @click="forgotPassword" 
+                            class="p-button-link p-field" />
                         </div>
                     </div>
                 </div>
@@ -76,8 +83,12 @@ export default {
             .then((response) => {
                 this.$router.push("/dashboard");
             }).catch(err => {
-                this.$toast.add({ severity: 'error', summary: 'HATA', detail: '"Kullanıcı adı veya şifre hatalı"', life: 3000});
-                console.log(err)
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('login.login_error') + "\n"+err, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             });
         },
     },

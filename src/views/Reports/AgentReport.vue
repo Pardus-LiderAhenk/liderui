@@ -48,6 +48,7 @@
           :options="statuses"
           optionLabel="name"
           optionValue="value"
+          showClear="true"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -160,10 +161,13 @@
           <template #body="{ data }">
             <Badge
               v-if="data.isOnline"
-              value="Çevrim İçi"
+              :value="$t('reports.detailed_agent_report.online')"
               severity="success"
             ></Badge>
-            <Badge v-else value="Çevrim Dışı" severity="danger"></Badge>
+            <Badge v-else 
+            :value="$t('reports.detailed_agent_report.offline')" 
+            severity="danger"
+            ></Badge>
           </template>
         </Column>
         <Column :header="$t('reports.detailed_agent_report.brand')">
@@ -194,7 +198,7 @@
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
                   icon="pi pi-list"
-                  v-tooltip.left="'Agent Details'"
+                  v-tooltip.left="$t('reports.detailed_agent_report.agent_detail')"
                   @click="showAgentDetailDialog(data.id)"
                 />
               </div>
@@ -347,7 +351,7 @@
 
     <template #footer>
       <Button
-        label="Close"
+        :label="this.$t('reports.detailed_agent_report.close')"
         icon="pi pi-times"
         class="p-button-text"
         @click="agentDetailDialog = false"

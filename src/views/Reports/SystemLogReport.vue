@@ -26,11 +26,20 @@
           optionLabel="text"
           optionValue="value"
           :filter="true" 
+          :showClear="true" 
+          :placeholder="$t('reports.system_log_report.select')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="inputDN">{{$t('reports.system_log_report.filter_area')}}</label>
-        <Dropdown  v-model="filter.field" :options="filter.filterTextType" optionLabel="text" optionValue="value"></Dropdown>
+        <Dropdown  
+          v-model="filter.field" 
+          :options="filter.filterTextType" 
+          optionLabel="text" 
+          :showClear="true" 
+          optionValue="value"
+          :placeholder="$t('reports.system_log_report.select')"
+        ></Dropdown>
       </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
             <label for="inputDN">{{
@@ -86,7 +95,7 @@
             <span>{{ index + 1 }}</span>
             </template>
         </Column>
-        <Column header="Günce Tipi">
+        <Column :header="$t('reports.system_log_report.logs_type')">
           <template #body="{ data }">
               {{ getOpetarionType(data.crudType)}}
           </template>
@@ -102,7 +111,7 @@
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
                   icon="pi pi-list"
-                  v-tooltip.left="'Log Details'"
+                  v-tooltip.left="$t('reports.system_log_report.log_details')"
                   @click="showLogDetailDialog(data.id)"
                 />
               </div>
@@ -167,7 +176,7 @@
 
      <template #footer>
       <Button
-        label="Close"
+        :label="$t('reports.system_log_report.close')"
         icon="pi pi-times"
         class="p-button-text"
         @click="logDetailDialog = false"
@@ -176,7 +185,7 @@
 
   </Dialog>
 
-  <Dialog header="Kullanıcı Grubu Seç" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
+  <Dialog :header="$t('reports.system_log_report.select_user_group')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
         <tree-component 
             ref="usertree"
             loadNodeUrl="/lider/user/getUsers"
@@ -211,8 +220,8 @@ export default {
         operationTypes:[],
         filter: {
             filterTextType: [
-              {value: 'userId', text:'Kullanıcı Adı'},
-              {value: 'requestIp', text:'IP Adresi'}
+              {value: 'userId', text:this.$t('reports.system_log_report.username')},
+              {value: 'requestIp', text:this.$t('reports.system_log_report.ip_address')}
             ],
             logCreateDate: '',
             logCreateStartDate:'',
@@ -364,27 +373,31 @@ export default {
     getOpetarionType(type) {
       var typeText = type;
       if (type == "CREATE") {
-        typeText = "Oluşturma";
+        typeText = this.$t('reports.system_log_report.create');
       } else if (type == "READ") {
-        typeText = "Okuma";
+        typeText = this.$t('reports.system_log_report.read');
       } else if (type == "UPDATE") {
-        typeText = "Güncelleme";
+        typeText = this.$t('reports.system_log_report.update');
       } else if (type == "DELETE") {
-        typeText = "Silme";
+        typeText = this.$t('reports.system_log_report.delete');
       } else if (type == "LOGIN") {
-        typeText = "Oturum Açma";
+        typeText = this.$t('reports.system_log_report.login');
       } else if (type == "LOGOUT") {
-        typeText = "Oturum Kapatma";
+        typeText = this.$t('reports.system_log_report.logout');
       } else if (type == "EXECUTE_TASK") {
-        typeText = "Görev Çalıştırma";
+        typeText = this.$t('reports.system_log_report.execute_task');
       } else if (type == "EXECUTE_POLICY") {
-        typeText = "Politika Çalıştırma";
+        typeText = this.$t('reports.system_log_report.execute_policy');
       } else if (type == "CHANGE_PASSWORD") {
-        typeText = "Parola Değiştir";
+        typeText = this.$t('reports.system_log_report.change_password');
       } else if (type == "MOVE") {
-        typeText = "Taşı";
+        typeText =this.$t('reports.system_log_report.move');
       } else if (type == "UNASSIGMENT_POLICY") {
-        typeText = "Politika Kaldır";
+        typeText = this.$t('reports.system_log_report.cancel_policy');
+      }else if (type == "CANCEL_SCHEDULED_TASK") {
+        typeText = this.$t('reports.system_log_report.scheduled_task_cancel');
+      }else if (type == "UPDATE_SCHEDULED_TASK") {
+        typeText = this.$t('reports.system_log_report.scheduled_task_update');
       }
       return typeText;
     },

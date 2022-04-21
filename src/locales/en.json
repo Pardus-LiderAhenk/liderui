@@ -4,7 +4,14 @@
         "description": "Content"
     },
     "login": {
-        "title": "Liderahenk Login"
+        "title": "Liderahenk Login",
+        "username":"Username",
+        "password":"Password",
+        "username_warn":"Username is not available",
+        "password_warn":"Password is not available",
+        "sign_in":"Sign in",
+        "forgot_password":"Forgot Password",
+        "login_error":"Invalid username or password"
     },
     "menu": {
         "dashboard": "Dashboard",
@@ -918,7 +925,8 @@
             "free_disk_space":"Free Disk Space",
             "disk_partitions":"Disk Partitions",
             "processor_information":"Agent Information",
-            "number_of_physical_cores":"Number of Pyhsical Cores"
+            "number_of_physical_cores":"Number of Pyhsical Cores",
+            "close":"Close"
 
         },
         "task_report":{
@@ -951,14 +959,15 @@
             "message_from_ahenk":"Message From Ahenk",
             "task_detail":"Task Detail",
             "total_result":"Total Result",
-            "task_sent_ahenk_list":"Task Sent Ahenk List"
+            "task_sent_ahenk_list":"Task Sent Ahenk List",
+            "close":"Close"
             
         },
         "system_log_report":{
             "system_log_report":"System Log Report",
             "system_log":"System Log",
-            "logs_date":"Logs Date",
-            "logs_type":"Logs Type",
+            "logs_date":"Log Date",
+            "logs_type":"Log Type",
             "filter_area":"Filter Area",
             "username":"Username",
             "results":"Results",
@@ -972,7 +981,25 @@
             "loading":"Loading",
             "total_result":"Total Result",
             "selected_system_log_detail":"Selected System Log Detail",
-            "log_id":"Log ID"
+            "log_id":"Log ID",
+            "select_user_group":"Select User Group",
+            "close":"Close",
+            "select":"Select",
+            "scheduled_task_update":"Scheduled Task Update",
+            "scheduled_task_cancel":"Scheduled Task Cancel",
+            "cancel_policy":"Policy Cancel",
+            "move":"Move",
+            "change_password":"Password Change",
+            "execute_policy":"Execute Policy",
+            "execute_task":"Execute Task",
+            "logout":"Logout",
+            "login":"Login",
+            "delete":"Delete",
+            "update":"Update",
+            "read":"Read",
+            "create":"Create",
+            "log_details":"Log Details"
+
         },
         "scheduled_task_report":{
             "scheduled_task_report":"Scheduled Task Report",
@@ -1002,8 +1029,8 @@
             "task_id":"Task ID",
             "update_date":"Update Date",
             "scheduled_task_parameters":"Scheduled Task Parameters",
-            "scheduled_task_will_be_canceled_are_you_sure":"The scheduled task will be cancelled, are you sure?"
-
+            "scheduled_task_will_be_canceled_are_you_sure":"The scheduled task will be cancelled, are you sure?",
+            "close":"Close"
         }
     }
 }

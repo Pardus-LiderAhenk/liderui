@@ -4,7 +4,14 @@
         "description": "Açıklama"
     },
     "login": {
-        "title": "Liderahenk Giriş"
+        "title": "Liderahenk Giriş",
+        "username":"Kullanıcı Adı",
+        "password":"Parola",
+        "username_warn":"Kullanıcı adı boş bırakılamaz",
+        "password_warn":"Parola boş bırakılamaz",
+        "sign_in":"Oturum Aç",
+        "forgot_password":"Parolamı Unuttum",
+        "login_error":"Geçersiz kullanıcı adı veya parola"
     },
     "menu": {
         "dashboard": "Ön Panel",
@@ -921,7 +928,8 @@
             "free_disk_space":"Boş Disk Alanı(GB)",
             "disk_partitions":"Disk Bölümleri",
             "processor_information":"İşlemci Bilgisi",
-            "number_of_physical_cores":"Fiziksel Çekirdek Sayısı"
+            "number_of_physical_cores":"Fiziksel Çekirdek Sayısı",
+            "close":"Kapat"
 
         },
         "task_report":{
@@ -954,7 +962,8 @@
             "message_from_ahenk":"Ahenkten Gelen Mesaj",
             "task_detail":"Görev Detayı",
             "total_result":"Toplam Sonuç",
-            "task_sent_ahenk_list":"Görev Gönderilen Ahenk Listesi"
+            "task_sent_ahenk_list":"Görev Gönderilen Ahenk Listesi",
+            "close":"Kapat"
 
         },
         "system_log_report":{
@@ -975,7 +984,24 @@
             "loading":"Yükleniyor",
             "total_result":"Toplam Sonuç",
             "selected_system_log_detail":"Seçilen Sistem Güncesi Detayı",
-            "log_id":"Günce ID"
+            "log_id":"Günce ID",
+            "select_user_group":"Kullanıcı Grubu Seç",
+            "close":"Kapat",
+            "select":"Seç",
+            "scheduled_task_update":"Zamanlanmış Görev Güncelleme",
+            "scheduled_task_cancel":"Zamanlanmış Görev İptal Etme",
+            "cancel_policy":"Politika Kaldır",
+            "move":"Taşı",
+            "change_password":"Parola Değiştir",
+            "execute_policy":"Politika Çalıştırma",
+            "execute_task":"Görev Çalıştırma",
+            "logout":"Oturum Kapat",
+            "login":"Oturum Açma",
+            "delete":"Silme",
+            "update":"Güncelleme",
+            "read":"Okuma",
+            "create":"Oluşturma",
+            "log_details":"Log Detayları"
 
         },
         "scheduled_task_report":{
@@ -1006,7 +1032,8 @@
             "task_id":"Görev ID",
             "update_date":"Güncelleme Tarihi",
             "scheduled_task_parameters":"Zamanlanmış Görev Parametreleri",
-            "scheduled_task_will_be_canceled_are_you_sure":"Zamanlanmış görev iptal edilecektir, emin misiniz?"
+            "scheduled_task_will_be_canceled_are_you_sure":"Zamanlanmış görev iptal edilecektir, emin misiniz?",
+            "close":"Kapat"
 
 
         }
