@@ -28,7 +28,7 @@
         "detailed_agent_report": "Detailed Agent Report",
         "executed_task_report": "Executed Task Report",
         "system_log_report": "System Log Report",
-        "control_access_management": "Console Access Management",
+        "console_access_settings": "Console Access Settings",
         "eta_message_definitions": "Eta Message Definitions",
         "registration_templates": "Registration Templates",
         "script_definitions": "Script Definitions",
@@ -480,7 +480,17 @@
             "hostname_input_warn": "Hostname is not available",
             "rename_success": "The hostname will be changed when the client is restarted",
             "rename_same_hostname_error": "This hostname is already in use. Please enter a different hostname",
-            "rename_error": "An error occured while renaming client"
+            "rename_error": "An error occured while renaming client",
+            "add_folder":"Add Folder",
+            "add_folder_warn": "Please select a folder",
+            "folder_name_warn":"Folder name is not available",
+            "add":"Add",
+            "folder_name":"Folder Name",
+            "add_folder_success":"Created folder successfully",
+            "delete_folder":"Delete Folder",
+            "delete_folder_warn":"The folder will be deleted, are you sure?",
+            "no_delete_folder_warn": "The selected folder has subfolders or clients. The folder must be empty to delete",
+            "delete_folder_success": "Deleted folder successfully"
         },
         "scheduled": {
             "title": "Scheduled Task Parameters",

@@ -28,7 +28,7 @@
         "detailed_agent_report": "Detaylı İstemci Raporu",
         "executed_task_report": "Çalıştırılan Görevler Raporu",
         "system_log_report": "Sistem Güncesi Raporu",
-        "control_access_management": "Control Access Management",
+        "console_access_settings": "Arayüz Erişim Ayarları",
         "eta_message_definitions": "Eta Mesaj Tanımları",
         "registration_templates": "Kayıt Şablonları",
         "script_definitions": "Betik Tanımları",
@@ -482,7 +482,17 @@
             "hostname_input_warn":"Bilgisayar adı boş bırakılamaz",
             "rename_success":"Bilgisayar adı istemci yeniden başlatıldığında değiştirilecektir",
             "rename_same_hostname_error": "Bu bilgisayar adı zaten kullanılıyor. Lütfen farklı bir bilgisayar adı giriniz",
-            "rename_error": "İstemci yeniden adlandırılırken hata oluştu"
+            "rename_error": "İstemci yeniden adlandırılırken hata oluştu",
+            "add_folder": "Klasör Ekle",
+            "add_folder_warn": "Lütfen bir klasör seçiniz",
+            "folder_name_warn": "Klasör adı boş bırakılamaz",
+            "add": "Ekle",
+            "folder_name":"Klasör Adı",
+            "add_folder_success":"Klasör başarıyla oluşturuldu",
+            "delete_folder":"Klasör Sil",
+            "delete_folder_warn":"Klasör silinecektir, emin misiniz?",
+            "no_delete_folder_warn": "Seçilen klasörün alt klasörü veya istemcileri bulunmaktadır. Silme işlemi için klasör boş olmalıdır.",
+            "delete_folder_success": "Klasör başarıyla silindi"
         },
         "scheduled": {
             "title": "Zamanlanmış Görev Parametreleri",

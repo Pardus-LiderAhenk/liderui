@@ -1,5 +1,54 @@
 <template>
   <div>
+    <!-- Delete Selected Folder Dialog -->
+    <Dialog :style="{width: '30vw'}"
+      :header="$t('computer.agent_info.delete_folder')" 
+      v-model:visible="deleteFolderDialog"  
+      :modal="true" 
+      @hide="deleteFolderDialog = false">
+      <div class="confirmation-content">
+          <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+          <span>{{ $t('computer.agent_info.delete_folder_warn')}}</span>
+      </div>
+      <template #footer>
+      <Button 
+          :label="$t('computer.agent_info.cancel')" 
+          icon="pi pi-times" 
+          @click="deleteFolderDialog = false" 
+          class="p-button-text p-button-sm"
+      />
+      <Button 
+          :label="$t('computer.agent_info.yes')"
+          icon="pi pi-check" 
+          @click="deleteFolder"
+          class="p-button-sm"
+      />
+      </template>
+    </Dialog>
+    <!-- Delete Selected Folder Dialog End -->
+    <!-- Add Folder Dialog -->
+    <Dialog :header="$t('computer.agent_info.add_folder')" v-model:visible="addFolderDialog" 
+        :style="{width: '30vw'}" :modal="true">
+        <div class="p-fluid">
+            <div class="p-field">
+                <label for="folderName">{{$t('computer.agent_info.folder_name')}}</label>
+                <InputText :class="validationFolderName ? 'p-invalid': ''" type="text" v-model="folderName"/>
+                <small v-if="validationFolderName" class="p-error">
+                    {{ $t('computer.agent_info.folder_name_warn')}}
+                </small>
+            </div>
+        </div>
+        <template #footer>
+            <Button :label="$t('computer.agent_info.cancel')" icon="pi pi-times" 
+                @click="addFolderDialog = false" class="p-button-text p-button-sm"
+            />
+            <Button :label="$t('computer.agent_info.add')" icon="pi pi-plus"
+                @click="addFolder" class="p-button-sm"
+            />
+        </template>
+    </Dialog>
+    <!-- Add Folder Dialog End-->
+    <!-- Update Agent Dialog -->
     <Dialog :style="{width: '20vw'}"
         :header="$t('computer.agent_info.update_client')" 
         v-model:visible="updateAgentConfirm"  
@@ -26,6 +75,7 @@
         />
       </template>
     </Dialog>
+    <!-- Delete Agent Dialog -->
     <Dialog :style="{width: '20vw'}"
       :header="$t('computer.agent_info.delete_client')" 
       v-model:visible="deleteAgentConfirm"  
@@ -56,6 +106,7 @@
         />
       </template>
     </Dialog>
+    <!-- Rename Agent Dialog -->
     <Dialog :style="{width: '20vw'}"
         :header="$t('computer.agent_info.rename')" 
         v-model:visible="renameAgentDialog"  
@@ -91,6 +142,7 @@
         />
       </template>
     </Dialog>
+    <!-- Move Agent Dialog -->
     <Dialog :header="$t('computer.agent_info.move_agent')" 
       v-model:visible="moveAgentDialog" 
       :style="{width: '40vw'}" :modal="true"
@@ -125,6 +177,7 @@
         </Button>
       </template>
     </Dialog>
+    <!-- Node Detail Dialog -->
     <Dialog
       :header="$t('computer.agent_info.node_detail')" 
       :modal="true"
@@ -312,7 +365,7 @@
           </Button>
       </template>
     </Dialog>
-    <div >
+    <div>
       <base-plugin
         :pluginTask="task"
         @task-response="responseAgentInfo">
@@ -326,7 +379,7 @@
         <template #pluginTitleButton>
           <div>
             <SplitButton class="p-button-sm" :title="$t('computer.agent_info.node_detail')" 
-              @click="showNodeDetail" :model="items"
+              @click="showNodeDetail" :model="selectedLiderNode && selectedLiderNode.type == 'AHENK'? items: folderItems"
               icon="pi pi-list">
             </SplitButton>
           </div>
@@ -404,6 +457,12 @@
 </template>
 
 <script>
+/**
+ * Agent info task. update, delete, move agent.
+ * @see {@link http://www.liderahenk.org/}
+ * 
+ */
+
 import axios from "axios";
 import { mapGetters } from "vuex";
 import {FilterMatchMode} from 'primevue/api';
@@ -436,7 +495,31 @@ export default {
       validationRenameAgent: false,
       newHostname: "",
       updateAgentConfirm: false,
+      addFolderDialog: false,
+      deleteFolderDialog: false,
+      folderName: '',
+      validationFolderName: false,
       linuxIcon: require("@/assets/images/icons/linux.png"),
+      folderItems: [
+        {
+          label: this.$t('computer.agent_info.add_folder'),
+          icon: 'pi pi-folder-open',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "ORGANIZATIONAL_UNIT") {
+              this.addFolderDialog = true;
+            }
+          }
+        },
+        {
+          label: this.$t('computer.agent_info.delete_folder'),
+          icon: 'pi pi-trash',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "ORGANIZATIONAL_UNIT") {
+              this.deleteFolderDialog = true;
+            }
+          }
+        },
+      ],
       items: [
         {
           label: this.$t('computer.agent_info.update'),
@@ -444,13 +527,6 @@ export default {
           command: () => {
             if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
               this.updateAgentConfirm = true;
-            } else {
-              this.$toast.add({
-                severity:'warn', 
-                detail: this.$t("computer.agent_info.select_client_warn"), 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-              });
             }
           }
         },
@@ -471,13 +547,6 @@ export default {
               this.renameAgentDialog = true;
               this.newHostname = "";
               this.validationRenameAgent = false;
-            } else {
-              this.$toast.add({
-                severity:'warn', 
-                detail: this.$t("computer.agent_info.select_client_warn"), 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-              });
             }
           }
         },
@@ -487,14 +556,7 @@ export default {
           command: () => {
             if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
               this.moveAgentDialog = true;
-            } else {
-              this.$toast.add({
-                severity:'warn', 
-                detail: this.$t("computer.agent_info.select_client_warn"), 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-              });
-            }
+            } 
           }
         },
         {
@@ -503,13 +565,6 @@ export default {
           command: () => {
             if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
               this.deleteAgentConfirm = true;
-            } else {
-              this.$toast.add({
-                severity:'warn', 
-                detail: this.$t("computer.agent_info.select_client_warn"), 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-              });
             }
           }
         },
@@ -561,6 +616,7 @@ export default {
   },
 
   methods: {
+    // ...mapActions(["setSelectedAgentInfo"]),
 
     getAgentInfo() {
       this.agentCn = this.selectedLiderNode.cn;
@@ -569,6 +625,7 @@ export default {
       axios.post("/select_agent_info/detail", params).then((response) => {
         if (response.data != "" && response.data != null) {
         this.selectedAgentInfo = response.data;
+        // this.setSelectedAgentInfo(response.data);
         } else {
           this.selectedAgentInfo = null;
           this.$toast.add({
@@ -886,7 +943,58 @@ export default {
           });
         }
       }
-    }
+    },
+
+    addFolder() {
+      if (!this.folderName.trim()) {
+        this.validationFolderName = true;
+        return;
+      }
+      let params = new FormData();
+      params.append("parentName", this.selectedLiderNode.distinguishedName);
+      params.append("ou", this.folderName);
+      axios.post('/lider/user/addOu', params).then(response => {
+        this.$emit('addFolder', response.data, this.selectedLiderNode.distinguishedName);
+        this.$toast.add({
+            severity:'success', 
+            detail: this.$t('computer.agent_info.add_folder_success'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+        });
+      });
+      this.folderName = '';
+      this.addFolderDialog = false;
+    },
+
+    deleteFolder() {
+      let ldapEntry = [];
+      ldapEntry.push({
+        "distinguishedName": this.selectedLiderNode.distinguishedName,
+        "entryUUID": this.selectedLiderNode.entryUUID,
+        "type": this.selectedLiderNode.type,
+        "uid": this.selectedLiderNode.uid
+      });
+
+      axios.post("/lider/computer/deleteComputerOu", ldapEntry).then(response => {
+        if (response.data) {
+          this.$emit('deleteSelectedAgent', this.selectedLiderNode);
+          this.$toast.add({
+              severity:'success', 
+              detail: this.$t('computer.agent_info.delete_folder_success'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+          });
+      } else {
+          this.$toast.add({
+              severity:'warn', 
+              detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+          });
+        }
+        this.deleteFolderDialog = false;
+      });
+    },
   },
 };
 </script>

@@ -4,9 +4,10 @@
       <div class="p-col-12 p-md-6 p-lg-5">
         <agent-info class="plugin-card"
           :pluginTask="pluginTaskAgentInfo"
-          @moveSelectedAgent="moveSelectedAgent"
-          @deleteSelectedAgent="deleteSelectedAgent"
-          @renameSelectedAgent="renameSelectedAgent">
+          @move-selected-agent="moveSelectedAgent"
+          @delete-selected-agent="deleteSelectedAgent"
+          @rename-selected-agent="renameSelectedAgent"
+          @add-folder="addFolder">
         </agent-info>
         <session-and-power-management v-if="sessionAndPowerState" 
         class="plugin-card" 
@@ -157,6 +158,10 @@ export default {
 
     renameSelectedAgent(selectedNode) {
       this.$emit('renameSelectedAgent', selectedNode);
+    },
+
+    addFolder(folder, destinationDn) {
+      this.$emit('addFolder', folder, destinationDn);
     }
   }
 };
