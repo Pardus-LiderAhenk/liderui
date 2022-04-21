@@ -75,6 +75,7 @@ export default {
                 this.$emit('updatedUser', response.data);
                 this.changePasswordDialog = false;
                 this.userPassword = null;
+                this.$refs.password.setPasswordForm('', '');
                 this.$toast.add({
                     severity:'success', 
                     detail: this.$t('user_management.change_user_password_success'), 

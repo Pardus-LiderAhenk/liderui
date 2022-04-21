@@ -93,7 +93,7 @@
         </div>
         <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
             <div v-if="domainType == 'ACTIVE_DIRECTORY'">
-                <node-table-content v-if="selectedNode && selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
+                <node-table-content v-if="selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
                     :selectedNode="selectedNode">
                 </node-table-content>
                 <user-management v-if="selectedNode && selectedNode.type == 'USER'" 
@@ -104,7 +104,7 @@
                 </group-management>
             </div>
             <div v-else>
-                <node-table-content v-if="selectedNode"
+                <node-table-content
                     :selectedNode="selectedNode">
                 </node-table-content>
             </div>

@@ -120,4 +120,9 @@ export default {
 .user-management {
     background-color: #e7f2f8;
 }
+
+.p-button {
+  font-weight: bold;
+}
+
 </style>

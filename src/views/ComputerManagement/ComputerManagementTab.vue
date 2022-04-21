@@ -81,4 +81,8 @@ export default {
 .computer-management {
     background-color: #e7f2f8;
 }
+
+.p-button {
+    font-weight: bold;
+}
 </style>
