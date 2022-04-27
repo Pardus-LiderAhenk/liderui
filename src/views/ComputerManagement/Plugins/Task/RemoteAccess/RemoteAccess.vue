@@ -38,6 +38,13 @@
 
      <template #pluginFooter> </template>
     </base-plugin>
+   
+    <Dialog v-model:visible="openRemoteAccessModal" @hide="remoteAccessDisconnect = true">
+        <RemoteAccessComp :disconnected="remoteAccessDisconnect"
+        />
+    </Dialog>
+    
+
   </div>
 </template>
 
@@ -48,7 +55,13 @@
  * @see {@link http://www.liderahenk.org/}
  * 
  */
+import RemoteAccessComp from '@/components/RemoteAccessComp/RemoteAccess.vue';
+import axios from 'axios';
+
 export default {
+  components: {
+    RemoteAccessComp
+  },
   props: {
     pluginTask: {
       type: Object,
@@ -66,7 +79,9 @@ export default {
       options: [
         {label: 'Kullanıcı izni ve bildirim aktif et', value: 'yes'},
         {label: 'Kullanıcı izni ve bildirim yok', value: 'without_notify'}
-      ]
+      ],
+      openRemoteAccessModal: false,
+      remoteAccessDisconnect:false
     };
   },
 
@@ -91,8 +106,22 @@ export default {
 
     startRemoteAccess(arrg) {
       console.log(arrg);
-      alert("start vnc connect");
-    }
+      let data = new FormData();
+      data.append("protocol", "vnc");
+      data.append("host", arrg.host);
+      data.append("port", arrg.port);
+      data.append("password", arrg.password);
+      data.append("username", "");
+
+      axios.post('/sendremote', data).then(response => {
+        this.openRemoteAccessModal = true;
+      })
+    },
+
+    // openRemoteScreen() {
+    //   let routeData = this.$router.resolve({name: 'routeName', query: {data: "someData"}});
+    //   window.open(routeData.href, '_blank');
+    // }
   }
 
 };
