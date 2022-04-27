@@ -5,7 +5,7 @@
   <div class="card overview-box" :class="colorClass">
     <div class="overview-info">
       <h6>{{title}}</h6>
-      <h1 >{{description}}</h1>
+      <h1 class="desClass">{{description}}</h1>
     </div>
     <i :class="icon" ></i>
   </div>
@@ -13,25 +13,35 @@
 
 <script>
 export default {
-    props: 
-        {
-            colorClass: {
-                type: String,
-                default: 'dark'
-            }, 
-            title: {
-                type: String
-            },
-            description: {
-                type: String
-            },
-            icon: {
-                type:String,
-                default: "pi pi-th-large"
-            }
-        },
-        
-    
+  props: {
+    colorClass: {
+        type: String,
+        default: 'dark'
+    }, 
+    title: {
+        type: String
+    },
+    description: {
+        type: String
+    },
+    icon: {
+        type:String,
+        default: "pi pi-th-large"
+    },
+    descriptionFont: {
+      type:String,
+      default: "normal"
+    }
+  },
+
+  computed: {
+    dashboardStyle() {
+      return {
+        'p-inputtext-sm': this.isSmallInput,
+        'p-invalid': this.validationErrors.password
+      }
+    },
+  },
 };
 </script>
 
@@ -86,4 +96,10 @@ export default {
   background: #4f8f91;
   color: #ffffff;
 }
+.desClass {
+  font-weight: v-bind(descriptionFont);
+}
+/* .card {
+      border-radius: 24px;
+} */
 </style>
