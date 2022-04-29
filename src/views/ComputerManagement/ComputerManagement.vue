@@ -65,9 +65,10 @@
         <div class="p-col">
             <keep-alive>
                 <component 
-                    @moveSelectedAgent="moveSelectedAgent"
-                    @deleteSelectedAgent="deleteSelectedAgent"
-                    @renameSelectedAgent="renameSelectedAgent"
+                    @move-selected-agent="moveSelectedAgent"
+                    @delete-selected-agent="deleteSelectedAgent"
+                    @rename-selected-agent="renameSelectedAgent"
+                    @add-folder="addFolder"
                     :is="selectedPluginTab">
                 </component>
             </keep-alive>
@@ -163,9 +164,11 @@ export default {
         renameSelectedAgent(selectedNode) {
             this.$refs.tree.updateNode(selectedNode.distinguishedName, this.selectedNode);
         },
-        groupTabClicked(e) {
-            console.log('Group Tab clicked', e);
+
+        addFolder(folder, destinationDn){
+            this.$refs.tree.append(folder, this.$refs.tree.getNode(destinationDn));
         }
+   
     },
 
 }

@@ -27,7 +27,15 @@ import UserProfile from '@/views/Profile/Profile.vue';
 //POLICY
 import PolicyManagement from '@/views/PolicyManagement/PolicyManagement.vue';
 
-const routes = [{
+import RemoteAccess from '../components/RemoteAccessComp/RemoteAccess.vue';
+
+const routes = [
+    {
+        path:'/remoteAccess',
+        name:'Remote Access',
+        component:RemoteAccess,
+    },
+    {
         path: "/",
         redirect: "/dashboard",
         component: FullLayout,
