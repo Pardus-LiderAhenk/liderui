@@ -2,7 +2,7 @@
     <div class="dashboard p-fluid">
         <div class="p-grid p-field">
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Total Client Number" 
+                <Dashboardbox title="Toplam İstemci Sayısı" 
                     :description="totalClientNumber" 
                     colorClass="darkgray"
                     :icon="'pi pi-desktop'"
@@ -10,14 +10,14 @@
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Total User Number" 
+                <Dashboardbox title="Toplam Kullanıcı Sayısı" 
                     :description="totalUserNumber"
                     :icon="'pi pi-users'" colorClass="blue"
                     :descriptionFont="'bold'"
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Total Sended Task Number" 
+                <Dashboardbox title="Toplam Gönderilen Görev Sayısı" 
                     :description="totalSentTaskNumber" 
                     :icon="'pi pi-send'" 
                     colorClass="orange"
@@ -25,7 +25,7 @@
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Total Assigned Policy Number"
+                <Dashboardbox title="Toplam Atanan Politika Sayısı"
                     :description="totalAssignedPolicyNumber" 
                     colorClass="green"
                     :descriptionFont="'bold'"
@@ -82,11 +82,18 @@
                         <span style="margin: 0 0 2px; font-size:1.2rem">Son 2 Yıla Ait İstemci Grafiği</span>
                     </template>
                     <template #content>
-                        <Chart type="line" :data="agentLineData"  :width="350" :height="100"/>
+                        <Chart type="line" :data="agentLineData"  :width="340" :height="100"/>
                     </template>
                 </Card>
             </div>
         </div>
+        <div class="p-field p-grid">
+            <div class="p-field p-col-12 p-md-6 p-lg-4">
+                <last-activity :lastActivityData="lastActivityData"></last-activity>
+            </div>
+        </div>
+        
+
     </div>
 </template>
 
@@ -98,6 +105,7 @@
 
 import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 import axios from "axios";
+import LastActivity from "./LastActivity.vue"
 
 export default {
     data() {
@@ -109,7 +117,7 @@ export default {
             totalOnlineComputerNumber: 0,
             totalRegisteredComputerTodayNumber: 0,
             totalSessionsTodayNumber: 0,
-            taskData: null,
+            lastActivityData: null,
             agentData: null,
             options: {
                 responsive: true,
@@ -131,16 +139,15 @@ export default {
                 },
             maintainAspectRatio: false
             },
-
             agentLineData: null,
         }
     },
     
     components: {
-        Dashboardbox
+        Dashboardbox,
+        LastActivity
     },
     mounted() {
-        // this.getPlugins();
         this.renderCharts();
     },
 
@@ -154,7 +161,7 @@ export default {
         getDashboardData() {
             return new Promise((resolve, reject)=> {
                 let params = new FormData();
-                params.append("innerPage", "dashboard");
+                params.append("userDn", "dashboard");
                 axios.post("/dashboard/info", params).then((response) => {
                     if (response.data) {
                         this.totalClientNumber = response.data.totalComputerNumber;
@@ -164,23 +171,11 @@ export default {
                         this.totalOnlineComputerNumber = response.data.totalOnlineComputerNumber;
                         this.totalRegisteredComputerTodayNumber = response.data.totalRegisteredComputerTodayNumber;
                         this.totalSessionsTodayNumber = response.data.totalSessionsTodayNumber;
+                        this.lastActivityData = response.data.liderConsoleLastActivity;
                         resolve(response.data);
                     }
                 });
             });
-        },
-
-        renderTaskChart() {
-            this.taskData = {
-                labels: this.labels,
-                datasets: [
-                {
-                    data: [50, 50, 50, 50, 50],
-                    backgroundColor: ["#42A5F5","#66BB6A","#FFA726"],
-                    hoverBackgroundColor: ["#64B5F6","#81C784","#FFB74D"]
-                }
-                ]
-            }
         },
 
         renderAgentStatusChart() {
@@ -192,8 +187,8 @@ export default {
                 datasets: [
                     {
                         data: [onlineRate, offlineRate],
-                        backgroundColor: ["#689F38","#D32F2F"],
-                        hoverBackgroundColor: ["#689F38","#D32F2F"],
+                        backgroundColor: ["#66BB6A","#D32F2F"],
+                        hoverBackgroundColor: ["#66BB6A","#D32F2F"],
                     }
                 ]
             }
@@ -212,15 +207,6 @@ export default {
                     },
                 ]
             }
-        },
-
-        getPlugins(){
-            axios.post("/dashboard/getPluginList", {}).then((response) => {
-                response.data.forEach(element => {
-                    this.labels.push(element.description)
-                });
-                return response.data;
-            });
         },
 
         getNowDate() {
