@@ -2,18 +2,18 @@
     <div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-col-8">
-                <h3>Parola Durumunuz</h3>
+                <h3>{{$t('profile.account_security.password_status')}}</h3>
             </div>
             <div class="p-field p-col-8">
-                <label for="updateDate">Son Değişiklik Tarihi</label>
+                <label for="updateDate">{{$t('profile.account_security.last_modified_date')}}</label>
                 <InputText id="pwdChangeTime" type="text" v-model="pwdChangeTime"/>
                 <small id="pwdChangeTime-help" class="p-error"></small>
             </div>
             <div class="p-col-12">
-                <h3>Parola Değiştir</h3>
+                <h3>{{$t('profile.account_security.change_password')}}</h3>
             </div>
             <div class="p-field p-col-8">
-                <label for="city">Eski Parola</label>
+                <label for="city">{{$t('profile.account_security.old_password')}}</label>
                 <Password  toggleMask v-model="oldPassword"/>
             </div>
             <div class="p-field p-col-8">
@@ -21,7 +21,8 @@
             </div>
         </div>
         <div class="p-d-flex p-jc-end p-col-8">
-            <Button type="button" label="Parola Değiştir"
+            <Button type="button" 
+                :label="$t('profile.account_security.change_password')"
                 icon="pi pi-unlock"
                 class="p-button-sm"
                 @click="updatePassword"
@@ -68,7 +69,7 @@ export default {
             if (this.oldPassword == "" || this.oldPassword == null) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Lütfen eski parolayı giriniz.", 
+                    detail: this.$t('profile.account_security.please_write_your_old_password'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -77,7 +78,7 @@ export default {
             if (this.oldPassword != this.user.userPassword) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Eski parola yanlış girilmiştir.", 
+                    detail: this.$t('profile.account_security.your_old_password_is_wrong'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -87,7 +88,7 @@ export default {
             if (!this.newPassword) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Lütfen yeni parola giriniz", 
+                    detail: this.$t('profile.account_security.please_write_your_new_password'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -106,7 +107,7 @@ export default {
 
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Parola başarı ile güncellenmiştir.", 
+                    detail: this.$t('profile.account_security.password_successfully_update'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

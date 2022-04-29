@@ -1,10 +1,10 @@
 <template>
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-col-12">
-            <h3>Kullanıcı Grup Bilgileri</h3>
+            <h3>{{$t('profile.group_information.group_information')}}</h3>
         </div>
         <div class="p-col-12 p-md-12">
-            <Panel header="Kullanıcı Grup Bilgileri">
+            <Panel :header="$t('profile.group_information.user_group_information')">
                 <template v-if="user !== null">
                     <p  v-for="(item,index) in user.attributesMultiValues.memberOf" :key="'memberof' + index">
                         {{item}}
@@ -15,7 +15,7 @@
        </div>
 
        <div class="p-col-12 p-md-12">
-            <Panel header="Kullanıcı Yetki Grup Bilgileri(Sudo)">
+            <Panel :header="$t('profile.group_information.user_authorization_group_information_sudo')">
                 <p v-for="(item,index) in userSudoGroups" :key="'sudogroups' + index">
                     {{item.distinguishedName}}
                 </p>

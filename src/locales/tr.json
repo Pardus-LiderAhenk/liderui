@@ -929,7 +929,8 @@
             "disk_partitions":"Disk Bölümleri",
             "processor_information":"İşlemci Bilgisi",
             "number_of_physical_cores":"Fiziksel Çekirdek Sayısı",
-            "close":"Kapat"
+            "close":"Kapat",
+            "select":"Seç"
 
         },
         "task_report":{
@@ -964,7 +965,6 @@
             "total_result":"Toplam Sonuç",
             "task_sent_ahenk_list":"Görev Gönderilen Ahenk Listesi",
             "close":"Kapat"
-
         },
         "system_log_report":{
             "system_log_report":"Sistem Güncesi Raporu",
@@ -1002,7 +1002,6 @@
             "read":"Okuma",
             "create":"Oluşturma",
             "log_details":"Log Detayları"
-
         },
         "scheduled_task_report":{
             "scheduled_task_report":"Zamanlanmış Görev Raporu",
@@ -1034,8 +1033,50 @@
             "scheduled_task_parameters":"Zamanlanmış Görev Parametreleri",
             "scheduled_task_will_be_canceled_are_you_sure":"Zamanlanmış görev iptal edilecektir, emin misiniz?",
             "close":"Kapat"
-
-
+        }
+    },
+    "profile":{
+        "user_information":{
+            "user_information":"Kullanıcı Bilgileri",
+            "user_id":"Kullanıcı ID",
+            "user_name":"Kullanıcı İsmi",
+            "user_surname":"Kullanıcı Soyadı",
+            "user_DN":"Kullanıcı DN",
+            "e_mail":"E-Mail",
+            "phone_number":"Telefon Numarası",
+            "user_home_directory":"Kullanıcı Ev Dizini",
+            "create_date":"Oluşturulma Tarihi",
+            "address":"Adres",
+            "update_informations":"Bilgileri Güncelle",
+            "information_has_been_successfully_updated":"Information has been successfully updated."
+        },
+        "account_security":{
+            "account_security":"Hesap Güvenliği",
+            "password_status":"Parola Durumunuz",
+            "last_modified_date":"Son Değişiklik Tarihi",
+            "change_password":"Parola Değiştir",
+            "old_password":"Eski Parola",
+            "new_password":"Yeni Parola",
+            "confirm_password":"Parola Doğrula",
+            "please_write_your_old_password":"Lütfen eski parolayı giriniz.",
+            "your_old_password_is_wrong":"Eski parola yanlış girilmiştir.",
+            "please_write_your_new_password":"Lütfen yeni parola giriniz",
+            "password_successfully_update":"Parola başarı ile güncellenmiştir."
+        },
+        "login_logout_history":{
+            "login_logout_history":"Kullanım Geçmişi",
+            "username":"Kullanıcı Adı",
+            "date":"Tarih",
+            "ip_address":"IP Adresi",
+            "status":"Durum",
+            "all":"Hepsi",
+            "login":"Oturum Açıldı",
+            "logout":"Oturum Kapatıldı"
+        },
+        "group_information":{
+            "group_information":"Grup Bilgileri",
+            "user_group_information":"Kullanıcı Grup Bilgileri",
+            "user_authorization_group_information_sudo":"Kullanıcı Yetki Grup Bilgileri(Sudo)"
         }
     }
 }

@@ -456,7 +456,7 @@ export default {
       .catch((error) => {
         this.$toast.add({
           severity:'error', 
-          detail: "Zamanlanmış görev güncellenirken hata oluştu \n"+error, 
+          detail: "Zamanlanmış görev güncellenirken hata oluştu \n"+error,
           summary:this.$t("computer.task.toast_summary"), 
           life: 3000
         });

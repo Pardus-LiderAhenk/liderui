@@ -37,25 +37,25 @@ export default {
             user:null,
             profileItems: [
                 {
-                    label: 'Kullanıcı Bilgileri',
+                    label: this.$t('profile.user_information.user_information'),
                     command: () => {
                         this.displayFormName = 1
                     }
                 },
                 {
-                    label: 'Hesap Güvenliği',
+                    label: this.$t('profile.account_security.account_security'),
                     command: () => {
                         this.displayFormName = 2
                     }
                 },
                 {
-                    label: 'Kullanım Geçmişi',
+                    label: this.$t('profile.login_logout_history.login_logout_history'),
                     command: () => {
                         this.displayFormName = 3
                     }
                 },
                 {
-                    label: 'Grup Bilgileri',
+                    label: this.$t('profile.group_information.group_information'),
                     command: () => {
                         this.displayFormName = 4
                     }

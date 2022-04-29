@@ -1,13 +1,13 @@
 <template>
     <div>
-         <h3>Lider Arayüz Kullanım Geçmişi</h3>
+         <h3>{{$t('profile.login_logout_history.login_logout_history')}}</h3>
         <DataTable :value="records" responsiveLayout="scroll" class="p-datatable-sm"
             >
             <template #header>
                 <div class="p-d-flex p-ac-end p-grid" style="justify-content:flex-end;">
                     <div class="p-flex p-ac-end p-col-12" style="justify-conten:flex-end; text-align:right;">
                         <span class="p-input-icon-left">
-                            <span>Durumu: </span>
+                            <span>{{$t('profile.login_logout_history.status')}}: </span>
                             <Dropdown v-model="operationType" :options="statusOptions" optionLabel="name" optionValue="value" />
                         </span>
                     </div>
@@ -18,14 +18,19 @@
                     <p>{{slotProps.index + 1}}</p>
                 </template>
             </Column>
-            <Column field="userId" header="Kullanıcı Adı"></Column>
-            <Column field="createDate" header="Tarih"></Column>
-            <Column field="requestIp" header="IP Adresi"></Column>
-            <Column header="Durum">
-                 <template #body="{ data }">
-                    {{ 
-                        data.crudType === 'LOGIN' ? 'Oturum Açıldı' : 'Oturum Kapatıldı'
-                    }}
+            <Column field="userId" :header="$t('profile.login_logout_history.username')"></Column>
+            <Column field="createDate" :header="$t('profile.login_logout_history.date')"></Column>
+            <Column field="requestIp" :header="$t('profile.login_logout_history.ip_address')"></Column>
+            <Column :header="$t('profile.login_logout_history.status')">
+                <template #body="slotProps">
+                    <Badge v-if="slotProps.data.crudType == 'LOGIN'" 
+                        :value="$t('profile.login_logout_history.login')" 
+                        severity="success">
+                    </Badge>
+                    <Badge v-if="slotProps.data.crudType == 'LOGOUT'"
+                        :value="$t('profile.login_logout_history.logout')" 
+                        severity="danger">
+                    </Badge>
                 </template>
             </Column>
         </DataTable>
@@ -53,15 +58,15 @@ export default {
             currentPage: 1,
             statusOptions: [
                 {
-                    name: 'Hepsi',
+                    name: this.$t('profile.login_logout_history.all'),
                     value: 'all'
                 },
                 {
-                    name: 'Oturum Açıldı',
+                    name: this.$t('profile.login_logout_history.login'),
                     value: 'login'
                 },
                 {
-                    name: 'Oturum Kapatıldı',
+                    name: this.$t('profile.login_logout_history.logout'),
                     value: 'logout'
                 }
             ],

@@ -48,7 +48,6 @@
           :options="statuses"
           optionLabel="name"
           optionValue="value"
-          showClear="true"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -57,7 +56,8 @@
           id="selectBrand"
           v-model="filter.brand"
           :options="brands"
-          :placeholder="$t('reports.detailed_agent_report.all')"
+          :placeholder="$t('reports.detailed_agent_report.select')"
+          showClear="true"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -66,7 +66,8 @@
           id="selectModel"
           v-model="filter.model"
           :options="brands"
-          :placeholder="$t('reports.detailed_agent_report.all')"
+          :placeholder="$t('reports.detailed_agent_report.select')"
+          showClear="true"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -75,7 +76,8 @@
           id="selectProcessor"
           v-model="filter.processor"
           :options="processors"
-          :placeholder="$t('reports.detailed_agent_report.all')"
+          :placeholder="$t('reports.detailed_agent_report.select')"
+          showClear="true"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -84,7 +86,8 @@
           id="selectOSVersion"
           v-model="filter.osVersion"
           :options="osVersions"
-          :placeholder="$t('reports.detailed_agent_report.all')"
+          :placeholder="$t('reports.detailed_agent_report.select')"
+          showClear="true"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">

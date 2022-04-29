@@ -926,7 +926,8 @@
             "disk_partitions":"Disk Partitions",
             "processor_information":"Agent Information",
             "number_of_physical_cores":"Number of Pyhsical Cores",
-            "close":"Close"
+            "close":"Close",
+            "select":"Select"
 
         },
         "task_report":{
@@ -1032,5 +1033,50 @@
             "scheduled_task_will_be_canceled_are_you_sure":"The scheduled task will be cancelled, are you sure?",
             "close":"Close"
         }
+    },
+    "profile":{
+        "user_information":{
+            "user_information":"User Information",
+            "user_id":"User ID",
+            "user_name":"User Name",
+            "user_surname":"User Surname",
+            "user_DN":"User DN",
+            "e_mail":"E-Mail",
+            "phone_number":"Phone Number",
+            "user_home_directory":"User Home Directory",
+            "create_date":"Create Date",
+            "address":"Address",
+            "update_informations":"Update Informations",
+            "information_has_been_successfully_updated":"Information has been successfully updated."
+        },
+        "account_security":{
+            "account_security":"Account Security",
+            "password_status":"Password Status",
+            "last_modified_date":"Last Modified Date",
+            "change_password":"Change Password",
+            "old_password":"Old Password",
+            "new_password":"New password",
+            "confirm_password":"Confirm password",
+            "please_write_your_old_password":"Please enter the old password",
+            "your_old_password_is_wrong":"The old password was incorrect",
+            "please_write_your_new_password":"Please enter new password",
+            "password_successfully_update":"Password has been successfully updated."
+        },
+        "login_logout_history":{
+            "login_logout_history":"Login Logout History",
+            "username":"Username",
+            "date":"Date",
+            "ip_address":"IP Address",
+            "status":"Status",
+            "all":"All",
+            "login":"Login",
+            "logout":"Logout"
+        },
+        "group_information":{
+            "group_information":"Group Information",
+            "user_group_information":"User Group Information",
+            "user_authorization_group_information_sudo":"User Authorization Group Information (sudo)"
+        }
+
     }
 }
