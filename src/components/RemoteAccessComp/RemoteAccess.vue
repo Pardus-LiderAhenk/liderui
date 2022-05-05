@@ -118,7 +118,12 @@
         }, 100)
       },
       connect() {
-        let tunnel = new Guacamole.HTTPTunnel(httpUrl, true)
+
+        let params =  {
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token')
+        }
+
+        let tunnel = new Guacamole.HTTPTunnel(httpUrl, true, params)
 
         if (this.client) {
           this.display.scale(0)

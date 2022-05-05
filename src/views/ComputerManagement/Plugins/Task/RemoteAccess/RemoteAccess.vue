@@ -104,18 +104,21 @@ export default {
       }
     },
 
-    startRemoteAccess(arrg) {
-      console.log(arrg);
-      let data = new FormData();
-      data.append("protocol", "vnc");
-      data.append("host", arrg.host);
-      data.append("port", arrg.port);
-      data.append("password", arrg.password);
-      data.append("username", "");
+    startRemoteAccess(args) {
+     
+     if (args) {
+        let data = new FormData();
+        data.append("protocol", "vnc");
+        data.append("host", args.host);
+        data.append("port", args.port);
+        data.append("password", args.password);
+        data.append("username", "");
 
-      axios.post('/sendremote', data).then(response => {
-        this.openRemoteAccessModal = true;
-      })
+        axios.post('/sendremote', data).then(response => {
+          this.openRemoteAccessModal = true;
+        })
+     }
+     
     },
 
     // openRemoteScreen() {
