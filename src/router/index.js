@@ -6,7 +6,7 @@ import ComputerManagementTab from '@/views/ComputerManagement/ComputerManagement
 import FullLayout from '@/layouts/FullLayout.vue';
 
 //REPORTS
-import AgentReport from '@/views/Reports/AgentReport.vue';
+import AgentReport from '@/views/Reports/AgentReport/AgentReport.vue';
 import TaskReport from '@/views/Reports/TaskReport.vue';
 import LogReport from '@/views/Reports/SystemLogReport.vue';
 import ScheduledTaskReport from '@/views/Reports/ScheduledTaskReport.vue';

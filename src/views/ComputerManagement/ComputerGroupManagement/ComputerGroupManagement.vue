@@ -264,6 +264,15 @@
                 </DataTable>
             </TabPanel>
         </TabView>
+        <div v-if="loadingGroup" class="p-text-center">
+            <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+            <a class="primary" v-if="modals.addClient">
+                İstemciler ekleniyor, lütfen bekleyiniz...
+            </a>
+            <a class="primary" v-else>
+                Grup oluşturuluyor, lütfen bekleyiniz...
+            </a>
+        </div>
         <template #footer>
             <Button :label="$t('user_management.cancel')" icon="pi pi-times" 
                 @click="modals.addGroup = false" class="p-button-text p-button-sm"
@@ -316,6 +325,7 @@ export default {
             moveFolderNode: null,
             showContextMenu: false,
             loading: false,
+            loadingGroup: false,
             modals : {
                 folderAdd: false,
                 renameGroup: false,
@@ -618,12 +628,14 @@ export default {
                 return;
             }
             this.loading = true;
+            this.loadingGroup = true;
             axios.post('/lider/computer_groups/createNewAgentGroup',{
                 groupName: this.agentGroupModal.groupName,
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 selectedOUDN: this.selectedNode.distinguishedName
             }).then(response => {
                 this.loading = false;
+                this.loadingGroup = false;
                 if (response.data === "") {
                     this.$toast.add({
                         severity:'error', 
@@ -667,11 +679,13 @@ export default {
         },
 
         addClientToGroup() {
+            this.loadingGroup = true;
             axios.post('/lider/computer_groups/group/existing',{
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 groupDN: this.selectedNode.distinguishedName
             }).then(response => {
                 this.loading = false;
+                this.loadingGroup = false;
                 if (response.data) {
                     this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
                     this.setSelectedComputerGroupNode(response.data);
