@@ -33,7 +33,7 @@
               </Dropdown>
           </div>
         </div>
-        guac
+        
       </template>
 
      <template #pluginFooter> </template>
@@ -74,7 +74,7 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.remote_access.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/betik/betik_tanimi/",
+      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/uzak_masaustu/",
       permission: "yes",
       options: [
         {label: 'Kullanıcı izni ve bildirim aktif et', value: 'yes'},

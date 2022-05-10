@@ -1,100 +1,100 @@
 <template>
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-col-12">
-            <h3>LDAP Sunucusu Bilgileri</h3>
+            <h3>{{$t('settings.server_settings.directory_server_settings.ldap_server_informations')}}</h3>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="ldapServer">LDAP Sunucu Adresi</label>
+            <label for="ldapServer">{{$t('settings.server_settings.directory_server_settings.ldap_server_address')}}</label>
             <InputText id="ldapServer" type="text" v-model="ldapServer"/>
         </div>
         <div class="p-field p-col-12 p-md-2">
-            <label for="ldapPort">Port</label>
+            <label for="ldapPort">{{$t('settings.server_settings.directory_server_settings.port')}}</label>
             <InputText id="ldapPort" type="text" v-model="ldapPort"/>
         </div>
         <div class="p-field p-col-12 p-md-6">
-            <label for="ldapRootDn">Domain Adı</label>
+            <label for="ldapRootDn">{{$t('settings.server_settings.directory_server_settings.domain_name')}}</label>
             <InputText id="ldapRootDn" type="text" v-model="ldapRootDn" disabled/>
         </div>
         <div class="p-field p-col-12 p-md-6">
-            <label for="ldapUsername">LDAP Kullanıcı DN</label>
+            <label for="ldapUsername">{{$t('settings.server_settings.directory_server_settings.ldap_user_dn')}}</label>
             <InputText id="ldapUsername" type="text" v-model="ldapUsername"/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="ldapPassword">LDAP Kullanıcı Şifresi</label>
+            <label for="ldapPassword">{{$t('settings.server_settings.directory_server_settings.ldap_user_password')}}</label>
             <InputText id="ldapPassword" type="password" v-model="ldapPassword" disabled/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="agentLdapBaseDn">Ahenk Klasörü</label>
+            <label for="agentLdapBaseDn">{{$t('settings.server_settings.directory_server_settings.ahenk_folder')}}</label>
             <InputText id="agentLdapBaseDn" type="text" v-model="agentLdapBaseDn" disabled/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="userLdapBaseDn">Kullanıcı Klasörü</label>
+            <label for="userLdapBaseDn">{{$t('settings.server_settings.directory_server_settings.user_folder')}}</label>
             <InputText id="userLdapBaseDn" type="text" v-model="userLdapBaseDn" disabled/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="groupLdapBaseDn">Grup Klasörü</label>
+            <label for="groupLdapBaseDn">{{$t('settings.server_settings.directory_server_settings.group_folder')}}</label>
             <InputText id="groupLdapBaseDn" type="text" v-model="groupLdapBaseDn" disabled/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="ahenkGroupLdapBaseDn">İstemci Grubu Klasörü</label>
+            <label for="ahenkGroupLdapBaseDn">{{$t('settings.server_settings.directory_server_settings.agent_group_folder')}}</label>
             <InputText id="ahenkGroupLdapBaseDn" type="text" v-model="ahenkGroupLdapBaseDn" disabled/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="userGroupLdapBaseDn">Kullanıcı Grubu Klasörü</label>
+            <label for="userGroupLdapBaseDn">{{$t('settings.server_settings.directory_server_settings.user_group_folder')}}</label>
             <InputText id="userGroupLdapBaseDn" type="text" v-model="userGroupLdapBaseDn" disabled/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="userLdapRolesDn">Yetki Grubu Klasörü(Sudo)</label>
+            <label for="userLdapRolesDn">{{$t('settings.server_settings.directory_server_settings.authority_group_folder')}}</label>
             <InputText id="userLdapRolesDn" type="text" v-model="userLdapRolesDn" disabled/>
         </div>
         <div class="p-field-checkbox p-col-12 p-md-6">
             <Checkbox id="cbShowADSettings" name="cbShowADSettings" v-model="cbShowADSettings" :binary="true"/>
-            <label for="city1">Aktif Dizin ayarları (Hibrit yapılı kurulumlar için bu ayarlar yapılmalıdır)</label>
+            <label for="city1">{{$t('settings.server_settings.directory_server_settings.active_directory_settings')}}</label>
         </div>
         <template v-if="cbShowADSettings">
             <div class="p-field p-col-12 p-md-4">
                 
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label for="adIpAddress">AD Sunucu Adresi</label>
+                <label for="adIpAddress">{{$t('settings.server_settings.directory_server_settings.active_directory_address')}}</label>
                 <InputText id="adIpAddress" type="text" v-model="adIpAddress"/>
             </div>
             <div class="p-field p-col-12 p-md-2">
-                <label for="adPort">AD Port</label>
+                <label for="adPort">{{$t('settings.server_settings.directory_server_settings.active_directory_port')}}</label>
                 <InputText id="adPort" type="text" v-model="adPort"/>
             </div>
             <div class="p-field p-col-12 p-md-6">
-                <label for="adDomainName">AD Domain Adı</label>
+                <label for="adDomainName">{{$t('settings.server_settings.directory_server_settings.active_directory_domain_name')}}</label>
                 <InputText id="adDomainName" type="text" v-model="adDomainName"/>
             </div>
             <div class="p-field p-col-12 p-md-6">
-                <label for="adAdminUserName">AD Yönetici Kullanıcı Adı</label>
+                <label for="adAdminUserName">{{$t('settings.server_settings.directory_server_settings.active_directory_admin_username')}}</label>
                 <InputText id="adAdminUserName" type="text" v-model="adAdminUserName"/>
             </div>
             <div class="p-field p-col-12 p-md-6">
-                <label for="adAdminUserFullDN">AD Yönetici Kullanıcı Tam DN</label>
+                <label for="adAdminUserFullDN">{{$t('settings.server_settings.directory_server_settings.active_directory_admin_dn')}}</label>
                 <InputText id="adAdminUserFullDN" type="text" v-model="adAdminUserFullDN"/>
             </div>
             <div class="p-field p-col-12 p-md-6">
-                <label for="adAdminPassword">AD Yönetici Şifresi</label>
+                <label for="adAdminPassword">{{$t('settings.server_settings.directory_server_settings.active_directory_admin_password')}}</label>
                 <InputText id="adAdminPassword" type="password" v-model="adAdminPassword"/>
             </div>
             <div class="p-field p-col-12 p-md-6">
-                <label for="adHostName">AD Host Adresi</label>
+                <label for="adHostName">{{$t('settings.server_settings.directory_server_settings.active_directory_hostname')}}</label>
                 <InputText id="adHostName" type="text" v-model="adHostName"/>
             </div>
 
             <div class="p-field p-col-12 p-md-6 p-grid">
                 <div class="p-field p-md-4">
-                    <label for="userLdapRolesDn">SSL Kullan</label>
+                    <label for="userLdapRolesDn">{{$t('settings.server_settings.directory_server_settings.ssl_certification')}}</label>
                     <Dropdown v-model="adUseSSL" :options="yesNoDropdown" optionLabel="label" optionValue="value"/>
                 </div>
                 <div class="p-field  p-md-4">
-                    <label for="userLdapRolesDn">TLS Kullan</label>
+                    <label for="userLdapRolesDn">{{$t('settings.server_settings.directory_server_settings.tls_certification')}}</label>
                     <Dropdown v-model="adUseTLS" :options="yesNoDropdown" optionLabel="label" optionValue="value"/>
                 </div>
                 <div class="p-field  p-md-4">
-                    <label for="userLdapRolesDn">Sertifika Kullan</label>
+                    <label for="userLdapRolesDn">{{$t('settings.server_settings.directory_server_settings.use_certification')}}</label>
                     <Dropdown v-model="adAllowSelfSignedCert" :options="yesNoDropdown" optionLabel="label" optionValue="value"/>
                 </div>
             </div>
@@ -102,7 +102,7 @@
 
         </template>
          <div class="p-field-checkbox p-col-12 p-md-6">
-             <Button type="button" label="Değişiklikleri Kaydet" @click="submitForm"/>
+             <Button type="button" :label="$t('settings.server_settings.directory_server_settings.save')" @click="submitForm"/>
          </div>
         
     </div>
@@ -117,8 +117,8 @@ export default {
     data() {
         return {
             yesNoDropdown:[
-                {label: 'Evet', value:true},
-                {label: 'Hayır', value:false}
+                {label: this.$t('settings.server_settings.directory_server_settings.yes'), value:true},
+                {label: this.$t('settings.server_settings.directory_server_settings.no'), value:false}
             ],
             ldapServer:'',
             ldapPort:'',
@@ -196,7 +196,7 @@ export default {
 
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Bilgiler başarı ile güncellenmiştir.", 
+                    detail: this.$t('settings.server_settings.directory_server_settings.information_has_been_successfully_updated'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

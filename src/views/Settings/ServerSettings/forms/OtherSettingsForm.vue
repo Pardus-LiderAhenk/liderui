@@ -2,46 +2,46 @@
     <div class="p-fluid p-formgrid p-grid">
        <div class="p-col-7">
            <div class="p-col-12">
-                <h3>Diğer Ayarlar</h3>
+                <h3>{{$t('settings.server_settings.other_settings.other_settings')}}</h3>
             </div>
             <div class="p-field-checkbox p-col-12 p-md-12">
                 <InputSwitch v-model="disableLocalUser" />
-                <label>Bilgisayarlar domaine alındığında yerel kullanıcıları pasif hale getir</label>
+                <label>{{$t('settings.server_settings.other_settings.locale_user_activation')}}</label>
             </div>
             <div class="p-col-12">
-                <h4>İstemcilerin hangi etki alanına alınacağını seçiniz</h4>
+                <h4>{{$t('settings.server_settings.other_settings.domain_type')}}</h4>
             </div>
             <div class="p-col-12">
                 <div class="p-field-radiobutton">
                     <RadioButton id="ldap" name="domainType" value="LDAP" v-model="domainType"/>
-                    <label for="ldap">LDAP</label>
+                    <label for="ldap">{{$t('settings.server_settings.other_settings.ldap')}}</label>
                 </div>
                 <div class="p-field-radiobutton">
                     <RadioButton id="city2" name="domainType" value="ACTIVE_DIRECTORY"  v-model="domainType"/>
-                    <label for="city2">Aktif Dizin veya Samba</label>
+                    <label for="city2">{{$t('settings.server_settings.other_settings.active_directory_or_samba')}}</label>
                 </div>
                 <div class="p-field-radiobutton">
                     <RadioButton id="city3" name="domainType" value="NONE"  v-model="domainType"/>
-                    <label for="city3">Hiçbiri (Bu seçenek seçildiğinde istemci etki alanına dahil edilmeyecektir. İstemciye yerel kullanıcı ile giriş yapılabilir)</label>
+                    <label for="city3">{{$t('settings.server_settings.other_settings.none')}}</label>
                 </div>
             </div>
             <div class="p-col-12">
-                <h4>Ahenk Depo Ayarları</h4>
+                <h4>{{$t('settings.server_settings.other_settings.ahenk_repo_setting')}}</h4>
             </div>
             <div class="p-field p-col-12">
-                <label for="ahenkRepoAddress">Depo Adresi</label>
+                <label for="ahenkRepoAddress">{{$t('settings.server_settings.other_settings.repo_address')}}</label>
                 <InputText id="ahenkRepoAddress" type="text" v-model="ahenkRepoAddress"
                     placeholder="deb [arch=amd64] http://repo.liderahenk.org/liderahenk stable main"
                 />
             </div>
             <div class="p-field p-col-12">
-                <label for="ahenkRepoKeyAddress">Depo Anahtar Adresi</label>
+                <label for="ahenkRepoKeyAddress">{{$t('settings.server_settings.other_settings.repo_key_address')}}</label>
                 <InputText id="ahenkRepoKeyAddress" type="text" v-model="ahenkRepoKeyAddress"
                     placeholder="http://repo.liderahenk.org/liderahenk-archive-keyring.asc"
                 />
             </div>
             <div class="p-field-checkbox p-col-12 p-md-6">
-             <Button type="button" label="Değişiklikleri Kaydet" @click="submitForm()"/>
+             <Button type="button" :label="$t('settings.server_settings.other_settings.save')" @click="submitForm()"/>
             </div>
        </div>
     </div>

@@ -1,30 +1,30 @@
 <template>
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-col-12">
-            <h3>Dosya Sunucusu Bilgileri</h3>
+            <h3>{{$t('settings.server_settings.file_server_settings.file_server_information')}}</h3>
         </div>
         <div class="p-field p-col-12 p-md-2">
-            <label for="fileServerProtocol">Transfer Tipi</label>
+            <label for="fileServerProtocol">{{$t('settings.server_settings.file_server_settings.transfer_type')}}</label>
             <Dropdown id="fileServerProtocol" :options="transferTypes" optionLabel="label" optionValue="value" v-model="fileServerProtocol"></Dropdown>
         </div>
         <div class="p-field p-col-12 p-md-6">
-            <label for="fileServerHost">Dosya Sunucusu Adresi</label>
+            <label for="fileServerHost">{{$t('settings.server_settings.file_server_settings.file_server_address')}}</label>
             <InputText id="fileServerHost" type="text" v-model="fileServerHost"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="fileServerPort">Port</label>
+            <label for="fileServerPort">{{$t('settings.server_settings.file_server_settings.port')}}</label>
             <InputText id="fileServerPort" type="text" v-model="fileServerPort"/>
         </div>
         <div class="p-field p-col-12 p-md-6">
-            <label for="fileServerUsername">Kullanıcı Adı</label>
+            <label for="fileServerUsername">{{$t('settings.server_settings.file_server_settings.username')}}</label>
             <InputText id="fileServerUsername" type="text" v-model="fileServerUsername"/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="fileServerPassword">Kullanıcı Şifresi</label>
+            <label for="fileServerPassword">{{$t('settings.server_settings.file_server_settings.password')}}</label>
             <InputText id="fileServerPassword" type="text" v-model="fileServerPassword"/>
         </div>
          <div class="p-field p-col-12 p-md-6">
-            <label for="fileServerAgentFilePath">Ajan Dosya Dizini</label>
+            <label for="fileServerAgentFilePath">{{$t('settings.server_settings.file_server_settings.agent_file_directory')}}</label>
             <InputText id="fileServerAgentFilePath" type="text" v-model="fileServerAgentFilePath"/>
         </div>
        <div class="p-col-12 p-md-6">
@@ -34,7 +34,7 @@
 
        </div>
          <div class="p-field-checkbox p-col-12 p-md-6">
-             <Button type="button" label="Değişiklikleri Kaydet" @click="submitForm()"/>
+             <Button type="button" :label="$t('settings.server_settings.file_server_settings.save')" @click="submitForm()"/>
          </div>
         
     </div>
@@ -87,7 +87,7 @@ export default {
 
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Bilgiler başarı ile güncellenmiştir.", 
+                    detail: this.$t('settings.server_settings.directory_server_settings.information_has_been_successfully_updated'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

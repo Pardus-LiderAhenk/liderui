@@ -1,37 +1,37 @@
 <template>
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-col-12">
-            <h3>Email Ayarları</h3>
+            <h3>{{$t('settings.server_settings.mail_server_settings.mail_server_settings')}}</h3>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailHost">Email Host Adresi</label>
+            <label for="emailHost">{{$t('settings.server_settings.mail_server_settings.mail_host_address')}}</label>
             <InputText id="emailHost" type="text" v-model="emailHost" placeholder="smtp.gmail.com"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailPort">Email Port</label>
+            <label for="emailPort">{{$t('settings.server_settings.mail_server_settings.port')}}</label>
             <InputText id="emailPort" type="text" v-model="emailPort" placeholder="587"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailUsername">Email Kullanıcı Adresi</label>
+            <label for="emailUsername">{{$t('settings.server_settings.mail_server_settings.mail_username')}}</label>
             <InputText id="emailUsername" type="text" v-model="emailUsername" placeholder="lider@liderahenk.org"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailPassword">Email Şifresi</label>
+            <label for="emailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
             <InputText id="emailPassword" type="password" v-model="emailPassword"/>
         </div>
          <div class="p-field p-col-12 p-md-4">
-            <label for="zip">SMTP Doğrulama</label>
+            <label for="zip">{{$t('settings.server_settings.mail_server_settings.smtp_verification')}}</label>
             <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="smtpAuth"></Dropdown>
         </div>
          <div class="p-field p-col-12 p-md-4">
-            <label for="zip">TLS Aktif</label>
+            <label for="zip">{{$t('settings.server_settings.mail_server_settings.tls_activation')}}</label>
             <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="tlsEnabled"></Dropdown>
         </div>
         <div class="p-col-12 p-md-8">
 
        </div>
          <div class="p-field-checkbox p-col-12 p-md-4">
-             <Button type="button" label="Değişiklikleri Kaydet" />
+             <Button type="button" :label="$t('settings.server_settings.mail_server_settings.save')" />
          </div>
         
     </div>
@@ -45,8 +45,8 @@ export default {
     data() {
         return {
             yesNoChoise: [
-                {label:'Evet', value:true},
-                {label:'Hayır', value:false},
+                {label:this.$t('settings.server_settings.mail_server_settings.yes'), value:true},
+                {label:this.$t('settings.server_settings.mail_server_settings.no'), value:false},
             ],
             smtpAuth:true,
             tlsEnabled:true,
