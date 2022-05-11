@@ -6,6 +6,7 @@
     @close-group-dialog="addGroupDialog=false;">
   </add-group-dialog>
   <add-to-exist-group-dialog v-if="addExistGroupDialog"
+    :filter="filter"
     :addExistGroupDialog="addExistGroupDialog" 
     @close-group-dialog="addExistGroupDialog=false;">
   </add-to-exist-group-dialog>
@@ -14,6 +15,28 @@
     :selectedAgent="selectedAgent"
     @close-agent-detail-dialog="agentDetailDialog=false;">
   </agent-detail-dialog>
+  <Dialog header="Klasör Seçiniz" 
+    v-model:visible="agentOuDialog" 
+    :style="{width: '30vw'}" :modal="true"
+  >
+    <tree-component 
+      ref="agentTree"
+      loadNodeUrl="/lider/computer/getComputers"
+      loadNodeOuUrl="/lider/computer/getOuDetails"
+      :treeNodeClick="node => filter.dn = node.distinguishedName"
+      :searchFields="[{key: this.$t('tree.folder'), value: 'ou'}]"
+      :isMove="true"
+    />
+    <template #footer>
+      <Button label="İptal" 
+        icon="pi pi-times" @click="agentOuDialog = false"
+        class="p-button-text p-button-sm"
+      />
+      <Button label="Seç" icon="pi pi-check" 
+          @click="selectAgentOuDn" class="p-button-sm"
+      />
+    </template>
+  </Dialog>
   <!-- Dialogs End -->
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
@@ -42,7 +65,12 @@
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="inputDN">{{$t('reports.detailed_agent_report.dn')}}</label>
-        <InputText id="inputDN" type="text" v-model="filter.dn" />
+         <div class="p-inputgroup ">
+            <InputText id="inputDN" type="text" v-model="filter.dn" />
+            <Button icon="pi pi-sitemap" class="p-button-warning" 
+                @click="agentOuDialog = true"
+            />
+        </div>
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="inputRegistrationDate">{{$t('reports.detailed_agent_report.registiration_date')}}</label>
@@ -309,8 +337,8 @@ export default {
       addGroupDialog: false,
       addExistGroupDialog: false,
       agentDetailDialog: false,
-      filterData: null
-
+      filterData: null,
+      agentOuDialog: false,
     };
   },
 
@@ -325,6 +353,19 @@ export default {
   },
 
   methods: {
+    selectAgentOuDn() {
+      if (!this.filter.dn.trim()) {
+        this.$toast.add({
+            severity:'warn', 
+            detail: "Lütfen klasör seçiniz", 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+        });
+        return;
+      }
+      this.agentOuDialog = false;
+    },
+
     showAgentDetailDialog(agentID) {
       this.selectedAgent = this.agents.filter(
         (agent) => agent.id === agentID

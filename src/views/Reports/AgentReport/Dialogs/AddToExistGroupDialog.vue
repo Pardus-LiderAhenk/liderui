@@ -1,15 +1,26 @@
 <template>
     <div>
-        <Dialog header="Mevcut Gruba Ekle" v-model:visible="showDialog" 
+        <Dialog header="Gruba İstemci Ekle" v-model:visible="showDialog" 
             :style="{width: '30vw'}" :modal="true">
             <div class="p-fluid">
                 <div class="p-field">
-                    <label for="groupName">Grup Adı</label>
-                    <InputText :class="validation.groupName ? 'p-invalid': ''" type="text" v-model="groupName"/>
-                    <small v-if="validation.groupName" class="p-error">
-                        Grup adı boş bırakılamaz
-                    </small>
+                    <tree-component 
+                        ref="grouptree"
+                        loadNodeUrl="/lider/computer_groups/getGroups"
+                        loadNodeOuUrl="/lider/computer_groups/getOuDetails"
+                        :treeNodeClick="selectTreeNodeClick"
+                        :searchFields="searchFolderFields"
+                    />
                 </div>
+                <div class="p-filed p-text-center">
+                    <small>Lütfen grup seçiniz</small>
+                </div>
+            </div>
+            <div v-if="loading" class="p-text-center">
+              <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+              <a class="primary">
+                İstemciler ekleniyor, lütfen bekleyiniz...
+              </a>
             </div>
             <template #footer>
                 <Button label="İptal" icon="pi pi-times" 
@@ -20,14 +31,12 @@
                 />
             </template>
         </Dialog>
-    <!-- Add Group Dialog End-->
     </div>
 </template>
 
-
 <script>
 /**
- * Create Group to AD tree
+ * Add client to existing group in LDAP
  * @see {@link http://www.liderahenk.org/}
  */
 
@@ -36,24 +45,31 @@ import axios from "axios";
 export default {
 
     props: {
-        selectedNode: {
+        filter: {
             type: Object,
-            description: "Selected tree node",
+            description: "Agent report filter",
         },
 
         addExistGroupDialog: {
             type: Boolean,
             default: false,
-            description: "Selected tree node",
         },
     },
 
     data(){
         return{
-            groupName:'',
-            validation: {
-                groupName: false,
-            },
+            selectedNode: null,
+            searchFolderFields: [
+                {
+                    key: this.$t('tree.name'),
+                    value: "cn"
+                },
+                {
+                    key: this.$t('tree.folder'),
+                    value: "ou"
+                }
+            ],
+            loading: false
         }
     },
 
@@ -65,44 +81,87 @@ export default {
 
             set (value) {
                 if (!value) {
-                    this.$emit('closeGroupDialog');
+                    this.$emit('closeGroupDialog')
                 }
             }
         }
     },
 
     methods: {
+        selectTreeNodeClick(node) {
+            this.selectedNode = node;
+        },
+
         addGroup() {
-            if (!this.groupName.trim()) {
-                this.validation.groupName = true;
+            if (!this.selectedNode || this.selectedNode.type != "GROUP") {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: "Lütfen grup seçiniz", 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
                 return;
             }
-            let params = new FormData();
-            params.append("parentName", this.selectedNode.distinguishedName);
-            params.append("cn", this.groupName);
-            axios.post('/ad/addGroup2AD', params).then(response => {
+            this.loading = true;
+            let data = new FormData();
+            data.append("groupDN", this.selectedNode.distinguishedName);
+            data.append("status", this.filter.status);
+            data.append("dn", this.filter.dn);
+            data.append("hostname", this.filter.hostname);
+            data.append("ipAddress", this.filter.ipAddress);
+            data.append("macAddress", this.filter.macAddress);
+            data.append("registrationStartDate", this.filter.registrationStartDate);
+            data.append("registrationEndDate", this.filter.registrationEndDate);
+            data.append("brand", this.filter.brand);
+            data.append("model", this.filter.model);
+            data.append("processor", this.filter.processor);
+            data.append("osVersion", this.filter.osVersion);
+            data.append("agentVersion", this.filter.agentVersion);
+            data.append("getFilterData", false);
+            
+            if (this.filter.registrationDate[0] != null) {
+                data.append(
+                "registrationStartDate",
+                moment(this.filter.registrationDate[0])
+                    .set("hour", 0)
+                    .set("minute", 0)
+                    .set("second", 0)
+                    .format("DD/MM/YYYY HH:mm:ss")
+                );
+            }
+            if (this.filter.registrationDate[1] != null) {
+                data.append(
+                "registrationEndDate",
+                moment(this.filter.registrationDate[1])
+                    .set("hour", 0)
+                    .set("minute", 0)
+                    .set("second", 0)
+                    .format("DD/MM/YYYY HH:mm:ss")
+                );
+            }
+
+            axios.post('/lider/computer_groups/agentReport/existing/group', data).then(response => {
                 if (response.data) {
-                    this.$emit('appendNode', response.data, this.selectedNode);
-                    this.$emit('closeAdDialog');
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('user_management.ad.added_group_success'), 
+                        detail: "İstemciler gruba başarıyla eklendi", 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.ad.added_group_error'), 
+                        detail: "İstemciler gruba eklenirken hata oluştu", 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
+                this.showDialog = false;
+                this.selectedNode = null;
+                this.loading = false;
             });
-            this.groupName = '';
         },
     }
-    
 }
 </script>
 

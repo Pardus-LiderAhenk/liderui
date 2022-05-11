@@ -38,6 +38,9 @@
                     <template #title>
                         <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.clients')}}</span>
                     </template>
+                    <template #subtitle>
+                        <span style="margin: 0 0 2px; font-size:1rem">Çevrimiçi/Çevrimdışı istemci oranı</span>
+                    </template>
                     <template #content>
                         <Chart 
                             type="pie" 
@@ -79,7 +82,14 @@
             <div class="p-col-12 p-md-6 p-lg-9">
                 <Card>
                     <template #title>
+<<<<<<< HEAD
                         <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.client_graph_for_the_last_2_years')}}</span>
+=======
+                        <span style="margin: 0 0 2px; font-size:1.2rem">İstemci Grafiği</span>
+                    </template>
+                    <template #subtitle>
+                        <span style="margin: 0 0 2px; font-size:1rem">Son 2 yılda kayıt olan istemci dağılımı</span>
+>>>>>>> 722ef9e0956cb8b4c162f783af4d55512e84db7f
                     </template>
                     <template #content>
                         <Chart type="line" :data="agentLineData"  :width="340" :height="100"/>
@@ -88,8 +98,11 @@
             </div>
         </div>
         <div class="p-field p-grid">
-            <div class="p-field p-col-12 p-md-6 p-lg-4">
+            <div class="p-field p-col-12 p-md-6 p-lg-5">
                 <last-activity :lastActivityData="lastActivityData"></last-activity>
+            </div>
+            <div class="p-field p-col-12 p-md-6 p-lg-7">
+                <task-activity :lastActivityData="lastActivityData"></task-activity>
             </div>
         </div>
         
@@ -106,6 +119,7 @@
 import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 import axios from "axios";
 import LastActivity from "./LastActivity.vue"
+import TaskActivity from "./TaskActivity.vue"
 
 export default {
     data() {
@@ -145,8 +159,10 @@ export default {
     
     components: {
         Dashboardbox,
-        LastActivity
+        LastActivity,
+        TaskActivity
     },
+    
     mounted() {
         this.renderCharts();
     },
