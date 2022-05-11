@@ -82,14 +82,11 @@
             <div class="p-col-12 p-md-6 p-lg-9">
                 <Card>
                     <template #title>
-<<<<<<< HEAD
                         <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.client_graph_for_the_last_2_years')}}</span>
-=======
                         <span style="margin: 0 0 2px; font-size:1.2rem">İstemci Grafiği</span>
                     </template>
                     <template #subtitle>
                         <span style="margin: 0 0 2px; font-size:1rem">Son 2 yılda kayıt olan istemci dağılımı</span>
->>>>>>> 722ef9e0956cb8b4c162f783af4d55512e84db7f
                     </template>
                     <template #content>
                         <Chart type="line" :data="agentLineData"  :width="340" :height="100"/>
@@ -102,7 +99,7 @@
                 <last-activity :lastActivityData="lastActivityData"></last-activity>
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-7">
-                <task-activity :lastActivityData="lastActivityData"></task-activity>
+                <task-activity></task-activity>
             </div>
         </div>
         

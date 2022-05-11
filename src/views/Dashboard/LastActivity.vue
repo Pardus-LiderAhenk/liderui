@@ -2,11 +2,8 @@
 <div>
     <Card>
         <template #title>
-<<<<<<< HEAD
             <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.last_activity')}}</span>
-=======
             <span style="margin: 0 0 2px; font-size:1.2rem">Faaliyetlerim</span>
->>>>>>> 722ef9e0956cb8b4c162f783af4d55512e84db7f
         </template>
         <template #subtitle>
             <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.lider_interface_usage_history')}}</span>
