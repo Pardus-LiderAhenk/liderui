@@ -2,7 +2,7 @@
 <div>
     <Card>
         <template #title>
-            <span style="margin: 0 0 2px; font-size:1.2rem">Faaliyet</span>
+            <span style="margin: 0 0 2px; font-size:1.2rem">Faaliyetlerim</span>
         </template>
         <template #subtitle>
             <span style="margin: 0 0 2px; font-size:1rem">Lider arayüz kullanım geçmişi</span>

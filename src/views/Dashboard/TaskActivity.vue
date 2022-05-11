@@ -1,7 +1,7 @@
 <template>
     <Card>
         <template #title>
-            <span style="margin: 0 0 2px; font-size:1.2rem">Görev İstatistiği</span>
+            <span style="margin: 0 0 2px; font-size:1.2rem">İş İstatistiğim</span>
         </template>
         <template #subtitle>
             <span style="margin: 0 0 2px; font-size:1rem">Gönderilen görevlerin eklentilere göre dağılımı</span>
