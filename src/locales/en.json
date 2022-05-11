@@ -3,6 +3,22 @@
         "title": "Title",
         "description": "Content"
     },
+    "dashboard_screen":{
+        "total_number_of_client":"Total Number of Clients",
+        "total_number_of_user":"Total Number of Users",
+        "total_number_of_sent_task":"Total Number of Sent Task",
+        "total_number_of_assigned_policies":"Total Number of Assigned Policies",
+        "clients":"Clients",
+        "statistics":"Statistics",
+        "client_registered_today":"Client registered today",
+        "user_logged_in_today":"User logged in today",
+        "client_graph_for_the_last_2_years":"Client Graph for the Last 2 Years",
+        "online":"Online",
+        "offline":"Offline",
+        "registered_clients":"Registered Clients",
+        "last_activity":"Last Activity",
+        "lider_interface_usage_history":"Lider interface usage history"
+    },
     "login": {
         "title": "Liderahenk Login",
         "username":"Username",
@@ -412,7 +428,9 @@
                 "header": "Remote Access",
                 "description": "Provides remote desktop access and ssh to clients",
                 "remote_destktop_access": "Remote Desktop Access",
-                "remote_access_options": "Remote desktop access options"
+                "remote_access_options": "Remote desktop access options",
+                "enable_user_permission_and_notification":"Enable user permission and notification",
+                "disable_user_permission_and_notification":"Disable user permission and notification"
             }
         },
         "agent_info": {
@@ -560,6 +578,11 @@
 
         },
         "server_settings":{
+            "directory_server_setting":"Directory Server Settings",
+            "xmpp_server_setting":"XMPP Server Settings",
+            "file_server_setting":"File Server Settings",
+            "mail_server_setting":"Mail Server Settings",
+            "other_setting":"Other Setting",
             "directory_server_settings":{
                 "directory_server_settings":"Directory Server Settings",
                 "ldap_server_informations":"LDAP Server Information",
@@ -945,7 +968,9 @@
         "apply_policy_confirm_message": "The policy will be applied, are you sure?",
         "assigned_policies": "Assigned Policies",
         "assigned_policy_empty_message": "Assigned policy not found",
-        "yes":"Yes"
+        "yes":"Yes",
+        "add_client_loading":"Adding clients, please wait...",
+        "add_group_loading":"Creating group, please wait..."
     },
     "policy_management": {
         "title":"Policy Management",

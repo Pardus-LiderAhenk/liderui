@@ -2,7 +2,7 @@
     <div class="dashboard p-fluid">
         <div class="p-grid p-field">
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Toplam İstemci Sayısı" 
+                <Dashboardbox :title="$t('dashboard_screen.total_number_of_client')" 
                     :description="totalClientNumber" 
                     colorClass="darkgray"
                     :icon="'pi pi-desktop'"
@@ -10,14 +10,14 @@
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Toplam Kullanıcı Sayısı" 
+                <Dashboardbox :title="$t('dashboard_screen.total_number_of_user')" 
                     :description="totalUserNumber"
                     :icon="'pi pi-users'" colorClass="blue"
                     :descriptionFont="'bold'"
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Toplam Gönderilen Görev Sayısı" 
+                <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
                     :description="totalSentTaskNumber" 
                     :icon="'pi pi-send'" 
                     colorClass="orange"
@@ -25,7 +25,7 @@
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Toplam Atanan Politika Sayısı"
+                <Dashboardbox :title="$t('dashboard_screen.total_number_of_assigned_policies')"
                     :description="totalAssignedPolicyNumber" 
                     colorClass="green"
                     :descriptionFont="'bold'"
@@ -36,7 +36,7 @@
             <div class="p-col-12 p-md-6 p-lg-3">
                 <Card class="p-field">
                     <template #title>
-                        <span style="margin: 0 0 2px; font-size:1.2rem">İstemciler</span>
+                        <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.clients')}}</span>
                     </template>
                     <template #content>
                         <Chart 
@@ -50,7 +50,7 @@
                 <Card class="p-field">
                 <template #title>
                     <div class="p-d-flex p-jc-between" style="margin: 0 0 2px; font-size:1.2rem;">
-                        <span >İstatistik</span>
+                        <span >{{$t('dashboard_screen.statistics')}}</span>
                         <span><i class="pi pi-calendar"></i> {{getNowDate()}}</span>
                     </div>
                 </template>
@@ -61,7 +61,7 @@
                                 {{totalRegisteredComputerTodayNumber}}
                             </h5>
                             <div>
-                                <h6 style="color: #29324180">Bugün kayıt olan istemci</h6>
+                                <h6 style="color: #29324180">{{$t('dashboard_screen.client_registered_today')}}</h6>
                             </div>
                         </div>
                         <div class="p-col-12 p-md-6 p-lg-6">
@@ -69,7 +69,7 @@
                                 {{totalSessionsTodayNumber}}
                             </h5>
                             <div>
-                                <h6 style="color: #29324180">Bugün oturum açan kullanıcı</h6>
+                                <h6 style="color: #29324180">{{$t('dashboard_screen.user_logged_in_today')}}</h6>
                             </div>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
             <div class="p-col-12 p-md-6 p-lg-9">
                 <Card>
                     <template #title>
-                        <span style="margin: 0 0 2px; font-size:1.2rem">Son 2 Yıla Ait İstemci Grafiği</span>
+                        <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.client_graph_for_the_last_2_years')}}</span>
                     </template>
                     <template #content>
                         <Chart type="line" :data="agentLineData"  :width="340" :height="100"/>
@@ -199,7 +199,7 @@ export default {
                 labels: dateRanges,
                 datasets: [
                     {   
-                        label: 'Kayıtlı İstemciler',
+                        label: this.$t('dashboard_screen.registered_clients'),
                         data: dateRangeValuesAgent,
                         fill: true,
                         borderColor: '#42A5F5',

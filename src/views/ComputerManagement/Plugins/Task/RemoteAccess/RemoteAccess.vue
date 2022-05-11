@@ -77,8 +77,8 @@ export default {
       pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/uzak_masaustu/",
       permission: "yes",
       options: [
-        {label: 'Kullanıcı izni ve bildirim aktif et', value: 'yes'},
-        {label: 'Kullanıcı izni ve bildirim yok', value: 'without_notify'}
+        {label: this.$t('computer.plugins.remote_access.enable_user_permission_and_notification'), value: 'yes'},
+        {label: this.$t('computer.plugins.remote_access.disable_user_permission_and_notification'), value: 'without_notify'}
       ],
       openRemoteAccessModal: false,
       remoteAccessDisconnect:false

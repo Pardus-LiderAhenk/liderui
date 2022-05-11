@@ -3,6 +3,23 @@
         "title": "Başlık",
         "description": "Açıklama"
     },
+    "dashboard_screen":{
+        "total_number_of_client":"Toplam İstemci Sayısı",
+        "total_number_of_user":"Toplam Kullanıcı Sayısı",
+        "total_number_of_sent_task":"Toplam Gönderilen Görev Sayısı",
+        "total_number_of_assigned_policies":"Toplam Atanan Politika Sayısı",
+        "clients":"İstemciler",
+        "statistics":"İstatistik",
+        "client_registered_today":"Bugün kayıt olan istemci",
+        "user_logged_in_today":"Bugün oturum açan kullanıcı",
+        "client_graph_for_the_last_2_years":"Son 2 Yıla Ait İstemci Grafiği",
+        "online":"Çevrimiçi",
+        "offline":"Çevrimdışı",
+        "registered_clients":"Kayıtlı İstemciler",
+        "last_activity":"Faaliyetler",
+        "lider_interface_usage_history":"Lider arayüz kullanım geçmişi"
+
+    },
     "login": {
         "title": "Liderahenk Giriş",
         "username":"Kullanıcı Adı",
@@ -414,7 +431,9 @@
                 "header": "Uzak Erişim",
                 "description": "İstemcilere uzak masaüstü ve ssh erişimi sağlar",
                 "remote_destktop_access": "Uzak Masaüstü Erişimi",
-                "remote_access_options": "Uzak masaüstü erişim seçenekleri"
+                "remote_access_options": "Uzak masaüstü erişim seçenekleri",
+                "enable_user_permission_and_notification":"Kullanıcı izni ve bildirim aktif et",
+                "disable_user_permission_and_notification":"Kullanıcı izni ve bildirim yok"
             }
         },
         "agent_info": {
@@ -562,6 +581,11 @@
 
         },
         "server_settings":{
+            "directory_server_setting":"Dizin Sunucusu Ayarları",
+            "xmpp_server_setting":"XMPP Sunucusu Ayarları",
+            "file_server_setting":"Dosya Sunucusu Ayarları",
+            "mail_server_setting":"Email Sunucu Ayarları",
+            "other_setting":"Diğer Ayarlar",
             "directory_server_settings":{
                 "directory_server_settings":"Dizin Sunucusu Ayarları",
                 "ldap_server_informations":"LDAP Sunucusu Bilgileri",
@@ -947,7 +971,9 @@
         "apply_policy_confirm_message": "Politika uygulanacaktır, emin misiniz?",
         "assigned_policies":"Atanmış Politikalar",
         "assigned_policy_empty_message": "Atanmış politika bulunamadı",
-        "yes":"Evet"
+        "yes":"Evet",
+        "add_client_loading":"İstemciler yükleniyor, lütfen bekleyiniz...",
+        "add_group_loading":"Grup oluşturuluyor, lütfen bekleyiniz..."
     },
     "policy_management": {
         "title":"Politika Yönetimi",

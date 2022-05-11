@@ -267,10 +267,10 @@
         <div v-if="loadingGroup" class="p-text-center">
             <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
             <a class="primary" v-if="modals.addClient">
-                İstemciler ekleniyor, lütfen bekleyiniz...
+                {{$t('group_management.add_client_loading')}}
             </a>
             <a class="primary" v-else>
-                Grup oluşturuluyor, lütfen bekleyiniz...
+                {{$t('group_management.add_group_loading')}}
             </a>
         </div>
         <template #footer>

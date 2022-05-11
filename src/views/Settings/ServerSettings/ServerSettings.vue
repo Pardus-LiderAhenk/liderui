@@ -1,18 +1,18 @@
 <template>
     <TabView ref="tabview1">
-        <TabPanel header="Dizin Sunucusu Ayarları">
+        <TabPanel :header="$t('settings.server_settings.directory_server_setting')">
             <ldap-settings-form :serverSettings="serverSettings"></ldap-settings-form>
         </TabPanel>
-        <TabPanel header="Mesajlaşma Sunucu (XMPP) Ayarları ">
+        <TabPanel :header="$t('settings.server_settings.xmpp_server_setting')">
             <xmpp-settings-form :serverSettings="serverSettings"></xmpp-settings-form>
         </TabPanel>
-        <TabPanel header="Dosya Sunucusu Ayarları">
+        <TabPanel :header="$t('settings.server_settings.file_server_setting')">
             <fileserver-settings-form :serverSettings="serverSettings"></fileserver-settings-form>
         </TabPanel>
-            <TabPanel header="Email Sunucusu Ayarları">
+            <TabPanel :header="$t('settings.server_settings.mail_server_setting')">
             <email-server-settings-form :serverSettings="serverSettings"></email-server-settings-form>
         </TabPanel>
-            <TabPanel header="Diğer Ayarları">
+            <TabPanel :header="$t('settings.server_settings.other_setting')">
             <other-settings-form :serverSettings="serverSettings"></other-settings-form>
         </TabPanel>
     </TabView>
