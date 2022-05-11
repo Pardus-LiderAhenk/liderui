@@ -8,16 +8,20 @@
         "total_number_of_user":"Toplam Kullanıcı Sayısı",
         "total_number_of_sent_task":"Toplam Gönderilen Görev Sayısı",
         "total_number_of_assigned_policies":"Toplam Atanan Politika Sayısı",
-        "clients":"İstemciler",
+        "clients":"İstemciler (%)",
         "statistics":"İstatistik",
         "client_registered_today":"Bugün kayıt olan istemci",
         "user_logged_in_today":"Bugün oturum açan kullanıcı",
         "client_graph_for_the_last_2_years":"Son 2 Yıla Ait İstemci Grafiği",
         "online":"Çevrimiçi",
         "offline":"Çevrimdışı",
+        "line_chart_title":"İstemci Kayıt Dağılımı",
         "registered_clients":"Kayıtlı İstemciler",
         "last_activity":"Faaliyetler",
-        "lider_interface_usage_history":"Lider arayüz kullanım geçmişi"
+        "lider_interface_usage_history":"Lider arayüz kullanım geçmişi",
+        "online_offline_rate":"Çevrimiçi/Çevrimdışı istemci oranı",
+        "work_statistic":"İş İstatistiğim",
+        "range_of_submitted_tasks_by_attachments":"Gönderilen görevlerin eklentilere göre dağılımı"
 
     },
     "login": {

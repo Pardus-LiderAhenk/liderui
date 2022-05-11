@@ -39,7 +39,7 @@
                         <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.clients')}}</span>
                     </template>
                     <template #subtitle>
-                        <span style="margin: 0 0 2px; font-size:1rem">Çevrimiçi/Çevrimdışı istemci oranı</span>
+                        <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.online_offline_rate')}}</span>
                     </template>
                     <template #content>
                         <Chart 
@@ -82,11 +82,10 @@
             <div class="p-col-12 p-md-6 p-lg-9">
                 <Card>
                     <template #title>
-                        <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.client_graph_for_the_last_2_years')}}</span>
-                        <span style="margin: 0 0 2px; font-size:1.2rem">İstemci Grafiği</span>
+                        <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.line_chart_title')}}</span>
                     </template>
                     <template #subtitle>
-                        <span style="margin: 0 0 2px; font-size:1rem">Son 2 yılda kayıt olan istemci dağılımı</span>
+                        <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.client_graph_for_the_last_2_years')}}</span>
                     </template>
                     <template #content>
                         <Chart type="line" :data="agentLineData"  :width="340" :height="100"/>
@@ -145,7 +144,7 @@ export default {
                     title: {
                         display: true,
                         align: "center",
-                        text: "İstemciler(%)"
+                        text: this.$t('dashboard_screen.clients')
                     },
                 },
             maintainAspectRatio: false
@@ -196,7 +195,7 @@ export default {
             let onlineRate = ((this.totalOnlineComputerNumber / this.totalClientNumber)*100).toFixed(2);
             let offlineRate = (100 - onlineRate).toFixed(2);
             this.agentData = {
-                labels: ["Çevrimiçi("+ this.totalOnlineComputerNumber +")", "Çevrimdışı("+ offlineComputerNumber +")"],
+                labels: [this.$t('dashboard_screen.online')+ "(" + this.totalOnlineComputerNumber +")", this.$t('dashboard_screen.offline') + "("+ offlineComputerNumber +")"],
                 datasets: [
                     {
                         data: [onlineRate, offlineRate],
@@ -224,7 +223,7 @@ export default {
 
         getNowDate() {
             let date = new Date();
-            let month = date.toLocaleString('tr', { month: 'long' });
+            let month = date.toLocaleString(this.$i18n.locale, { month: 'long' });
             return date.getDate() +' '+month;
         }
     }

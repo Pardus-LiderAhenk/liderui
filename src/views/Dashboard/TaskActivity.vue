@@ -1,10 +1,10 @@
 <template>
     <Card>
         <template #title>
-            <span style="margin: 0 0 2px; font-size:1.2rem">İş İstatistiğim</span>
+            <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.work_statistic')}}</span>
         </template>
         <template #subtitle>
-            <span style="margin: 0 0 2px; font-size:1rem">Gönderilen görevlerin eklentilere göre dağılımı</span>
+            <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.range_of_submitted_tasks_by_attachments')}}</span>
         </template>
         <template #content>
             <ul class="activity-list" v-for="task in tasks" :key="task.plugin_name">

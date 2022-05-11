@@ -3,7 +3,6 @@
     <Card>
         <template #title>
             <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.last_activity')}}</span>
-            <span style="margin: 0 0 2px; font-size:1.2rem">Faaliyetlerim</span>
         </template>
         <template #subtitle>
             <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.lider_interface_usage_history')}}</span>

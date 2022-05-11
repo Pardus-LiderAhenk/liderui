@@ -8,16 +8,20 @@
         "total_number_of_user":"Total Number of Users",
         "total_number_of_sent_task":"Total Number of Sent Task",
         "total_number_of_assigned_policies":"Total Number of Assigned Policies",
-        "clients":"Clients",
+        "clients":"Clients (%)",
         "statistics":"Statistics",
         "client_registered_today":"Client registered today",
         "user_logged_in_today":"User logged in today",
         "client_graph_for_the_last_2_years":"Client Graph for the Last 2 Years",
         "online":"Online",
         "offline":"Offline",
+        "line_chart_title":"Registered Clients Range",
         "registered_clients":"Registered Clients",
         "last_activity":"Last Activity",
-        "lider_interface_usage_history":"Lider interface usage history"
+        "lider_interface_usage_history":"Lider interface usage history",
+        "online_offline_rate":"Online / Offline Rate",
+        "work_statistic":"Work Statistic",
+        "range_of_submitted_tasks_by_attachments":"Range of submitted tasks by attachments"
     },
     "login": {
         "title": "Liderahenk Login",
