@@ -6,6 +6,7 @@
     @close-group-dialog="addGroupDialog=false;">
   </add-group-dialog>
   <add-to-exist-group-dialog v-if="addExistGroupDialog"
+    :filter="filter"
     :addExistGroupDialog="addExistGroupDialog" 
     @close-group-dialog="addExistGroupDialog=false;">
   </add-to-exist-group-dialog>

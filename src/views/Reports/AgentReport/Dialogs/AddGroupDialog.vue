@@ -1,8 +1,7 @@
 <template>
     <div>
         <Dialog header="Grup Ekle" v-model:visible="showDialog" 
-            :style="{width: '30vw'}" :modal="true"
-            >
+            :style="{width: '30vw'}" :modal="true">
             <div class="p-fluid">
                 <div class="p-field">
                     <label for="groupName">Grup Adı</label>
@@ -39,7 +38,6 @@
                     @click="addGroup" class="p-button-sm"
                 />
             </template>
-            
         </Dialog>
     </div>
 </template>
@@ -55,11 +53,6 @@ import axios from "axios";
 export default {
 
     props: {
-        selectedNode: {
-            type: Object,
-            description: "Selected ou node",
-        },
-
         filter: {
             type: Object,
             description: "Agent report filter",
@@ -104,7 +97,6 @@ export default {
 
     methods: {
         selectTreeNodeClick(node) {
-            //*** This method for tree that is created for folder move dialog.  */
             this.selectedOu = node;
         },
 

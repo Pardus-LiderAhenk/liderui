@@ -42,7 +42,7 @@ export default {
                 if (this.lastActivityData) {
                     data = this.lastActivityData.content;
                 }
-                return data
+                return data;
             },
         },
     },
