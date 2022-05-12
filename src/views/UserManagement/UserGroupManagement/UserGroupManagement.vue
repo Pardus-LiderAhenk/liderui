@@ -107,7 +107,7 @@
         </template>
     </Dialog>
     <!-- Move Selected Node Dialog End -->
-    <!-- Add Group Dialog or Add Client to Group Dialog -->
+    <!-- Add Group Dialog or Add User to Group Dialog -->
     <Dialog :header="modals.addUser? $t('group_management.add_user')
         :$t('group_management.add_group')"
          v-model:visible="modals.addGroup" :style="{width: '50vw'}" :modal="true">
@@ -139,7 +139,7 @@
             <TabPanel>
                 <template #header>
                     <span>{{$t('group_management.selected_users')}}
-                        <Badge :value="userGroupModal.checkedNodes.length"></Badge>
+                        <Badge v-if="userGroupModal.checkedNodes.length > 0" :value="userGroupModal.checkedNodes.length"></Badge>
                     </span>
                 </template>
                 <DataTable :value="userGroupModal.checkedNodes" v-model:filters="filters"
@@ -181,7 +181,7 @@
             <TabPanel v-if="modals.addUser">
                 <template #header>
                     <span>{{$t('group_management.existing_users')}}
-                        <Badge :value="userGroupModal.existingUsers.length"></Badge>
+                        <Badge v-if="userGroupModal.checkedNodes.length > 0" :value="userGroupModal.existingUsers.length"></Badge>
                     </span>
                 </template>
                 <DataTable :value="userGroupModal.existingUsers" v-model:filters="filters"
@@ -217,7 +217,7 @@
             />
         </template>
     </Dialog>
-    <!-- Add Group Dialog or Add Client to Group Dialog End -->
+    <!-- Add Group Dialog or Add User to Group Dialog End -->
     <!-- Delete Selected Node Dialog -->
     <Dialog :header="$t('computer.task.toast_summary')" 
         v-model:visible="modals.deleteNode"  
