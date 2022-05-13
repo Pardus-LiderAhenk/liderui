@@ -142,7 +142,7 @@ export default {
                         },
                     },
                     title: {
-                        display: true,
+                        display: false,
                         align: "center",
                         text: this.$t('dashboard_screen.clients')
                     },

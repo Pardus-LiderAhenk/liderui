@@ -1,10 +1,10 @@
 <template>
-    <Dialog header="Erişim Yetkisi Ekleme" v-model:visible="modalVisible" 
+    <Dialog :header="$t('settings.console_user_settings.adding_access_authorization')" v-model:visible="modalVisible" 
     :modal="true" position="top"
     >
         <div class="p-grid">
             <div class="p-col-12">
-                <p>"cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org" grubunun tüm üyeleri seçeceğiniz klasör ve bu klasörün altındaki tüm klasör ve kayıtlara erişim sağlayacaktır</p>
+                <p>{{$t('settings.console_user_settings.admin_group_info')}}</p>
             </div>
             <div class="p-col-12">
                 <tree-component 
@@ -18,18 +18,18 @@
             <div class="p-col-12">
                <div class="p-field-radiobutton">
                     <RadioButton  value="read" v-model="userPermissionChoise" />
-                    <label >Seçili klasör ve alt klasörlerini sadece okuma yetkisi ver</label>
+                    <label >{{$t('settings.console_user_settings.read_access')}}</label>
                 </div>
                 <div class="p-field-radiobutton">
                     <RadioButton  value="write" v-model="userPermissionChoise" />
-                    <label >Seçili klasör ve alt klasörlerini okuma ve yazma yetkisi ver</label>
+                    <label >{{$t('settings.console_user_settings.read_and_write_access')}}</label>
                 </div>
             </div>
         </div>
 
          <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
-            <Button label="Ekle" icon="pi pi-check" @click="addAccessRule" autofocus />
+            <Button :label="$t('settings.console_user_settings.close')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
+            <Button :label="$t('settings.console_user_settings.add')" icon="pi pi-check" @click="addAccessRule" autofocus />
         </template>
        
     </Dialog>

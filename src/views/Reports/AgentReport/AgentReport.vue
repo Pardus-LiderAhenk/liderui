@@ -167,8 +167,8 @@
     <template #title>
       <div class="p-d-flex p-jc-between">
         <div>{{$t('reports.detailed_agent_report.results')}}</div>
-        <div>
-          <SplitButton class="p-mr-2" 
+        <div  v-if="agents.length > 0">
+          <SplitButton class="p-mr-2"
             label="İstemci Grubu Oluştur" icon="fa fa-users"
             @click="addGroupDialog=true;" :model="items">
           </SplitButton>

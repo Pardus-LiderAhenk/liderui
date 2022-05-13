@@ -1,32 +1,32 @@
 <template>
-    <Dialog header="Konsol Kullanıcısı Ekle" v-model:visible="modalVisible" style="width:85vw;" position="top">
+    <Dialog :header="$t('settings.console_user_settings.add_console_user')" v-model:visible="modalVisible" style="width:85vw;" position="top">
         <TabView>
-            <TabPanel header="Yeni Arayüz Kullanıcısı Oluştur">
+            <TabPanel :header="$t('settings.console_user_settings.create_new_lider_user')">
                 <div class="p-grid">
                     <div class="p-col-6">
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-12">
-                                <label for="uid">Kimlik (ID) *</label>
+                                <label for="uid">{{$t('settings.console_user_settings.identity')}}*</label>
                                 <InputText id="uid" type="text" v-model="userForm.uid"/>
                             </div>
                             <div class="p-field p-col-12">
-                                <label for="cn">Kullanıcı Adı *</label>
+                                <label for="cn">{{$t('settings.console_user_settings.username')}}*</label>
                                 <InputText id="cn" type="text" v-model="userForm.cn"/>
                             </div>
                             <div class="p-field p-col-12">
-                                <label for="sn">Kullanıcı Soyadı *</label>
+                                <label for="sn">{{$t('settings.console_user_settings.user_surname')}}*</label>
                                 <InputText id="sn" type="text" v-model="userForm.sn"/>
                             </div>
                             <div class="p-field p-col-12">
-                                <label for="mail">Mail Adresi *</label>
+                                <label for="mail">{{$t('settings.console_user_settings.mail_address')}}*</label>
                                 <InputText id="mail" type="text" v-model="userForm.mail"/>
                             </div>
                             <div class="p-field p-col-12">
-                                <label for="telephoneNumber">Telefon *</label>
+                                <label for="telephoneNumber">{{$t('settings.console_user_settings.phone')}}*</label>
                                 <InputText id="telephoneNumber" type="text" v-model="userForm.telephoneNumber"/>
                             </div>
                             <div class="p-field p-col-12">
-                                <label for="homePostalAddress">Adres</label>
+                                <label for="homePostalAddress">{{$t('settings.console_user_settings.address')}}</label>
                                 <InputText id="homePostalAddress" type="text" v-model="userForm.homePostalAddress"/>
                             </div>
                         </div>
@@ -39,10 +39,10 @@
                     </div>
                 </div>
             </TabPanel>
-            <TabPanel header="Mevcut Kullanıcılara Erişim Yetkisi Ver">
+            <TabPanel :header="$t('settings.console_user_settings.grant_access_to_existing_users')">
                 <Toolbar>
                     <template #end>
-                        <Button label="Kullanıcıya Arayüz Kullanıcısı Yetkisi Ver" icon="pi pi-check" @click="addAsConsoleUser" autofocus :disabled="(selectedUserNode != null && selectedUserNode.attributesMultiValues !=null && selectedUserNode.attributesMultiValues.liderPrivilege != null && selectedUserNode.attributesMultiValues.liderPrivilege.includes('ROLE_USER')) ? true : false"/>
+                        <Button :label="$t('settings.console_user_settings.grant_user_lider_user_authorization')" icon="pi pi-check" @click="addAsConsoleUser" autofocus :disabled="(selectedUserNode != null && selectedUserNode.attributesMultiValues !=null && selectedUserNode.attributesMultiValues.liderPrivilege != null && selectedUserNode.attributesMultiValues.liderPrivilege.includes('ROLE_USER')) ? true : false"/>
                     </template>
                 </Toolbar>
                 <tree-component 
@@ -54,7 +54,7 @@
                 />
                 
             </TabPanel>
-            <TabPanel header="Dizin Erişim Yetkisi Ver">
+            <TabPanel :header="$t('settings.console_user_settings.grant_directory_access')">
                  <div class="p-grid" v-if="selectedUserNode != null">
                     <div class="p-col-3">
                         <tree-component 
@@ -67,7 +67,7 @@
                     </div>
                     <div class="p-col-3">
                         <div class="p-col-12">
-                            <p>Grup Üyeleri</p>
+                            <p>{{$t('settings.console_user_settings.group_members')}}</p>
                         </div>
                         <DataTable :value="groupMembers" responsiveLayout="scroll" 
                             >
@@ -76,12 +76,12 @@
                                     <p>{{slotProps.index + 1}}</p>
                                 </template>
                             </Column>
-                            <Column field="uid" header="Üye DN"></Column>
+                            <Column field="uid" :header="$t('settings.console_user_settings.member_dn')"></Column>
                         </DataTable>
                     </div>
                     <div class="p-col-6">
                         <div class="p-col-12 p-d-flex p-jc-end">
-                            <Button type="button" label="Gruba Ekle"  iconPos="right" @click="addUserToGroup" />
+                            <Button type="button" :label="$t('settings.console_user_settings.add_to_group')"  iconPos="right" @click="addUserToGroup" />
                             
                         </div>
                         <DataTable :value="groupPrivilages" responsiveLayout="scroll" 
@@ -103,12 +103,12 @@
                     </div>
                 </div>
                 <div v-if="selectedUserNode == null">
-                    <p>Lütfen, bir önceki tab'dan erişim yetkisi vermek istediğiniz kullanıcıyı seçiniz.</p>
+                    <p>{{$t('settings.console_user_settings.tab_warning')}}</p>
                 </div>
             </TabPanel>
         </TabView>
         <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
+            <Button :label="$t('settings.console_user_settings.close')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
             
         </template>
     </Dialog>
@@ -194,8 +194,8 @@ export default {
                 axios.post('/lider/settings/editUserRoles',data).then(response => {
                     this.$toast.add({
                         severity:'success', 
-                        detail: 'Kullanıcıya yetki başarı ile verildi.', 
-                        summary: 'Başarılı', 
+                        detail: this.$t('settings.console_user_settings.the_user_has_been_successfully_authorized'), 
+                        summary: this.$t('settings.console_user_settings.successful'), 
                         life: 3000
                     });
                     this.$emit('updateConsoleUsers');
@@ -203,8 +203,8 @@ export default {
             } else {
                 this.$toast.add({
                     severity:'error', 
-                    detail: 'Lütfen yetki verilmesini istediğini kullanıcıyı seçiniz.', 
-                    summary: 'Kullanıcı Seçilmedi', 
+                    detail: this.$t('settings.console_user_settings.please_select_the_user_you_want_to_be_authorized'),
+                    summary: this.$t('settings.console_user_settings.user_not_select'),
                     life: 3000
                 });
         }
@@ -226,8 +226,8 @@ export default {
                 if(response.status == 200) {
                     this.$toast.add({
                         severity:'success', 
-                        detail: 'Kullanıcı başarı ile oluşturuldu.', 
-                        summary: 'Başarılı', 
+                        detail: this.$t('settings.console_user_settings.user_successfully_create'), 
+                        summary: this.$t('settings.console_user_settings.successful'), 
                         life: 3000
                     });
 
@@ -243,8 +243,8 @@ export default {
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: 'Beklenmedik bir problem ile karşılaşıldı. ', 
-                        summary: 'HATA', 
+                        detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'), 
+                        summary: this.$t('settings.console_user_settings.error'), 
                         life: 3000
                     });
 
@@ -273,8 +273,8 @@ export default {
             if (this.selectedUserNode == null || this.selectedGroupNode == null) {
                 this.$toast.add({
                     severity:'error', 
-                    detail: 'Lütfen kullanıcı ve grup seçiniz.', 
-                    summary: 'HATA',
+                    detail:  this.$t('settings.console_user_settings.please_select_user_and_group'), 
+                    summary: this.$t('settings.console_user_settings.error'), 
                     life: 3000
                 });
                 return;
@@ -288,8 +288,8 @@ export default {
                 if (response.status === 200) {
                     this.$toast.add({
                         severity:'success', 
-                        detail: 'Kullanıcı gruba başarı ile eklendi.', 
-                        summary: 'BAŞARILI',
+                        detail: this.$t('settings.console_user_settings.user_successfully_add_to_group'), 
+                        summary: this.$t('settings.console_user_settings.successful'), 
                         life: 3000
                     });
 
