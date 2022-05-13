@@ -649,21 +649,20 @@ export default {
 
     getEntryFolderName(selDn) {
       let dnArr = selDn.split(",");
-      let ous = ""
+      let ous = "";
       for (let i = 0; i < dnArr.length; i++) {
-          let dn = dnArr[i];
-          if(dn.startsWith("ou")){
-            let arr = dn.split("=");
-            if(arr.length > 0){
-              if(arr[1] != 'Ahenkler'){
-                ous += arr[1]
-                if(i < dnArr.length){
-                  ous +=" "
-                }
-              }
+        let dn = dnArr[i];
+        if(dn.startsWith("ou")){
+          let arr = dn.split("=");
+          if(arr.length > 0){
+            ous += arr[1]
+            if(i < dnArr.length){
+              ous +=" / ";
             }
           }
         }
+      }
+      ous = ous.trim().slice(0, -1);
       return ous;
     },
 

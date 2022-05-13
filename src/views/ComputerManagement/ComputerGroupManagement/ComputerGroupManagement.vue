@@ -195,7 +195,7 @@
             <TabPanel>
                 <template #header>
                     <span>{{$t('group_management.selected_clients')}}
-                         <Badge :value="agentGroupModal.checkedNodes.length"></Badge>
+                        <Badge v-if="agentGroupModal.checkedNodes.length > 0" :value="agentGroupModal.checkedNodes.length"></Badge>
                     </span>
                 </template>
                 <DataTable :value="agentGroupModal.checkedNodes" v-model:filters="filters"
@@ -237,7 +237,7 @@
             <TabPanel v-if="modals.addClient">
                 <template #header>
                     <span>{{$t('group_management.existing_clients')}}
-                         <Badge :value="agentGroupModal.existingClients.length"></Badge>
+                         <Badge v-if="agentGroupModal.checkedNodes.length > 0" :value="agentGroupModal.existingClients.length"></Badge>
                     </span>
                 </template>
                 <DataTable :value="agentGroupModal.existingClients" v-model:filters="filters"
