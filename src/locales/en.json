@@ -131,6 +131,9 @@
         "confirm_password_input_message": "Please enter a password again"
     },
     "computer": {
+        "total": "Total",
+        "online":"Online",
+        "offline":"Offline",
         "plugins": {
             "button": {
                 "system": "System",

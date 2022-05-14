@@ -4,7 +4,7 @@
         @close-node-detail-dialog="showNodeDetailDialog=false">
     </node-detail>
     <div class="p-grid computer-group-management">
-        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;">
+        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
                 loadNodeUrl="/lider/computer_groups/getGroups"

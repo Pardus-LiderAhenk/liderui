@@ -132,6 +132,9 @@
         
     },
     "computer": {
+        "total": "Toplam",
+        "online":"Çevrimiçi",
+        "offline":"Çevrimdışı",
         "plugins": {
             "button": {
                 "system": "Sistem",
