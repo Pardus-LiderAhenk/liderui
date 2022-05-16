@@ -132,6 +132,9 @@
         
     },
     "computer": {
+        "total": "Toplam",
+        "online":"Çevrimiçi",
+        "offline":"Çevrimdışı",
         "plugins": {
             "button": {
                 "system": "Sistem",
@@ -229,7 +232,7 @@
                 "header": "Dosya Paylaşımı",
                 "description": "İstemciye dosya paylaşımı yapabilirsiniz. Dosya boyutu 20 MB'den küçük olmalıdır.",
                 "share_button": "Dosya Paylaş",
-                "invalid_file_size_message": "Geçersiz dosya boyutu, dosya boyutu 20 MB'den küçük olmalıdır",
+                "invalid_file_size_message": "{fileName}: Geçersiz dosya boyutu, dosya boyutu {maxFileSize} MB'den küçük olmalıdır",
                 "destination_folder": "Hedef Dizin",
                 "add_file": "Dosya Ekle",
                 "user_permissions": "Kullanıcı İzinleri",

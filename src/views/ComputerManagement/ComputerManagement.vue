@@ -1,10 +1,26 @@
 <template>
   <div class="p-grid computer-management">
-      <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;">
+      <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
+          <div class="p-col">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label><i class="pi pi-desktop" style="font-size: 0.8rem;"></i> {{$t('computer.total')}}:</label>
+                    <a style="color: rgb(32, 99, 155); font-weight: bold;">&nbsp;{{agent.total == 0 ? '0': agent.total}}</a>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label><i class="pi pi-desktop" style="font-size: 0.8rem;"></i> {{$t('computer.online')}}:</label>
+                    <a style="color: #66BB6A; font-weight: bold;">&nbsp;{{agent.online == 0 ? '0': agent.online}}</a>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label><i class="pi pi-desktop" style="font-size: 0.8rem;"></i> {{$t('computer.offline')}}:</label>
+                    <a style="color: #D32F2F; font-weight: bold;">&nbsp;{{agent.offline == 0 ? '0': agent.offline}}</a>
+                </div>
+            </div>
+        </div>
         <tree-component ref="tree"
             loadNodeUrl="/lider/computer/getComputers"
             loadNodeOuUrl="/lider/computer/getOuDetails"
-            :treeNodeClick="setSelectedLiderNode"
+            :treeNodeClick="treeNodeClick"
             isAgentTree="true"
             :searchFields="searchFields">
         </tree-component>
@@ -78,7 +94,6 @@
   </div>
 </template>
 
-
 <script>
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import SystemManagement from "@/views/ComputerManagement/Plugins/Task/System/SystemManagementPage.vue";
@@ -89,6 +104,8 @@ import RemoteAccess from '@/views/ComputerManagement/Plugins/Task/RemoteAccess/R
 import SecurityManagement from '@/views/ComputerManagement/Plugins/Task/Security/SecurityManagementPage.vue';
 import TaskHistory from '@/views/ComputerManagement/Plugins/Task/TaskHistory/TaskHistory.vue'
 import { mapActions } from "vuex";
+import axios from "axios";
+import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 
 export default {
     components: {
@@ -100,6 +117,7 @@ export default {
         RemoteAccess,
         SecurityManagement,
         TaskHistory,
+        Dashboardbox
     },
     data() {
         return {
@@ -127,17 +145,11 @@ export default {
                     value: "o"
                 }
             ],
-            defaultTreeProps: {
-                children: 'childEntries',
-                label: 'name',
-                isLeaf: function(data, node) {
-                    if (data.hasSubordinates === "TRUE") {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                },
-            },
+            agent: {
+                total: 0,
+                online: 0,
+                offline: 0
+            }
         };
     },
      created() {
@@ -148,6 +160,39 @@ export default {
         
         setSelectedPluginTab(tab) {
             this.selectedPluginTab = tab;
+        },
+
+        treeNodeClick(node) {
+            this.setSelectedLiderNode(node);
+            this.getAgentonlineOfflineCount(node);
+        },
+
+        async getAgentonlineOfflineCount(node) {
+            await this.getAgentCountList(node);
+        },
+
+        getAgentCountList(node) {
+            return new Promise((resolve, reject)=> {
+                if (node.type == "ORGANIZATIONAL_UNIT") {
+                    let params = new FormData();
+                    params.append("searchDn", node.distinguishedName);
+                    axios.post("/lider/computer/getAgentListSize", params).then((response) => {
+                        this.agent.total = response.data.agentListSize;
+                        this.agent.online = response.data.onlineAgentListSize;
+                        this.agent.offline = this.agent.total - this.agent.online;
+                        resolve(this.agent);
+                    });
+                } else if (node.type == "AHENK"){
+                    this.agent.total = 1;
+                    if (node.online) {
+                        this.agent.online = 1;
+                    } else {
+                        this.agent.online = 0;
+                    }
+                    this.agent.offline = this.agent.total - this.agent.online;
+                    resolve(this.agent);
+                }
+            });
         },
 
         moveSelectedAgent(selectedNode, destinationDn) {

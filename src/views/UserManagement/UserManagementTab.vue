@@ -1,8 +1,7 @@
 <template>
-  <div class="p-grid user-management">
-      <div class="p-col-12 p-md-6 p-lg-12">
-          <div class="p-grid p-flex-column">
-            <div class="p-col" v-if="domainType != 'ACTIVE_DIRECTORY'">
+    <div class="user-management">
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-12" v-if="domainType != 'ACTIVE_DIRECTORY'">
                 <Button
                     icon="pi pi-user"
                     :class="selectedTab == 'user-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
@@ -32,16 +31,11 @@
                 >
                 </Button>
             </div>
-            <div class="p-col">
-                <!-- <keep-alive> -->
-                    <component 
-                        :is="selectedTab">
-                    </component>
-                <!-- </keep-alive> -->
-            </div>
         </div>
+        <component 
+            :is="selectedTab">
+        </component>
     </div>
-  </div>
 </template>
 
 

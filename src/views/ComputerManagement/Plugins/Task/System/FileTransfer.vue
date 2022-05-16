@@ -24,16 +24,16 @@
         <div class="p-grid p-flex-column">
           <div class="p-col">
             <FileUpload
-            name="demo[]"
+              name="demo[]"
               :maxFileSize="20000000"
-              fileLimit="1"
+              :fileLimit="1"
               :chooseLabel="$t('computer.plugins.file_transfer.add_file')"
               :showUploadButton="false"
               :showCancelButton="false"
               @select="onUpload"
               @remove="encodedFile = null;"
               url="./local"
-              :invalid_file_size_message="'{0}: '+$t('computer.plugins.file_transfer.share_button')+' {1}'"
+              :invalidFileSizeMessage="$t('computer.plugins.file_transfer.invalid_file_size_message', {'fileName': '{0}', 'maxFileSize': '{1}'})"
             >
             </FileUpload>
           </div>
@@ -156,10 +156,12 @@ export default {
 
   methods:{
     async onUpload(event){
-      var selectedFile = event.files[0];
-      this.fileName = event.files[0].name;
-      const response = await this.readFileOne(selectedFile);
-      this.encodedFile = response;
+      if (event.files[0]) {
+        var selectedFile = event.files[0];
+        this.fileName = event.files[0].name;
+        const response = await this.readFileOne(selectedFile);
+        this.encodedFile = response;
+      }
     },
 
     readFileOne(file) {
