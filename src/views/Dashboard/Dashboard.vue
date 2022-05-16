@@ -98,7 +98,7 @@
                 <last-activity :lastActivityData="lastActivityData"></last-activity>
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-7">
-                <task-activity></task-activity>
+                <task-activity :userTasks="userTasks"></task-activity>
             </div>
         </div>
         
@@ -129,6 +129,7 @@ export default {
             totalSessionsTodayNumber: 0,
             lastActivityData: null,
             agentData: null,
+            userTasks: [],
             options: {
                 responsive: true,
                 plugins: {
@@ -184,6 +185,7 @@ export default {
                         this.totalRegisteredComputerTodayNumber = response.data.totalRegisteredComputerTodayNumber;
                         this.totalSessionsTodayNumber = response.data.totalSessionsTodayNumber;
                         this.lastActivityData = response.data.liderConsoleLastActivity;
+                        this.userTasks = response.data.userTasks;
                         resolve(response.data);
                     }
                 });

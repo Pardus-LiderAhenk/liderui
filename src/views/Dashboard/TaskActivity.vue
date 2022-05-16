@@ -7,13 +7,16 @@
             <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.range_of_submitted_tasks_by_attachments')}}</span>
         </template>
         <template #content>
-            <ul class="activity-list" v-for="task in tasks" :key="task.plugin_name">
+            <div v-if="tasks.length == 0" class="p-d-flex p-jc-center">
+                <small>Gönderilen görev bulunamadı</small>
+            </div>
+            <ul class="activity-list" v-for="task in tasks" :key="task[0]">
                 <li>
                     <div class="p-d-flex p-jc-between p-ai-center p-mb-3">
-                        <h5 style="margin: 0 0 2px; font-size:1.2rem" class="activity p-m-0">{{task.plugin_name}}</h5>
-                        <div class="count" style="font-size:20px; background-color: #66BB6A">{{task.value}}</div>
+                        <h5 style="margin: 0 0 2px; font-size:1.2rem" class="activity p-m-0">{{task[0]}}</h5>
+                        <div class="count" style="font-size:20px; background-color: #66BB6A">{{task[1]}}</div>
                     </div>
-                    <ProgressBar :value="getTaskRange(task.value)" :showValue="true" />
+                    <ProgressBar :value="((task[1] / totalTask)*100).toFixed(2)" :showValue="true"/>
                 </li>
             </ul>
         </template>
@@ -21,58 +24,35 @@
 </template>
 
 <script>
+/**
+ * executed tasks by logged in user with total count for each
+ * @see {@link http://www.liderahenk.org/}
+ */
 export default {
+    props: {
+        userTasks: {
+            type: Array,
+            default: [],
+        },
+    },
+
+    computed: {
+        tasks: {
+            get () {
+                for (let index = 0; index < this.userTasks.length; index++) {
+                    const element = this.userTasks[index];
+                    this.totalTask = this.totalTask + element[1];
+                }
+                return this.userTasks;
+            },
+        },
+    },
+
     data() {
         return {
-            value: "50",
             totalTask: 0,
-            tasks:[
-                {
-                    "plugin_name":"Kaynak Kullanımı",
-                    "value": 50
-                },
-                {
-                    "plugin_name":"Paket Kur veya Kaldır",
-                    "value": 25
-                },
-                {
-                    "plugin_name":"Betik Çalıştır",
-                    "value": 75
-                },
-                {
-                    "plugin_name":"Yerel Kullanıcı",
-                    "value": 15
-                },
-                {
-                    "plugin_name":"Dosya Paylaşımı",
-                    "value": 8
-                },
-                {
-                    "plugin_name":"Root Parola Yönetimi",
-                    "value": 13
-                },
-                {
-                    "plugin_name":"Uzak Erişim",
-                    "value": 33
-                },
-            ]
         }
     },
-
-    mounted() {
-        for (let index = 0; index < this.tasks.length; index++) {
-            const element = this.tasks[index];
-            this.totalTask = this.totalTask + element.value;
-            
-        }
-    },
-
-    methods: {
-        getTaskRange(value) {
-            return ((value / this.totalTask)*100).toFixed(2);
-        }
-    }
-    
 }
 </script>
 
