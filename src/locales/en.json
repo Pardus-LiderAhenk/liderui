@@ -229,7 +229,7 @@
                 "header": "Share File",
                 "description": "You can share file to client. File size should be smaller than 20 MB",
                 "share_button": "Share File",
-                "invalid_file_size_message": "Invalid file size, file size should be smaller than",
+                "invalid_file_size_message": "{fileName}: Invalid file size, file size should be smaller than {maxFileSize}.",
                 "destination_folder": "Destination Folder",
                 "add_file": "Add File",
                 "user_permissions": "User Permissions",
