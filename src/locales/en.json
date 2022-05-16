@@ -622,7 +622,7 @@
             "read_and_write_access":"Allow read and write selected folders and subfolders",
             "close":"Close",
             "add":"Add",
-            "create_new_lider_user":"Yeni Arayüz Kullanıcısı Oluştur",
+            "create_new_lider_user":"Create New Lider User",
             "identity":"Identity (ID)",
             "username":"Name",
             "user_surname":"Surname",
@@ -641,7 +641,9 @@
             "user_successfully_create":"The user has been successfully created.",
             "an_unexpected_problem_was_encountered":"An unexpected problem was encountered.",
             "please_select_user_and_group":"Please select user and group.",
-            "user_successfully_add_to_group":"The user has been successfully added to the group."
+            "user_successfully_add_to_group":"The user has been successfully added to the group.",
+            "create":"Create",
+            "authorization":"Authorization"
         },
         "server_settings":{
             "directory_server_setting":"Directory Server Settings",
@@ -1100,8 +1102,30 @@
         "unassign_policy_success": "Deteleted policy in group successfully",
         "unassign_policy_error": "An error occured while deleting policy in group",
         "selected_profile_warn": "At least one profile must be selected",
-        "plugins":{
-            "login_manager_validation": "At least one of the days allowed must be selected"
+        "profile":{
+            "login_manager":{
+                "login_manager_validation": "İzin verilen günlerden en az bir tane seçilmelidir",
+                "allowed_days":"The allowed days",
+                "start_time":"Start Time",
+                "finish_time":"Finish Time",
+                "last_validity_date":"Last Validity Time",
+                "notify_time":"Notification Time",
+                "sunday":"Sunday",
+                "monday":"Monday",
+                "tuesday":"Tuesday",
+                "wednesday":"Wednesday",
+                "thursday":"Thursday",
+                "friday":"Friday",
+                "saturday":"Saturday",
+                "one_minute":"Before 1 Minute",
+                "five_minute":"Before 5 Minute"
+            },
+            "rsyslog":{
+                "yes":"Yes"
+
+            }
+            
+            
         }
     },
     "reports":{

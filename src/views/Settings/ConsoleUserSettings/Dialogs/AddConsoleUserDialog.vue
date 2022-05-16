@@ -35,7 +35,7 @@
                         <password-component ref="userForm.userPassword"></password-component>
                     </div>
                     <div class="p-col-12 p-d-flex p-jc-end">
-                        <Button label="Oluştur" @click="addNewConsoleUser"></Button>
+                        <Button icon="pi pi-user-plus" :label="$t('settings.console_user_settings.create')" @click="addNewConsoleUser"></Button>
                     </div>
                 </div>
             </TabPanel>
