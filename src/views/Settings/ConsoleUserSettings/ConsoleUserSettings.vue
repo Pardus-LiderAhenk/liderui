@@ -105,7 +105,7 @@
                                     </template>
                                 </Column>
                                 <Column field="accessDN" :header="$t('settings.console_user_settings.access_granted_dn')"></Column>
-                                <Column header="Yetki">
+                                <Column :header="$t('settings.console_user_settings.authorization')">
                                     <template #body="slotProps">
                                         {{
                                                 slotProps.data != null && slotProps.data.accessType == "write" ? $t('settings.console_user_settings.read_and_write') : $t('settings.console_user_settings.read')

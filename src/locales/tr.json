@@ -17,7 +17,7 @@
         "offline":"Çevrimdışı",
         "line_chart_title":"İstemci Kayıt Dağılımı",
         "registered_clients":"Kayıtlı İstemciler",
-        "last_activity":"Faaliyetler",
+        "last_activity":"Faaliyetlerim",
         "lider_interface_usage_history":"Lider arayüz kullanım geçmişi",
         "online_offline_rate":"Çevrimiçi/Çevrimdışı istemci oranı",
         "work_statistic":"İş İstatistiğim",
@@ -647,7 +647,9 @@
             "user_successfully_create":"Kullanıcı başarı ile oluşturuldu.",
             "an_unexpected_problem_was_encountered":"Beklenmedik bir problem ile karşılaşıldı.",
             "please_select_user_and_group":"Lütfen kullanıcı ve grup seçiniz.",
-            "user_successfully_add_to_group":"Kullanıcı gruba başarı ile eklendi."
+            "user_successfully_add_to_group":"Kullanıcı gruba başarı ile eklendi.",
+            "create":"Oluştur",
+            "authorization":"Yetki"
 
         },
         "server_settings":{
@@ -1107,8 +1109,32 @@
         "unassign_policy_success": "Politika gruptan başarıyla kaldırıldı",
         "unassign_policy_error": "Politika gruptan kaldırılırken hata oluştu",
         "selected_profile_warn": "En az bir profil seçilmelidir",
-        "plugins":{
-            "login_manager_validation": "İzin verilen günlerden en az bir tane seçilmelidir"
+        "profile":{
+            "login_manager":{
+                "login_manager_validation": "İzin verilen günlerden en az bir tane seçilmelidir",
+                "allowed_days":"İzin verilen günler",
+                "start_time":"Başlangıç Saati",
+                "finish_time":"Bitiş Saati",
+                "last_validity_date":"Son Geçerlilik Tarihi",
+                "notify_time":"Bildirim Zamanı",
+                "sunday":"Pazar",
+                "monday":"Pazartesi",
+                "tuesday":"Salı",
+                "wednesday":"Çarşamba",
+                "thursday":"Perşembe",
+                "friday":"Cuma",
+                "saturday":"Cumartesi",
+                "one_minute":"1 dk önce",
+                "five_minute":"5 dk önce"
+            },
+            "rsyslog":{
+                "yes":"Evet",
+                "no":"Hayır",
+                "select_from_favorites":"Sık Kullanılanlardan Seç"
+
+            }
+            
+            
         }
     },
     "reports": {
