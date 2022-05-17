@@ -98,18 +98,32 @@
                     <Dropdown v-model="adAllowSelfSignedCert" :options="yesNoDropdown" optionLabel="label" optionValue="value"/>
                 </div>
             </div>
-           
-
         </template>
         <div class="p-field p-col-12 p-text-right">
             <div class="p-d-flex p-jc-end">
                 <div>
-                    <Button icon="pi pi-save" type="button" :label="$t('settings.server_settings.directory_server_settings.save')" @click="submitForm()"/>
+                    <Button icon="pi pi-save" type="button" :label="$t('settings.server_settings.directory_server_settings.save')" @click="showDialog = true"/>
                 </div>
             </div>
         </div>
-        
     </div>
+    <Dialog header="Ayarları Güncelle" v-model:visible="showDialog" 
+        :style="{width: '20vw'}" :modal="true">
+        <div class="p-fluid">
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+            <span>
+                Dizin sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?
+            </span>
+        </div>
+        <template #footer>
+            <Button label="İptal" icon="pi pi-times" 
+                @click="showDialog = false" class="p-button-text p-button-sm"
+            />
+            <Button label="Evet" icon="pi pi-check"
+                @click="submitForm" class="p-button-sm"
+            />
+        </template>
+    </Dialog>
 </template>
 
 
@@ -146,7 +160,7 @@ export default {
             adDomainName:'',
             adAdminUserName:'',
             adAdminUserFullDN:'',
-
+            showDialog: false
         }
     },
     watch: { 
@@ -196,19 +210,19 @@ export default {
             data.append("adAllowSelfSignedCert",this.adAllowSelfSignedCert);
 
             axios.post('/lider/settings/update/ldap', data).then(response => {
-                // FIXME Burada logout işlemi yapılacak. 
-
                 this.$toast.add({
                     severity:'success', 
-                    detail: this.$t('settings.server_settings.directory_server_settings.information_has_been_successfully_updated'), 
+                    detail: "Dizin sunucu ayarları başarıyla güncellendi", 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
             });
-
+            setTimeout(() => {
+                this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+            }, 3000);
+            this.showDialog = false;
         }
     },
-    
 }
 
 </script>

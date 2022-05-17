@@ -30,11 +30,28 @@
         <div class="p-field p-col-12 p-text-right">
             <div class="p-d-flex p-jc-end">
                 <div>
-                    <Button icon="pi pi-save" type="button" :label="$t('settings.server_settings.mail_server_settings.save')" @click="submitForm()"/>
+                    <Button icon="pi pi-save" type="button" :label="$t('settings.server_settings.mail_server_settings.save')" @click="showDialog = true"/>
                 </div>
             </div>
         </div>
     </div>
+    <Dialog header="Ayarları Güncelle" v-model:visible="showDialog" 
+        :style="{width: '20vw'}" :modal="true">
+        <div class="p-fluid">
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+            <span>
+                Email ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?
+            </span>
+        </div>
+        <template #footer>
+            <Button label="İptal" icon="pi pi-times" 
+                @click="showDialog = false" class="p-button-text p-button-sm"
+            />
+            <Button label="Evet" icon="pi pi-check"
+                @click="submitForm" class="p-button-sm"
+            />
+        </template>
+    </Dialog>
 </template>
 
 
@@ -54,6 +71,7 @@ export default {
             emailPort:'',
             emailUsername:'',
             emailPassword:'',
+            showDialog: false
         }
         
     },
@@ -87,7 +105,10 @@ export default {
                     life: 3000
                 });
             });
-
+            setTimeout(() => {
+                this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+            }, 3000);
+            this.showDialog = false;
         }
     },
 }
