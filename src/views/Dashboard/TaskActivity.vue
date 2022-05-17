@@ -8,7 +8,7 @@
         </template>
         <template #content>
             <div v-if="tasks.length == 0" class="p-d-flex p-jc-center">
-                <small>Gönderilen görev bulunamadı</small>
+                <small>{{$t('dashboard_screen.sent_task_cant_find')}}</small>
             </div>
             <ul class="activity-list" v-for="task in tasks" :key="task[0]">
                 <li>

@@ -21,7 +21,8 @@
         "lider_interface_usage_history":"Lider interface usage history",
         "online_offline_rate":"Online / Offline Rate",
         "work_statistic":"My Work Statistics",
-        "range_of_submitted_tasks_by_attachments":"Range of submitted tasks by attachments"
+        "range_of_submitted_tasks_by_attachments":"Range of submitted tasks by attachments",
+        "sent_task_cant_find":"Sent task cannot find"
     },
     "login": {
         "title": "Liderahenk Login",
@@ -1124,8 +1125,35 @@
                 "five_minute":"Before 5 Minute"
             },
             "rsyslog":{
-                "yes":"Yes"
-
+                "yes":"Yes",
+                "no":"No",
+                "select_from_favorites":"Select From Favorites",
+                "add_log_to_manage":"Add Log to Manage",
+                "local_record":"Local Record",
+                "record_name":"Record Name",
+                "record_name_cannot_null":"Record name cannot be null",
+                "log_record_path":"Log Record Path",
+                "log_record_path_cannot_null":"Log record path cannot be null",
+                "log_rotation":"Log Rotation",
+                "rotation_frequency":"Rotation Frequency",
+                "keep_log_that_old":"Keep Log That Old",
+                "file_size_for_rotation":"File Size For Rotation(MB)",
+                "file_size_warning":"Go to rotation when log file is larger than(MB)",
+                "create_new_log_file_after_rotation":"Create new log file after rotation",
+                "compress_old_log_files":"Compress old log files",
+                "if_there_is_no_log_file_switch_to_another_without_error":"If there is no log file switch to another without error",
+                "remote_server_to_backup_logs":"Remote server to backup logs",
+                "server_address":"Server Address",
+                "server_address_cannot_null":"Server address cannot null",
+                "port":"Port",
+                "port_cannot_null":"Port cannot null",
+                "protocol":"Protocol",
+                "logs_to_manage":"Log to Manage",
+                "no_records_found":"No records found",
+                "daily":"Daily",
+                "weekly":"Weekly",
+                "monthly":"Monthly",
+                "yearly":"Yearly"
             }
             
             

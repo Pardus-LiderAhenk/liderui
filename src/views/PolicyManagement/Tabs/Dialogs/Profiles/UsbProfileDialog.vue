@@ -1,19 +1,19 @@
 <template>
     <div>
         <!-- Add Usb Item as Black or White List -->
-        <Dialog :header="!selectedUsbItem ? 'USB Ekle': 'USB Güncelle'" v-model:visible="usbItemDialog" 
+        <Dialog :header="!selectedUsbItem ? $t('policy_management.profile.usb.usb_add'): $t('policy_management.profile.usb.usb_update')" v-model:visible="usbItemDialog" 
             :style="{width: '30vw'}" :modal="true">
             <div class="p-fluid">
                 <div class="p-field">
-                    <label for="icon">Üretici Firma</label>
+                    <label for="icon"> {{$t('policy_management.profile.usb.manufacturer')}}</label>
                     <InputText class="p-inputtext-sm" type="text" v-model="form.vendor"/>
                 </div>
                 <div class="p-field">
-                    <label for="icon">Model</label>
+                    <label for="icon">{{$t('policy_management.profile.usb.model')}}</label>
                     <InputText class="p-inputtext-sm" type="text" v-model="form.model"/>
                 </div>
                 <div class="p-field">
-                    <label for="icon">Seri Numarası</label>
+                    <label for="icon">{{$t('policy_management.profile.usb.serial_number')}}</label>
                     <InputText class="p-inputtext-sm" type="text" v-model="form.serialNumber"/>
                 </div>
             </div>

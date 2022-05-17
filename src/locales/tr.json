@@ -21,8 +21,8 @@
         "lider_interface_usage_history":"Lider arayüz kullanım geçmişi",
         "online_offline_rate":"Çevrimiçi/Çevrimdışı istemci oranı",
         "work_statistic":"İş İstatistiğim",
-        "range_of_submitted_tasks_by_attachments":"Gönderilen görevlerin eklentilere göre dağılımı"
-
+        "range_of_submitted_tasks_by_attachments":"Gönderilen görevlerin eklentilere göre dağılımı",
+        "sent_task_cant_find":"Gönderilen görev bulunamadı"
     },
     "login": {
         "title": "Liderahenk Giriş",
@@ -1130,8 +1130,34 @@
             "rsyslog":{
                 "yes":"Evet",
                 "no":"Hayır",
-                "select_from_favorites":"Sık Kullanılanlardan Seç"
-
+                "select_from_favorites":"Sık Kullanılanlardan Seç",
+                "add_log_to_manage":"Yönetilecek Log Ekle",
+                "local_record":"Yerel Kayıt",
+                "record_name":"Kayıt Adı",
+                "record_name_cannot_null":"Kayıt adı boş bırakılamaz",
+                "log_record_path":"Log Kayıt Yolu",
+                "log_record_path_cannot_null":"Log kayıt yolu boş bırakılamaz",
+                "log_rotation":"Log Rotasyonu",
+                "rotation_frequency":"Rotasyon sıklığı",
+                "keep_log_that_old":"Şu kadar eski logu tut",
+                "file_size_for_rotation":"Rotasyon için dosya boyutu(MB)",
+                "file_size_warning":"Log dosyası şu boyuttan büyük olduğunda rotasyona git(MB)",
+                "create_new_log_file_after_rotation":"Rotasyondan sonra yeni log dosyası oluştur",
+                "compress_old_log_files":"Eski log dosyalarını sıkıştır",
+                "if_there_is_no_log_file_switch_to_another_without_error":"Log dosyası yoksa hata vermeden diğerine geç",
+                "remote_server_to_backup_logs":"Logların Yedekleneceği Uzak Sunucu",
+                "server_address":"Sunucu Adresi",
+                "server_address_cannot_null":"Sunucu adresi boş bırakılamaz",
+                "port":"Port",
+                "port_cannot_null":"Port boş bırakılamaz",
+                "protocol":"Protokol",
+                "logs_to_manage":"Yönetilecek Loglar",
+                "no_records_found":"Kayıt bulunamadı",
+                "daily":"Günlük",
+                "weekly":"Haftalık",
+                "monthly":"Aylık",
+                "yearly":"Yıllık"
+                
             }
             
             
