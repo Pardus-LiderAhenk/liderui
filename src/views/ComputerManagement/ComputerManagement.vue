@@ -152,9 +152,14 @@ export default {
             }
         };
     },
-     created() {
+    created() {
         this.setSelectedLiderNode(null);
     },
+
+    mounted() {
+        this.getAgentonlineOfflineCount(null);
+    },
+
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
         
@@ -173,24 +178,34 @@ export default {
 
         getAgentCountList(node) {
             return new Promise((resolve, reject)=> {
-                if (node.type == "ORGANIZATIONAL_UNIT") {
-                    let params = new FormData();
-                    params.append("searchDn", node.distinguishedName);
+                let params = new FormData();
+                if (node) {
+                    if (node.type == "ORGANIZATIONAL_UNIT") {
+                        params.append("searchDn", node.distinguishedName);
+                        axios.post("/lider/computer/getAgentListSize", params).then((response) => {
+                            this.agent.total = response.data.agentListSize;
+                            this.agent.online = response.data.onlineAgentListSize;
+                            this.agent.offline = this.agent.total - this.agent.online;
+                            resolve(this.agent);
+                        });
+                    } else if (node.type == "AHENK"){
+                        this.agent.total = 1;
+                        if (node.online) {
+                            this.agent.online = 1;
+                        } else {
+                            this.agent.online = 0;
+                        }
+                        this.agent.offline = this.agent.total - this.agent.online;
+                        resolve(this.agent);
+                    }
+                } else {
+                    params.append("searchDn", "agents");
                     axios.post("/lider/computer/getAgentListSize", params).then((response) => {
                         this.agent.total = response.data.agentListSize;
                         this.agent.online = response.data.onlineAgentListSize;
                         this.agent.offline = this.agent.total - this.agent.online;
                         resolve(this.agent);
-                    });
-                } else if (node.type == "AHENK"){
-                    this.agent.total = 1;
-                    if (node.online) {
-                        this.agent.online = 1;
-                    } else {
-                        this.agent.online = 0;
-                    }
-                    this.agent.offline = this.agent.total - this.agent.online;
-                    resolve(this.agent);
+                    });   
                 }
             });
         },
