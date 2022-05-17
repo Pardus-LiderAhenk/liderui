@@ -28,7 +28,7 @@
             <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.operating_system_version')}}</b></div>
             <div class="p-col-8">
                 {{
-                getPropertyValue(selectedAgent.properties, "os.distributionVersion")
+                getPropertyValue(selectedAgent.properties, "os.version")
                 }}
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />

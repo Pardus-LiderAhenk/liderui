@@ -73,7 +73,7 @@
         </div>
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputRegistrationDate">{{$t('reports.detailed_agent_report.registiration_date')}}</label>
+        <label for="inputRegistrationDate">{{$t('reports.detailed_agent_report.create_date')}}</label>
         <Calendar
           v-model="filter.registrationDate"
           selectionMode="range"
@@ -236,9 +236,9 @@
             {{ getPropertyValue(data.properties, "os.distributionName") }}
           </template>
         </Column>
-        <Column :header="$t('reports.detailed_agent_report.version')">
+        <Column :header="$t('reports.detailed_agent_report.operating_system_version')">
           <template #body="{ data }">
-            {{ getPropertyValue(data.properties, "os.distributionVersion") }}
+            {{ getPropertyValue(data.properties, "os.version") }}
           </template>
         </Column>
         <Column field="createDate" :header="$t('reports.detailed_agent_report.create_date')"></Column>
