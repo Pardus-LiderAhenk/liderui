@@ -1157,7 +1157,19 @@
                 "weekly":"Haftalık",
                 "monthly":"Aylık",
                 "yearly":"Yıllık"
-                
+            },
+            "usb":{
+                "usb_add":"USB Ekle",
+                "usb_güncelle":"USB Güncelle",
+                "manufacturer":"Üretici Firma",
+                "model":"Model",
+                "serial_number":"Seri Numarası",
+                "printer":"Yazıcı",
+                "webcam":"Web Kamerası",
+                "mouse-keyboard":"Fare-Klavye",
+                "white_list":"Beyaz Liste Oluştur",
+                "black_list":"Kara Liste Oluştur"
+
             }
             
             
