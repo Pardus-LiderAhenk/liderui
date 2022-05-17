@@ -1,19 +1,4 @@
 <template>
-
-    <!---
-        Sudo grup oluşturma ekranı
-        /lider/sudo_groups/createSudoGroup
-        groupName: deneme123
-        selectedOUDN: ou=Role,ou=Groups,dc=liderahenk,dc=org
-        sudoUserList[]: lider
-        sudoUserList[]: test_ldap_user
-        sudoCommandList[]: mycommand
-        sudoHostList[]: myhost
-
-        /lider/sudo_groups/editSudoGroup
-     --->
-
-  <ConfirmDialog></ConfirmDialog>
     <div class="p-grid user-permission-management">
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
@@ -27,10 +12,10 @@
                 <template #contextmenu>
                     <div
                         ref="treecontextmenu"
-                        class="el-overlay mycontextmenu"
+                        class="el-overlay sudocontextmenu"
                         v-show="showContextMenu"
                         @click="showContextMenu = false"
-                        >
+                    >
                         <div  ref="rightMenu">
                             <Menu :model="contextMenuItems"  />
                         </div>
@@ -39,137 +24,201 @@
             </tree-component>
         </div>
         <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
-                <TabView style="min-height:90vh;">
-                    <TabPanel header="Kayıt Bilgisi">
-                         <DataTable :value="selectedNodeData" responsiveLayout="scroll">
-                            <Column field="label" header="Öznitelik"></Column>
-                            <Column field="value" header="Değer"></Column>
-                        </DataTable>
-                    </TabPanel>
-                    <TabPanel header="Grup Üyeleri">
-                         <DataTable :value="selectedNode ? selectedNode.attributesMultiValues.sudoUser: []" responsiveLayout="scroll">
-                            <Column header="Üye DN">
-                                <template #body="slotProps">
-                                    <span>{{slotProps.data}}</span>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <Card>
+                        <template #title>
+                           <div style="font-size:15px;">
+                                Kayıt Bilgisi
+                            </div>
+                        </template>
+                        <template #content>
+                            <DataTable class="p-datatable-sm" 
+                                :value="selectedNodeData" responsiveLayout="scroll">
+                                <template #empty>
+                                    <div class="p-d-flex p-jc-center">
+                                        Lütfen kayıt seçiniz
+                                    </div>
                                 </template>
-                            </Column>
-                            <Column  >
-                                <template #body="slotProps">
-                                    <Button icon="pi pi-times" class="p-button-rounded p-button-danger" @click="deleteSudoUser(slotProps.data)"/>
+                                <Column field="label" header="Öznitelik"></Column>
+                                <Column field="value" header="Değer"></Column>
+                            </DataTable>
+                        </template>
+                    </Card>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <Card>
+                        <template #title>
+                            <div style="font-size:15px;">
+                                Kullanıcı Listesi
+                            </div>
+                        </template>
+                        <template #content>
+                            <DataTable class="p-datatable-sm" 
+                                :value="sudoUser" 
+                                v-model:filters="filters"
+                                :paginator="true" :rows="10" ref="dt"
+                                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                                :rowsPerPageOptions="[10,25,50,100]"  style="margin-top: 2em">
+                                <template #header>
+                                    <div class="p-d-flex p-jc-end">
+                                        <div>
+                                            <span class="p-input-icon-left">
+                                                <i class="pi pi-search"/>
+                                                <InputText v-model="filters['global'].value" 
+                                                class="p-inputtext-sm" 
+                                                placeholder="Ara" 
+                                                />
+                                            </span>
+                                        </div>
+                                    </div>
                                 </template>
-                            </Column>
-                        </DataTable>
-                    </TabPanel>
-                </TabView>
+                                <template #empty>
+                                    <div class="p-d-flex p-jc-center">
+                                        <div v-if="selectedNode && selectedNode.type=='ROLE'">
+                                            Yetkili kullanıcı bulunamadı
+                                        </div>
+                                        <div v-else>
+                                            Lütfen yetki grubu seçiniz
+                                        </div>
+                                    </div>
+                                </template>
+                                <Column field="index" header="#" style="width:10%"></Column>
+                                <Column header="Kullanıcı Adı" field="uid"></Column>
+                                <Column>
+                                    <template #body="slotProps">
+                                        <div class="p-d-flex p-jc-end">
+                                            <Button 
+                                                label="Sil"
+                                                icon="pi pi-trash" 
+                                                class="p-button-rounded p-button-sm p-button-danger" 
+                                                @click="modals.deleteSudoUser = true; deletedSudoUser = slotProps.data;"
+                                            />
+                                        </div>
+                                    </template>
+                                </Column>
+                            </DataTable>
+                        </template>
+                    </Card>
+                </div>
+            </div>
         </div>
     </div>
-    <Dialog header="Klasör Ekle" v-model:visible="modals.folderAdd" :style="{width: '50vw'}" :modal="true">
-        <div class="p-fluid">
-            <div class="p-field">
-                <label for="folderName">Klasör Adı</label>
-                <InputText id="folderName" type="text" v-model="folderName"/>
-            </div>
-        </div>
-        <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modals.folderAdd = false" class="p-button-text"/>
-            <Button label="Kaydet" icon="pi pi-check" @click="addFolder" autofocus />
-        </template>
-    </Dialog>
-    <Dialog header="Klasör Adını Değiştir" v-model:visible="modals.folderNameChange" :style="{width: '50vw'}" :modal="true">
-        <div class="p-fluid">
-            <div class="p-field">
-                <label for="folderName">Klasör Adını Değiştir</label>
-                <InputText id="folderName" type="text" v-model="folderName"/>
-            </div>
-        </div>
-        <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modals.folderNameChange = false" class="p-button-text"/>
-            <Button label="Güncelle" icon="pi pi-check" @click="changeFolder" autofocus />
-        </template>
-    </Dialog>
-    <Dialog header="Taşınacak Klasörü Seçiniz" v-model:visible="modals.moveFolder" :style="{width: '50vw'}" :modal="true">
-        <tree-component 
-                ref="movetree"
-                loadNodeUrl="/lider/sudo_groups/getGroups"
-                loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
-                :treeNodeClick="moveTreeNodeClick"
-                :isMove="true"
-        />
-        <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="modals.folderNameChange = false" class="p-button-text"/>
-            <Button label="Taşı" icon="pi pi-check" @click="moveFolder" autofocus />
-        </template>
-    </Dialog>
-    <sudo-group-dialog 
+
+    <!-- Dialogs -->
+    <add-folder-dialog v-if="modals.folderAdd"
+        :selectedNode="selectedNode"
+        :addFolderDialog="modals.folderAdd"
+        @close-sudo-dialog="modals.folderAdd = false"
+        @append-node="appendNode">
+    </add-folder-dialog>
+
+    <change-folder-name-dialog v-if="modals.folderNameChange"
+        :selectedNode="selectedNode"
+        :folderNameChange="modals.folderNameChange"
+        @close-sudo-dialog="modals.folderNameChange = false"
+        @update-node="updateNode">
+    </change-folder-name-dialog>
+
+    <move-node-dialog v-if="modals.moveNode"
+        :selectedNode="selectedNode"
+        :moveNodeDialog="modals.moveNode"
+        @close-sudo-dialog="modals.moveNode = false"
+        @move-node="moveNode">
+    </move-node-dialog>
+    
+    <sudo-group-dialog v-if="modals.sudoGroup"
         :modalVisibleValue="modals.sudoGroup" 
         @modalVisibleValue="modals.sudoGroup = $event; sudoGruopEdit = false"
         :selectedTreeNode="selectedNode"
         @sudoGroupCreated="sudoGroupCreated"
-        :isEdit="sudoGruopEdit"/>
+        :isEdit="sudoGruopEdit">
+    </sudo-group-dialog>
+
+    <Dialog :header="selectedNode && selectedNode.type == 'ROLE' ? 'Yetki Grubu Sil': 'Klasör Sil'" 
+        v-model:visible="modals.deleteNode"  
+        :modal="true" :style="{width: '30vw'}">
+        <div class="confirmation-content">
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+            <span v-if="selectedNode.type == 'ROLE'">Yetki grubu silinecektir, emin misiniz?</span>
+            <span v-if="selectedNode.type == 'ORGANIZATIONAL_UNIT'">
+                Klasör silinecektir, emin misiniz?
+                Bu işlem seçili olan klasörü ve bu klasörün altında yer alan tüm klasör ve grupları silecektir. Bu işlem geri alınamaz.
+            </span>
+        </div>
+        <template #footer>
+        <Button 
+            label="İptal" 
+            icon="pi pi-times" 
+            @click="modals.deleteNode = false" 
+            class="p-button-text p-button-sm"
+        />
+        <Button 
+            label="Evet"
+            icon="pi pi-check" 
+            @click="deleteNode"
+            class="p-button-sm"
+        />
+        </template>
+    </Dialog>
+    <Dialog header="Kullanıcı Sil" 
+        v-model:visible="modals.deleteSudoUser"  
+        :modal="true" :style="{width: '30vw'}">
+        <div class="confirmation-content">
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+            <span>Kullanıcı yetki grubundan silinecektir, emin misiniz?</span>
+        </div>
+        <template #footer>
+        <Button 
+            label="İptal" 
+            icon="pi pi-times" 
+            @click="modals.deleteSudoUser = false" 
+            class="p-button-text p-button-sm"
+        />
+        <Button 
+            label="Evet"
+            icon="pi pi-check" 
+            @click="deleteSudoUser"
+            class="p-button-sm"
+        />
+        </template>
+    </Dialog>
+    <!-- Dialogs End -->
 </template>
 
 <script>
+/**
+ * User Permission management as sudoUser, sudoCommand and sudoHost
+ * @see {@link http://www.liderahenk.org/}
+ */
+
+
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import axios from 'axios';
-import { useConfirm } from "primevue/useconfirm";
 import { mapActions } from "vuex"
-import {ref} from 'vue';
 import SudoGroupDialog from './Dialogs/SudoGroupDialog.vue';
+import {FilterMatchMode} from 'primevue/api';
+import AddFolderDialog from './Dialogs/AddFolderDialog.vue'
+import ChangeFolderNameDialog from './Dialogs/ChangeFolderNameDialog.vue'
+import MoveNodeDialog from './Dialogs/MoveNodeDialog.vue'
 
 export default {
-    setup(){
-        const selectedNode = ref(null);
-        const tree = ref(null);
-        const confirm = useConfirm();
-        const deleteFolder = () => {
-            confirm.require({
-                message: 'Bu işlem seçili olan klasörü ve bu klasörün altında yer alan tüm klasör ve grupları silecektir. Bu işlem geri alınamaz.',
-                header: 'Klasör Silme Onay',
-                icon: 'pi pi-exclamation-triangle',
-                accept: () => {
-                   axios.post('/lider/sudo_groups/deleteEntry', null, {
-                       params : { dn: selectedNode.value.distinguishedName }
-                   }).then(response => {
-                       tree.value.remove(selectedNode.value);
-                   });
-                },
-                reject: () => {
-                    confirm.close();
-                }
-            });
-        }
-
-        return { deleteFolder, selectedNode, tree };
-    },
-    components: {
-        TreeComponent,
-        SudoGroupDialog,
-    },
     data() {
         return {
-            moveFolderNode: null,
             modals : {
-             folderAdd:false,
-             folderNameChange: false,
-             moveFolder: false,
-             sudoGroup:false
+                folderAdd:false,
+                folderNameChange: false,
+                moveNode: false,
+                sudoGroup:false,
+                deleteNode: false,
+                deleteSudoUser: false
             },
-            folderName:'',
-            groupName:'',
-            selectedAgents: [],
-            agentGroupModal: {
-                showCheckbox: true,
-                groupName:'',
-                checkedNodes: []
-            },
+            sudoUser: [],
             showContextMenu: false,
-            contextMenuItems: [
-                {label: 'View', icon: 'pi pi-fw pi-search'},
-                {label: 'Delete', icon: 'pi pi-fw pi-times'}
-            ],
+            contextMenuItems: [],
             selectedNodeData: [],
-            selectedNodeGroupMembers: [],
             sudoGruopEdit: false,
+            deletedSudoUser: null,
             searchFields: [
                 {
                     key: this.$t('tree.name'),
@@ -180,103 +229,112 @@ export default {
                     value: "ou"
                 },
             ],
+            filters: {
+                'global': {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+            },
         }
     },
+    components: {
+        TreeComponent,
+        SudoGroupDialog,
+        AddFolderDialog,
+        ChangeFolderNameDialog,
+        MoveNodeDialog
+    },
+
     created() {
         this.setSelectedLiderNode(null);
     },
+
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
+
         treeNodeClick(node) {
             this.selectedNode = node;
+            if (this.selectedNode.type == "ROLE") {
+                this.sudoUser = [];
+                if (this.selectedNode.attributesMultiValues.sudoUser) {
+                    this.selectedNode.attributesMultiValues.sudoUser.forEach(element => {
+                        this.sudoUser.push({
+                            "uid":element
+                        });
+                    });
+                    this.updateRowIndex();
+                }
+            } else {
+                this.sudoUser = [];
+            }
+            this.setSelectedNodeData(node);
             this.setSelectedLiderNode(node);
+        },
 
-            let nodeData = [];
-
-            node.attributesMultiValues.objectClass.map(oclas => {
+        setSelectedNodeData(node){
+            if (node) {
+                let nodeData = [];
                 nodeData.push({
-                    'label': 'Nesne Sınıfı', 
-                    'value' : oclas
-                })
-            });
-            nodeData.push({
-                'label': 'Ad',
-                'value': node.name,
-            }, 
-            {
-                'label': 'Kayıt DN',
-                'value': node.distinguishedName,
-            },
-            {
-                'label': 'Oluştrulma Tarihi',
-                'value': node.attributes.createTimestamp,
-            },
-            {
-                'label': 'Güncelleme Tarihi',
-                'value': node.attributes.modifyTimestamp,
-            },
-            {
-                'label': 'Oluşturan Kişi',
-                'value': node.attributes.modifiersName,
+                    'label': 'Ad',
+                    'value': node.name,
+                }, 
+                {
+                    'label': 'Tipi',
+                    'value': node.type
+                },
+                {
+                    'label': 'Kayıt DN',
+                    'value': node.distinguishedName,
+                },
+                {
+                    'label': 'Oluştrulma Tarihi',
+                    'value': node.createDateStr,
+                },
+                {
+                    'label': 'Güncelleme Tarihi',
+                    'value': node.modifyDateStr,
+                },
+                {
+                    'label': 'Oluşturan Kişi',
+                    'value': node.attributes.modifiersName,
 
-            });
-
-
-            this.selectedNodeData = nodeData;
-
-
+                },
+                {
+                    'label': 'Güncelleyen Kişi',
+                    'value': node.attributes.modifiersName,
+                },
+                {
+                    'label': 'Açıklama',
+                    'value': node.attributes.description,
+                });
+                node.attributesMultiValues.objectClass.map(oclas => {
+                    nodeData.push({
+                        'label': 'Nesne Sınıfı', 
+                        'value' : oclas
+                    })
+                });
+                this.selectedNodeData = nodeData;
+            } else {
+                this.selectedNodeData = [];
+            }
         },
-        moveTreeNodeClick(node) {
-            //*** This method for tree that is created for folder move dialog.  */
-            this.moveFolderNode = node;
-        },
-        addFolder() {
-            axios.post('/lider/sudo_groups/addOu', {
-                parentName: this.selectedNode.distinguishedName,
-                type:'ORGANIZATIONAL_UNIT',
-                ou: this.folderName,
-                distinguishedName: 'ou=' + this.folderName + ',' + this.selectedNode.distinguishedName,
-                name: this.folderName
-            }).then(response => {
-                this.$refs.tree.append(response.data, this.selectedNode);
-                this.modals.folderAdd = false;
-                this.$toast.add({severity:'success', summary: 'Klasör Oluşturuldu', detail:'Başarı ile eklendi.', life: 3000});
-            });
-            this.folderName = '';
-            this.modals.folderAdd = false;
-        },
-        changeFolder() {
-            axios.post('/lider/sudo_groups/rename/entry', null, {
-                params: {
-                    oldDN: this.selectedNode.distinguishedName,
-                    newName: 'ou=' + this.folderName
-                }
-            }).then(response => {
-                this.selectedNode.distinguishedName = response.data.distinguishedName;
-                this.selectedNode.name = response.data.name;
-                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
-                this.$toast.add({severity:'success', summary: 'Klasör Adı Değişti.', detail:'Başarı ile değiştirme yapıldı.', life: 3000});
-                this.modals.folderNameChange = false;
-            });
-        },
-        moveFolder() {
-            axios.post('/lider/sudo_groups/move/entry', null ,{
-                params: {
-                    sourceDN: this.selectedNode.distinguishedName,
-                    destinationDN: this.moveFolderNode.distinguishedName
-                }
-            }).then(response => {
-                if (response.data) {
-                    this.$refs.tree.remove(this.selectedNode);
-                    this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveFolderNode.distinguishedName));
-                    this.modals.moveFolder = false;
-                    this.$toast.add({severity:'success', summary: 'Klasör Taşındı.', detail:'Başarı ile taşıma yapıldı.', life: 3000});
-                } else {
-                    this.$toast.add({severity:'error', summary: 'HATA', detail:'Taşıma işlemi yapılamadı.', life: 3000});
-                }
 
-            });
+        appendNode(node, parentNode) {
+            this.$refs.tree.append(node, parentNode);
         },
+
+        updateNode(response, data) {
+            this.selectedNode.distinguishedName = response.distinguishedName;
+            this.selectedNode.name = response.name;
+            this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+            this.setSelectedLiderNode(response);
+            this.setSelectedNodeData(response);
+        },
+
+        moveNode(destinationNode) {
+            this.$refs.tree.remove(this.selectedNode);
+            this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(destinationNode.distinguishedName));
+            this.setSelectedNodeData(null);
+            this.setSelectedNodeData(null);
+        },
+
         sudoGroupCreated(data, isEdit) {
             if (isEdit) {
                 this.isEdit = false;
@@ -290,47 +348,88 @@ export default {
             }
             this.modals.sudoGroup = false;
         },
-        deleteSudoUser(user) {
-            axios.post('/lider/sudo_groups/delete/sudo/user', null, {
-                params : { uid: user ,dn: this.selectedNode.distinguishedName }
+
+        deleteNode() {
+            axios.post('/lider/sudo_groups/deleteEntry', null, {
+                params : { dn: this.selectedNode.distinguishedName }
             }).then(response => {
-                this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
-                this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
-                this.treeNodeClick(response.data);
+                if (response.data) {
+                    this.$refs.tree.remove(this.selectedNode);
+                    this.setSelectedLiderNode(null);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: "Kayıt başarıyla silindi", 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else{
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: "Kayıt silinirken hata oluştu", 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                this.modals.deleteNode = false;
             });
         },
-        handleContenxtMenu(data, node, treenode, tree){
+
+        deleteSudoUser() {
+            axios.post('/lider/sudo_groups/delete/sudo/user', null, {
+                params : { uid: this.deletedSudoUser.uid ,dn: this.selectedNode.distinguishedName }
+            }).then(response => {
+                if (response.data) {
+                   this.$toast.add({
+                        severity:'success', 
+                        detail: "Kullanıcı yetki grubundan başarıyla silindi", 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    }); 
+                    this.sudoUser = this.sudoUser.filter(user => user.uid != this.deletedSudoUser.uid);
+                    this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
+                    this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+                    this.treeNodeClick(this.selectedNode);
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: "Kullanıcı yetki grubundan silinirken hata oluştu", 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                
+            });
+            this.modals.deleteSudoUser = false;
             
+        },
+
+        handleContenxtMenu(data, node, treenode, tree){
             data.preventDefault();
-
             this.treeNodeClick(node);
-
             switch(node.type) {
                 case 'ORGANIZATIONAL_UNIT':
                     if (node.isRoot) {
                         this.contextMenuItems = [
-                            {label: 'Yeni Yetki Grubu Oluştur', command: () => {this.modals.sudoGroup = true;}},
-                            {label: 'Yeni Klasör Oluştur', command: () => {this.modals.folderAdd = true}},
+                            {label: 'Yetki Grubu Ekle', icon:"fas fa-user-tag", command: () => {this.modals.sudoGroup = true;}},
+                            {label: 'Klasör Ekle', icon:"pi pi-folder-open",  command: () => {this.modals.folderAdd = true}},
                         ]
                     } else {
                         this.contextMenuItems = [
-                            {label: 'Yeni Yetki Grubu Oluştur',command: () => {this.modals.sudoGroup = true;}},
-                            {label: 'Yeni Klasör Oluştur', command: () => {this.modals.folderAdd = true}},
-                            {label: 'Klasör Adı Düzenle', command: () => {this.modals.folderNameChange = true}},
-                            {label: 'Klasör Taşı', command:() => {this.modals.moveFolder = true;}},
-                            {label: 'Klasör Sil', command:() => {this.deleteFolder();}},
+                            {label: 'Yetki Grubu Ekle', icon:"fas fa-user-tag", command: () => {this.modals.sudoGroup = true;}},
+                            {label: 'Klasör Ekle', icon:"pi pi-folder-open",  command: () => {this.modals.folderAdd = true}},
+                            {label: 'Klasör Adı Düzenle', icon:"pi pi-pencil", command: () => {this.modals.folderNameChange = true}},
+                            {label: 'Klasör Taşı', icon:"el-icon-rank",  command:() => {this.modals.moveNode = true;}},
+                            {label: 'Klasör Sil', icon:"pi pi-trash", command:() => {this.modals.deleteNode = true}}
                         ]
                     }
                     break
                 case 'ROLE':
                     this.contextMenuItems = [
-                        {label: 'Grubu Düzenle', command:() => {this.sudoGruopEdit = true; this.modals.sudoGroup = true}},
-                        {label: 'Kaydı Taşı', command: () => {this.modals.moveFolder = true}},
-                        {label: 'Yetki Grubu Sil',command:() => {this.deleteFolder();}},
+                        {label: 'Yetki Grubu Düzenle', icon:"pi pi-pencil", command:() => {this.sudoGruopEdit = true; this.modals.sudoGroup = true}},
+                        {label: 'Yetki Grubu Taşı', icon:"el-icon-rank",  command: () => {this.modals.moveNode = true}},
+                        {label: 'Yetki Grubu Sil', icon:"pi pi-trash", command:() => {this.modals.deleteNode = true}}
                     ]
             }
-
-
 
             this.$refs.rightMenu.style.top = data.clientY + 'px';
             this.$refs.rightMenu.style.left = data.clientX + 'px';
@@ -338,16 +437,35 @@ export default {
             this.$refs.rightMenu.style.margin = '0';
             this.$refs.rightMenu.style.backgroundColor = '0';
             this.showContextMenu = !this.showContextMenu;
+        },
+
+        updateRowIndex() {
+            for (let index = 0; index < this.sudoUser.length; index++) {
+                const element = this.sudoUser[index];
+                element.index = index + 1;
+            }
         }
     },
 }
 </script>
 
-<style scoped>
-.mycontextmenu {
+<style lang="scss" scoped>
+
+.sudocontextmenu {
     background-color: rgba(0,0,0,0.0);
 }
 .user-permission-management {
     background-color: #e7f2f8;
+}
+::v-deep(.p-paginator) {
+    .p-paginator-current {
+        margin-left: auto;
+    }
+}
+
+::v-deep(.p-datatable.p-datatable-customers) {
+    .p-paginator {
+        padding: 1rem;
+    }
 }
 </style>
