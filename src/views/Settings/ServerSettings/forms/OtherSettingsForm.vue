@@ -1,6 +1,6 @@
 <template>
     <div class="p-fluid p-formgrid p-grid">
-       <div class="p-col-7">
+       <div class="p-col-6">
            <div class="p-col-12">
                 <h3>{{$t('settings.server_settings.other_settings.other_settings')}}</h3>
             </div>
@@ -26,6 +26,23 @@
                 </div>
             </div>
             <div class="p-col-12">
+                <h4>Kullanıcıların hangi etki alanından yetkilendirileceğini(sudo) seçiniz</h4>
+            </div>
+            <div class="p-col-12">
+                <div class="p-field-radiobutton">
+                    <RadioButton id="sudoRoleType1" name="sudoRoleType" value="LDAP" v-model="sudoRoleType"/>
+                    <label for="sudoRoleType1">{{$t('settings.server_settings.other_settings.ldap')}}</label>
+                </div>
+                <div class="p-field-radiobutton">
+                    <RadioButton id="sudoRoleType2" name="sudoRoleType" value="ACTIVE_DIRECTORY"  v-model="sudoRoleType"/>
+                    <label for="sudoRoleType2">{{$t('settings.server_settings.other_settings.active_directory_or_samba')}}</label>
+                </div>
+                <div class="p-field-radiobutton">
+                    <RadioButton id="sudoRoleType3" name="sudoRoleType" value="NONE"  v-model="sudoRoleType"/>
+                    <label for="sudoRoleType3">{{$t('settings.server_settings.other_settings.none')}}</label>
+                </div>
+            </div>
+            <div class="p-col-12">
                 <h4>{{$t('settings.server_settings.other_settings.ahenk_repo_setting')}}</h4>
             </div>
             <div class="p-field p-col-12">
@@ -40,8 +57,12 @@
                     placeholder="http://repo.liderahenk.org/liderahenk-archive-keyring.asc"
                 />
             </div>
-            <div class="p-field-checkbox p-col-12 p-md-6">
-             <Button type="button" :label="$t('settings.server_settings.other_settings.save')" @click="submitForm()"/>
+            <div class="p-field p-col-12 p-text-right">
+                <div class="p-d-flex p-jc-end">
+                    <div>
+                        <Button icon="pi pi-save" type="button" :label="$t('settings.server_settings.other_settings.save')" @click="submitForm()"/>
+                    </div>
+                </div>
             </div>
        </div>
     </div>
@@ -55,6 +76,7 @@ export default {
     data() {
         return {
             domainType: 'LDAP',
+            sudoRoleType:  'LDAP',
             disableLocalUser: false,
             ahenkRepoAddress:'',
             ahenkRepoKeyAddress:'',
@@ -64,6 +86,7 @@ export default {
       	serverSettings: function(newVal) { 
           if(newVal) {
             this.domainType = newVal.domainType;
+            this.sudoRoleType = newVal.sudoRoleType;
             this.disableLocalUser = newVal.disableLocalUser;
             this.ahenkRepoAddress = newVal.ahenkRepoAddress;
             this.ahenkRepoKeyAddress = newVal.ahenkRepoKeyAddress;
@@ -74,18 +97,17 @@ export default {
     },
     methods: {
         submitForm() {
-            var data = new FormData();
+            let data = new FormData();
             data.append("domainType",this.domainType);
+            data.append("sudoRoleType",this.sudoRoleType);
             data.append("disableLocalUser",this.disableLocalUser);
             data.append("ahenkRepoAddress",this.ahenkRepoAddress);
             data.append("ahenkRepoKeyAddress",this.ahenkRepoKeyAddress);
 
-            axios.post('/lider/settings/update/otherSetting', data).then(response => {
-                // FIXME Burada logout işlemi yapılacak. ?
-
+            axios.post('/lider/settings/update/otherSettings', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Bilgiler başarı ile güncellenmiştir.", 
+                    detail: "Ayarlar başarıyla ile güncellendi", 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

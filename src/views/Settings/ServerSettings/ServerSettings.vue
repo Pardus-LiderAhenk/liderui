@@ -44,7 +44,6 @@ export default {
         getServerSettings() {
             axios.get('/lider/settings/configurations').then(response => {
                 this.serverSettings = response.data;
-                console.log('Server Settings Changed');
             });
         }
     },

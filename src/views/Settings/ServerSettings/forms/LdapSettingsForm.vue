@@ -101,9 +101,13 @@
            
 
         </template>
-         <div class="p-field-checkbox p-col-12 p-md-6">
-             <Button type="button" :label="$t('settings.server_settings.directory_server_settings.save')" @click="submitForm"/>
-         </div>
+        <div class="p-field p-col-12 p-text-right">
+            <div class="p-d-flex p-jc-end">
+                <div>
+                    <Button icon="pi pi-save" type="button" :label="$t('settings.server_settings.directory_server_settings.save')" @click="submitForm()"/>
+                </div>
+            </div>
+        </div>
         
     </div>
 </template>

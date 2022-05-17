@@ -27,13 +27,13 @@
             <label for="zip">{{$t('settings.server_settings.mail_server_settings.tls_activation')}}</label>
             <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="tlsEnabled"></Dropdown>
         </div>
-        <div class="p-col-12 p-md-8">
-
-       </div>
-         <div class="p-field-checkbox p-col-12 p-md-4">
-             <Button type="button" :label="$t('settings.server_settings.mail_server_settings.save')" />
-         </div>
-        
+        <div class="p-field p-col-12 p-text-right">
+            <div class="p-d-flex p-jc-end">
+                <div>
+                    <Button icon="pi pi-save" type="button" :label="$t('settings.server_settings.mail_server_settings.save')" @click="submitForm()"/>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -79,9 +79,7 @@ export default {
             data.append("emailUsername",this.emailUsername);
             data.append("emailPassword",this.emailPassword);
 
-            axios.post('/lider/settings/update/emailSetting', data).then(response => {
-                // FIXME Burada logout işlemi yapılacak. ?
-
+            axios.post('/lider/settings/update/emailSettings', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
                     detail: "Bilgiler başarı ile güncellenmiştir.", 
