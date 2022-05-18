@@ -100,7 +100,7 @@ export default {
             axios.post('/lider/settings/update/emailSettings', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Bilgiler başarı ile güncellenmiştir.", 
+                    detail: "E-Mail ayarları başarı ile güncellenmiştir.", 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

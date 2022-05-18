@@ -1,6 +1,6 @@
 <template>
     <div class="p-fluid p-formgrid">
-        <h6>İnternete Erişmek İçin Vekil Sunucu Yapılandır</h6>
+        <h6>{{$t('policy_management.profile.proxy.configuring_proxy_server_to_access_the_internet')}}</h6>
         <div class="p-field p-col-12 p-md-12">
             <Dropdown
                 v-model="proxyType"
@@ -10,52 +10,52 @@
             >
             </Dropdown>
         </div>
-        <h6>Elle Yapılandırma</h6>
+        <h6>{{$t('policy_management.profile.proxy.manuel_configuration')}}</h6>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>HTTP Vekil Sunucu</label>
+                <label>{{$t('policy_management.profile.proxy.http_proxy_server')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="httpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>HTTP Port</label>
+                <label>{{$t('policy_management.profile.proxy.http_port')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="httpPort"/>
             </div>
         </div>
         <div class="p-field p-grid">
             <InputSwitch :disabled="proxyType != '1'"  class="p-col-fixed" id="useThisServerForAllProtocols" v-model="useThisServerForAllProtocols"/>
-            <label for="useThisServerForAllProtocols" class="p-col" >Firefox'un varsayılan tarayıcı olduğunu her zaman kontrol et</label>
+            <label for="useThisServerForAllProtocols" class="p-col" >{{$t('policy_management.profile.proxy.browser_settings_notify')}}</label>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>SSL Vekil Sunucu</label>
+                <label>{{$t('policy_management.profile.proxy.ssl_proxy_server')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="sslProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>SSL Port</label>
+                <label>{{$t('policy_management.profile.proxy.ssl_port')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="sslPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>FTP Vekil Sunucu</label>
+                <label>{{$t('policy_management.profile.proxy.ftp_proxy_server')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="ftpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>FTP Port</label>
+                <label>{{$t('policy_management.profile.proxy.ftp_port')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="ftpPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>SOCKS Vekil Sunucu</label>
+                <label>{{$t('policy_management.profile.proxy.socks_proxy_server')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="socksProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-2">
-                <label>SOCKS Port</label>
+                <label>{{$t('policy_management.profile.proxy.socks_port')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="socksPort"/>
             </div>
             <div class="p-field p-col-12 p-md-2">
-                <label>SOCKS Sürümü</label>
+                <label>{{$t('policy_management.profile.proxy.socks_version')}}</label>
                 <Dropdown :disabled="proxyType != '1'"
                     v-model="socksVersion"
                     :options="[{name: '4', value: '4'},
@@ -67,19 +67,19 @@
         </div>
         <div class="p-field p-grid">
             <InputSwitch :disabled="proxyType != '1'" class="p-col-fixed" id="remoteDns" v-model="remoteDns"/>
-            <label for="remoteDns" class="p-col">Uzak DNS</label>
+            <label for="remoteDns" class="p-col">{{$t('policy_management.profile.proxy.remote_dns')}}</label>
         </div>
         <div class="p-field">
-            <label class="p-col">Vekil Sunucu Kullanma</label>
+            <label class="p-col">{{$t('policy_management.profile.proxy.using_proxy_server')}}</label>
             <Textarea :disabled="proxyType != '1'" v-model="noProxyOn"></Textarea>
         </div>
         <div class="p-field">
-            <label class="p-col">Oromatik Vekil Sunucu Yapılandırma URL'i</label>
+            <label class="p-col">{{$t('policy_management.profile.proxy.automatic_proxy_configuration_url')}}</label>
             <InputText :disabled="proxyType != '2'" class="p-inputtext-sm" type="text" v-model="autoProxyConfigUrl"/>
         </div>
         <div class="p-field p-grid">
             <InputSwitch :disabled="proxyType != '1'" class="p-col-fixed" id="dontPromptForAuth" v-model="dontPromptForAuth"/>
-            <label for="dontPromptForAuth" class="p-col">Eğer parola kaydedildiyse yetkilendirme için sorma</label>
+            <label for="dontPromptForAuth" class="p-col">{{$t('policy_management.profile.proxy.donot_ask_for_authorization_if_password_is_saved')}}</label>
         </div>
     </div>
 </template>
@@ -113,11 +113,11 @@ export default {
             dontPromptForAuth: false,
             noProxyOn: "localhost, 127.0.0.1",
             proxyOptions: [
-                {name: "Vekil sunucu kullanma", value: "0"},
-                {name: "Elle yapılandır", value:"1"},
-                {name: "Otomatik vekil sunucu yapılandırma URL'i", value: "2"},
-                {name: "Sistem vekil sunucu ayarlarını kullan", value: "3"},
-                {name: "Bu ağ için vekil sunucu ayarlarını otomatik keşfet", value: "4"}
+                {name: this.$t('policy_management.profile.proxy.using_proxy_server'), value: "0"},
+                {name: this.$t('policy_management.profile.proxy.manuel_configuration'), value:"1"},
+                {name: this.$t('policy_management.profile.proxy.automatic_proxy_configuration_url'), value: "2"},
+                {name: this.$t('policy_management.profile.proxy.use_system_proxy_settings'), value: "3"},
+                {name: this.$t('policy_management.profile.proxy.automatically_discover_proxy_settings_for_this_network'), value: "4"}
             ],
             proxyPreferences: []
         }
