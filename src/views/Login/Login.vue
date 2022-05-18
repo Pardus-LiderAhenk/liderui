@@ -91,6 +91,10 @@ export default {
                 });
             });
         },
+
+        forgotPassword() {
+            this.$router.push("forgotPassword");
+        }
     },
 
     watch:{
