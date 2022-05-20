@@ -6,7 +6,7 @@ import ComputerManagementTab from '@/views/ComputerManagement/ComputerManagement
 import FullLayout from '@/layouts/FullLayout.vue';
 
 //REPORTS
-import AgentReport from '@/views/Reports/AgentReport.vue';
+import AgentReport from '@/views/Reports/AgentReport/AgentReport.vue';
 import TaskReport from '@/views/Reports/TaskReport.vue';
 import LogReport from '@/views/Reports/SystemLogReport.vue';
 import ScheduledTaskReport from '@/views/Reports/ScheduledTaskReport.vue';
@@ -26,8 +26,11 @@ import UserProfile from '@/views/Profile/Profile.vue';
 
 //POLICY
 import PolicyManagement from '@/views/PolicyManagement/PolicyManagement.vue';
-
+// Remote Access
 import RemoteAccess from '../components/RemoteAccessComp/RemoteAccess.vue';
+
+// Forgot Password
+import ForgotPassword from '@/views/Login/ForgotPassword.vue';
 
 const routes = [
     {
@@ -159,14 +162,24 @@ const routes = [
         path: "/",
         redirect: "/",
         component: AuthLayout,
-        children: [{
-            path: "/login",
-            name: "Login",
-            components: { default: Login },
-            meta: {
-                guest: true
-            }
-        }, ],
+        children: [
+            {
+                path: "/login",
+                name: "Login",
+                components: { default: Login },
+                meta: {
+                    guest: true
+                }
+            },
+            {
+                path: "/forgotPassword",
+                name: "ForgotPassword",
+                components: { default: ForgotPassword },
+                meta: {
+                    guest: true
+                }
+            } 
+        ],
     },
 ];
 

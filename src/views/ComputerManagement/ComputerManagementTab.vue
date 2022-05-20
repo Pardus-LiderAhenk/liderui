@@ -1,35 +1,30 @@
 <template>
-  <div class="p-grid computer-management">
-      <div class="p-col-12 p-md-6 p-lg-12">
-          <div class="p-grid p-flex-column">
-            <div class="p-col">
-                <Button
-                    icon="fa fa-desktop"
-                    :class="selectedTab == 'computer-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                    @click="setSelectedTab('computer-management')"
-                    :label="$t('menu.computer_management')"
-                >
-                </Button>
-                <Button
-                    icon="fa fa-cubes"
-                    :class="selectedTab == 'computer-group-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-                    @click="setSelectedTab('computer-group-management')"
-                    :label="$t('menu.computer_group_management')"
-                >
-                </Button>
-            </div>
-            <div class="p-col">
-                <!-- <keep-alive> -->
-                    <component 
-                        :is="selectedTab">
-                    </component>
-                <!-- </keep-alive> -->
+    <div class="computer-management">
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-12">
+                <div class="p-d-flex p-jc-between">
+                    <div>
+                        <Button
+                            icon="fa fa-desktop"
+                            :class="selectedTab == 'computer-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                            @click="setSelectedTab('computer-management')"
+                            :label="$t('menu.computer_management')"
+                        >
+                        </Button>
+                        <Button
+                            icon="fa fa-cubes"
+                            :class="selectedTab == 'computer-group-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                            @click="setSelectedTab('computer-group-management')"
+                            :label="$t('menu.computer_group_management')"
+                        >
+                        </Button>
+                    </div>
+                </div>
             </div>
         </div>
+        <component :is="selectedTab"> </component>
     </div>
-  </div>
 </template>
-
 
 <script>
 import ComputerManagement from "@/views/ComputerManagement/ComputerManagement.vue";

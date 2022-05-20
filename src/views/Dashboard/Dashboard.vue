@@ -2,7 +2,7 @@
     <div class="dashboard p-fluid">
         <div class="p-grid p-field">
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Toplam İstemci Sayısı" 
+                <Dashboardbox :title="$t('dashboard_screen.total_number_of_client')" 
                     :description="totalClientNumber" 
                     colorClass="darkgray"
                     :icon="'pi pi-desktop'"
@@ -10,14 +10,14 @@
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Toplam Kullanıcı Sayısı" 
+                <Dashboardbox :title="$t('dashboard_screen.total_number_of_user')" 
                     :description="totalUserNumber"
                     :icon="'pi pi-users'" colorClass="blue"
                     :descriptionFont="'bold'"
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Toplam Gönderilen Görev Sayısı" 
+                <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
                     :description="totalSentTaskNumber" 
                     :icon="'pi pi-send'" 
                     colorClass="orange"
@@ -25,7 +25,7 @@
                 />
             </div>
             <div class="p-field p-col-12 p-md-6 p-lg-3">
-                <Dashboardbox title="Toplam Atanan Politika Sayısı"
+                <Dashboardbox :title="$t('dashboard_screen.total_number_of_assigned_policies')"
                     :description="totalAssignedPolicyNumber" 
                     colorClass="green"
                     :descriptionFont="'bold'"
@@ -36,7 +36,10 @@
             <div class="p-col-12 p-md-6 p-lg-3">
                 <Card class="p-field">
                     <template #title>
-                        <span style="margin: 0 0 2px; font-size:1.2rem">İstemciler</span>
+                        <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.clients')}}</span>
+                    </template>
+                    <template #subtitle>
+                        <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.online_offline_rate')}}</span>
                     </template>
                     <template #content>
                         <Chart 
@@ -50,7 +53,7 @@
                 <Card class="p-field">
                 <template #title>
                     <div class="p-d-flex p-jc-between" style="margin: 0 0 2px; font-size:1.2rem;">
-                        <span >İstatistik</span>
+                        <span >{{$t('dashboard_screen.statistics')}}</span>
                         <span><i class="pi pi-calendar"></i> {{getNowDate()}}</span>
                     </div>
                 </template>
@@ -61,7 +64,7 @@
                                 {{totalRegisteredComputerTodayNumber}}
                             </h5>
                             <div>
-                                <h6 style="color: #29324180">Bugün kayıt olan istemci</h6>
+                                <h6 style="color: #29324180">{{$t('dashboard_screen.client_registered_today')}}</h6>
                             </div>
                         </div>
                         <div class="p-col-12 p-md-6 p-lg-6">
@@ -69,7 +72,7 @@
                                 {{totalSessionsTodayNumber}}
                             </h5>
                             <div>
-                                <h6 style="color: #29324180">Bugün oturum açan kullanıcı</h6>
+                                <h6 style="color: #29324180">{{$t('dashboard_screen.user_logged_in_today')}}</h6>
                             </div>
                         </div>
                     </div>
@@ -79,7 +82,10 @@
             <div class="p-col-12 p-md-6 p-lg-9">
                 <Card>
                     <template #title>
-                        <span style="margin: 0 0 2px; font-size:1.2rem">Son 2 Yıla Ait İstemci Grafiği</span>
+                        <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.line_chart_title')}}</span>
+                    </template>
+                    <template #subtitle>
+                        <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.client_graph_for_the_last_2_years')}}</span>
                     </template>
                     <template #content>
                         <Chart type="line" :data="agentLineData"  :width="340" :height="100"/>
@@ -88,8 +94,11 @@
             </div>
         </div>
         <div class="p-field p-grid">
-            <div class="p-field p-col-12 p-md-6 p-lg-4">
+            <div class="p-field p-col-12 p-md-6 p-lg-5">
                 <last-activity :lastActivityData="lastActivityData"></last-activity>
+            </div>
+            <div class="p-field p-col-12 p-md-6 p-lg-7">
+                <task-activity :userTasks="userTasks"></task-activity>
             </div>
         </div>
         
@@ -106,6 +115,7 @@
 import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 import axios from "axios";
 import LastActivity from "./LastActivity.vue"
+import TaskActivity from "./TaskActivity.vue"
 
 export default {
     data() {
@@ -119,6 +129,7 @@ export default {
             totalSessionsTodayNumber: 0,
             lastActivityData: null,
             agentData: null,
+            userTasks: [],
             options: {
                 responsive: true,
                 plugins: {
@@ -132,9 +143,9 @@ export default {
                         },
                     },
                     title: {
-                        display: true,
+                        display: false,
                         align: "center",
-                        text: "İstemciler(%)"
+                        text: this.$t('dashboard_screen.clients')
                     },
                 },
             maintainAspectRatio: false
@@ -145,8 +156,10 @@ export default {
     
     components: {
         Dashboardbox,
-        LastActivity
+        LastActivity,
+        TaskActivity
     },
+    
     mounted() {
         this.renderCharts();
     },
@@ -172,6 +185,7 @@ export default {
                         this.totalRegisteredComputerTodayNumber = response.data.totalRegisteredComputerTodayNumber;
                         this.totalSessionsTodayNumber = response.data.totalSessionsTodayNumber;
                         this.lastActivityData = response.data.liderConsoleLastActivity;
+                        this.userTasks = response.data.userTasks;
                         resolve(response.data);
                     }
                 });
@@ -183,7 +197,7 @@ export default {
             let onlineRate = ((this.totalOnlineComputerNumber / this.totalClientNumber)*100).toFixed(2);
             let offlineRate = (100 - onlineRate).toFixed(2);
             this.agentData = {
-                labels: ["Çevrimiçi("+ this.totalOnlineComputerNumber +")", "Çevrimdışı("+ offlineComputerNumber +")"],
+                labels: [this.$t('dashboard_screen.online')+ "(" + this.totalOnlineComputerNumber +")", this.$t('dashboard_screen.offline') + "("+ offlineComputerNumber +")"],
                 datasets: [
                     {
                         data: [onlineRate, offlineRate],
@@ -199,7 +213,7 @@ export default {
                 labels: dateRanges,
                 datasets: [
                     {   
-                        label: 'Kayıtlı İstemciler',
+                        label: this.$t('dashboard_screen.registered_clients'),
                         data: dateRangeValuesAgent,
                         fill: true,
                         borderColor: '#42A5F5',
@@ -211,7 +225,7 @@ export default {
 
         getNowDate() {
             let date = new Date();
-            let month = date.toLocaleString('tr', { month: 'long' });
+            let month = date.toLocaleString(this.$i18n.locale, { month: 'long' });
             return date.getDate() +' '+month;
         }
     }

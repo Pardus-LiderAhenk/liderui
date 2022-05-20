@@ -1,19 +1,19 @@
 <template>
     <div class="p-grid">
         <div class="p-col-12">
-            <h5>ARAYÜZ KULLANICILARI VE ERİŞİM AYARLARI</h5>
+            <h5>{{$t('settings.console_user_settings.lider_users_and_access_settings')}}</h5>
         </div>
         <div class="p-col-12">
             <TabView>
-                <TabPanel header="Arayüz Kullanıcı Yönetimi">
+                <TabPanel :header="$t('settings.console_user_settings.lider_user_management')">
                     <div class="p-grid">
                         <div class="p-col-6">
                             <div class="p-col-12">
-                                <h5>Mevcut Konsol Kullanıcıları</h5>
+                                <h5>{{$t('settings.console_user_settings.existing_console_users')}}</h5>
                             </div>
                             <div class="p-col-12 p-d-flex p-jc-end ">
-                                <Button label="Konsol Kullanıcısı Ekle" class="p-mr-2" @click="addConsoleUserModalVisible = true"/>
-                                <Button  label="Kullanıcının Konsol Yetkisini Sil" @click="showDeleteConsoleUserDialog = true"/>
+                                <Button :label="$t('settings.console_user_settings.add_console_user')"  class="p-mr-2" @click="addConsoleUserModalVisible = true"/>
+                                <Button :label="$t('settings.console_user_settings.delete_users_console_authority')" @click="showDeleteConsoleUserDialog = true"/>
                             </div>
                             <div class="p-col-12">
                                 <DataTable :value="records" responsiveLayout="scroll"
@@ -29,7 +29,7 @@
                                         </template>
                                     </Column>
                                     <Column field="uid" header="UID"></Column>
-                                    <Column field="distinguishedName" header="Kayıt DN"></Column>
+                                    <Column field="distinguishedName" :header="$t('settings.console_user_settings.registiration_dn')"></Column>
                                    
                                 
                                 </DataTable>
@@ -37,10 +37,10 @@
                         </div>
                         <div class="p-col-6" v-if="selectedUser">
                             <div class="p-col-12 ">
-                                <p style="font-weight:bold">Seçili Kullanıcı Rolleri (Kayıt DN: {{selectedUser ? selectedUser.distinguishedName: 'Lütfen Seçiniz'}})</p>
+                                <p style="font-weight:bold">{{$t('settings.console_user_settings.selected_users_roles')}} {{selectedUser ? selectedUser.distinguishedName: $t('settings.console_user_settings.please_select')}})</p>
                             </div>
                             <div class="p-col-12 p-d-flex p-jc-end">
-                                <Button label="Değişiklikleri Kaydet" @click="showUpdateConsoleUserRolesDialog=true"/>
+                                <Button :label="$t('settings.console_user_settings.save')" @click="showUpdateConsoleUserRolesDialog=true"/>
                             </div>
                             <DataTable :value="roles" responsiveLayout="scroll" 
                                 >
@@ -49,7 +49,7 @@
                                         <p>{{slotProps.index + 1}}</p>
                                     </template>
                                 </Column>
-                                <Column field="name" header="Rol Adı"></Column>
+                                <Column field="name" :header="$t('settings.console_user_settings.role_name')"></Column>
                                  <Column :exportable="false" style="min-width:8rem">
                                     <template #body="slotProps">
                                     <InputSwitch 
@@ -60,11 +60,14 @@
                             </DataTable>
                         </div>
                         <div class="p-col-6 p-d-flex" v-if="selectedUser === null">
-                            <p style="width:100%;text-align:center;" class="p-as-center p-ai-center p-ac-center">Lütfen Yetkilerini düzenlemek istediğiniz kullanıcıyı seçiniz.</p>
+                            <p 
+                            style="width:100%;text-align:center;" 
+                            class="p-as-center p-ai-center p-ac-center">
+                                {{$t('settings.console_user_settings.please_select_the_user_whose_privileges_you_want_to_edit')}}</p>
                         </div>
                     </div>
                 </TabPanel>
-                <TabPanel header="Arayüz Kullanıcısı Dizin Erişim Ayarları">
+                <TabPanel :header="$t('settings.console_user_settings.lider_user_directory_access_settings')">
                     <div class="p-grid">
                         <div class="p-col-3">
                             <tree-component 
@@ -77,7 +80,7 @@
                         </div>
                         <div class="p-col-3">
                             <div class="p-col-12">
-                                <p>Grup Üyeleri</p>
+                                <p>{{$t('settings.console_user_settings.group_member')}}</p>
                             </div>
                             <DataTable :value="groupMembers" responsiveLayout="scroll" 
                                 >
@@ -86,12 +89,12 @@
                                         <p>{{slotProps.index + 1}}</p>
                                     </template>
                                 </Column>
-                                <Column field="uid" header="Üye DN"></Column>
+                                <Column field="uid" :header="$t('settings.console_user_settings.member_dn')"></Column>
                             </DataTable>
                         </div>
                         <div class="p-col-6">
                             <div class="p-col-12 p-d-flex p-jc-end">
-                                <Button type="button" label="Yeni Yetki Grubu Ekle" icon="pi pi-angle-down" iconPos="right" @click="toggle" />
+                                <Button type="button" :label="$t('settings.console_user_settings.add_new_authority_group')" icon="pi pi-angle-down" iconPos="right" @click="toggle" />
                                 <Menu ref="menu" :model="privilegeActions" :popup="true" />
                             </div>
                             <DataTable :value="groupPrivilages" responsiveLayout="scroll" 
@@ -101,11 +104,11 @@
                                         <p>{{slotProps.index + 1}}</p>
                                     </template>
                                 </Column>
-                                <Column field="accessDN" header="Erişim Yetkisi Verilen DN"></Column>
-                                <Column header="Yetki">
+                                <Column field="accessDN" :header="$t('settings.console_user_settings.access_granted_dn')"></Column>
+                                <Column :header="$t('settings.console_user_settings.authorization')">
                                     <template #body="slotProps">
                                         {{
-                                                slotProps.data != null && slotProps.data.accessType == "write" ? "Okuma ve Yazma" : "Okuma"
+                                                slotProps.data != null && slotProps.data.accessType == "write" ? $t('settings.console_user_settings.read_and_write') : $t('settings.console_user_settings.read')
                                         }}
                                     </template>
                                 </Column>
@@ -158,8 +161,8 @@
     <LiderConfirmDialog 
         :showDialog="showDeleteConsoleUserDialog"
         @showDialog="showDeleteConsoleUserDialog = $event;"
-        header="Konsol Kullanıcısı Yetki Silme"
-        message="Konsol kullanıcısı yetkileri silinecektir. Devam etmek istiyor musunuz ?"
+        :header="$t('settings.console_user_settings.console_user_authorization_deletion')"
+        :message="$t('settings.console_user_settings.console_user_authorization_deletion_question')"
         @accepted="deleteConsoleUser"
     />
 
@@ -167,8 +170,8 @@
     <LiderConfirmDialog 
         :showDialog="showUpdateConsoleUserRolesDialog"
         @showDialog="showUpdateConsoleUserRolesDialog = $event;"
-        header="Yetki Güncelleme"
-        message="Konsol kullanıcısı yetkileri güncellenecektir. Devam etmek istiyor musunuz ?"
+        :header="$t('settings.console_user_settings.authority_update')"
+        :message="$t('settings.console_user_settings.authority_update_question')"
         @accepted="updateUserRoles"
     />
   
@@ -207,35 +210,35 @@ export default {
             groupPrivilages: [],
             privilegeActions: [
                 {
-					label: 'İstemciler',
+					label: this.$t('settings.console_user_settings.computers'),
 					icon: 'pi pi-refresh',
 					command: () => {
 						this.agentsModalVisible = true;
 					}
 				},
                  {
-					label: 'Kullanıcılar',
+					label: this.$t('settings.console_user_settings.users'),
 					icon: 'pi pi-refresh',
 					command: () => {
 						this.userModalVisible = true;
 					}
 				},
                 {
-					label: 'İstemci Grupları',
+					label: this.$t('settings.console_user_settings.computers_groups'),
 					icon: 'pi pi-refresh',
 					command: () => {
 						this.agentGroupModalVisible = true;
 					}
 				},
                 {
-					label: 'Kullanıcı Grupları',
+					label: this.$t('settings.console_user_settings.users_groups'),
 					icon: 'pi pi-refresh',
 					command: () => {
 						this.userGroupModalVisible = true;
 					}
 				},
                 {
-					label: 'Rol Kullanıcıları',
+					label: this.$t('settings.console_user_settings.role_users'),
 					icon: 'pi pi-refresh',
 					command: () => {
 						this.roleGroupModalVisible = true;
@@ -289,8 +292,8 @@ export default {
                      if(response.status === 200) {
                          this.$toast.add({
                             severity:'success', 
-                            detail: 'Kullanıcı rolleri başarı ile güncellendi', 
-                            summary: 'Başarılı', 
+                            detail: this.$t('settings.console_user_settings.users_role_successfully_update'), 
+                            summary: this.$t('settings.console_user_settings.successful'), 
                             life: 3000
                         });
                         // FIXME 
@@ -298,8 +301,8 @@ export default {
                      } else {
                           this.$toast.add({
                             severity:'error', 
-                            detail: 'Yetki kaldırılırken beklenmedik bir hata oluştu.', 
-                            summary: 'HATA', 
+                            detail: this.$t('settings.console_user_settings.an_unexpected_error_occurred_while_deauthorizing'), 
+                            summary: this.$t('settings.console_user_settings.error'), 
                             life: 3000
                         });
                      }
@@ -324,16 +327,16 @@ export default {
                     this.getConsoleUsers();
                     this.$toast.add({
                         severity:'success', 
-                        detail: 'Kullanıcı rolleri başarı ile silindi.', 
-                        summary: 'Başarılı', 
+                        detail:  this.$t('settings.console_user_settings.user_roles_deleted_successfully'),  
+                        summary: this.$t('settings.console_user_settings.successful'), 
                         life: 3000
                     });
                 });
             } else {
                 this.$toast.add({
                     severity:'error', 
-                    detail: 'Lütfen yetkisini silmek istediğiniz kullanıcıyı seçiniz.', 
-                    summary: 'Kullanıcı Seçilmemiş', 
+                    detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
+                    summary: this.$t('settings.console_user_settings.no_user_selected'), 
                     life: 3000
                 });
             }
@@ -360,8 +363,8 @@ export default {
                     if(response.status === 200) {
                         this.$toast.add({
                             severity:'success', 
-                            detail: 'Rol başarı ile kaldırıldı.', 
-                            summary: 'Başarılı', 
+                            detail: this.$t('settings.console_user_settings.role_successfully_deleted'),
+                            summary: this.$t('settings.console_user_settings.successful'),
                             life: 3000
                         });
 
@@ -382,16 +385,16 @@ export default {
                     if(response.data) {
                         this.$toast.add({
                             severity:'success', 
-                            detail: 'Erişim Yetkisi Başarı İle Eklendi', 
-                            summary: 'BAŞARILI', 
+                            detail: this.$t('settings.console_user_settings.access_authorization_added_successfully'),
+                            summary: this.$t('settings.console_user_settings.successful'),
                             life: 3000
                         });
                         this.getOlcAccessRules();
                     } else {
                         this.$toast.add({
                             severity:'error', 
-                            detail: 'Erişim Yetkisi Eklenirken Hata Oluştu.', 
-                            summary: 'HATA', 
+                            detail: this.$t('settings.console_user_settings.an_error_occurred_while_adding_access_authorization'),
+                            summary: this.$t('settings.console_user_settings.error'),
                             life: 3000
                         });
                     }

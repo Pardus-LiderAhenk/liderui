@@ -2,10 +2,10 @@
 <div>
     <Card>
         <template #title>
-            <span style="margin: 0 0 2px; font-size:1.2rem">Faaliyet</span>
+            <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('dashboard_screen.last_activity')}}</span>
         </template>
         <template #subtitle>
-            <span style="margin: 0 0 2px; font-size:1rem">Lider arayüz kullanım geçmişi</span>
+            <span style="margin: 0 0 2px; font-size:1rem">{{$t('dashboard_screen.lider_interface_usage_history')}}</span>
         </template>
         <template #content>
             <Timeline :value="activityData" class="customized-timeline">
@@ -42,7 +42,7 @@ export default {
                 if (this.lastActivityData) {
                     data = this.lastActivityData.content;
                 }
-                return data
+                return data;
             },
         },
     },

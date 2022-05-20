@@ -1,69 +1,69 @@
 <template>
     <div>
         <div class="p-fluid p-formgrid">
-            <h6>Başlangıç</h6>
+            <h6>{{$t('policy_management.profile.browser.start')}}</h6>
             <div class="p-field p-grid">
                 <InputSwitch id="checkDefaultBrowser" class="p-col-fixed" v-model="checkDefaultBrowser"/>
-                <label for="checkDefaultBrowser" class="p-col">Firefox'un varsayılan tarayıcı olduğunu her zaman kontrol et</label>
+                <label for="checkDefaultBrowser" class="p-col">{{$t('policy_management.profile.browser.browser_settings_notify')}}</label>
             </div>
             <div class="p-field">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-12 p-md-6">
-                        <label>Firefox başlatıldığında</label>
+                        <label>{{$t('policy_management.profile.browser.when_firefox_start')}}</label>
                         <Dropdown
                             v-model="pageMode"
-                            :options="[{name:'Anasayfayı göster', value:'1'},
-                                {name: 'Boş sayfa göster', value:'0'},
-                                {name: 'Geçen seferden kalan pencere ve sekmeleri göster', value: '3'}]"
+                            :options="[{name:$t('policy_management.profile.browser.show_homepage'), value:'1'},
+                                {name: $t('policy_management.profile.browser.show_blank_page'), value:'0'},
+                                {name: $t('policy_management.profile.browser.show_windows_and_tabs_from_last_time'), value: '3'}]"
                             optionLabel="name"
                             optionValue="value"
                         >
                         </Dropdown>
                     </div>
                     <div class="p-field p-col-12 p-md-6">
-                        <label>Ana Sayfa</label>
+                        <label>{{$t('policy_management.profile.browser.homepage')}}</label>
                         <InputText class="p-inputtext-sm" type="text" v-model="homePage" placeholder="https://liderahenk.org/"/>
                     </div>
                 </div>
             </div>
-            <h6>İndirilenler</h6>
+            <h6>{{$t('policy_management.profile.browser.downloads')}}</h6>
             <div class="p-field p-grid">
                 <RadioButton value="true" v-model="useDownloadDir" id="useDownloadDir1"/>
-                <label for="useDownloadDir1" class="p-col">Dosyaları buraya kaydet</label>
+                <label for="useDownloadDir1" class="p-col">{{$t('policy_management.profile.browser.save_files_here')}}</label>
                 <InputText class="p-inputtext-sm p-col" type="text" 
                     :disabled="useDownloadDir == 'false'"
                     v-model="downloadDir" 
-                    placeholder="/home/kullanıcıAdı/İndirilenler"/>
+                    :placeholder="$t('policy_management.profile.browser.save_directory')"/>
             </div>
             <div class="p-field p-grid">
                 <RadioButton id="useDownloadDir2" value="false" v-model="useDownloadDir"/>
-                <label for="useDownloadDir2" class="p-col">Dosyaların nereye kaydedileceğini her seferinde sor</label>
+                <label for="useDownloadDir2" class="p-col">{{$t('policy_management.profile.browser.ask_each_time_where_to_save_files')}}</label>
             </div>
             <h6>Sekmeler</h6>
             <div class="p-field p-grid">
                 <InputSwitch id="openNewWindow" class="p-col-fixed" v-model="openNewWindow"/>
-                <label for="openNewWindow" class="p-col">Bağlantıları yeni sekmede aç</label>
+                <label for="openNewWindow" class="p-col">{{$t('policy_management.profile.browser.open_links_in_new_tab')}}</label>
             </div>
             <div class="p-field p-grid">
                 <InputSwitch id="warnOnClose" class="p-col-fixed" v-model="warnOnClose"/>
-                <label for="warnOnClose" class="p-col">Birden fazla sekme kapatılırken beni uyar</label>
+                <label for="warnOnClose" class="p-col">{{$t('policy_management.profile.browser.multiple_tabs_warnings')}}</label>
             </div>
             <div class="p-field p-grid">
                 <InputSwitch id="warnOnOpen" class="p-col-fixed" v-model="warnOnOpen"/>
-                <label for="warnOnOpen" class="p-col">Firefox'un yavaşlamasına neden olabilecek sayıda sekme açılırken beni uyar</label>
+                <label for="warnOnOpen" class="p-col">{{$t('policy_management.profile.browser.firefox_slowing_warning')}}</label>
             </div>
             <div class="p-field p-grid">
                 <InputSwitch id="restoreOnDemand" class="p-col-fixed" v-model="restoreOnDemand"/>
-                <label for="restoreOnDemand" class="p-col">Seçilene kadar sekmeleri yükleme</label>
+                <label for="restoreOnDemand" class="p-col">{{$t('policy_management.profile.browser.loading_tabs_until_selected')}}</label>
             </div>
             <div class="p-field p-grid">
                 <InputSwitch id="loadInBackground" class="p-col-fixed" v-model="loadInBackground"/>
-                <label for="loadInBackground" class="p-col">Yeni sekme açıldığında, ona geç</label>
+                <label for="loadInBackground" class="p-col">{{$t('policy_management.profile.browser.when_the_new_tabs_opens_switch_to_that')}}</label>
             </div>
-            <h6>Eklenti Kurulumu</h6>
+            <h6>{{$t('policy_management.profile.browser.plugin_installation')}}</h6>
             <div class="p-field p-grid">
                 <InputSwitch id="enableXpInstall" class="p-col-fixed" v-model="enableXpInstall"/>
-                <label for="enableXpInstall" class="p-col">Eklenti kurulumunu engelle</label>
+                <label for="enableXpInstall" class="p-col">{{$t('policy_management.profile.browser.block_plugin_installation')}}</label>
             </div>
         </div>
     </div>

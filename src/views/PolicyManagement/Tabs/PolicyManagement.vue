@@ -7,9 +7,7 @@
                 </template>
                 <template #content>
                     <p>
-                       Politika bir kullanıcı grubunun yetki ve kısıtları belirlenir. 
-                       Bir veya birden fazla profil bir araya gelerek politikayı oluşturur. 
-                       Politikalar kullanıcının oturum açması esnasında Lider'den sorgulanarak uygulanır.
+                        {{$t('policy_management.explanation')}}
                     </p>
                 </template>
             </Card>

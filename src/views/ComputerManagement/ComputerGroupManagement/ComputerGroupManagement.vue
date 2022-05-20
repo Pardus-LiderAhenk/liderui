@@ -4,7 +4,7 @@
         @close-node-detail-dialog="showNodeDetailDialog=false">
     </node-detail>
     <div class="p-grid computer-group-management">
-        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;">
+        <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
                 loadNodeUrl="/lider/computer_groups/getGroups"
@@ -195,7 +195,7 @@
             <TabPanel>
                 <template #header>
                     <span>{{$t('group_management.selected_clients')}}
-                         <Badge :value="agentGroupModal.checkedNodes.length"></Badge>
+                        <Badge v-if="agentGroupModal.checkedNodes.length > 0" :value="agentGroupModal.checkedNodes.length"></Badge>
                     </span>
                 </template>
                 <DataTable :value="agentGroupModal.checkedNodes" v-model:filters="filters"
@@ -237,7 +237,7 @@
             <TabPanel v-if="modals.addClient">
                 <template #header>
                     <span>{{$t('group_management.existing_clients')}}
-                         <Badge :value="agentGroupModal.existingClients.length"></Badge>
+                         <Badge v-if="agentGroupModal.checkedNodes.length > 0" :value="agentGroupModal.existingClients.length"></Badge>
                     </span>
                 </template>
                 <DataTable :value="agentGroupModal.existingClients" v-model:filters="filters"
@@ -264,6 +264,15 @@
                 </DataTable>
             </TabPanel>
         </TabView>
+        <div v-if="loadingGroup" class="p-text-center">
+            <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+            <a class="primary" v-if="modals.addClient">
+                {{$t('group_management.add_client_loading')}}
+            </a>
+            <a class="primary" v-else>
+                {{$t('group_management.add_group_loading')}}
+            </a>
+        </div>
         <template #footer>
             <Button :label="$t('user_management.cancel')" icon="pi pi-times" 
                 @click="modals.addGroup = false" class="p-button-text p-button-sm"
@@ -316,6 +325,7 @@ export default {
             moveFolderNode: null,
             showContextMenu: false,
             loading: false,
+            loadingGroup: false,
             modals : {
                 folderAdd: false,
                 renameGroup: false,
@@ -618,12 +628,14 @@ export default {
                 return;
             }
             this.loading = true;
+            this.loadingGroup = true;
             axios.post('/lider/computer_groups/createNewAgentGroup',{
                 groupName: this.agentGroupModal.groupName,
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 selectedOUDN: this.selectedNode.distinguishedName
             }).then(response => {
                 this.loading = false;
+                this.loadingGroup = false;
                 if (response.data === "") {
                     this.$toast.add({
                         severity:'error', 
@@ -667,11 +679,13 @@ export default {
         },
 
         addClientToGroup() {
+            this.loadingGroup = true;
             axios.post('/lider/computer_groups/group/existing',{
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 groupDN: this.selectedNode.distinguishedName
             }).then(response => {
                 this.loading = false;
+                this.loadingGroup = false;
                 if (response.data) {
                     this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
                     this.setSelectedComputerGroupNode(response.data);

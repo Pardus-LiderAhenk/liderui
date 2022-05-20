@@ -7,10 +7,7 @@
                 </template>
                 <template #content>
                     <p>
-                       Bir eklentide gerçekleştirilebilecek yapılandırma ayarlarının bütününe Profil denir.
-                       Bir veya birden fazla profil bir araya gelerek politikayı oluşturur. Tek başına çalıştırılamaz. 
-                       Bir politika üzerine eklendikten sonra kullanılabilir. 
-                       Örneğin; Tarayıcı eklentisi için; Lider Arayüz üzerinden eklenti aracılığı ile anasayfa belirleme gibi yapılandırma ayarlarının belirlenip kaydedilmesi ile profil oluşturulabilir.
+                       {{$t('policy_management.profile.explanation')}}
                     </p>
                 </template>
             </Card>

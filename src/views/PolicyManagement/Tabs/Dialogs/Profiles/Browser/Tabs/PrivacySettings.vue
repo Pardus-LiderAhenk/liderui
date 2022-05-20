@@ -1,41 +1,41 @@
 <template>
     <div class="p-fluid p-formgrid">
-        <h6>Takip Edilme</h6>
+        <h6>{{$t('policy_management.profile.privacy.being_tracked')}}</h6>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="dontWantToBeTracked" v-model="dontWantToBeTracked"/>
-            <label for="dontWantToBeTracked" class="p-col">Sitelere takip edilmek istemediğimi söyle</label>
+            <label for="dontWantToBeTracked" class="p-col">{{$t('policy_management.profile.privacy.tell_the_sites_that_ı_dont_want_to_be_tracked')}}</label>
         </div>
-        <h6>Geçmiş</h6>
+        <h6>{{$t('policy_management.profile.privacy.history')}}</h6>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="rememberBrowsingDownloadHistory" v-model="rememberBrowsingDownloadHistory"/>
-            <label for="rememberBrowsingDownloadHistory" class="p-col">Gezinme ve indirme geçmişini hatırla</label>
+            <label for="rememberBrowsingDownloadHistory" class="p-col">{{$t('policy_management.profile.privacy.remember_browsing_and_download_history')}}</label>
         </div>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="rememberSearchFormHistory" v-model="rememberSearchFormHistory"/>
-            <label for="rememberSearchFormHistory" class="p-col">Arama ve form geçmişini hatırla</label>
+            <label for="rememberSearchFormHistory" class="p-col">{{$t('policy_management.profile.privacy.remember_search_and_form_history')}}</label>
         </div>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="acceptCookiesFromSites" v-model="acceptCookiesFromSites"/>
-            <label for="acceptCookiesFromSites" class="p-col">Çerezleri kabul et</label>
+            <label for="acceptCookiesFromSites" class="p-col">{{$t('policy_management.profile.privacy.accept_cookies')}}</label>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-4">
-                <label>Üçüncü şahıs çerezleri kabul et</label>
+                <label>{{$t('policy_management.profile.privacy.accept_third_party_cookies')}}</label>
                 <Dropdown :disabled="!acceptCookiesFromSites"
                     v-model="acceptThirdPartyCookies"
-                    :options="[{name: 'Her zaman', value:'0'},
-                            {name: 'Ziyaret edilenlerden', value: '1'},
-                            {name: 'Asla', value: '2'}]"
+                    :options="[{name: $t('policy_management.profile.privacy.always'), value:'0'},
+                            {name: $t('policy_management.profile.privacy.from_those_visited'), value: '1'},
+                            {name: $t('policy_management.profile.privacy.never'), value: '2'}]"
                     optionLabel="name" optionValue="value"
                 >
                 </Dropdown>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>Şu zamana dek tut</label>
+                <label>{{$t('policy_management.profile.privacy.keep_it_until_that_time')}}</label>
                 <Dropdown :disabled="!acceptCookiesFromSites"
                     v-model="keepCookiesUntil"
-                    :options="[{name: 'Süresi dolana dek tut', value:'0'},
-                            {name: 'Firefox kapatıldığında', value: '2'}]"
+                    :options="[{name: $t('policy_management.profile.privacy.keep_it_until_it_expires'), value:'0'},
+                            {name: $t('policy_management.profile.privacy.when_firefox_closed'), value: '2'}]"
                     optionLabel="name" optionValue="value"
                 >
                 </Dropdown>
@@ -43,21 +43,21 @@
         </div>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="clearHistoryOnClose" v-model="clearHistoryOnClose"/>
-            <label for="clearHistoryOnClose" class="p-col">Firefox kapatıldığında geçmişi temizle</label>
+            <label for="clearHistoryOnClose" class="p-col">{{$t('policy_management.profile.privacy.clear_history_when_firefox_is_closed')}}</label>
         </div>
-        <h6>Adres Çubuğu (Adres çubuğunu kullanırken, öner)</h6>
+        <h6>{{$t('policy_management.profile.privacy.address_bar')}}</h6>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-grid p-col-12 p-md-3">
                 <InputSwitch class="p-col-fixed" id="suggestHistory" v-model="suggestHistory"/>
-                <label for="suggestHistory" class="p-col">Geçmiş</label>
+                <label for="suggestHistory" class="p-col">{{$t('policy_management.profile.privacy.history')}}</label>
             </div>
             <div class="p-field p-grid p-col-12 p-md-3">
                 <InputSwitch  class="p-col-fixed" id="suggestBookmarks" v-model="suggestBookmarks"/>
-                <label for="suggestBookmarks" class="p-col">Yer imleri</label>
+                <label for="suggestBookmarks" class="p-col">{{$t('policy_management.profile.privacy.bookmarks')}}</label>
             </div>
             <div class="p-field p-grid p-col-12 p-md-4">
                 <InputSwitch  class="p-col-fixed" id="suggestOpenTabs" v-model="suggestOpenTabs"/>
-                <label for="suggestOpenTabs" class="p-col">Açık sekmeler</label>
+                <label for="suggestOpenTabs" class="p-col">{{$t('policy_management.profile.privacy.open_tabs')}}</label>
             </div>
         </div>
 

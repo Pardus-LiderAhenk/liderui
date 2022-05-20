@@ -1,4 +1,43 @@
 <template>
+<!-- Dialogs Start -->
+  <add-group-dialog v-if="addGroupDialog"
+    :filter="filter"
+    :addGroupDialog="addGroupDialog" 
+    @close-group-dialog="addGroupDialog=false;">
+  </add-group-dialog>
+  <add-to-exist-group-dialog v-if="addExistGroupDialog"
+    :filter="filter"
+    :addExistGroupDialog="addExistGroupDialog" 
+    @close-group-dialog="addExistGroupDialog=false;">
+  </add-to-exist-group-dialog>
+  <agent-detail-dialog v-if="agentDetailDialog"
+    :agentDetailDialog="agentDetailDialog"
+    :selectedAgent="selectedAgent"
+    @close-agent-detail-dialog="agentDetailDialog=false;">
+  </agent-detail-dialog>
+  <Dialog header="Klasör Seçiniz" 
+    v-model:visible="agentOuDialog" 
+    :style="{width: '30vw'}" :modal="true"
+  >
+    <tree-component 
+      ref="agentTree"
+      loadNodeUrl="/lider/computer/getComputers"
+      loadNodeOuUrl="/lider/computer/getOuDetails"
+      :treeNodeClick="node => filter.dn = node.distinguishedName"
+      :searchFields="[{key: this.$t('tree.folder'), value: 'ou'}]"
+      :isMove="true"
+    />
+    <template #footer>
+      <Button label="İptal" 
+        icon="pi pi-times" @click="agentOuDialog = false"
+        class="p-button-text p-button-sm"
+      />
+      <Button label="Seç" icon="pi pi-check" 
+          @click="selectAgentOuDn" class="p-button-sm"
+      />
+    </template>
+  </Dialog>
+  <!-- Dialogs End -->
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
       <h4 class="p-pt-2">{{$t('reports.detailed_agent_report.detailed_agent_report')}}</h4>
@@ -26,10 +65,15 @@
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="inputDN">{{$t('reports.detailed_agent_report.dn')}}</label>
-        <InputText id="inputDN" type="text" v-model="filter.dn" />
+         <div class="p-inputgroup ">
+            <InputText id="inputDN" type="text" v-model="filter.dn" />
+            <Button icon="pi pi-sitemap" class="p-button-warning" 
+                @click="agentOuDialog = true"
+            />
+        </div>
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputRegistrationDate">{{$t('reports.detailed_agent_report.registiration_date')}}</label>
+        <label for="inputRegistrationDate">{{$t('reports.detailed_agent_report.create_date')}}</label>
         <Calendar
           v-model="filter.registrationDate"
           selectionMode="range"
@@ -123,7 +167,11 @@
     <template #title>
       <div class="p-d-flex p-jc-between">
         <div>{{$t('reports.detailed_agent_report.results')}}</div>
-        <div>
+        <div  v-if="agents.length > 0">
+          <SplitButton class="p-mr-2"
+            label="İstemci Grubu Oluştur" icon="fa fa-users"
+            @click="addGroupDialog=true;" :model="items">
+          </SplitButton>
           <Button
             :label="$t('reports.detailed_agent_report.export')"
             icon="fas fa-file-excel"
@@ -188,9 +236,9 @@
             {{ getPropertyValue(data.properties, "os.distributionName") }}
           </template>
         </Column>
-        <Column :header="$t('reports.detailed_agent_report.version')">
+        <Column :header="$t('reports.detailed_agent_report.operating_system_version')">
           <template #body="{ data }">
-            {{ getPropertyValue(data.properties, "os.distributionVersion") }}
+            {{ getPropertyValue(data.properties, "os.version") }}
           </template>
         </Column>
         <Column field="createDate" :header="$t('reports.detailed_agent_report.create_date')"></Column>
@@ -219,153 +267,18 @@
       </Paginator>
     </template>
   </Card>
-  <Dialog
-    v-model:visible="agentDetailDialog"
-    :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-    :style="{ width: '50vw' }"
-  >
-    <template #header>
-      <h3>{{$t('reports.detailed_agent_report.agent_detail')}}</h3>
-    </template>
-    <h4>{{$t('reports.detailed_agent_report.general_information')}}</h4>
-    <div class="p-grid">
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.computer_name')}}</b></div>
-      <div class="p-col-8">{{ selectedAgent.hostname }}</div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.mac_address')}}</b></div>
-      <div class="p-col-8">
-        {{ selectedAgent.macAddresses.replace(/'/g, "") }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>JID</b></div>
-      <div class="p-col-8">{{ selectedAgent.jid }}</div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ip_address')}}</b></div>
-      <div class="p-col-8">
-        {{ selectedAgent.ipAddresses.replace(/'/g, "") }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.operating_system_version')}}</b></div>
-      <div class="p-col-8">
-        {{
-          getPropertyValue(selectedAgent.properties, "os.distributionVersion")
-        }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ahenk_version')}}</b></div>
-      <div class="p-col-8">
-        {{ getPropertyValue(selectedAgent.properties, "agentVersion") }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.create_date')}}</b></div>
-      <div class="p-col-8">{{ selectedAgent.createDate }}</div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.update_date')}}</b></div>
-      <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-    </div>
-
-    <h4>{{$t('reports.detailed_agent_report.disk_and_memory_information')}}</h4>
-    <div class="p-grid">
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.total_disk_space')}}</b></div>
-      <div class="p-col-8">
-        {{
-          (
-            getPropertyValue(selectedAgent.properties, "hardware.disk.total") /
-            1000
-          )
-            .toFixed(2)
-            .toLocaleString("tr-TR")
-        }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.used_disk_space')}}</b></div>
-      <div class="p-col-8">
-        {{
-          (
-            getPropertyValue(selectedAgent.properties, "hardware.disk.used") /
-            1000
-          )
-            .toFixed(2)
-            .toLocaleString("tr-TR")
-        }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.free_disk_space')}}</b></div>
-      <div class="p-col-8">
-        {{
-          (
-            (getPropertyValue(selectedAgent.properties, "hardware.disk.total") -
-              getPropertyValue(
-                selectedAgent.properties,
-                "hardware.disk.used"
-              )) /
-            1000
-          )
-            .toFixed(2)
-            .toLocaleString("tr-TR")
-        }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.disk_partitions')}}</b></div>
-      <div class="p-col-8">
-        {{
-          getPropertyValue(selectedAgent.properties, "hardware.disk.partitions")
-        }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>RAM(GB)</b></div>
-      <div class="p-col-8">
-        {{
-          (
-            getPropertyValue(
-              selectedAgent.properties,
-              "hardware.memory.total"
-            ) / 1000
-          )
-            .toFixed(2)
-            .toLocaleString("tr-TR")
-        }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-    </div>
-
-    <h4>{{$t('reports.detailed_agent_report.processor_information')}}</h4>
-    <div class="p-grid">
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.processor')}}</b></div>
-      <div class="p-col-8">
-        {{ getPropertyValue(selectedAgent.properties, "processor") }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.number_of_physical_cores')}}</b></div>
-      <div class="p-col-8">
-        {{
-          getPropertyValue(
-            selectedAgent.properties,
-            "hardware.cpu.physicalCoreCount"
-          )
-        }}
-      </div>
-      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-    </div>
-
-    <template #footer>
-      <Button
-        :label="this.$t('reports.detailed_agent_report.close')"
-        icon="pi pi-times"
-        class="p-button-text"
-        @click="agentDetailDialog = false"
-      />
-    </template>
-  </Dialog>
 </template>
 
 <script>
+/**
+ * Detailed Agent Report.
+ * @see {@link http://www.liderahenk.org/}
+ */
 import axios from "axios";
 import moment from "moment";
+import AddGroupDialog from './Dialogs/AddGroupDialog.vue'
+import AddToExistGroupDialog from './Dialogs/AddToExistGroupDialog.vue'
+import AgentDetailDialog from './Dialogs/AgentDetailDialog.vue'
 
 export default {
   data() {
@@ -382,7 +295,6 @@ export default {
       osVersions: [],
       agentVersions: [],
       getFilterData: true,
-      agentDetailDialog: false,
       selectedAgent: null,
       statuses: [
         {
@@ -413,12 +325,47 @@ export default {
         osVersion: "",
         agentVersion: "",
       },
+      items: [
+        {
+          label: 'Mevcut Gruba Ekle',
+          icon: 'pi pi-plus',
+          command: () => {
+              this.addExistGroupDialog = true;
+          }
+        },
+      ],
+      addGroupDialog: false,
+      addExistGroupDialog: false,
+      agentDetailDialog: false,
+      filterData: null,
+      agentOuDialog: false,
     };
   },
+
+  components: {
+    AddGroupDialog,
+    AddToExistGroupDialog,
+    AgentDetailDialog
+  },
+
   mounted() {
     this.getAgents();
   },
+
   methods: {
+    selectAgentOuDn() {
+      if (!this.filter.dn.trim()) {
+        this.$toast.add({
+            severity:'warn', 
+            detail: "Lütfen klasör seçiniz", 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+        });
+        return;
+      }
+      this.agentOuDialog = false;
+    },
+
     showAgentDetailDialog(agentID) {
       this.selectedAgent = this.agents.filter(
         (agent) => agent.id === agentID

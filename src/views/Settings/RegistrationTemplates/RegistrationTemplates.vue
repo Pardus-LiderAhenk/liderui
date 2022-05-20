@@ -3,35 +3,32 @@
         <div class="p-field p-col-12 p-md-12">
             <Card style="margin-top: 10px">
                 <template #title>
-                    Kayıt Şablonları
+                    {{$t('settings.registiration_template.registiration_template')}}
                 </template>
                 <template #content>
-                    Şablonda belirtilen metinle başlayan istemcilerin domaine sadece şablonda belirtilen gruba üye olan kullanıcılar tarafından alınmasını sağlayıp bu kullanıcıların şablonda verilen Organizsayon Birimi altında oluşturulmasını sağlar.
-                    Örneğin şablon adı 'pardus-01-', yetkili grup DN'i 'cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org' ve istemcilerin dahil edileceği Organizsayon Birimi ise 'ou=ANKARA,ou=Agents,dc=liderahenk,dc=org' olsun.
-                    Bu kayıt şablonundan sonra istemci adı 'pardus-01-' ile başlayan tüm kullanıcılar sadece 'cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org' grubunda yer alan yetkili kullanıcılar tarafından domaine alınabilir 
-                    ve domaine alınan istemciler 'ou=ANKARA,ou=Agents,dc=liderahenk,dc=org' Organizsayon Birimi altında oluşturulur.
+                    {{$t('settings.registiration_template.content')}}
                 </template>
             </Card>
         </div>
         <div class="p-field p-col-12 p-md-12">
             <Card>
                 <template #title>
-                    Kayıt Şablonları
+                    {{$t('settings.registiration_template.registiration_template')}}
                 </template>
                 <template #content>
                     <div class="p-fluid">
                         <div class="p-field p-fluid  p-grid">
                             <div class="p-field p-col-12 p-md-2">
-                                <label>Birim Şablon Metni</label>
+                                <label>{{$t('settings.registiration_template.template_text')}}</label>
                                 <InputText placeholder="pardus-01-" type="text" v-model="templateText"
                                     :class="validationErrors.templateText ? 'p-invalid':''"
                                 />
                                 <small v-if="validationErrors.templateText" class="p-error">
-                                    Birim şablon metni boş bırakılamaz
+                                    {{$t('settings.registiration_template.template_text_cant_be_null')}}
                                 </small>
                             </div>
                             <div class="p-field p-col-12 p-md-5">
-                                <label>İstemcinin Dahil Edileceği Organizsayon Birimi</label>
+                                <label>{{$t('settings.registiration_template.organization_unit_to_include_the_client')}}</label>
                                 <div class="p-inputgroup ">
                                     <InputText placeholder="ou=ANKARA,ou=Agents,dc=liderahenk,dc=org" 
                                         v-model="agentCreationDN" :class="validationErrors.agentCreationDN ? 'p-invalid':''"
@@ -41,11 +38,11 @@
                                     />
                                 </div>
                                 <small v-if="validationErrors.agentCreationDN" class="p-error">
-                                    İstemcinin dahil edileceği Organizsayon Birimi boş bırakılamaz
+                                    {{$t('settings.registiration_template.organization_unit_to_include_the_client_cant_be_null')}}
                                 </small>
                             </div>
                             <div class="p-field p-col-12 p-md-5">
-                                <label>Yetkili Kullanıcı Grubu</label>
+                                <label>{{$t('settings.registiration_template.authorized_user_group')}}</label>
                                 <div class="p-inputgroup">
                                     <InputText placeholder="cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org" 
                                         v-model="authorizedUserGroupDN" :class="validationErrors.authorizedUserGroupDN ? 'p-invalid':''"
@@ -55,13 +52,15 @@
                                     />
                                 </div>
                                 <small v-if="validationErrors.authorizedUserGroupDN" class="p-error">
-                                    Yetkili kullanıcı grubu boş bırakılamaz
+                                    {{$t('settings.registiration_template.authorized_user_group_cant_be_null')}}
                                 </small>
                             </div>
                         </div>
                         <div class="p-field p-d-flex p-jc-end">
                             <div>
-                                <Button class="p-button-sm" label="Şablonu Kaydet" icon="pi pi-save"
+                                <Button class="p-button-sm" 
+                                :label="$t('settings.registiration_template.save_template')" 
+                                icon="pi pi-save"
                                     @click="saveRegistrationTemplate"    
                                 />
                             </div>
@@ -85,14 +84,17 @@
                                     </div>
                                 </template>
                                 <Column field="index" header="#" style="width:5%"></Column>
-                                <Column field="unitId" header="Birim Şablon Metni" style="width:20%"></Column>
-                                <Column field="parentDn" header="İstemcinin Dahil Edileceği Organizsayon Birimi" style="width:25%"></Column>
-                                <Column field="authGroup" header="Yetkili Kullanıcı Grubu" style="width:25%"></Column>
-                                <Column field="createDate" header="Oluşturulma Tarihi" style="width:20%"></Column>
+                                <Column field="unitId" :header="$t('settings.registiration_template.template_text')" style="width:20%"></Column>
+                                <Column field="parentDn" :header="$t('settings.registiration_template.organization_unit_to_include_the_client')" style="width:25%"></Column>
+                                <Column field="authGroup" :header="$t('settings.registiration_template.authorized_user_group')" style="width:25%"></Column>
+                                <Column field="createDate" :header="$t('settings.registiration_template.create_date')" style="width:20%"></Column>
                                 <Column :exportable="false">
                                     <template #body="slotProps">
                                         <Button class="p-button-danger p-mr-2 p-button-sm p-button-rounded" 
-                                            icon="pi pi-trash"  label="Delete" @click="showDeleteDialog = true; selectedRecord = slotProps.data">
+                                            icon="pi pi-trash"  
+                                            :label="$t('settings.registiration_template.delete')" 
+                                            @click="showDeleteDialog = true; 
+                                            selectedRecord = slotProps.data">
                                         </Button>
                                     </template>
                                 </Column>
@@ -103,7 +105,7 @@
             </Card>
         </div>
     </div>
-    <Dialog header="Organizasyon Birimi Seç" 
+    <Dialog :header="$t('settings.registiration_template.select_organization_unit')" 
         v-model:visible="agentOuDialog" 
         :style="{width: '40vw'}" :modal="true"
     >
@@ -116,15 +118,15 @@
             :isMove="true"
         />
         <template #footer>
-            <Button label="İptal" icon="pi pi-times" @click="agentOuDialog = false"
+            <Button :label="$t('settings.registiration_template.cancel')" icon="pi pi-times" @click="agentOuDialog = false"
                 class="p-button-text p-button-sm"
             />
-            <Button label="Tamam" icon="pi pi-check" 
+            <Button :label="$t('settings.registiration_template.add')" icon="pi pi-check" 
                 @click="selectAgentOuDn" class="p-button-sm"
             />
         </template>
     </Dialog>
-    <Dialog header="Yetkili Kullanıcı Grubu Seç" 
+    <Dialog :header="$t('settings.registiration_template.select_authorized_user_group')" 
         v-model:visible="userGroupDialog" 
         :style="{width: '40vw'}" :modal="true"
     >
@@ -136,28 +138,28 @@
             :searchFields="searchGroupFields"
         />
         <template #footer>
-            <Button label="İptal" icon="pi pi-times" @click="userGroupDialog = false"
+            <Button :label="$t('settings.registiration_template.cancel')" icon="pi pi-times" @click="userGroupDialog = false"
                 class="p-button-text p-button-sm"
             />
-            <Button label="Tamam" icon="pi pi-check" 
+            <Button :label="$t('settings.registiration_template.add')" icon="pi pi-check" 
                 @click="selectUserGroupDn" class="p-button-sm"
             />
         </template>
     </Dialog>
     <!-- Delete Template Dialog -->
-        <Dialog header="Şablon Sil" v-model:visible="showDeleteDialog" 
+        <Dialog :header="$t('settings.registiration_template.delete_template')" v-model:visible="showDeleteDialog" 
             :style="{width: '20vw'}" :modal="true">
             <div class="p-fluid">
                 <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
                 <span>
-                    Şablon silinecektir, emin misiniz?
+                    {{$t('settings.registiration_template.template_delete_question')}}
                 </span>
             </div>
             <template #footer>
-                <Button label="İptal" icon="pi pi-times" 
+                <Button :label="$t('settings.registiration_template.cancel')" icon="pi pi-times" 
                     @click="showDeleteDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button label="Evet" icon="pi pi-check"
+                <Button :label="$t('settings.registiration_template.add')" icon="pi pi-check"
                     @click="deleteRecord" class="p-button-sm"
                 />
             </template>
@@ -221,8 +223,8 @@ export default {
         })
         .catch((error) => { 
             this.$toast.add({
-                severity:'error', 
-                detail: "Kayıt şablonları getirilirken hata oluştu"+ " \n"+error, 
+                severity:'error',
+                detail: this.$t('settings.registiration_template.an_error_occurred_while_fetching_registration_templates')+ " \n"+error, 
                 summary:this.$t("computer.task.toast_summary"), 
                 life: 3000
             })
@@ -234,7 +236,7 @@ export default {
             if (!this.selectedAgentOu) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Lütfen klasör seçiniz", 
+                    detail: this.$t('settings.registiration_template.please_select_folder'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -249,7 +251,7 @@ export default {
             if (!this.selectedUserGroup || this.selectedUserGroup.type != "GROUP") {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Lütfen yetkili kullanıcı grubu seçiniz", 
+                    detail: this.$t('settings.registiration_template.please_select_authorized_user_group'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -277,7 +279,7 @@ export default {
                     this.records.push(response.data);
                     this.$toast.add({
                         severity:'success', 
-                        detail: "Şablon başarıyla kaydedildi", 
+                        detail: this.$t('settings.registiration_template.template_successfully_saved'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -287,7 +289,7 @@ export default {
             .catch((error) => { 
                 this.$toast.add({
                     severity:'error', 
-                    detail: "Şablon kaydedilirken hata oluştu"+ " \n"+error, 
+                    detail: this.$t('settings.registiration_template.an_error_occurred_while_saving_template')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 })
@@ -314,7 +316,7 @@ export default {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 
-                        detail: "Kayıt başarıyla silindi", 
+                        detail: this.$t('settings.registiration_template.template_successfully_deleted'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -327,7 +329,7 @@ export default {
             .catch((error) => { 
                 this.$toast.add({
                     severity:'error', 
-                    detail: "Kayıt silinirken hata oluştu"+ " \n"+error, 
+                    detail: this.$t('settings.registiration_template.an_error_occurred_while_deleting_template')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

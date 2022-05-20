@@ -12,39 +12,39 @@
                     <div class="p-fluid p-grid p-field p-formgrid">
                         <div class="p-field p-col-12 p-md-4">
                             <!-- <label>{{ $t("computer.plugins.conky.templates") }}</label> -->
-                            <label for="days">İzin verilen günler</label>
+                            <label for="days"> {{$t("policy_management.profile.login_manager.allowed_days")}}</label>
                             <MultiSelect v-model="selectedDays" :options="allDays" 
                                 optionLabel="name" optionValue="value" 
                                 placeholder="Select Day" display="chip" 
                             />
                             <small v-if="loginManagerValidation" class="p-error">{{
-                                $t("policy_management.plugins.login_manager_validation")}}
+                                $t("policy_management.profile.login_manager.login_manager_validation")}}
                             </small>
                         </div>
                         <div class="p-field p-col-12 p-md-4">
                             <!-- <label>{{ $t("computer.plugins.conky.templates") }}</label> -->
-                            <label for="startTime">Başlangıç Saati</label>
+                            <label for="startTime">{{$t("policy_management.profile.login_manager.start_time")}}</label>
                             <Calendar id="startTime" v-model="startTime" :timeOnly="true" hourFormat="24" icon="pi pi-clock" :showIcon="true"/>
                         </div>
                         <div class="p-field p-col-12 p-md-4">
                             <!-- <label>{{ $t("computer.plugins.conky.templates") }}</label> -->
-                            <label for="endTime">Bitiş Saati</label>
+                            <label for="endTime">{{$t("policy_management.profile.login_manager.finish_time")}}</label>
                             <Calendar id="endTime" v-model="endTime" :timeOnly="true" hourFormat="24" icon="pi pi-clock" :showIcon="true"/>
                         </div>
                     </div>
                     <div class="p-fluid p-grid p-field p-formgrid">
                         <div class="p-field p-col-12 p-md-4">
-                            <label for="icon">Son Geçerlilik Tarihi</label>
+                            <label for="icon">{{$t("policy_management.profile.login_manager.last_validity_date")}}</label>
                             <Calendar id="icon" dateFormat="dd/mm/yy" 
                                 v-model="lastDate" 
                                 :showButtonBar="true" :showIcon="true"
                             />
                         </div>
                         <div class="p-field p-col-12 p-md-4">
-                            <label for="icon">Bildirim Zamanı</label>
+                            <label for="icon">{{$t("policy_management.profile.login_manager.notify_time")}}</label>
                             <Dropdown v-model="duration" :options="[
-                                {name: '1 dk önce', value: '1'},
-                                {name: '5 dk önce', value: '5'},]" 
+                                {name: $t('policy_management.profile.login_manager.one_minute'), value: '1'},
+                                {name: $t('policy_management.profile.login_manager.five_minute'), value: '5'},]" 
                                 optionLabel="name" optionValue="value"/>
                         </div>
                     </div>
@@ -89,13 +89,13 @@ export default {
         return {
             selectedDays: null,
             allDays: [
-                {name: 'Pazartesi', value: '0'},
-                {name: 'Salı', value: '1'},
-                {name: 'Çarşamba', value: '2'},
-                {name: 'Perşembe', value: '3'},
-                {name: 'Cuma', value: '4'},
-                {name: 'Cumartesi', value: '5'},
-                {name: 'Pazar', value: '6'},
+                {name: this.$t('policy_management.profile.login_manager.sunday'), value: '0'},
+                {name: this.$t('policy_management.profile.login_manager.monday'), value: '1'},
+                {name: this.$t('policy_management.profile.login_manager.tuesday'), value: '2'},
+                {name: this.$t('policy_management.profile.login_manager.wednesday'), value: '3'},
+                {name: this.$t('policy_management.profile.login_manager.thursday'), value: '4'},
+                {name: this.$t('policy_management.profile.login_manager.friday'), value: '5'},
+                {name: this.$t('policy_management.profile.login_manager.saturday'), value: '6'},
                 
             ],
             startTime: null,

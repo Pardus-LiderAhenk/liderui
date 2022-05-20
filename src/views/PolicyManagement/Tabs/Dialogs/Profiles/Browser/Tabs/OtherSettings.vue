@@ -3,16 +3,16 @@
         <div class="p-fluid p-field p-grid">
             <div class="p-field p-col-12 p-md-5">
                 <InputText :class="validation.preferenceName ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'"
-                 type="text" v-model="preferenceName" placeholder="Özellik Adı"/>
+                 type="text" v-model="preferenceName" :placeholder="$t('policy_management.profile.browser.feature_name')"/>
                 <small v-if="validation.preferenceName" class="p-error">
-                    Özellik adı boş bırakılamaz
+                    {{$t('policy_management.profile.browser.feature_name_cannot_be_null')}}
                 </small>
             </div>
             <div class="p-field p-col-12 p-md-5">
                 <InputText :class="validation.value ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'"
-                    type="text" v-model="value" placeholder="Değer"/>
+                    type="text" v-model="value" :placeholder="$t('policy_management.profile.browser.value')"/>
                 <small v-if="validation.value" class="p-error">
-                    Özellik değeri boş bırakılamaz
+                    {{$t('policy_management.profile.browser.feature_value_cannot_be_null')}}
                 </small>
             </div>
             <div class="p-field p-col-12 p-md-2">
@@ -27,11 +27,11 @@
             class="p-datatable-sm p-field">
             <template #empty>
                 <div class="p-d-flex p-jc-center">
-                    <span>Firefox tarayıcı özellikleri bulunamadı</span>
+                    <span>{{$t('policy_management.profile.browser.firefox_feature_cannot_find')}}</span>
                 </div>
             </template>
-            <Column field="preferenceName" header="Özellik Adı" style="width:40%"></Column>
-            <Column field="value" header="Değer" style="width:40%"></Column>
+            <Column field="preferenceName" :header="$t('policy_management.profile.browser.feature_name')" style="width:40%"></Column>
+            <Column field="value" :header="$t('policy_management.profile.browser.value')" style="width:40%"></Column>
             <Column :exportable="false">
                 <template #body="slotProps">
                     <div class="p-d-flex p-jc-end">

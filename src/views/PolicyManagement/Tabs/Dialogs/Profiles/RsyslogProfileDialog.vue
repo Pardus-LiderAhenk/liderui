@@ -1,10 +1,10 @@
 <template>
-    <Dialog header="Yönetilecek Log Ekle" 
+    <Dialog :header="this.$t('policy_management.profile.rsyslog.add_log_to_manage')"
         v-model:visible="addLogDialog"
         :style="{width: '30vw'}" :modal="true">
             <div class="p-fluid">
                 <div class="p-field">
-                    <label>Sık Kullanılanlardan Seç</label>
+                    <label>{{$t('policy_management.profile.rsyslog.select_from_favorites')}}</label>
                     <Dropdown :showClear="true"
                         v-model="logName"
                         :options="favLogFiles"
@@ -15,35 +15,35 @@
                     </Dropdown>
                 </div>
                 <div class="p-field">
-                    <label>Yerel Kayıt</label>
+                    <label>{{$t('policy_management.profile.rsyslog.local_record')}}</label>
                     <Dropdown
                         v-model="form.isLocal"
-                        :options="[{name: 'Evet', value: 'YES'},
-                            {name: 'Hayır', value: 'NO'}]"
+                        :options="[{name: $t('policy_management.profile.rsyslog.yes'), value: 'YES'},
+                            {name: $t('policy_management.profile.rsyslog.no'), value: 'NO'}]"
                         optionLabel="name" optionValue="value"
                     >
                     </Dropdown>
                 </div>
                 <div class="p-field">
-                    <label>Kayıt Adı</label>
+                    <label>{{$t('policy_management.profile.rsyslog.record_name')}}</label>
                     <InputText class="validation2.recordDescription ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
                         type="text" 
                         placeholder="*.*;auth,authpriv.none" 
                         v-model="form.recordDescription"
                     />
                     <small v-if="validation2.recordDescription" class="p-error">
-                        Kayıt adı boş bırakılamaz
+                        {{$t('policy_management.profile.rsyslog.record_name_cannot_null')}}
                     </small>
                 </div>
                 <div class="p-field">
-                    <label>Log Kayıt yolu</label>
+                    <label>{{$t('policy_management.profile.rsyslog.log_record_path')}}</label>
                     <InputText class="validation2.logFilePath ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
                         type="text" 
                         placeholder="-/var/log/syslog" 
                         v-model="form.logFilePath"
                     />
                     <small v-if="validation2.logFilePath" class="p-error">
-                        Log kayıt yolu boş bırakılamaz 
+                        {{$t('policy_management.profile.rsyslog.log_record_path_cannot_null')}} 
                     </small>
                 </div>
                 
@@ -67,10 +67,10 @@
                 @update-profile="updateProfile">
                 <template #default>
                     <div class="p-fluid p-formgrid">
-                        <h6>Log Rotasyonu</h6>
+                        <h6>{{$t('policy_management.profile.rsyslog.log_rotation')}}</h6>
                         <div class="p-field p-grid">
                             <div class="p-field p-col-12 p-md-4">
-                                <label>Rotasyon sıklığı</label>
+                                <label>{{$t('policy_management.profile.rsyslog.rotation_frequency')}}</label>
                                 <Dropdown
                                     v-model="profileData.rotationInterval"
                                     :options="rotationOptions"
@@ -80,7 +80,7 @@
                                 </Dropdown>
                             </div>
                             <div class="p-field p-col-12 p-md-4">
-                                <label>Şu kadar eski logu tut</label>
+                                <label>{{$t('policy_management.profile.rsyslog.keep_log_that_old')}}</label>
                                 <InputNumber showButtons buttonLayout="horizontal" class="p-inputtext-sm"
                                     decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
                                     incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
@@ -88,45 +88,45 @@
                                 />
                             </div>
                             <div class="p-field p-col-12 p-md-4">
-                                <label>Rotasyon için dosya boyutu(MB)</label>
+                                <label>{{$t('policy_management.profile.rsyslog.file_size_for_rotation')}}</label>
                                 <InputText type="text" class="p-inputtext-sm" 
-                                    v-tooltip.top="'Log dosyası şu boyuttan büyük olduğunda rotasyona git(MB)'"  
+                                    v-tooltip.top="$t('policy_management.profile.rsyslog.file_size_warning')"  
                                     v-model="profileData.maxSize" placeholder="50"
                                 />
                             </div>
                         </div>
                         <div class="p-field p-grid">
                             <InputSwitch class="p-col-fixed" v-model="profileData.createNewLogFiles"/>
-                            <label class="p-col">Rotasyondan sonra yeni log dosyası oluştur</label>
+                            <label class="p-col">{{$t('policy_management.profile.rsyslog.create_new_log_file_after_rotation')}}</label>
                         </div>
                         <div class="p-field p-grid">
                             <InputSwitch class="p-col-fixed" v-model="profileData.compressOldLogFiles"/>
-                            <label  class="p-col">Eski log dosyalarını sıkıştır</label>
+                            <label  class="p-col">{{$t('policy_management.profile.rsyslog.compress_old_log_files')}}</label>
                         </div>
                         <div class="p-field p-grid">
                             <InputSwitch class="p-col-fixed" v-model="profileData.missingOk"/>
-                            <label class="p-col">Log dosyası yoksa hata vermeden diğerine geç</label>
+                            <label class="p-col">{{$t('policy_management.profile.rsyslog.if_there_is_no_log_file_switch_to_another_without_error')}}</label>
                         </div>
-                        <h6>Logların Yedekleneceği Uzak Sunucu</h6>
+                        <h6>{{$t('policy_management.profile.rsyslog.remote_server_to_backup_logs')}}</h6>
                         <div class="p-field p-grid">
                             <div class="p-field p-col-12 p-md-4">
-                                <label>Sunucu Adres</label>
+                                <label>{{$t('policy_management.profile.rsyslog.server_address')}}</label>
                                 <InputText type="text" :class="validation.address ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
                                     v-model="profileData.ADDRESS" placeholder="192.168.*.*"/>
                                 <small v-if="validation.address" class="p-error">
-                                    Sunucu adresi boş bırakılamaz 
+                                    {{$t('policy_management.profile.rsyslog.server_address_cannot_null')}}
                                 </small>
                             </div>
                             <div class="p-field p-col-12 p-md-4">
-                                <label>Port</label>
+                                <label>{{$t('policy_management.profile.rsyslog.port')}}</label>
                                 <InputText type="number" :class="validation.port ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
                                     v-model="profileData.PORT" placeholder="514"/>
                                 <small v-if="validation.port" class="p-error">
-                                    Port boş bırakılamaz
+                                    {{$t('policy_management.profile.rsyslog.port_cannot_null')}}
                                 </small>
                             </div>
                             <div class="p-field p-col-12 p-md-4">
-                                <label>Protokol</label>
+                                <label>{{$t('policy_management.profile.rsyslog.protocol')}}</label>
                                 <Dropdown
                                     v-model="profileData.PROTOCOL"
                                     :options="[{name: 'UDP', value: 'UDP'},
@@ -137,7 +137,7 @@
                                 </Dropdown>
                             </div>
                         </div>
-                        <h6>Yönetilecek Loglar</h6>
+                        <h6>{{$t('policy_management.profile.rsyslog.logs_to_manage')}}</h6>
                         <div class="p-field">
                             <DataTable :value="items" responsiveLayout="scroll"
                                 class="p-datatable-sm">
@@ -153,12 +153,12 @@
                                 
                                 <template #empty>
                                     <div class="p-d-flex p-jc-center">
-                                        <span>Kayıt bulunamadı</span>
+                                        <span>{{$t('policy_management.profile.rsyslog.no_records_found')}}</span>
                                     </div>
                                 </template>
-                                <Column field="isLocal" header="Yerel Kayıt" style="width:20%"></Column>
-                                <Column field="recordDescription" header="Kayıt Adı" style="width:35%"></Column>
-                                <Column field="logFilePath" header="Log Kayıt Yolu" style="width:35%"></Column>
+                                <Column field="isLocal" :header="$t('policy_management.profile.rsyslog.local_record')" style="width:20%"></Column>
+                                <Column field="recordDescription" :header="$t('policy_management.profile.rsyslog.record_name')" style="width:35%"></Column>
+                                <Column field="logFilePath" :header="$t('policy_management.profile.rsyslog.log_record_path')" style="width:35%"></Column>
                                 <Column :exportable="false">
                                     <template #body="slotProps">
                                         <div class="p-d-flex p-jc-end">
@@ -229,10 +229,10 @@ export default {
                 isLocal: "YES",
             },
             rotationOptions: [
-                {name: "Günlük", value: "DAILY"},
-                {name: "Haftalık", value: "WEEKLY"},
-                {name: "Aylık", value: "MONTHLY"},
-                {name: "Yıllık", value: "YEARLY"},
+                {name: this.$t('policy_management.profile.rsyslog.daily'), value: "DAILY"},
+                {name: this.$t('policy_management.profile.rsyslog.weekly'), value: "WEEKLY"},
+                {name: this.$t('policy_management.profile.rsyslog.monthly'), value: "MONTHLY"},
+                {name: this.$t('policy_management.profile.rsyslog.yearly'), value: "YEARLY"},
             ],
             favLogFiles: [
                 {name: "*.*;auth,authpriv.none", value: "-/var/log/syslog"},

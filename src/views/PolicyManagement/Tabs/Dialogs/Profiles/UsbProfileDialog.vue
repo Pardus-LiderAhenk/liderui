@@ -1,19 +1,19 @@
 <template>
     <div>
         <!-- Add Usb Item as Black or White List -->
-        <Dialog :header="!selectedUsbItem ? 'USB Ekle': 'USB Güncelle'" v-model:visible="usbItemDialog" 
+        <Dialog :header="!selectedUsbItem ? $t('policy_management.profile.usb.usb_add'): $t('policy_management.profile.usb.usb_update')" v-model:visible="usbItemDialog" 
             :style="{width: '30vw'}" :modal="true">
             <div class="p-fluid">
                 <div class="p-field">
-                    <label for="icon">Üretici Firma</label>
+                    <label for="icon"> {{$t('policy_management.profile.usb.manufacturer')}}</label>
                     <InputText class="p-inputtext-sm" type="text" v-model="form.vendor"/>
                 </div>
                 <div class="p-field">
-                    <label for="icon">Model</label>
+                    <label for="icon">{{$t('policy_management.profile.usb.model')}}</label>
                     <InputText class="p-inputtext-sm" type="text" v-model="form.model"/>
                 </div>
                 <div class="p-field">
-                    <label for="icon">Seri Numarası</label>
+                    <label for="icon">{{$t('policy_management.profile.usb.serial_number')}}</label>
                     <InputText class="p-inputtext-sm" type="text" v-model="form.serialNumber"/>
                 </div>
             </div>
@@ -40,22 +40,22 @@
                         <div class="p-field p-col-12 p-md-3">
                             <label for="icon">USB</label>
                             <Dropdown v-model="storage" :options="options" showClear="true"
-                                optionLabel="name" optionValue="value" placeholder="seç"/>
+                                optionLabel="name" optionValue="value" :placeholder="$t('policy_management.profile.usb.select')"/>
                         </div>
                         <div class="p-field p-col-12 p-md-3">
-                            <label for="icon">Yazıcı</label>
+                            <label for="icon">{{$t('policy_management.profile.usb.printer')}}</label>
                             <Dropdown v-model="printer" :options="options" showClear="true"
-                                optionLabel="name" optionValue="value" placeholder="seç"/>
+                                optionLabel="name" optionValue="value" :placeholder="$t('policy_management.profile.usb.select')"/>
                         </div>
                         <div class="p-field p-col-12 p-md-3">
-                            <label for="icon">Web Kamerası</label>
+                            <label for="icon">{{$t('policy_management.profile.usb.webcam')}}</label>
                             <Dropdown v-model="webcam" :options="options" showClear="true"
-                                optionLabel="name" optionValue="value" placeholder="seç"/>
+                                optionLabel="name" optionValue="value" :placeholder="$t('policy_management.profile.usb.select')"/>
                         </div>
                         <div class="p-field p-col-12 p-md-3">
-                            <label for="icon">Fare-Klavye</label>
+                            <label for="icon">{{$t('policy_management.profile.usb.mouse_keyboard')}}</label>
                             <Dropdown v-model="mouseKeyboard" :options="options" showClear="true"
-                                optionLabel="name" optionValue="value" placeholder="seç"/>
+                                optionLabel="name" optionValue="value" :placeholder="$t('policy_management.profile.usb.select')"/>
                         </div>
                     </div>
                     <div class="p-fluid p-field ">
@@ -64,17 +64,17 @@
                                 <template #start>
                                     <div class="field-radiobutton p-mr-2">
                                         <RadioButton id="typeWhite" name="typeWhite" value="whitelist" v-model="type" @change="changeUsbListType"/>
-                                        <label for="typeWhite"> Beyaz Liste Oluştur</label>
+                                        <label for="typeWhite">{{$t('policy_management.profile.usb.white_list')}}</label>
                                     </div>
                                     <div class="field-radiobutton p-mr-2">
                                         <RadioButton id="typeBlack" name="typeBlack" value="blacklist" v-model="type" @change="changeUsbListType"/>
-                                        <label for="typeBlack"> Kara Liste Oluştur</label>
+                                        <label for="typeBlack">{{$t('policy_management.profile.usb.black_list')}}</label>
                                     </div>
                                 </template>
                                 <template #end>
                                     <Button class="p-button-sm" 
                                         icon="pi pi-plus"  
-                                        :label="type == 'whitelist'? 'Beyaz Liste Ekle':'Kara Liste Ekle'" 
+                                        :label="type == 'whitelist'? $t('policy_management.profile.usb.white_list_add'):$t('policy_management.profile.usb.black_list_add')" 
                                         @click.prevent="showUsbItemDialog">
                                     </Button>
                                 </template>
@@ -86,20 +86,20 @@
                                 <template #header>
                                     <div class="p-d-flex p-jc-between">
                                         <div style="text-align: left">
-                                            <h5>Beyaz / Kara USB Listesi</h5>
+                                            <h5>{{$t('policy_management.profile.usb.white_black_list')}}</h5>
                                         </div>
                                     </div>
                                 </template>
                                 <template #empty>
                                     <div class="p-d-flex p-jc-center" >
-                                        <span style="text-align: center">USB listesi bulunamadı</span>
+                                        <span style="text-align: center">{{$t('policy_management.profile.usb.usb_list_cant_find')}}</span>
                                     </div>
                                 </template>
                                 <!-- <Column field="index" header="#"></Column> -->
-                                <Column field="vendor" header="Üretici Firma" style="width:25%"></Column>
-                                <Column field="model" header="Model" style="width:25%"></Column>
-                                <Column field="serialNumber" header="Seri Numarası" style="width:25%"></Column>
-                                <Column field="type" header="Tipi" style="width:15%"></Column>
+                                <Column field="vendor" :header="$t('policy_management.profile.usb.manufacturer')" style="width:25%"></Column>
+                                <Column field="model" :header="$t('policy_management.profile.usb.model')" style="width:25%"></Column>
+                                <Column field="serialNumber" :header="$t('policy_management.profile.usb.serial_number')" style="width:25%"></Column>
+                                <Column field="type" :header="$t('policy_management.profile.usb.type')" style="width:15%"></Column>
                                 <Column :exportable="false" style="flex: 0 0 4rem">
                                     <template #body="slotProps">
                                         <div class="p-d-flex p-jc-end">
@@ -159,8 +159,8 @@ export default {
     data(){
         return {
             options: [
-                {name: 'İzin Ver', value: '1'},
-                {name: 'İzin Verme', value: '0'},
+                {name: this.$t('policy_management.profile.usb.allow'), value: '1'},
+                {name: this.$t('policy_management.profile.usb.not_allow'), value: '0'},
             ],
             storage: null,
             printer: null,
@@ -209,7 +209,7 @@ export default {
             if (Object.keys(this.profileData).length == 0) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "En az bir tane ayar giriniz",
+                    detail: this.$t('policy_management.profile.usb.enter_at_least_one_setting'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -246,7 +246,7 @@ export default {
             if (Object.keys(this.profileData).length == 0) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "En az bir tane ayar giriniz",
+                    detail: this.$t('policy_management.profile.usb.enter_at_least_one_setting'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -288,7 +288,7 @@ export default {
             if (!this.form.vendor.trim() && !this.form.model.trim() && !this.form.serialNumber.trim()) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Üretici firma, model ya da seri numarası alanlarından en az bir tanesi girilmelidir",
+                    detail: this.$t('policy_management.profile.usb.white_black_list_warning'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

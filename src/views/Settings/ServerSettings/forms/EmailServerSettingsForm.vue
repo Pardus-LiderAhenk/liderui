@@ -1,40 +1,57 @@
 <template>
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-col-12">
-            <h3>Email Ayarları</h3>
+            <h3>{{$t('settings.server_settings.mail_server_settings.mail_server_settings')}}</h3>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailHost">Email Host Adresi</label>
+            <label for="emailHost">{{$t('settings.server_settings.mail_server_settings.mail_host_address')}}</label>
             <InputText id="emailHost" type="text" v-model="emailHost" placeholder="smtp.gmail.com"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailPort">Email Port</label>
+            <label for="emailPort">{{$t('settings.server_settings.mail_server_settings.port')}}</label>
             <InputText id="emailPort" type="text" v-model="emailPort" placeholder="587"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailUsername">Email Kullanıcı Adresi</label>
+            <label for="emailUsername">{{$t('settings.server_settings.mail_server_settings.mail_username')}}</label>
             <InputText id="emailUsername" type="text" v-model="emailUsername" placeholder="lider@liderahenk.org"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailPassword">Email Şifresi</label>
+            <label for="emailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
             <InputText id="emailPassword" type="password" v-model="emailPassword"/>
         </div>
          <div class="p-field p-col-12 p-md-4">
-            <label for="zip">SMTP Doğrulama</label>
+            <label for="zip">{{$t('settings.server_settings.mail_server_settings.smtp_verification')}}</label>
             <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="smtpAuth"></Dropdown>
         </div>
          <div class="p-field p-col-12 p-md-4">
-            <label for="zip">TLS Aktif</label>
+            <label for="zip">{{$t('settings.server_settings.mail_server_settings.tls_activation')}}</label>
             <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="tlsEnabled"></Dropdown>
         </div>
-        <div class="p-col-12 p-md-8">
-
-       </div>
-         <div class="p-field-checkbox p-col-12 p-md-4">
-             <Button type="button" label="Değişiklikleri Kaydet" />
-         </div>
-        
+        <div class="p-field p-col-12 p-text-right">
+            <div class="p-d-flex p-jc-end">
+                <div>
+                    <Button icon="pi pi-save" type="button" :label="$t('settings.server_settings.mail_server_settings.save')" @click="showDialog = true"/>
+                </div>
+            </div>
+        </div>
     </div>
+    <Dialog header="Ayarları Güncelle" v-model:visible="showDialog" 
+        :style="{width: '20vw'}" :modal="true">
+        <div class="p-fluid">
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+            <span>
+                Email ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?
+            </span>
+        </div>
+        <template #footer>
+            <Button label="İptal" icon="pi pi-times" 
+                @click="showDialog = false" class="p-button-text p-button-sm"
+            />
+            <Button label="Evet" icon="pi pi-check"
+                @click="submitForm" class="p-button-sm"
+            />
+        </template>
+    </Dialog>
 </template>
 
 
@@ -45,8 +62,8 @@ export default {
     data() {
         return {
             yesNoChoise: [
-                {label:'Evet', value:true},
-                {label:'Hayır', value:false},
+                {label:this.$t('settings.server_settings.mail_server_settings.yes'), value:true},
+                {label:this.$t('settings.server_settings.mail_server_settings.no'), value:false},
             ],
             smtpAuth:true,
             tlsEnabled:true,
@@ -54,6 +71,7 @@ export default {
             emailPort:'',
             emailUsername:'',
             emailPassword:'',
+            showDialog: false
         }
         
     },
@@ -79,17 +97,18 @@ export default {
             data.append("emailUsername",this.emailUsername);
             data.append("emailPassword",this.emailPassword);
 
-            axios.post('/lider/settings/update/emailSetting', data).then(response => {
-                // FIXME Burada logout işlemi yapılacak. ?
-
+            axios.post('/lider/settings/update/emailSettings', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Bilgiler başarı ile güncellenmiştir.", 
+                    detail: "E-Mail ayarları başarı ile güncellenmiştir.", 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
             });
-
+            setTimeout(() => {
+                this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+            }, 3000);
+            this.showDialog = false;
         }
     },
 }

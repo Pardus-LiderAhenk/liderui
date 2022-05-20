@@ -91,6 +91,10 @@ export default {
                 });
             });
         },
+
+        forgotPassword() {
+            this.$router.push("forgotPassword");
+        }
     },
 
     watch:{
@@ -115,6 +119,7 @@ export default {
         padding: 50px;
         border-radius: 25px;
         max-width: 450px;
+        max-height: 450px;
 
         .login-form-header {
             text-align: center;
