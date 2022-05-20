@@ -96,6 +96,8 @@ class XmppClinet {
     } else if (status == Strophe.Status.DISCONNECTED) {
       this.isXmppConnected = false;
       console.log("Disconnected");
+      store.dispatch("logout");
+      console.log('Kapadım aslında')
     } else if (status == Strophe.Status.CONNECTED) {
       console.log('STROPE CONNECTED');
        this.connection.addHandler(this.onMessage, null, 'message', null, null,  null); 
@@ -129,6 +131,9 @@ class XmppClinet {
       );
       this.connection.send($pres().tree());
     } else {
+      store.dispatch("logout");
+      windows.location = '/login';
+      console.log('Kapadım aslında')
       console.log("Sunucuya ulaşılamıyor.", "ERROR");
     }
   
@@ -185,6 +190,7 @@ class XmppClinet {
 
 disconnect = () => {
   this.connection.disconnect();
+  
 }
 
 isConnected = () => {

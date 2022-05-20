@@ -1,9 +1,20 @@
 <template>
-    <div class="auth-container">
+    <div class="p-grid">
+        <div class="p-col-5">
+            <router-view />
+        </div>
+        <div class="p-col-7 ">
+            <div class="auth-image-container">
+
+            </div>
+
+        </div>
+    </div>
+    <!-- <div class="auth-container">
         <div class="content">
             <router-view />
         </div>
-    </div>
+    </div> -->
 </template>
 
 
@@ -13,6 +24,13 @@
         width:100%;
         height:100vh;
         position: relative;
+    }
+
+    .auth-image-container {
+        background: url("../assets/images/wp.svg") no-repeat ;
+        width:100%;
+        height:100%;
+        position: absolute;
     }
 
     .content {

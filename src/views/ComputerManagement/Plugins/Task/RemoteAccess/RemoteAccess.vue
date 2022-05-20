@@ -25,6 +25,18 @@
           <div class="p-field p-col-6">
               <label>{{ $t("computer.plugins.remote_access.remote_access_options") }}</label>
               <Dropdown
+                v-model="selectedProtocol"
+                :options="protocols"
+                optionLabel="label"
+                optionValue="value"
+              >
+              </Dropdown>
+          </div>
+        </div>
+        <div class="p-fluid" v-if="selectedProtocol === 'vnc'">
+          <div class="p-field p-col-6">
+              <label>{{ $t("computer.plugins.remote_access.remote_access_options") }}</label>
+              <Dropdown
                 v-model="permission"
                 :options="options"
                 optionLabel="label"
@@ -33,13 +45,12 @@
               </Dropdown>
           </div>
         </div>
-        guac
       </template>
 
      <template #pluginFooter> </template>
     </base-plugin>
    
-    <Dialog v-model:visible="openRemoteAccessModal" @hide="remoteAccessDisconnect = true">
+    <Dialog header="pardus-virtualbox" v-model:visible="openRemoteAccessModal" @hide="remoteAccessDisconnect = true" :maximizable="true">
         <RemoteAccessComp :disconnected="remoteAccessDisconnect"
         />
     </Dialog>
@@ -81,7 +92,12 @@ export default {
         {label: 'Kullanıcı izni ve bildirim yok', value: 'without_notify'}
       ],
       openRemoteAccessModal: false,
-      remoteAccessDisconnect:false
+      remoteAccessDisconnect:false,
+      protocols: [
+        {label: 'SSH', value: 'ssh'},
+        {label: 'VNC', value: 'vnc'}
+      ],
+      selectedProtocol: 'ssh'
     };
   },
 
@@ -108,14 +124,17 @@ export default {
      
      if (args) {
         let data = new FormData();
-        data.append("protocol", "vnc");
-        data.append("host", args.host);
-        data.append("port", args.port);
-        data.append("password", args.password);
-        data.append("username", "");
+        data.append("protocol", this.selectedProtocol);
+        data.append("host", '192.168.56.108');
+        data.append("port", 22);
+        data.append("password", 1);
+        data.append("username", "pardus");
 
         axios.post('/sendremote', data).then(response => {
-          this.openRemoteAccessModal = true;
+          // this.openRemoteAccessModal = true;
+          let routeData = this.$router.resolve({name: 'Remote Access', query: {data: "someData"}});
+          window.open(routeData.href, '_blank');
+          // this.$router.push('/remoteAccess')
         })
      }
      

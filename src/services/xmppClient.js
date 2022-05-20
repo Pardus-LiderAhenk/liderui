@@ -1,4 +1,5 @@
-require('@ismailbasaran/vuestrophejs');
+import  '@ismailbasaran/vuestrophejs';
+import store from '../store/store';
 
 var connection =null
 var isXmppConnected=false
@@ -56,6 +57,8 @@ function onMessage(msg) {
     } else if (status == Strophe.Status.DISCONNECTED) {
       isXmppConnected = false;
       console.log("Disconnected");
+      store.dispatch("logout");
+      console.log('Kapadım aslında')
     } else if (status == Strophe.Status.CONNECTED) {
        connection.addHandler(onMessage, null, 'message', null, null,  null); 
       var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});

@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <remote-access class="plugin-card" v-if="remoteAccessState" :pluginTask="pluginTaskRemoteAccess"></remote-access>
   </div>
 </template>
