@@ -34,7 +34,7 @@
         <label for="inputDN">{{$t('reports.system_log_report.filter_area')}}</label>
         <Dropdown  
           v-model="filter.field" 
-          :options="filter.filterTextType" 
+          :options="filterTextType" 
           optionLabel="text" 
           :showClear="true" 
           optionValue="value"
@@ -218,11 +218,11 @@ export default {
         searchTextDialog:false,
         operationTypesResponse:[],
         operationTypes:[],
-        filter: {
-            filterTextType: [
+        filterTextType: [
               {value: 'userId', text:this.$t('reports.system_log_report.username')},
               {value: 'requestIp', text:this.$t('reports.system_log_report.ip_address')}
-            ],
+        ],
+        filter: {
             logCreateDate: '',
             logCreateStartDate:'',
             logCreateEndDate:'',
