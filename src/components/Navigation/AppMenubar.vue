@@ -40,10 +40,12 @@ export default {
                 {label:'TR', icon:'../../assets/images/flags/tr.png', command: () => {
                     this.$i18n.locale = 'tr';
                     this.updateUserLanguage('tr');
+                    this.$router.go();
                 }},
                 {label:'EN', icon:'../../assets/images/flags/us.png', command: () => {
                     this.$i18n.locale = 'en';
                     this.updateUserLanguage('en');
+                    this.$router.go();
                 }}
             ],
             items: [ {

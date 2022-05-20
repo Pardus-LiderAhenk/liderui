@@ -48,7 +48,20 @@ axios.interceptors.request.use(function(config) {
 });
 
 
-XmppClientManager.getInstance().connect();
+axios.interceptors.response.use(
+    (response) => {
+        if(response.status === 401) {
+            store.dispatch("logout");
+        }
+        return response;
+    },
+    (error) => {
+
+    }
+ );
+
+
+//XmppClientManager.getInstance().connect();
 
 
 app.mount('#app');

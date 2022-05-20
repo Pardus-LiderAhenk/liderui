@@ -1,4 +1,5 @@
 import axios from 'axios';
+import strophe from '@/services/strophe.js';
 
 const state = {
     selectedLiderNode: null,
@@ -31,6 +32,7 @@ const actions = {
             commit('logout')
             localStorage.removeItem('auth_token')
             delete axios.defaults.headers.common['Authorization']
+            strophe.getInstance().disconnect();
             resolve()
         })
     },
@@ -42,6 +44,9 @@ const actions = {
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
                     axios.post("/liderConsole/profile", {}).then((userresponse) => {
                         commit('auth_success', {token:response.data.token,user:userresponse.data});
+                        if(!strophe.isConnected) {
+                            strophe.getInstance().connect();
+                        }
                         resolve(userresponse);
                     });
 

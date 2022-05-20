@@ -26,7 +26,7 @@ class XmppClinet {
   }
 
 
-  connect = () => {
+  connect () {
     axios
     .post(process.env.VUE_APP_URL + "/api/messaging/getMessagingServerInfo", { })
     .then(
@@ -95,9 +95,6 @@ class XmppClinet {
       console.log("Disconnecting");
     } else if (status == Strophe.Status.DISCONNECTED) {
       this.isXmppConnected = false;
-      console.log("Disconnected");
-      store.dispatch("logout");
-      console.log('Kapadım aslında')
     } else if (status == Strophe.Status.CONNECTED) {
       console.log('STROPE CONNECTED');
        this.connection.addHandler(this.onMessage, null, 'message', null, null,  null); 
@@ -185,17 +182,17 @@ class XmppClinet {
     //     }
     // }
     return true;
-}
+  }
 
-
-disconnect = () => {
-  this.connection.disconnect();
+  disconnect(){
+    this.connection.disconnect();
+    
+  }
   
-}
+  isConnected = () => {
+    return this.isXmppConnected;
+  }
 
-isConnected = () => {
-  return this.isXmppConnected;
-}
 }
 
 var XmppClientManager = (function(){
