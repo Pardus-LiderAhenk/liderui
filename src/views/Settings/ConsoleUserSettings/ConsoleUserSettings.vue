@@ -211,35 +211,35 @@ export default {
             privilegeActions: [
                 {
 					label: this.$t('settings.console_user_settings.computers'),
-					icon: 'pi pi-refresh',
+					icon: 'fas fa-desktop',
 					command: () => {
 						this.agentsModalVisible = true;
 					}
 				},
                  {
 					label: this.$t('settings.console_user_settings.users'),
-					icon: 'pi pi-refresh',
+					icon: 'fas fa-user',
 					command: () => {
 						this.userModalVisible = true;
 					}
 				},
                 {
 					label: this.$t('settings.console_user_settings.computers_groups'),
-					icon: 'pi pi-refresh',
+					icon: 'fas fa-network-wired',
 					command: () => {
 						this.agentGroupModalVisible = true;
 					}
 				},
                 {
 					label: this.$t('settings.console_user_settings.users_groups'),
-					icon: 'pi pi-refresh',
+					icon: 'fas fa-users',
 					command: () => {
 						this.userGroupModalVisible = true;
 					}
 				},
                 {
 					label: this.$t('settings.console_user_settings.role_users'),
-					icon: 'pi pi-refresh',
+					icon: 'fas fa-user-cog',
 					command: () => {
 						this.roleGroupModalVisible = true;
 					}
