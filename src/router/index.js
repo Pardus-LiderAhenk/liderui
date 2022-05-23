@@ -31,6 +31,7 @@ import RemoteAccess from '../components/RemoteAccessComp/RemoteAccess.vue';
 
 // Forgot Password
 import ForgotPassword from '@/views/Login/ForgotPassword.vue';
+import ResetPassword from '@/views/Login/ResetPassword.vue';
 
 const routes = [
     {
@@ -178,7 +179,15 @@ const routes = [
                 meta: {
                     guest: true
                 }
-            } 
+            },
+            {
+                path: "/forgot_password/id/:uuid",
+                name: "Reset Password",
+                components: { default: ResetPassword },
+                meta: {
+                    guest: true
+                }
+            }  
         ],
     },
 ];

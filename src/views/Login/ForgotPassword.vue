@@ -10,20 +10,20 @@
         </div>
         <div class="p-col-12">
             <div class="p-field">
-                <InlineMessage severity="info">
-                    Liderahenk MYS'ye ulaşamıyorsanız, kullanıcı adını girin ve tekrar giriş yapabilmeniz için gerekli detayların olduğu bir e-posta gönderilecek.
+                <InlineMessage :severity="severity" style="text-align:left;">
+                    {{inlineMessage}}
                 </InlineMessage>
             </div>
             <div class="card">
                 <div class="p-fluid">
                     <span class="p-field p-input-icon-left">
                         <i class="pi pi-user" />
-                        <InputText type="text" 
+                        <InputText type="text"
                             v-model="username" 
                             :class="validation.username ? 'p-invalid ':''" 
                             :placeholder="$t('login.username')" 
                         />
-                        <small v-if="validation.username" class="p-error">
+                        <small v-if="validation.username" class="p-error validation-username">
                             {{$t('login.username_warn')}}
                         </small>
                     </span>
@@ -39,7 +39,7 @@
                             </div>
                             <div class="p-ml-2">
                                 <Button 
-                                    icon="pi pi-link"
+                                    icon="pi pi-send"
                                     label="Gönder" 
                                     class="p-button-sm"
                                     @click="sendPasswordResetLink"
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     data() {
         return {
@@ -62,7 +63,10 @@ export default {
             validation: {
                 username: false,
                 password: false
-            }
+            },
+            inlineMessage: "Liderahenk MYS'ye ulaşamıyorsanız, kullanıcı adını girin ve tekrar giriş yapabilmeniz için gerekli detayların olduğu bir e-posta gönderilecek.",
+            severity: "info"
+
         }
     },
 
@@ -73,7 +77,22 @@ export default {
                 this.validation.username = true;
                 return;
         }
-            alert("password reset")
+        let params = {
+            username: this.username
+        }
+        axios.post(process.env.VUE_APP_URL + "/forgot_password/", params).then(response => {
+            if (response.status === 200) {
+                this.severity = "success";
+                this.inlineMessage = response.data[0];
+            }
+        }).catch((error) => {
+            this.$toast.add({
+                severity:'error', 
+                detail: "kullanıcı adı veya mail adresi bulunamadı", 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
+        });
         },
 
         cancelPasswordReset() {
@@ -106,4 +125,5 @@ export default {
             }
         }
     }
+    
 </style>

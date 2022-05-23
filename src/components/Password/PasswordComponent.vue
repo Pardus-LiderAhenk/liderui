@@ -3,7 +3,7 @@
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12">
                 <slot></slot>
-                <label for="city">{{$t("password.new_password")}}</label>
+                <label v-if="showTitle" for="new_password">{{$t("password.new_password")}}</label>
                 <div class="p-inputgroup">
                     <Password @update:modelValue="getPassword"
                         v-model="passwordForm.password" :toggleMask="toogleMask" 
@@ -28,7 +28,7 @@
                             </ul>
                         </template>
                     </Password>
-                    <Button 
+                    <Button v-if="generate"
                         icon="pi pi-key" 
                         class="p-button-sm" :title='$t("password.generate_password")' 
                         @click.prevent="generatePassword"
@@ -40,7 +40,7 @@
                 </small>
             </div>
             <div class="p-field p-col-12">
-                <label for="city">{{$t("password.confirm_password")}}</label>
+                <label v-if="showTitle" for="confirm_password">{{$t("password.confirm_password")}}</label>
                 <div class="p-inputgroup">
                     <Password @update:modelValue="getPassword"
                         v-model="passwordForm.confirmPassword" :toggleMask="toogleMask" 
@@ -65,7 +65,7 @@
                             </ul>
                         </template>
                     </Password>
-                    <Button 
+                    <Button v-if="generate"
                         icon="pi pi-key" 
                         class="p-button-sm" :title='$t("password.generate_password")' 
                         @click.prevent="generatePassword"
@@ -119,7 +119,18 @@ export default {
             default: false,
             description: "Disabled password input"
         },
-        
+
+        generate: {
+            type: Boolean,
+            default: true,
+            description: "Generate password"
+        },
+
+        showTitle: {
+            type: Boolean,
+            default: true,
+            description: "Show Password title"
+        }
     },
 
     computed: {
