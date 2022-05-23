@@ -21,7 +21,7 @@
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="fileServerPassword">{{$t('settings.server_settings.file_server_settings.password')}}</label>
-            <InputText id="fileServerPassword" type="text" v-model="fileServerPassword"/>
+            <InputText id="fileServerPassword" type="password" v-model="fileServerPassword"/>
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="fileServerAgentFilePath">{{$t('settings.server_settings.file_server_settings.agent_file_directory')}}</label>

@@ -78,12 +78,12 @@ export default {
     watch: { 
       	serverSettings: function(newVal) { 
           if(newVal) {
-            this.smtpAuth = newVal.smtpAuth;
-            this.tlsEnabled = newVal.tlsEnabled;
-            this.emailHost = newVal.emailHost;
-            this.emailPort = newVal.emailPort;
-            this.emailUsername = newVal.emailUsername;
-            this.emailPassword = newVal.emailPassword;
+            this.smtpAuth = newVal.mailSmtpAuth;
+            this.tlsEnabled = newVal.mailSmtpStartTlsEnable;
+            this.emailHost = newVal.mailHost;
+            this.emailPort = newVal.mailSmtpPort;
+            this.emailUsername = newVal.mailAddress;
+            this.emailPassword = newVal.mailPassword;
           }
         }
     },
