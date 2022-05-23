@@ -11,7 +11,7 @@
         <div class="p-col-12">
             <div class="p-field">
                 <InlineMessage severity="info">
-                    Liderahenk MYS'ye ulaşamıyorsanız, kullanıcı adını girin ve tekrar giriş yapabilmeniz için gerekli detayların olduğu bir e-posta gönderilecek.
+                     {{$t('login.password_notify')}}
                 </InlineMessage>
             </div>
             <div class="card">
@@ -32,7 +32,7 @@
                             <div>
                                 <Button 
                                     icon="pi pi-times"
-                                    label="İptal" 
+                                    :label="$t('login.cancel')"
                                     class="p-button-sm p-button-text"
                                     @click="cancelPasswordReset"
                                 />
@@ -40,7 +40,7 @@
                             <div class="p-ml-2">
                                 <Button 
                                     icon="pi pi-link"
-                                    label="Gönder" 
+                                    :label="$t('login.send')"
                                     class="p-button-sm"
                                     @click="sendPasswordResetLink"
                                 />

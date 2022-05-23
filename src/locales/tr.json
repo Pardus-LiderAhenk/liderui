@@ -32,7 +32,10 @@
         "password_warn":"Parola boş bırakılamaz",
         "sign_in":"Oturum Aç",
         "forgot_password":"Parolamı Unuttum",
-        "login_error":"Geçersiz kullanıcı adı veya parola"
+        "login_error":"Geçersiz kullanıcı adı veya parola",
+        "password_notify":"Liderahenk MYS'ye ulaşamıyorsanız, kullanıcı adını girin ve tekrar giriş yapabilmeniz için gerekli detayların olduğu bir e-posta gönderilecek.",
+        "cancel":"İptal",
+        "send":"Gönder"
     },
     "menu": {
         "dashboard": "Ön Panel",
@@ -686,7 +689,11 @@
                 "save":"Değişiklikleri Kaydet",
                 "yes":"Evet",
                 "no":"Hayır",
-                "information_has_been_successfully_updated":"Bilgiler başarı ile güncellenmiştir"
+                "information_has_been_successfully_updated":"Bilgiler başarı ile güncellenmiştir",
+                "update_settings":"Ayarları Güncelle",
+                "cancel":"İptal",
+                "directory_server_notify":"Dizin sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
+                "directory_server_settings_successfully_update":"Dizin sunucu ayarları başarıyla güncellendi"
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Sunucusu Bilgileri",
@@ -701,7 +708,11 @@
                 "xmpp_ping_timeout":"XMPP Ping Timeout",
                 "save":"Değişiklikleri Kaydet",
                 "yes":"Evet",
-                "no":"Hayır"
+                "no":"Hayır",
+                "cancel":"İptal",
+                "update_settings":"Ayarları Güncelle",
+                "messaging_server_notify":"XMPP sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
+                "messaging_server_settings_successfully_update":"XMPP sunucu ayarları başarıyla güncellendi"
             },
             "file_server_settings":{
                 "file_server_information":"Dosya Sunucusu Bilgileri",
@@ -713,9 +724,15 @@
                 "agent_file_directory":"Ajan Dosya Dizini",
                 "save":"Değişiklikleri Kaydet",
                 "yes":"Evet",
-                "no":"Hayır"
+                "no":"Hayır",
+                "cancel":"İptal",
+                "update_settings":"Ayarları Güncelle",
+                "file_server_notify":"Dosya sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
+                "file_server_settings_successfully_update":"Dosya sunucu ayarları başarıyla güncellendi"
             },
             "mail_server_settings":{
+                "mail_notify":"Email ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
+                "mail_settings_successfully_update":"E-Mail ayarları başarı ile güncellenmiştir.",
                 "mail_server_settings":"Email Sunucu Bilgileri",
                 "mail_host_address":"Email Host Adresi",
                 "port":"Email Port",
@@ -725,7 +742,9 @@
                 "tls_activation":"TLS Aktif",
                 "save":"Değişiklikleri Kaydet",
                 "yes":"Evet",
-                "no":"Hayır"
+                "no":"Hayır",
+                "cancel":"İptal",
+                "update_settings":"Ayarları Güncelle"
             },
             "other_settings":{
                 "other_settings":"Diğer Ayarlar",
@@ -739,7 +758,12 @@
                 "repo_key_address":"Depo Anahtar Adresi",
                 "save":"Değişiklikleri Kaydet",
                 "yes":"Evet",
-                "no":"Hayır"
+                "no":"Hayır",
+                "cancel":"İptal",
+                "update_settings":"Ayarları Güncelle",
+                "sudo_type":"Kullanıcıların hangi etki alanından yetkilendirileceğini(sudo) seçiniz",
+                "other_server_notify":"Ayarlar güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
+                "other_server_settings_successfully_update":"Ayarlar başarıyla güncellendi"
             }
         },
         "registiration_template":{
@@ -963,6 +987,45 @@
             "select_ou": "Dizin Seç",
             "already_exist_user_in_ldap": "Kullanıcılar OpenLDAP'ta zaten var",
             "already_exist_group_in_ldap": "Gruplar OpenLDAP'ta zaten var"
+        },
+        "sudo":{
+            "selected_node_title":"Kayıt Bilgisi",
+            "please_select_registration":"Lütfen kayıt seçiniz",
+            "user_list":"Kullanıcı Listesi",
+            "attribute":"Öznitelik",
+            "value":"Değer",
+            "search":"Ara",
+            "no_authorized_user_found":"Yetkili kullanıcı bulunamadı",
+            "please_select_authorization_group":"Lütfen yetki grubu seçiniz",
+            "username":"Kullanıcı Adı",
+            "delete": "Sil",
+            "delete_authority_group":"Yetki Grubu Sil",
+            "delete_folder":"Klasör Sil",
+            "delete_authority_group_question":"Yetki grubu silinecektir, emin misiniz?",
+            "delete_folder_question":"Klasör silinecektir, emin misiniz? Bu işlem seçili olan klasörü ve bu klasörün altında yer alan tüm klasör ve grupları silecektir. Bu işlem geri alınamaz.",
+            "cancel":"İptal",
+            "yes":"Evet",
+            "delete_user":"Kullanıcı Sil",
+            "delete_user_question":"Kullanıcı yetki grubundan silinecektir, emin misiniz?",
+            "name":"Ad",
+            "type":"Tipi",
+            "node_dn":"Kayıt DN",
+            "created_date":"Oluşturma Tarihi",
+            "modified_date":"Güncelleme Tarihi",
+            "creator_name":"Oluşturan Kişi",
+            "modifier_name":"Güncelleyen Kişi",
+            "description":"Açıklama",
+            "objectclass":"Nesne Sınıfı",
+            "registiration_delete":"Kayıt başarıyla silindi",
+            "registiration_delete_error":"Kayıt silinirken hata oluştu",
+            "user_delete":"Kullanıcı yetki grubundan başarıyla silindi",
+            "user_delete_error":"Kullanıcı yetki grubundan silinirken hata oluştu",
+            "add_authority_group":"Yetki Grubu Ekle",
+            "add_folder":"Klasör Ekle",
+            "edit_folder_name":"Klasör Adı Düzenle",
+            "move_folder":"Klasör Taşı",
+            "edit_authority_group":"Yetki Grubu Düzenle",
+            "move_authority_group":"Yetki Grubu Taşı"            
         }
     },
     "group_management": {
@@ -1295,7 +1358,22 @@
             "processor_information":"İşlemci Bilgisi",
             "number_of_physical_cores":"Fiziksel Çekirdek Sayısı",
             "close":"Kapat",
-            "select":"Seç"
+            "select":"Seç",
+            "add_group":"Grup Ekle",
+            "group_name":"Grup Adı",
+            "group_name_cannot_be_null":"Grup adı boş bırakılamaz",
+            "please_select_folder":"Lütfen klasör seçiniz",
+            "group_is_creating_please_wait":"Grup oluşturuluyor, lütfen bekleyiniz...",
+            "add_computer_group":"Gruba İstemci Ekle",
+            "please_select_group":"Lütfen grup seçiniz",
+            "computers_adding_please_wait":"İstemciler ekleniyor, lütfen bekleyiniz...",
+            "cancel":"İptal",
+            "add":"Ekle",
+            "computers_successfully_added":"İstemciler gruba başarıyla eklendi",
+            "an_error_occurred_while_adding_computers_to_the_group":"İstemciler gruba eklenirken hata oluştu",
+            "add_existing_group":"Mevcut Gruba Ekle",
+            "select_folder":"Klasör Seçiniz",
+            "create_computer_group":"İstemci Grubu Oluştur"
 
         },
         "task_report":{
@@ -1443,5 +1521,27 @@
             "user_group_information":"Kullanıcı Grup Bilgileri",
             "user_authorization_group_information_sudo":"Kullanıcı Yetki Grup Bilgileri(Sudo)"
         }
+    },
+    "user_authorization_sudo":{
+        "update_authority_group":"Yetki Grubu Güncelle",
+        "add_authority_group":"Yetki Grubu Ekle",
+        "authority_group_name":"Yetki Grup Adı",
+        "group_name_cannot_be_null":"Grup adı boş bırakılamaz",
+        "feauter":"Özellik",
+        "username":"Kullanıcı Adı",
+        "select_user":"Kullanıcı Seç",
+        "add":"Ekle",
+        "search":"Ara",
+        "feauter_value":"Özellik Değeri",
+        "close":"Kapat",
+        "delete":"Sil",
+        "update":"Güncelle",
+        "authorization_group_successfully_created":"Yetki grubu başarıyla oluşturuldu",
+        "an_error_occurred_while_creating_the_authorization_group":"Yetki grubu oluşturulurken hata oluştu",
+        "authorization_group_successfully_update":"Yetki grubu başarıyla güncellendi",
+        "an_error_occurred_while_updating_the_authorization_group":"Yetki grubu güncellenirken hata oluştu",
+        "value_cannot_be_null":"Kullanıcı adı, bilgisayar adı veya komut değeri boş bırakılamaz"
+        
+        
     }
 }

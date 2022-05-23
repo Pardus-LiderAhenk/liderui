@@ -15,7 +15,7 @@
     :selectedAgent="selectedAgent"
     @close-agent-detail-dialog="agentDetailDialog=false;">
   </agent-detail-dialog>
-  <Dialog header="Klasör Seçiniz" 
+  <Dialog :header="$t('reports.detailed_agent_report.select_folder')"
     v-model:visible="agentOuDialog" 
     :style="{width: '30vw'}" :modal="true"
   >
@@ -28,11 +28,11 @@
       :isMove="true"
     />
     <template #footer>
-      <Button label="İptal" 
+      <Button :label="$t('reports.detailed_agent_report.cancel')"
         icon="pi pi-times" @click="agentOuDialog = false"
         class="p-button-text p-button-sm"
       />
-      <Button label="Seç" icon="pi pi-check" 
+      <Button :label="$t('reports.detailed_agent_report.select')" icon="pi pi-check" 
           @click="selectAgentOuDn" class="p-button-sm"
       />
     </template>
@@ -169,7 +169,7 @@
         <div>{{$t('reports.detailed_agent_report.results')}}</div>
         <div  v-if="agents.length > 0">
           <SplitButton class="p-mr-2"
-            label="İstemci Grubu Oluştur" icon="fa fa-users"
+             :label="$t('reports.detailed_agent_report.create_computer_group')" icon="fa fa-users"
             @click="addGroupDialog=true;" :model="items">
           </SplitButton>
           <Button
@@ -327,7 +327,7 @@ export default {
       },
       items: [
         {
-          label: 'Mevcut Gruba Ekle',
+          label: this.$t('reports.detailed_agent_report.add_existing_group'),
           icon: 'pi pi-plus',
           command: () => {
               this.addExistGroupDialog = true;
@@ -357,7 +357,7 @@ export default {
       if (!this.filter.dn.trim()) {
         this.$toast.add({
             severity:'warn', 
-            detail: "Lütfen klasör seçiniz", 
+            detail: this.$t('reports.detailed_agent_report.please_select_folder'),
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
         });

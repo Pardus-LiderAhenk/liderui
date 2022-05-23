@@ -1,5 +1,5 @@
 <template>
-    <Dialog :header="isEdit ? 'Yetki Grubu Güncelle': 'Yetki Grubu Ekle'" 
+    <Dialog :header="isEdit ? $t('user_authorization_sudo.update_authority_group'): $t('user_authorization_sudo.add_authority_group')" 
         v-model:visible="modalVisible" 
         :style="{width: '40vw'}" 
         :modal="true"
@@ -7,16 +7,16 @@
     >
         <div class="p-fluid">
             <div class="p-field">
-                <label for="groupName">Yetki Grup Adı</label>
+                <label for="groupName">{{$t('user_authorization_sudo.authority_group_name')}}</label>
                 <InputText :class="validation.groupName ? 'p-invalid': ''" type="text" v-model="groupName"/>
                 <small v-if="validation.groupName" class="p-error">
-                    Grup adı boş bırakılamaz
+                    {{$t('user_authorization_sudo.group_name_cannot_be_null')}}
                 </small>
             </div>
         </div>
          <div class="p-fluid">
             <div class="p-field ">
-                <label for="groupName">Özellik</label>
+                <label for="groupName">{{$t('user_authorization_sudo.feauter')}}</label>
                 <div class="p-inputgroup">
                     <Dropdown class="featureDopdown" 
                         v-model="selectedFeature" 
@@ -25,17 +25,17 @@
                     >
                     </Dropdown>
                     <InputText
-                        :placeholder="selectedFeature.value == 'sudoUser' ? 'Kullanıcı Adı': selectedFeature.value == 'sudoCommand'?'ALL':'pardus'" 
+                        :placeholder="selectedFeature.value == 'sudoUser' ? $t('user_authorization_sudo.username'): selectedFeature.value == 'sudoCommand'?'ALL':'pardus'" 
                         v-model="featureValue" 
                     />
                    
                     <Button icon="pi pi-sitemap" v-if="selectedFeature.value == 'sudoUser'"
-                        title="Kullanıcı Seç" 
+                        :title="$t('user_authorization_sudo.select_user')" 
                         class="p-button-warning" 
                         @click="showUserTreeModal = true"
                     />
                     <Button icon="pi pi-plus" 
-                        label="Ekle" 
+                        :label="$t('user_authorization_sudo.add')" 
                         @click="addNewFeature()"
                     />
                 </div>
@@ -55,19 +55,19 @@
                             <i class="pi pi-search"/>
                             <InputText v-model="filters['global'].value" 
                             class="p-inputtext-sm" 
-                            placeholder="Ara" 
+                            :placeholder="$t('user_authorization_sudo.search')" 
                             />
                         </span>
                     </div>
                 </div>
             </template>
-            <Column field="type" header="Özellik"></Column>
+            <Column field="type" :header="$t('user_authorization_sudo.feauter')" ></Column>
             <Column field="value" header="Özellik Değeri"></Column>
             <Column :exportable="false">
                 <template #body="slotProps">
                     <div class="p-d-flex p-jc-end">
                         <Button 
-                            title="Sil"
+                            :title="$t('user_authorization_sudo.delete')"
                             icon="pi pi-trash" 
                             class="p-button-rounded p-button-danger p-button-sm" 
                             @click.prevent="deleteFeature(slotProps.data)"
@@ -77,22 +77,22 @@
             </Column>
         </DataTable>
         <template #footer>
-            <Button label="Kapat" 
+            <Button :label="$t('user_authorization_sudo.close')" 
                 icon="pi pi-times" 
                 @click="modalVisible = false" 
                 class="p-button-text p-button-sm"
             />
-            <Button v-if="!isEdit" label="Ekle" 
+            <Button v-if="!isEdit" :label="$t('user_authorization_sudo.add')" 
                 icon="pi pi-plus" 
                 @click="createSudoGroup" class="p-button-sm" 
             />
-            <Button v-if="isEdit" label="Güncelle" 
+            <Button v-if="isEdit" :label="$t('user_authorization_sudo.update')" 
                 icon="pi pi-refresh" 
                 @click="updateSudoGroup" class="p-button-sm" 
             />
         </template>
     </Dialog>
-    <Dialog header="Kullanıcı seç" 
+    <Dialog :header="$t('user_authorization_sudo.select_user')" 
         v-model:visible="showUserTreeModal" 
         :style="{width: '40vw'}" :modal="true"
     >
@@ -104,12 +104,12 @@
             :searchFields="userSearchFields"
         />
         <template #footer>
-            <Button label="İptal" 
+            <Button :label="$t('user_authorization_sudo.close')" 
                 icon="pi pi-times" 
                 @click="showUserTreeModal = false" 
                 class="p-button-text p-button-sm"
             />
-            <Button label="Ekle" 
+            <Button :label="$t('user_authorization_sudo.add')" 
                 icon="pi pi-user-plus" @click="addUsersToData" 
                 class="p-button-sm"
             />
@@ -240,14 +240,14 @@ export default {
                     this.$emit('sudoGroupCreated', response.data, this.isEdit);
                     this.$toast.add({
                         severity:'success', 
-                        detail: "Yetki grubu başarıyla oluşturuldu", 
+                        detail: this.$t('user_authorization_sudo.authorization_group_successfully_created'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'success', 
-                        detail: "Yetki grubu oluşturulurken hata oluştu", 
+                        detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -267,14 +267,14 @@ export default {
                     this.$emit('sudoGroupCreated', response.data, this.isEdit);
                     this.$toast.add({
                         severity:'success', 
-                        detail: "Yetki grubu başarıyla güncellendi", 
+                        detail: this.$t('user_authorization_sudo.authorization_group_successfully_update'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: "Yetki grubu güncellenirken hata oluştu", 
+                        detail: this.$t('user_authorization_sudo.an_error_occurred_while_updating_the_authorization_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -324,7 +324,7 @@ export default {
             if (this.selectedFeature === '' || this.featureValue === '') {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Kullanıcı adı, bilgisayar adı veya komut değeri boş bırakılamaz", 
+                    detail: this.$t('user_authorization_sudo.value_cannot_be_null'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

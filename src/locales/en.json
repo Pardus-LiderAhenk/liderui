@@ -32,7 +32,10 @@
         "password_warn":"Password is not available",
         "sign_in":"Sign in",
         "forgot_password":"Forgot Password",
-        "login_error":"Invalid username or password"
+        "login_error":"Invalid username or password",
+        "password_notify":"If you cannot reach Liderahenk MYS, enter your username and you will be sent an e-mail with the necessary details to log in again.",
+        "cancel":"Cancel",
+        "send":"Send"
     },
     "menu": {
         "dashboard": "Dashboard",
@@ -683,7 +686,11 @@
                 "save":"Save",
                 "yes":"Yes",
                 "no":"No",
-                "information_has_been_successfully_updated":"Information has been successfully updated"
+                "information_has_been_successfully_updated":"Information has been successfully updated",
+                "update_settings":"Update Settings",
+                "cancel":"Cancel",
+                "directory_server_notify":"Directory server settings will be updated and you will be redirected to login page, are you sure?",
+                "directory_server_settings_successfully_update":"Directory server settings updated successfully"
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Server Information",
@@ -698,7 +705,11 @@
                 "xmpp_ping_timeout":"XMPP Ping Timeout",
                 "save":"Save",
                 "yes":"Yes",
-                "no":"No"
+                "no":"No",
+                "cancel":"Cancel",
+                "update_settings":"Update Settings",
+                "file_server_notify":"File server settings will be updated and you will be redirected to login page, are you sure?",
+                "file_server_settings_successfully_update":"File server settings updated successfully"
             },
             "file_server_settings":{
                 "file_server_information":"File Server Information",
@@ -710,9 +721,15 @@
                 "agent_file_directory":"Agent File Directory",
                 "save":"Save",
                 "yes":"Yes",
-                "no":"No"
+                "no":"No",
+                "cancel":"Cancel",
+                "update_settings":"Update Settings",
+                "file_server_notify":"File server settings will be updated and you will be redirected to login page, are you sure?",
+                "file_server_settings_successfully_update":"File server settings updated successfully"
             },
             "mail_server_settings":{
+                "mail_notify":"Email settings will be updated and you will be directed to the login page, are you sure?",
+                "mail_settings_successfully_update":"E-Mail settings have been successfully updated.",
                 "mail_server_settings":"E-mail Server Information",
                 "mail_host_address":"E-mail Hostname",
                 "port":"E-mail Port",
@@ -722,7 +739,9 @@
                 "tls_activation":"TLS Activation",
                 "save":"Save",
                 "yes":"Yes",
-                "no":"No"
+                "no":"No",
+                "update_settings":"Update Settings",
+                "cancel":"Cancel"
             },
             "other_settings":{
                 "other_settings":"Other Settings",
@@ -736,7 +755,12 @@
                 "repo_key_address":"Repo Key Address",
                 "save":"Save",
                 "yes":"Yes",
-                "no":"No"
+                "no":"No",
+                "cancel":"Cancel",
+                "update_settings":"Update Settings",
+                "sudo_type":"Choose from which domain the users will be authorized (sudo)",
+                "other_server_notify":"Settings will be updated and you will be redirected to login page, are you sure?",
+                "other_server_settings_successfully_update":"Settings updated successfully"
             }
         },
         "registiration_template":{
@@ -1162,7 +1186,7 @@
                 "usb_güncelle":"USB Update",
                 "manufacturer":"Manufacturer",
                 "model":"Model",
-                "serial_number":"Seri Numarası",
+                "serial_number":"Serial Number",
                 "type":"Type",
                 "printer":"Printer",
                 "webcam":"Webcam",
@@ -1292,7 +1316,22 @@
             "processor_information":"Agent Information",
             "number_of_physical_cores":"Number of Pyhsical Cores",
             "close":"Close",
-            "select":"Select"
+            "select":"Select",
+            "add_group":"Add Group",
+            "group_name":"Group Name",
+            "group_name_cannot_be_null":"Group name cannot be null",
+            "please_select_folder":"Please select folder",
+            "group_is_creating_please_wait":"Group is creating. Please wait...",
+            "add_computer_group":"Add Computer Group",
+            "please_select_group":"Please select group",
+            "cancel":"Cancel",
+            "add":"Add",
+            "computer_group_successfully_create":"Computer group successfully created",
+            "an_error_occurred_while_creating_the_computer_group":"An error occurred while creating the client group",
+            "add_existing_group":"Add Existing Group",
+            "select_folder":"Select Folder",
+            "create_computer_group":"Create Computer Group"
+
 
         },
         "task_report":{
@@ -1443,5 +1482,27 @@
             "user_authorization_group_information_sudo":"User Authorization Group Information (sudo)"
         }
 
+    },
+    "user_authorization_sudo":{
+        "update_authority_group":"Yetki Grubu Güncelle",
+        "add_authority_group":"Yetki Grubu Ekle",
+        "authority_group_name":"Yetki Grup Adı",
+        "group_name_cannot_be_null":"Grup adı boş bırakılamaz",
+        "feauter":"Özellik",
+        "username":"Kullanıcı Adı",
+        "select_user":"Kullanıcı Seç",
+        "add":"Ekle",
+        "search":"Ara",
+        "feauter_value":"Özellik Değeri",
+        "close":"Kapat",
+        "delete":"Delete",
+        "update":"Güncelle",
+        "authorization_group_successfully_created":"Yetki grubu başarıyla oluşturuldu",
+        "an_error_occurred_while_creating_the_authorization_group":"Yetki grubu oluşturulurken hata oluştu",
+        "authorization_group_successfully_update":"Yetki grubu başarıyla güncellendi",
+        "an_error_occurred_while_updating_the_authorization_group":"Yetki grubu güncellenirken hata oluştu",
+        "value_cannot_be_null":"Kullanıcı adı, bilgisayar adı veya komut değeri boş bırakılamaz"
+        
+        
     }
 }

@@ -18,13 +18,11 @@
                     </password-component>
                 </div>
                 <div>
-                    <small>* Dizin yapısında bulunan kullanıcıların Lider Arayüzü(Konsol erişimi) kullanması için Lider'e aktarılması gerekmektedir</small>
-                </div>
-                <div>
-                    <small>* Etki alanı parola erişimi kısıtından dolayı aktarılacak kullanıcının Lider Arayüz(Konsol erişimi) giriş parolası etki alanı parolasından bağımsız tanımlanmalıdır</small>
-                </div>
-                <div>
-                    <small>* Aktarılacak kullanıcının sayfa erişimlerini Ayarlar Menüsünden tanımlayabilirsiniz.</small>
+                    <InlineMessage severity="info">
+                        Dizin yapısında bulunan kullanıcıların Lider Arayüzü(Konsol erişimi) kullanması için Lider'e aktarılması gerekmektedir.
+                        Etki alanı parola erişimi kısıtından dolayı aktarılacak kullanıcının Lider Arayüz(Konsol erişimi) giriş parolası etki alanı parolasından bağımsız tanımlanmalıdır.
+                        Aktarılacak kullanıcının sayfa erişimlerini Ayarlar Menüsünden tanımlayabilirsiniz.
+                    </InlineMessage>
                 </div>
             </div>
             <template #footer>

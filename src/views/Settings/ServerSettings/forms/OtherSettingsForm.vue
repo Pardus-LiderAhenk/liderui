@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="p-col-12">
-                <h4>Kullanıcıların hangi etki alanından yetkilendirileceğini(sudo) seçiniz</h4>
+                <h4>{{$t('settings.server_settings.other_settings.sudo_type')}}</h4>
             </div>
             <div class="p-col-12">
                 <div class="p-field-radiobutton">
@@ -66,19 +66,19 @@
             </div>
        </div>
     </div>
-    <Dialog header="Ayarları Güncelle" v-model:visible="showDialog" 
+    <Dialog :header="$t('settings.server_settings.other_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
             <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
             <span>
-                Ayarlar güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?
+                {{$t('settings.server_settings.other_settings.other_server_notify')}}
             </span>
         </div>
         <template #footer>
-            <Button label="İptal" icon="pi pi-times" 
+            <Button :label="$t('settings.server_settings.other_settings.cancel')" icon="pi pi-times" 
                 @click="showDialog = false" class="p-button-text p-button-sm"
             />
-            <Button label="Evet" icon="pi pi-check"
+            <Button :label="$t('settings.server_settings.other_settings.yes')" icon="pi pi-check"
                 @click="submitForm" class="p-button-sm"
             />
         </template>
@@ -125,7 +125,7 @@ export default {
             axios.post('/lider/settings/update/otherSettings', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Ayarlar başarıyla ile güncellendi", 
+                    detail: this.$t('settings.server_settings.other_settings.other_server_settings_successfully_update'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

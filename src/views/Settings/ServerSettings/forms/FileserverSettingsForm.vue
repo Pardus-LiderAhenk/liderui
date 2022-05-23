@@ -38,19 +38,19 @@
             </div>
         </div>
     </div>
-    <Dialog header="Ayarları Güncelle" v-model:visible="showDialog" 
+    <Dialog :header="$t('settings.server_settings.file_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
             <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
             <span>
-                Dosya sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?
+                {{$t('settings.server_settings.file_server_settings.file_server_notify')}}
             </span>
         </div>
         <template #footer>
-            <Button label="İptal" icon="pi pi-times" 
+            <Button :label="$t('settings.server_settings.file_server_settings.cancel')" icon="pi pi-times" 
                 @click="showDialog = false" class="p-button-text p-button-sm"
             />
-            <Button label="Evet" icon="pi pi-check"
+            <Button :label="$t('settings.server_settings.file_server_settings.yes')" icon="pi pi-check"
                 @click="submitForm" class="p-button-sm"
             />
         </template>
@@ -103,7 +103,7 @@ export default {
             axios.post('/lider/settings/update/fileServer', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Dosya sunucu ayarları başarıyla güncellendi", 
+                    detail: this.$t('settings.server_settings.file_server_settings.file_server_settings_successfully_update'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

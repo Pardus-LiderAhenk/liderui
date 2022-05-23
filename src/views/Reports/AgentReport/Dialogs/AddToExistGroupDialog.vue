@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Dialog header="Gruba İstemci Ekle" v-model:visible="showDialog" 
+        <Dialog :header="$t('reports.detailed_agent_report.add_computer_group')" v-model:visible="showDialog" 
             :style="{width: '30vw'}" :modal="true">
             <div class="p-fluid">
                 <div class="p-field">
@@ -13,20 +13,20 @@
                     />
                 </div>
                 <div class="p-filed p-text-center">
-                    <small>Lütfen grup seçiniz</small>
+                    <small>{{$t('reports.detailed_agent_report.please_select_group')}}</small>
                 </div>
             </div>
             <div v-if="loading" class="p-text-center">
               <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
               <a class="primary">
-                İstemciler ekleniyor, lütfen bekleyiniz...
+                {{$t('reports.detailed_agent_report.computers_adding_please_wait')}}
               </a>
             </div>
             <template #footer>
-                <Button label="İptal" icon="pi pi-times" 
+                <Button :label="$t('reports.detailed_agent_report.cancel')" icon="pi pi-times" 
                     @click="showDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button label="Ekle" icon="pi pi-plus"
+                <Button :label="$t('reports.detailed_agent_report.add')" icon="pi pi-plus"
                     @click="addGroup" class="p-button-sm"
                 />
             </template>
@@ -96,7 +96,7 @@ export default {
             if (!this.selectedNode || this.selectedNode.type != "GROUP") {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Lütfen grup seçiniz", 
+                    detail: this.$t('reports.detailed_agent_report.please_select_group'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -144,14 +144,14 @@ export default {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 
-                        detail: "İstemciler gruba başarıyla eklendi", 
+                        detail: this.$t('reports.detailed_agent_report.computers_successfully_added'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: "İstemciler gruba eklenirken hata oluştu", 
+                        detail:  this.$t('reports.detailed_agent_report.an_error_occurred_while_adding_computers_to_the_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });

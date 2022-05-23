@@ -64,11 +64,11 @@
                                 <template #start>
                                     <div class="field-radiobutton p-mr-2">
                                         <RadioButton id="typeWhite" name="typeWhite" value="whitelist" v-model="type" @change="changeUsbListType"/>
-                                        <label for="typeWhite">{{$t('policy_management.profile.usb.white_list')}}</label>
+                                        <label for="typeWhite">&nbsp; &nbsp;{{$t('policy_management.profile.usb.white_list')}}</label>
                                     </div>
                                     <div class="field-radiobutton p-mr-2">
                                         <RadioButton id="typeBlack" name="typeBlack" value="blacklist" v-model="type" @change="changeUsbListType"/>
-                                        <label for="typeBlack">{{$t('policy_management.profile.usb.black_list')}}</label>
+                                        <label for="typeBlack">&nbsp; &nbsp;{{$t('policy_management.profile.usb.black_list')}}</label>
                                     </div>
                                 </template>
                                 <template #end>

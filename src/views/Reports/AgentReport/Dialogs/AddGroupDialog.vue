@@ -1,13 +1,13 @@
 <template>
     <div>
-        <Dialog header="Grup Ekle" v-model:visible="showDialog" 
+        <Dialog :header="$t('reports.detailed_agent_report.add_group')" v-model:visible="showDialog" 
             :style="{width: '30vw'}" :modal="true">
             <div class="p-fluid">
                 <div class="p-field">
-                    <label for="groupName">Grup Adı</label>
+                    <label for="groupName">{{$t('reports.detailed_agent_report.group_name')}}</label>
                     <InputText :class="validation.groupName ? 'p-invalid': ''" type="text" v-model="groupName"/>
                     <small v-if="validation.groupName" class="p-error">
-                        Grup adı boş bırakılamaz
+                        {{$t('reports.detailed_agent_report.group_name_cannot_be_null')}}
                     </small>
                 </div>
                 <div class="p-field">
@@ -21,20 +21,20 @@
                     />
                 </div>
                 <div class="p-filed p-text-center">
-                    <small>Lütfen klasör seçiniz</small>
+                    <small>{{$t('reports.detailed_agent_report.please_select_folder')}}</small>
                 </div>
             </div>
             <div v-if="loading" class="p-text-center">
               <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
               <a class="primary">
-                Grup oluşturuluyor, lütfen bekleyiniz...
+                {{$t('reports.detailed_agent_report.group_is_creating_please_wait')}}
               </a>
             </div>
             <template #footer>
-                <Button label="İptal" icon="pi pi-times" 
+                <Button :label="$t('reports.detailed_agent_report.cancel')" icon="pi pi-times" 
                     @click="showDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button label="Ekle" icon="pi pi-plus"
+                <Button :label="$t('reports.detailed_agent_report.add')" icon="pi pi-plus"
                     @click="addGroup" class="p-button-sm"
                 />
             </template>
@@ -108,7 +108,7 @@ export default {
             if (!this.selectedOu) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Lütfen klasör seçiniz", 
+                    detail: this.$t('reports.detailed_agent_report.please_select_folder'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -157,14 +157,14 @@ export default {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 
-                        detail: "İstemci grubu başarıyla oluşturuldu", 
+                        detail: this.$t('reports.detailed_agent_report.computer_group_successfully_create'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: "İstemci grubu oluşturulurken hata oluştu", 
+                        detail: this.$t('reports.detailed_agent_report.an_error_occurred_while_creating_the_computer_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
