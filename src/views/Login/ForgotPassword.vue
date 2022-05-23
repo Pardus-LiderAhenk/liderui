@@ -10,8 +10,8 @@
         </div>
         <div class="p-col-12">
             <div class="p-field">
-                <InlineMessage severity="info">
-                     {{$t('login.password_notify')}}
+                <InlineMessage :severity="severity" style="text-align:left;">
+                     {{inlineMessage}}
                 </InlineMessage>
             </div>
             <div class="card">
@@ -39,7 +39,7 @@
                             </div>
                             <div class="p-ml-2">
                                 <Button 
-                                    icon="pi pi-link"
+                                    icon="pi pi-send"
                                     :label="$t('login.send')"
                                     class="p-button-sm"
                                     @click="sendPasswordResetLink"
@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     data() {
         return {
@@ -62,7 +64,10 @@ export default {
             validation: {
                 username: false,
                 password: false
-            }
+            },
+            severity: "info",
+            inlineMessage: this.$t('login.password_notify')
+
         }
     },
 
@@ -72,8 +77,20 @@ export default {
             if (!this.username.trim()) {
                 this.validation.username = true;
                 return;
-        }
-            alert("password reset")
+            }
+
+            let params = {
+                username: this.username
+            }
+            axios.post(process.env.VUE_APP_URL + "/forgot_password/", params).then(response => {
+                if (response.status === 200) {
+                    this.severity = "success";
+                    this.inlineMessage = response.data[0];
+                }
+            }).catch((error) => {
+               this.inlineMessage = "Lütfen sunucu mail ayarlarını, kullanıcı adı ve mail adresini kontrol ediniz.";
+               this.severity = "error";
+            });
         },
 
         cancelPasswordReset() {
