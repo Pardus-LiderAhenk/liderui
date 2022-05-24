@@ -29,7 +29,7 @@
                     <Card>
                         <template #title>
                            <div style="font-size:15px;">
-                                Kayıt Bilgisi
+                                {{$t('user_management.sudo.selected_node_title')}}
                             </div>
                         </template>
                         <template #content>
@@ -37,11 +37,11 @@
                                 :value="selectedNodeData" responsiveLayout="scroll">
                                 <template #empty>
                                     <div class="p-d-flex p-jc-center">
-                                        Lütfen kayıt seçiniz
+                                        {{$t('user_management.sudo.please_select_registration')}}
                                     </div>
                                 </template>
-                                <Column field="label" header="Öznitelik"></Column>
-                                <Column field="value" header="Değer"></Column>
+                                <Column field="label" :header="$t('user_management.sudo.attribute')"></Column>
+                                <Column field="value" :header="$t('user_management.sudo.value')"></Column>
                             </DataTable>
                         </template>
                     </Card>
@@ -50,7 +50,7 @@
                     <Card>
                         <template #title>
                             <div style="font-size:15px;">
-                                Kullanıcı Listesi
+                                {{$t('user_management.sudo.user_list')}}
                             </div>
                         </template>
                         <template #content>
@@ -67,7 +67,7 @@
                                                 <i class="pi pi-search"/>
                                                 <InputText v-model="filters['global'].value" 
                                                 class="p-inputtext-sm" 
-                                                placeholder="Ara" 
+                                                :placeholder="$t('user_management.sudo.search')" 
                                                 />
                                             </span>
                                         </div>
@@ -76,20 +76,20 @@
                                 <template #empty>
                                     <div class="p-d-flex p-jc-center">
                                         <div v-if="selectedNode && selectedNode.type=='ROLE'">
-                                            Yetkili kullanıcı bulunamadı
+                                            {{$t('user_management.sudo.no_authorized_user_found')}}
                                         </div>
                                         <div v-else>
-                                            Lütfen yetki grubu seçiniz
+                                            {{$t('user_management.sudo.please_select_authorization_group')}}
                                         </div>
                                     </div>
                                 </template>
                                 <Column field="index" header="#" style="width:10%"></Column>
-                                <Column header="Kullanıcı Adı" field="uid"></Column>
+                                <Column :header="$t('user_management.sudo.username')" field="uid"></Column>
                                 <Column>
                                     <template #body="slotProps">
                                         <div class="p-d-flex p-jc-end">
                                             <Button 
-                                                label="Sil"
+                                                :label="$t('user_management.sudo.delete')"
                                                 icon="pi pi-trash" 
                                                 class="p-button-rounded p-button-sm p-button-danger" 
                                                 @click="modals.deleteSudoUser = true; deletedSudoUser = slotProps.data;"
@@ -135,48 +135,47 @@
         :isEdit="sudoGruopEdit">
     </sudo-group-dialog>
 
-    <Dialog :header="selectedNode && selectedNode.type == 'ROLE' ? 'Yetki Grubu Sil': 'Klasör Sil'" 
+    <Dialog :header="selectedNode && selectedNode.type == 'ROLE' ? $t('user_management.sudo.delete_authority_group'): $t('user_management.sudo.delete_folder')" 
         v-model:visible="modals.deleteNode"  
         :modal="true" :style="{width: '30vw'}">
         <div class="confirmation-content">
             <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
-            <span v-if="selectedNode.type == 'ROLE'">Yetki grubu silinecektir, emin misiniz?</span>
+            <span v-if="selectedNode.type == 'ROLE'">{{$t('user_management.sudo.delete_authority_group_question')}}</span>
             <span v-if="selectedNode.type == 'ORGANIZATIONAL_UNIT'">
-                Klasör silinecektir, emin misiniz?
-                Bu işlem seçili olan klasörü ve bu klasörün altında yer alan tüm klasör ve grupları silecektir. Bu işlem geri alınamaz.
+                {{$t('user_management.sudo.delete_folder_question')}}
             </span>
         </div>
         <template #footer>
         <Button 
-            label="İptal" 
+            :label="$t('user_management.sudo.cancel')" 
             icon="pi pi-times" 
             @click="modals.deleteNode = false" 
             class="p-button-text p-button-sm"
         />
         <Button 
-            label="Evet"
+            :label="$t('user_management.sudo.yes')" 
             icon="pi pi-check" 
             @click="deleteNode"
             class="p-button-sm"
         />
         </template>
     </Dialog>
-    <Dialog header="Kullanıcı Sil" 
+    <Dialog :header="$t('user_management.sudo.delete_user')" 
         v-model:visible="modals.deleteSudoUser"  
         :modal="true" :style="{width: '30vw'}">
         <div class="confirmation-content">
             <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
-            <span>Kullanıcı yetki grubundan silinecektir, emin misiniz?</span>
+            <span>{{$t('user_management.sudo.delete_user_question')}}</span>
         </div>
         <template #footer>
         <Button 
-            label="İptal" 
+            :label="$t('user_management.sudo.cancel')" 
             icon="pi pi-times" 
             @click="modals.deleteSudoUser = false" 
             class="p-button-text p-button-sm"
         />
         <Button 
-            label="Evet"
+            :label="$t('user_management.sudo.yes')" 
             icon="pi pi-check" 
             @click="deleteSudoUser"
             class="p-button-sm"
@@ -272,41 +271,41 @@ export default {
             if (node) {
                 let nodeData = [];
                 nodeData.push({
-                    'label': 'Ad',
+                    'label': this.$t('user_management.sudo.name'),
                     'value': node.name,
                 }, 
                 {
-                    'label': 'Tipi',
+                    'label': this.$t('user_management.sudo.type'),
                     'value': node.type
                 },
                 {
-                    'label': 'Kayıt DN',
+                    'label': this.$t('user_management.sudo.node_dn'),
                     'value': node.distinguishedName,
                 },
                 {
-                    'label': 'Oluştrulma Tarihi',
+                    'label': this.$t('user_management.sudo.create_date'),
                     'value': node.createDateStr,
                 },
                 {
-                    'label': 'Güncelleme Tarihi',
+                    'label': this.$t('user_management.sudo.modified_date'),
                     'value': node.modifyDateStr,
                 },
                 {
-                    'label': 'Oluşturan Kişi',
+                    'label': this.$t('user_management.sudo.creator_name'),
                     'value': node.attributes.modifiersName,
 
                 },
                 {
-                    'label': 'Güncelleyen Kişi',
+                    'label': this.$t('user_management.sudo.modifier_name'),
                     'value': node.attributes.modifiersName,
                 },
                 {
-                    'label': 'Açıklama',
+                    'label': this.$t('user_management.sudo.description'),
                     'value': node.attributes.description,
                 });
                 node.attributesMultiValues.objectClass.map(oclas => {
                     nodeData.push({
-                        'label': 'Nesne Sınıfı', 
+                        'label': this.$t('user_management.sudo.objectclass'),
                         'value' : oclas
                     })
                 });
@@ -358,14 +357,14 @@ export default {
                     this.setSelectedLiderNode(null);
                     this.$toast.add({
                         severity:'success', 
-                        detail: "Kayıt başarıyla silindi", 
+                        detail: this.$t('user_management.sudo.registiration_delete'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else{
                     this.$toast.add({
                         severity:'error', 
-                        detail: "Kayıt silinirken hata oluştu", 
+                        detail: this.$t('user_management.sudo.registiration_delete_error'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -381,7 +380,7 @@ export default {
                 if (response.data) {
                    this.$toast.add({
                         severity:'success', 
-                        detail: "Kullanıcı yetki grubundan başarıyla silindi", 
+                        detail: this.$t('user_management.sudo.user_delete'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     }); 
@@ -392,7 +391,7 @@ export default {
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: "Kullanıcı yetki grubundan silinirken hata oluştu", 
+                        detail: this.$t('user_management.sudo.user_delete_error'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
@@ -410,24 +409,24 @@ export default {
                 case 'ORGANIZATIONAL_UNIT':
                     if (node.isRoot) {
                         this.contextMenuItems = [
-                            {label: 'Yetki Grubu Ekle', icon:"fas fa-user-tag", command: () => {this.modals.sudoGroup = true;}},
-                            {label: 'Klasör Ekle', icon:"pi pi-folder-open",  command: () => {this.modals.folderAdd = true}},
+                            {label: this.$t('user_management.sudo.add_authority_group'), icon:"fas fa-user-tag", command: () => {this.modals.sudoGroup = true;}},
+                            {label: this.$t('user_management.sudo.add_folder'), icon:"pi pi-folder-open",  command: () => {this.modals.folderAdd = true}},
                         ]
                     } else {
                         this.contextMenuItems = [
-                            {label: 'Yetki Grubu Ekle', icon:"fas fa-user-tag", command: () => {this.modals.sudoGroup = true;}},
-                            {label: 'Klasör Ekle', icon:"pi pi-folder-open",  command: () => {this.modals.folderAdd = true}},
-                            {label: 'Klasör Adı Düzenle', icon:"pi pi-pencil", command: () => {this.modals.folderNameChange = true}},
-                            {label: 'Klasör Taşı', icon:"el-icon-rank",  command:() => {this.modals.moveNode = true;}},
-                            {label: 'Klasör Sil', icon:"pi pi-trash", command:() => {this.modals.deleteNode = true}}
+                            {label: this.$t('user_management.sudo.add_authority_group'), icon:"fas fa-user-tag", command: () => {this.modals.sudoGroup = true;}},
+                            {label: this.$t('user_management.sudo.add_folder'), icon:"pi pi-folder-open",  command: () => {this.modals.folderAdd = true}},
+                            {label: this.$t('user_management.sudo.edit_folder_name'), icon:"pi pi-pencil", command: () => {this.modals.folderNameChange = true}},
+                            {label: this.$t('user_management.sudo.move_folder'), icon:"el-icon-rank",  command:() => {this.modals.moveNode = true;}},
+                            {label: this.$t('user_management.sudo.delete_folder'), icon:"pi pi-trash", command:() => {this.modals.deleteNode = true}}
                         ]
                     }
                     break
                 case 'ROLE':
                     this.contextMenuItems = [
-                        {label: 'Yetki Grubu Düzenle', icon:"pi pi-pencil", command:() => {this.sudoGruopEdit = true; this.modals.sudoGroup = true}},
-                        {label: 'Yetki Grubu Taşı', icon:"el-icon-rank",  command: () => {this.modals.moveNode = true}},
-                        {label: 'Yetki Grubu Sil', icon:"pi pi-trash", command:() => {this.modals.deleteNode = true}}
+                        {label: this.$t('user_management.sudo.edit_authority_group'), icon:"pi pi-pencil", command:() => {this.sudoGruopEdit = true; this.modals.sudoGroup = true}},
+                        {label: this.$t('user_management.sudo.move_authority_group'), icon:"el-icon-rank",  command: () => {this.modals.moveNode = true}},
+                        {label: this.$t('user_management.sudo.delete_authority_group'), icon:"pi pi-trash", command:() => {this.modals.deleteNode = true}}
                     ]
             }
 
