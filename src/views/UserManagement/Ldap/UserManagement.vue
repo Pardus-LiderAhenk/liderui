@@ -447,8 +447,8 @@ export default {
 
         addUser() {
             if (this.userFormValidation()) {
-                if (!this.$refs.password.getPassword()) {
-                    this.user.userPassword = this.$refs.password.getPassword();
+                this.user.userPassword = this.$refs.password.getPassword();
+                if (!this.user.userPassword) {
                     return;
                 }
                 let params = new FormData();
