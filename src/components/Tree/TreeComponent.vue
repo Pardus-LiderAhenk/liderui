@@ -460,12 +460,16 @@ export default {
     loadNode(node, resolve) {
       if (node.level === 0) {
         axios.post(this.loadNodeUrl, {}).then((response) => {
-          Promise.all(response.data.map(this.getAgentsByNode)).then(
+          if(response.data) {
+            Promise.all(response.data.map(this.getAgentsByNode)).then(
             (result) => {
+              this.$emit('directoryConnection', true);
               this.treeData = result;
               resolve(result);
-            }
-          );
+            });
+          } else {
+             this.$emit('directoryConnection', false);
+          }
         });
       }
       if (node.level >= 1) {

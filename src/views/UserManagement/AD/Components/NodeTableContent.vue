@@ -21,6 +21,7 @@
                             :rowsPerPageOptions="[10,25,50,100]"  style="margin-top: 2em"
                             v-model:filters="filters"
                             responsiveLayout="scroll"
+                            :loading="loading"
                         >
                             <template #header>
                                 <div class="p-d-flex p-jc-end">
@@ -84,6 +85,7 @@ export default {
             selectedNodeTable: null,
             showNodeDetailDialog: false,
             nodes: [],
+            loading: false,
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
@@ -102,11 +104,13 @@ export default {
         getChildEntries() {
             this.nodes = [];
             if (this.selectedNode.type != "USER" && this.selectedNode.type != "GROUP") {
+                this.loading = true;
                 let params = new FormData();
                 params.append("distinguishedName", this.selectedNode.distinguishedName);
                 params.append("name", this.selectedNode.name);
                 params.append("parent", this.selectedNode.parent);
                 axios.post('/ad/getChildEntries', params).then(response => {
+                    this.loading = false;
                     if (response.data) {
                         this.nodes = response.data;
                     }
@@ -122,6 +126,7 @@ export default {
             } else {
                 this.nodes.push(this.selectedNode);
             }
+            
         },
 
         selectedNodeDetail(node) {
@@ -136,6 +141,10 @@ export default {
                 this.getChildEntries();
             }
         },
+    },
+
+    unmounted() {
+        this.loading = false;
     }
     
 }

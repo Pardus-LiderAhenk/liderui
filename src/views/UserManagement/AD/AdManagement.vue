@@ -69,13 +69,14 @@
 
     <div class="p-grid ad-management">
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
-            <tree-component ref="tree" class="border-card"
+            <tree-component ref="adTree" class="border-card"
                 loadNodeUrl="/ad/getDomainEntry"
                 loadNodeOuUrl="/ad/getChildEntriesOu"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
                 searchNodeUrl="/ad/searchEntry"
+                @directoryConnection="directoryConnection"
             >
                 <template #contextmenu>
                     <div
@@ -91,7 +92,10 @@
                 </template>
             </tree-component>
         </div>
-        <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
+        <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px" v-if="isAdConnection">
+            <Message v-if="isAdConnection" :closable="false" :life="3000" :sticky="false" severity="success">
+                Aktif Dizin Sunucusu ile bağlantı başarıyla kuruldu.
+            </Message>
             <div v-if="domainType == 'ACTIVE_DIRECTORY'">
                 <node-table-content v-if="selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
                     :selectedNode="selectedNode">
@@ -108,6 +112,21 @@
                     :selectedNode="selectedNode">
                 </node-table-content>
             </div>
+        </div>
+        <div v-if="!isAdConnection" class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px">
+            <Card>
+                <template #content>
+                    <div class="p-grid p-flex-column">
+                        <Message v-if="!isAdConnection && !loading" :closable="false" severity="info">
+                            Aktif Dizin Sunucusu ile bağlantı kurulamadı. Lütfen Aktif Dizin ayarlarını kontrol ediniz.
+                        </Message>
+                        <Message v-if="loading" :closable="false" severity="info">
+                            <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp; 
+                            Aktif Dizin Sunucusu ile bağlantı kuruluyor. Lütfen bekleyiniz...
+                        </Message>
+                    </div>
+                </template>
+            </Card>
         </div>
     </div>
 </template>
@@ -135,7 +154,6 @@ import UserSynchronizationDialog from './Dialogs/UserSynchronizationDialog.vue'
 import GroupSynchronizationDialog from './Dialogs/GroupSynchronizationDialog.vue'
 import axios from "axios";
 
-
 export default {
 
     data() {
@@ -144,6 +162,8 @@ export default {
             selectedNode: null,
             domainType: "LDAP", // LDAP, ACTIVE_DIRECTORY, NONE
             enableDeleteUpdate: false,
+            isAdConnection: false,
+            loading: true,
             searchFields: [
                 {
                     key: "SAM-Account-Name",
@@ -209,7 +229,7 @@ export default {
         GiveConsoleAccessDialog,
         DeleteNodeDialog,
         UserSynchronizationDialog,
-        GroupSynchronizationDialog
+        GroupSynchronizationDialog,
     },
 
     created() {
@@ -225,7 +245,13 @@ export default {
     },
 
     methods:{
+
         ...mapActions(["setSelectedLiderNode"]),
+
+        directoryConnection(status) {
+            this.isAdConnection = status;
+            this.loading = false;
+        },
 
         treeNodeClick(node) {
             this.selectedNode = node;
