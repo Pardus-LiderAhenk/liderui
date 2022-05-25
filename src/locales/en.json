@@ -1522,28 +1522,25 @@
             "user_group_information":"User Group Information",
             "user_authorization_group_information_sudo":"User Authorization Group Information (sudo)"
         }
-
     },
     "user_authorization_sudo":{
-        "update_authority_group":"Yetki Grubu Güncelle",
-        "add_authority_group":"Yetki Grubu Ekle",
-        "authority_group_name":"Yetki Grup Adı",
-        "group_name_cannot_be_null":"Grup adı boş bırakılamaz",
-        "feauter":"Özellik",
-        "username":"Kullanıcı Adı",
-        "select_user":"Kullanıcı Seç",
-        "add":"Ekle",
-        "search":"Ara",
-        "feauter_value":"Özellik Değeri",
-        "close":"Kapat",
+        "update_authority_group":"Update Authority Group",
+        "add_authority_group":"Add Authority Group",
+        "authority_group_name":"Authority Group Name",
+        "group_name_cannot_be_null":"Group name cannot be null",
+        "feauter":"Property",
+        "username":"Username",
+        "select_user":"Select User",
+        "add":"Add",
+        "search":"Search",
+        "feauter_value":"Property Value",
+        "close":"Close",
         "delete":"Delete",
-        "update":"Güncelle",
-        "authorization_group_successfully_created":"Yetki grubu başarıyla oluşturuldu",
-        "an_error_occurred_while_creating_the_authorization_group":"Yetki grubu oluşturulurken hata oluştu",
-        "authorization_group_successfully_update":"Yetki grubu başarıyla güncellendi",
-        "an_error_occurred_while_updating_the_authorization_group":"Yetki grubu güncellenirken hata oluştu",
-        "value_cannot_be_null":"Kullanıcı adı, bilgisayar adı veya komut değeri boş bırakılamaz"
-        
-        
+        "update":"Update",
+        "authorization_group_successfully_created":"Authorization group successfully created",
+        "an_error_occurred_while_creating_the_authorization_group":"An error occurred while creating the authorization group.",
+        "authorization_group_successfully_update":"Authority group successfully updated",
+        "an_error_occurred_while_updating_the_authorization_group":"An error occurred while updating the authorization group.",
+        "value_cannot_be_null":"Username, computer name, or command value cannot be null."
     }
 }

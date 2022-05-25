@@ -88,14 +88,14 @@
         <Column field="commandOwnerUid" :header="$t('reports.task_report.sender')">
           
         </Column>
-        <Column :header="$t('reports.task_report.sender')">
+        <Column :header="$t('reports.task_report.total')">
           <template #body="{ data }">
             {{
              data.uidList.length
             }}
           </template>
         </Column>
-        <Column :header="$t('reports.task_report.total')">
+        <Column :header="$t('reports.task_report.successful')">
           <template #body="{ data }">
             {{ data.successfullTaskCount  }}
           </template>

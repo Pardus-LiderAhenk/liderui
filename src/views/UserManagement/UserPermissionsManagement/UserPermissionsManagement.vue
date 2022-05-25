@@ -283,7 +283,7 @@ export default {
                     'value': node.distinguishedName,
                 },
                 {
-                    'label': this.$t('user_management.sudo.create_date'),
+                    'label': this.$t('user_management.sudo.created_date'),
                     'value': node.createDateStr,
                 },
                 {
