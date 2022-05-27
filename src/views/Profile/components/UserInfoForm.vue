@@ -64,14 +64,14 @@
             <div class="p-fluid">
                 <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
                 <span>
-                    Kullanıcı bilgileri güncellenecektir, emin misiniz?
+                    {{$t('profile.user_information.change_user_info_confirm_message')}}
                 </span>
             </div>
             <template #footer>
-                <Button label="İptal" icon="pi pi-times" 
+                <Button :label="$t('profile.cancel')" icon="pi pi-times" 
                     @click="showDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button label="Evet" icon="pi pi-check"
+                <Button :label="$t('profile.yes')" icon="pi pi-check"
                     @click="updateProfile" class="p-button-sm"
                 />
             </template>

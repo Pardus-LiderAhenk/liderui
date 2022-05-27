@@ -890,12 +890,12 @@
         "yes": "Evet",
         "no":"Hayır",
         "cancel":"İptal",
-        "update_user_confirm_message":"Kullanıcı bilgileri güncellenecek, emin misiniz?",
+        "update_user_confirm_message":"Kullanıcı bilgileri güncellenecektir, emin misiniz?",
         "select_user_warn": "Lütfen kullanıcı seçiniz",
         "update_user_success": "Kullanıcı bilgileri başarıyla güncellendi",
         "change_password": "Parola Değiştir",
         "change_user_password_success": "Kullanıcı parolası başarıyla güncellendi",
-        "change_user_password_confirm_message": "Kullanıcı parolasını değiştirilecek, emin misiniz?",
+        "change_user_password_confirm_message": "Kullanıcı parolası değiştirilecektir, emin misiniz?",
         "change_user_password_error": "Kullanıcı parolası değiştirilirken hata oluştu",
         "add":"Ekle",
         "add_to_group":"Gruba Ekle",
@@ -1481,6 +1481,8 @@
         }
     },
     "profile":{
+        "yes":"Evet",
+        "cancel":"İptal",
         "user_information":{
             "user_information":"Kullanıcı Bilgileri",
             "user_id":"Kullanıcı ID",
@@ -1493,7 +1495,8 @@
             "create_date":"Oluşturulma Tarihi",
             "address":"Adres",
             "update_informations":"Bilgileri Güncelle",
-            "information_has_been_successfully_updated":"Information has been successfully updated."
+            "information_has_been_successfully_updated":"Bilgiler başarıyla güncellendi.",
+            "change_user_info_confirm_message":"Kullanıcı bilgileri güncellenecektir, emin misiniz?"
         },
         "account_security":{
             "account_security":"Hesap Güvenliği",
@@ -1506,7 +1509,8 @@
             "please_write_your_old_password":"Lütfen eski parolayı giriniz.",
             "your_old_password_is_wrong":"Eski parola yanlış girilmiştir.",
             "please_write_your_new_password":"Lütfen yeni parola giriniz",
-            "password_successfully_update":"Parola başarı ile güncellenmiştir."
+            "password_successfully_update":"Parola başarı ile güncellenmiştir.",
+            "change_user_password_confirm_message":"Kullanıcı parolası değiştirilecektir, emin misiniz?"
         },
         "login_logout_history":{
             "login_logout_history":"Kullanım Geçmişi",

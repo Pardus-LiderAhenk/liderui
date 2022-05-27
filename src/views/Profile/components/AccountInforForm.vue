@@ -39,14 +39,14 @@
             <div class="p-fluid">
                 <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
                 <span>
-                   Kullanıcı parolası değiştirilecektir, emin misiniz?
+                    {{$t('profile.account_security.change_user_password_confirm_message')}}
                 </span>
             </div>
             <template #footer>
-                <Button label="İptal" icon="pi pi-times" 
+                <Button :label="$t('profile.cancel')" icon="pi pi-times" 
                     @click="showDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button label="Evet" icon="pi pi-check"
+                <Button :label="$t('profile.yes')" icon="pi pi-check"
                     @click="changePassword" class="p-button-sm"
                 />
             </template>

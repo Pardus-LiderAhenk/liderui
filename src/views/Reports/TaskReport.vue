@@ -189,7 +189,7 @@
     
     <template #footer>
       <Button
-        label="Close"
+        :label="$t('reports.task_report.close')"
         icon="pi pi-times"
         class="p-button-text"
         @click="taskDetailDialog = false"
@@ -270,7 +270,7 @@
 
      <template #footer>
       <Button
-        label="Close"
+        :label="$t('reports.task_report.close')"
         icon="pi pi-times"
         class="p-button-text"
         @click="taskExecutionsResultDialog = false"
