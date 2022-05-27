@@ -56,12 +56,28 @@
                 :label="$t('profile.user_information.update_informations')"
                 icon="pi pi-refresh"
                 class="p-button-sm"
-                @click="updateProfile()"
+                @click="showDialog = true"
             />
         </div>
+        <Dialog :header="$t('computer.task.toast_summary')" v-model:visible="showDialog" 
+            :style="{width: '20vw'}" :modal="true">
+            <div class="p-fluid">
+                <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+                <span>
+                    Kullanıcı bilgileri güncellenecektir, emin misiniz?
+                </span>
+            </div>
+            <template #footer>
+                <Button label="İptal" icon="pi pi-times" 
+                    @click="showDialog = false" class="p-button-text p-button-sm"
+                />
+                <Button label="Evet" icon="pi pi-check"
+                    @click="updateProfile" class="p-button-sm"
+                />
+            </template>
+        </Dialog>
     </div>
 </template>
-
 
 <script>
 import axios from "axios";
@@ -78,11 +94,11 @@ export default {
             homeDirectory:null,
             createDateStr:null,
             homePostalAddress:null,
+            showDialog: false
         }
     },
     methods: {
         updateProfile() {
-            console.log('UPDATE PROFILE DATA', this.cn);
             axios.post("/liderConsole/updateProfile", {
                 distinguishedName: this.distinguishedName,
                 uid: this.uid,
@@ -106,6 +122,7 @@ export default {
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
+                this.showDialog = false;
             });
         },
     },

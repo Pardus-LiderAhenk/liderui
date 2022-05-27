@@ -6,15 +6,21 @@
             </div>
             <div class="p-field p-col-8">
                 <label for="updateDate">{{$t('profile.account_security.last_modified_date')}}</label>
-                <InputText id="pwdChangeTime" type="text" v-model="pwdChangeTime"/>
-                <small id="pwdChangeTime-help" class="p-error"></small>
+                <InputText disabled id="pwdChangeTime" type="text" v-model="pwdChangeTime"/>
             </div>
             <div class="p-col-12">
                 <h3>{{$t('profile.account_security.change_password')}}</h3>
             </div>
             <div class="p-field p-col-8">
                 <label for="city">{{$t('profile.account_security.old_password')}}</label>
-                <Password  toggleMask v-model="oldPassword"/>
+                <Password 
+                    :placeholder="$t('profile.account_security.old_password')"
+                    toggleMask v-model="oldPassword" :feedback="false"
+                    :class="validationOldPassword ? 'p-invalid': ''"
+                />
+                <small v-if="validationOldPassword" class="p-error">
+                    {{ oldPasswordMessage}}
+                </small>
             </div>
             <div class="p-field p-col-8">
                 <password-component ref="password"></password-component>
@@ -28,6 +34,23 @@
                 @click="updatePassword"
             />
         </div>
+        <Dialog :header="$t('computer.task.toast_summary')" v-model:visible="showDialog" 
+            :style="{width: '20vw'}" :modal="true">
+            <div class="p-fluid">
+                <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+                <span>
+                   Kullanıcı parolası değiştirilecektir, emin misiniz?
+                </span>
+            </div>
+            <template #footer>
+                <Button label="İptal" icon="pi pi-times" 
+                    @click="showDialog = false" class="p-button-text p-button-sm"
+                />
+                <Button label="Evet" icon="pi pi-check"
+                    @click="changePassword" class="p-button-sm"
+                />
+            </template>
+        </Dialog>
     </div>
 </template>
 
@@ -38,17 +61,16 @@ import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 
 export default {
     props:['user'],
-    watch:  {
-        user: function(newVal, oldVal) {
-            this.pwdChangeTime = this.getFormattedDate(newVal.attributes.pwdChangedTime)
-        }
-    },
+    
     data() {
         return {
             pwdChangeTime: null,
             oldPassword:null,
             newPassword:null,
             newPasswordAgain:null,
+            validationOldPassword: false,
+            oldPasswordMessage: this.$t('profile.account_security.please_write_your_old_password'),
+            showDialog: false
         }
     },
 
@@ -65,54 +87,61 @@ export default {
         },
 
         updatePassword() {
-
-            if (this.oldPassword == "" || this.oldPassword == null) {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('profile.account_security.please_write_your_old_password'),
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                return;
-            }
-            if (this.oldPassword != this.user.userPassword) {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('profile.account_security.your_old_password_is_wrong'),
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
+           
+            if (!this.oldPassword) {
+                this.validationOldPassword = true;
+                this.oldPasswordMessage = this.$t('profile.account_security.please_write_your_old_password');
                 return;
             }
             this.newPassword = this.$refs.password.getPassword();
             if (!this.newPassword) {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('profile.account_security.please_write_your_new_password'),
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
                 return;
             }
-
-            axios.post("/liderConsole/updatePassword", {
-                distinguishedName: this.user.distinguishedName,
-                userPassword: this.newPassword
-            }).then((response) => {
-                this.oldPassword = null;
-                this.newPassword = null;
-                this.$refs.password.setPasswordForm('', '');
-                // FIXME Burada logout edilecek. ?
-                this.$store.dispatch("logout").then(() => this.$router.push("/login"));
-
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('profile.account_security.password_successfully_update'),
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            });
+            this.showDialog = true;
         },
+
+        changePassword() {
+            let params = new FormData();
+            params.append("uid", this.user.uid);
+            params.append("userPassword", this.oldPassword);
+            axios.post("/liderConsole/matchesPassword", params).then((response) => {
+                if (response.data) {
+                    axios.post("/liderConsole/updatePassword", {
+                        distinguishedName: this.user.distinguishedName,
+                        userPassword: this.newPassword
+                    }).then((rsp) => {
+                        this.oldPassword = null;
+                        this.newPassword = null;
+                        this.$refs.password.setPasswordForm('', '');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('profile.account_security.password_successfully_update'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        setTimeout(() => {
+                            this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                        }, 3000);
+                    });
+                } else {
+                    this.validationOldPassword = true;
+                    this.oldPasswordMessage = this.$t('profile.account_security.your_old_password_is_wrong');
+                }
+            });
+            this.showDialog = false;
+        }
+    },
+
+    watch: {
+        oldPassword() {
+            if (this.oldPassword) {
+                this.validationOldPassword = false;
+            }
+        },
+
+        user() {
+            this.pwdChangeTime = this.getFormattedDate(this.user.attributes.pwdChangedTime);
+        }
     }
 }
 

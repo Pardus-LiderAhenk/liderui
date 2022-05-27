@@ -32,13 +32,11 @@ app.use(store);
 app.use(ElementPlus);
 app.use(i18n);
 
-
 axios.defaults.baseURL = process.env.VUE_APP_URL;
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('auth_token');
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 axios.interceptors.request.use(function(config) {
-
     if (config.url == '/api/auth/signin') {
         config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     }
@@ -46,7 +44,6 @@ axios.interceptors.request.use(function(config) {
 }, function(error) {
     return Promise.reject(error);
 });
-
 
 axios.interceptors.response.use(
     (response) => {
@@ -56,12 +53,11 @@ axios.interceptors.response.use(
         return response;
     },
     (error) => {
-
+        return Promise.reject(error);
+        // return error;
     }
  );
 
-
 //XmppClientManager.getInstance().connect();
-
 
 app.mount('#app');
