@@ -760,9 +760,13 @@
                 "no":"No",
                 "cancel":"Cancel",
                 "update_settings":"Update Settings",
-                "sudo_type":"Choose from which domain the users will be authorized (sudo)",
+                "sudo_type":"Select from which domain the users will be authorized (sudo)",
                 "other_server_notify":"Settings will be updated and you will be redirected to login page, are you sure?",
-                "other_server_settings_successfully_update":"Settings updated successfully"
+                "other_server_settings_successfully_update":"Settings updated successfully",
+                "registration_template_type": "Select by which registration template type clients will register",
+                "default": "Default(Clients are saved under the Agents folder as default)",
+                "ip_address": "IP Address(It is registered according to the entered IP address rule)",
+                "hostname": "Hostname(It is registered according to the entered hostname rule)"
             }
         },
         "registiration_template":{
