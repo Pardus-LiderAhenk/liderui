@@ -1,62 +1,76 @@
 <template>
     <div class="p-fluid p-formgrid p-grid">
        <div class="p-col-6">
-           <div class="p-col-12">
-                <h3>{{$t('settings.server_settings.other_settings.other_settings')}}</h3>
-            </div>
-            <div class="p-field-checkbox p-col-12 p-md-12">
-                <InputSwitch v-model="disableLocalUser" />
-                <label>{{$t('settings.server_settings.other_settings.locale_user_activation')}}</label>
-            </div>
-            <div class="p-col-12">
-                <h4>{{$t('settings.server_settings.other_settings.domain_type')}}</h4>
-            </div>
-            <div class="p-col-12">
-                <div class="p-field-radiobutton">
-                    <RadioButton id="ldap" name="domainType" value="LDAP" v-model="domainType"/>
-                    <label for="ldap">{{$t('settings.server_settings.other_settings.ldap')}}</label>
+           <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.other_settings')" >
+                <div class="p-field-checkbox p-col-12 p-md-12">
+                    <InputSwitch v-model="disableLocalUser" />
+                    <label>{{$t('settings.server_settings.other_settings.locale_user_activation')}}</label>
                 </div>
-                <div class="p-field-radiobutton">
-                    <RadioButton id="city2" name="domainType" value="ACTIVE_DIRECTORY"  v-model="domainType"/>
-                    <label for="city2">{{$t('settings.server_settings.other_settings.active_directory_or_samba')}}</label>
+           </Fieldset>
+            <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.domain_type')" >
+                <div class="p-col-12">
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="ldap" name="domainType" value="LDAP" v-model="domainType"/>
+                        <label for="ldap">{{$t('settings.server_settings.other_settings.ldap')}}</label>
+                    </div>
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="city2" name="domainType" value="ACTIVE_DIRECTORY"  v-model="domainType"/>
+                        <label for="city2">{{$t('settings.server_settings.other_settings.active_directory_or_samba')}}</label>
+                    </div>
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="city3" name="domainType" value="NONE"  v-model="domainType"/>
+                        <label for="city3">{{$t('settings.server_settings.other_settings.none')}}</label>
+                    </div>
                 </div>
-                <div class="p-field-radiobutton">
-                    <RadioButton id="city3" name="domainType" value="NONE"  v-model="domainType"/>
-                    <label for="city3">{{$t('settings.server_settings.other_settings.none')}}</label>
+            </Fieldset>
+            <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.sudo_type')" >
+                <div class="p-col-12">
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="sudoRoleType1" name="sudoRoleType" value="LDAP" v-model="sudoRoleType"/>
+                        <label for="sudoRoleType1">{{$t('settings.server_settings.other_settings.ldap')}}</label>
+                    </div>
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="sudoRoleType2" name="sudoRoleType" value="ACTIVE_DIRECTORY"  v-model="sudoRoleType"/>
+                        <label for="sudoRoleType2">{{$t('settings.server_settings.other_settings.active_directory_or_samba')}}</label>
+                    </div>
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="sudoRoleType3" name="sudoRoleType" value="NONE"  v-model="sudoRoleType"/>
+                        <label for="sudoRoleType3">{{$t('settings.server_settings.other_settings.none')}}</label>
+                    </div>
                 </div>
-            </div>
-            <div class="p-col-12">
-                <h4>{{$t('settings.server_settings.other_settings.sudo_type')}}</h4>
-            </div>
-            <div class="p-col-12">
-                <div class="p-field-radiobutton">
-                    <RadioButton id="sudoRoleType1" name="sudoRoleType" value="LDAP" v-model="sudoRoleType"/>
-                    <label for="sudoRoleType1">{{$t('settings.server_settings.other_settings.ldap')}}</label>
+            </Fieldset>
+            <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.registration_template_type')" >
+                <div class="p-col-12">
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="registrationType1" name="DEFAULT" value="DEFAULT" v-model="selectedRegistrationType"/>
+                        <label for="registrationType1">{{$t('settings.server_settings.other_settings.default')}}</label>
+                    </div>
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="registrationType3" name="HOSTNAME" value="HOSTNAME"  v-model="selectedRegistrationType"/>
+                        <label for="registrationType3">{{$t('settings.server_settings.other_settings.hostname')}}</label>
+                    </div>
+                    <div class="p-field-radiobutton">
+                        <RadioButton id="registrationType2" name="IP_ADDRESS" value="IP_ADDRESS"  v-model="selectedRegistrationType"/>
+                        <label for="registrationType2">{{$t('settings.server_settings.other_settings.ip_address')}}</label>
+                    </div>
                 </div>
-                <div class="p-field-radiobutton">
-                    <RadioButton id="sudoRoleType2" name="sudoRoleType" value="ACTIVE_DIRECTORY"  v-model="sudoRoleType"/>
-                    <label for="sudoRoleType2">{{$t('settings.server_settings.other_settings.active_directory_or_samba')}}</label>
+             </Fieldset>
+            <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.ahenk_repo_setting')" >
+                <div class="p-field p-col-12">
+                    <label for="ahenkRepoAddress">{{$t('settings.server_settings.other_settings.repo_address')}}</label>
+                    <InputText id="ahenkRepoAddress" type="text" v-model="ahenkRepoAddress"
+                        placeholder="deb [arch=amd64] http://repo.liderahenk.org/liderahenk stable main"
+                        class="p-inputtext-sm"
+                    />
                 </div>
-                <div class="p-field-radiobutton">
-                    <RadioButton id="sudoRoleType3" name="sudoRoleType" value="NONE"  v-model="sudoRoleType"/>
-                    <label for="sudoRoleType3">{{$t('settings.server_settings.other_settings.none')}}</label>
+                <div class="p-field p-col-12">
+                    <label for="ahenkRepoKeyAddress">{{$t('settings.server_settings.other_settings.repo_key_address')}}</label>
+                    <InputText id="ahenkRepoKeyAddress" type="text" v-model="ahenkRepoKeyAddress"
+                        placeholder="http://repo.liderahenk.org/liderahenk-archive-keyring.asc"
+                        class="p-inputtext-sm"
+                    />
                 </div>
-            </div>
-            <div class="p-col-12">
-                <h4>{{$t('settings.server_settings.other_settings.ahenk_repo_setting')}}</h4>
-            </div>
-            <div class="p-field p-col-12">
-                <label for="ahenkRepoAddress">{{$t('settings.server_settings.other_settings.repo_address')}}</label>
-                <InputText id="ahenkRepoAddress" type="text" v-model="ahenkRepoAddress"
-                    placeholder="deb [arch=amd64] http://repo.liderahenk.org/liderahenk stable main"
-                />
-            </div>
-            <div class="p-field p-col-12">
-                <label for="ahenkRepoKeyAddress">{{$t('settings.server_settings.other_settings.repo_key_address')}}</label>
-                <InputText id="ahenkRepoKeyAddress" type="text" v-model="ahenkRepoKeyAddress"
-                    placeholder="http://repo.liderahenk.org/liderahenk-archive-keyring.asc"
-                />
-            </div>
+            </Fieldset>
             <div class="p-field p-col-12 p-text-right">
                 <div class="p-d-flex p-jc-end">
                     <div>
@@ -97,7 +111,8 @@ export default {
             disableLocalUser: false,
             ahenkRepoAddress:'',
             ahenkRepoKeyAddress:'',
-            showDialog: false
+            showDialog: false,
+            selectedRegistrationType: 'DEFAULT'
         }
     },
     watch: { 
@@ -110,9 +125,11 @@ export default {
             this.ahenkRepoKeyAddress = newVal.ahenkRepoKeyAddress;
             this.emailUsername = newVal.emailUsername;
             this.emailPassword = newVal.emailPassword;
+            this.selectedRegistrationType = newVal.selectedRegistrationType
           }
         }
     },
+
     methods: {
         submitForm() {
             let data = new FormData();
@@ -121,6 +138,7 @@ export default {
             data.append("disableLocalUser",this.disableLocalUser);
             data.append("ahenkRepoAddress",this.ahenkRepoAddress);
             data.append("ahenkRepoKeyAddress",this.ahenkRepoKeyAddress);
+            data.append("selectedRegistrationType", this.selectedRegistrationType);
 
             axios.post('/lider/settings/update/otherSettings', data).then(response => {
                 this.$toast.add({

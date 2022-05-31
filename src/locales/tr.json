@@ -765,12 +765,16 @@
                 "update_settings":"Ayarları Güncelle",
                 "sudo_type":"Kullanıcıların hangi etki alanından yetkilendirileceğini(sudo) seçiniz",
                 "other_server_notify":"Ayarlar güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
-                "other_server_settings_successfully_update":"Ayarlar başarıyla güncellendi"
+                "other_server_settings_successfully_update":"Ayarlar başarıyla güncellendi",
+                "registration_template_type": "İstemcilerin hangi kayıt şablon tipine göre kayıt olacağını seçiniz",
+                "default": "Varsayılan(İstemciler, varsayılan olarak Agents klasörü altına kaydedilir)",
+                "ip_address": "IP Adresi(Girilen IP adresi kuralına göre kaydedilir)",
+                "hostname": "Bilgisayar Adı(Girilen bilgisayar adı kuralına göre kaydedilir)"
             }
         },
         "registiration_template":{
             "registiration_template":"Kayıt Şablonları",
-            "content":"Şablonda belirtilen metinle başlayan istemcilerin domaine sadece şablonda belirtilen gruba üye olan kullanıcılar tarafından alınmasını sağlayıp bu kullanıcıların şablonda verilen Organizsayon Birimi altında oluşturulmasını sağlar. Örneğin şablon adı 'pardus-01-', yetkili grup DN'i 'cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org' ve istemcilerin dahil edileceği Organizsayon Birimi ise 'ou=ANKARA,ou=Agents,dc=liderahenk,dc=org' olsun. Bu kayıt şablonundan sonra istemci adı 'pardus-01-' ile başlayan tüm kullanıcılar sadece cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org' grubunda yer alan yetkili kullanıcılar tarafından domaine alınabilir ve domaine alınan istemciler 'ou=ANKARA,ou=Agents,dc=liderahenk,dc=org' Organizsayon Birimi altında oluşturulur.",
+            "content":"Şablonda belirtilen metinle başlayan istemcilerin domaine sadece şablonda belirtilen gruba üye olan kullanıcılar tarafından alınmasını sağlayıp bu kullanıcıların şablonda verilen Organizasyon Birimi altında oluşturulmasını sağlar. Örneğin şablon adı 'pardus-01-', yetkili grup DN'i 'cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org' ve istemcilerin dahil edileceği Organizsayon Birimi ise 'ou=ANKARA,ou=Agents,dc=liderahenk,dc=org' olsun. Bu kayıt şablonundan sonra istemci adı 'pardus-01-' ile başlayan tüm kullanıcılar sadece cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org' grubunda yer alan yetkili kullanıcılar tarafından domaine alınabilir ve domaine alınan istemciler 'ou=ANKARA,ou=Agents,dc=liderahenk,dc=org' Organizsayon Birimi altında oluşturulur.",
             "template_text":"Birim Şablon Metni",
             "template_text_cant_be_null":"Birim şablon metni boş bırakılamaz",
             "organization_unit_to_include_the_client":"İstemcinin Dahil Edileceği Organizsayon Birimi",
