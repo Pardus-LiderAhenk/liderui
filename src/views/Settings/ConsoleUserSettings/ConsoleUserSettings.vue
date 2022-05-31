@@ -12,17 +12,19 @@
                                 <h5>{{$t('settings.console_user_settings.existing_console_users')}}</h5>
                             </div>
                             <div class="p-col-12 p-d-flex p-jc-end ">
-                                <Button :label="$t('settings.console_user_settings.add_console_user')"  class="p-mr-2" @click="addConsoleUserModalVisible = true"/>
-                                <Button :label="$t('settings.console_user_settings.delete_users_console_authority')" @click="showDeleteConsoleUserDialog = true"/>
+                                <Button :label="$t('settings.console_user_settings.add_console_user')"  class="p-mr-2" 
+                                    @click="addConsoleUserModalVisible = true"
+                                />
+                                <Button :label="$t('settings.console_user_settings.delete_users_console_authority')" 
+                                    @click="showDeleteConsoleUserDialog = true"
+                                />
                             </div>
                             <div class="p-col-12">
                                 <DataTable :value="records" responsiveLayout="scroll"
                                     v-model:filters="filters"
                                     v-model:selection="selectedUser"
                                     selectionMode="single"
-                                    >
-                                    
-                                        
+                                >
                                     <Column header="#">
                                          <template #body="slotProps">
                                             <p>{{slotProps.index + 1}}</p>
@@ -30,31 +32,31 @@
                                     </Column>
                                     <Column field="uid" header="UID"></Column>
                                     <Column field="distinguishedName" :header="$t('settings.console_user_settings.registiration_dn')"></Column>
-                                   
-                                
                                 </DataTable>
                             </div>
                         </div>
                         <div class="p-col-6" v-if="selectedUser">
                             <div class="p-col-12 ">
-                                <p style="font-weight:bold">{{$t('settings.console_user_settings.selected_users_roles')}} {{selectedUser ? selectedUser.distinguishedName: $t('settings.console_user_settings.please_select')}})</p>
+                                <p style="font-weight:bold">{{$t('settings.console_user_settings.selected_users_roles')}} 
+                                    {{selectedUser ? selectedUser.distinguishedName: $t('settings.console_user_settings.please_select')}})
+                                </p>
                             </div>
                             <div class="p-col-12 p-d-flex p-jc-end">
                                 <Button :label="$t('settings.console_user_settings.save')" @click="showUpdateConsoleUserRolesDialog=true"/>
                             </div>
-                            <DataTable :value="roles" responsiveLayout="scroll" 
-                                >
+                            <DataTable :value="roles" responsiveLayout="scroll">
                                 <Column header="#">
-                                        <template #body="slotProps">
+                                    <template #body="slotProps">
                                         <p>{{slotProps.index + 1}}</p>
                                     </template>
                                 </Column>
                                 <Column field="name" :header="$t('settings.console_user_settings.role_name')"></Column>
-                                 <Column :exportable="false" style="min-width:8rem">
+                                <Column :exportable="false" style="min-width:8rem">
                                     <template #body="slotProps">
                                     <InputSwitch 
                                         :modelValue="selectedUser ? (selectedUser.attributesMultiValues.liderPrivilege.includes(slotProps.data.value) ? true : false) : false"  
-                                        @change="roleSwitchChanged(slotProps.data)"/>
+                                        @change="roleSwitchChanged(slotProps.data)"
+                                    />
                                     </template>
                                  </Column>
                             </DataTable>
@@ -82,10 +84,9 @@
                             <div class="p-col-12">
                                 <p>{{$t('settings.console_user_settings.group_member')}}</p>
                             </div>
-                            <DataTable :value="groupMembers" responsiveLayout="scroll" 
-                                >
+                            <DataTable :value="groupMembers" responsiveLayout="scroll">
                                 <Column header="#">
-                                        <template #body="slotProps">
+                                    <template #body="slotProps">
                                         <p>{{slotProps.index + 1}}</p>
                                     </template>
                                 </Column>
@@ -94,13 +95,14 @@
                         </div>
                         <div class="p-col-6">
                             <div class="p-col-12 p-d-flex p-jc-end">
-                                <Button type="button" :label="$t('settings.console_user_settings.add_new_authority_group')" icon="pi pi-angle-down" iconPos="right" @click="toggle" />
+                                <Button type="button" :label="$t('settings.console_user_settings.add_new_authority_group')" 
+                                    icon="pi pi-angle-down" iconPos="right" @click="toggle" 
+                                />
                                 <Menu ref="menu" :model="privilegeActions" :popup="true" />
                             </div>
-                            <DataTable :value="groupPrivilages" responsiveLayout="scroll" 
-                                >
+                            <DataTable :value="groupPrivilages" responsiveLayout="scroll">
                                 <Column header="#">
-                                        <template #body="slotProps">
+                                    <template #body="slotProps">
                                         <p>{{slotProps.index + 1}}</p>
                                     </template>
                                 </Column>
@@ -108,13 +110,15 @@
                                 <Column :header="$t('settings.console_user_settings.authorization')">
                                     <template #body="slotProps">
                                         {{
-                                                slotProps.data != null && slotProps.data.accessType == "write" ? $t('settings.console_user_settings.read_and_write') : $t('settings.console_user_settings.read')
+                                            slotProps.data != null && slotProps.data.accessType == "write" ? $t('settings.console_user_settings.read_and_write') : $t('settings.console_user_settings.read')
                                         }}
                                     </template>
                                 </Column>
                                 <Column :exportable="false" style="min-width:8rem">
                                     <template #body="slotProps">
-                                    <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"  @click="deleteOlcAccessRule(slotProps.data)"/>
+                                        <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"  
+                                            @click="deleteOlcAccessRule(slotProps.data)"
+                                        />
                                     </template>
                                  </Column>
                             </DataTable>
@@ -132,22 +136,22 @@
      />
 
      <agent-group-dialog 
-     :modalVisibleValue="agentGroupModalVisible" 
+        :modalVisibleValue="agentGroupModalVisible" 
         @modalVisibleValue="agentGroupModalVisible = $event;"
         @addOlcAccessRule="addOlcAccessRule"
      />
      <user-dialog 
-     :modalVisibleValue="userModalVisible" 
+        :modalVisibleValue="userModalVisible" 
         @modalVisibleValue="userModalVisible = $event;"
         @addOlcAccessRule="addOlcAccessRule"
      />
      <user-group-dialog 
-     :modalVisibleValue="userGroupModalVisible" 
+        :modalVisibleValue="userGroupModalVisible" 
         @modalVisibleValue="userGroupModalVisible = $event;"
         @addOlcAccessRule="addOlcAccessRule"
      />
      <role-dialog 
-     :modalVisibleValue="roleGroupModalVisible" 
+        :modalVisibleValue="roleGroupModalVisible" 
         @modalVisibleValue="roleGroupModalVisible = $event;"
         @addOlcAccessRule="addOlcAccessRule"
      />
@@ -156,7 +160,6 @@
         :modalVisibleValue="addConsoleUserModalVisible" 
         @modalVisibleValue="addConsoleUserModalVisible = $event;"
      />
-
     
     <LiderConfirmDialog 
         :showDialog="showDeleteConsoleUserDialog"
@@ -166,7 +169,6 @@
         @accepted="deleteConsoleUser"
     />
 
-
     <LiderConfirmDialog 
         :showDialog="showUpdateConsoleUserRolesDialog"
         @showDialog="showUpdateConsoleUserRolesDialog = $event;"
@@ -175,11 +177,10 @@
         @accepted="updateUserRoles"
     />
   
-
-  
 </template>
 
 <script>
+
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import AgentsDialog from './Dialogs/AgentsDialog.vue';
 import AgentGroupDialog from './Dialogs/AgentGroupsDialog.vue';
@@ -264,9 +265,9 @@ export default {
                     value: "ou"
                 },
             ],
-
         }
     },
+
     methods: {
         toggle(event) {
             this.$refs.menu.toggle(event);

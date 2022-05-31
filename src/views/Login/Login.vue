@@ -90,6 +90,8 @@ export default {
                     life: 3000
                 });
             });
+
+            
         },
 
         forgotPassword() {

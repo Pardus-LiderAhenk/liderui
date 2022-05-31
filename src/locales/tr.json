@@ -778,7 +778,7 @@
             "template_text":"Birim Şablon Metni",
             "template_text_cant_be_null":"Birim şablon metni boş bırakılamaz",
             "organization_unit_to_include_the_client":"İstemcinin Dahil Edileceği Organizsayon Birimi",
-            "organization_unit_to_include_the_client_cant_be_null":"İstemcinin dahil edileceği Organizsayon Birimi boş bırakılamaz",
+            "organization_unit_to_include_the_client_cant_be_null":"İstemcinin dahil edileceği Organizasyon Birimi boş bırakılamaz",
             "authorized_user_group":"Yetkili Kullanıcı Grubu",
             "authorized_user_group_cant_be_null":"Yetkili kullanıcı grubu boş bırakılamaz",
             "save_template":"Şablonu Kaydet",

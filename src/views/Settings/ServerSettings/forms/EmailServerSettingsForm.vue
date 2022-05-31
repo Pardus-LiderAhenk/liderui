@@ -104,10 +104,10 @@ export default {
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
+                setTimeout(() => {
+                    this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                }, 3000);
             });
-            setTimeout(() => {
-                this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-            }, 3000);
             this.showDialog = false;
         }
     },
