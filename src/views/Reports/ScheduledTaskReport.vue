@@ -78,8 +78,8 @@
         </template>
         <Column header="#">
           <template #body="{index}">
-            <span>{{ index + 1 }}</span>
-            </template>
+            <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+          </template>
         </Column>
         <Column field="task.plugin.description" :header="$t('reports.scheduled_task_report.plugin')"></Column>
         <Column :header="$t('reports.scheduled_task_report.task')">
@@ -208,14 +208,14 @@
     </div>
      <template #footer>
       <Button
-        label="Kapat"
+        :label="$t('reports.scheduled_task_report.close')"
         icon="pi pi-times"
         class="p-button-sm p-button-text"
         @click="scheduledTaskDetailDialog = false"
       />
     </template>
   </Dialog>
-  <Dialog header="Zamanlanmış Görevi İptal Et" v-model:visible="cancelScheduledTaskDialog" 
+  <Dialog :header="$t('reports.scheduled_task_report.cancel_scheduled_task')" v-model:visible="cancelScheduledTaskDialog" 
     :style="{width: '20vw'}" :modal="true">
     <div class="p-fluid">
         <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
@@ -224,10 +224,10 @@
         </span>
     </div>
     <template #footer>
-        <Button label="İptal" icon="pi pi-times" 
+        <Button :label="$t('reports.scheduled_task_report.cancel')" icon="pi pi-times" 
             @click="cancelScheduledTaskDialog = false" class="p-button-text p-button-sm"
         />
-        <Button label="Evet" icon="pi pi-check"
+        <Button :label="$t('reports.scheduled_task_report.yes')" icon="pi pi-check"
             @click="cancelScheduledTask" class="p-button-sm"
         />
     </template>
@@ -266,6 +266,8 @@ export default {
         taskSendEndDate:'',
         task:null
       },
+      pageNumber: 1,
+      rowNumber: 10,
     };
   },
 
@@ -281,17 +283,17 @@ export default {
       )[0];
     },
 
-    getTasks(pageNumber = 1, rowNumber = 10) {
-      this.currentPage = pageNumber;
+    getTasks() {
+      this.currentPage = this.pageNumber;
       var data = new FormData();
-      data.append("pageNumber", pageNumber);
-      data.append("pageSize", rowNumber);
+      data.append("pageNumber", this.pageNumber);
+      data.append("pageSize", this.rowNumber);
       data.append("startDate", this.filter.taskSendStartDate);
       data.append("endDate", this.filter.taskSendEndDate);
       if(this.filter.task != null) {
         data.append("taskCommand", this.filter.task);
       }
-      if (pageNumber == 1) {
+      if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
       if (this.filter.taskSendDate[0] != null) {
@@ -336,12 +338,9 @@ export default {
           task.successfullTaskCount = successfullTaskCount;
           task.failedTaskCount = failedTaskCount;
           task.waitingTaskCount = task.uidList.length - successfullTaskCount - failedTaskCount;
-
           successfullTaskCount = 0;
           failedTaskCount = 0;
-          
           return task;
-
         }, [successfullTaskCount, failedTaskCount]);
 
       });
@@ -352,7 +351,9 @@ export default {
     },
     onPage(event) {
       this.loading = true;
-      this.getTasks(event.page + 1, event.rows);
+      this.pageNumber = event.page + 1;
+      this.rowNumber = event.rows;
+      this.getTasks();
     },
     filterAgents() {
       if (this.filter.taskSendDate[0] != null) {

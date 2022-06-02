@@ -192,11 +192,11 @@
             <span>{{$t('reports.detailed_agent_report.loading')}}...</span>
           </div>
         </template>
-        <!-- <Column>
-          <template #body="slotProps">
-            <span>{{ slotProps.index }}</span>
+        <Column header="#">
+          <template #body="{index}">
+            <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
           </template>
-        </Column> -->
+        </Column>
         <Column field="hostname" :header="$t('reports.detailed_agent_report.computer_name')"></Column>
         <Column :header="$t('reports.detailed_agent_report.mac_address')">
           <template #body="{ data }">
@@ -288,6 +288,8 @@ export default {
       showedTotalElementCount: 10,
       currentPage: 1,
       offset: 1,
+      pageNumber: 1,
+      rowNumber: 10,
       loading: true,
       brands: [],
       models: [],
@@ -382,11 +384,11 @@ export default {
       }
       return propertyValue;
     },
-    getAgents(pageNumber = 1, rowNumber = 10) {
-      this.currentPage = pageNumber;
+    getAgents() {
+      this.currentPage = this.pageNumber;
       var data = new FormData();
-      data.append("pageNumber", pageNumber);
-      data.append("pageSize", rowNumber);
+      data.append("pageNumber", this.pageNumber);
+      data.append("pageSize", this.rowNumber);
       data.append("status", this.filter.status);
       data.append("dn", this.filter.dn);
       data.append("hostname", this.filter.hostname);
@@ -399,7 +401,7 @@ export default {
       data.append("processor", this.filter.processor);
       data.append("osVersion", this.filter.osVersion);
       data.append("agentVersion", this.filter.agentVersion);
-      if (pageNumber == 1) {
+      if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
       if (this.filter.registrationDate[0] != null) {
@@ -439,7 +441,9 @@ export default {
     },
     onPage(event) {
       this.loading = true;
-      this.getAgents(event.page + 1, event.rows);
+      this.pageNumber = event.page + 1;
+      this.rowNumber = event.rows;
+      this.getAgents();
     },
     filterAgents() {
       if (this.filter.registrationDate[0] != null) {

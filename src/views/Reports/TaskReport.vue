@@ -73,8 +73,8 @@
         </template>
         <Column header="#">
           <template #body="{index}">
-            <span>{{ index + 1 }}</span>
-            </template>
+            <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+          </template>
         </Column>
         <Column field="task.plugin.description" :header="$t('reports.task_report.plugin')"></Column>
         <Column :header="$t('reports.task_report.task')">
@@ -266,8 +266,6 @@
         </div>
         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
     </div>
-
-
      <template #footer>
       <Button
         :label="$t('reports.task_report.close')"
@@ -287,24 +285,26 @@ import moment from "moment";
 export default {
   data() {
     return {
-        tasks: [],
-        totalElements: 0,
-        showedTotalElementCount: 10,
-        currentPage: 1,
-        offset: 1,
-        loading: true,
-        getFilterData: true,
-        taskDetailDialog: false,
-        taskExecutionsResultDialog: false,
-        selectedTask: null,
-        selectedTaskExecutionResult: null,
-        plugins:[],
-        filter: {
-            taskSendDate: '',
-            taskSendStartDate:'',
-            taskSendEndDate:'',
-            task:null
-        },
+      tasks: [],
+      totalElements: 0,
+      showedTotalElementCount: 10,
+      currentPage: 1,
+      offset: 1,
+      loading: true,
+      getFilterData: true,
+      taskDetailDialog: false,
+      taskExecutionsResultDialog: false,
+      selectedTask: null,
+      selectedTaskExecutionResult: null,
+      plugins:[],
+      filter: {
+          taskSendDate: '',
+          taskSendStartDate:'',
+          taskSendEndDate:'',
+          task:null
+      },
+      pageNumber: 1,
+      rowNumber: 10,
     };
   },
   mounted() {
@@ -324,17 +324,17 @@ export default {
       )[0];
       this.taskExecutionsResultDialog = true;
     },
-    getTasks(pageNumber = 1, rowNumber = 10) {
-      this.currentPage = pageNumber;
+    getTasks() {
+      this.currentPage = this.pageNumber;
       var data = new FormData();
-      data.append("pageNumber", pageNumber);
-      data.append("pageSize", rowNumber);
+      data.append("pageNumber", this.pageNumber);
+      data.append("pageSize", this.rowNumber);
       data.append("startDate", this.filter.taskSendStartDate);
       data.append("endDate", this.filter.taskSendEndDate);
       if(this.filter.task != null) {
         data.append("taskCommand", this.filter.task);
       }
-      if (pageNumber == 1) {
+      if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
       if (this.filter.taskSendDate[0] != null) {
@@ -397,7 +397,9 @@ export default {
     },
     onPage(event) {
       this.loading = true;
-      this.getTasks(event.page + 1, event.rows);
+      this.pageNumber = event.page + 1;
+      this.rowNumber = event.rows;
+      this.getTasks();
     },
     filterAgents() {
       if (this.filter.taskSendDate[0] != null) {

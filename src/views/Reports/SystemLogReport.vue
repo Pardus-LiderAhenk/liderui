@@ -92,8 +92,8 @@
         </template>
         <Column header="#">
           <template #body="{index}">
-            <span>{{ index + 1 }}</span>
-            </template>
+            <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+          </template>
         </Column>
         <Column :header="$t('reports.system_log_report.logs_type')">
           <template #body="{ data }">
@@ -206,31 +206,33 @@ import moment from "moment";
 export default {
   data() {
     return {
-        logs: [],
-        totalElements: 0,
-        showedTotalElementCount: 10,
-        currentPage: 1,
-        offset: 1,
-        loading: true,
-        getFilterData: true,
-        logDetailDialog: false,
-        selectedLog: null,
-        searchTextDialog:false,
-        operationTypesResponse:[],
-        operationTypes:[],
-        filterTextType: [
-              {value: 'userId', text:this.$t('reports.system_log_report.username')},
-              {value: 'requestIp', text:this.$t('reports.system_log_report.ip_address')}
-        ],
-        filter: {
-            logCreateDate: '',
-            logCreateStartDate:'',
-            logCreateEndDate:'',
-            operationType:'ALL',
-            searchText:null,
-            field:null,
-        },
-        selectedNode: null
+      logs: [],
+      totalElements: 0,
+      showedTotalElementCount: 10,
+      currentPage: 1,
+      offset: 1,
+      loading: true,
+      getFilterData: true,
+      logDetailDialog: false,
+      selectedLog: null,
+      searchTextDialog:false,
+      operationTypesResponse:[],
+      operationTypes:[],
+      filterTextType: [
+            {value: 'userId', text:this.$t('reports.system_log_report.username')},
+            {value: 'requestIp', text:this.$t('reports.system_log_report.ip_address')}
+      ],
+      filter: {
+          logCreateDate: '',
+          logCreateStartDate:'',
+          logCreateEndDate:'',
+          operationType:'ALL',
+          searchText:null,
+          field:null,
+      },
+      selectedNode: null,
+      pageNumber: 1,
+      rowNumber: 10,
     };
   },
   mounted() {
@@ -254,11 +256,11 @@ export default {
       )[0];
       this.logDetailDialog = true;
     },
-    getLogs(pageNumber = 1, rowNumber = 10) {
-      this.currentPage = pageNumber;
+    getLogs() {
+      this.currentPage = this.pageNumber;
       var data = new FormData();
-      data.append("pageNumber", pageNumber);
-      data.append("pageSize", rowNumber);
+      data.append("pageNumber", this.pageNumber);
+      data.append("pageSize", this.rowNumber);
       data.append('operationType',this.filter.operationType);
       if(this.filter.searchText != null) {
         data.append("searchText", this.filter.searchText);
@@ -266,7 +268,7 @@ export default {
        if(this.filter.field != null) {
         data.append("field", this.filter.field);
       }
-      if (pageNumber == 1) {
+      if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
       if (this.filter.logCreateStartDate[0] != null) {
@@ -302,7 +304,9 @@ export default {
     },
     onPage(event) {
       this.loading = true;
-      this.getLogs(event.page + 1, event.rows);
+      this.pageNumber = event.page + 1;
+      this.rowNumber = event.rows;
+      this.getLogs();
     },
     filterAgents() {
       this.getLogs(this.currentPage, this.showedTotalElementCount);
