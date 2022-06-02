@@ -51,7 +51,7 @@ axios.interceptors.request.use(function(config) {
 axios.interceptors.response.use(
     (response) => {
         if(response.status === 401) {
-            store.dispatch("logout");
+            store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
         }
         return response;
     },

@@ -102,7 +102,7 @@ const routes = [
                 }
             },
             {
-                path: '/settings/server_setings',
+                path: '/settings/server-settings',
                 name: 'ServerSettings',
                 components: {default: ServerSettings},
                 meta: {
@@ -110,7 +110,7 @@ const routes = [
                 }
             },
             {
-                path: '/settings/system_monitoring_definitions',
+                path: '/settings/system-monitoring-definitions',
                 name: 'SystemMonitoringDefinitions',
                 components: {default: SystemMonitoringDefinitions},
                 meta: {
@@ -118,7 +118,7 @@ const routes = [
                 }
             },
             {
-                path: '/settings/script_definitions',
+                path: '/settings/script-definitions',
                 name: 'ScriptDefinitions',
                 components: {default: ScriptDefinitions},
                 meta: {
@@ -126,7 +126,7 @@ const routes = [
                 }
             },
             {
-                path: '/settings/registratin_templates',
+                path: '/settings/registration-templates',
                 name: 'RegistrationTemplates',
                 components: {default: RegistrationTemplates},
                 meta: {
@@ -134,7 +134,7 @@ const routes = [
                 }
             },
             {
-                path: '/settings/console_user_settings',
+                path: '/settings/console-user-settings',
                 name: 'ConsoleUserSettings',
                 components: {default: ConsoleUserSettings},
                 meta: {
@@ -142,7 +142,7 @@ const routes = [
                 }
             },
             {
-                path: '/user_profile',
+                path: '/user-profile',
                 name: 'User Profile',
                 components: {default: UserProfile},
                 meta: {
@@ -174,7 +174,7 @@ const routes = [
                 }
             },
             {
-                path: "/forgotPassword",
+                path: "/forgot-password",
                 name: "ForgotPassword",
                 components: { default: ForgotPassword },
                 meta: {
@@ -182,7 +182,7 @@ const routes = [
                 }
             },
             {
-                path: "/forgot_password/id/:uuid",
+                path: "/forgot-password/id/:uuid",
                 name: "Reset Password",
                 components: { default: ResetPassword },
                 meta: {

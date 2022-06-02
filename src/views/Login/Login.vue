@@ -95,7 +95,7 @@ export default {
         },
 
         forgotPassword() {
-            this.$router.push("forgotPassword");
+            this.$router.push("forgot-password");
         }
     },
 

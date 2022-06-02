@@ -791,10 +791,22 @@
             "an_error_occurred_while_fetching_registration_templates":"An error occurred while fetching registration templates.",
             "please_select_folder":"Please select folder",
             "please_select_authorized_user_group":"Please select an authorized user group",
-            "template_successfully_saved":"Template successfully saved",
+            "template_successfully_saved":"Template saved successfully",
             "an_error_occurred_while_saving_template":"An error occurred while saving template",
-            "template_successfully_deleted":"Template successfully deleted",
-            "an_error_occurred_while_deleting_template":"An error occurred while deleting template"
+            "template_successfully_deleted":"Template deleted successfully",
+            "an_error_occurred_while_deleting_template":"An error occurred while deleting template",
+            "table_empty_message": "Record not found",
+            "save":"Save",
+            "add_template": "Add Registration Template",
+            "hostname":"Hostname",
+            "ip_address":"IP Address",
+            "template_type": "Registration Template Type",
+            "saved_templates_list": "Registration Template List",
+            "edit":"Edit",
+            "update":"Update",
+            "template_successfully_updated":"Template updated successfully",
+            "an_error_occurred_while_updating_template":"An error occurred while updating template",
+            "update_template": "Update Registration Template"
         },
 
         "script_definition": {

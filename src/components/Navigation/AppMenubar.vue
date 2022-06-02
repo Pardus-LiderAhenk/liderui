@@ -11,7 +11,7 @@
                 <span class="pi pi-angle-down"></span>
             </Button>
             <Menu id="overlay_menu_lang" ref="languageMenu" :model="languages" :popup="true"/>
-            <Button type="button" class=" p-button-link" @click="toggleSettings" v-if="settingItems.length > 0">
+            <Button type="button" class=" p-button-link" @click="toggleSettings" v-if="settingItemsMenu.length > 0">
                 <i class="pi pi-cog" style="fontSize: 1.2rem"></i>
                 <span class="pi pi-angle-down"></span>
             </Button>
@@ -73,7 +73,7 @@ export default {
                 let profileItems = [
                     {
                         label: this.$t('menu.view_profile'),
-                        to: '/user_profile',
+                        to: '/user-profile',
                         icon:'pi pi-user'
                     },
                     {
@@ -105,7 +105,6 @@ export default {
         getPriviliges() {
             return new Promise((resolve, reject)=> {
                 axios.post("/liderConsole/profile", {}).then((response) => {
-                    console.log(response.data)
                     this.priviliges = response.data.priviliges;
                     resolve(response.data.priviliges);
                 });
@@ -163,7 +162,7 @@ export default {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.console_user_settings'),
-                        to:'/settings/console_user_settings',
+                        to:'/settings/console-user-settings',
                     }
                 );
             }
@@ -171,7 +170,7 @@ export default {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.server_settings'),
-                        to: '/settings/server_setings'
+                        to: '/settings/server-settings'
                     }
                 );
             }
@@ -179,7 +178,7 @@ export default {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.system_monitoring_definitions'),
-                        to:'/settings/system_monitoring_definitions',
+                        to:'/settings/system-monitoring-definitions',
                     }
                 );
             }
@@ -187,7 +186,7 @@ export default {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.script_definitions'),
-                        to: '/settings/script_definitions',
+                        to: '/settings/script-definitions',
                     }
                 );
             }
@@ -195,7 +194,7 @@ export default {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.registration_templates'),
-                        to:'/settings/registratin_templates',
+                        to:'/settings/registration-templates',
                     }
                 );
             }

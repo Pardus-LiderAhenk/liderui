@@ -1,21 +1,23 @@
 <template>
     <div>
          <h3>{{$t('profile.login_logout_history.login_logout_history')}}</h3>
-        <DataTable :value="records" responsiveLayout="scroll" class="p-datatable-sm"
-            >
+        <DataTable :value="records" responsiveLayout="scroll" class="p-datatable-sm">
             <template #header>
                 <div class="p-d-flex p-ac-end p-grid" style="justify-content:flex-end;">
                     <div class="p-flex p-ac-end p-col-12" style="justify-conten:flex-end; text-align:right;">
                         <span class="p-input-icon-left">
                             <span>{{$t('profile.login_logout_history.status')}}: </span>
-                            <Dropdown v-model="operationType" :options="statusOptions" optionLabel="name" optionValue="value" />
+                            <Dropdown v-model="operationType" :options="statusOptions" 
+                                optionLabel="name" optionValue="value" 
+                                @change="getLogs"
+                            />
                         </span>
                     </div>
                 </div>
             </template>
             <Column header="#">
-                    <template #body="slotProps">
-                    <p>{{slotProps.index + 1}}</p>
+                <template #body="{index}">
+                    <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
                 </template>
             </Column>
             <Column field="userId" :header="$t('profile.login_logout_history.username')"></Column>
@@ -35,11 +37,11 @@
             </Column>
         </DataTable>
         <Paginator
-        :rows="10"
-        :totalRecords="totalElements"
-        :rowsPerPageOptions="[10, 25, 50, 100]"
-        @page="onPage($event)"
-      >
+            :rows="10"
+            :totalRecords="totalElements"
+            :rowsPerPageOptions="[10, 25, 50, 100]"
+            @page="onPage($event)"
+        >
       </Paginator>
     </div>
 </template>
@@ -55,7 +57,6 @@ export default {
             loading:false,
             operationType:'all',
             totalElements:0,
-            currentPage: 1,
             statusOptions: [
                 {
                     name: this.$t('profile.login_logout_history.all'),
@@ -70,7 +71,9 @@ export default {
                     value: 'logout'
                 }
             ],
-            records: []
+            records: [],
+            pageNumber: 1,
+            rowNumber: 10
         }
     },
     methods: {
@@ -79,13 +82,14 @@ export default {
         },
         onPage(event) {
             this.loading = true;
-            this.getLogs(event.page + 1, event.rows);
+            this.pageNumber = event.page + 1;
+            this.rowNumber = event.rows;
+            this.getLogs();
         },
-        getLogs(pageNumber = 1, rowNumber = 10) {
-            this.currentPage = pageNumber;
+        getLogs() {
             var data = new FormData();
-            data.append("pageNumber", pageNumber);
-            data.append("pageSize", rowNumber);
+            data.append("pageNumber", this.pageNumber);
+            data.append("pageSize", this.rowNumber);
             data.append('operationType',this.operationType);
 
             axios.post("/operation/login", data).then((response) => {
