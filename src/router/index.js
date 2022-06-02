@@ -28,6 +28,7 @@ import UserProfile from '@/views/Profile/Profile.vue';
 import PolicyManagement from '@/views/PolicyManagement/PolicyManagement.vue';
 // Remote Access
 import RemoteAccess from '../components/RemoteAccessComp/RemoteAccess.vue';
+import RemoteAccessScreem from '../views/ComputerManagement/Plugins/Task/RemoteAccess/RemoteAccessScreen.vue';
 
 // Forgot Password
 import ForgotPassword from '@/views/Login/ForgotPassword.vue';
@@ -37,7 +38,7 @@ const routes = [
     {
         path:'/remoteAccess',
         name:'Remote Access',
-        component:RemoteAccess,
+        component:RemoteAccessScreem,
     },
     {
         path: "/",
