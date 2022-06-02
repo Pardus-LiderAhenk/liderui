@@ -797,7 +797,19 @@
             "template_successfully_saved":"Şablon başarıyla kaydedildi",
             "an_error_occurred_while_saving_template":"Şablon kaydedilirken hata oluştu",
             "template_successfully_deleted":"Kayıt başarıyla silindi",
-            "an_error_occurred_while_deleting_template":"Kayıt silinirken hata oluştu"
+            "an_error_occurred_while_deleting_template":"Kayıt silinirken hata oluştu",
+            "table_empty_message": "Kayıt bulunamadı",
+            "save": "Kaydet",
+            "add_template": "Kayıt Şablonu Ekle",
+            "hostname":"Bilgisayar Adı",
+            "ip_address":"IP Adresi",
+            "template_type": "Kayıt Şablon Tipi",
+            "saved_templates_list": "Kayıt Şablon Listesi",
+            "edit":"Düzenle",
+            "update":"Güncelle",
+            "template_successfully_updated":"Şablon başarıyla güncellendi",
+            "an_error_occurred_while_updating_template":"Şablon güncellenirken hata oluştu",
+            "update_template": "Kayıt Şablonu Güncelle"
         },
         "script_definition": {
             "title": "Betik Tanımlama",
