@@ -1495,7 +1495,9 @@
             "update_date":"Update Date",
             "scheduled_task_parameters":"Scheduled Task Parameters",
             "scheduled_task_will_be_canceled_are_you_sure":"The scheduled task will be cancelled, are you sure?",
-            "close":"Close"
+            "close":"Close",
+            "yes":"Yes",
+            "cancel_scheduled_task": "Cancel Scheduled Task"
         }
     },
     "profile":{

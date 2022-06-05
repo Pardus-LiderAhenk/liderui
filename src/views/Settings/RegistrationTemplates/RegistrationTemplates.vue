@@ -186,7 +186,6 @@ export default {
         getRegistrationTemplate(){
             axios.get("/api/registration-templates/type/" + this.templateType +"/page-count/" + this.pageNumber + "/page-size/" + this.rowNumber, null)
             .then((response) => {
-                console.log(response)
                 if (response.data) {
                     this.records = response.data.content;
                     this.totalElements = response.data.totalElements;
@@ -201,8 +200,6 @@ export default {
                 })
             });
         },
-
-
 
         savedTemplate(data) {
             this.resetPaginator();
