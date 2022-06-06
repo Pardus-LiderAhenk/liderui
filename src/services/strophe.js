@@ -90,6 +90,7 @@ class XmppClinet {
     } else if (status == Strophe.Status.CONNFAIL) {
       this.isXmppConnected = false;
       console.log("Conn Fail");
+      this.connect();
     } else if (status == Strophe.Status.DISCONNECTING) {
       this.isXmppConnected = false;
       console.log("Disconnecting");

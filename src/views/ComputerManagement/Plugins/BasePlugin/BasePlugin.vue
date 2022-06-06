@@ -200,6 +200,13 @@ export default {
   },
 
   methods: {
+    fillNode(){
+      if (this.selectedNodeType == "computer") {
+        this.selectedNode = this.selectedLiderNode;
+      } else if (this.selectedNodeType == "computerGroup") {
+        this.selectedNode = this.selectedComputerGroupNode;
+      }
+    },
     confirmTaskDialog(){
       if (this.selectedNodeType == "computer") {
         this.selectedNode = this.selectedLiderNode;
@@ -341,6 +348,7 @@ export default {
 
     executeTask(){
       if (this.executeTask) {
+        this.fillNode();
         this.executeTaskManager();
         this.closeTaskDialog('success');
       }

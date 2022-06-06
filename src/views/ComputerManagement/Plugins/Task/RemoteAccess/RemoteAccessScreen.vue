@@ -1,42 +1,62 @@
 <template>
-  <div>
-    
-    <div v-show="!isconnected" class="infoDiv">
+  <base-plugin
+    :pluginUrl="pluginUrl"
+    :pluginDescription="pluginDescription"
+    :showTaskDialog="false"
+    @close-task-dialog="showTaskDialog = false"
+    :pluginTask="task"
+    @task-response="remoteAccessResponse"
+    :executeTask="executeTask"
+  >
+  <template #pluginTitleButton>
+        <Button label="Yeniden Bağlan" class="p-button-raised  p-button-info" @click="reconnect();" style="margin-right:10px"/>
+        <Button label="Bağlantıyı kapat" class="p-button-raised  p-button-danger" @click="closeConnection();"/>
+        
+      </template>
+    <template #pluginTitle>
      <div>
-       
-       <ProgressSpinner style="width:50px;height:50px" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"/>
-     </div>
-      <p>{{status}}</p>
-    </div>
-    <div v-show="isconnected">
-      <div>
-          <Toolbar>
-          <template #start>
-              
-          </template>
+            <ProgressSpinner v-show="!connected"
+              style="width: 20px; height: 20px"
+              strokeWidth="8"
+              fill="var(--surface-ground)"
+              animationDuration=".5s"
+            />
+            {{ title }}
+          </div> 
+    </template>
+    <template #default>
+      <div style="height: 90vh">
+        <div v-show="!connected" class="infoDiv">
+            <div class="p-grid" style="width:50vw">
+               
+                <div class="p-col-12">
+                        <transition-group name="p-message" tag="div">
+                            <Message v-for="msg of status_messages" :severity="msg.severity" :key="msg.content"  :closable="false">{{msg.content}}</Message>
+                        </transition-group>
+                </div>
 
-          <template #end>
-            <Button v-if="!connected" icon="pi pi-times" class="p-button-primary" label="Yeniden Bağlan" @click="connect()"/>
-            <Button icon="pi pi-times" class="p-button-danger" label="Bağlantıyı Kapat" @click="closeConnection()"/>
-          </template>
-        </Toolbar>
+            </div>
+            
+        </div>
+        <div v-show="connected">
+          <div class="viewport" ref="viewport">
+            <modal ref="modal" @reconnect="connect(query)" />
+            <!-- tabindex allows for div to be focused -->
+            <div ref="display" class="display" tabindex="0" />
+          </div>
+        </div>
       </div>
-    
-      <div class="viewport" ref="viewport">
-        <modal ref="modal" @reconnect="connect(query)" />
-        <!-- tabindex allows for div to be focused -->
-        <div ref="display" class="display" tabindex="0" />
-      </div>
-  </div>
-  </div>
+    </template>
+  </base-plugin>
 </template>
 
 <script>
+import axios from "axios";
 import Guacamole from "guacamole-common-js";
 import GuacMouse from "./lib/GuacMouse";
 import states from "./lib/states";
 import clipboard from "./lib/clipboard";
-import Modal from "./lib/Modal";
+import { mapGetters } from "vuex";
 
 
 Guacamole.Mouse = GuacMouse.mouse;
@@ -44,28 +64,21 @@ Guacamole.Mouse = GuacMouse.mouse;
 const httpUrl = `http://${location.host}/tunnel`;
 
 export default {
-  components: {
-    Modal,
-  },
-  props: {
-    forceHttp: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    showRemoteModal: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    watchVl: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-  },
   data() {
     return {
+      title: "Remote Access",
+      task: null,
+      showTaskDialog: false,
+      pluginUrl:
+        "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/uzak_masaustu/",
+      pluginDescription: this.$t("computer.plugins.remote_access.description"),
+      pluginTask: null,
+      remoteAccessState: false,
+      status_messages: [
+			
+		],
+      permission: "yes",
+      executeTask: false,
       connected: false,
       display: null,
       currentAdjustedHeight: null,
@@ -77,26 +90,85 @@ export default {
       errorMessage: "",
       arguments: {},
       status:'',
-      isconnected: false
+      connection_info:null,
+      selectedProtocol:'vnc',
+      tunnel:null,
+      connectionData:null,
     };
   },
-  watch: {
-    // connectionState(state) {
-    //   this.$refs.modal.show(state, this.errorMessage)
-    // },
-    disconnected: {
-      handler: function (newVal, oldVal) {
-        if (newVal) {
-          this.connected = false;
-          this.client.disconnect();
-        }
-      },
-    },
+  computed: {
+    ...mapGetters(["remoteConnections"]),
   },
   methods: {
+    sendTaskRemoteAccess() {
+        this.status_messages.push({severity: 'info', content: "Ahenk'e bağlantı isteği gönderiliyor..."});
+        this.task = { ...this.pluginTask };
+        this.task.commandId = "SETUP-VNC-SERVER";
+        this.task.parameterMap = {
+          permission: this.connectionData.permission,
+        };
+        this.executeTask = true;
+        this.status_messages.push({severity: 'success', content: "Bağlantı isteği gönderildi..."});
+    },
+
+    reconnect(){
+        // this.executeTask = false;
+        // //this.clipboard.uninstall();
+        // this.client.disconnect();
+        // // this.tunnel.disconnect();
+        // this.status_messages = [];
+        // this.connected = false;
+        // this.sendTaskRemoteAccess();
+
+        location.reload();
+    },
+
+    async start_connection(){
+
+        
+        let data = new FormData();
+        if (this.connectionData && this.connectionData.protocol == 'ssh') {
+            data.append("protocol", this.connectionData.protocol);
+            data.append("port", 22);
+            data.append("password", this.connectionData.sshPassword);
+            data.append("username", this.connectionData.sshUsername);
+        } else {
+            data.append("protocol", this.connectionData.protocol);
+            data.append("port", this.connection_info.port);
+            data.append("password", this.connection_info.password);
+            data.append("username", '');
+        }
+
+        let checkhostFormdata = new FormData();
+        checkhostFormdata.append('host', this.connection_info.host);
+        checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? 22 : this.connection_info.port);
+        const hostResponse = await axios.post('/checkhost',checkhostFormdata);
+        this.status_messages.push({severity: 'success', content: "Ahenk erişimi " + hostResponse.data + ' adresinden sağlanacak...'},);
+        data.append("host", hostResponse.data);
+        const sremoteResponse = await  axios.post('/sendremote', data);
+
+        this.connect();
+
+        if (this.permission == "yes") {
+            this.status_messages.push({severity: 'success', content: "Kullanıcıya erişim isteği gönderildi. Cevap bekleniyor... "},);
+        }
+
+    },
+    remoteAccessResponse(message) {
+      
+      if (message.commandClsId == "SETUP-VNC-SERVER") {
+        let result = JSON.parse(message.result.responseDataStr);
+        this.connection_info = result;
+        this.status_messages.push({severity: 'info', content: "Bağlantı bilgileri alındı. Erişim kontrol ediliyor..."},);
+        this.title = "Remote Access - " + message.commandExecution.uid;
+        this.start_connection();
+      }
+    },
     closeConnection() {
+      this.$store.dispatch('removeConnectionInfo', this.connectionData);
       this.client.disconnect();
-      window.close()
+      this.connected = false;
+      window.close();
     },
     send(cmd) {
       if (!this.client) {
@@ -124,20 +196,15 @@ export default {
       this.client.sendMouseState(scaledMouseState);
     },
     resize() {
-      console.log('Resize cagrildi');
       const elm = this.$refs.viewport;
-      console.log('Viewport elem aldım', elm);
       if (!elm || !elm.offsetWidth) {
         // resize is being called on the hidden window
-        console.log('resize 1');
         return;
       }
 
       let pixelDensity = window.devicePixelRatio || 1;
-      console.log('pixcel destiny ',pixelDensity);
       const width = elm.clientWidth * pixelDensity;
       const height = elm.clientHeight * pixelDensity;
-      console.log('Gelen Width ve height', width,height);
       if (
         this.display.getWidth() !== width ||
         this.display.getHeight() !== height
@@ -146,12 +213,12 @@ export default {
       }
       // setting timeout so display has time to get the correct size
       setTimeout(() => {
-        const scale = Math.min(
-          elm.clientWidth / Math.max(this.display.getWidth(), 1),
-          elm.clientHeight / Math.max(this.display.getHeight(), 1)
-        ) || 1;
+        const scale =
+          Math.min(
+            elm.clientWidth / Math.max(this.display.getWidth(), 1),
+            elm.clientHeight / Math.max(this.display.getHeight(), 1)
+          ) || 1;
         this.display.scale(scale);
-        console.log('resize 2', scale);
       }, 100);
     },
     connect() {
@@ -159,47 +226,43 @@ export default {
         Authorization: "Bearer " + localStorage.getItem("auth_token"),
       };
 
-      let tunnel = new Guacamole.HTTPTunnel(httpUrl, true, params);
+      this.tunnel = new Guacamole.HTTPTunnel(httpUrl, true, params);
 
       if (this.client) {
         this.display.scale(0);
         this.uninstallKeyboard();
       }
 
-      this.client = new Guacamole.Client(tunnel);
+      this.client = new Guacamole.Client(this.tunnel);
       clipboard.install(this.client);
 
-      tunnel.onerror = (status) => {
+      this.tunnel.onerror = (status) => {
         // eslint-disable-next-line no-console
         console.error(`Tunnel failed ${JSON.stringify(status)}`);
         this.connectionState = states.TUNNEL_ERROR;
       };
 
-      tunnel.onstatechange = (state) => {
+      this.tunnel.onstatechange = (state) => {
         switch (state) {
           // Connection is being established
           case Guacamole.Tunnel.State.CONNECTING:
             this.connectionState = states.CONNECTING;
-            console.log('state 1')
             break;
 
           // Connection is established / no longer unstable
           case Guacamole.Tunnel.State.OPEN:
             this.connectionState = states.CONNECTED;
-            console.log('state 2')
             break;
 
           // Connection is established but misbehaving
           case Guacamole.Tunnel.State.UNSTABLE:
-            console.log('state 3')
             // TODO
             break;
 
           // Connection has closed
           case Guacamole.Tunnel.State.CLOSED:
             this.connectionState = states.DISCONNECTED;
-            console.log('state 4');
-            this.status = "Kullanıcı Reddetti";
+            this.status_messages.push({severity: 'warning', content: "Kullanıcının izin vermesi bekleniyor..."},);
             break;
         }
       };
@@ -208,36 +271,32 @@ export default {
         switch (clientState) {
           case 0:
             this.connectionState = states.IDLE;
-            console.log('state 5')
             break;
           case 1:
             // connecting ignored for some reason?
-            console.log('state 6')
             break;
           case 2:
             this.connectionState = states.WAITING;
-            console.log('state 7');
             this.status = "Kullanıcının izin vermesi bekleniyor";
-            this.isconnected = false;
+            //this.connected = false;
             break;
           case 3:
             this.connectionState = states.CONNECTED;
-            console.log('state 8')
+            this.connected = true;
             window.addEventListener("resize", this.resize);
             this.resize();
             this.$refs.viewport.addEventListener("mouseenter", this.resize);
 
             clipboard.setRemoteClipboard(this.client);
-            this.status = '';
-            this.isconnected = true;
+            this.status = "";
+            
 
           // eslint-disable-next-line no-fallthrough
           case 4:
-            console.log('state 9')
           case 5:
             // disconnected, disconnecting
-            console.log('state 10')
-            this.status = "Kullanıcı Oturum Açmamış. \n Bağlantı kurabilmek için lütfen kullanıcıdan oturum açmasını isteyiniz.";
+            this.status =
+              "Kullanıcı Oturum Açmamış. \n Bağlantı kurabilmek için lütfen kullanıcıdan oturum açmasını isteyiniz.";
             break;
         }
       };
@@ -340,9 +399,28 @@ export default {
     },
   },
   mounted() {
-    console.log('Store user', this.$store.getters.getUser);
-    this.connected = true;
-    this.connect();
+
+    this.remoteConnections.map(item => {
+      if (item.uid == this.$route.query.uid && (item.protocol == this.$route.query.protocol)) {
+        this.connectionData = item;
+      }
+    });
+
+    
+    axios.post("/getPluginTaskList", {}).then((response) => {
+      for (let index = 0; index < response.data.length; index++) {
+        const element = response.data[index];
+        if (element.page == "remote-access") {
+          this.pluginTask = element;
+          this.remoteAccessState = element.state;
+
+          this.sendTaskRemoteAccess();
+        }
+      }
+    });
+  },
+  unmounted() {
+      this.$store.dispatch('removeConnectionInfo', this.connectionData);
   },
 };
 </script>
@@ -363,11 +441,8 @@ export default {
 .infoDiv {
   justify-content: center;
   text-align: center;
-  align-items: center;
   width: 100%;
   height: 100vh;
-  display:flex;
-  vertical-align: middle;
-  
+  display: flex;
 }
 </style>

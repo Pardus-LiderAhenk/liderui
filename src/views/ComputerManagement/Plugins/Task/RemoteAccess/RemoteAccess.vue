@@ -45,6 +45,28 @@
               </Dropdown>
           </div>
         </div>
+
+        <div class="p-fluid" v-if="selectedProtocol === 'ssh'">
+          <div class="p-field p-col-6">
+              <label>{{ "Username" }}</label>
+                <InputText 
+                  type="text"
+                  v-model="sshUsername" 
+                  :class="validationScriptParams ? 'p-invalid': ''" 
+                />
+          </div>
+        </div>
+
+        <div class="p-fluid" v-if="selectedProtocol === 'ssh'">
+          <div class="p-field p-col-6">
+              <label>{{ "Password" }}</label>
+              <InputText 
+                  type="password"
+                  v-model="sshPassword" 
+                  :class="validationScriptParams ? 'p-invalid': ''" 
+                />
+          </div>
+        </div>
         
       </template>
 
@@ -69,6 +91,7 @@
  */
 import RemoteAccessComp from '@/components/RemoteAccessComp/RemoteAccess.vue';
 import axios from 'axios';
+import { mapGetters } from "vuex"
 
 export default {
   components: {
@@ -98,20 +121,41 @@ export default {
         {label: 'SSH', value: 'ssh'},
         {label: 'VNC', value: 'vnc'}
       ],
-      selectedProtocol: 'ssh'
+      selectedProtocol: 'vnc',
+      sshUsername:null,
+      sshPassword:null,
     };
   },
-
+  
   created() {
     this.task = { ...this.pluginTask };
   },
+  computed: {
+    ...mapGetters(["selectedLiderNode", "selectedNodeType", "selectedComputerGroupNode"]),
+  },
   methods: {
     sendTaskRemoteAccess() {
-      this.task.commandId = "SETUP-VNC-SERVER";
-      this.task.parameterMap = {
-        "permission": this.permission
-      }
-      this.showTaskDialog = true;
+      // this.task.commandId = "SETUP-VNC-SERVER";
+      // this.task.parameterMap = {
+      //   "permission": this.permission
+      // }
+      // this.showTaskDialog = true;
+
+
+      // let routeData = this.$router.resolve({name: 'Remote Access', query: {}});
+      // window.open(routeData.href, '_blank');
+
+      this.$store.dispatch('addRemoteConnections', {
+        "dn": this.selectedLiderNode.distinguishedName,
+        "uid":this.selectedLiderNode.uid,
+        "protocol": this.selectedProtocol,
+        "sshUsername": this.sshUsername,
+        "sshPassword": this.sshPassword,
+        "permission":this.permission
+      }).then(() => {
+        let routeData = this.$router.resolve({name: 'Remote Access', query: {uid:this.selectedLiderNode.uid, protocol:this.selectedProtocol}});
+        window.open(routeData.href, '_blank');
+      });
     },
 
     remoteAccessResponse(message) {
@@ -121,22 +165,30 @@ export default {
       }
     },
 
-    startRemoteAccess(args) {
+    async startRemoteAccess(args) {
      
      if (args) {
         let data = new FormData();
-        data.append("protocol", this.selectedProtocol);
-        data.append("host", '192.168.56.108');
-        data.append("port", 22);
-        data.append("password", 1);
-        data.append("username", "pardus");
+        if (this.selectedProtocol && this.selectedProtocol == 'ssh') {
+            data.append("protocol", this.selectedProtocol);
+            data.append("port", 22);
+            data.append("password", this.sshPassword);
+            data.append("username", this.sshUsername);
+        } else {
+            data.append("protocol", this.selectedProtocol);
+            data.append("port", args.port);
+            data.append("password", args.password);
+            data.append("username", '');
+        }
 
-        axios.post('/sendremote', data).then(response => {
-          // this.openRemoteAccessModal = true;
-          let routeData = this.$router.resolve({name: 'Remote Access', query: {data: "someData"}});
-          window.open(routeData.href, '_blank');
-          // this.$router.push('/remoteAccess')
-        })
+        let checkhostFormdata = new FormData();
+        checkhostFormdata.append('host', args.host);
+        checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? 22 : args.port);
+        const hostResponse = await axios.post('/checkhost',checkhostFormdata);
+        data.append("host", hostResponse.data);
+        await  axios.post('/sendremote', data);
+        let routeData = this.$router.resolve({name: 'Remote Access', query: {}});
+        window.open(routeData.href, '_blank');
      }
      
     },
