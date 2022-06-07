@@ -102,10 +102,21 @@
                 v-tooltip.left="$t('computer.scheduled.title')+': \n' + scheduledParam">
                </Button>
             </div>
-            <div v-if="loading">
+            <!-- <div v-if="loading">
               <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
               <a class="primary">
                 {{$t('computer.plugins.base_plugin.loading_default_text')}}
+              </a>
+            </div> -->
+            <div v-if="loading">
+              <ProgressSpinner
+                style="width: 20px; height: 20px"
+                strokeWidth="8"
+                fill="var(--surface-ground)"
+                animationDuration=".5s"
+              />
+              <a class="primary">
+                &nbsp;{{$t('computer.plugins.base_plugin.loading_default_text')}}
               </a>
             </div>
             <div class="p-col p-as-end">
