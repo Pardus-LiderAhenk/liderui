@@ -6,7 +6,6 @@
                 src="@/assets/images/liderahenk_login.png"
                 style="width: 50%;"
             />
-            
         </div>
         <div class="p-col-12">
             <div class="p-field">
@@ -78,7 +77,6 @@ export default {
                 this.validation.username = true;
                 return;
             }
-
             let params = {
                 username: this.username
             }
@@ -88,7 +86,7 @@ export default {
                     this.inlineMessage = response.data[0];
                 }
             }).catch((error) => {
-               this.inlineMessage = "Lütfen sunucu mail ayarlarını, kullanıcı adı ve mail adresini kontrol ediniz.";
+               this.inlineMessage = this.$t('login.forgot_password_inline_message_warn');
                this.severity = "error";
             });
         },

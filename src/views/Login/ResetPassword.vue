@@ -8,8 +8,8 @@
         </div>
         <div class="p-col-12 p-fluid">
             <div class="p-field">
-                <InlineMessage v-if="severity == 'success'" :severity="severity" style="text-align:left;">
-                   Parolanız başarılı bir şekilde sıfırlandı. Şimdi <a href='/login'> giriş yapabilirsiniz.</a>
+                <InlineMessage v-if="severity == 'success'" :severity="success" style="text-align:left;">
+                   {{$t('login.reset_password_inline_message_success')}} <a href='/login'> {{$t('login.login_message')}}</a>
                 </InlineMessage>
                 <InlineMessage v-else :severity="severity" style="text-align:left;">
                     {{inlineMessage}}
@@ -25,7 +25,7 @@
                         </password-component>
                         <div>
                             <Button 
-                                label="Sıfırla" 
+                                :label="$t('login.reset')" 
                                 class="p-mt-2"
                                 @click="resetPassword"
                             />
@@ -45,7 +45,7 @@ export default {
      data() {
         return {
             isPasswordReset: false,
-            inlineMessage: "Liderahenk MYS' ye giriş yapabilmeniz için parolanızı sıfırlamanız gerekmektedir.",
+            inlineMessage: this.$t('login.reset_password_inline_message_warn'),
             severity: "info"
         }
     },
@@ -76,7 +76,7 @@ export default {
                 }
             }).catch((error) => {
                 this.severity = "error";
-                this.inlineMessage = "Parolanız sıfırlanırken hata oluştu";
+                this.inlineMessage = this.$t('login.reset_password_inline_message_error');
             });
         },
     },
