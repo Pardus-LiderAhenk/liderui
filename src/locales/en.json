@@ -33,9 +33,15 @@
         "sign_in":"Sign in",
         "forgot_password":"Forgot Password",
         "login_error":"Invalid username or password",
-        "password_notify":"If you cannot reach Liderahenk MYS, enter your username and you will be sent an e-mail with the necessary details to log in again.",
+        "password_notify":"If you cannot reach Liderahenk CMS, enter your username and you will be sent an e-mail with the necessary details to log in again.",
         "cancel":"Cancel",
-        "send":"Send"
+        "send":"Send",
+        "forgot_password_inline_message_warn": "Please check server mail settings, user name and mail address",
+        "reset": "Reset",
+        "reset_password_inline_message_warn": "You must reset your password in order to login to Liderahenk CMS",
+        "reset_password_inline_message_error": "An error occurred while resetting your password",
+        "reset_password_inline_message_success": "Your password has been reset successfully",
+        "login_message": "You can login now"
     },
     "menu": {
         "dashboard": "Dashboard",

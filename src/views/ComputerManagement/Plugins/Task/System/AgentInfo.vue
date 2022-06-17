@@ -444,9 +444,15 @@
             </div>
             <div v-if="loading">
               <div class="p-text-center">
-                <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+                <!-- <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp; -->
+                <ProgressSpinner
+                  style="width: 20px; height: 20px"
+                  strokeWidth="8"
+                  fill="var(--surface-ground)"
+                  animationDuration=".5s"
+                />
                 <a class="primary">
-                  {{$t('computer.plugins.base_plugin.loading_default_text')}}
+                  &nbsp;{{$t('computer.plugins.base_plugin.loading_default_text')}}
                 </a>
               </div>
             </div>
