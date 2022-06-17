@@ -1,4 +1,4 @@
-import Guacamole from 'guacamole-common-js'
+import Guacamole from "@ismailbasaran/guacamole-common-js";
 
 const mouse = function(element) {
 

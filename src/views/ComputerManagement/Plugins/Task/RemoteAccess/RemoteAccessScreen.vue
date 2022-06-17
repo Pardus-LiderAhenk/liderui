@@ -52,7 +52,7 @@
 
 <script>
 import axios from "axios";
-import Guacamole from "guacamole-common-js";
+import Guacamole from "@ismailbasaran/guacamole-common-js";
 import GuacMouse from "./lib/GuacMouse";
 import states from "./lib/states";
 import clipboard from "./lib/clipboard";
