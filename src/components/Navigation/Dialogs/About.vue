@@ -16,7 +16,7 @@
                     </div>
                     <div class="p-field">
                         <span>
-                            Versiyon: Liderahenk 3.0.0
+                            Versiyon: Liderahenk {{version}}
                         </span>
                     </div>
                     <div class="p-field">
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+
 export default {
 
     props: {
@@ -51,9 +52,16 @@ export default {
         },
     },
 
+    data() {
+        return {
+            version: "1.0.0"
+        }
+    },
+
     computed: {
         showDialog: {
             get () {
+                this.getVersion()
                 return this.showAboutDialog;
             },
 
@@ -64,6 +72,12 @@ export default {
             }
         }
     },
+
+    methods: {
+        getVersion() {
+            this.version = process.env.VUE_APP_VERSION = require('../../../../package.json').version;
+        }
+    }
 }
 </script>
 
