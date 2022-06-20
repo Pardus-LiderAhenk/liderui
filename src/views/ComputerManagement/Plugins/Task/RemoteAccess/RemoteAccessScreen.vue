@@ -145,7 +145,9 @@ export default {
       checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? this.defaultSshPort : this.connection_info.port);
       const hostResponse = await axios.post('/checkhost',checkhostFormdata);
       this.status_messages.push({severity: 'success', content: "Ahenk erişimi " + hostResponse.data + ' adresinden sağlanacak...'},);
-      this.title = "SSH Connection - " + hostResponse.data;
+      if (this.connectionData.protocol == 'ssh') {
+        this.title = "SSH Connection - " + hostResponse.data;
+      }  
       data.append("host", hostResponse.data);
       const sremoteResponse = await  axios.post('/sendremote', data);
       this.connect();
