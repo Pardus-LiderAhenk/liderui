@@ -45,7 +45,7 @@
                     >
                     </Button>
                     <Button
-                        icon="fa fa-hashtag"
+                        icon="fa fa-code"
                         :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                         @click="setSelectedPluginTab('script-management')"
                         :label="$t('computer.plugins.button.script')"

@@ -1061,6 +1061,11 @@
     "@intlify/runtime" "9.1.9"
     "@intlify/shared" "9.1.9"
 
+"@ismailbasaran/guacamole-common-js@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@ismailbasaran/guacamole-common-js/-/guacamole-common-js-1.3.0.tgz#587a0384cedf4d661c4c43fa0615494654e7c1d3"
+  integrity sha512-r8pa6AGBBsHcb4HdNMNQZPpEnuWm97XgKftYp/QzMQ/5i4DE5QTUnxjOMJ8WtoE9Wu2z+L3hxwyr5S/ZFkbsoQ==
+
 "@ismailbasaran/vuestrophejs@^1.4.2":
   version "1.4.2"
   resolved "https://registry.npmjs.org/@ismailbasaran/vuestrophejs/-/vuestrophejs-1.4.2.tgz"
@@ -4830,11 +4835,6 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.9.tgz"
   integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
 
-guacamole-common-js@^1.3.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/guacamole-common-js/-/guacamole-common-js-1.4.0.tgz#0cf737bb8ddc02559054d40edfb373c0a87c8bae"
-  integrity sha512-nz1yW0B4Vt7p8TeATIlYNlS11oVs2VynmJHFdnBOIX0NcUY3Ax0Zg0Gk2MQ2gm9F3lWou3yrCYCj8X7ofuC04g==
-
 gzip-size@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/gzip-size/-/gzip-size-5.1.1.tgz#cb9bee692f87c0612b232840a873904e4c135274"
@@ -7581,10 +7581,10 @@ primeflex@^2.0.0:
   resolved "https://registry.npmjs.org/primeflex/-/primeflex-2.0.0.tgz"
   integrity sha512-t6AG3iRI1rh04uI+9nC4JSlbKfA8PnpRDFtjyqi3rDSLRgdfOuhIiunJbjVQ4alnnCfuQAAbVyde1AKN9QxT/w==
 
-primeicons@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.npmjs.org/primeicons/-/primeicons-4.1.0.tgz"
-  integrity sha512-uEv2pSPk1zQCfaB2VgnUfnUxxlGryYi+5rbdxmZBBt5v9S/pscIQYS5YDLxsQZ7D9jn5c76+Tx5wX/2J1nK6sA==
+primeicons@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/primeicons/-/primeicons-5.0.0.tgz#73a0b6028a77c58a9eeb331ad13aaf085e8451ee"
+  integrity sha512-heygWF0X5HFI1otlZE62pp6ye7sZ8om78J9au2BRkg8O7Y8AHTZ9qKMRzchZUHLe8zUAvdi6hZzzm9XxgwIExw==
 
 primevue@^3.5.0:
   version "3.12.0"

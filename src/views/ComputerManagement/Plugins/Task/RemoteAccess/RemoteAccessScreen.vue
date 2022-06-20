@@ -94,6 +94,7 @@ export default {
       selectedProtocol:'vnc',
       tunnel:null,
       connectionData:null,
+      defaultSshPort: 22
     };
   },
   computed: {
@@ -111,51 +112,7 @@ export default {
         this.status_messages.push({severity: 'success', content: "Bağlantı isteği gönderildi..."});
     },
 
-    reconnect(){
-        // this.executeTask = false;
-        // //this.clipboard.uninstall();
-        // this.client.disconnect();
-        // // this.tunnel.disconnect();
-        // this.status_messages = [];
-        // this.connected = false;
-        // this.sendTaskRemoteAccess();
-
-        location.reload();
-    },
-
-    async start_connection(){
-
-        
-        let data = new FormData();
-        if (this.connectionData && this.connectionData.protocol == 'ssh') {
-            data.append("protocol", this.connectionData.protocol);
-            data.append("port", 22);
-            data.append("password", this.connectionData.sshPassword);
-            data.append("username", this.connectionData.sshUsername);
-        } else {
-            data.append("protocol", this.connectionData.protocol);
-            data.append("port", this.connection_info.port);
-            data.append("password", this.connection_info.password);
-            data.append("username", '');
-        }
-
-        let checkhostFormdata = new FormData();
-        checkhostFormdata.append('host', this.connection_info.host);
-        checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? 22 : this.connection_info.port);
-        const hostResponse = await axios.post('/checkhost',checkhostFormdata);
-        this.status_messages.push({severity: 'success', content: "Ahenk erişimi " + hostResponse.data + ' adresinden sağlanacak...'},);
-        data.append("host", hostResponse.data);
-        const sremoteResponse = await  axios.post('/sendremote', data);
-
-        this.connect();
-
-        if (this.permission == "yes") {
-            this.status_messages.push({severity: 'success', content: "Kullanıcıya erişim isteği gönderildi. Cevap bekleniyor... "},);
-        }
-
-    },
     remoteAccessResponse(message) {
-      
       if (message.commandClsId == "SETUP-VNC-SERVER") {
         let result = JSON.parse(message.result.responseDataStr);
         this.connection_info = result;
@@ -164,12 +121,46 @@ export default {
         this.start_connection();
       }
     },
+
+    reconnect(){
+      location.reload();
+    },
+
+    async start_connection(){
+      let data = new FormData();
+      if (this.connectionData && this.connectionData.protocol == 'ssh') {
+        data.append("protocol", this.connectionData.protocol);
+        data.append("port", this.defaultSshPort);
+        data.append("password", this.connectionData.sshPassword);
+        data.append("username", this.connectionData.sshUsername);
+      } else {
+        data.append("protocol", this.connectionData.protocol);
+        data.append("port", this.connection_info.port);
+        data.append("password", this.connection_info.password);
+        data.append("username", '');
+      }
+
+      let checkhostFormdata = new FormData();
+      checkhostFormdata.append('host', this.connection_info.host);
+      checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? this.defaultSshPort : this.connection_info.port);
+      const hostResponse = await axios.post('/checkhost',checkhostFormdata);
+      this.status_messages.push({severity: 'success', content: "Ahenk erişimi " + hostResponse.data + ' adresinden sağlanacak...'},);
+      this.title = "SSH Connection - " + hostResponse.data;
+      data.append("host", hostResponse.data);
+      const sremoteResponse = await  axios.post('/sendremote', data);
+      this.connect();
+      if (this.permission == "yes") {
+          this.status_messages.push({severity: 'success', content: "Kullanıcıya erişim isteği gönderildi. Cevap bekleniyor... "},);
+      }
+    },
+
     closeConnection() {
       this.$store.dispatch('removeConnectionInfo', this.connectionData);
       this.client.disconnect();
       this.connected = false;
       window.close();
     },
+
     send(cmd) {
       if (!this.client) {
         return;
@@ -399,28 +390,34 @@ export default {
     },
   },
   mounted() {
-
     this.remoteConnections.map(item => {
       if (item.uid == this.$route.query.uid && (item.protocol == this.$route.query.protocol)) {
         this.connectionData = item;
       }
     });
 
-    
-    axios.post("/getPluginTaskList", {}).then((response) => {
-      for (let index = 0; index < response.data.length; index++) {
-        const element = response.data[index];
-        if (element.page == "remote-access") {
-          this.pluginTask = element;
-          this.remoteAccessState = element.state;
-
-          this.sendTaskRemoteAccess();
+    if (this.connectionData.protocol === "vnc") {
+      axios.post("/getPluginTaskList", {}).then((response) => {
+        for (let index = 0; index < response.data.length; index++) {
+          const element = response.data[index];
+          if (element.page == "remote-access") {
+            this.pluginTask = element;
+            this.remoteAccessState = element.state;
+            this.sendTaskRemoteAccess();
+          }
         }
-      }
-    });
+      });
+    } else {
+      this.connection_info = {
+        "host": this.connectionData.ipAddress,
+        "port": this.defaultSshPort
+      };
+      this.start_connection();
+    }
   },
+
   unmounted() {
-      this.$store.dispatch('removeConnectionInfo', this.connectionData);
+    this.$store.dispatch('removeConnectionInfo', this.connectionData);
   },
 };
 </script>

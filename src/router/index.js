@@ -27,8 +27,7 @@ import UserProfile from '@/views/Profile/Profile.vue';
 //POLICY
 import PolicyManagement from '@/views/PolicyManagement/PolicyManagement.vue';
 // Remote Access
-import RemoteAccess from '../components/RemoteAccessComp/RemoteAccess.vue';
-import RemoteAccessScreem from '../views/ComputerManagement/Plugins/Task/RemoteAccess/RemoteAccessScreen.vue';
+import RemoteAccessScreem from '@/views/ComputerManagement/Plugins/Task/RemoteAccess/RemoteAccessScreen.vue';
 
 // Forgot Password
 import ForgotPassword from '@/views/Login/ForgotPassword.vue';
@@ -36,7 +35,7 @@ import ResetPassword from '@/views/Login/ResetPassword.vue';
 
 const routes = [
     {
-        path:'/remoteAccess',
+        path:'/remote-access',
         name:'Remote Access',
         component:RemoteAccessScreem,
     },

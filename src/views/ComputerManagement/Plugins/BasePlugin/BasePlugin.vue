@@ -12,11 +12,11 @@
   >
     <div class="confirmation-content">
       <span v-if="scheduledParam == null">
-        <i class="fas fa-info-circle"></i>&nbsp;
+        <i class="pi pi-info-circle" style="font-size: 1.5rem"></i>&nbsp;
         {{ $t('computer.plugins.base_plugin.task_confirm_question') }}
       </span>
       <span v-if="scheduledParam">
-        <i class="fas fa-clock"></i>&nbsp;
+        <i class="pi pi-clock" style="font-size: 1.5rem"></i>&nbsp;
         {{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}
       </span>
     </div>
@@ -204,6 +204,12 @@ export default {
       default: "basePluginListener",
       description: "listener for plugin"
     },
+
+    selectedAgentNode: {
+      type: Object,
+      default: null,
+      description: "Selected agent node for send task"
+    }
   },
 
   computed: {
@@ -217,10 +223,17 @@ export default {
       } else if (this.selectedNodeType == "computerGroup") {
         this.selectedNode = this.selectedComputerGroupNode;
       }
+
+      if (this.selectedAgentNode) {
+        this.selectedNode = this.selectedAgentNode;
+      }
     },
     confirmTaskDialog(){
       if (this.selectedNodeType == "computer") {
         this.selectedNode = this.selectedLiderNode;
+        if (this.selectedAgentNode) {
+          this.selectedNode = this.selectedAgentNode;
+        }
         if (this.selectedLiderNode == null || 
           this.selectedLiderNode.type != "AHENK" && 
           this.selectedLiderNode.type != "WIND0WS_AHENK") {
@@ -235,6 +248,9 @@ export default {
         }
       } else if (this.selectedNodeType == "computerGroup") {
         this.selectedNode = this.selectedComputerGroupNode;
+        if (this.selectedAgentNode) {
+          this.selectedNode = this.selectedAgentNode;
+        }
          if (this.selectedComputerGroupNode == null || 
           this.selectedComputerGroupNode.type != "GROUP") {
           this.$toast.add({
