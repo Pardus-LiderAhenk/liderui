@@ -390,13 +390,13 @@ export default {
     },
   },
   mounted() {
-    this.remoteConnections.map(item => {
-      if (item.uid == this.$route.query.uid && (item.protocol == this.$route.query.protocol)) {
-        this.connectionData = item;
-      }
-    });
+    if (this.$route.query.protocol == "vnc") {
+      this.remoteConnections.map(item => {
+        if (item.uid == this.$route.query.uid && (item.protocol == this.$route.query.protocol)) {
+          this.connectionData = item;
+        } 
+      });
 
-    if (this.connectionData.protocol === "vnc") {
       axios.post("/getPluginTaskList", {}).then((response) => {
         for (let index = 0; index < response.data.length; index++) {
           const element = response.data[index];
@@ -407,9 +407,11 @@ export default {
           }
         }
       });
-    } else {
+
+    } else if (this.$route.query.protocol == "ssh") {
+      this.connectionData = this.$route.query;
       this.connection_info = {
-        "host": this.connectionData.ipAddress,
+        "host": this.$route.query.host,
         "port": this.defaultSshPort
       };
       this.start_connection();

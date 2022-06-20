@@ -24,7 +24,7 @@
       <Button 
        :label="$t('computer.plugins.base_plugin.yes')"
        icon="pi pi-check" 
-       @click="sendTaskRemoteAccess"
+       @click="connectRemoteAccess"
        class="p-button-sm"
        />
     </template>
@@ -80,13 +80,13 @@
             <div class="p-inputgroup">
               <InputText 
                 type="text"
-                v-model="ipAddress" 
-                :class="validationIpAddress ? 'p-invalid': ''" 
+                v-model="host" 
+                :class="validationHost ? 'p-invalid': ''" 
                 placeholder="192.168.*.*"
               />
               <Button icon="pi pi-undo" title="IP Adresi Getir" @click="getIpAddress"/>
             </div>
-            <small v-show="validationIpAddress" class="p-error">
+            <small v-show="validationHost" class="p-error">
               IP Adresi adı boş bırakılamaz
             </small>
           </div>
@@ -145,10 +145,10 @@ export default {
       selectedProtocol: 'vnc',
       sshUsername: "",
       sshPassword: "",
-      ipAddress: "",
+      host: "",
       validationPassword: false,
       validationUsername: false,
-      validationIpAddress: false,
+      validationHost: false,
       remoteAccessConfirmDialog: false
     };
   },
@@ -171,8 +171,8 @@ export default {
           return;
         }
       } else if (this.selectedProtocol == "ssh") {
-        if (!this.ipAddress.trim()){
-          this.validationIpAddress = true;
+        if (!this.host.trim()){
+          this.validationHost = true;
           return;
         }
         if (!this.sshUsername.trim()){
@@ -187,19 +187,38 @@ export default {
       this.remoteAccessConfirmDialog = true;
     },
 
-    sendTaskRemoteAccess() {
-      this.$store.dispatch('addRemoteConnections', {
+    connectRemoteAccess() {
+      let data = {
         "dn": this.selectedProtocol == 'vnc'? this.selectedLiderNode.distinguishedName: null,
         "uid": this.selectedProtocol == 'vnc'? this.selectedLiderNode.uid: null,
         "protocol": this.selectedProtocol,
-        "sshUsername": this.sshUsername,
-        "sshPassword": this.sshPassword,
         "permission": this.selectedProtocol == 'vnc'? this.permission: null,
-        "ipAddress": this.ipAddress
-      }).then(() => {
-        let routeData = this.$router.resolve({path: '/remote-access', query: {uid:this.selectedLiderNode.uid, protocol:this.selectedProtocol}});
-        window.open(routeData.href, '_blank');
-      });
+        "sshUsername": this.selectedProtocol == 'ssh'? this.sshUsername: null,
+        "sshPassword": this.selectedProtocol == 'ssh'? this.sshPassword: null,
+        "host": this.selectedProtocol == 'ssh'? this.host: null
+      }
+      // if selected protocol is vnc added remote connection info to vuex
+      if (this.selectedProtocol == "vnc") {
+        this.$store.dispatch('addRemoteConnections', data).then(() => {
+          let routeData = this.$router.resolve({path: '/remote-access', 
+          query: {
+              uid:this.selectedProtocol == 'vnc'? this.selectedLiderNode.uid: null,
+              protocol:this.selectedProtocol
+            }
+          });
+          window.open(routeData.href, '_blank');
+        });
+      } else if (this.selectedProtocol == "ssh") {
+        let routeData = this.$router.resolve({path: '/remote-access', 
+          query: {
+              sshUsername: this.sshUsername,
+              sshPassword: this.sshPassword,
+              host: this.host,
+              protocol: this.selectedProtocol
+            }
+          });
+          window.open(routeData.href, '_blank');
+      }
       this.remoteAccessConfirmDialog = false;
     },
 
@@ -218,7 +237,7 @@ export default {
       params.append("agentJid", this.selectedLiderNode.uid);
       axios.post("/select_agent_info/detail", params).then((response) => {
         if (response.data != "" && response.data != null) {
-          this.ipAddress = response.data.ipAddresses.replace(/'/g, "");
+          this.host = response.data.ipAddresses.replace(/'/g, "");
         } else {
           this.$toast.add({
             severity:'error', 
@@ -244,9 +263,9 @@ export default {
       }
     },
 
-    ipAddress() {
-      if (this.ipAddress.trim()){
-        this.validationIpAddress = false;
+    host() {
+      if (this.host.trim()){
+        this.validationHost = false;
       }
     }
   }
