@@ -1,4 +1,5 @@
 <template>
+    <about-dialog :showAboutDialog="showAboutDialog" @close-about-dialog="showAboutDialog = false"></about-dialog>
      <Menubar :model="menuItems" style="background-color:#20639B; color:#fff">
         <template #start>
             <router-link to="/">
@@ -16,6 +17,13 @@
                 <span class="pi pi-angle-down"></span>
             </Button>
             <Menu id="overlay_menu" ref="settingsMenu" :model="settingItemsMenu" :popup="true"/>
+
+            <Button type="button" class="p-button-link" @click="toggleAbout">
+                <i class="pi pi-question-circle" style="fontSize: 1.2rem"></i>
+                <span class="layout-topbar-icon pi pi-angle-down"></span>
+            </Button>
+            <Menu ref="aboutMenu" :model="aboutItemsMenu" :popup="true"/>
+
             <Button type="button" class="p-button-link" @click="toggleProfile">
                 <i class="pi pi-user" style="fontSize: 1.2rem"></i>
                 <span class="layout-topbar-icon pi pi-angle-down"></span>
@@ -32,11 +40,13 @@
  */
  
 import axios from 'axios';
+import AboutDialog from './Dialogs/About.vue'
 
 export default {
     
     data() {
         return {
+            showAboutDialog: false,
             languages: [
                 {
                     label:'TR', icon:'../../assets/images/flags/tr.png', command: () => {
@@ -59,6 +69,10 @@ export default {
 
     created() {
         this.showMenuBar();
+    },
+
+    components:{
+        AboutDialog
     },
 
     computed: {
@@ -85,6 +99,44 @@ export default {
                     }
                 ]
                 return profileItems;
+            }
+        },
+
+        aboutItemsMenu: {
+            get () {
+                let aboutItems = [
+                    {
+                        label: "Dokümantasyon",
+                        icon:'pi pi-book',
+                        command: () => {
+                            window.open("http://docs.liderahenk.org", '_blank').focus();
+                        }
+                    },
+                    {
+                        label: "Hata Bildir",
+                        icon:'pi pi-exclamation-triangle',
+                        command: () => {
+                            window.open("https://talep.pardus.org.tr/servicedesk/customer/portal/1/user/login?destination=portal%2F1", '_blank').focus();
+                        }
+                    },
+                    {
+                        label: "Forum",
+                        icon:'pi pi-external-link',
+                        command: () => {
+                            window.open("https://forum.pardus.org.tr/c/projeler/liderahenk/30", '_blank').focus();
+                        }
+                    },
+
+                    {
+                        label: "Hakkında",
+                        icon:'pi pi-info-circle',
+                        command: () => {
+                            this.showAboutDialog = true;
+                        }
+                    },
+                    
+                ]
+                return aboutItems;
             }
         },
 
@@ -247,6 +299,9 @@ export default {
         
         toggleProfile(event) {
             this.$refs.profileMenu.toggle(event);
+        },
+        toggleAbout(event) {
+            this.$refs.aboutMenu.toggle(event);
         },
 
         toggleLanguage(event) {

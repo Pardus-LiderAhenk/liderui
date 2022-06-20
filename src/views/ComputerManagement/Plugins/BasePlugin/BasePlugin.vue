@@ -10,13 +10,15 @@
     :modal="true" 
     @hide="closeTaskDialog('cancel')"
   >
-    <div class="confirmation-content">
-      <span v-if="scheduledParam == null">
-        <i class="pi pi-info-circle" style="font-size: 1.5rem"></i>&nbsp;
+    <div class="confirmation-content"  v-if="scheduledParam == null">
+      <i class="pi pi-info-circle mr-3" style="font-size: 1.5rem"></i>&nbsp;
+      <span>
         {{ $t('computer.plugins.base_plugin.task_confirm_question') }}
       </span>
-      <span v-if="scheduledParam">
-        <i class="pi pi-clock" style="font-size: 1.5rem"></i>&nbsp;
+    </div>
+    <div class="confirmation-content"  v-if="scheduledParam">
+      <i class="pi pi-clock mr-3" style="font-size: 1.5rem"></i>&nbsp;
+      <span>
         {{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}
       </span>
     </div>
@@ -447,6 +449,10 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.confirmation-content {
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+}
 </style>
