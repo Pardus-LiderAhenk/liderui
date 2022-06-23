@@ -7,11 +7,11 @@
     <div class="confirmation-content">
       <span v-if="selectedProtocol === 'vnc'">
         <i class="pi pi-info-circle" style="font-size: 1.5rem"></i>&nbsp;
-        Uzak masaüstü erişimi sağlanacaktır, emin misiniz?
+        {{$t('computer.plugins.remote_access.remote_desktop_access_will_be_provided_are_you_sure')}}
       </span>
       <span v-if="selectedProtocol === 'ssh'">
         <i class="pi pi-info-circle" style="font-size: 1.5rem"></i>&nbsp;
-        SSH erişimi sağlanacaktır, emin misiniz?
+        {{$t('computer.plugins.remote_access.ssh_access_will_be_provided_are_you_sure')}}
       </span>
     </div>
     <template #footer>
@@ -44,7 +44,7 @@
       <Button
           icon="pi pi-play"
           class="p-button-raised p-button-sm"
-          title="Bağlan"
+          :title="$t('computer.plugins.remote_access.connect')"
           @click.prevent="showRemoteAccessConfirmDialog"
         >
         </Button>
@@ -52,7 +52,7 @@
       <template #default>
         <div class="p-fluid">
           <div class="p-field p-col-6">
-              <label>Uzak Bağlantı Seçenekleri</label>
+              <label>{{$t('computer.plugins.remote_access.remote_access_option')}}</label>
               <Dropdown
                 v-model="selectedProtocol"
                 :options="protocols"
@@ -74,9 +74,9 @@
             </div>
           </div>
         </Fieldset>
-        <Fieldset class="p-fluid p-col-6" v-if="selectedProtocol === 'ssh'" legend="SSH Bağlantı Ayarları">
+        <Fieldset class="p-fluid p-col-6" v-if="selectedProtocol === 'ssh'" :legend="$t('computer.plugins.remote_access.ssh_connection_settings')">
           <div class="p-field p-col-12">
-            <label>{{ "IP Adresi" }}</label>
+            <label>{{$t('computer.plugins.remote_access.ip_address')}}</label>
             <div class="p-inputgroup">
               <InputText 
                 type="text"
@@ -84,32 +84,32 @@
                 :class="validationHost ? 'p-invalid': ''" 
                 placeholder="192.168.*.*"
               />
-              <Button icon="pi pi-undo" title="IP Adresi Getir" @click="getIpAddress"/>
+              <Button icon="pi pi-undo" :title="$t('computer.plugins.remote_access.get_ip_address')" @click="getIpAddress"/>
             </div>
             <small v-show="validationHost" class="p-error">
-              IP Adresi adı boş bırakılamaz
+              {{$t('computer.plugins.remote_access.ip_address_cannot_be_null')}}
             </small>
           </div>
           <div class="p-field p-col-12">
-              <label>{{ "Kullanıcı Adı" }}</label>
+              <label>{{$t('computer.plugins.remote_access.username')}}</label>
               <InputText 
                 type="text"
                 v-model="sshUsername" 
                 :class="validationUsername ? 'p-invalid': ''" 
-                placeholder="Kullanıcı adı"
+                :placeholder="$t('computer.plugins.remote_access.username')"
               />
               <small v-show="validationUsername" class="p-error">
-                Kullanıcı adı boş bırakılamaz
+                {{$t('computer.plugins.remote_access.username_cannot_be_null')}}
               </small>
           </div>
           <div class="p-field p-col-12">
-              <label>{{ "Kullanıcı Parolası" }}</label>
+              <label>{{$t('computer.plugins.remote_access.user_password')}}</label>
               <Password :class="validationPassword ? 'p-invalid': ''"  
                 v-model="sshPassword" :feedback="false" toggleMask
-                placeholder="Kullanıcı parolası"
+                :placeholder="$t('computer.plugins.remote_access.user_password_cannot_be_null')"
               />
               <small v-show="validationPassword" class="p-error">
-                Kullanıcı parolası boş bırakılamaz
+                 {{$t('computer.plugins.remote_access.user_password_cannot_be_null')}}
               </small>
           </div>
         </Fieldset>
@@ -139,8 +139,8 @@ export default {
       openRemoteAccessModal: false,
       remoteAccessDisconnect:false,
       protocols: [
-        {label: 'VNC İle Bağlan', value: 'vnc'},
-        {label: 'SSH İle Bağlan', value: 'ssh'}
+        {label: this.$t('computer.plugins.remote_access.connect_with_vnc'), value: 'vnc'},
+        {label: this.$t('computer.plugins.remote_access.connect_with_ssh'), value: 'ssh'}
       ],
       selectedProtocol: 'vnc',
       sshUsername: "",
@@ -241,7 +241,7 @@ export default {
         } else {
           this.$toast.add({
             severity:'error', 
-            detail: "Ip adresi getirilirken hata oluştu", 
+            detail: this.$t('computer.plugins.remote_access.an_error_occurred_while_fetching_the_ip_address'), 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
           });

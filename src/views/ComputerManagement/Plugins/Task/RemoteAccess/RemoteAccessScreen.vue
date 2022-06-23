@@ -9,8 +9,8 @@
     :executeTask="executeTask"
   >
   <template #pluginTitleButton>
-        <Button label="Yeniden Bağlan" class="p-button-raised  p-button-info" @click="reconnect();" style="margin-right:10px"/>
-        <Button label="Bağlantıyı kapat" class="p-button-raised  p-button-danger" @click="closeConnection();"/>
+        <Button :label="$t('computer.plugins.remote_access.reconnect')" class="p-button-raised  p-button-info" @click="reconnect();" style="margin-right:10px"/>
+        <Button :label="$t('computer.plugins.remote_access.close_connection')" class="p-button-raised  p-button-danger" @click="closeConnection();"/>
         
       </template>
     <template #pluginTitle>
@@ -102,22 +102,22 @@ export default {
   },
   methods: {
     sendTaskRemoteAccess() {
-        this.status_messages.push({severity: 'info', content: "Ahenk'e bağlantı isteği gönderiliyor..."});
+        this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.request_message")});
         this.task = { ...this.pluginTask };
         this.task.commandId = "SETUP-VNC-SERVER";
         this.task.parameterMap = {
           permission: this.connectionData.permission,
         };
         this.executeTask = true;
-        this.status_messages.push({severity: 'success', content: "Bağlantı isteği gönderildi..."});
+        this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.connection_request_sent")});
     },
 
     remoteAccessResponse(message) {
       if (message.commandClsId == "SETUP-VNC-SERVER") {
         let result = JSON.parse(message.result.responseDataStr);
         this.connection_info = result;
-        this.status_messages.push({severity: 'info', content: "Bağlantı bilgileri alındı. Erişim kontrol ediliyor..."},);
-        this.title = "Remote Access - " + message.commandExecution.uid;
+        this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.checking_access")},);
+        this.title =  this.$t("computer.plugins.remote_access.remote_destktop_access") + " - " + message.commandExecution.uid;
         this.start_connection();
       }
     },
@@ -144,15 +144,15 @@ export default {
       checkhostFormdata.append('host', this.connection_info.host);
       checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? this.defaultSshPort : this.connection_info.port);
       const hostResponse = await axios.post('/checkhost',checkhostFormdata);
-      this.status_messages.push({severity: 'success', content: "Ahenk erişimi " + hostResponse.data + ' adresinden sağlanacak...'},);
+      this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.client_access") + hostResponse.data },);
       if (this.connectionData.protocol == 'ssh') {
-        this.title = "SSH Connection - " + hostResponse.data;
+        this.title = this.$t("computer.plugins.remote_access.ssh_connection") +" - " + hostResponse.data;
       }  
       data.append("host", hostResponse.data);
       const sremoteResponse = await  axios.post('/sendremote', data);
       this.connect();
       if (this.permission == "yes") {
-          this.status_messages.push({severity: 'success', content: "Kullanıcıya erişim isteği gönderildi. Cevap bekleniyor... "},);
+          this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.waiting_response")},);
       }
     },
 
@@ -255,7 +255,7 @@ export default {
           // Connection has closed
           case Guacamole.Tunnel.State.CLOSED:
             this.connectionState = states.DISCONNECTED;
-            this.status_messages.push({severity: 'warning', content: "Kullanıcının izin vermesi bekleniyor..."},);
+            this.status_messages.push({severity: 'warning', content: this.$t("computer.plugins.remote_access.waiting_for_the_user_to_give_permission")},);
             break;
         }
       };
@@ -270,7 +270,7 @@ export default {
             break;
           case 2:
             this.connectionState = states.WAITING;
-            this.status = "Kullanıcının izin vermesi bekleniyor";
+            this.status = this.$t("computer.plugins.remote_access.waiting_for_the_user_to_give_permission");
             //this.connected = false;
             break;
           case 3:
@@ -289,7 +289,7 @@ export default {
           case 5:
             // disconnected, disconnecting
             this.status =
-              "Kullanıcı Oturum Açmamış. \n Bağlantı kurabilmek için lütfen kullanıcıdan oturum açmasını isteyiniz.";
+              this.$t("computer.plugins.remote_access.not_logged_user_message");
             break;
         }
       };

@@ -16,8 +16,8 @@
           </template>
 
           <template #end>
-            <Button v-if="!connected" icon="pi pi-times" class="p-button-primary" label="Yeniden Bağlan" @click="connect()"/>
-            <Button icon="pi pi-times" class="p-button-danger" label="Bağlantıyı Kapat" @click="closeConnection()"/>
+            <Button v-if="!connected" icon="pi pi-times" class="p-button-primary" :label="$t('computer.plugins.remote_access.reconnect')" @click="connect()"/>
+            <Button icon="pi pi-times" class="p-button-danger" :label="$t('computer.plugins.remote_access.close_connection')" @click="closeConnection()"/>
           </template>
         </Toolbar>
       </div>
@@ -199,7 +199,7 @@ export default {
           case Guacamole.Tunnel.State.CLOSED:
             this.connectionState = states.DISCONNECTED;
             console.log('state 4');
-            this.status = "Kullanıcı Reddetti";
+            this.status = $t('computer.plugins.remote_access.user_denied');
             break;
         }
       };
@@ -217,7 +217,7 @@ export default {
           case 2:
             this.connectionState = states.WAITING;
             console.log('state 7');
-            this.status = "Kullanıcının izin vermesi bekleniyor";
+            this.status = $t('computer.plugins.remote_access.waiting_for_the_user_to_give_permission');
             this.isconnected = false;
             break;
           case 3:
@@ -237,7 +237,7 @@ export default {
           case 5:
             // disconnected, disconnecting
             console.log('state 10')
-            this.status = "Kullanıcı Oturum Açmamış. \n Bağlantı kurabilmek için lütfen kullanıcıdan oturum açmasını isteyiniz.";
+            this.status = $t('computer.plugins.remote_access.not_logged_user_message');
             break;
         }
       };
