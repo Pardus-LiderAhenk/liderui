@@ -1,7 +1,7 @@
 <template>
     <div>
         <Dialog
-            header="Liderahenk MYS Hakkında" 
+            :header="$t('about.more_information')" 
             :modal="true"
             :style="{ width: '25vw'}"
             v-model:visible="showDialog"
@@ -10,20 +10,19 @@
                 <div class="p-fluid">
                     <div class="p-field">
                         <span>
-                            Kurumsal ağ üzerindeki sistemleri ve kullanıcıları merkezden yönetilebilmeyi, 
-                            izlemeyi ve denetlemeyi sağlayan, açık kaynaklı bir yazılım sistemidir.
+                            {{$t('about.about_us_message')}}    
                         </span>
                     </div>
                     <div class="p-field">
                         <span>
-                            Versiyon: Liderahenk {{version}}
+                            {{$t('about.version')}} {{version}}
                         </span>
                     </div>
                     <div class="p-field">
                         <span>
                             <i class="pi pi-link"></i>&nbsp;
                             <a href="http://liderahenk.org/" type="primary" target="_blank">
-                                Daha fazla bilgi için ...
+                                {{$t('about.more_information')}}
                             </a>
                         </span>
                     </div>

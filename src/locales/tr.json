@@ -1601,5 +1601,15 @@
         "value_cannot_be_null":"Kullanıcı adı, bilgisayar adı veya komut değeri boş bırakılamaz"
         
         
+    },
+    "about":{
+        "about_lider": "Liderahenk MYS Hakkında",
+        "about_us_message": "Kurumsal ağ üzerindeki sistemleri ve kullanıcıları merkezden yönetilebilmeyi, izlemeyi ve denetlemeyi sağlayan, açık kaynaklı bir yazılım sistemidir.",
+        "version": "Versiyon: Liderahenk",
+        "more_information": "Daha fazla bilgi için ...",
+        "document": "Dokümantasyon",
+        "report_bug": "Hata Bildir",
+        "forum": "Forum",
+        "about": "Hakkında"
     }
 }

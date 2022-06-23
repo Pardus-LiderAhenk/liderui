@@ -1599,5 +1599,15 @@
         "authorization_group_successfully_update":"Authority group successfully updated",
         "an_error_occurred_while_updating_the_authorization_group":"An error occurred while updating the authorization group.",
         "value_cannot_be_null":"Username, computer name, or command value cannot be null."
+    },
+    "about":{
+        "about_lider": "About Liderahenk MYS",
+        "about_us_message": "It is an open source software system that enables centralized management, monitoring and control of systems and users on the corporate network.",
+        "version": "Version: Liderahenk",
+        "more_information": "For more information ",
+        "document": "Document",
+        "report_bug": "Report Bug",
+        "forum": "Forum",
+        "about": "About"
     }
 }

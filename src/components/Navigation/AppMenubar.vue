@@ -106,21 +106,21 @@ export default {
             get () {
                 let aboutItems = [
                     {
-                        label: "Dokümantasyon",
+                        label: this.$t('about.document'),
                         icon:'pi pi-book',
                         command: () => {
                             window.open("http://docs.liderahenk.org", '_blank').focus();
                         }
                     },
                     {
-                        label: "Hata Bildir",
+                        label: this.$t('about.report_bug'),
                         icon:'pi pi-exclamation-triangle',
                         command: () => {
                             window.open("https://talep.pardus.org.tr/servicedesk/customer/portal/1/user/login?destination=portal%2F1", '_blank').focus();
                         }
                     },
                     {
-                        label: "Forum",
+                        label: this.$t('about.forum'),
                         icon:'pi pi-external-link',
                         command: () => {
                             window.open("https://forum.pardus.org.tr/c/projeler/liderahenk/30", '_blank').focus();
@@ -128,7 +128,7 @@ export default {
                     },
 
                     {
-                        label: "Hakkında",
+                        label: this.$t('about.about'),
                         icon:'pi pi-info-circle',
                         command: () => {
                             this.showAboutDialog = true;
