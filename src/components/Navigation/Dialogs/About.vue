@@ -1,7 +1,7 @@
 <template>
     <div>
         <Dialog
-            :header="$t('about.more_information')" 
+            :header="$t('about.about')" 
             :modal="true"
             :style="{ width: '25vw'}"
             v-model:visible="showDialog"
