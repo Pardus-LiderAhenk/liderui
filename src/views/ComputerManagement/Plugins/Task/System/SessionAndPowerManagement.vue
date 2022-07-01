@@ -7,14 +7,14 @@
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.session_and_power_management.header") }}
       </template>
       <template #default>
         <div class="p-grid">
           <div class="p-col session">
             <div class="p-grid p-jc-center" style="margin-top:10px">
-              <Button icon="fas fa-sign-out-alt" class="p-button-success" 
+              <Button icon="fas fa-sign-out-alt" class="session-button p-button-success" 
               @click.prevent="showConfirmDialogForTask('MANAGE')">
               </Button>
             </div>
@@ -24,7 +24,7 @@
           </div>
           <div class="p-col session">
             <div class="p-grid p-jc-center" style="margin-top:10px">
-              <Button icon="fa fa-sync-alt"  
+              <Button icon="fa fa-sync-alt" class="session-button"
               @click.prevent="showConfirmDialogForTask('MACHINE_RESTART')">
               </Button>
             </div>
@@ -34,7 +34,7 @@
           </div>
           <div class="p-col session">
             <div class="p-grid p-jc-center" style="margin-top:10px">
-            <Button icon="fa fa-power-off" class="p-button-danger" 
+            <Button icon="fa fa-power-off" class="session-button p-button-danger" 
              @click.prevent="showConfirmDialogForTask('MACHINE_SHUTDOWN')">
             </Button>
             </div>
@@ -101,5 +101,8 @@ export default {
 }
 .session:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.session-button {
+  height: 33px; width: 33px
 }
 </style>

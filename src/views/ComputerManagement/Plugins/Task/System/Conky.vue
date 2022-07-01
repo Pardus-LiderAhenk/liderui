@@ -7,10 +7,10 @@
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.conky.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <div>
           <Button
             icon="pi pi-trash"
@@ -116,8 +116,7 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.conky.description"),
-      pluginUrl:
-        "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/sistem_gozlemcisi/",
+      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/sistem_gozlemcisi/",
       conkyMessage: "",
       conkyValidation: false,
       templates: [],
@@ -128,30 +127,27 @@ export default {
 
   mounted() {
     const params = new FormData();
-    axios
-      .post(process.env.VUE_APP_URL + "/conky/list", params)
-      .then((response) => {
-        if (response.data != null || response.data != "") {
-          this.templateList = response.data;
-          for (let index = 0; index < response.data.length; index++) {
-            const element = response.data[index];
-            this.templates.push({
-              label: element.label,
-              id: element.id,
-              contents: element.contents,
-              settings: element.settings,
-            });
-          }
+    axios.post("/conky/list", params).then((response) => {
+      if (response.data != null || response.data != "") {
+        for (let index = 0; index < response.data.length; index++) {
+          const element = response.data[index];
+          this.templates.push({
+            label: element.label,
+            id: element.id,
+            contents: element.contents,
+            settings: element.settings,
+          });
         }
-      })
-      .catch((error) => {
-        this.$toast.add({
-          severity: "error",
-          detail: this.$t("computer.plugins.conky.conky_error_message") +" \n" + error,
-          summary: this.$t("computer.task.toast_summary"),
-          life: 3000,
-        });
+      }
+    })
+    .catch((error) => {
+      this.$toast.add({
+        severity: "error",
+        detail: this.$t("computer.plugins.conky.conky_error_message") +" \n" + error,
+        summary: this.$t("computer.task.toast_summary"),
+        life: 3000,
       });
+    });
   },
 
   methods: {

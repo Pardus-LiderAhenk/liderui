@@ -109,7 +109,7 @@
         </div>
         <div class="p-field p-grid" v-if="showPasswordForm">
           <label class="p-col-4" >
-            <i class="pi pi-lock"></i> &nbsp;{{ $t('computer.plugins.password.new_password') }}
+            <i class="pi pi-lock"></i> &nbsp;{{ $t('password.new_password') }}
           </label>
           <div class="p-col-8">
             <div>
@@ -119,27 +119,27 @@
                 :class="validationErrors.new_password ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'"  
                 onpaste="return false"
                 strongRegex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})" 
-                :weakLabel="$t('computer.plugins.password.weak')"
-                :mediumLabel="$t('computer.plugins.password.medium')"
-                :strongLabel="$t('computer.plugins.password.strong')"
-                :promptLabel="$t('computer.plugins.password.password_prompt')"
-                :placeholder="$t('computer.plugins.password.new_password')">
+                :weakLabel="$t('password.weak')"
+                :mediumLabel="$t('password.medium')"
+                :strongLabel="$t('password.strong')"
+                :promptLabel="$t('password.password_prompt')"
+                :placeholder="$t('password.new_password')">
                   <template #footer="sp">
                     {{sp.level}}
                     <Divider/>
                     <ul class="p-pl-2 p-ml-2 p-mt-0" style="line-height: 1.5">
-                      <li>{{ $t('computer.plugins.password.lowercase_message') }}</li>
-                      <li>{{ $t('computer.plugins.password.uppercase_message') }}</li>
-                      <li>{{ $t('computer.plugins.password.number_message') }}</li>
-                      <li>{{ $t('computer.plugins.password.password_length_message') }}</li>
-                      <li>{{ $t('computer.plugins.password.does_not_support_message') }}</li>
+                      <li>{{ $t('password.lowercase_message') }}</li>
+                      <li>{{ $t('password.uppercase_message') }}</li>
+                      <li>{{ $t('password.number_message') }}</li>
+                      <li>{{ $t('password.password_length_message') }}</li>
+                      <li>{{ $t('password.does_not_support_message') }}</li>
                     </ul>
                   </template>
                 </Password>
                 <Button 
                 icon="pi pi-key" 
                 class="p-button-sm" 
-                :title='$t("computer.plugins.password.generate_password")' 
+                :title='$t("password.generate_password")' 
                 @click="generatePassword" :disabled="showPasswordForm ? false : true"
                 />
               </div>
@@ -153,7 +153,7 @@
         </div>
         <div class="p-field p-grid" v-if="showPasswordForm">
           <label class="p-col-4" >
-            <i class="pi pi-lock"></i> &nbsp;{{ $t('computer.plugins.password.confirm_password') }}
+            <i class="pi pi-lock"></i> &nbsp;{{ $t('password.confirm_password') }}
           </label>
           <div class="p-col-8">
             <div >
@@ -164,23 +164,23 @@
                 onpaste="return false"
                 strongRegex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})" 
                 :weakLabel="$t('computer.plugins.password.weak')"
-                :mediumLabel="$t('computer.plugins.password.medium')"
-                :strongLabel="$t('computer.plugins.password.strong')"
-                :promptLabel="$t('computer.plugins.password.password_prompt')"
-                :placeholder="$t('computer.plugins.password.confirm_password')">
+                :mediumLabel="$t('password.medium')"
+                :strongLabel="$t('password.strong')"
+                :promptLabel="$t('password.password_prompt')"
+                :placeholder="$t('password.confirm_password')">
                   <template #footer="sp">
                     {{sp.level}}
                     <Divider />
                     <ul class="p-pl-2 p-ml-2 p-mt-0" style="line-height: 1.5">
-                      <li>{{ $t('computer.plugins.password.lowercase_message') }}</li>
-                      <li>{{ $t('computer.plugins.password.uppercase_message') }}</li>
-                      <li>{{ $t('computer.plugins.password.number_message') }}</li>
-                      <li>{{ $t('computer.plugins.password.password_length_message') }}</li>
-                      <li>{{ $t('computer.plugins.password.does_not_support_message') }}</li>
+                      <li>{{ $t('password.lowercase_message') }}</li>
+                      <li>{{ $t('password.uppercase_message') }}</li>
+                      <li>{{ $t('password.number_message') }}</li>
+                      <li>{{ $t('password.password_length_message') }}</li>
+                      <li>{{ $t('password.does_not_support_message') }}</li>
                     </ul>
                   </template>
                 </Password>
-                <Button icon="pi pi-key" class="p-button-sm" :title='$t("computer.plugins.password.generate_password")' 
+                <Button icon="pi pi-key" class="p-button-sm" :title='$t("password.generate_password")' 
                   @click="generatePassword"
                   :disabled="showPasswordForm ? false : true"
                 />
@@ -204,7 +204,7 @@
         />
         <Button class="p-button-sm" 
           :label="selectedUser ? $t('computer.plugins.local_user.update'): $t('computer.plugins.local_user.add')" 
-          :icon="selectedUser ? 'pi pi-user-edit': 'pi pi-user-plus'"
+          :icon="selectedUser ? 'pi pi-refresh': 'pi pi-user-plus'"
           @click.prevent="sendTaskForLocaUser(selectedUser ? 'EDIT_USER': 'ADD_USER')"
         />
       </template>
@@ -218,10 +218,10 @@
       :pluginTask="task"
       :executeTask="executeTask"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.local_user.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <Button
           v-if="users"
           icon="pi pi-user-plus"
@@ -435,19 +435,19 @@ export default {
         if (this.userForm.password.trim()){
           this.validationErrors['password'] = true;
           if (!/[a-z]/.test(this.userForm.password)) {
-            this.passwordErrorMessage = this.$t('computer.plugins.password.lowercase_message')+" (a-z)";
+            this.passwordErrorMessage = this.$t('password.lowercase_message')+" (a-z)";
             return;
           } else if (!/[A-Z]/.test(this.userForm.password)) {
-            this.passwordErrorMessage = this.$t('computer.plugins.password.uppercase_message')+" (A-Z)";
+            this.passwordErrorMessage = this.$t('password.uppercase_message')+" (A-Z)";
             return;
           } else if (!/[0-9]/.test(this.userForm.password)) {
-            this.passwordErrorMessage = this.$t('computer.plugins.password.number_message')+" (0-9)";
+            this.passwordErrorMessage = this.$t('password.number_message')+" (0-9)";
             return;
           } else if (/[*]/.test(this.userForm.password)) {
-            this.passwordErrorMessage = this.$t('computer.plugins.password.does_not_support_message');
+            this.passwordErrorMessage = this.$t('password.does_not_support_message');
             return;
           } else if (this.userForm.password.length < 6) {
-            this.passwordErrorMessage = this.$t('computer.plugins.password.password_length_message');
+            this.passwordErrorMessage = this.$t('password.password_length_message');
             return;
           } else {
             this.passwordErrorMessage = '';
@@ -456,7 +456,7 @@ export default {
         }
         if (this.userForm.password != this.userForm.confirmPassword) {
           this.validationErrors['confirmPassword'] = true;
-          this.passwordErrorMessage = this.$t('computer.plugins.password.match_password_message');
+          this.passwordErrorMessage = this.$t('password.match_password_message');
           return;
         } else {
           this.passwordErrorMessage = '';

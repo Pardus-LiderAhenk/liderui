@@ -1,5 +1,4 @@
 <template>
-<br>
   <div class="plugin-card">
     <Card>
         <template #title>
@@ -21,7 +20,7 @@
         </template>
       <template #content>
         <div class="p-grid p-flex-column">
-          <DataTable :value="taskList" class="p-datatable-sm  editable-cells-table p-col"
+          <DataTable :value="taskList" class="p-datatable-sm p-col"
             :paginator="true" :rows="10" ref="dt"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
             :rowsPerPageOptions="[10,25,50,100,500,1000]"  style="margin-top: 2em"
@@ -32,7 +31,7 @@
                 <div class="p-d-flex p-jc-between">
                     <div style="text-align: left">
                         <Button v-if="taskList.length > 0"
-                            class="p-button-sm" icon="pi pi-external-link"
+                            class="p-button-sm" icon="pi pi-download"
                             :label="$t('computer.task_history.export')"
                             @click="exportCSV($event)">
                         </Button>
@@ -246,7 +245,8 @@ export default {
             detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
-        })})
+            });
+        });
     },
 
     executedTaskDetail(data) {

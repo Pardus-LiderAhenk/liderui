@@ -9,10 +9,10 @@
       :pluginTask="task"
       :executeTask="executeTask"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.installed_packages.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <div>
           <Button
           v-if="packages"
@@ -32,17 +32,16 @@
         </div>
       </template> 
       <template #default>
-        <div class="p-grid p-flex-column">
-          <DataTable :value="packages" class="p-datatable-sm table-no-select-all p-col"
-          v-model:selection="selectedPackages" dataKey="id"
-          :paginator="true" :rows="10" 
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-          :rowsPerPageOptions="[10,25,50]" 
-          :metaKeySelection="false" 
-          style="margin-top: 2em"
-          @rowSelect="onRowSelect" 
-          @rowUnselect="onRowUnselect"
-          v-model:filters="filters"
+        <div class="p-flex-column">
+          <DataTable :value="packages" class="p-datatable-sm"
+            v-model:selection="selectedPackages" dataKey="id"
+            :paginator="true" :rows="10" 
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+            :rowsPerPageOptions="[10,25,50]" 
+            :metaKeySelection="false" 
+            @rowSelect="onRowSelect" 
+            @rowUnselect="onRowUnselect"
+            v-model:filters="filters"
           >
             <template #header>
               <div class="p-d-flex p-jc-end">
@@ -276,15 +275,6 @@ export default {
 ::v-deep(.p-paginator) {
     .p-paginator-current {
         margin-left: auto;
-    }
-}
-
-::v-deep(.p-progressbar) {
-    height: .5rem;
-    background-color: #D8DADC;
-
-    .p-progressbar-value {
-        background-color: #607D8B;
     }
 }
 

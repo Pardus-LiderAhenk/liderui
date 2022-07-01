@@ -9,10 +9,10 @@
       :pluginTask="task"
       :executeTask="executeTask"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.service_management.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <div>
           <Button
           v-if="services != null && services.length > 0"
@@ -66,10 +66,10 @@
               <Column field="serviceStatus" :header="$t('computer.plugins.service_management.status')" style="width: 10%">
                 <template #body="slotProps">
                   <Badge
-                  :value="slotProps.data.serviceStatus == 'active' || slotProps.data.serviceStatus == 'start'? 
-                  $t('computer.plugins.service_management.active'): 
-                  $t('computer.plugins.service_management.inactive')" 
-                  :severity="slotProps.data.serviceStatus == 'active' || slotProps.data.serviceStatus == 'start'? 'success': 'danger'">
+                    :value="slotProps.data.serviceStatus == 'active' || slotProps.data.serviceStatus == 'start'? 
+                    $t('computer.plugins.service_management.active'): 
+                    $t('computer.plugins.service_management.inactive')" 
+                    :severity="slotProps.data.serviceStatus == 'active' || slotProps.data.serviceStatus == 'start'? 'success': 'danger'">
                   </Badge>
                 </template>
               </Column>
@@ -79,20 +79,20 @@
               >
                 <template #body="slotProps">
                   <Dropdown 
-                  v-model="slotProps.data.serviceStatus" 
-                  style="min-width: 100%;" 
-                  :disabled="slotProps.data.selectDisabled"
-                  :options="[{
-                    label: $t('computer.plugins.service_management.active'), 
-                    value: 'active'
-                    },
-                    {
-                      label: $t('computer.plugins.service_management.inactive'),
-                      value: 'inactive'
-                    }]"
-                  optionLabel="label" 
-                  optionValue="value" 
-                  :placeholder="$t('computer.plugins.service_management.select')" 
+                    v-model="slotProps.data.serviceStatus" 
+                    style="min-width: 100%;" 
+                    :disabled="slotProps.data.selectDisabled"
+                    :options="[{
+                      label: $t('computer.plugins.service_management.active'), 
+                      value: 'active'
+                      },
+                      {
+                        label: $t('computer.plugins.service_management.inactive'),
+                        value: 'inactive'
+                      }]"
+                    optionLabel="label" 
+                    optionValue="value" 
+                    :placeholder="$t('computer.plugins.service_management.select')" 
                   />
                 </template>
               </Column>
@@ -100,74 +100,74 @@
               <Column field="startAuto" :header="$t('computer.plugins.service_management.auto_start')" style="width: 10%">
                 <template #body="slotProps">
                   <Badge
-                  :value="slotProps.data.startAuto == 'enabled' ? $t('computer.plugins.service_management.enabled'): 
-                  $t('computer.plugins.service_management.disabled')" 
-                  :severity="slotProps.data.startAuto == 'enabled' ? 'success': 'danger'">
+                    :value="slotProps.data.startAuto == 'enabled' ? $t('computer.plugins.service_management.enabled'): 
+                    $t('computer.plugins.service_management.disabled')" 
+                    :severity="slotProps.data.startAuto == 'enabled' ? 'success': 'danger'">
                   </Badge>
                 </template>
               </Column>
               <Column field="startAuto" 
-              :exportable="false" 
-              :header="$t('computer.plugins.service_management.change')" 
-              style="width: 10%">
+                :exportable="false" 
+                :header="$t('computer.plugins.service_management.change')" 
+                style="width: 10%">
                 <template #body="slotProps">
                   <Dropdown 
-                  v-model="slotProps.data.startAuto" 
-                  style="min-width: 100%;" 
-                  :id="slotProps.data.id" 
-                  :disabled="slotProps.data.selectDisabled"
-                  :options="[{label: $t('computer.plugins.service_management.enabled'), value: 'enabled'},
-                  {label: $t('computer.plugins.service_management.disabled'), value: 'disabled'}]"
-                  optionLabel="label" 
-                  optionValue="value" 
-                  :placeholder="$t('computer.plugins.service_management.select')" 
+                    v-model="slotProps.data.startAuto" 
+                    style="min-width: 100%;" 
+                    :id="slotProps.data.id" 
+                    :disabled="slotProps.data.selectDisabled"
+                    :options="[{label: $t('computer.plugins.service_management.enabled'), value: 'enabled'},
+                    {label: $t('computer.plugins.service_management.disabled'), value: 'disabled'}]"
+                    optionLabel="label" 
+                    optionValue="value" 
+                    :placeholder="$t('computer.plugins.service_management.select')" 
                   />
                 </template>
               </Column>
           </DataTable>
           <div class="p-col" v-if="services != null && services.length > 0">
             <Button type="button" 
-            :label="$t('computer.plugins.service_management.view_selected_services')" 
-            @click="toggle($event)" 
-            icon="pi pi-info-circle" 
-            class="p-button-sm" 
-            :badge="serviceRequestParameters != null && serviceRequestParameters.length > 0 ? serviceRequestParameters.length: '0'" 
-            badgeClass="p-badge-danger" />
+              :label="$t('computer.plugins.service_management.view_selected_services')" 
+              @click="toggle($event)" 
+              icon="pi pi-info-circle" 
+              class="p-button-sm" 
+              :badge="serviceRequestParameters != null && serviceRequestParameters.length > 0 ? serviceRequestParameters.length: '0'" 
+              badgeClass="p-badge-danger" />
             <OverlayPanel 
-            ref="servicesOp" 
-            appendTo="body" 
-            :showCloseIcon="false" 
-            id="overlay_panel" 
-            :style="{width: '30vw'}" 
-            :breakpoints="{'960px': '75vw'}"
+              ref="servicesOp" 
+              appendTo="body" 
+              :showCloseIcon="false" 
+              id="overlay_panel" 
+              :style="{width: '30vw'}" 
+              :breakpoints="{'960px': '75vw'}"
             >
               <h5 class="text-center">{{$t('computer.plugins.service_management.selected_services')}}</h5>
               <DataTable 
-              :value="serviceRequestParameters" 
-              responsiveLayout="scroll" 
-              scrollable="true" 
-              scrollHeight="400px" 
-              class="p-datatable-sm" 
-              :metaKeySelection="false"
+                :value="serviceRequestParameters" 
+                responsiveLayout="scroll" 
+                scrollable="true" 
+                scrollHeight="400px" 
+                class="p-datatable-sm" 
+                :metaKeySelection="false"
               >
                 <Column field="serviceName" :header="$t('computer.plugins.service_management.service_name')"></Column>
                 <Column field="serviceStatus" :header="$t('computer.plugins.service_management.status')">
                   <template #body="slotProps">
-                  <Badge
-                  :value="slotProps.data.serviceStatus == 'active' ? $t('computer.plugins.service_management.active'): 
-                  $t('computer.plugins.service_management.inactive')" 
-                  :severity="slotProps.data.serviceStatus == 'active' ? 'success': 'danger'">
-                  </Badge>
-                </template>
+                    <Badge
+                      :value="slotProps.data.serviceStatus == 'active' ? $t('computer.plugins.service_management.active'): 
+                      $t('computer.plugins.service_management.inactive')" 
+                      :severity="slotProps.data.serviceStatus == 'active' ? 'success': 'danger'">
+                    </Badge>
+                  </template>
                 </Column>
                 <Column field="startAuto" :header="$t('computer.plugins.service_management.auto_start')">
                   <template #body="slotProps">
-                  <Badge
-                  :value="slotProps.data.startAuto == 'enabled' ? $t('computer.plugins.service_management.enabled'): 
-                  $t('computer.plugins.service_management.disabled')" 
-                  :severity="slotProps.data.startAuto == 'enabled' ? 'success': 'danger'">
-                  </Badge>
-                </template>
+                    <Badge
+                      :value="slotProps.data.startAuto == 'enabled' ? $t('computer.plugins.service_management.enabled'): 
+                      $t('computer.plugins.service_management.disabled')" 
+                      :severity="slotProps.data.startAuto == 'enabled' ? 'success': 'danger'">
+                    </Badge>
+                  </template>
                 </Column>
               </DataTable>
             </OverlayPanel>
@@ -353,15 +353,6 @@ export default {
 ::v-deep(.p-paginator) {
     .p-paginator-current {
         margin-left: auto;
-    }
-}
-
-::v-deep(.p-progressbar) {
-    height: .5rem;
-    background-color: #D8DADC;
-
-    .p-progressbar-value {
-        background-color: #607D8B;
     }
 }
 

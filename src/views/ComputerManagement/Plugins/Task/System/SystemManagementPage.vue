@@ -1,9 +1,14 @@
 <template>
   <div>
-    <br>
     <div class="p-grid">
-      <div class="p-col-5">
-        <agent-info class="plugin-card" :pluginTask="pluginTaskResourceUsage"></agent-info>
+      <div class="p-col-12 p-md-6 p-lg-5">
+        <agent-info class="plugin-card"
+          :pluginTask="pluginTaskAgentInfo"
+          @move-selected-agent="moveSelectedAgent"
+          @delete-selected-agent="deleteSelectedAgent"
+          @rename-selected-agent="renameSelectedAgent"
+          @add-folder="addFolder">
+        </agent-info>
         <session-and-power-management v-if="sessionAndPowerState" 
         class="plugin-card" 
         :pluginTask="pluginTaskSessionPowerManagement">
@@ -14,7 +19,7 @@
         <ldap-login v-if="ldapLoginState" class="plugin-card" :pluginTask="pluginTaskLdapLogin"></ldap-login>
         <xmessage v-if="xmessageState" class="plugin-card" :pluginTask="pluginTaskXmessage"></xmessage>
       </div>
-      <div class="p-col-7">
+      <div class="p-col-12 p-md-6 p-lg-7">
         <resource-usage v-if="resourceUsageState" class="plugin-card" :pluginTask="pluginTaskResourceUsage"></resource-usage>
         <file-management v-if="fileManagementState" class="plugin-card" :pluginTask="pluginTaskFileManagement"></file-management>
        <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>
@@ -58,6 +63,7 @@ export default {
       pluginTaskXmessage: null,
       pluginTaskFileTransfer: null,
       pluginTaskRemoteAccess: null,
+      pluginTaskAgentInfo: null,
 
       resourceUsageState: false,
       sessionAndPowerState: false,
@@ -87,61 +93,77 @@ export default {
   },
 
   created() {
-    axios
-      .post(
-        process.env.VUE_APP_URL + "/getPluginTaskList",
-        {},
-      )
-      .then((response) => {
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          if (element.page == "resource-usage") {
-            this.pluginTaskResourceUsage = element;
-            this.resourceUsageState = element.state;
-          }
-          if (element.page == "end-sessions") {
-            this.pluginTaskSessionPowerManagement = element;
-            this.sessionAndPowerState = element.state;
-          }
-          if (element.page == "conky") {
-            this.pluginTaskConky = element;
-            this.conkyState = element.state;
-          }
-          if (element.page == "eta-notify") {
-            this.pluginTaskEtaNotify = element;
-            this.etaNotifyState = element.state;
-          }
-          if (element.page == "file-management") {
-            this.pluginTaskFileManagement = element;
-            this.fileManagementState = element.state;
-          }
-          if (element.page == "local-user") {
-            this.pluginTaskLocalUser = element;
-            this.localUserState = element.state;
-          }
-          if (element.page == "ldap-login") {
-            this.pluginTaskLdapLogin = element;
-            this.ldapLoginState = element.state;
-          }
-          if (element.page == "xmessage") {
-            this.pluginTaskXmessage = element;
-            this.xmessageState = element.state;
-          }
-          if (element.page == "file-transfer") {
-            this.pluginTaskFileTransfer = element;
-            this.fileTransferState = element.state;
-          }
-          if (element.page == "remote-access") {
-            this.pluginTaskRemoteAccess = element;
-            this.remoteAccessState = element.state;
-          }
-          if (element.page == "manage-root") {
-            this.pluginTaskManageRoot = element
-            this.manageRootState = element.state;
-          }
+    axios.post("/getPluginTaskList", {}).then((response) => {
+      for (let index = 0; index < response.data.length; index++) {
+        const element = response.data[index];
+        if (element.page == "resource-usage") {
+          this.pluginTaskResourceUsage = element;
+          this.resourceUsageState = element.state;
         }
-      });
+        if (element.page == "end-sessions") {
+          this.pluginTaskSessionPowerManagement = element;
+          this.sessionAndPowerState = element.state;
+        }
+        if (element.page == "conky") {
+          this.pluginTaskConky = element;
+          this.conkyState = element.state;
+        }
+        if (element.page == "eta-notify") {
+          this.pluginTaskEtaNotify = element;
+          this.etaNotifyState = element.state;
+        }
+        if (element.page == "file-management") {
+          this.pluginTaskFileManagement = element;
+          this.fileManagementState = element.state;
+        }
+        if (element.page == "local-user") {
+          this.pluginTaskLocalUser = element;
+          this.localUserState = element.state;
+        }
+        if (element.page == "ldap-login") {
+          this.pluginTaskLdapLogin = element;
+          this.ldapLoginState = element.state;
+        }
+        if (element.page == "xmessage") {
+          this.pluginTaskXmessage = element;
+          this.xmessageState = element.state;
+        }
+        if (element.page == "file-transfer") {
+          this.pluginTaskFileTransfer = element;
+          this.fileTransferState = element.state;
+        }
+        if (element.page == "remote-access") {
+          this.pluginTaskRemoteAccess = element;
+          this.remoteAccessState = element.state;
+        }
+        if (element.page == "manage-root") {
+          this.pluginTaskManageRoot = element
+          this.manageRootState = element.state;
+        }
+        if (element.page == "move-agent") {
+          this.pluginTaskAgentInfo = element
+        }
+      }
+    });
   },
+
+  methods: {
+    moveSelectedAgent(selectedNode, destinationDn) {
+      this.$emit('moveSelectedAgent', selectedNode, destinationDn,);
+    },
+
+    deleteSelectedAgent(selectedNode) {
+      this.$emit('deleteSelectedAgent', selectedNode);
+    },
+
+    renameSelectedAgent(selectedNode) {
+      this.$emit('renameSelectedAgent', selectedNode);
+    },
+
+    addFolder(folder, destinationDn) {
+      this.$emit('addFolder', folder, destinationDn);
+    }
+  }
 };
 </script>
 

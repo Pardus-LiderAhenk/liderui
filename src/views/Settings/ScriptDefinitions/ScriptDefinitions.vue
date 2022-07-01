@@ -133,7 +133,7 @@
                 />
                 <Button 
                 :label="selectedScript ? $t('settings.script_definition.update'): $t('settings.script_definition.save')" 
-                :icon="selectedScript ?'el-icon-refresh': 'pi pi-save'"  
+                :icon="selectedScript ?'pi pi-refresh': 'pi pi-save'"  
                 class="p-button-sm"
                 @click="scriptOperation(selectedScript ? 'update':'add')"
                 />
@@ -232,14 +232,14 @@ export default {
                 this.scripts = response.data;
                 this.updateRowIndex();
             }
-        })
-        .catch((error) => { 
-        this.$toast.add({
-            severity:'error', 
-            detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-            })})
+        }).catch((error) => { 
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
+        });
     },
 
     methods: {
@@ -324,10 +324,6 @@ export default {
                 if (!this.validateForm()) {
                     return;
                 }
-                if (this.isExistScriptName(this.label, this.selectedScript.id)) {
-                    this.validationScriptLabel = true;
-                    return;
-                }
                 const params = {
                     label: this.label,
                     contents: this.contents,
@@ -364,10 +360,6 @@ export default {
                 })
             } else{
                 if (!this.validateForm()) {
-                    return;
-                }
-                if (this.isExistScriptName(this.label, null)) {
-                    this.validationScriptLabel = true;
                     return;
                 }
                 const params = {

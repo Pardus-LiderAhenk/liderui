@@ -1,140 +1,478 @@
 <template>
   <div>
-    <teleport to='body' >
-      <!-- <base-modal v-if="agentInfoModal" @close="showAgentInfoModal(false)"
-        show=true
-        size="sm"
-        showClose=true
+    <!-- Delete Selected Folder Dialog -->
+    <Dialog :style="{width: '30vw'}"
+      :header="$t('computer.agent_info.delete_folder')" 
+      v-model:visible="deleteFolderDialog"  
+      :modal="true" 
+      @hide="deleteFolderDialog = false">
+      <div class="confirmation-content">
+          <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+          <span>{{ $t('computer.agent_info.delete_folder_warn')}}</span>
+      </div>
+      <template #footer>
+      <Button 
+          :label="$t('computer.agent_info.cancel')" 
+          icon="pi pi-times" 
+          @click="deleteFolderDialog = false" 
+          class="p-button-text p-button-sm"
+      />
+      <Button 
+          :label="$t('computer.agent_info.yes')"
+          icon="pi pi-check" 
+          @click="deleteFolder"
+          class="p-button-sm"
+      />
+      </template>
+    </Dialog>
+    <!-- Delete Selected Folder Dialog End -->
+    <!-- Add Folder Dialog -->
+    <Dialog :header="$t('computer.agent_info.add_folder')" v-model:visible="addFolderDialog" 
+        :style="{width: '30vw'}" :modal="true">
+        <div class="p-fluid">
+            <div class="p-field">
+                <label for="folderName">{{$t('computer.agent_info.folder_name')}}</label>
+                <InputText :class="validationFolderName ? 'p-invalid': ''" type="text" v-model="folderName"/>
+                <small v-if="validationFolderName" class="p-error">
+                    {{ $t('computer.agent_info.folder_name_warn')}}
+                </small>
+            </div>
+        </div>
+        <template #footer>
+            <Button :label="$t('computer.agent_info.cancel')" icon="pi pi-times" 
+                @click="addFolderDialog = false" class="p-button-text p-button-sm"
+            />
+            <Button :label="$t('computer.agent_info.add')" icon="pi pi-plus"
+                @click="addFolder" class="p-button-sm"
+            />
+        </template>
+    </Dialog>
+    <!-- Add Folder Dialog End-->
+    <!-- Update Agent Dialog -->
+    <Dialog :style="{width: '20vw'}"
+        :header="$t('computer.agent_info.update_client')" 
+        v-model:visible="updateAgentConfirm"  
+        :modal="true" 
+      >
+      <div class="confirmation-content">
+        <span>
+          <i class="fas fa-info-circle" ></i>&nbsp;
+          {{ $t('computer.agent_info.update_client_confirm_question') }}
+        </span>
+      </div>
+      <template #footer>
+        <Button 
+          :label="$t('computer.agent_info.cancel')" 
+          icon="pi pi-times"
+          @click="updateAgentConfirm = false" 
+          class="p-button-text p-button-sm"
+        />
+        <Button 
+          :label="$t('computer.agent_info.yes')"
+          icon="pi pi-check" 
+          @click="updateAgentInfo"
+          class="p-button-sm"
+        />
+      </template>
+    </Dialog>
+    <!-- Delete Agent Dialog -->
+    <Dialog :style="{width: '20vw'}"
+      :header="$t('computer.agent_info.delete_client')" 
+      v-model:visible="deleteAgentConfirm"  
+      :modal="true" 
+    >
+      <div class="confirmation-content">
+        <span v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedLiderNode.online">
+          <i class="fas fa-info-circle" ></i>&nbsp;
+          {{ $t('computer.agent_info.delete_client_confirm_question_online') }}
+        </span>
+        <span v-else-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && !selectedLiderNode.online">
+          <i class="fas fa-info-circle" ></i>&nbsp;
+          {{ $t('computer.agent_info.delete_client_confirm_question_offline') }}
+        </span>
+      </div>
+      <template #footer>
+        <Button 
+          :label="$t('computer.agent_info.cancel')" 
+          icon="pi pi-times"
+          @click="deleteAgentConfirm = false" 
+          class="p-button-text p-button-sm"
+        />
+        <Button 
+          :label="$t('computer.agent_info.yes')"
+          icon="pi pi-check" 
+          @click="deleteAgent"
+          class="p-button-sm"
+        />
+      </template>
+    </Dialog>
+    <!-- Rename Agent Dialog -->
+    <Dialog :style="{width: '20vw'}"
+        :header="$t('computer.agent_info.rename')" 
+        v-model:visible="renameAgentDialog"  
+        :modal="true" 
+      >
+      <div class="p-fluid">
+        <div class="p-field">
+          <label>{{$t('computer.agent_info.hostname')}}</label>
+          <InputText :class="validationRenameAgent ? 'p-inputtext-sm p-invalid': 'p-inputtext-sm'"  
+            placeholder="pardus" v-model="newHostname" type="text" 
+          />
+          <small v-if="validationRenameAgent" class="p-error">
+            {{$t('computer.agent_info.hostname_input_warn')}}
+          </small>
+        </div>
+        <div class="p-field">
+          <i class="fas fa-info-circle" ></i>&nbsp;
+          <span>{{ $t('computer.agent_info.rename_success') }}</span>
+        </div>
+      </div>
+      <template #footer>
+        <Button 
+          :label="$t('computer.agent_info.cancel')" 
+          icon="pi pi-times"
+          @click="renameAgentDialog = false" 
+          class="p-button-text p-button-sm"
+        />
+        <Button 
+          :label="$t('computer.agent_info.update')"
+          icon="pi pi-refresh" 
+          @click="renameAgent"
+          class="p-button-sm"
+        />
+      </template>
+    </Dialog>
+    <!-- Move Agent Dialog -->
+    <Dialog :header="$t('computer.agent_info.move_agent')" 
+      v-model:visible="moveAgentDialog" 
+      :style="{width: '40vw'}" :modal="true"
+    >
+      <div class="p-grid p-flex-column">
+        <div class="p-col">
+          <tree-component 
+            ref="movetree"
+            loadNodeUrl="/lider/computer/getComputers"
+            loadNodeOuUrl="/lider/computer/getOuDetails"
+            :treeNodeClick="moveTreeNodeClick"
+            :searchFields="searchFields"
+            :isMove="true"
+          />
+        </div>
+        <div class="p-col p-text-center">
+          <small>{{ $t('computer.agent_info.move_agent_info') }}</small>
+        </div>
+      </div>
+      <template #footer>
+        <Button 
+          :label="$t('computer.agent_info.cancel')" 
+          icon="pi pi-times"
+          @click="moveAgentDialog = false" 
+          class="p-button-text p-button-sm">
+        </Button>
+        <Button class="p-button-sm"
+          :label="$t('computer.agent_info.move')"
+          icon="el-icon-rank" 
+          @click="moveAgent" 
         >
-        <template #header class="text-center">
-            {{ $t("computer.agent_info.attributes") }} 
+        </Button>
+      </template>
+    </Dialog>
+    <!-- Node Detail Dialog -->
+    <Dialog
+      :header="$t('computer.agent_info.node_detail')" 
+      :modal="true"
+      :style="{ width: '50vw'}"
+      v-model:visible="showAgentInfoDialog">
+        <TabView style="min-height:50vh;">
+          <TabPanel>
+            <template #header>
+                <i class="pi pi-info-circle"></i>
+                <span>
+                    &nbsp;{{ $t('computer.agent_info.node_detail') }}
+                </span>
+            </template>
+            <DataTable class="p-datatable-sm" 
+              :value="selectedNodeData" responsiveLayout="scroll"
+            >
+              <Column field="label" :header="$t('group_management.attribute')"></Column>
+              <Column field="value" :header="$t('group_management.value')"></Column>
+            </DataTable>
+          </TabPanel>
+          <TabPanel v-if="selectedLiderNode.type == 'AHENK'">
+            <template #header>
+                <i class="el el-icon-data-analysis"></i>
+                <span>
+                    &nbsp;{{ $t('computer.agent_info.client_detail') }}
+                </span>
+            </template>
+            <h4>{{ $t('computer.agent_info.general_info') }}</h4>
+            <div class="p-grid">
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>{{ $t('computer.agent_info.hostname') }}</b></div>
+              <div class="p-col-8">{{ selectedAgentInfo.hostname }}</div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>{{$t("computer.agent_info.mac")}}</b></div>
+              <div class="p-col-8">
+                {{ selectedAgentInfo.macAddresses.replace(/'/g, "") }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>JID</b></div>
+              <div class="p-col-8">{{ selectedAgentInfo.jid }}</div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>{{ $t('computer.agent_info.ip_addr') }}</b></div>
+              <div class="p-col-8">
+                {{ selectedAgentInfo.ipAddresses.replace(/'/g, "") }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>{{ $t("computer.agent_info.operating_system") }}</b></div>
+              <div class="p-col-8">{{ getPropertyValue(selectedAgentInfo.properties, "os.version") }}</div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>{{ $t("computer.agent_info.agent_version") }}</b></div>
+              <div class="p-col-8">{{ getPropertyValue(selectedAgentInfo.properties, "agentVersion") }}</div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>{{ $t("computer.agent_info.created_date") }}</b></div>
+              <div class="p-col-8">{{ selectedAgentInfo.createDate }}</div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>{{ $t("computer.agent_info.modified_date") }}</b></div>
+              <div class="p-col-8">{{ selectedAgentInfo.updateDate }}</div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            </div>
+          <h4>{{ $t("computer.agent_info.disk_and_memory_info") }}</h4>
+          <div class="p-grid">
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.total_disk") }}</b></div>
+            <div class="p-col-8">
+              {{
+                (getPropertyValue(selectedAgentInfo.properties, "hardware.disk.total") / 1000)
+                  .toFixed(2)
+                  .toLocaleString("tr-TR")
+              }}
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.used_disk") }}</b></div>
+            <div class="p-col-8">
+              {{
+                (getPropertyValue(selectedAgentInfo.properties, "hardware.disk.used") / 1000)
+                  .toFixed(2)
+                  .toLocaleString("tr-TR")
+              }}
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.available_disk") }})</b></div>
+            <div class="p-col-8">
+              {{
+                ((getPropertyValue(selectedAgentInfo.properties, "hardware.disk.total") -
+                    getPropertyValue(
+                      selectedAgentInfo.properties,
+                      "hardware.disk.used"
+                    )) / 1000)
+                  .toFixed(2)
+                  .toLocaleString("tr-TR")
+              }}
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_partitions") }}</b></div>
+            <div class="p-col-8">
+              {{ getPropertyValue(selectedAgentInfo.properties, "hardware.disk.partitions") }}
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.memory") }}</b></div>
+            <div class="p-col-8">
+              {{
+                (getPropertyValue(selectedAgentInfo.properties, "hardware.memory.total") / 1000)
+                  .toFixed(2)
+                  .toLocaleString("tr-TR")
+              }}
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+          </div>
+          <h4>{{ $t("computer.agent_info.processor_info") }}</h4>
+          <div class="p-grid">
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.processor") }}</b></div>
+            <div class="p-col-8"> {{ getPropertyValue(selectedAgentInfo.properties, "processor") }}</div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.physical_core_count") }}</b></div>
+            <div class="p-col-8">
+              {{
+                getPropertyValue(selectedAgentInfo.properties, "hardware.cpu.physicalCoreCount")
+              }}
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+          </div>
+          </TabPanel>
+          <TabPanel v-if="selectedLiderNode.type == 'AHENK'">
+            <template #header>
+                <i class="pi pi-users"></i>
+                <span>
+                    &nbsp;{{ $t('computer.agent_info.session_history') }}
+                </span>
+            </template>
+            <DataTable :value="selectedAgentInfo.sessions"
+              style="margin-top: 2em"  ref="dt" class="p-datatable-sm" 
+              v-model:filters="filters"
+              responsiveLayout="stack"
+              :paginator="true" :rows="10"
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+              :rowsPerPageOptions="[10,25,50]">
+              <template #header>
+                <div class="p-d-flex p-jc-between">
+                    <div style="text-align: left">
+                        <Button v-if="selectedAgentInfo.sessions.length > 0"
+                            class="p-button-sm" icon="pi pi-download"
+                            :label="$t('computer.agent_info.export')"
+                            @click="exportSessionsHistoryCSV($event)">
+                        </Button>
+                    </div>
+                    <div class="p-d-flex p-jc-end">
+                        <span class="p-input-icon-left">
+                          <i class="pi pi-search" />
+                          <InputText 
+                            v-model="filters['global'].value" 
+                            class="p-inputtext-sm" 
+                            :placeholder="$t('computer.agent_info.search')" 
+                          />
+                        </span>
+                    </div>
+                </div>
+              </template>
+              <template #empty>
+                <div class="p-d-flex p-jc-center">
+                  <span>{{$t('computer.agent_info.sessions_table_empty_message')}}</span>
+                </div>
+              </template>
+              <Column field="username" :header="$t('computer.agent_info.username')"></Column>
+              <Column field="createDate" :header="$t('computer.agent_info.created_date')"></Column>
+              <Column field="sessionEvent" :header="$t('computer.agent_info.status')">
+                <template #body="slotProps">
+                  <Badge
+                    :value="slotProps.data.sessionEvent == 'LOGIN'? 
+                    $t('computer.agent_info.login'): 
+                    $t('computer.agent_info.logout')" 
+                    :severity="slotProps.data.sessionEvent == 'LOGIN'? 'success': 'danger'">
+                  </Badge>
+                </template>
+              </Column>
+            </DataTable>
+          </TabPanel>
+      </TabView>
+      <template #footer>
+          <Button 
+              :label="$t('group_management.close')" 
+              icon="pi pi-times"
+              @click="showAgentInfoDialog = false" 
+              class="p-button-text p-button-sm">
+          </Button>
+      </template>
+    </Dialog>
+    <div>
+      <base-plugin
+        :pluginTask="task"
+        @task-response="responseAgentInfo">
+        <template #pluginTitle>
+          <span v-if="selectedLiderNode">
+            <i :class="selectedLiderNode.type == 'AHENK'? 'fab fa-linux': 'pi pi-folder-open'"></i>
+            &nbsp; {{selectedLiderNode.name}}
+          </span>
+          <p v-else><i class="pi pi-folder-open"></i>&nbsp; Agents</p>
+        </template>
+        <template #pluginTitleButton>
+          <div>
+            <SplitButton class="p-button-sm" :title="$t('computer.agent_info.node_detail')" 
+              @click="showNodeDetail" :model="selectedLiderNode && selectedLiderNode.type == 'AHENK'? items: folderItems"
+              icon="pi pi-list">
+            </SplitButton>
+          </div>
         </template>
         <template #default>
-          <div>
-            <p>Agent LDAP Attribute Info</p>
-          </div>
+            <div class="p-grid">
+              <div class="p-col-4"><b><i class="el el-icon-turn-off"></i> {{ $t("computer.agent_info.status") }}</b></div>
+              <div class="p-col-8">
+                <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo" 
+                  :value="selectedLiderNode.online ? $t('computer.agent_info.online'):$t('computer.agent_info.offline')" 
+                  :severity="selectedLiderNode.online ?'success':'danger'">
+                </Badge>
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="el el-icon-data-line"></i> {{ $t("computer.agent_info.hostname") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ selectedAgentInfo.hostname }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="el el-icon-location-outline"></i> {{ $t("computer.agent_info.location") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode">{{ getEntryFolderName(selectedLiderNode.distinguishedName) }}</div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4" v-if="isUserDomain"><b><i class="pi pi-sitemap"></i> {{ $t("computer.agent_info.user_domain") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ selectedAgentInfo.userDirectoryDomain }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="el el-icon-data-analysis"></i> {{ $t("computer.agent_info.operating_system") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ getPropertyValue(selectedAgentInfo.properties, "os.version") }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="el el-icon-cpu"></i> {{ $t("computer.agent_info.processor") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ getPropertyValue(selectedAgentInfo.properties, "processor") }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="pi pi-wifi"></i> {{ $t("computer.agent_info.ip_addr") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ selectedAgentInfo.ipAddresses.replace(/'/g, "") }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="el el-icon-data-analysis"></i> {{ $t("computer.agent_info.mac") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ selectedAgentInfo.macAddresses.replace(/'/g, "") }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="fa fa-code-branch"></i> {{ $t("computer.agent_info.agent_version") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ getPropertyValue(selectedAgentInfo.properties, "agentVersion") }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="far fa-user"></i> {{ $t("computer.agent_info.last_logged_user") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ selectedLiderNode.o }}
+              </div>
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b><i class="pi pi-calendar-times"></i> {{ $t("computer.agent_info.created_date") }}</b></div>
+              <div class="p-col-8" v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo">
+                {{ selectedAgentInfo.createDate }}
+              </div>
+            </div>
+            <div v-if="loading">
+              <div class="p-text-center">
+                <!-- <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp; -->
+                <ProgressSpinner
+                  style="width: 20px; height: 20px"
+                  strokeWidth="8"
+                  fill="var(--surface-ground)"
+                  animationDuration=".5s"
+                />
+                <a class="primary">
+                  &nbsp;{{$t('computer.plugins.base_plugin.loading_default_text')}}
+                </a>
+              </div>
+            </div>
         </template>
-      </base-modal> -->
-    </teleport>
-    <base-plugin
-      v-loading="loading" element-loading-text="Veriler alınıyor..."
-      element-loading-spinner="fa fa-sync fa-spin"
-      element-loading-background="rgba(0, 0, 0, 0.7)"
-      :showTaskDialog="showTaskDialog"
-      :pluginTask="task"
-      @cancel-task="showTaskDialog = false"
-      >
-      <template #pluginHeader>
-        <i class="fas fa-info-circle"></i> 
-        <a href="#"
-          @click.prevent="showAgentInfoModal(true)" 
-          style="color:#495057">
-          {{ selectedLiderNode ? selectedLiderNode.name: 'Agents' }}
-        </a>
-      </template>
-      <template #pluginHeaderButton>
-        <div>
-          <Button
-            icon="el-icon-refresh"
-            title="Yenile"
-            class="p-button-sm p-mr-2"
-            @click.prevent="updateAgentInfo"
-          >
-          </Button>
-          <Button
-            icon="el-icon-rank"
-            title="Taşı"
-            class="p-button-sm p-mr-2"
-            @click.prevent="moveAgent"
-          >
-          </Button>
-          <Button
-            icon="pi pi-trash"
-            title="Sil"
-            @click="deleteAgent"
-            class="p-button-danger p-button-sm"
-          >
-          </Button>
-        </div>
-      </template>
-      <template #default>
-      <!-- <ul style="margin-left: -25px"> -->
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="el el-icon-turn-off"></i> {{ $t("computer.agent_info.status") }}</div>
-            <div class="p-col-8">
-            <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK'" :value="status" :severity="statusType"></Badge></div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="el el-icon-data-line"></i> {{ $t("computer.agent_info.hostname") }}</div>
-            <div class="p-col-8">{{ hostname }}</div>
-          </div>
-        </li>
-         <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="el el-icon-location-outline"></i> {{ $t("computer.agent_info.location") }}</div>
-            <div class="p-col-8">{{ location }}</div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4" v-if="isUserDomain"><i class="pi pi-sitemap"></i> {{ $t("computer.agent_info.user_domain") }}</div>
-            <div class="p-col-8" v-if="isUserDomain">{{ userDirectoryDomain }}</div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="el el-icon-data-analysis"></i> {{ $t("computer.agent_info.operating_system") }}</div>
-            <div class="p-col-8">{{ operatingSystem }}</div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="el el-icon-cpu"></i> {{ $t("computer.agent_info.processor") }}</div>
-            <div class="p-col-8">{{ processor }}</div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="pi pi-wifi"></i> {{ $t("computer.agent_info.ip_addr") }}</div>
-            <div class="p-col-8">{{ ipAddress }}</div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="el el-icon-data-analysis"></i> {{ $t("computer.agent_info.mac") }}</div>
-            <div class="p-col-8">{{ macAddresses }}</div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="fa fa-code-branch"></i> {{ $t("computer.agent_info.agent_version") }}</div>
-            <div class="p-col-8">{{ agentVersion }}</div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="far fa-user"></i> {{ $t("computer.agent_info.last_logged_user") }}</div>
-            <div class="p-col-8">{{ lastLoggedUser }}</div>
-          </div>
-        </li>
-        <li style="list-style-type: none;">
-          <div class="p-grid">
-            <div class="p-col-4"><i class="pi pi-calendar-times"></i> {{ $t("computer.agent_info.created_date") }}</div>
-            <div class="p-col-8">{{ createdDate }}</div>
-          </div>
-        </li>
-      <!-- </ul> -->
-      </template>
-    </base-plugin>
+      </base-plugin>
+    </div>
   </div>
 </template>
 
 <script>
+/**
+ * Agent info task. update, delete, move agent.
+ * @see {@link http://www.liderahenk.org/}
+ * 
+ */
+
 import axios from "axios";
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters } from "vuex";
+import {FilterMatchMode} from 'primevue/api';
+import TreeComponent from '@/components/Tree/TreeComponent.vue';
 
 export default {
   
@@ -151,26 +489,112 @@ export default {
       task: null,
       loading: false,
       agentCn: "",
-      isHostname: true,
       isUserDomain: true,
-      statusType: "danger",
-      status: this.$t('computer.agent_info.offline'),
-      hostname: "",
-      location: "",
-      userDirectoryDomain: "",
-      operatingSystem: "",
-      processor: "",
-      ipAddress: "",
-      macAddresses: "",
-      agentVersion: "",
-      lastLoggedUser: "",
-      createdDate: "",
       agentInfoModal: false,
+      showAgentInfoDialog: false,
+      selectedNodeSummaryData: [],
+      attributesMultiValue: false,
+      filters: {},
+      selectedAgentInfo: null,
+      deleteAgentConfirm: null,
+      renameAgentDialog: false,
+      validationRenameAgent: false,
+      newHostname: "",
+      updateAgentConfirm: false,
+      addFolderDialog: false,
+      deleteFolderDialog: false,
+      folderName: '',
+      validationFolderName: false,
+      linuxIcon: require("@/assets/images/icons/linux.png"),
+      folderItems: [
+        {
+          label: this.$t('computer.agent_info.add_folder'),
+          icon: 'pi pi-folder-open',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "ORGANIZATIONAL_UNIT") {
+              this.addFolderDialog = true;
+            }
+          }
+        },
+        {
+          label: this.$t('computer.agent_info.delete_folder'),
+          icon: 'pi pi-trash',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "ORGANIZATIONAL_UNIT") {
+              this.deleteFolderDialog = true;
+            }
+          }
+        },
+      ],
+      items: [
+        {
+          label: this.$t('computer.agent_info.update'),
+          icon: 'pi pi-refresh',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
+              this.updateAgentConfirm = true;
+            }
+          }
+        },
+        {
+          label: this.$t('computer.agent_info.rename'),
+          icon: 'pi pi-pencil',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
+              if (!this.selectedLiderNode.online) {
+                this.$toast.add({
+                  severity:'warn', 
+                  detail: this.$t("computer.agent_info.rename_warn"), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: 3000
+                });
+                return;
+              }
+              this.renameAgentDialog = true;
+              this.newHostname = "";
+              this.validationRenameAgent = false;
+            }
+          }
+        },
+        {
+          label: this.$t('computer.agent_info.move_agent'),
+          icon: 'el-icon-rank',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
+              this.moveAgentDialog = true;
+            } 
+          }
+        },
+        {
+          label: this.$t('computer.agent_info.delete_client'),
+          icon: 'pi pi-trash',
+          command: () => {
+            if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
+              this.deleteAgentConfirm = true;
+            }
+          }
+        },
+      ],
+      moveFolderNode: null,
+      moveAgentDialog: false,
+      searchFields: [
+        {
+          key: this.$t('tree.folder'),
+          value: "ou"
+        },
+      ],
     };
   },
 
+  components: {
+    TreeComponent
+   },
+
   created() {
     this.task = {...this.pluginTask};
+    this.filters = {
+      'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+    }
   },
 
   computed:mapGetters(["selectedLiderNode"]),
@@ -178,87 +602,44 @@ export default {
   mounted() {
     if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
         this.getAgentInfo();
-      } else {
-        this.setDefaultTable();
-      }
+    }
   },
 
   watch: {
     selectedLiderNode() {
-      if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
+      if (this.selectedLiderNode) {
+        if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
         this.getAgentInfo();
-      } else {
-        this.setDefaultTable();
+      }
+      this.getSelectedNodeAttribute();
+      }
+    },
+    newHostname() {
+      if (this.newHostname.trim()) {
+        this.validationRenameAgent = false;
       }
     }
   },
 
   methods: {
-    ...mapActions(["setSelectedAgentInfo"]),
+    // ...mapActions(["setSelectedAgentInfo"]),
 
     getAgentInfo() {
-      this.loading = true;
       this.agentCn = this.selectedLiderNode.cn;
-      this.location = this.getEntryFolderName(this.selectedLiderNode.distinguishedName);
-      this.lastLoggedUser = this.selectedLiderNode.o;
-      if (this.selectedLiderNode.online) {
-        this.statusType = "success";
-        this.status = this.$t('computer.agent_info.online');
-      }
-      
       const params = new URLSearchParams();
       params.append("agentJid", this.selectedLiderNode.uid);
       axios.post("/select_agent_info/detail", params).then((response) => {
-        this.setSelectedAgentInfo(response.data);
-        this.loading = false;
         if (response.data != "" && response.data != null) {
-          var selectedLiderNodeProperties = response.data.properties;
-          if (response.data.hostname) {
-            this.hostname = response.data.hostname;
-          }
-          if (response.data.userDirectoryDomain) {
-            this.userDirectoryDomain = response.data.userDirectoryDomain;
-          }
-          if (response.data.createDate) {
-            this.createdDate = response.data.createDate;
-          }
-          
-          for (let index = 0; index < selectedLiderNodeProperties.length; index++) {
-            let element = selectedLiderNodeProperties[index];
-            if (element.propertyName == "agentVersion") {
-              if (element.propertValue != "" || element.propertyValue != null) {
-                this.agentVersion = element.propertyValue;
-              }
-            }
-            if (element.propertyName == "os.name") {
-              if (element.propertValue != "" || element.propertyValue != null) {
-                this.operatingSystem = element.propertyValue;
-              }
-            }
-            if (element.propertyName == "processor") {
-              if (element.propertValue != "" || element.propertyValue != null) {
-                this.processor = element.propertyValue;
-              }
-            }
-            if (element.propertyName == "ipAddresses") {
-              if (element.propertValue != "" || element.propertyValue != null) {
-                this.ipAddress = element.propertyValue.replace(/\'/g, '');
-              }
-            }
-            if (element.propertyName == "macAddresses") {
-              if (element.propertValue != "" || element.propertyValue != null) {
-                this.macAddresses = element.propertyValue.replace(/\'/g, '');
-              }
-            }
-          }
+        this.selectedAgentInfo = response.data;
+        // this.setSelectedAgentInfo(response.data);
         } else {
+          this.selectedAgentInfo = null;
           this.$toast.add({
             severity:'error', 
             detail: this.$t("computer.agent_info.error_message"), 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
           });
-          this.setDefaultTable();
         }
       });
     },
@@ -272,55 +653,49 @@ export default {
       }
     },
 
-    setDefaultTable() {
-      this.agentCn = "";
-      this.statusType = "danger";
-      this.status = this.$t('computer.agent_info.offline');
-      this.hostname = "";
-      this.location = this.selectedLiderNode != null ? this.getEntryFolderName(this.selectedLiderNode.distinguishedName): "";
-      this.userDirectoryDomain = "";
-      this.operatingSystem = "";
-      this.processor = "";
-      this.ipAddress = "";
-      this.macAddresses = "";
-      this.agentVersion = "";
-      this.lastLoggedUser = "";
-      this.createdDate = "";
-    },
-
     getEntryFolderName(selDn) {
-      var dnArr = selDn.split(",");
-      var ous = ""
+      let dnArr = selDn.split(",");
+      let ous = "";
       for (let i = 0; i < dnArr.length; i++) {
-          var dn = dnArr[i];
-          if(dn.startsWith("ou")){
-            var arr = dn.split("=");
-            if(arr.length > 0){
-              if(arr[1] != 'Ahenkler'){
-                ous += arr[1]
-                if(i < dnArr.length){
-                  ous +=" "
-                }
-              }
+        let dn = dnArr[i];
+        if(dn.startsWith("ou")){
+          let arr = dn.split("=");
+          if(arr.length > 0){
+            ous += arr[1]
+            if(i < dnArr.length){
+              ous +=" / ";
             }
           }
         }
+      }
+      ous = ous.trim().slice(0, -1);
       return ous;
     },
 
-    updateAgentInfo() {
-      alert("will be update agent info")
-      // this.loading = true;
-      this.showTaskDialog = true;
-      setTimeout(() => this.loading = false, 5000);
+    showNodeDetail(){
+      if (this.selectedLiderNode) {
+        this.showAgentInfoDialog = true;
+      } else {
+        this.$toast.add({
+          severity:'warn', 
+          detail: this.$t("computer.agent_info.select_node_warn"), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
     },
 
-    deleteAgent() {
-      alert("will be delete agent")
-    },
-
-    moveAgent(){
-      alert("will be move agent")
+    getPropertyValue(properties, propertyName) {
+      var propertyValue = "";
+      if (this.selectedLiderNode.type == "AHENK") {
+        const filteredProperties = properties.filter(
+        (property) => property.propertyName === propertyName
+        );
+        if (filteredProperties != null && filteredProperties.length > 0) {
+          propertyValue = filteredProperties[0].propertyValue;
+        }
+      }
+      return propertyValue;
     },
 
     showAgentInfoModal(show) {
@@ -330,14 +705,324 @@ export default {
         this.agentInfoModal = false;
       }
     },
+
+    getSelectedNodeAttribute() {
+      let nodeData = [];
+      let nodeSummaryData = [];
+      nodeSummaryData.push({
+        'label': this.$t('computer.agent_info.name'),
+        'value': this.selectedLiderNode.name,
+        },
+        {
+          'label': this.$t('computer.agent_info.type'),
+          'value': this.selectedLiderNode.type,
+        });
+      if (this.selectedLiderNode.type == "AHENK") {
+        nodeData.push({
+          'label': this.$t('computer.agent_info.uid'),
+          'value': this.selectedLiderNode.uid
+        });
+      }
+      nodeData.push({
+        'label': this.$t('computer.agent_info.name'),
+        'value': this.selectedLiderNode.name,
+        }, 
+        {
+          'label': this.$t('computer.agent_info.node_dn'),
+          'value': this.selectedLiderNode.distinguishedName,
+        },
+        {
+          'label': this.$t('computer.agent_info.type'),
+          'value': this.selectedLiderNode.type,
+        },
+        {
+          'label': this.$t('computer.agent_info.created_date'),
+          'value': this.selectedLiderNode.createDateStr,
+        },
+        {
+          'label': this.$t('computer.agent_info.modified_date'),
+          'value': this.selectedLiderNode.modifyDateStr,
+        },
+        {
+          'label': this.$t('computer.agent_info.creator_name'),
+          'value': this.selectedLiderNode.attributes.creatorsName,
+        },
+        {
+          'label': this.$t('computer.agent_info.modifier_name'),
+          'value': this.selectedLiderNode.attributes.modifiersName,
+        });
+      this.selectedLiderNode.attributesMultiValues.objectClass.map(oclas => {
+        nodeData.push({
+          'label': this.$t('computer.agent_info.objectclass'),
+          'value' : oclas
+        })
+      });
+      if (this.selectedLiderNode.type == "AHENK" && this.selectedLiderNode.attributesMultiValues.memberOf) {
+          this.selectedLiderNode.attributesMultiValues.memberOf.map(memberOf => {
+              nodeData.push({
+                  'label': this.$t('node_detail.member_of_group'),
+                  'value' : memberOf
+              })
+          });
+      }
+      this.selectedNodeData = nodeData;
+      this.selectedNodeSummaryData = nodeSummaryData;
+    },
+
+    exportSessionsHistoryCSV() {
+        this.$refs.dt.exportCSV();
+    },
+
+    moveTreeNodeClick(node) {
+      //*** This method for tree that is created for folder move dialog.  */
+      this.moveFolderNode = node;
+    },
+
+    moveAgent() {
+      if (this.moveFolderNode != null && this.moveFolderNode.type == "ORGANIZATIONAL_UNIT") {
+        this.task.commandId = "MOVE_AGENT";
+        const params = new FormData();
+        params.append("sourceDN", this.selectedLiderNode.distinguishedName);
+        params.append("sourceCN", this.selectedLiderNode.cn);
+        params.append("destinationDN", this.moveFolderNode.distinguishedName);
+        axios.post("/lider/computer/move/agent", params).then((response) => {
+          if (response.data) {
+            // TO DO --> computer tree will be updated
+            this.moveAgentDialog = false;
+            this.$emit('moveSelectedAgent', this.selectedLiderNode, this.moveFolderNode.distinguishedName);
+          }
+        })
+        .catch((error) => {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.move_client_error")+"\n"+error, 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        });
+      } else {
+        this.$toast.add({
+          severity:'warn', 
+          detail: this.$t("computer.agent_info.select_folder_warn"), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
+    },
+
+    updateAgentInfo() {
+      this.loading = true;
+      this.updateAgentConfirm = false;
+      this.task.commandId = "AGENT_INFO";
+      const params = new FormData();
+      params.append("agentDN", this.selectedLiderNode.distinguishedName);
+      axios.post("/lider/computer/get_agent_info", params).then((response) => {
+        if (!response.data) {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.delete_client_error"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      });
+    },
+
+    deleteAgent() {
+      this.task.commandId = "DELETE_AGENT";
+      const params = new FormData();
+      this.deleteAgentConfirm = false;
+      params.append("agentDN", this.selectedLiderNode.distinguishedName);
+      params.append("agentUID", this.selectedLiderNode.uid);
+      axios.post("/lider/computer/delete/agent", params).then((response) => {
+        if (response.data) {
+          this.$emit('deleteSelectedAgent', this.selectedLiderNode);
+        } else {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.delete_client_error"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      })
+      .catch((error) => { 
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t("computer.agent_info.delete_client_error")+"\n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      });
+    },
+
+    renameAgent() {
+      if (!this.newHostname.trim()) {
+        this.validationRenameAgent = true;
+        return;
+      }
+      this.task.commandId = "RENAME_ENTRY";
+      this.renameAgentDialog = false;
+      const params = new FormData();
+      params.append("agentDN", this.selectedLiderNode.distinguishedName);
+      params.append("cn", this.selectedLiderNode.cn);
+      params.append("newHostname", this.newHostname);
+      axios.post("/lider/computer/rename/agent", params).then((response) => {
+        if (response.data) {
+          let newDn = this.selectedLiderNode.distinguishedName.replace("cn="+this.selectedLiderNode.cn, "cn="+this.newHostname);
+          this.selectedLiderNode.distinguishedName = newDn;
+          this.selectedLiderNode.name = this.newHostname;
+          this.selectedLiderNode.cn = this.newHostname;
+          this.selectedLiderNode.uid = this.newHostname;
+          this.selectedLiderNode.attributes.uid = this.newHostname;
+          this.selectedLiderNode.attributes.cn = this.newHostname;
+          this.selectedLiderNode.attributes.entryDN = newDn;
+          this.$emit('renameSelectedAgent', this.selectedLiderNode);
+           this.$toast.add({
+            severity:'success', 
+            detail: this.$t("computer.agent_info.rename_success"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 5000
+          });
+        } else {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.delete_client_error"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      })
+      .catch((error) => {
+        if (error.response.status == 409) {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.rename_same_hostname_error"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 5000
+          });
+        } else {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.rename_error")+"\n"+error, 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      });
+    },
+
+    responseAgentInfo(message) {
+      if (message.commandClsId == "AGENT_INFO") {
+        this.loading = false;
+        var arrg = JSON.parse(message.result.responseDataStr);
+        if (arrg) {
+          let phase = null;
+          let processor = null;
+          if (arrg.hasOwnProperty('phase')) {
+            phase = arrg.phase;
+          }
+          if (arrg.hasOwnProperty('processor')) {
+            processor = arrg.processor;
+          }
+          const params = new FormData();
+          params.append("ipAddresses", arrg.ipAddresses);
+          params.append("hostname", arrg.hostname);
+          params.append("agentVersion", arrg.agentVersion);
+          params.append("macAddresses", arrg.macAddresses);
+          params.append("phase", phase);
+          params.append("osVersion", arrg.osVersion);
+          params.append("agentUid", this.selectedLiderNode.uid);
+          axios.post("/lider/computer/update_agent_info", params).then((response) => {
+            if (response.data) {
+              // TO DO --> computer tree will be updated
+              this.selectedAgentInfo = response.data
+            } else {
+              this.$toast.add({
+                severity:'error', 
+                detail: this.$t("computer.agent_info.delete_client_error"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
+          });
+        }
+      }
+    },
+
+    addFolder() {
+      if (!this.folderName.trim()) {
+        this.validationFolderName = true;
+        return;
+      }
+      let params = new FormData();
+      params.append("parentName", this.selectedLiderNode.distinguishedName);
+      params.append("ou", this.folderName);
+      axios.post('/lider/user/addOu', params).then(response => {
+        this.$emit('addFolder', response.data, this.selectedLiderNode.distinguishedName);
+        this.$toast.add({
+            severity:'success', 
+            detail: this.$t('computer.agent_info.add_folder_success'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+        });
+      });
+      this.folderName = '';
+      this.addFolderDialog = false;
+    },
+
+    deleteFolder() {
+      let ldapEntry = [];
+      ldapEntry.push({
+        "distinguishedName": this.selectedLiderNode.distinguishedName,
+        "entryUUID": this.selectedLiderNode.entryUUID,
+        "type": this.selectedLiderNode.type,
+        "uid": this.selectedLiderNode.uid
+      });
+
+      axios.post("/lider/computer/deleteComputerOu", ldapEntry).then(response => {
+        if (response.data) {
+          this.$emit('deleteSelectedAgent', this.selectedLiderNode);
+          this.$toast.add({
+              severity:'success', 
+              detail: this.$t('computer.agent_info.delete_folder_success'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+          });
+      } else {
+          this.$toast.add({
+              severity:'warn', 
+              detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+          });
+        }
+        this.deleteFolderDialog = false;
+      });
+    },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .dashboard .task-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+.p-splitbutton {
+    /* height: 2rem; */
+    height: 33px;
+  
+}
+::v-deep(.p-paginator) {
+    .p-paginator-current {
+        margin-left: auto;
+    }
+}
+::v-deep(.p-datatable.p-datatable-customers) {
+    .p-paginator {
+        padding: 1rem;
+    }
 }
 </style>

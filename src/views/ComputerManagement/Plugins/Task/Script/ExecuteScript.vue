@@ -41,7 +41,7 @@
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
     >
-    <template #pluginHeader>
+    <template #pluginTitle>
         {{ $t("computer.plugins.execute_script.header") }}
     </template>
      <template #default>

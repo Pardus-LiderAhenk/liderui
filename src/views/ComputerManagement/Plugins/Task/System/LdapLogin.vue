@@ -5,14 +5,13 @@
       :pluginDescription="pluginDescription"
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="closeShowTaskDialog"
-      @task-response="ldapLoginResponse"
       :pluginTask="task"
       executeTaskUrl="/ldapLogin/task/execute"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{ $t("computer.plugins.ldap_login.header") }}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <Button
           icon="pi pi-caret-right"
           class="p-button-raised p-button-sm"

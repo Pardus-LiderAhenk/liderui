@@ -93,7 +93,10 @@ import ToggleButton from 'primevue/togglebutton';
 import Tree from 'primevue/tree';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
-import Editor from 'primevue/editor'
+import Editor from 'primevue/editor';
+import ProgressSpinner from 'primevue/progressspinner';
+
+import LiderConfirmDialogVue from '../components/LiderConfirmDialog/LiderConfirmDialog.vue';
 
 
 
@@ -185,5 +188,7 @@ export default {
         app.component('TreeTable', TreeTable);
         app.component('TriStateCheckbox', TriStateCheckbox);
         app.component('Editor', Editor);
+        app.component('LiderConfirmDialog', LiderConfirmDialogVue);
+        app.component('ProgressSpinner',ProgressSpinner);
     },
 };

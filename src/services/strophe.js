@@ -1,8 +1,7 @@
 require('@ismailbasaran/vuestrophejs');
 import axios from 'axios';
-
 import store from '../store/store';
-
+import router from '../router';
 
 class XmppClinet {
 
@@ -27,7 +26,7 @@ class XmppClinet {
   }
 
 
-  connect = () => {
+  connect () {
     axios
     .post(process.env.VUE_APP_URL + "/api/messaging/getMessagingServerInfo", { })
     .then(
@@ -91,12 +90,12 @@ class XmppClinet {
     } else if (status == Strophe.Status.CONNFAIL) {
       this.isXmppConnected = false;
       console.log("Conn Fail");
+      store.dispatch("logout").then(() => router.push('/login')).catch(err => console.log(err))
     } else if (status == Strophe.Status.DISCONNECTING) {
       this.isXmppConnected = false;
       console.log("Disconnecting");
     } else if (status == Strophe.Status.DISCONNECTED) {
       this.isXmppConnected = false;
-      console.log("Disconnected");
     } else if (status == Strophe.Status.CONNECTED) {
       console.log('STROPE CONNECTED');
        this.connection.addHandler(this.onMessage, null, 'message', null, null,  null); 
@@ -108,7 +107,7 @@ class XmppClinet {
     } else if (status == Strophe.Status.ERROR) {
       console.log("Error");
     } else if (status == Strophe.Status.ATTACHED) {
-      console.log("Attached succesfully to connection");
+      // console.log("Attached succesfully to connection");
       this.isXmppConnected = true;
       
       
@@ -130,15 +129,13 @@ class XmppClinet {
       );
       this.connection.send($pres().tree());
     } else {
-      console.log("Sunucuya ulaşılamıyor.", "ERROR");
+      store.dispatch("logout").then(() => router.push('/login')).catch(err => console.log(err))
     }
   
     return this.isXmppConnected;
   }
   
   onRoster = (iq) => {
-    console.log("on roster")
-    console.log(iq)
     // $(iq)
     //   .find("item")
     //   .each(function () {
@@ -154,19 +151,14 @@ class XmppClinet {
   }
 
   onRosterChanged(iq) {
-    console.log("on roster changed")
     $(iq).find('item').each(function () {
         var sub = $(this).attr('subscription');
         var jid = $(this).attr('jid');
         var name = $(this).attr('name') || jid;
         var jid_id =jid_to_id(jid);
-        
-        console.log("Lider MYS yeni kayıt yapılıyor. Kayıt Ad : "+ name,"success");
     });
     return true;
-
   }
-
 
   onPresence(presence){
     //console.log(presence)
@@ -188,20 +180,18 @@ class XmppClinet {
     //     }
     // }
     return true;
+  }
+
+  disconnect(){
+    this.connection.disconnect();
+    
+  }
+  
+  isConnected = () => {
+    return this.isXmppConnected;
+  }
+
 }
-
-
-disconnect = () => {
-  this.connection.disconnect();
-}
-
-isConnected = () => {
-  return this.isXmppConnected;
-}
-
-
-}
-
 
 var XmppClientManager = (function(){
   var instance;

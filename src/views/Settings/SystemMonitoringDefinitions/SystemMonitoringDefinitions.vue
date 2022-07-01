@@ -162,7 +162,7 @@
         <Button
           :label="selectedTemplate ? $t('settings.system_monitoring_definitions.update'):
           $t('settings.system_monitoring_definitions.save')"
-          :icon="selectedTemplate ? 'el-icon-refresh' : 'pi pi-save'"
+          :icon="selectedTemplate ? 'pi pi-refresh' : 'pi pi-save'"
           class="p-button-sm"
           @click="templateOperation(selectedTemplate ? 'update' : 'add')"
         />
@@ -331,10 +331,6 @@ export default {
         if (!this.validateForm()) {
           return;
         }
-        if (this.isExistTemplateName(this.label, this.selectedTemplate.id)) {
-          this.validationTemplateLabel = true;
-          return;
-        }
         const params = {
           label: this.label,
           contents: this.contents,
@@ -371,10 +367,6 @@ export default {
           });
       } else {
         if (!this.validateForm()) {
-          return;
-        }
-        if (this.isExistTemplateName(this.label, null)) {
-          this.validationTemplateLabel = true;
           return;
         }
         const params = {

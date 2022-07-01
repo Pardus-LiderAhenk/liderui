@@ -8,10 +8,10 @@
       @task-response="getResourceUsage"
       :pluginTask="task"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{$t("computer.plugins.resource_usage.header")}}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <Button
           icon="pi pi-chart-line"
           class="p-button-raised p-button-sm"
@@ -21,30 +21,29 @@
         </Button>
       </template>
       <template #default>
-        <div>
           <div class="p-grid">
             <div class="p-col-6">
               <div>
                 <Chart 
-                type="pie" 
-                :data="chartDiskData" 
-                with="300" height="150" 
-                :options="diskChartOptions">
+                  type="pie" 
+                  :width="400" :height="250"
+                  :data="chartDiskData" 
+                  :options="diskChartOptions">
                 </Chart>
               </div>
               <div class="p-grid p-jc-center" style="margin-top:3px">
                 <Button 
-                icon="fas fa-info-circle" 
-                class="p-button-text" 
-                @click="toggle($event, 'disk')" 
-                :label="$t('computer.plugins.resource_usage.view_detail')"
+                  icon="fas fa-info-circle" 
+                  class="p-button-text" 
+                  @click="toggle($event, 'disk')" 
+                  :label="$t('computer.plugins.resource_usage.view_detail')"
                 />
                 <OverlayPanel 
-                ref="diskOp" 
-                appendTo="body" 
-                :showCloseIcon="false" id="overlay_panel" 
-                style="width: 450px" 
-                :breakpoints="{'960px': '75vw'}">
+                  ref="diskOp" 
+                  appendTo="body" 
+                  :showCloseIcon="false" id="overlay_panel" 
+                  style="width: 450px" 
+                  :breakpoints="{'960px': '75vw'}">
                   <h5 class="text-center">{{$t('computer.plugins.resource_usage.disk_usage_detail')}}</h5>
                   <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
                     <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
@@ -62,14 +61,18 @@
             </div>
             <div class="p-col-6">
               <div>
-                <Chart type="pie" :data="chartMemoryData" with="300" height="150" :options="memoryChartOptions"></Chart>
+                <Chart type="pie"
+                 :data="chartMemoryData" 
+                  :width="400" :height="250" 
+                  :options="memoryChartOptions">
+                </Chart>
               </div>
               <div class="p-grid p-jc-center" style="margin-top:3px">
                 <Button 
-                icon="fas fa-info-circle" 
-                @click="toggle($event, 'memory')" 
-                class="p-button-text" 
-                :label="$t('computer.plugins.resource_usage.view_detail')"
+                  icon="fas fa-info-circle" 
+                  @click="toggle($event, 'memory')" 
+                  class="p-button-text" 
+                  :label="$t('computer.plugins.resource_usage.view_detail')"
                 />
                 <OverlayPanel 
                   ref="memoryOp" 
@@ -88,7 +91,6 @@
               </div>
             </div>
           </div>
-        </div>
       </template>
       <template #pluginFooter>
       </template>
@@ -139,7 +141,7 @@ export default {
         ],
       
       pluginDescription: this.$t("computer.plugins.resource_usage.description"),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/kaynak_kullanimi/"
+      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/kaynak_kullanimi/",
     };
   },
 
@@ -228,23 +230,24 @@ export default {
 
     returnOptionForChart(title) {
       let options = {
+      responsive: true,
+      plugins: {
         legend: {
           display: true,
-          position: "chartArea",
-          // align: "center",
-          // onClick: function() {
-          //   return false;
+          position: "top",
+          align: "center",
+          // labels: {
+          //   boxWidth: 20,
+          //   boxHeight: 10,
           // },
-          labels: {
-            boxWidth: 20,
-            boxHeight: 20,
-          },
-       },
-       title: {
+        },
+        title: {
           display: true,
           align: "center",
           text: title
-        }
+        },
+      },
+      maintainAspectRatio: false
       }
       return options;
     },
@@ -260,5 +263,6 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
 </style>

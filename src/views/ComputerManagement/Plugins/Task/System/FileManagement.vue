@@ -8,10 +8,10 @@
       @task-response="fileManagementResponse"
       :pluginTask="task"
     >
-      <template #pluginHeader>
+      <template #pluginTitle>
         {{$t("computer.plugins.file_management.header")}}
       </template>
-      <template #pluginHeaderButton>
+      <template #pluginTitleButton>
         <div>
           <Button
           icon="fa fa-save"

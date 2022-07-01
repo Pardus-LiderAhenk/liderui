@@ -13,6 +13,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 import BasePlugin from '@/views/ComputerManagement/Plugins/BasePlugin/BasePlugin.vue';
 import BaseScheduled from '@/views/ComputerManagement/Plugins/Scheduled/BaseScheduled.vue';
+import TreeComponent from '@/components/Tree/TreeComponent.vue';
 
 router.beforeEach(function(to, from, next) {
     window.scrollTo(0, 0);
@@ -24,6 +25,7 @@ const app = createApp(App);
 app.config.globalProperties.$appState = reactive({ inputStyle: 'outlined' });
 app.component("base-plugin", BasePlugin);
 app.component("base-scheduled", BaseScheduled);
+app.component("tree-component", TreeComponent);
 app.use(PrimeVue);
 app.use(router);
 app.use(store);
@@ -46,7 +48,24 @@ axios.interceptors.request.use(function(config) {
 });
 
 
-XmppClientManager.getInstance().connect();
+axios.interceptors.response.use(
+    (response) => {
+        if(response.status === 401) {
+            store.dispatch("logout").then(() => this.$router.push("/login") ).catch(err => console.log(err))
+        }
+        return response;
+    },
+    (error) => {
+        if (error.response.status === 400) {
+            store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+          }
+       
+        return Promise.reject(error);
+    }
+ );
+
+
+//XmppClientManager.getInstance().connect();
 
 
 app.mount('#app');

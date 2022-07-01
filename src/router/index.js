@@ -2,15 +2,14 @@ import { createRouter, createWebHashHistory, createWebHistory } from "vue-router
 import Dashboard from '@/views/Dashboard/Dashboard.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import Login from '@/views/Login/Login.vue';
-import ComputerManagement from '@/views/ComputerManagement/ComputerManagement.vue';
+import ComputerManagementTab from '@/views/ComputerManagement/ComputerManagementTab.vue';
 import FullLayout from '@/layouts/FullLayout.vue';
-import ComputerGroupManagement from '@/views/GroupManagement/ComputerGroupManagement/ComputerGroupManagement.vue';
-import UserGroupManagement from '@/views/GroupManagement/UserGroupManagement/UserGroupManagement.vue';
-import UserPermissionsManagement from '@/views/GroupManagement/UserPermissionsManagement/UserPermissionsManagement.vue';
-import UserManagement from '@/views/UserManagement/UserManagement.vue';
 
 //REPORTS
-import AgentReport from '@/views/Reports/AgentReport.vue';
+import AgentReport from '@/views/Reports/AgentReport/AgentReport.vue';
+import TaskReport from '@/views/Reports/TaskReport.vue';
+import LogReport from '@/views/Reports/SystemLogReport.vue';
+import ScheduledTaskReport from '@/views/Reports/ScheduledTaskReport.vue';
 
 //SETTINGS
 import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
@@ -19,7 +18,28 @@ import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefiniti
 import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
 import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
 
-const routes = [{
+//USER
+import UserManagementTab from '@/views/UserManagement/UserManagementTab.vue';
+
+// LIDER CONSOLE PROFILE
+import UserProfile from '@/views/Profile/Profile.vue';
+
+//POLICY
+import PolicyManagement from '@/views/PolicyManagement/PolicyManagement.vue';
+// Remote Access
+import RemoteAccessScreem from '@/views/ComputerManagement/Plugins/Task/RemoteAccess/RemoteAccessScreen.vue';
+
+// Forgot Password
+import ForgotPassword from '@/views/Login/ForgotPassword.vue';
+import ResetPassword from '@/views/Login/ResetPassword.vue';
+
+const routes = [
+    {
+        path:'/remote-access',
+        name:'Remote Access',
+        component:RemoteAccessScreem,
+    },
+    {
         path: "/",
         redirect: "/dashboard",
         component: FullLayout,
@@ -33,41 +53,17 @@ const routes = [{
                 }
             },
             {
-                path: "/computermanagement",
+                path: "/computer",
                 name: "ComputerManagement",
-                components: { default: ComputerManagement },
+                components: { default: ComputerManagementTab },
                 meta: {
                     requiresAuth: true,
                 }
             },
             {
-                path: "/computer_group_management",
-                name: "ComputerGroupManagement",
-                components: { default: ComputerGroupManagement },
-                meta: {
-                    requiresAuth: true,
-                }
-            },
-            {
-                path: "/usermanagement",
+                path: "/user",
                 name: "UserManagement",
-                components: { default: UserManagement },
-                meta: {
-                    requiresAuth: true,
-                }
-            },
-            {
-                path: "/user_group_management",
-                name: "UserGroupManagement",
-                components: { default: UserGroupManagement },
-                meta: {
-                    requiresAuth: true,
-                }
-            },
-            {
-                path: "/user_permissions_management",
-                name: "UserPermissionsManagement",
-                components: { default: UserPermissionsManagement },
+                components: { default: UserManagementTab },
                 meta: {
                     requiresAuth: true,
                 }
@@ -81,7 +77,31 @@ const routes = [{
                 }
             },
             {
-                path: '/settings/server_setings',
+                path: "/reports/task",
+                name: "TaskReport",
+                components: { default: TaskReport },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/reports/logs",
+                name: "LogReport",
+                components: { default: LogReport },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/reports/scheduled",
+                name: "ScheduledReport",
+                components: { default: ScheduledTaskReport },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: '/settings/server-settings',
                 name: 'ServerSettings',
                 components: {default: ServerSettings},
                 meta: {
@@ -89,7 +109,7 @@ const routes = [{
                 }
             },
             {
-                path: '/settings/system_monitoring_definitions',
+                path: '/settings/system-monitoring-definitions',
                 name: 'SystemMonitoringDefinitions',
                 components: {default: SystemMonitoringDefinitions},
                 meta: {
@@ -97,7 +117,7 @@ const routes = [{
                 }
             },
             {
-                path: '/settings/script_definitions',
+                path: '/settings/script-definitions',
                 name: 'ScriptDefinitions',
                 components: {default: ScriptDefinitions},
                 meta: {
@@ -105,7 +125,7 @@ const routes = [{
                 }
             },
             {
-                path: '/settings/registratin_templates',
+                path: '/settings/registration-templates',
                 name: 'RegistrationTemplates',
                 components: {default: RegistrationTemplates},
                 meta: {
@@ -113,13 +133,29 @@ const routes = [{
                 }
             },
             {
-                path: '/settings/console_user_settings',
+                path: '/settings/console-user-settings',
                 name: 'ConsoleUserSettings',
                 components: {default: ConsoleUserSettings},
                 meta: {
                     requiresAuth: true
                 }
             },
+            {
+                path: '/user-profile',
+                name: 'User Profile',
+                components: {default: UserProfile},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/policy',
+                name: 'Policy Management',
+                components: {default: PolicyManagement},
+                meta: {
+                    requiresAuth: true
+                }
+            }
            
         ],
     },
@@ -127,14 +163,32 @@ const routes = [{
         path: "/",
         redirect: "/",
         component: AuthLayout,
-        children: [{
-            path: "/login",
-            name: "Login",
-            components: { default: Login },
-            meta: {
-                guest: true
-            }
-        }, ],
+        children: [
+            {
+                path: "/login",
+                name: "Login",
+                components: { default: Login },
+                meta: {
+                    guest: true
+                }
+            },
+            {
+                path: "/forgot-password",
+                name: "ForgotPassword",
+                components: { default: ForgotPassword },
+                meta: {
+                    guest: true
+                }
+            },
+            {
+                path: "/forgot-password/id/:uuid",
+                name: "Reset Password",
+                components: { default: ResetPassword },
+                meta: {
+                    guest: true
+                }
+            }  
+        ],
     },
 ];
 

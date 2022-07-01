@@ -1,134 +1,268 @@
 <template>
-    <Card>
-        <template #title>
-            Kayıt Şablonları
-        </template>
-        <template #content>
-            Şablonda belirtilen metinle başlayan istemcilerin domaine sadece şablonda belirtilen gruba üye olan kullanıcılar tarafından alınmasını sağlayıp bu kullanıcıların şablonda verilen grup altında oluşturulmasını sağlar.
-            Örneğin şablon adı 'pardus-01-', yetkili grup DN'i ya da kullanıcı DN'i 'ou=Teknik,ou=Ankara,ou=People,dc=liderahenk,dc=org' ve istemcilerin dahil edileceği grup ise 'ou=Yöneticiler,ou=Çankaya,ou=Ankara,ou=People,dc=liderahenk,dc=org' olsun.
-            Bu kayıt şablonundan sonra istemci adı 'pardus-01-' ile başlayan tüm kullanıcılar sadece 'ou=Teknik,ou=Ankara,ou=People,dc=liderahenk,dc=org' grubunda yer alan yetkili kullanıcılar tarafından domaine alınabilir(yetkili gruba sadece bir kullanıcı DN'i de eklenebilir) 
-            ve domaine alınan istemciler 'ou=Yöneticiler,ou=Çankaya,ou=Ankara,ou=People,dc=liderahenk,dc=org' grubu altında oluşturulur.
-        </template>
-    </Card>
-    <Card>
-        <template #title>
-            KAYIT ŞABLONLARI
-        </template>
-        <template #content>
-
-            <Card>
+    <add-registration-template v-if="addTemplateDialog"
+        :addTemplateDialog="addTemplateDialog"
+        @close-template-dialog="addTemplateDialog=false;"
+        @saved-registration-template="savedTemplate"
+    >
+    </add-registration-template>
+    <update-registration-template v-if="updateTemplateDialog"
+        :updateTemplateDialog="updateTemplateDialog"
+        :selectedTemplate="selectedRecord"
+        @close-template-dialog="updateTemplateDialog=false;"
+        @updated-registration-template="savedTemplate"
+    >
+    </update-registration-template>
+    <div class="p-fluid">
+        <div class="p-field">
+            <Card style="margin-top: 10px">
+                <template #title>
+                    {{$t('settings.registiration_template.registiration_template')}}
+                </template>
                 <template #content>
-                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-12 p-md-2">
-                            <label for="firstname6">Birim Şablon Metni</label>
-                            <InputText id="firstname6" type="text" />
-                        </div>
-                        <div class="p-field p-col-12 p-md-5">
-                            <label for="firstname6">İstemcinin Dahil Edileceği Klasör</label>
-                            <div class="p-inputgroup ">
-                                <InputText placeholder="Keyword"/>
-                                <Button icon="pi pi-sitemap" class="p-button-warning" @click="agentGroupDialog = true"/>
-                            </div>
-                        </div>
-                        <div class="p-field p-col-12 p-md-5">
-                            <label for="firstname6">Yetkili Kullanıcı Grubu</label>
-                            <div class="p-inputgroup">
-                                <InputText placeholder="Keyword"/>
-                                <Button icon="pi pi-sitemap" class="p-button-warning" @click="selectUserGroupDialog=true"/>
-                            </div>
-                        </div>
-                         <div class="p-col-12 p-grid p-jc-end" >
-                             <div class="p-col-2">
-                                <Button label="Şablonu Kaydet" />
-                             </div>
-                         </div>
-                     </div>
+                    {{$t('settings.registiration_template.content')}}
                 </template>
             </Card>
-
-            <DataTable :value="records" responsiveLayout="scroll"
-                    v-model:filters="filters"
-                     :globalFilterFields="['unitId','parentDn','authGroup', 'createDate']"
-                      dataKey="id"
-                      filterDisplay="row" 
-                      showGridlines
-                    >
-                    <template #header>
-                        <div class="p-d-flex p-ac-end" style="justify-content:flex-end">
-                            <span class="p-input-icon-left">
-                                <i class="pi pi-search" />
-                                <InputText v-model="filters['global'].value" placeholder="Ara" />
-                            </span>
+        </div>
+        <div class="p-field">
+            <Card>
+                <template #title>
+                    <div class="p-d-flex p-jc-between">
+                        <div>
+                            {{$t('settings.registiration_template.saved_templates_list')}}
                         </div>
-                    </template>
-                         <Column field="unitId" header="Birim Şablon Metni"></Column>
-                         <Column field="parentDn" header="İstemcinin Dahil Edileceği Klasör"></Column>
-                          <Column field="authGroup" header="Yetkili Kullanıcı Grubu"></Column>
-                          <Column field="createDate" header="Oluşturulma Tarihi"></Column>
-                          <Column :exportable="false" style="min-width:8rem">
-                                <template #body="slotProps">
-                                    <Button class="p-button-danger" label="Delete" @click="deleteRecord(slotProps.data)"></Button>
+                        <div>
+                            <Button 
+                                class="p-button-sm" 
+                                icon="pi pi-plus" 
+                                :label="$t('settings.registiration_template.add')"
+                                @click="addTemplateDialog = true;">
+                            </Button>
+                        </div>
+                    </div>
+                </template>
+                <template #content>
+                    <div class="p-fluid">
+                        <div class="p-field">
+                            <DataTable :value="records" responsiveLayout="scroll"
+                                v-model:filters="filters"
+                                class="p-datatable-sm"
+                            >
+                                <template #header>
+                                    <div class="p-d-flex p-jc-between">
+                                         <div>
+                                            <Dropdown  v-model="templateType" :options="templateTypes" 
+                                                optionLabel="label" optionValue="value" 
+                                                @change="getRegistrationTemplate"
+                                            />
+                                        </div>
+                                        <div>
+                                            <span class="p-input-icon-left">
+                                                <i class="pi pi-search"/>
+                                                <InputText v-model="filters['global'].value" 
+                                                class="p-inputtext-sm" 
+                                                :placeholder="$t('settings.script_definition.search')" 
+                                                />
+                                            </span>
+                                        </div>
+                                    </div>
                                 </template>
-                            </Column>
-                    </DataTable>
-
-
-        </template>
-    </Card>
-    <Dialog header="Ahenk'in oluşturulmasını istediğiniz grubu seçiniz." v-model:visible="agentGroupDialog" :style="{width: '50vw'}" :modal="true">
-        <tree-component 
-            ref="istemcitree"
-            loadNodeUrl="/lider/registration_template/getComputers"
-            loadNodeOuUrl="/lider/registration_template/getOuDetails"
-        />
-        <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="agentGroupDialog = false" class="p-button-text"/>
-            <Button label="Oluştur" icon="pi pi-check" @click="createAgentGroup" autofocus />
-        </template>
-    </Dialog>
-    <Dialog header="Kullanıcı Grubu Seç" v-model:visible="selectUserGroupDialog" :style="{width: '50vw'}" :modal="true">
-        <tree-component 
-            ref="istemcitree"
-            loadNodeUrl="/lider/registration_template/getGroups"
-            loadNodeOuUrl="/lider/registration_template/getOuDetails"
-        />
-        <template #footer>
-            <Button label="Kapat" icon="pi pi-times" @click="selectUserGroupDialog = false" class="p-button-text"/>
-            <Button label="Oluştur" icon="pi pi-check" @click="createAgentGroup" autofocus />
-        </template>
-    </Dialog>
+                                <template #empty>
+                                    <div class="p-d-flex p-jc-center">
+                                        <span>{{$t('settings.registiration_template.table_empty_message')}}</span>
+                                    </div>
+                                </template>
+                                <Column header="#" style="width:5%">
+                                    <template #body="{index}">
+                                        <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+                                    </template>
+                                </Column>
+                                <Column field="unitId" :header="$t('settings.registiration_template.template_text')"></Column>
+                                <Column field="parentDn" :header="$t('settings.registiration_template.organization_unit_to_include_the_client')"></Column>
+                                <Column field="authGroup" :header="$t('settings.registiration_template.authorized_user_group')"></Column>
+                                <Column field="createDate" :header="$t('settings.registiration_template.create_date')"></Column>
+                                <Column field="templateType" :header="$t('settings.registiration_template.template_type')"></Column>
+                                <Column :exportable="false">
+                                    <template #body="slotProps">
+                                        <div class="p-d-flex p-jc-end">
+                                            <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
+                                                icon="pi pi-pencil"  
+                                                :title="$t('settings.registiration_template.edit')" 
+                                                @click.prevent="editTemplate(slotProps.data)">
+                                            </Button>
+                                            <Button class="p-button-danger p-button-sm p-button-rounded" 
+                                                icon="pi pi-trash"  
+                                                :title="$t('settings.registiration_template.delete')" 
+                                                @click="showDeleteDialog = true; 
+                                                selectedRecord = slotProps.data">
+                                            </Button>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </DataTable>
+                            <Paginator v-if="totalElements > rows"
+                                :rows="rows"
+                                v-model:first="first"
+                                :totalRecords="totalElements"
+                                :rowsPerPageOptions="[10, 25, 50, 100]"
+                                @page="onPage($event)"
+                            >
+                                <!-- <template #start=""> {{$t('reports.system_log_report.total_result')}} : {{ totalElements }} </template> -->
+                            </Paginator>
+                        </div>
+                    </div>
+                </template>
+            </Card>
+        </div>
+    </div>
+    
+    <!-- Delete Template Dialog -->
+        <Dialog :header="$t('settings.registiration_template.delete_template')" v-model:visible="showDeleteDialog" 
+            :style="{width: '20vw'}" :modal="true">
+            <div class="p-fluid">
+                <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+                <span>
+                    {{$t('settings.registiration_template.template_delete_question')}}
+                </span>
+            </div>
+            <template #footer>
+                <Button :label="$t('settings.registiration_template.cancel')" icon="pi pi-times" 
+                    @click="showDeleteDialog = false" class="p-button-text p-button-sm"
+                />
+                <Button :label="$t('settings.registiration_template.add')" icon="pi pi-check"
+                    @click="deleteRecord" class="p-button-sm"
+                />
+            </template>
+        </Dialog>
+        <!-- Delete Template Dialog End -->
 </template>
 
 <script>
+/**
+ * Registration template
+ * @see {@link http://www.liderahenk.org/}
+ * 
+*/
+
 import {FilterMatchMode} from 'primevue/api';
-import TreeComponent from '@/components/Tree/TreeComponent.vue';
+import axios from "axios";
+import AddRegistrationTemplate from './Dialogs/AddRegistrationTemplate.vue'
+import UpdateRegistrationTemplate from './Dialogs/UpdateRegistrationTemplate.vue'
 
 export default {
-    components: {
-        TreeComponent,
-    },
+    
     data() {
         return {
-            records: [
-                {
-                    id: 1,
-                    unitId: 'Deneme',
-                    parentDn: 'ou=Agents,dc=liderahenk,dc=org',
-                    authGroup: 'cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org',
-                    createDate: '01.01.2021 12:10:09',
-                }
-            ],
+            records: [],
+            rows: 10,
+            selectedRecord: null,
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.STARTS_WITH},
             },
-            agentGroupDialog: false,
-            selectUserGroupDialog: false
+            showDeleteDialog: false,
+            totalElements: 0,
+            templateType: 'HOSTNAME',
+            templateTypes: [
+                {label: this.$t('settings.registiration_template.hostname'), value: 'HOSTNAME'},
+                {label: this.$t('settings.registiration_template.ip_address'),  value: "IP_ADDRESS"}
+            ],
+            addTemplateDialog: false,
+            updateTemplateDialog: false,
+            first: 0,
+            pageNumber: 1,
+            rowNumber: 10
         }
     },
-    methods: {
-        deleteRecord(data) {
 
+    components: {
+        AddRegistrationTemplate,
+        UpdateRegistrationTemplate
+    },
+
+    mounted() {
+        this.getRegistrationTemplate();
+    },
+
+    methods: {
+        getRegistrationTemplate(){
+            axios.get("/api/registration-templates/type/" + this.templateType +"/page-count/" + this.pageNumber + "/page-size/" + this.rowNumber, null)
+            .then((response) => {
+                if (response.data) {
+                    this.records = response.data.content;
+                    this.totalElements = response.data.totalElements;
+                }
+            })
+            .catch((error) => { 
+                this.$toast.add({
+                    severity:'error',
+                    detail: this.$t('settings.registiration_template.an_error_occurred_while_fetching_registration_templates')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                })
+            });
         },
-    }
+
+        savedTemplate(data) {
+            this.resetPaginator();
+            this.getRegistrationTemplate();
+        },
+
+        editTemplate(data) {
+            this.selectedRecord = data;
+            this.updateTemplateDialog = true;
+        },
+
+        resetPaginator() {
+            this.pageNumber = 1;
+            this.rowNumber = this.rows;
+            this.first = 0;
+            this.getRegistrationTemplate();
+        },
+
+        deleteRecord() {
+            axios.delete("/api/registration-templates/" + this.selectedRecord.id).then((response) => {
+                if (response.status == 200) {
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.registiration_template.template_successfully_deleted'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    this.records = this.records.filter(template => template.id != this.selectedRecord.id);
+                    this.resetPaginator();
+                    this.selectedRecord = null;
+                    this.showDeleteDialog = false;
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.registiration_template.an_error_occurred_while_deleting_template'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            })
+            .catch((error) => { 
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.registiration_template.an_error_occurred_while_deleting_template')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            });
+        },
+
+        onPage(event) {
+            this.pageNumber = event.page + 1;
+            this.rowNumber = event.rows;
+            this.getRegistrationTemplate();
+        },
+    },
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
+    }
+}
+</style>
