@@ -1,7 +1,7 @@
 require('@ismailbasaran/vuestrophejs');
 import axios from 'axios';
-
 import store from '../store/store';
+import router from '../router';
 
 class XmppClinet {
 
@@ -90,7 +90,7 @@ class XmppClinet {
     } else if (status == Strophe.Status.CONNFAIL) {
       this.isXmppConnected = false;
       console.log("Conn Fail");
-      this.connect();
+      store.dispatch("logout").then(() => router.push('/login')).catch(err => console.log(err))
     } else if (status == Strophe.Status.DISCONNECTING) {
       this.isXmppConnected = false;
       console.log("Disconnecting");
@@ -129,10 +129,7 @@ class XmppClinet {
       );
       this.connection.send($pres().tree());
     } else {
-      store.dispatch("logout");
-      windows.location = '/login';
-      console.log('Kapadım aslında')
-      console.log("Sunucuya ulaşılamıyor.", "ERROR");
+      store.dispatch("logout").then(() => router.push('/login')).catch(err => console.log(err))
     }
   
     return this.isXmppConnected;

@@ -51,14 +51,16 @@ axios.interceptors.request.use(function(config) {
 axios.interceptors.response.use(
     (response) => {
         if(response.status === 401) {
-            store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+            store.dispatch("logout").then(() => this.$router.push("/login") ).catch(err => console.log(err))
         }
         return response;
     },
     (error) => {
+        if (error.response.status === 400) {
+            store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+          }
+       
         return Promise.reject(error);
-        // return error;
-
     }
  );
 

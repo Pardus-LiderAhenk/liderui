@@ -1,5 +1,6 @@
 import axios from 'axios';
 import strophe from '@/services/strophe.js';
+import router from '../../router';
 
 const state = {
     selectedLiderNode: null,
@@ -32,7 +33,8 @@ const actions = {
             commit('logout')
             localStorage.removeItem('auth_token')
             delete axios.defaults.headers.common['Authorization']
-            strophe.getInstance().disconnect();
+            //strophe.getInstance().disconnect();
+            router.push('/login')
             resolve()
         })
     },
