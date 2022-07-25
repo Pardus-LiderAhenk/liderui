@@ -350,4 +350,7 @@ export default {
     .p-button.p-button-icon-only.p-button-rounded {
         color: #fff
     }
+    ::v-deep .p-menuitem-link {
+        margin-right: 5px;
+    }
 </style>
