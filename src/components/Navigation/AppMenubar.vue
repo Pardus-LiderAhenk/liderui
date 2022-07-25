@@ -109,7 +109,7 @@ export default {
                         label: this.$t('about.document'),
                         icon:'pi pi-book',
                         command: () => {
-                            window.open("http://docs.liderahenk.org", '_blank').focus();
+                            window.open("https://docs.liderahenk.org", '_blank').focus();
                         }
                     },
                     {
