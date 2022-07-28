@@ -13,10 +13,12 @@
             <ul class="activity-list" v-for="task in userTasks" :key="task[0]">
                 <li>
                     <div class="p-d-flex p-jc-between p-ai-center p-mb-3">
-                        <h5 style="margin: 0 0 2px; font-size:1.2rem" class="activity p-m-0">{{task[0]}}</h5>
+                        <h5 style="margin: 0 0 2px; font-size:1.2rem" class="activity p-m-0">
+                            {{task[0]}} - %{{((task[1] / totalTask)*100).toFixed(2)}}
+                        </h5>
                         <div class="count" style="font-size:20px; background-color: #66BB6A">{{task[1]}}</div>
                     </div>
-                    <ProgressBar :value="((task[1] / totalTask)*100).toFixed(2)" :showValue="true"/>
+                    <ProgressBar :value="((task[1] / totalTask)*100).toFixed(2)" :showValue="false"/>
                 </li>
             </ul>
         </template>

@@ -15,13 +15,13 @@
                     </div>
                     <div class="p-field">
                         <span>
-                            {{$t('about.version')}} {{version}}
+                            {{$t('about.version')}} {{liderapiVersion}}
                         </span>
                     </div>
                     <div class="p-field">
                         <span>
                             <i class="pi pi-link"></i>&nbsp;
-                            <a href="http://liderahenk.org/" type="primary" target="_blank">
+                            <a href="https://liderahenk.org/" type="primary" target="_blank">
                                 {{$t('about.more_information')}}
                             </a>
                         </span>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
 
@@ -53,7 +54,8 @@ export default {
 
     data() {
         return {
-            version: "1.0.0"
+            lideruiVersion: "",
+            liderapiVersion: ""
         }
     },
 
@@ -74,7 +76,10 @@ export default {
 
     methods: {
         getVersion() {
-            this.version = process.env.VUE_APP_VERSION = require('../../../../package.json').version;
+            // this.lideruiVersion = process.env.VUE_APP_VERSION = require('../../../../package.json').version;
+            axios.get("/lider-info/version", {}).then((response) => {
+               this.liderapiVersion = response.data;
+            });
         }
     }
 }

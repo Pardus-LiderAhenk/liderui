@@ -193,9 +193,14 @@ export default {
         },
 
         renderAgentStatusChart() {
-            let offlineComputerNumber = this.totalClientNumber - this.totalOnlineComputerNumber;
-            let onlineRate = ((this.totalOnlineComputerNumber / this.totalClientNumber)*100).toFixed(2);
-            let offlineRate = (100 - onlineRate).toFixed(2);
+            let offlineComputerNumber = 0;
+            let onlineRate = 50;
+            let offlineRate = 50;
+            if (this.totalClientNumber > 0) {
+                offlineComputerNumber = this.totalClientNumber - this.totalOnlineComputerNumber;
+                onlineRate = ((this.totalOnlineComputerNumber / this.totalClientNumber)*100).toFixed(2);
+                offlineRate = (100 - onlineRate).toFixed(2);
+            }
             this.agentData = {
                 labels: [this.$t('dashboard_screen.online')+ "(" + this.totalOnlineComputerNumber +")", this.$t('dashboard_screen.offline') + "("+ offlineComputerNumber +")"],
                 datasets: [
