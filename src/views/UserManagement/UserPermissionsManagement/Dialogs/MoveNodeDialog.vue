@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Move node Dialog -->
-        <Dialog header="Kayıt Taşı" 
+        <Dialog :header="$t('user_management.sudo.move_node')" 
             v-model:visible="showDialog" 
             :style="{width: '40vw'}" :modal="true"
         >
@@ -13,12 +13,12 @@
                 :isMove="true"
             />
             <template #footer>
-                <Button label="İptal" 
+                <Button :label="$t('user_management.sudo.cancel')" 
                     icon="pi pi-times" 
                     @click="showDialog = false" 
                     class="p-button-text p-button-sm"
                 />
-                <Button label="Taşı" 
+                <Button :label="$t('user_management.sudo.move')" 
                     icon="el el-icon-rank" 
                     @click="moveNode" 
                     class="p-button-sm" 
@@ -81,7 +81,7 @@ export default {
             if (!this.moveNodeData) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "Lütfen klasör seçiniz", 
+                    detail:this.$t('user_management.sudo.select_folder_warn'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -98,14 +98,14 @@ export default {
                     this.$emit('moveNode', this.moveNodeData);
                     this.$toast.add({
                         severity:'success', 
-                        detail: "Kayıt başarıyla taşındı", 
+                        detail:this.$t('user_management.sudo.move_node_success'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 } else {
                     this.$toast.add({
                         severity:'error', 
-                        detail: "Kayıt taşınırken hata oluştu", 
+                        detail:this.$t('user_management.sudo.move_node_error'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });

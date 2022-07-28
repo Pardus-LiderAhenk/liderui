@@ -1075,7 +1075,18 @@
             "edit_folder_name":"Edit Folder Name",
             "move_folder":"Move Folder",
             "edit_authority_group":"Edit Authority Group",
-            "move_authority_group":"Move Authority Group"            
+            "move_authority_group":"Move Authority Group",
+            "folder_name_warn":"Folder name is not available",
+            "add":"Add",
+            "add_folder_success":"Created folder successfully",
+            "folder_name":"Folder Name",
+            "update":"Update",
+            "update_folder_name_success": "Changed folder name suscessfully",
+            "move_node": "Move Node",
+            "move":"Move",
+            "select_folder_warn":"Please select a folder",
+            "move_node_success":"Moved node successfully",
+            "move_node_error":"An error occurred while moving node"
         }
     },
     "group_management": {

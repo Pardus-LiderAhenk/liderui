@@ -1,23 +1,23 @@
 <template>
     <div>
         <!-- Change Folder Name Dialog -->
-        <Dialog header="Klasör Adını Değiştir" v-model:visible="showDialog" 
+        <Dialog :header="$t('user_management.sudo.edit_folder_name')" v-model:visible="showDialog" 
             :style="{width: '30vw'}" :modal="true">
             <div class="p-fluid">
                 <div class="p-field">
-                    <label for="folderName">Klasör Adı</label>
+                    <label for="folderName">{{$t('user_management.sudo.folder_name')}}</label>
                     <InputText :class="validation.folderName ? 'p-invalid': ''" type="text" 
                         v-model="folderName"/>
                     <small v-if="validation.folderName" class="p-error">
-                        Klasör adı boş bırakılamaz
+                        {{$t('user_management.sudo.folder_name_warn')}}
                     </small>
                 </div>
             </div>
             <template #footer>
-                <Button label="İptal" icon="pi pi-times" 
+                <Button :label="$t('user_management.sudo.cancel')" icon="pi pi-times" 
                     @click="showDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button label="Güncelle" icon="pi pi-refresh"
+                <Button :label="$t('user_management.sudo.update')" icon="pi pi-refresh"
                     @click="changeFolderName" class="p-button-sm"
                 />
             </template>
@@ -91,7 +91,7 @@ export default {
                 this.$emit('updateNode', response.data, this.selectedNode);
                 this.$toast.add({
                     severity:'success', 
-                    detail: "Klasör adı başaryla değiştirildi", 
+                    detail:this.$t('user_management.sudo.update_folder_name_success'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

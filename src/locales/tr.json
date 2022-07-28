@@ -1078,7 +1078,18 @@
             "edit_folder_name":"Klasör Adı Düzenle",
             "move_folder":"Klasör Taşı",
             "edit_authority_group":"Yetki Grubu Düzenle",
-            "move_authority_group":"Yetki Grubu Taşı"
+            "move_authority_group":"Yetki Grubu Taşı",
+            "folder_name_warn":"Klasör adı boş bırakılamaz",
+            "add":"Ekle",
+            "add_folder_success":"Klasör başarıyla oluşturuldu",
+            "folder_name":"Klasör Adı",
+            "update":"Güncelle",
+            "update_folder_name_success": "Klasör adı başarıyla değiştirildi",
+            "move_node": "Kayıt Taşı",
+            "move":"Taşı",
+            "select_folder_warn":"Lütfen klasör seçiniz",
+            "move_node_success":"Kayıt başarıyla taşındı",
+            "move_node_error":"Kayıt taşınırken hata oluştu"
         }
     },
     "group_management": {
