@@ -146,7 +146,7 @@
               <div>
                 <i class="pi pi-link"></i>&nbsp;
                 <a 
-                  href="https://www.liderahenk.org/" 
+                  href="https://docs.liderahenk.org/lider3.0/computerManagement/crontabManagement/" 
                   type="primary" target="_blank">
                   {{$t('computer.plugins.plugin_popover.for_more_info')}}...
                 </a>

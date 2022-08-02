@@ -134,7 +134,7 @@ export default {
     return {
       showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.remote_access.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/uzak_masaustu/",
+      pluginUrl:"https://docs.liderahenk.org/lider3.0/",
       permission: "yes",
       openRemoteAccessModal: false,
       remoteAccessDisconnect:false,

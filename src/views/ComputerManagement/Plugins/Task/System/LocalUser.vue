@@ -311,7 +311,7 @@ export default {
         selectedUser: null,
         showUserDialog: false,
         pluginDescription: this.$t('computer.plugins.local_user.description'),
-        pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/yerel_kullanici_yonetimi/",
+        pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/localUserManagement/",
         userForm: {
           username: '',
           home: '',

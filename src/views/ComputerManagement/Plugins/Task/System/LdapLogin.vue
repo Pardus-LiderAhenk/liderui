@@ -119,7 +119,7 @@ export default {
       disableLocalUser: null,
       allowDynamicDNSUpdate: false,
       pluginDescription: this.$t('computer.plugins.ldap_login.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/istemci_oturum_acma_ayarlari/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/computerLoginSettings/",
     };
   },
 

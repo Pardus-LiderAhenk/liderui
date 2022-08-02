@@ -122,7 +122,7 @@ export default {
       filters: {},
       validationPackageName: false,
       pluginDescription: this.$t('computer.plugins.check_package.description'),
-      pluginUrl: "https://docs.liderahenk.org/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/packageControl/",
     }
   },
 

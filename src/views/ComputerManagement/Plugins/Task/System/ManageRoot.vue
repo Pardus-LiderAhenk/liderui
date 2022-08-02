@@ -62,7 +62,7 @@ export default {
         confirmPassword: '',
       },
       pluginDescription: this.$t('computer.plugins.manage_root.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/root_parola_yonetimi/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/rootPasswordManagement/",
     };
   },
 

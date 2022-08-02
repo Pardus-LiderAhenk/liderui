@@ -61,7 +61,7 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t('computer.plugins.xmessage.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/anlik_mesaj/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/instantMessage/",
       message: '',
       messageValidation: false
     }

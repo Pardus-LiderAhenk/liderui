@@ -135,7 +135,7 @@ export default {
       packageInfoList: [],
       filters: {},
       pluginDescription: this.$t('computer.plugins.installed_packages.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/paket/istemci_paketlerini_listele_ve_kaldir/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/installedPackageManagement/",
     }
   },
 

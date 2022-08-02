@@ -90,7 +90,7 @@ export default {
       scriptParams: "",
       selectedScript: "",
       pluginDescription: this.$t("computer.plugins.execute_script.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/betik/betik_tanimi/",
+      pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/script/",
     };
   },
 
