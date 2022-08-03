@@ -213,7 +213,7 @@ export default {
       filters: {},
       addRepoAddrDialog: false,
       pluginDescription: this.$t('computer.plugins.repositories.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/paket/istemci_paket_depolari/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/repositoryManagement/",
     }
   },
 

@@ -150,7 +150,7 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.usb.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/guvenlik/usb_yonetimi/",
+      pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/usbManagement/",
       storageCb: false,
       storage: 1,
       printerCb: false,

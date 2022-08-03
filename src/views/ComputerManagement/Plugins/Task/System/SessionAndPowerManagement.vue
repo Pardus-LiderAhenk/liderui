@@ -70,7 +70,7 @@ export default {
       showTaskDialog: false,
       task: null,
       pluginDescription: this.$t('computer.plugins.session_and_power_management.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/oturum_yonetimi/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/sessionPowerManagement/",
     }
   },
 

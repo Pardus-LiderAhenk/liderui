@@ -120,7 +120,7 @@ export default {
         task: null,
         showTaskDialog: false,
         pluginDescription: this.$t("computer.plugins.network_management.description"),
-        pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/guvenlik/ag_yonetimi/",
+        pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/networkManagement/",
         filters: {},
         dnsMessage: null,
         hostMessage: null,

@@ -93,7 +93,7 @@ export default {
       lockRootUser: true,
       pathValidation: false,
       pluginDescription: this.$t('computer.plugins.file_management.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/dosya_yonetimi/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/fileManagement/",
       selectedFilePath: '',
       filePath: '',
       fileContent: '',

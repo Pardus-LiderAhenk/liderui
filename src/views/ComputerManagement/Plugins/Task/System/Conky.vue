@@ -116,7 +116,7 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.conky.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/sistem_gozlemcisi/",
+      pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/systemMonitoring/",
       conkyMessage: "",
       conkyValidation: false,
       templates: [],

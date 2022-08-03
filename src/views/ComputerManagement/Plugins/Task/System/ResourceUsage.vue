@@ -141,7 +141,7 @@ export default {
         ],
       
       pluginDescription: this.$t("computer.plugins.resource_usage.description"),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/kaynak_kullanimi/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/resourcesUsage/",
     };
   },
 

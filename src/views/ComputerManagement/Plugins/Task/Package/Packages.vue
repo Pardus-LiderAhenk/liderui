@@ -223,7 +223,7 @@ export default {
       },
       packageInfoList: [],
       pluginDescription: this.$t('computer.plugins.packages.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/paket/paket_kur_veya_kaldir/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/packageInstallUninstall/",
       taskValidation: false,
       repoValidation: {}
     }
