@@ -64,9 +64,7 @@ export default {
     },
 
     created() {
-        let params = new FormData();
-        params.append("innerPage", "directory-manager");
-        axios.post("/lider/pages/getInnerHtmlPage", params).then((response) => {
+        axios.get("/ad/configurations").then((response) => {
             if (response.data) {
                 this.domainType = response.data.domainType;
                 if (this.domainType == "ACTIVE_DIRECTORY") {
