@@ -30,51 +30,58 @@
     </template>
   </Dialog>
   <div>
-    <base-plugin 
-      :pluginUrl="pluginUrl"
-      :pluginDescription="pluginDescription"
-      :showTaskDialog="showTaskDialog"
-      @close-task-dialog="showTaskDialog = false"
-      :pluginTask="task"
-    >
-    <template #pluginTitle>
-        {{ $t("computer.plugins.remote_access.header") }}
-    </template>
-    <template #pluginTitleButton>
-      <Button
-          icon="pi pi-play"
-          class="p-button-raised p-button-sm"
-          :title="$t('computer.plugins.remote_access.connect')"
-          @click.prevent="showRemoteAccessConfirmDialog"
-        >
-        </Button>
-      </template>
-      <template #default>
-        <div class="p-fluid">
-          <div class="p-field p-col-6">
-              <label>{{$t('computer.plugins.remote_access.remote_access_option')}}</label>
-              <Dropdown
-                v-model="selectedProtocol"
-                :options="protocols"
-                optionLabel="label"
-                optionValue="value"
-              >
-              </Dropdown>
+    <Card>
+      <template #title>
+        <div class="p-d-flex p-jc-between">
+          <div style="font-size:15px;">
+            {{ $t("computer.plugins.remote_access.header") }}
+          </div>
+          <div>
+            <Button
+              icon="pi pi-play"
+              class="p-button-raised p-button-sm"
+              :title="$t('computer.plugins.remote_access.connect')"
+              @click.prevent="showRemoteAccessConfirmDialog"
+            >
+            </Button>
           </div>
         </div>
-        <Fieldset class="p-field p-col-6" v-if="selectedProtocol === 'vnc'" :legend="$t('computer.plugins.remote_access.remote_access_options')">
+        <hr style="margin-bottom:-5px">
+      </template>
+      <template #content>
+        <div class="p-fluid">
+          <div class="p-field p-col-6">
+            <label>{{$t('computer.plugins.remote_access.remote_access_option')}}</label>
+            <Dropdown
+              v-model="selectedProtocol"
+              :options="protocols"
+              optionLabel="label"
+              optionValue="value"
+            >
+            </Dropdown>
+          </div>
+        </div>
+        <Fieldset class="p-field p-col-6" v-if="selectedProtocol === 'vnc'" 
+          :legend="$t('computer.plugins.remote_access.remote_access_options')"
+        >
           <div class="p-col-12">
             <div class="p-field-radiobutton">
-                <RadioButton id="remoteAccessType1" name="yes" value="yes" v-model="permission"/>
-                <label for="remoteAccessType1">{{$t('computer.plugins.remote_access.enable_user_permission_and_notification')}}</label>
+              <RadioButton id="remoteAccessType1" name="yes" value="yes" v-model="permission"/>
+              <label for="remoteAccessType1">
+                {{$t('computer.plugins.remote_access.enable_user_permission_and_notification')}}
+              </label>
             </div>
             <div class="p-field-radiobutton">
-                <RadioButton id="remoteAccessType2" name="without_notify" value="without_notify"  v-model="permission"/>
-                <label for="remoteAccessType2">{{$t('computer.plugins.remote_access.disable_user_permission_and_notification')}}</label>
+              <RadioButton id="remoteAccessType2" name="without_notify" value="without_notify" v-model="permission"/>
+              <label for="remoteAccessType2">
+                {{$t('computer.plugins.remote_access.disable_user_permission_and_notification')}}
+              </label>
             </div>
           </div>
         </Fieldset>
-        <Fieldset class="p-fluid p-col-6" v-if="selectedProtocol === 'ssh'" :legend="$t('computer.plugins.remote_access.ssh_connection_settings')">
+        <Fieldset class="p-fluid p-col-6" v-if="selectedProtocol === 'ssh'" 
+          :legend="$t('computer.plugins.remote_access.ssh_connection_settings')"
+        >
           <div class="p-field p-col-12">
             <label>{{$t('computer.plugins.remote_access.ip_address')}}</label>
             <div class="p-inputgroup">
@@ -84,38 +91,65 @@
                 :class="validationHost ? 'p-invalid': ''" 
                 placeholder="192.168.*.*"
               />
-              <Button icon="pi pi-undo" :title="$t('computer.plugins.remote_access.get_ip_address')" @click="getIpAddress"/>
+              <Button icon="pi pi-undo" 
+                :title="$t('computer.plugins.remote_access.get_ip_address')" 
+                @click="getIpAddress"
+              />
             </div>
             <small v-show="validationHost" class="p-error">
               {{$t('computer.plugins.remote_access.ip_address_cannot_be_null')}}
             </small>
           </div>
           <div class="p-field p-col-12">
-              <label>{{$t('computer.plugins.remote_access.username')}}</label>
-              <InputText 
-                type="text"
-                v-model="sshUsername" 
-                :class="validationUsername ? 'p-invalid': ''" 
-                :placeholder="$t('computer.plugins.remote_access.username')"
-              />
-              <small v-show="validationUsername" class="p-error">
-                {{$t('computer.plugins.remote_access.username_cannot_be_null')}}
-              </small>
+            <label>{{$t('computer.plugins.remote_access.username')}}</label>
+            <InputText 
+              type="text"
+              v-model="sshUsername" 
+              :class="validationUsername ? 'p-invalid': ''" 
+              :placeholder="$t('computer.plugins.remote_access.username')"
+            />
+            <small v-show="validationUsername" class="p-error">
+              {{$t('computer.plugins.remote_access.username_cannot_be_null')}}
+            </small>
           </div>
           <div class="p-field p-col-12">
-              <label>{{$t('computer.plugins.remote_access.user_password')}}</label>
-              <Password :class="validationPassword ? 'p-invalid': ''"  
-                v-model="sshPassword" :feedback="false" toggleMask
-                :placeholder="$t('computer.plugins.remote_access.user_password_cannot_be_null')"
-              />
-              <small v-show="validationPassword" class="p-error">
-                 {{$t('computer.plugins.remote_access.user_password_cannot_be_null')}}
-              </small>
+            <label>{{$t('computer.plugins.remote_access.user_password')}}</label>
+            <Password :class="validationPassword ? 'p-invalid': ''"  
+              v-model="sshPassword" :feedback="false" toggleMask
+              :placeholder="$t('computer.plugins.remote_access.user_password_cannot_be_null')"
+            />
+            <small v-show="validationPassword" class="p-error">
+                {{$t('computer.plugins.remote_access.user_password_cannot_be_null')}}
+            </small>
           </div>
         </Fieldset>
       </template>
-     <template #pluginFooter> </template>
-    </base-plugin>
+      <template #footer>
+        <div class="p-col p-as-start">
+          <a class="primary" type="secondary" @click="toggle" 
+            v-tooltip.right="$t('computer.plugins.plugin_popover.title')">
+            <i class="el el-icon-question"></i>
+          </a>
+          <OverlayPanel ref="op" 
+            appendTo="body" 
+            :showCloseIcon="false" 
+            id="overlay_panel" 
+            style="width: 450px" 
+            :breakpoints="{'960px': '75vw'}"
+          >
+            <div><h5>{{ $t('computer.plugins.plugin_popover.title') }}</h5></div>
+            <ul>
+              <li>
+                <small>{{ pluginDescription }}</small>
+              </li>
+            </ul>
+            <i class="pi pi-link"></i>&nbsp;<a :href="pluginUrl" type="primary" target="_blank">
+              {{ $t('computer.plugins.plugin_popover.for_more_info') }}...
+            </a>
+          </OverlayPanel>
+        </div>
+       </template>
+    </Card>
   </div>
 </template>
 
@@ -132,12 +166,9 @@ import { mapGetters } from "vuex"
 export default {
    data() {
     return {
-      showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.remote_access.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider3.0/",
+      pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/remoteAccess/",
       permission: "yes",
-      openRemoteAccessModal: false,
-      remoteAccessDisconnect:false,
       protocols: [
         {label: this.$t('computer.plugins.remote_access.connect_with_vnc'), value: 'vnc'},
         {label: this.$t('computer.plugins.remote_access.connect_with_ssh'), value: 'ssh'}
@@ -247,6 +278,10 @@ export default {
           });
         }
       });
+    },
+
+    toggle(event) {
+      this.$refs.op.toggle(event);
     },
   },
 

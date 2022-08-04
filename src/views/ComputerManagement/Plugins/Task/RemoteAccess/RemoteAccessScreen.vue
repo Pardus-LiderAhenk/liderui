@@ -8,35 +8,42 @@
     @task-response="remoteAccessResponse"
     :executeTask="executeTask"
   >
-  <template #pluginTitleButton>
-        <Button :label="$t('computer.plugins.remote_access.reconnect')" class="p-button-raised  p-button-info" @click="reconnect();" style="margin-right:10px"/>
-        <Button :label="$t('computer.plugins.remote_access.close_connection')" class="p-button-raised  p-button-danger" @click="closeConnection();"/>
-        
-      </template>
+    <template #pluginTitleButton>
+      <Button :label="$t('computer.plugins.remote_access.reconnect')" 
+        class="p-button-raised  p-button-info" 
+        @click="reconnect();" style="margin-right:10px"
+      />
+      <Button :label="$t('computer.plugins.remote_access.close_connection')" 
+        class="p-button-raised  p-button-danger" 
+        @click="closeConnection();"
+      />
+    </template>
     <template #pluginTitle>
      <div>
-            <ProgressSpinner v-show="!connected"
-              style="width: 20px; height: 20px"
-              strokeWidth="8"
-              fill="var(--surface-ground)"
-              animationDuration=".5s"
-            />
-            {{ title }}
-          </div> 
+        <ProgressSpinner v-show="!connected"
+          style="width: 20px; height: 20px"
+          strokeWidth="8"
+          fill="var(--surface-ground)"
+          animationDuration=".5s"
+        />
+        {{ title }}
+      </div> 
     </template>
     <template #default>
       <div style="height: 90vh">
         <div v-show="!connected" class="infoDiv">
             <div class="p-grid" style="width:50vw">
-               
-                <div class="p-col-12">
-                        <transition-group name="p-message" tag="div">
-                            <Message v-for="msg of status_messages" :severity="msg.severity" :key="msg.content"  :closable="false">{{msg.content}}</Message>
-                        </transition-group>
-                </div>
-
+              <div class="p-col-12">
+                <transition-group name="p-message" tag="div">
+                  <Message v-for="msg of status_messages" 
+                    :severity="msg.severity" 
+                    :key="msg.content"  
+                    :closable="false">
+                    {{msg.content}}
+                  </Message>
+                </transition-group>
+              </div>
             </div>
-            
         </div>
         <div v-show="connected">
           <div class="viewport" ref="viewport">
@@ -69,14 +76,11 @@ export default {
       title: "Remote Access",
       task: null,
       showTaskDialog: false,
-      pluginUrl:
-        "https://docs.liderahenk.org/lider-ahenk-docs/liderv2/computer_management/sistem/uzak_masaustu/",
+      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/remoteAccess/",
       pluginDescription: this.$t("computer.plugins.remote_access.description"),
       pluginTask: null,
       remoteAccessState: false,
-      status_messages: [
-			
-		],
+      status_messages: [],
       permission: "yes",
       executeTask: false,
       connected: false,
