@@ -17,7 +17,7 @@
                 </div>
                 <div class="p-field">
                     <label>{{$t('settings.registiration_template.template_text')}}</label>
-                    <InputText :placeholder="templateType == 'IP_ADDRESS' ? '192.168.56-': 'pardus-01-'"
+                    <InputText :placeholder="templateType == 'IP_ADDRESS' ? '192.168.*.*': 'pardus-01'"
                         type="text" v-model="templateText"
                         :class="validationErrors.templateText ? 'p-invalid':''"
                     />
