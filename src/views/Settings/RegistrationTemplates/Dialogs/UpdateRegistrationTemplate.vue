@@ -186,6 +186,7 @@ export default {
             this.templateText = this.selectedTemplate.unitId;
             this.authorizedUserGroupDN = this.selectedTemplate.authGroup;
             this.agentCreationDN = this.selectedTemplate.parentDn;
+            this.templateType = this.selectedTemplate.templateType;
         },
 
         selectAgentOuDn() {
