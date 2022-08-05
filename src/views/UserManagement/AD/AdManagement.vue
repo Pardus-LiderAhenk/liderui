@@ -94,10 +94,10 @@
         </div>
         <div class="p-col-12 p-md-6 p-lg-9" style="min-height:90vh; margin-top:3px" v-if="isAdConnection">
             <Message v-if="isAdConnection" :closable="false" :life="3000" :sticky="false" severity="success">
-                Aktif Dizin Sunucusu ile bağlantı başarıyla kuruldu.
+                {{$t('user_management.ad.ad_connect_successfully')}}
             </Message>
             <div v-if="domainType == 'ACTIVE_DIRECTORY'">
-                <node-table-content v-if="selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
+                <node-table-content v-if="selectedNode && selectedNode.type != 'USER' && selectedNode.type != 'GROUP'"
                     :selectedNode="selectedNode">
                 </node-table-content>
                 <user-management v-if="selectedNode && selectedNode.type == 'USER'" 
@@ -118,11 +118,11 @@
                 <template #content>
                     <div class="p-grid p-flex-column">
                         <Message v-if="!isAdConnection && !loading" :closable="false" severity="info">
-                            Aktif Dizin Sunucusu ile bağlantı kurulamadı. Lütfen Aktif Dizin ayarlarını kontrol ediniz.
+                            {{$t('user_management.ad.ad_connect_not_successfully')}}
                         </Message>
                         <Message v-if="loading" :closable="false" severity="info">
                             <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp; 
-                            Aktif Dizin Sunucusu ile bağlantı kuruluyor. Lütfen bekleyiniz...
+                            {{$t('user_management.ad.ad_connecting_wait')}}
                         </Message>
                     </div>
                 </template>
