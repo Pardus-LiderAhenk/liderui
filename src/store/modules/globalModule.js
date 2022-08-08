@@ -33,7 +33,7 @@ const actions = {
             commit('logout')
             localStorage.removeItem('auth_token')
             delete axios.defaults.headers.common['Authorization']
-            //strophe.getInstance().disconnect();
+            strophe.getInstance().disconnect();
             router.push('/login')
             resolve()
         })
