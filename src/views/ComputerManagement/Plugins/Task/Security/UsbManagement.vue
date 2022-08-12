@@ -24,9 +24,9 @@
       <template #default>
         <div class="p-grid">
           <div class="p-col-5">
-            <Checkbox id="binary" v-model="storageCb" :binary="true" @change="changeCbStorage"/>&nbsp;&nbsp;
+            <Checkbox id="storageCb" v-model="storageCb" :binary="true" @change="changeCbStorage"/>&nbsp;&nbsp;
             <i class="fab fa-usb"></i>&nbsp;&nbsp;
-            <label>{{ $t("computer.plugins.usb.usb") }}</label>
+            <label for="storageCb">{{ $t("computer.plugins.usb.usb") }}</label>
           </div>
           <div class="p-col-3">
             <Dropdown 
@@ -48,9 +48,9 @@
         </div>
         <div class="p-grid p-fluid">
           <div class="p-col-5">
-            <Checkbox id="binary" v-model="printerCb" :binary="true" @change="changeCbPrinter"/>&nbsp;&nbsp;
+            <Checkbox id="printerCb" v-model="printerCb" :binary="true" @change="changeCbPrinter"/>&nbsp;&nbsp;
             <i class="fas fa-print"></i>&nbsp;&nbsp;
-            <label>{{ $t("computer.plugins.usb.printer") }}</label>
+            <label for="printerCb">{{ $t("computer.plugins.usb.printer") }}</label>
           </div>
           <div class="p-col-3">
             <Dropdown 
@@ -72,9 +72,9 @@
         </div>
         <div class="p-grid p-fluid">
           <div class="p-col-5">
-            <Checkbox id="binary" v-model="webcamCb" :binary="true" @change="changeCbWebcam"/>&nbsp;&nbsp;
+            <Checkbox id="webcamCb" v-model="webcamCb" :binary="true" @change="changeCbWebcam"/>&nbsp;&nbsp;
             <i class="fas fa-camera"></i>&nbsp;&nbsp;
-            <label>{{ $t("computer.plugins.usb.webcam") }}</label>
+            <label for="webcamCb">{{ $t("computer.plugins.usb.webcam") }}</label>
           </div>
           <div class="p-col-3">
             <Dropdown 
@@ -96,7 +96,7 @@
         </div>
         <div class="p-grid p-fluid">
           <div class="p-col-5">
-            <Checkbox id="binary" v-model="mouseKeyboardCb" :binary="true" @change="changeCbMouseKeyboard"/>&nbsp;&nbsp;
+            <Checkbox id="storage" v-model="mouseKeyboardCb" :binary="true" @change="changeCbMouseKeyboard"/>&nbsp;&nbsp;
             <i class="fas fa-keyboard"></i>&nbsp;&nbsp;
             <label for="storage">{{ $t("computer.plugins.usb.mouse_keyboard") }}</label>
           </div>
