@@ -219,10 +219,7 @@ export default {
       }, 100);
     },
     connect() {
-      let params = {
-        Authorization: "Bearer " + localStorage.getItem("auth_token"),
-      };
-
+      let params = {};
       this.tunnel = new Guacamole.HTTPTunnel(httpUrl, true, params);
 
       if (this.client) {
