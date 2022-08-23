@@ -47,16 +47,16 @@
             <div class="p-grid p-ai-stretch vertical-container p-col">
               <Fieldset :legend="$t('computer.plugins.file_transfer.user_permissions')" class="p-col">
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="readUser" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.read')}}</label>
+                  <Checkbox id="readUser" v-model="readUser" :binary="true"/>
+                  <label for="readUser">{{$t('computer.plugins.file_transfer.read')}}</label>
                 </div>
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="writeUser" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.write')}}</label>
+                  <Checkbox id="writeUser" v-model="writeUser" :binary="true"/>
+                  <label for="writeUser">{{$t('computer.plugins.file_transfer.write')}}</label>
                 </div>
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="executeUser" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.execute')}}</label>
+                  <Checkbox id="executeUser" v-model="executeUser" :binary="true"/>
+                  <label for="executeUser">{{$t('computer.plugins.file_transfer.execute')}}</label>
                 </div>
                 <div class="p-inputgroup">
                   <span class="p-inputgroup-addon">
@@ -67,16 +67,16 @@
               </Fieldset>
               <Fieldset :legend="$t('computer.plugins.file_transfer.group_permissions')" class="p-col">
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="readGroup" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.read')}}</label>
+                  <Checkbox id="readGroup" v-model="readGroup" :binary="true"/>
+                  <label for="readGroup">{{$t('computer.plugins.file_transfer.read')}}</label>
                 </div>
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="writeGroup" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.write')}}</label>
+                  <Checkbox id="writeGroup" v-model="writeGroup" :binary="true"/>
+                  <label for="writeGroup">{{$t('computer.plugins.file_transfer.write')}}</label>
                 </div>
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="executeGroup" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.execute')}}</label>
+                  <Checkbox id="executeGroup" v-model="executeGroup" :binary="true"/>
+                  <label for="executeGroup">{{$t('computer.plugins.file_transfer.execute')}}</label>
                 </div>
                 <div class="p-inputgroup">
                   <span class="p-inputgroup-addon">
@@ -87,16 +87,16 @@
               </Fieldset>
               <Fieldset :legend="$t('computer.plugins.file_transfer.other_permissions')" class="p-col">
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="readOther" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.read')}}</label>
+                  <Checkbox id="readOther" v-model="readOther" :binary="true"/>
+                  <label for="readOther">{{$t('computer.plugins.file_transfer.read')}}</label>
                 </div>
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="writeOther" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.write')}}</label>
+                  <Checkbox id="writeOther" v-model="writeOther" :binary="true"/>
+                  <label for="writeOther">{{$t('computer.plugins.file_transfer.write')}}</label>
                 </div>
                 <div class="p-field-checkbox">
-                  <Checkbox id="binary" v-model="executeOther" :binary="true"/>
-                  <label for="binary">{{$t('computer.plugins.file_transfer.execute')}}</label>
+                  <Checkbox id="executeOther" v-model="executeOther" :binary="true"/>
+                  <label for="executeOther">{{$t('computer.plugins.file_transfer.execute')}}</label>
                 </div>
               </Fieldset>
             </div>
