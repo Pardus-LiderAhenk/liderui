@@ -33,6 +33,10 @@ import RemoteAccessScreem from '@/views/ComputerManagement/Plugins/Task/RemoteAc
 import ForgotPassword from '@/views/Login/ForgotPassword.vue';
 import ResetPassword from '@/views/Login/ResetPassword.vue';
 
+// Installer Router
+import installerRouter from "./installer/installerIndex.js"
+
+
 const routes = [
     {
         path:'/remote-access',
@@ -192,24 +196,30 @@ const routes = [
     },
 ];
 
-const router = createRouter({
-    history: createWebHistory(),
-    linkActiveClass: "active",
-    routes,
-});
 
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if ( localStorage.getItem('auth_token') !== undefined 
-                && localStorage.getItem('auth_token') !== null 
-                && localStorage.getItem('auth_token') !== '') {
-            next()
-            return
-        } 
-        next('/login')
-    }  else {
-        next()
+const routerApp = (isLiderInstalled) => {
+    if (isLiderInstalled) {
+        const router = createRouter({
+            history: createWebHashHistory(),
+            linkActiveClass: "active",
+            routes,
+        });
+        router.beforeEach((to, from, next) => {
+            if (to.matched.some(record => record.meta.requiresAuth)) {
+                if ( localStorage.getItem('auth_token') !== undefined 
+                        && localStorage.getItem('auth_token') !== null 
+                        && localStorage.getItem('auth_token') !== '') {
+                    next()
+                    return
+                } 
+                next('/login')
+            }  else {
+                next()
+            }
+        })
+        return router;
+    } else {
+        return installerRouter;
     }
-})
-
-export default router;
+};
+export default routerApp;

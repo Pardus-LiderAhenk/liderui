@@ -1,5 +1,5 @@
 import { createApp, reactive } from 'vue';
-import router from './router';
+import routerApp from './router/index';
 import App from './App.vue';
 // import CodeHighlight from './AppCodeHighlight';
 import store from './store/store.js';
@@ -15,13 +15,15 @@ import BasePlugin from '@/views/ComputerManagement/Plugins/BasePlugin/BasePlugin
 import BaseScheduled from '@/views/ComputerManagement/Plugins/Scheduled/BaseScheduled.vue';
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 
+const isLiderInstalled = false;
+const router = routerApp(isLiderInstalled)
 router.beforeEach(function(to, from, next) {
     window.scrollTo(0, 0);
     next();
 });
 
+// create default app
 const app = createApp(App);
-
 app.config.globalProperties.$appState = reactive({ inputStyle: 'outlined' });
 app.component("base-plugin", BasePlugin);
 app.component("base-scheduled", BaseScheduled);
@@ -31,7 +33,6 @@ app.use(router);
 app.use(store);
 app.use(ElementPlus);
 app.use(i18n);
-
 
 axios.defaults.baseURL = process.env.VUE_APP_URL;
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('auth_token');
@@ -67,5 +68,5 @@ axios.interceptors.response.use(
 
 //XmppClientManager.getInstance().connect();
 
-
 app.mount('#app');
+
