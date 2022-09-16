@@ -1172,7 +1172,8 @@
         "assigned_policy_empty_message": "Atanmış politika bulunamadı",
         "yes":"Evet",
         "add_client_loading":"İstemciler yükleniyor, lütfen bekleyiniz...",
-        "add_group_loading":"Grup oluşturuluyor, lütfen bekleyiniz..."
+        "add_group_loading":"Grup oluşturuluyor, lütfen bekleyiniz...",
+        "delete_admin_group_error": "Admin Grup silinemez."
     },
     "policy_management": {
         "title":"Politika Yönetimi",

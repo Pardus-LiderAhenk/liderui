@@ -1168,8 +1168,9 @@
         "assigned_policies": "Assigned Policies",
         "assigned_policy_empty_message": "Assigned policy not found",
         "yes":"Yes",
-        "add_client_loading":"Adding clients, please wait...",
-        "add_group_loading":"Creating group, please wait..."
+        "add_client_loading": "Adding clients, please wait...",
+        "add_group_loading": "Creating group, please wait...",
+        "delete_admin_group_error": "Admin Group can not be deleted"
     },
     "policy_management": {
         "title":"Policy Management",
