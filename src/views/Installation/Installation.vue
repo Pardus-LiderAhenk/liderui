@@ -83,8 +83,11 @@ p {
 .installer {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
+  
 }
 .installer:hover {
   box-shadow: 0 8px 20px 0 rgba(155, 150, 150, 0.2);
+  cursor: pointer;
+  
 } 
 </style>

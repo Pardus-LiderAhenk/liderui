@@ -1,25 +1,24 @@
 import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import InstallerLayout from '@/layouts/InstallerLayout.vue';
-import Dashboard from '@/views/Installation/Dashboard/Dashboard.vue';
+import Installation from '@/views/Installation/Installation.vue';
 
 import BasicInstallation from '../../views/Installation/BasicInstallation/BasicInstallation.vue';
-import DatabaseInstallation from '../../views/Installation/BasicInstallation/Servers/DatabaseInstallation.vue';
-import OpenLdapInstallation from '../../views/Installation/BasicInstallation/Servers/OpenLdapInstallation.vue';
-import EjabberdInstallation from '../../views/Installation/BasicInstallation/Servers/EjabberdInstallation.vue'
-
+import DatabaseInstallation from '../../views/Installation/BasicInstallation/DatabaseInstallation.vue';
+import OpenLdapInstallation from '../../views/Installation/BasicInstallation/OpenLdapInstallation.vue';
+import EjabberdInstallation from '../../views/Installation/BasicInstallation/EjabberdInstallation.vue'
 
 
 const routes = [
     {
         path: "/",
-        redirect: "/dashboard",
+        redirect: "/installation",
         component: InstallerLayout,
-        name: "Home",
+        name: "Installation Home",
         children: [
             {
-                path: "/dashboard",
-                name: "Dashboard",
-                components: { default: Dashboard },
+                path: "/installation",
+                name: "Installation",
+                components: { default: Installation },
             },
             {
                 path: "/basic/installation",
