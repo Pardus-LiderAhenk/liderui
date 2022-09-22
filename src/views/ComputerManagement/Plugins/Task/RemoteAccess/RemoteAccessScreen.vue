@@ -391,14 +391,18 @@ export default {
     uninstallKeyboard() {
       this.keyboard.onkeydown = this.keyboard.onkeyup = () => {};
     },
-  },
-  mounted() {
-    if (this.$route.query.protocol == "vnc") {
+
+    async getConnectionData() {
       this.remoteConnections.map(item => {
         if (item.uid == this.$route.query.uid && (item.protocol == this.$route.query.protocol)) {
           this.connectionData = item;
         } 
       });
+    }
+  },
+  async mounted() {
+    if (this.$route.query.protocol == "vnc") {
+      await this.getConnectionData();
 
       axios.post("/getPluginTaskList", {}).then((response) => {
         for (let index = 0; index < response.data.length; index++) {
