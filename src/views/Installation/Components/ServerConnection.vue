@@ -10,8 +10,9 @@
             <form class="p-fluid">
                 <div class="p-fluid">
                     <div class="p-field">
-                        <label for="firstname">Server Address</label>
-                        <InputText id="firstname" 
+                        <label>Server Address</label>
+                        <InputText
+                            placeholder="192.168.*.*"
                             v-model="server.address"
                             :class="{ 'p-invalid': validationErrors.address }" 
                         />
@@ -20,8 +21,9 @@
                         </small>
                     </div>
                     <div class="p-field">
-                        <label for="lastname">Username</label>
-                        <InputText id="lastname"
+                        <label>Username</label>
+                        <InputText
+                            placeholder="lider"
                             v-model="server.username" 
                             :class="{ 'p-invalid': validationErrors.username }" 
                         />
@@ -30,15 +32,30 @@
                         </small>
                     </div>
                     <div class="p-field">
-                        <label for="lastname">User Password</label>
+                        <label>User Password</label>
                         <Password 
                             v-model="server.password" toggleMask 
+                            placeholder="******"
                             :feedback="false"
                             :class="{ 'p-invalid': validationErrors.password }" 
                         ></Password>
                         <small v-show="validationErrors.password" class="p-error">
                             User password is required
                         </small>
+                    </div>
+                </div>
+                <div class="p-field p-d-flex p-jc-between">
+                    <div>
+                        <span v-if="status" class="badge success">Success</span>
+                        <span v-else class="badge danger">No Connect</span>
+                        
+                    </div>
+                    <div>
+                        <Button
+                            icon="pi pi-link"
+                            label="Check Connection"
+                            @click="checkServerConnection"
+                        />
                     </div>
                 </div>
             </form>
@@ -58,8 +75,8 @@ export default {
                 username: "",
                 password: ""
             },
-
-            validationErrors: {}
+            validationErrors: {},
+            status: false
         };
     },
     methods: {
@@ -79,6 +96,14 @@ export default {
             if (!this.server.password.trim()) this.validationErrors['password'] = true;
             else delete this.validationErrors['password'];
             return !Object.keys(this.validationErrors).length;
+        },
+
+        checkServerConnection() {
+            if (!this.validateForm()) {
+                return;
+            }
+            this.status = true;
+            console.log(this.server)
         }
     },
     watch: {
@@ -91,4 +116,22 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+ .badge.danger {
+    background: #EF4444;
+    color:  #ffffff;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 3px
+  }
+
+.badge.success {
+    background: #c8e6c9;
+    color: #256029;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 3px
+}
+</style>
 

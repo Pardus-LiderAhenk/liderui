@@ -18,6 +18,7 @@
                                 <label>Database Name</label>
                                 <InputText id="name" 
                                     v-model="database.name"
+                                    placeholder="lidermysdb"
                                     ::class="{
                                         'p-invalid': v$.database.name.$invalid && submitted,
                                     }"
@@ -27,9 +28,10 @@
                                 </small>
                             </div>
                             <div class="p-field">
-                                <label for="lastname">Username</label>
-                                <InputText id="name" 
+                                <label for="username">Username</label>
+                                <InputText id="username" 
                                     v-model="database.username"
+                                    placeholder="root"
                                     ::class="{
                                         'p-invalid': v$.database.username.$invalid && submitted,
                                     }"
@@ -39,10 +41,11 @@
                                 </small>
                             </div>
                             <div class="p-field">
-                                <label for="lastname">Password</label>
+                                <label for="password">Password</label>
                                 <Password 
                                     v-model="database.password" toggleMask 
                                     :feedback="false"
+                                    placeholder="******"
                                     ::class="{
                                         'p-invalid': v$.database.password.$invalid && submitted,
                                     }"
@@ -52,9 +55,10 @@
                                 </small>
                             </div>
                             <div class="p-field">
-                                <label for="lastname">Port</label>
-                                <InputText id="name" 
+                                <label for="port">Port</label>
+                                <InputText id="port" 
                                     v-model="database.port"
+                                    placeholder="3306"
                                     ::class="{
                                         'p-invalid': v$.database.port.$invalid && submitted,
                                     }"
@@ -125,21 +129,15 @@ export default {
     data() {
         return {
             database: {
-                name: "lidermysdb",
-                username: "root",
+                name: "",
+                username: "",
                 password: null,
-                port: 3306
+                port: null
             },
             submitted: false,
         };
     },
     methods: {
-
-        async installDb() {
-            
-            console.log(serverInfo)
-        },
-
         async handleSubmit(isFormValid) {
             let serverInfo = await this.$refs.serverConnection.getServerConnectionInfo();
 
