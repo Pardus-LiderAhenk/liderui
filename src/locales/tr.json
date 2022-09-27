@@ -1541,7 +1541,9 @@
             "scheduled_task_will_be_canceled_are_you_sure":"Zamanlanmış görev iptal edilecektir, emin misiniz?",
             "close":"Kapat",
             "yes":"Evet",
-            "cancel_scheduled_task":"Zamanlanmış Görevi İptal Et"
+            "cancel_scheduled_task":"Zamanlanmış Görevi İptal Et",
+            "error_scheduled_task": "Zamanlanmış görev listesi getirilirken hata oluştu",
+            "error_code_417": "Zamanlanmış görev listesi getirilirken beklenmedik hata oluştu. Hata kodu : 417"
         }
     },
     "profile":{

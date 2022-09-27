@@ -125,7 +125,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left=""> {{$t('reports.system_log_report.total_result')}} : {{ totalElements }} </template>
+        <template> {{$t('reports.system_log_report.total_result')}} : {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -200,8 +200,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import moment from "moment";
+import { systemTaskReportService } from "../../services/Reports/SystemLogReportService.js";
 
 export default {
   data() {
@@ -256,7 +256,7 @@ export default {
       )[0];
       this.logDetailDialog = true;
     },
-    getLogs() {
+    async getLogs() {
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
@@ -292,11 +292,26 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/operation/logs", data).then((response) => {
+      //axios.post("/operation/logs", data)
+      const { response, error } = await systemTaskReportService.operationLogsList(data)
+      if(error){
+            this.$toast.add({
+            severity:'error',
+            detail:"Operation log listesi getirilemedi.",
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });
+      }else{
+        if( response.status == 200){
         this.logs = response.data.content;
         this.totalElements = response.data.totalElements;
         this.loading = false;
-      });
+        }
+        else if(response.status == 417){
+          console.log("Coul not retrieve usage history. Unexpected error occured.")
+        }
+      }
+      
     },
     currentPageChange(newCurrentPage) {
       this.loading = true;
@@ -311,7 +326,7 @@ export default {
     filterAgents() {
       this.getLogs(this.currentPage, this.showedTotalElementCount);
     },
-    exportToExcel() {
+    async exportToExcel() {
       this.loading = true;
       var data = new FormData();
       data.append('operationType',this.filter.operationType);
@@ -343,16 +358,30 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/operation/export", data, {responseType: 'blob'})
-      .then((response) => {
-        let blob = new Blob([response.data]);
-        let link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "Logs_Report.xlsx";
-        this.loading = false;
-        link.click();
-      });
+      //axios.post("/operation/export", data, {responseType: 'blob'})
+      const { response, error } = await systemTaskReportService.operationExport(data)
+      if(error){
+            this.$toast.add({
+            severity:'error',
+            detail:"Sistem güncesi dosyası oluşturulamadı.",
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });
+      }else{
+        if( response.status == 200){
+          let blob = new Blob([response.data]);
+          let link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "Logs_Report.xlsx";
+          this.loading = false;
+          link.click();
+        }
+        else if(response.status == 400){
+          console.log("Could not create operation log report.")
+        }
+      }            
     },
+
     clearFilterFields() {
       this.filter = {
           logCreateDate: '',
@@ -363,17 +392,28 @@ export default {
           searchText:null
       };
     },
-    getOperationTypes(){
-        axios.post("/operation/types", {}).then((response) => {
-            this.operationTypesResponse = response.data;
-            this.operationTypes = this.operationTypesResponse.map((otype, index) => {
+
+    async getOperationTypes(){
+        //axios.post("/operation/types", {})
+      const { response, error } = await systemTaskReportService.operationTypes()
+      if(error){
+            this.$toast.add({
+            severity:'error',
+            detail:"Log tipi getirilemedi.",
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });
+      }else{
+          this.operationTypesResponse = response.data;
+          this.operationTypes = this.operationTypesResponse.map((otype, index) => {
               return {
                 text: this.getOpetarionType(otype),
                 value: index + 1
               }
             });
-        });
+      }                      
     },
+
     getOpetarionType(type) {
       var typeText = type;
       if (type == "CREATE") {

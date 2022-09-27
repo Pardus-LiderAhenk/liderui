@@ -1540,7 +1540,9 @@
             "scheduled_task_will_be_canceled_are_you_sure":"The scheduled task will be cancelled, are you sure?",
             "close":"Close",
             "yes":"Yes",
-            "cancel_scheduled_task": "Cancel Scheduled Task"
+            "cancel_scheduled_task": "Cancel Scheduled Task",
+            "error_scheduled_task": "An error occurred while getting the scheduled task report",
+            "error_code_417": "Unexpected error occured while getting the scheduled task report. Error code: 417"
         }
     },
     "profile":{

@@ -138,7 +138,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left=""> {{$t('reports.task_report.total_result')}}: {{ totalElements }} </template>
+        <template> {{$t('reports.task_report.total_result')}}: {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -279,215 +279,245 @@
 </template>
 
 <script>
-import axios from "axios";
-import moment from "moment";
+  import moment from "moment";
+  import { executedTaskReportService } from "../../services/Reports/ExecutedTaskReportService.js"
+  export default {
+    data() {
+      return {
+        tasks: [],
+        totalElements: 0,
+        showedTotalElementCount: 10,
+        currentPage: 1,
+        offset: 1,
+        loading: true,
+        getFilterData: true,
+        taskDetailDialog: false,
+        taskExecutionsResultDialog: false,
+        selectedTask: null,
+        selectedTaskExecutionResult: null,
+        plugins:[],
+        filter: {
+            taskSendDate: '',
+            taskSendStartDate:'',
+            taskSendEndDate:'',
+            task:null
+        },
+        pageNumber: 1,
+        rowNumber: 10,
+      };
+    },
+    mounted() {
+      this.getTasks();
+      this.getPlugins();
+    },
+    methods: {
+      showTaskDetailDialog(taskId) {
+        this.selectedTask = this.tasks.filter(
+          (task) => task.id === taskId
+        )[0];
+        this.taskDetailDialog = true;
+      },
 
-export default {
-  data() {
-    return {
-      tasks: [],
-      totalElements: 0,
-      showedTotalElementCount: 10,
-      currentPage: 1,
-      offset: 1,
-      loading: true,
-      getFilterData: true,
-      taskDetailDialog: false,
-      taskExecutionsResultDialog: false,
-      selectedTask: null,
-      selectedTaskExecutionResult: null,
-      plugins:[],
-      filter: {
+      showTaskExecutionsResultDialog(id){
+        this.selectedTaskExecutionResult = this.selectedTask.commandExecutions.filter(
+          (executionResult) => executionResult.id === id
+        )[0];
+        this.taskExecutionsResultDialog = true;
+      },
+
+      async getTasks() {
+        this.currentPage = this.pageNumber;
+        var data = new FormData();
+        data.append("pageNumber", this.pageNumber);
+        data.append("pageSize", this.rowNumber);
+        data.append("startDate", this.filter.taskSendStartDate);
+        data.append("endDate", this.filter.taskSendEndDate);
+        if(this.filter.task != null) {
+          data.append("taskCommand", this.filter.task);
+        }
+        if (this.pageNumber == 1) {
+          data.append("getFilterData", true);
+        }
+        if (this.filter.taskSendDate[0] != null) {
+          data.append(
+            "startDate",
+            moment(this.filter.taskSendDate[0])
+              .set("hour", 0)
+              .set("minute", 0)
+              .set("second", 0)
+              .format("DD/MM/YYYY HH:mm:ss")
+          );
+        }
+        
+        if (this.filter.taskSendDate[1] != null) {
+          data.append(
+            "endDate",
+            moment(this.filter.taskSendDate[1])
+              .set("hour", 0)
+              .set("minute", 0)
+              .set("second", 0)
+              .format("DD/MM/YYYY HH:mm:ss")
+          );
+        }
+        const {response, error} = await executedTaskReportService.executedTaskList(data);
+        if (error) {
+            this.$toast.add({
+            severity:'error',
+            detail:"Çalışan görevler getirilemedi.",
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });
+        } else {
+          if (response.status == 200) {
+            this.tasks = response.data.content;
+            this.totalElements = response.data.totalElements;
+            this.loading = false;
+            let successfullTaskCount = 0;
+            let failedTaskCount = 0;
+            this.tasks = this.tasks.map( task => {
+              task.commandExecutions.map( commandExecution => {
+                if(commandExecution.commandExecutionResults != null && commandExecution.commandExecutionResults.length != 0) {
+                  if(commandExecution.commandExecutionResults[0].responseCode == "TASK_PROCESSED") {
+                    successfullTaskCount++;
+                  }
+                  if(commandExecution.commandExecutionResults[0].responseCode == "TASK_ERROR") {
+                    failedTaskCount++
+                  }
+                }
+              },[successfullTaskCount, failedTaskCount]);
+              task.successfullTaskCount = successfullTaskCount;
+              task.failedTaskCount = failedTaskCount;
+              task.waitingTaskCount = task.uidList.length - successfullTaskCount - failedTaskCount;
+              successfullTaskCount = 0;
+              failedTaskCount = 0;
+              return task;
+            }, [successfullTaskCount, failedTaskCount]);
+          } else if (response.status == 417) {
+            console.log("Executed task list not found.Unexpected error occured")
+          }
+        }
+      },
+
+      currentPageChange(newCurrentPage) {
+        this.loading = true;
+        this.getTasks(newCurrentPage);
+      },
+
+      onPage(event) {
+        this.loading = true;
+        this.pageNumber = event.page + 1;
+        this.rowNumber = event.rows;
+        this.getTasks();
+      },
+      filterAgents() {
+        if (this.filter.taskSendDate[0] != null) {
+          this.filter.taskSendStartDate = moment(
+            this.filter.taskSendDate[0]
+          )
+            .set("hour", 0)
+            .set("minute", 0)
+            .set("second", 0)
+            .format("DD/MM/YYYY HH:mm:ss");
+        }
+        if (this.filter.taskSendDate[1] != null) {
+          this.filter.taskSendEndDate = moment(
+            this.filter.taskSendDate[1]
+          )
+            .set("hour", 23)
+            .set("minute", 59)
+            .set("second", 59)
+            .format("DD/MM/YYYY HH:mm:ss");
+        }
+        this.getTasks(this.currentPage, this.showedTotalElementCount);
+      },
+     
+      async exportToExcel() {
+        this.loading = true;
+        var data = new FormData();
+        if(this.filter.task != null) {
+          data.append("taskCommand", this.filter.task);
+        }
+        if (this.filter.taskSendDate[0] != null) {
+          data.append(
+            "startDate",
+            moment(this.filter.taskSendDate[0])
+              .set("hour", 0)
+              .set("minute", 0)
+              .set("second", 0)
+              .format("DD/MM/YYYY HH:mm:ss")
+          );
+        }
+        if (this.filter.taskSendDate[1] != null) {
+          data.append(
+            "endDate",
+            moment(this.filter.taskSendDate[1])
+              .set("hour", 0)
+              .set("minute", 0)
+              .set("second", 0)
+              .format("DD/MM/YYYY HH:mm:ss")
+          );
+        }
+        let responseType = {
+          responseType: 'blob'
+        }
+        const {response, error} = await executedTaskReportService.executedTaskExport(data, responseType);
+        if (error) {
+            this.$toast.add({
+            severity:'error',
+            detail:"Çalışan görevlerin dosyası oluşturulamadı.",
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });
+        } else {
+          if (response.status == 200) {
+            let blob = new Blob([response.data]);
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "Tasks_Report.xlsx";
+            this.loading = false;
+            link.click();
+          } else if (response.status == 400){
+            console.log("Could not create executed task report.")
+          }
+        }
+      },
+
+      clearFilterFields() {
+        this.filter = {
           taskSendDate: '',
           taskSendStartDate:'',
           taskSendEndDate:'',
           task:null
+        };
       },
-      pageNumber: 1,
-      rowNumber: 10,
-    };
-  },
-  mounted() {
-    this.getTasks();
-    this.getPlugins();
-  },
-  methods: {
-    showTaskDetailDialog(taskId) {
-      this.selectedTask = this.tasks.filter(
-        (task) => task.id === taskId
-      )[0];
-      this.taskDetailDialog = true;
-    },
-    showTaskExecutionsResultDialog(id){
-      this.selectedTaskExecutionResult = this.selectedTask.commandExecutions.filter(
-        (executionResult) => executionResult.id === id
-      )[0];
-      this.taskExecutionsResultDialog = true;
-    },
-    getTasks() {
-      this.currentPage = this.pageNumber;
-      var data = new FormData();
-      data.append("pageNumber", this.pageNumber);
-      data.append("pageSize", this.rowNumber);
-      data.append("startDate", this.filter.taskSendStartDate);
-      data.append("endDate", this.filter.taskSendEndDate);
-      if(this.filter.task != null) {
-        data.append("taskCommand", this.filter.task);
-      }
-      if (this.pageNumber == 1) {
-        data.append("getFilterData", true);
-      }
-      if (this.filter.taskSendDate[0] != null) {
-        data.append(
-          "startDate",
-          moment(this.filter.taskSendDate[0])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
-            .format("DD/MM/YYYY HH:mm:ss")
-        );
-      }
-      
-      if (this.filter.taskSendDate[1] != null) {
-        data.append(
-          "endDate",
-          moment(this.filter.taskSendDate[1])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
-            .format("DD/MM/YYYY HH:mm:ss")
-        );
-      }
-      axios.post("/lider/executedTaskReport/list/", data).then((response) => {
-        this.tasks = response.data.content;
-        this.totalElements = response.data.totalElements;
-        this.loading = false;
-        let successfullTaskCount = 0;
-        let failedTaskCount = 0;
 
-        this.tasks = this.tasks.map( task => {
-          task.commandExecutions.map( commandExecution => {
-            if(commandExecution.commandExecutionResults != null && commandExecution.commandExecutionResults.length != 0) {
-							if(commandExecution.commandExecutionResults[0].responseCode == "TASK_PROCESSED") {
-								successfullTaskCount++;
-							}
-							if(commandExecution.commandExecutionResults[0].responseCode == "TASK_ERROR") {
-								failedTaskCount++
-							}
-						}
-          },[successfullTaskCount, failedTaskCount]);
-
-          task.successfullTaskCount = successfullTaskCount;
-          task.failedTaskCount = failedTaskCount;
-          task.waitingTaskCount = task.uidList.length - successfullTaskCount - failedTaskCount;
-
-          successfullTaskCount = 0;
-          failedTaskCount = 0;
-
-
-          return task;
-
-        }, [successfullTaskCount, failedTaskCount]);
-
-      });
-    },
-    currentPageChange(newCurrentPage) {
-      this.loading = true;
-      this.getTasks(newCurrentPage);
-    },
-    onPage(event) {
-      this.loading = true;
-      this.pageNumber = event.page + 1;
-      this.rowNumber = event.rows;
-      this.getTasks();
-    },
-    filterAgents() {
-      if (this.filter.taskSendDate[0] != null) {
-        this.filter.taskSendStartDate = moment(
-          this.filter.taskSendDate[0]
-        )
-          .set("hour", 0)
-          .set("minute", 0)
-          .set("second", 0)
-          .format("DD/MM/YYYY HH:mm:ss");
-      }
-      if (this.filter.taskSendDate[1] != null) {
-        this.filter.taskSendEndDate = moment(
-          this.filter.taskSendDate[1]
-        )
-          .set("hour", 23)
-          .set("minute", 59)
-          .set("second", 59)
-          .format("DD/MM/YYYY HH:mm:ss");
-      }
-      this.getTasks(this.currentPage, this.showedTotalElementCount);
-    },
-    exportToExcel() {
-      this.loading = true;
-      var data = new FormData();
-      if(this.filter.task != null) {
-        data.append("taskCommand", this.filter.task);
-      }
-      if (this.filter.taskSendDate[0] != null) {
-        data.append(
-          "startDate",
-          moment(this.filter.taskSendDate[0])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
-            .format("DD/MM/YYYY HH:mm:ss")
-        );
-      }
-      if (this.filter.taskSendDate[1] != null) {
-        data.append(
-          "endDate",
-          moment(this.filter.taskSendDate[1])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
-            .format("DD/MM/YYYY HH:mm:ss")
-        );
-      }
-      axios.post("/lider/executedTaskReport/export", data, {responseType: 'blob'})
-      .then((response) => {
-        let blob = new Blob([response.data]);
-        let link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "Tasks_Report.xlsx";
-        this.loading = false;
-        link.click();
-      });
-    },
-    clearFilterFields() {
-      this.filter = {
-        taskSendDate: '',
-        taskSendStartDate:'',
-        taskSendEndDate:'',
-        task:null
-      };
-    },
-    getPlugins(){
-        // /lider/executedTaskReport/plugins
-
-        axios.post("/lider/executedTaskReport/plugins", {}).then((response) => {
+      async getPlugins(){
+        const {response, error} = await executedTaskReportService.executedTaskPlugins();
+        if (error) {
+          console.log("error geldi")
+        } else {
+          if (response.status == 200) {
+            console.log(response)
             this.plugins = response.data;
-        });
-    },
-    getTaskName(data) {
-      if (data != null && data.task != null && data.task != '') {
-        let plugin =  this.plugins.find(plugin => plugin.commandId === data.task.commandClsId );
-        if (plugin != null) {
-          return plugin.name
+          }
         }
-        return '';
-      } else {
-        return ''
-      }
+      },
 
+      getTaskName(data) {
+        if (data != null && data.task != null && data.task != '') {
+          let plugin =  this.plugins.find(plugin => plugin.commandId === data.task.commandClsId );
+          if (plugin != null) {
+            return plugin.name
+          }
+          return '';
+        } else {
+          return ''
+        }
+      },
     },
-  },
-};
-</script>
+  };
+  
+  </script>
 
 <style lang="scss" scoped>
 ::v-deep(.p-paginator) {

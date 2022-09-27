@@ -263,7 +263,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left=""> Toplam Sonuç: {{ totalElements }} </template>
+        <template> Toplam Sonuç: {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -279,6 +279,7 @@ import moment from "moment";
 import AddGroupDialog from './Dialogs/AddGroupDialog.vue'
 import AddToExistGroupDialog from './Dialogs/AddToExistGroupDialog.vue'
 import AgentDetailDialog from './Dialogs/AgentDetailDialog.vue'
+import { agentInfoReportService } from "../../../services/Reports/AgentInfoReportService.js";
 
 export default {
   data() {
@@ -384,7 +385,7 @@ export default {
       }
       return propertyValue;
     },
-    getAgents() {
+    async getAgents() {
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
@@ -424,16 +425,32 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/lider/agent_info/list", data).then((response) => {
-        this.brands = response.data.brands;
-        this.models = response.data.models;
-        this.processors = response.data.processors;
-        this.agentVersions = response.data.agentVersions;
-        this.osVersions = response.data.osVersions;
-        this.agents = response.data.agents.content;
-        this.totalElements = response.data.agents.totalElements;
-        this.loading = false;
-      });
+
+      const { response, error } = await agentInfoReportService.agentInfoList(data);
+      if (error){
+            this.$toast.add({
+            severity:'error',
+            detail:"Liste döndürülemedi.",
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });
+      } else{
+        if (response.status == 200) {
+          this.brands = response.data.brands;
+          this.models = response.data.models;
+          this.processors = response.data.processors;
+          this.agentVersions = response.data.agentVersions;
+          this.osVersions = response.data.osVersions;
+          this.agents = response.data.agents.content;
+          this.totalElements = response.data.agents.totalElements;
+          
+        } else if (response.status == 417) {
+          console.log("Could not retrieve agents list. Unexpected error occured. ")
+        }
+      }
+
+      this.loading = false;
+      
     },
     currentPageChange(newCurrentPage) {
       this.loading = true;
@@ -501,15 +518,38 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/lider/agent_info/export", data, {responseType: 'blob'})
-      .then((response) => {
-        let blob = new Blob([response.data]);
-        let link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "Agent Report.xlsx";
-        this.loading = false;
-        link.click();
-      });
+      const { response, error } =  agentInfoReportService.agentInfoExport(data)
+      if (error){
+            this.$toast.add({
+            severity:'error',
+            detail:"Dosya export edilemedi..",
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });
+
+      }else{
+        if(response.status == 200){
+          let blob = new Blob([response.data])
+          let link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "Agent Report.xlsx";
+          this.loading = false;
+          link.click();
+        }
+        else if(response.status == 400)
+          console.log("Could not create client report.");
+      }
+      
+
+      // axios.post("/lider/agent_info/export", data, {responseType: 'blob'})
+      // .then((response) => {
+      //   let blob = new Blob([response.data]);
+      //   let link = document.createElement("a");
+      //   link.href = window.URL.createObjectURL(blob);
+      //   link.download = "Agent Report.xlsx";
+      //   this.loading = false;
+      //   link.click();
+      // });
     },
     clearFilterFields() {
       this.filter = {
