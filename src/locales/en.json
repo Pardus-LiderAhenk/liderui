@@ -1468,7 +1468,21 @@
             "task_detail":"Task Detail",
             "total_result":"Total Result",
             "task_sent_ahenk_list":"Task Sent Ahenk List",
-            "close":"Close"
+            "close":"Close",
+            "agent_info_report_error":"Could not retrieve agent info list",
+            "error_417_agent_info_list":"Could not retrieve agents list. Error code : 417",
+            "agent_info_report_export_error":"Could not create agent task report.",
+            "error_400_agent_info_report":"Could not create agent task report. Error code : 400",
+            "error_get_operation_log_list":"Could not retrieve operation log list!",
+            "error_417_operation_log":"Unexpected error occured while getting the system log list. Error code: 417",
+            "error_operation_log_export":"Could not created system log task report",
+            "error_400_operation_export_report":"Unexpected error occured while creating the system log report. Error code: 400",
+            "error_operation_log_types": "Could not retrieve operation log type.",
+            "error_executed_task_list":"Could not retrieve executed task list!",
+            "error_417_executed_task_list":"Unexpected error occured while getting the executed task list. Error code: 417",
+            "error_executed_task_export":"Could not created executed task report",
+            "error_400_executed_task_export":"Unexpected error occured while creating the executed task report. Error code: 400",
+            "error_executed_task_plugin":"Failed to import executed task plugins"
             
         },
         "system_log_report":{
@@ -1542,7 +1556,15 @@
             "yes":"Yes",
             "cancel_scheduled_task": "Cancel Scheduled Task",
             "error_scheduled_task": "An error occurred while getting the scheduled task report",
-            "error_code_417": "Unexpected error occured while getting the scheduled task report. Error code: 417"
+            "error_code_417": "Unexpected error occured while getting the scheduled task report. Error code: 417",
+            "error_scheduled_task_export":"Could not created scheduled task report",
+            "error_code_400":"Could not create scheduled task report. Error code : 400",
+            "error_scheduled_task_plugins":"Failed to import scheduled task plugins",
+            "error_code_plugins_417": "Unexpected error occured while getting the scheduled task plugins. Error code: 417",
+            "success_scheduled_update":"Scheduled task updated successfully",
+            "error_scheduled_update":"Scheduled task id not found!!",
+            "success_scheduled_cancel":"Scheduled task canceled successfully",
+            "error_scheduled_cancel":"Error canceling scheduled task"
         }
     },
     "profile":{

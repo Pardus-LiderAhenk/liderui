@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const agentsUrl="api/lider/agent-info/list";
-const agentInfoExportUrl="api/lider/agent_info/export";
+const agentInfoExportUrl="api/lider/agent-info/export";
 
 
 class AgentInfoReportService {

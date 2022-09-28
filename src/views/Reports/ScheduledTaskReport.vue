@@ -427,7 +427,7 @@ export default {
       if(error){
             this.$toast.add({
             severity:'error',
-            detail:"Zamanlanmış görev raporu getirilemedi.",
+            detail:this.$t("reports.scheduled_task_report.error_scheduled_task_export"),
             summary:this.$t("computer.task.toast_summary"),
             life:3600
           });
@@ -441,7 +441,12 @@ export default {
               link.click();
           }
           else if(response.status == 400){
-            console.log("Could not create scheduled task report.Bad Request.")
+            this.$toast.add({
+            severity:'error',
+            detail: this.$t('reports.scheduled_task_report.error_code_400'),
+            summary: this.$t("computer.task.toast_summary"),
+            life:3600
+          });
           }
       }        
     },
@@ -456,12 +461,11 @@ export default {
     },
 
     async getPlugins(){
-      //axios.post("/api/lider/executed_task_report/plugins", {})
-      const { response, error } = await scheduledTaskReportService.scheduledTaskPlugins()
+      const { response, error } = await scheduledTaskReportService.scheduledTaskPlugins();
       if (error){
         this.$toast.add({
           severity:'error',
-          detail:"Zamanlanmış görev eklentileri alınamadı.",
+          detail: this.$t('reports.scheduled_task_report.error_scheduled_task_plugins'),
           summary:this.$t("computer.task.toast_summary"),
           life:3600
         });        
@@ -470,7 +474,12 @@ export default {
           this.plugins = response.data;
         }
         else if(response.status == 417){
-          console.log("Could not retrieve scheduled task plugins. Unexpected error occured.")
+          this.$toast.add({
+            severity:'error',
+            detail:this.$t('reports.scheduled_task_report.error_code_plugins_417'),
+            summary:this.$t("computer.task.toast_summary"),
+            life:3600
+        });        
         }
       }                            
     },
@@ -491,14 +500,40 @@ export default {
       var params = new FormData();
       params.append("id", this.selectedCommand.id);
       params.append("cronExpression", scheduledParam);
-      //axios.post("/lider/scheduledTask/update", params)
-      const { response, error} = scheduledTaskReportService.scheduledTaskUpdate(params)
+      const { response, error} = scheduledTaskReportService.scheduledTaskUpdate(params);
       if (response.status == 200 && response.data != null) {
         this.tasks = this.tasks.filter(command => command.id != response.data.id);
         this.tasks.push(response.data);
         this.$toast.add({
           severity:'success', 
-          detail: "Zamanlanmış görev başarıyla güncellendi", 
+          detail: this.$t('reports.scheduled_task_report.success_scheduled_update'),
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
+
+      else if(response.status == 400){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('reports.scheduled_task_report.error_scheduled_update'),
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+    
+      });
+    }
+  },
+
+  cancelScheduledTask() {
+    var params = new FormData();
+    params.append("id", this.selectedCommand.id);
+    //axios.post("/lider/scheduledTask/cancel", params)
+    const{ response, error } = scheduledTaskReportService.scheduledTaskCancel(params);
+      if (response.status == 200 && response.data != null) {
+        this.tasks = this.tasks.filter(command => command.id != response.data.id);
+        this.tasks.push(response.data);
+        this.$toast.add({
+          severity:'success', 
+          detail: this.$t('reports.scheduled_task_report.success_scheduled_cancel'), 
           summary:this.$t("computer.task.toast_summary"), 
           life: 3000
         });
@@ -506,41 +541,14 @@ export default {
       else if(response.status == 400){
         console.log("Scheduled task id not found!");
       }
-  
       this.$toast.add({
         severity:'error', 
-        detail: "Zamanlanmış görev güncellenirken hata oluştu \n"+error,
+        detail: this.$t('reports.scheduled_task_report.error_scheduled_cancel'), 
         summary:this.$t("computer.task.toast_summary"), 
         life: 3000
       });
-    },
-
-    cancelScheduledTask() {
-      var params = new FormData();
-      params.append("id", this.selectedCommand.id);
-      //axios.post("/lider/scheduledTask/cancel", params)
-      const{ response, error } = scheduledTaskReportService.scheduledTaskCancel(params)
-        if (response.status == 200 && response.data != null) {
-          this.tasks = this.tasks.filter(command => command.id != response.data.id);
-          this.tasks.push(response.data);
-          this.$toast.add({
-            severity:'success', 
-            detail: "Zamanlanmış görev başarıyla iptal edildi", 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-          });
-        }
-        else if(response.status == 400){
-          console.log("Scheduled task id not found!");
-        }
-        this.$toast.add({
-          severity:'error', 
-          detail: "Zamanlanmış görev iptal edilirken hata oluştu \n", 
-          summary:this.$t("computer.task.toast_summary"), 
-          life: 3000
-        });
-      this.cancelScheduledTaskDialog = false;
-    }
+    this.cancelScheduledTaskDialog = false;
+  }
   },
 };
 </script>

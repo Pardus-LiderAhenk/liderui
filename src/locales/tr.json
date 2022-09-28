@@ -1471,7 +1471,21 @@
             "task_detail":"Görev Detayı",
             "total_result":"Toplam Sonuç",
             "task_sent_ahenk_list":"Görev Gönderilen Ahenk Listesi",
-            "close":"Kapat"
+            "close":"Kapat",
+            "agent_info_report_error":"İstemci listesi getirilemedi.",
+            "error_417_agent_info_list":"İstemci listesi getirilemedi. Hata kodu : 417",
+            "agent_info_report_export_error":"İstemci kaporu oluşturulurken hata oluştu",
+            "error_400_agent_info_report":"İstemci raporu oluşturuluken hata alındı. Hata kodu : 400",
+            "error_get_operation_log_list":"Sistem güncesi listesi getirilirken hata oluştu.",
+            "error_417_operation_log":"Sistem güncesi listesi getirilirken beklenmedik hata alındı. Hata kodu : 417",
+            "error_operation_log_export":"Sistem güncesi raporu oluşturulurken bir hata alındı.",
+            "error_400_operation_export_report":"Sistem güncesi raporu oluşturuluken beklenmedik bir hata alındı. Hata odu: 400",
+            "error_operation_log_types":"Sistem güncesi log tipi getirilirken hata oluştu.",
+            "error_executed_task_list":"Çalıştırılan görevler listesi alınamadı.",
+            "error_417_executed_task_list":"Çalıştırılan görevler listesi getirilirken bir hata aluştu. Hata kodu : 417",
+            "error_executed_task_export":"Çalıştırılan görevler raporu oluşturulamadı.",
+            "error_400_executed_task_export":"Çalıştırılan görevler raporu oluşturulurken bir hata alındı. Hata Kodu : 400",
+            "error_executed_task_plugin":"Çalıştırılan görevler eklentisi getirilirken beklenmedik bir hata ile karşılaşıldı."
         },
         "system_log_report":{
             "system_log_report":"Sistem Güncesi Raporu",
@@ -1543,7 +1557,17 @@
             "yes":"Evet",
             "cancel_scheduled_task":"Zamanlanmış Görevi İptal Et",
             "error_scheduled_task": "Zamanlanmış görev listesi getirilirken hata oluştu",
-            "error_code_417": "Zamanlanmış görev listesi getirilirken beklenmedik hata oluştu. Hata kodu : 417"
+            "error_code_417": "Zamanlanmış görev listesi getirilirken beklenmedik hata oluştu. Hata kodu : 417",
+            "error_scheduled_task_export":"Zamanlanmış görev raporu oluşturulamadı",
+            "error_code_400":"Zamanlanmış görev raporu oluşturulamadı. Hata kodu : 400",
+            "error_scheduled_task_plugins": "Zamanlanmış görev eklentileri alınamadı",
+            "error_code_plugins_417": "Zamanlanmış görev eklentileri getirilirken beklenmedik hata oluştu. Hata kodu : 417",
+            "success_scheduled_update":"Zamanlanmış görev başarıyla güncellendi",
+            "error_scheduled_update":"Zamanlanmış görev kimliği bulunamadı!",
+            "success_scheduled_cancel":"Zamanlanmış görev başarıyla iptal edildi",
+            "error_scheduled_cancel":"Zamanlanmış görev iptal edilirken hata oluştu!"
+
+
         }
     },
     "profile":{

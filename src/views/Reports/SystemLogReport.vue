@@ -292,13 +292,13 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      //axios.post("/operation/logs", data)
+      
       const { response, error } = await systemTaskReportService.operationLogsList(data)
       if(error){
-            this.$toast.add({
+          this.$toast.add({
             severity:'error',
-            detail:"Operation log listesi getirilemedi.",
-            summary:this.$t("computer.toast_summary"),
+            detail:this.$t('reports.task_report.error_get_operation_log_list'),
+            summary:this.$t("computer.task.toast_summary"),
             life:3600
           });
       }else{
@@ -308,7 +308,12 @@ export default {
         this.loading = false;
         }
         else if(response.status == 417){
-          console.log("Coul not retrieve usage history. Unexpected error occured.")
+          this.$toast.add({
+            severity:'error',
+            detail:this.$t('reports.task_report.error_417_operation_log'),
+            summary:this.$t("computer.task.toast_summary"),
+            life:3600
+          });
         }
       }
       
@@ -363,7 +368,7 @@ export default {
       if(error){
             this.$toast.add({
             severity:'error',
-            detail:"Sistem güncesi dosyası oluşturulamadı.",
+            detail:this.$t('reports.task_report.error_operation_log_export'),
             summary:this.$t("computer.toast_summary"),
             life:3600
           });
@@ -377,6 +382,12 @@ export default {
           link.click();
         }
         else if(response.status == 400){
+          this.$toast.add({
+            severity:'error',
+            detail:this.$t('reports.task_report.error_400_operation_export_report'),
+            summary:this.$t("computer.task.toast_summary"),
+            life:3600
+          });
           console.log("Could not create operation log report.")
         }
       }            
@@ -394,12 +405,12 @@ export default {
     },
 
     async getOperationTypes(){
-        //axios.post("/operation/types", {})
+
       const { response, error } = await systemTaskReportService.operationTypes()
       if(error){
             this.$toast.add({
             severity:'error',
-            detail:"Log tipi getirilemedi.",
+            detail:this.$t('reports.task_report.error_operation_log_types'),
             summary:this.$t("computer.toast_summary"),
             life:3600
           });

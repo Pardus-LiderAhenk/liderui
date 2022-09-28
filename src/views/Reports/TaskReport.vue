@@ -363,8 +363,8 @@
         if (error) {
             this.$toast.add({
             severity:'error',
-            detail:"Çalışan görevler getirilemedi.",
-            summary:this.$t("computer.toast_summary"),
+            detail:this.$t('reports.task_report.error_executed_task_list'),
+            summary:this.$t("computer.task.toast_summary"),
             life:3600
           });
         } else {
@@ -393,7 +393,12 @@
               return task;
             }, [successfullTaskCount, failedTaskCount]);
           } else if (response.status == 417) {
-            console.log("Executed task list not found.Unexpected error occured")
+            this.$toast.add({
+              severity:'error',
+              detail:this.$t('reports.task_report.error_417_executed_task_list'),
+              summary:this.$t("computer.task.toast_summary"),
+              life:3600
+          });
           }
         }
       },
@@ -462,10 +467,10 @@
         }
         const {response, error} = await executedTaskReportService.executedTaskExport(data, responseType);
         if (error) {
-            this.$toast.add({
+          this.$toast.add({
             severity:'error',
-            detail:"Çalışan görevlerin dosyası oluşturulamadı.",
-            summary:this.$t("computer.toast_summary"),
+            detail:this.$t('reports.task_report.error_executed_task_export'),
+            summary:this.$t("computer.task.toast_summary"),
             life:3600
           });
         } else {
@@ -477,7 +482,12 @@
             this.loading = false;
             link.click();
           } else if (response.status == 400){
-            console.log("Could not create executed task report.")
+            this.$toast.add({
+              severity:'error',
+              detail:this.$t('reports.task_report.error_400_executed_task_export'),
+              summary:this.$t("computer.task.toast_summary"),
+              life:3600
+          });
           }
         }
       },
@@ -494,10 +504,15 @@
       async getPlugins(){
         const {response, error} = await executedTaskReportService.executedTaskPlugins();
         if (error) {
-          console.log("error geldi")
+          this.$toast.add({
+              severity:'error',
+              detail:this.$t('reports.task_report.error_executed_task_plugin'),
+              summary:this.$t("computer.task.toast_summary"),
+              life:3600
+          });
         } else {
           if (response.status == 200) {
-            console.log(response)
+
             this.plugins = response.data;
           }
         }

@@ -274,7 +274,6 @@
  * Detailed Agent Report.
  * @see {@link http://www.liderahenk.org/}
  */
-import axios from "axios";
 import moment from "moment";
 import AddGroupDialog from './Dialogs/AddGroupDialog.vue'
 import AddToExistGroupDialog from './Dialogs/AddToExistGroupDialog.vue'
@@ -430,8 +429,8 @@ export default {
       if (error){
             this.$toast.add({
             severity:'error',
-            detail:"Liste döndürülemedi.",
-            summary:this.$t("computer.toast_summary"),
+            detail: this.$t('reports.task_report.agent_info_report_error'),
+            summary:this.$t("computer.task.toast_summary"),
             life:3600
           });
       } else{
@@ -445,7 +444,12 @@ export default {
           this.totalElements = response.data.agents.totalElements;
           
         } else if (response.status == 417) {
-          console.log("Could not retrieve agents list. Unexpected error occured. ")
+          this.$toast.add({
+            severity:'error',
+            detail: this.$t('reports.task_report.error_417_agent_info_list'),
+            summary:this.$t("computer.task.toast_summary"),
+            life:3600
+          });
         }
       }
 
@@ -483,7 +487,7 @@ export default {
       }
       this.getAgents(this.currentPage, this.showedTotalElementCount);
     },
-    exportToExcel() {
+    async exportToExcel() {
       this.loading = true;
       var data = new FormData();
       data.append("status", this.filter.status);
@@ -518,11 +522,11 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      const { response, error } =  agentInfoReportService.agentInfoExport(data)
+      const { response, error } = await agentInfoReportService.agentInfoExport(data)
       if (error){
             this.$toast.add({
             severity:'error',
-            detail:"Dosya export edilemedi..",
+            detail:this.$t('reports.task_report.agent_info_report_export_error'),
             summary:this.$t("computer.toast_summary"),
             life:3600
           });
@@ -537,20 +541,15 @@ export default {
           link.click();
         }
         else if(response.status == 400)
-          console.log("Could not create client report.");
-      }
-      
-
-      // axios.post("/lider/agent_info/export", data, {responseType: 'blob'})
-      // .then((response) => {
-      //   let blob = new Blob([response.data]);
-      //   let link = document.createElement("a");
-      //   link.href = window.URL.createObjectURL(blob);
-      //   link.download = "Agent Report.xlsx";
-      //   this.loading = false;
-      //   link.click();
-      // });
+        this.$toast.add({
+            severity:'error',
+            detail:this.$t('reports.task_report.error_400_agent_info_report'),
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });      
+        }
     },
+
     clearFilterFields() {
       this.filter = {
         dn: "",
