@@ -6,6 +6,7 @@ import BasicInstallation from '../../views/Installation/BasicInstallation/BasicI
 import DatabaseInstallation from '../../views/Installation/BasicInstallation/DatabaseInstallation.vue';
 import OpenLdapInstallation from '../../views/Installation/BasicInstallation/OpenLdapInstallation.vue';
 import EjabberdInstallation from '../../views/Installation/BasicInstallation/EjabberdInstallation.vue'
+import Confirmation from '../../views/Installation/BasicInstallation/Confirmation.vue'
 
 
 const routes = [
@@ -39,6 +40,11 @@ const routes = [
                         path: "/basic/installation/ejabberd",
                         name: "Ejabberd Installation",
                         components: { default: EjabberdInstallation }
+                    },
+                    {
+                        path: "/basic/installation/confirmation",
+                        name: "Installation Confirmation",
+                        components: { default: Confirmation }
                     },
                 ]
             },

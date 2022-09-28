@@ -12,8 +12,16 @@
                     <template #icons>
                         <i class="pi pi-database" style="fontSize: 1.5rem;color:#3296F3;"></i>
                     </template>
-                    <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+                    <form @submit.prevent="nextPage(!v$.$invalid)" class="p-fluid">
                         <div class="p-fluid">
+                            <div class="p-field">
+                                <label for="">Choose Action</label>
+                                <Dropdown v-model="database.action" 
+                                    :options="actions" optionLabel="name" 
+                                    optionValue="value" 
+                                    placeholder="Select action" 
+                                />
+                            </div>
                             <div class="p-field">
                                 <label>Database Name</label>
                                 <InputText id="name" 
@@ -73,8 +81,8 @@
                             <div class="p-field p-d-flex p-jc-end">
                                 <div>
                                     <Button
-                                        icon="pi pi-caret-right"
-                                        label="Install"
+                                        icon="pi pi-angle-right"
+                                        label="Next"
                                         type="submit"
                                     />
                                 </div>
@@ -91,7 +99,6 @@
 </template>
 
 <script>
-import { databaseInstallationService } from '../../../services/Installation/BasicInstallation/DatabaseInstallationService'
 import { useVuelidate } from "@vuelidate/core";
 import { required, numeric } from "@vuelidate/validators";
 
@@ -132,48 +139,42 @@ export default {
                 name: "",
                 username: "",
                 password: null,
-                port: null
+                port: null,
+                action: "new"
             },
+            actions: [
+                {
+                    name: "Install New Database",
+                    value: "new"
+                },
+                {
+                    name: "Use Existing Database",
+                    value: "exist"
+                }
+            ],
             submitted: false,
         };
     },
     methods: {
-        async handleSubmit(isFormValid) {
+        async nextPage(isFormValid) {
             let serverInfo = await this.$refs.serverConnection.getServerConnectionInfo();
 
             this.submitted = true;
-            if (!isFormValid) {
-                return;
-            }
+            // if (!isFormValid) {
+            //     return;
+            // }
             let params = {
-                serverAddress: serverInfo.address,
-                serverUsername: serverInfo.username,
-                serverPassword: serverInfo.password,
+                dbServerAddress: serverInfo.address,
+                dbServerUsername: serverInfo.username,
+                dbServerPassword: serverInfo.password,
                 dbName: this.database.name,
                 dbUsername: this.database.username,
-                dbPassword: this.database.password,
-                dbPort: this.database.port
+                dbUserPassword: this.database.password,
+                dbPort: this.database.port,
+                dbAction: this.database.action
             };
 
-            const {data, error} = await databaseInstallationService.installDatabase(params)
-            if (data) {
-                console.log("success")
-                this.$toast.add({
-                    severity:'success', 
-                    detail: "Database install", 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                this.$emit('next-page', { formData: {}, pageIndex: 0 });
-            } else {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: "An error occurred while installing database", 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                console.log("errorr")
-            }
+            this.$emit('next-page', { formData: params, pageIndex: 0 });
         },
     }
 };

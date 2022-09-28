@@ -5,7 +5,7 @@
                 <h3 style="fontSize: 1.5rem">Server Connection Information</h3>
             </template>
             <template #icons>
-                <i class="pi pi-link" style="fontSize: 1.5rem;color:#3296F3;"></i>
+                <i class="p-ml-2  pi pi-link" style="fontSize: 1.5rem;color:#3296F3;"></i>
             </template>
             <form class="p-fluid">
                 <div class="p-fluid">
@@ -46,9 +46,8 @@
                 </div>
                 <div class="p-field p-d-flex p-jc-between">
                     <div>
-                        <span v-if="status" class="badge success">Success</span>
-                        <span v-else class="badge danger">No Connect</span>
-                        
+                        <Tag v-if="status" icon="pi pi-check" severity="success" value="Success"></Tag>
+                        <Tag v-if="!status" icon="pi pi-times" severity="danger" value="Danger"></Tag>
                     </div>
                     <div>
                         <Button
@@ -71,12 +70,12 @@ export default {
     data() {
         return {
             server: {
-                address: "",
-                username: "",
-                password: ""
+                address: "192.168.56.111",
+                username: "pardus",
+                password: "123456"
             },
             validationErrors: {},
-            status: false
+            status: null
         };
     },
     methods: {
@@ -118,20 +117,5 @@ export default {
 </script>
 
 <style scoped>
- .badge.danger {
-    background: #EF4444;
-    color:  #ffffff;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 3px
-  }
-
-.badge.success {
-    background: #c8e6c9;
-    color: #256029;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 3px
-}
 </style>
 
