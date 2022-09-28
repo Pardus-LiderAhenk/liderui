@@ -331,7 +331,7 @@ export default {
                                 command: () => {this.modals.addGroupDialog = true;}
                             },
                         ]
-                        if (this.enableDeleteUpdate == "true") {
+                        if (this.enableDeleteUpdate == true) {
                             this.contextMenuItems.push({
                                 label: this.$t('user_management.delete_folder'), 
                                 icon:"pi pi-trash", 
@@ -378,7 +378,7 @@ export default {
                             },
                             
                         ]
-                        if (this.enableDeleteUpdate == "true") {
+                        if (this.enableDeleteUpdate == true) {
                             this.contextMenuItems.push({
                                 label: this.$t('user_management.delete_user'), 
                                 icon:"pi pi-user-minus", 
@@ -453,7 +453,7 @@ export default {
                                 command: () => {this.modals.addMemberDialog = true}
                             },
                         ]
-                        if (this.enableDeleteUpdate == "true") {
+                        if (this.enableDeleteUpdate == true) {
                             this.contextMenuItems.push({
                                 label: this.$t('user_management.delete_group'), 
                                 icon:"pi pi-trash", 
@@ -484,7 +484,7 @@ export default {
         },
 
         appendNode(node, parentNode) {
-            this.$refs.tree.append(node, parentNode);
+            this.$refs.adTree.append(node, parentNode);
         },
 
         updateNode(node, selectedNode) {
@@ -493,7 +493,7 @@ export default {
         },
 
         deleteNode(selectedNode) {
-            this.$refs.tree.remove(selectedNode);
+            this.$refs.adTree.remove(selectedNode);
             this.selectedNode = null;
             this.setSelectedLiderNode(null);
         },
