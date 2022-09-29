@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const operationLogsUrl = "api/operation/logs";
-const operationExportUrl = "api/operation/export";
-const operationTypesUrl = "api/operation/types";
+const operationLogsUrl = "/api/operation/logs";
+const operationExportUrl = "/api/operation/export";
+const operationTypesUrl = "/api/operation/types";
 
 
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const executeTaskListUrl = "api/lider/executed-task-report/list";
-const executeTaskPluginstUrl = "api/lider/executed-task-report/plugins";
-const executeTaskExportUrl = "api/lider/executed-task-report/export";
+const executeTaskListUrl = "/api/lider/executed-task-report/list";
+const executeTaskPluginstUrl = "/api/lider/executed-task-report/plugins";
+const executeTaskExportUrl = "/api/lider/executed-task-report/export";
 
 
 class ExecutedTaskReportService{

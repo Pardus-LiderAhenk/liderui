@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const scheduleTaskReportListUrl = "api/lider/scheduled-task-report/list";
-const scheduleTaskReportPluginsUrl = "api/lider/scheduled-task-report/plugins";
-const scheduleTaskReportExportUrl = "api/lider/scheduled-task-report/export";
-const scheduleTaskReportUpdatetUrl = "api/lider/scheduled-task-report/update";
-const scheduleTaskReportCanceltUrl = "api/lider/scheduled-task-report/cancel";
+const scheduleTaskReportListUrl = "/api/lider/scheduled-task-report/list";
+const scheduleTaskReportPluginsUrl = "/api/lider/scheduled-task-report/plugins";
+const scheduleTaskReportExportUrl = "/api/lider/scheduled-task-report/export";
+const scheduleTaskReportUpdatetUrl = "/api/lider/scheduled-task-report/update";
+const scheduleTaskReportCanceltUrl = "/api/lider/scheduled-task-report/cancel";
 
 
 
