@@ -209,7 +209,7 @@ export default {
             data.append("adUseTLS",this.adUseTLS);
             data.append("adAllowSelfSignedCert",this.adAllowSelfSignedCert);
 
-            axios.post('/lider/settings/update/ldap', data).then(response => {
+            axios.post('/api/lider/settings/update/ldap', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
                     detail: this.$t('settings.server_settings.directory_server_settings.directory_server_settings_successfully_update'), 

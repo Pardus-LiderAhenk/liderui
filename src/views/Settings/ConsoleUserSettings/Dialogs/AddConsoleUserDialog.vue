@@ -118,8 +118,9 @@
 
 <script>
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
-import axios from 'axios';
+
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import { consoleUserSettingsService } from "../../../../services/Settings/ConsoleUserSettingsService/ConsoleUserSettingsService.js";
 
 export default {
     components:{
@@ -191,7 +192,10 @@ export default {
                 console.log('Selected user node', this.selectedUserNode);
                 data.append('dn', this.selectedUserNode.distinguishedName);
                 data.append('roles[]', ['ROLE_USER']);
-                axios.post('/lider/settings/editUserRoles',data).then(response => {
+                const {response, error} = consoleUserSettingsService.editUserRoles(data);
+
+                //axios.post('/lider/settings/editUserRoles',data).then(response => {
+                if(response.status == 200){
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('settings.console_user_settings.the_user_has_been_successfully_authorized'), 
@@ -199,7 +203,10 @@ export default {
                         life: 3000
                     });
                     this.$emit('updateConsoleUsers');
-                });
+                }
+            else if (response.status == 417){
+                return "";
+            }
             } else {
                 this.$toast.add({
                     severity:'error', 
@@ -222,34 +229,32 @@ export default {
             data.append('homePostalAddress', this.userForm.homePostalAddress);
             data.append('mail', this.mail);
 
-            axios.post('/lider/user/addUser', data).then(response => {
-                if(response.status == 200) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.console_user_settings.user_successfully_create'), 
-                        summary: this.$t('settings.console_user_settings.successful'), 
-                        life: 3000
-                    });
-
-                    this.userForm = {
-                        cn : null,
-                        uid: null,
-                        sn : null,
-                        userPassword : null,
-                        telephoneNumber : null,
-                        homePostalAddress : null,
-                        mail : null,
-                    }
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'), 
-                        summary: this.$t('settings.console_user_settings.error'), 
-                        life: 3000
-                    });
-
+            const { response,error } = consoleUserSettingsService.addUser(data);
+            if(response.status == 200) {
+                this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('settings.console_user_settings.user_successfully_create'), 
+                    summary: this.$t('settings.console_user_settings.successful'), 
+                    life: 3000
+                });
+                this.userForm = {
+                    cn : null,
+                    uid: null,
+                    sn : null,
+                    userPassword : null,
+                    telephoneNumber : null,
+                    homePostalAddress : null,
+                    mail : null,
                 }
-            }); 
+            } else {
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'), 
+                    summary: this.$t('settings.console_user_settings.error'), 
+                    life: 3000
+                });
+            }
+          
         },
         setSelectedGroupNode(node) {
             this.groupMembers = [];
@@ -263,9 +268,15 @@ export default {
 
             let data = new FormData();
             data.append('dn',node.distinguishedName);
-            axios.post('/lider/settings/getOLCAccessRules', data ).then(response => {
+            
+            const {response,error} = consoleUserSettingsService.olcAccessRules(data);
+
+            if (response.status == 200){
+                
                 this.groupPrivilages = response.data;
-            });
+
+            }
+        
             
         },
         addUserToGroup() {
@@ -284,22 +295,22 @@ export default {
             let data = new FormData();
             data.append('distinguishedName',this.selectedUserNode.distinguishedName);
             data.append('parentName',this.selectedGroupNode.distinguishedName);
-            axios.post('/lider/settings/addMemberToGroup', data).then(response => {
-                if (response.status === 200) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.console_user_settings.user_successfully_add_to_group'), 
-                        summary: this.$t('settings.console_user_settings.successful'), 
-                        life: 3000
-                    });
-
-                    this.groupMembers = [];
-                    this.groupPrivilages = [];
-                    this.selectedGroupNode = null;
-                    this.selectedUserNode = null;
-                    this.modalVisible = false;
-                }
-            });
+            //axios.post('/lider/settings/addMemberToGroup', data).then(response => {
+            const {response,error} = consoleUserSettingsService.addMemberToGroup(data);
+            if (response.status === 200) {
+                this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('settings.console_user_settings.user_successfully_add_to_group'), 
+                    summary: this.$t('settings.console_user_settings.successful'), 
+                    life: 3000
+                });
+                this.groupMembers = [];
+                this.groupPrivilages = [];
+                this.selectedGroupNode = null;
+                this.selectedUserNode = null;
+                this.modalVisible = false;
+            }
+            
 
             
         }

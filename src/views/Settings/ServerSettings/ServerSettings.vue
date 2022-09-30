@@ -42,7 +42,7 @@ export default {
     },
     methods: {
         getServerSettings() {
-            axios.get('/lider/settings/configurations').then(response => {
+            axios.get('/api/lider/settings/configurations').then(response => {
                 this.serverSettings = response.data;
             });
         }
