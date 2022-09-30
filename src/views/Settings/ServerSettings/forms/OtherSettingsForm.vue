@@ -35,7 +35,7 @@
                     </div>
                     <div class="p-field-radiobutton">
                         <RadioButton id="sudoRoleType3" name="sudoRoleType" value="NONE"  v-model="sudoRoleType"/>
-                        <label for="sudoRoleType3">{{$t('settings.server_settings.other_settings.none')}}</label>
+                        <label for="sudoRoleType3">{{$t('settings.server_settings.other_settings.none_sudo')}}</label>
                     </div>
                 </div>
             </Fieldset>

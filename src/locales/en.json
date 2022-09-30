@@ -691,7 +691,7 @@
             "xmpp_server_setting":"XMPP Server Settings",
             "file_server_setting":"File Server Settings",
             "mail_server_setting":"Mail Server Settings",
-            "other_setting":"Other Setting",
+            "other_setting":"Other Settings",
             "directory_server_settings":{
                 "directory_server_settings":"Directory Server Settings",
                 "ldap_server_informations":"LDAP Server Information",
@@ -783,7 +783,8 @@
                 "domain_type":"Select which domain the clients will be taken to",
                 "ldap":"LDAP",
                 "active_directory_or_samba":"Active Directory or SAMBA",
-                "none":"None (When this option is selected, the client will not be included in the domain. The client can be logged in as a local user.)",
+                "none":"None (When this option is selected, the client will not be included in the domain. The client can be logged in as a local user)",
+                "none_sudo":"None (When this option is selected, the users will be able to access sudo authorization only through the local user)",
                 "ahenk_repo_setting":"Ahenk Repo Settings",
                 "repo_address":"Repo Address",
                 "repo_key_address":"Repo Key Address",

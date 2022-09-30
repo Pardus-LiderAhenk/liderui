@@ -787,6 +787,7 @@
                 "ldap":"LDAP",
                 "active_directory_or_samba":"Aktif Dizin veya Samba",
                 "none":"Hiçbiri (Bu seçenek seçildiğinde istemci etki alanına dahil edilmeyecektir. İstemciye yerel kullanıcı ile giriş yapılabilir)",
+                "none_sudo":"Hiçbiri (Bu seçenek seçildiğinde kullanıcılar sudo yetkilendirmesine sadece yerel kullanıcı üzerinden erişebilecekler)",
                 "ahenk_repo_setting":"Ahenk Depo Ayarları",
                 "repo_address":"Depo Adresi",
                 "repo_key_address":"Depo Anahtar Adresi",
