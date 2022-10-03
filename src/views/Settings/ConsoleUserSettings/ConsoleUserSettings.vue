@@ -188,8 +188,7 @@ import UserDialog from './Dialogs/UsersDialog.vue';
 import UserGroupDialog from './Dialogs/UserGroupsDialog.vue';
 import RoleDialog from './Dialogs/RoleGroupsDialog.vue';
 import AddConsoleUserDialog from './Dialogs/AddConsoleUserDialog.vue';
-import axios from 'axios';
-import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService/ConsoleUserSettingsService.js"
+import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService/ConsoleUserSettingsService.js";
 
 export default {
     components: {
@@ -281,14 +280,30 @@ export default {
         async getRoles(){
             const {response,error} = await consoleUserSettingsService.getRoles();
             if(error){
-                console.log("here to error");
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                    summary: this.$t('settings.console_user_settings.user_not_select'),
+                    life: 3000
+                });
             }
             else{
                 if(response.status == 200){
                     this.roles = response.data;
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.console_user_settings.user_roles_get_successfully'),
+                        summary: this.$t('settings.console_user_settings.success'),
+                        life: 3000
+                    });
                 }
                 else if(response.status == 417){
-                    console.log("here to error");
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_417_get_user_roles'),
+                        summary: this.$t('settings.console_user_settings.user_not_select'),
+                        life: 3000
+                    });
                 }
             }
         
@@ -300,7 +315,25 @@ export default {
             {
                 this.records = response.data;
             }
-               
+            else{
+                if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_417_get_console_user'),
+                        summary: this.$t('settings.console_user_settings.error'),
+                        life: 3000
+                    });
+
+                }
+                else if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                        summary: this.$t('settings.console_user_settings.error'),
+                        life: 3000
+                    });
+                }
+            }               
         },
 
         updateUserRoles() {
@@ -310,10 +343,10 @@ export default {
                 data.append('dn', this.selectedUser.distinguishedName);
                 data.append('roles[]', this.selectedUser.attributesMultiValues.liderPrivilege);
                 
-//                axios.post('/lider/settings/editUserRoles', data).then(response => {
+
                 const { response,error } = consoleUserSettingsService.editUserRoles(data);
                 if(response.status === 200) {
-                     this.$toast.add({
+                    this.$toast.add({
                         severity:'success', 
                         detail: this.$t('settings.console_user_settings.users_role_successfully_update'), 
                         summary: this.$t('settings.console_user_settings.successful'), 
@@ -322,16 +355,27 @@ export default {
                     // FIXME 
                     this.getConsoleUsers();
                 } else {
-                      this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.console_user_settings.an_unexpected_error_occurred_while_deauthorizing'), 
-                        summary: this.$t('settings.console_user_settings.error'), 
-                        life: 3000
+                    if(error){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.please_select_the_user_you_want_to_be_authorized'),
+                            summary: this.$t('settings.console_user_settings.error'),
+                            life: 3000
                     });
+                    }
+
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_edit_user_roles'),
+                            summary: this.$t('settings.console_user_settings.error'),
+                            life: 3000
+                        });
+                    }                      
                 }
-//                });
             }
         },
+
         roleSwitchChanged(data) {
             if (this.selectedUser) {
                 if (this.selectedUser.attributesMultiValues.liderPrivilege.includes(data.value)) {
@@ -345,27 +389,38 @@ export default {
             if (this.selectedUser) {
                 let data = new FormData();
                 data.append('dn',this.selectedUser.distinguishedName);
-            //    axios.post('/lider/settings/deleteConsoleUser', data).then(response => {
-                    const { response,error } = consoleUserSettingsService.deleteConsoleUsers(data);
-                    console.log('Kullanıcı silindi', response);
-                    this.getConsoleUsers();
-                    this.$toast.add({
-                        severity:'success', 
-                        detail:  this.$t('settings.console_user_settings.user_roles_deleted_successfully'),  
-                        summary: this.$t('settings.console_user_settings.successful'), 
-                        life: 3000
-                    });
-            //    });
-            } else {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
-                    summary: this.$t('settings.console_user_settings.no_user_selected'), 
-                    life: 3000
-                });
-            }
 
+                const { response,error } = consoleUserSettingsService.deleteConsoleUsers(data);
 
+                this.getConsoleUsers();
+                    if(response.status == 200){
+                        this.$toast.add({
+                            severity:'success', 
+                            detail:  this.$t('settings.console_user_settings.user_roles_deleted_successfully'),  
+                            summary: this.$t('settings.console_user_settings.successful'), 
+                            life: 3000
+                        });
+                    }
+                    else{
+                        if (response.status = 417){
+                            this.$toast.add({
+                                severity:'error', 
+                                detail: this.$t('settings.console_user_settings.error_417_deleted_user'),
+                                summary: this.$t('settings.console_user_settings.error'), 
+                                life: 3000
+                                });
+
+                        }
+                        else if (error){
+                            this.$toast.add({
+                                severity:'error', 
+                                detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
+                                summary: this.$t('settings.console_user_settings.error'), 
+                                life: 3000
+                                });
+                        }
+                    }                   
+                } 
             this.showDeleteConsoleUserDialog = false;
         }, 
         setSelectedGroupNode(node) {
@@ -383,19 +438,36 @@ export default {
             let rules = this.groupPrivilages.filter(p => p.accessDN === rule.accessDN);
 
             if(rules && rules.length > 0) {
-            //    axios.post('/lider/settings/deleteOLCAccessRule', rules[0]).then(response => {
+
             const { response,error } = consoleUserSettingsService.deleteOLCAccessRule(data);
             if(response.status === 200) {
                 this.$toast.add({
                     severity:'success', 
-                    detail: this.$t('settings.console_user_settings.role_successfully_deleted'),
+                    detail: this.$t('settings.console_user_settings.olc_success_rule_deleted'),
                     summary: this.$t('settings.console_user_settings.successful'),
                     life: 3000
                 })
                 this.getOlcAccessRules();
             }
-            //    });
+            else{
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_olc_rule_deleted'),
+                        summary: this.$t('settings.console_user_settings.error'), 
+                        life: 3000
+                    });
+                }
+                else if(response.status = 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_417_olc_rule_deleted'),
+                        summary: this.$t('settings.console_user_settings.error'), 
+                        life: 3000
+                    });
+                }
             }
+        }
         }, 
         addOlcAccessRule(olcAccessDn, accessType) {
             let data = new FormData();
@@ -404,7 +476,7 @@ export default {
             data.append('olcAccessDN', olcAccessDn, );
             data.append('accessType',accessType);
 
-        //    axios.post('/lider/settings/addOLCAccessRule', data).then(response => {
+
             const { response,error } = consoleUserSettingsService.addOLCAccessRule(data);
             if (response.status === 200) {
                 if(response.data) {
@@ -431,18 +503,30 @@ export default {
             if(this.selectedGroupNode) {
                 let data = new FormData();
                 data.append('dn',this.selectedGroupNode.distinguishedName);
-            //    axios.post('/lider/settings/getOLCAccessRules', data ).then(response => {
+
                 const { response,error} = consoleUserSettingsService.getOLCAccessRule(data);
                 if(response.status == 200){
-
-                    this.groupPrivilages = response.data;
+                    this.groupPrivilages = response.data
+                    
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.console_user_settings.olc_access_rule_get'),
+                        summary: this.$t('settings.console_user_settings.successful'),
+                        life: 3000
+                    });
 
                 }
-                    
-            //    });
+                else{
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_417_olc_access_rule'),
+                        summary: this.$t('settings.console_user_settings.error'),
+                        life: 3000
+                    });
+                    }                    
+                }
             }
         }
-    }
    
 }
 </script>

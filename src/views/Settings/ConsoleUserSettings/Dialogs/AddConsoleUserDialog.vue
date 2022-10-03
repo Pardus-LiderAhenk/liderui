@@ -47,8 +47,8 @@
                 </Toolbar>
                 <tree-component 
                     ref="agentsTree"
-                    loadNodeUrl="/lider/user/getUsers"
-                    loadNodeOuUrl="/lider/user/getOuDetails"
+                    loadNodeUrl="/api/lider/user/getUsers"
+                    loadNodeOuUrl="/api/lider/user/getOuDetails"
                     :treeNodeClick="setSelectedUserNode"
                     :searchFields="searchFields"
                 />
@@ -205,7 +205,12 @@ export default {
                     this.$emit('updateConsoleUsers');
                 }
             else if (response.status == 417){
-                return "";
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.error_417_edit_user_roles'),
+                    summary: this.$t('settings.console_user_settings.user_not_select'),
+                    life: 3000
+                });
             }
             } else {
                 this.$toast.add({
@@ -219,7 +224,7 @@ export default {
         setSelectedUserNode(node) {
             this.selectedUserNode = node;
         },
-        addNewConsoleUser(){
+        async addNewConsoleUser(){
             let data = new FormData();
             data.append('uid', this.userForm.uid);
             data.append('cn',this.userForm.cn);
@@ -229,32 +234,40 @@ export default {
             data.append('homePostalAddress', this.userForm.homePostalAddress);
             data.append('mail', this.mail);
 
-            const { response,error } = consoleUserSettingsService.addUser(data);
-            if(response.status == 200) {
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.console_user_settings.user_successfully_create'), 
-                    summary: this.$t('settings.console_user_settings.successful'), 
-                    life: 3000
-                });
-                this.userForm = {
-                    cn : null,
-                    uid: null,
-                    sn : null,
-                    userPassword : null,
-                    telephoneNumber : null,
-                    homePostalAddress : null,
-                    mail : null,
-                }
-            } else {
+            const { response, error } = await consoleUserSettingsService.addUser(data);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'), 
                     summary: this.$t('settings.console_user_settings.error'), 
                     life: 3000
                 });
+            } else {
+                if(response.status == 200) {
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.console_user_settings.user_successfully_create'), 
+                        summary: this.$t('settings.console_user_settings.successful'), 
+                        life: 3000
+                    });
+                    this.userForm = {
+                        cn : null,
+                        uid: null,
+                        sn : null,
+                        userPassword : null,
+                        telephoneNumber : null,
+                        homePostalAddress : null,
+                        mail : null,
+                    }
+                } else if (response.status ==  417) {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_417_user_create'), 
+                        summary: this.$t('settings.console_user_settings.error'), 
+                        life: 3000
+                    });
+                }
             }
-          
         },
         setSelectedGroupNode(node) {
             this.groupMembers = [];
@@ -270,15 +283,24 @@ export default {
             data.append('dn',node.distinguishedName);
             
             const {response,error} = consoleUserSettingsService.olcAccessRules(data);
-
-            if (response.status == 200){
-                
+            if(response.status == 200){
                 this.groupPrivilages = response.data;
+            }
+            else{
+                this.$toast.add({
+                    severity:'error',
+                    detail:this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                    summary:this.$t('settings.console_user_settings.error'),
+                    life:3600
+          });
+
+                    
+                }
 
             }
         
-            
         },
+
         addUserToGroup() {
 
             if (this.selectedUserNode == null || this.selectedGroupNode == null) {
@@ -314,6 +336,6 @@ export default {
 
             
         }
-    }
+    
 }
 </script>

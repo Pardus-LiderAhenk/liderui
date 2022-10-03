@@ -176,7 +176,7 @@ export default {
             params.append("dn", this.selectedGroup.distinguishedName);
             params.append("attribute", "member");
             params.append("value", this.selectedNode.distinguishedName);
-            axios.post("/lider/user/removeAttributeWithValue", params).then((response) => {
+            axios.post("/api/lider/user/removeAttributeWithValue", params).then((response) => {
                 if (response.data) {
                     let index = this.groups.findIndex(function(item, i){
                         return item.distinguishedName === response.data.distinguishedName;

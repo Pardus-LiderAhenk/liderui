@@ -686,9 +686,21 @@
             "please_select_user_and_group":"Lütfen kullanıcı ve grup seçiniz.",
             "user_successfully_add_to_group":"Kullanıcı gruba başarı ile eklendi.",
             "create":"Oluştur",
-            "authorization":"Yetki"
+            "authorization":"Yetki",
+            "error_417_edit_user_roles":"Kulanıcıya yetki verilemedi. Hata kodu : 417",
+            "error_417_user_create":"Kullanıcı oluşturulamadı. Beklenmedik bir hata alındı. Hata kodu : 417",
+            "error_417_deleted_user":"Seçilen kullanıcı silinmedi. Beklenmedik hata oluştu. Hata kodu : 417",
+            "error_417_get_console_user":"Konsol kullanıcıları listesi alınamadı. Beklenmeyen bir hata oluştu. Hata kodu : 417",
+            "user_roles_get_successfully":"Kullanıcı rolleri başarıyla alındı",
+            "error_417_get_user_roles":"Kullanıcı rolleri alınamadı. Beklenmedik bir hata alındı. Hata kodu : 417",
+            "olc_success_rule_deleted":"OLC erişim kuralı başarı ile silindi.",
+            "error_olc_rule_deleted":"OLC erişim kuralı silinemedi.",
+            "error_417_olc_rule_deleted":"OLC erişim kuralı silinirken beklenmedik bir hata alındı. Hata kodu : 417",
+            "olc_access_rule_get":"OLC erişim kuralları başarılı bir şekilde alındı.",
+            "error_417_olc_access_rule":"Açık ldap kontrol kuralı listesi alınamadı. Beklenmeyen bir hata oluştu. Hata kodu : 417"
 
         },
+
         "server_settings":{
             "directory_server_setting":"Dizin Sunucusu Ayarları",
             "xmpp_server_setting":"XMPP Sunucusu Ayarları",

@@ -6,8 +6,8 @@
             <tree-component 
                 ref="movetree"
                 :isMove="true"
-                loadNodeUrl="/lider/user/getUsers"
-                loadNodeOuUrl="/lider/user/getOuDetails"
+                loadNodeUrl="/api/lider/user/getUsers"
+                loadNodeOuUrl="/api/lider/user/getOuDetails"
                 :treeNodeClick="node => selectedLdapOuDn = node.distinguishedName"
                 :searchFields="searchFolderFields"
             />

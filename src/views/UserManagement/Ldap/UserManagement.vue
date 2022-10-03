@@ -7,8 +7,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component
                 ref="tree"
-                loadNodeUrl="/lider/user/getUsers"
-                loadNodeOuUrl="/lider/user/getOuDetails"
+                loadNodeUrl="/api/lider/user/getUsers"
+                loadNodeOuUrl="/api/lider/user/getOuDetails"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
@@ -158,8 +158,8 @@
         <tree-component 
             ref="movetree"
             :isMove="true"
-            loadNodeUrl="/lider/user/getUsers"
-            loadNodeOuUrl="/lider/user/getOuDetails"
+            loadNodeUrl="/api/lider/user/getUsers"
+            loadNodeOuUrl="/api/lider/user/getOuDetails"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
         />
@@ -318,7 +318,7 @@ export default {
         }
     },
     created() {
-        axios.get("/lider/user/configurations", null).then((response) => {
+        axios.get("/api/lider/user/configurations", null).then((response) => {
             if (response.data != null) {
                 this.userLdapBaseDn = response.data;
             }
@@ -347,7 +347,7 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
-            axios.post('/lider/user/addOu', params).then(response => {
+            axios.post('/api/lider/user/addOu', params).then(response => {
                 this.modals.folderAdd = false;
                 if (response.data) {
                      this.$refs.tree.append(response.data, this.selectedNode);
@@ -383,7 +383,7 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveUserNode.distinguishedName);
             this.modals.moveUser = false;
-            axios.post('/lider/user/move/entry', params).then(response => {
+            axios.post('/api/lider/user/move/entry', params).then(response => {
                 if (response.data) {
                     this.$refs.tree.remove(this.selectedNode);
                     this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
@@ -407,7 +407,7 @@ export default {
 
         deleteNode() {
             let ldapEntry = [];
-            let deleteUrl = "/lider/user/deleteUser";
+            let deleteUrl = "/api/lider/user/deleteUser";
             if (this.selectedNode.type === "ORGANIZATIONAL_UNIT") {
                 ldapEntry.push({
                     "distinguishedName": this.selectedNode.distinguishedName,
@@ -415,7 +415,7 @@ export default {
                     "type": this.selectedNode.type,
                     "uid": this.selectedNode.uid
                 });
-                deleteUrl = "/lider/user/deleteUserOu";
+                deleteUrl = "/api/lider/user/deleteUserOu";
                 
             } else if (this.selectedNode.type === "USER") {
                 ldapEntry.push({
@@ -460,7 +460,7 @@ export default {
                 params.append("telephoneNumber", this.user.telephoneNumber);
                 params.append("homePostalAddress", this.user.homePostalAddress);
                 params.append("userPassword", this.user.userPassword);
-                axios.post('/lider/user/addUser', params).then(response => {
+                axios.post('/api/lider/user/add-user', params).then(response => {
                     this.modals.addUser = false;
                     if (response.data) {
                         this.$refs.tree.append(response.data, this.selectedNode);

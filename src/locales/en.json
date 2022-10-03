@@ -684,7 +684,19 @@
             "please_select_user_and_group":"Please select user and group.",
             "user_successfully_add_to_group":"The user has been successfully added to the group.",
             "create":"Create",
-            "authorization":"Authorization"
+            "authorization":"Authorization",
+            "error_417_edit_user_roles":"Could not edit user roles in ldap entries. Unexpected error occured. Error code : 417",
+            "error_417_user_create":"The user has not  been  created. Unexpected error occured. Error code : 417",
+            "error_417_deleted_user":"The selected user not deleted. Unexpected error occurred. Error code : 417",
+            "error_417_get_console_user":"Could not get console users list. Unexpected error occurred. Error code : 417",
+            "user_roles_get_successfully":"User roles get successfully",
+            "error_417_get_user_roles":"Failed to get user roles. Unexpected error occured. Error code : 417",
+            "olc_success_rule_deleted":"OLC Access rule has been deleted.",
+            "error_olc_rule_deleted":"OLC access rule has not been deleted.",
+            "error_417_olc_rule_deleted":"An unexpected error was received while deleting the OLC access rule. Error code : 417",
+            "olc_access_rule_get":"OLC access rules successfully retrieved.",
+            "error_417_olc_access_rule":"Could not retrieved open ldap  check rule list. Unexpected error occured. Error code : 417"
+
         },
         "server_settings":{
             "directory_server_setting":"Directory Server Settings",

@@ -104,7 +104,7 @@ export default {
             this.loading = true;
             let params = new FormData();
             params.append("uid", this.selectedNode.uid);
-            axios.post("/lider/user/getUserSessions", params).then((response) => {
+            axios.post("/api/lider/user/getUserSessions", params).then((response) => {
                 if (response.data) {
                     this.sessions = response.data;
                 }
