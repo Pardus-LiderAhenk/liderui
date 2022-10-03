@@ -92,7 +92,7 @@ export default {
             data.append("pageSize", this.rowNumber);
             data.append('operationType',this.operationType);
 
-            axios.post("/operation/login", data).then((response) => {
+            axios.post("/api/operation/login", data).then((response) => {
                 this.records = response.data.content;
                 this.totalElements = response.data.totalElements;
                 this.loading = false;

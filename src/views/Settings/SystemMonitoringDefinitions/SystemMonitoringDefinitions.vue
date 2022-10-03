@@ -51,7 +51,11 @@
                 </span>
               </div>
             </template>
-            <Column field="rowIndex" header="#" style="width:5%"></Column>
+            <Column header="#" style="width:5%">
+              <template #body="{index}">
+                  <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+              </template>
+            </Column>
             <Column style="width:25%"
               field="label"
               :header="$t('settings.system_monitoring_definitions.template_name')"
@@ -88,6 +92,14 @@
               </template>
             </Column>
           </DataTable>
+          <Paginator
+              v-model:first="first"
+              :rows="10"
+              :totalRecords="totalElements"
+              :rowsPerPageOptions="[10, 25, 50, 100]"
+              @page="onPage($event)"
+          >
+          </Paginator>
         </template>
       </Card>
     </div>
@@ -256,14 +268,27 @@ export default {
         "   minimum_width = 300, minimum_height = 0,\n" +
         "   alignment = 'top_right'\n" +
         "}\n",
+      pageNumber: 1,
+      rowNumber: 10,
+      totalElements:0,
+      first : 0,
     };
   },
 
-  created() {
-    axios.post("/conky/list", null) .then((response) => {
+  mounted() {
+    this.getTemplate();
+  },
+
+  methods: {
+
+    getTemplate(){
+      var data = new FormData();
+      data.append("pageNumber", this.pageNumber);
+      data.append("pageSize", this.rowNumber); 
+      axios.post("/conky/list", data) .then((response) => {
         if (response.data != null) {
-          this.templates = response.data;
-          this.updateRowIndex();
+          this.templates = response.data.content;
+          this.totalElements = response.data.totalElements;
         }
       })
       .catch((error) => {
@@ -274,9 +299,14 @@ export default {
           life: 3000,
         });
       })
-  },
+    },
 
-  methods: {
+    onPage(event) {
+      this.pageNumber = event.page + 1;
+      this.rowNumber = event.rows;
+      this.getTemplate();
+    },
+
     editTemplate(data) {
       this.selectedTemplate = data;
       this.showTemplateDialog = true;
@@ -300,12 +330,13 @@ export default {
       };
       axios.post("/conky/delete", params).then((response) => {
           if (response.data != null) {
-            var index = this.templates.findIndex(function (item, i) {
-              return item.id === response.data.id;
-            });
-            if (index > -1) {
-              this.templates.splice(index, 1);
-            }
+            // var index = this.templates.findIndex(function (item, i) {
+            //   return item.id === response.data.id;
+            // });
+            // if (index > -1) {
+            //   this.templates.splice(index, 1);
+            // }
+            this.reset();
             this.selectedTemplate = null;
             this.$toast.add({
               severity: "success",
@@ -313,7 +344,6 @@ export default {
               summary: this.$t("computer.task.toast_summary"),
               life: 3000,
             });
-            this.updateRowIndex();
           }
         })
         .catch((error) => {
@@ -340,15 +370,16 @@ export default {
         axios.post("/conky/update", params).then((response) => {
             if (response.data != null) {
               this.showTemplateDialog = false;
-              for (let index = 0; index < this.templates.length; index++) {
-                const element = this.templates[index];
-                if (response.data.id === element.id) {
-                  element.label = response.data.label;
-                  element.contents = response.data.contents;
-                  element.settings = response.data.settings;
-                  element.modifyDate = response.data.modifyDate;
-                }
-              }
+              // for (let index = 0; index < this.templates.length; index++) {
+              //   const element = this.templates[index];
+              //   if (response.data.id === element.id) {
+              //     element.label = response.data.label;
+              //     element.contents = response.data.contents;
+              //     element.settings = response.data.settings;
+              //     element.modifyDate = response.data.modifyDate;
+              //   }
+              // }
+              this.reset();
               this.$toast.add({
                 severity: "success",
                 detail: this.$t("settings.system_monitoring_definitions.updated_template_success_message"),
@@ -377,14 +408,14 @@ export default {
         axios.post("/conky/add", params).then((response) => {
             if (response.data != null) {
               this.showTemplateDialog = false;
-              this.templates.push(response.data);
+              // this.templates.push(response.data);
+              this.reset();
               this.$toast.add({
                 severity: "success",
                 detail: this.$t("settings.system_monitoring_definitions.saved_template_success_message"),
                 summary: this.$t("computer.task.toast_summary"),
                 life: 3000,
               });
-              this.updateRowIndex();
             }
           })
           .catch((error) => {
@@ -425,12 +456,13 @@ export default {
       return isExist;
     },
 
-    updateRowIndex() {
-      for (let index = 0; index < this.templates.length; index++) {
-        const element = this.templates[index];
-        element.rowIndex = index + 1;
-      }
+    reset(){
+        this.pageNumber = 1;
+        this.rowNumber = 10;
+        this.getTemplate();
+        this.first = 0;
     }
+   
   },
 
   watch: {
@@ -447,3 +479,10 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
+    }
+}
+</style>
