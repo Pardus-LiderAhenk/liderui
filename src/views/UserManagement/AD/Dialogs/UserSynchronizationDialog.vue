@@ -143,7 +143,7 @@ export default {
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
                 params.append("value", "user");
-                axios.post('/ad/getChildUser', params).then(response => {
+                axios.post('/api/ad/child-user', params).then(response => {
                     if (response.data) {
                         this.users = response.data;
                         this.loading = false;
@@ -190,7 +190,7 @@ export default {
                 "distinguishedName": this.selectedLdapOuDn,
                 "childEntries": this.selectedUsers
             };
-            axios.post('/ad/syncUserFromAd2Ldap', params).then(response => {
+            axios.post('/api/ad/sync-user-from-ad-to-ldap', params).then(response => {
                 if (response.data.length == 0) {
                     this.$toast.add({
                         severity:'success', 

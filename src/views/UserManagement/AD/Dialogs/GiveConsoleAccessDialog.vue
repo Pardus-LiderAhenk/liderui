@@ -90,7 +90,7 @@ export default {
             childEntries.push({
                 "distinguishedName" : this.selectedNode.distinguishedName
             });
-            axios.post('/ad/moveAdUser2Ldap', {
+            axios.post('/api/ad/move-ad-user-to-ldap', {
                 distinguishedName: this.selectedNode.distinguishedName,
                 userPassword: userPassword,
                 childEntries: childEntries

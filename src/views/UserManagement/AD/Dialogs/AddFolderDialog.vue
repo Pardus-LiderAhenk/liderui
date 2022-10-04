@@ -80,7 +80,7 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
-            axios.post('/ad/addOu2AD', params).then(response => {
+            axios.post('/api/ad/add-ou-to-ad', params).then(response => {
                 if (response.data) {
                     this.$emit('appendNode', response.data, this.selectedNode);
                     this.$emit('closeAdDialog');

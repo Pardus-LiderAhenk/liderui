@@ -80,7 +80,7 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("cn", this.groupName);
-            axios.post('/ad/addGroup2AD', params).then(response => {
+            axios.post('/api/ad/add-group-to-ad', params).then(response => {
                 if (response.data) {
                     this.$emit('appendNode', response.data, this.selectedNode);
                     this.$emit('closeAdDialog');

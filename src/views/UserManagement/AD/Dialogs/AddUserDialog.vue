@@ -181,7 +181,7 @@ export default {
                 params.append("telephoneNumber", this.user.telephoneNumber);
                 params.append("homePostalAddress", this.user.homePostalAddress);
                 params.append("uid", this.user.uid);
-                axios.post('/ad/addUser2AD', params).then(response => {
+                axios.post('/api/ad/add-user-to-ad', params).then(response => {
                     if (response.data) {
                         this.$emit('appendNode', response.data, this.selectedNode);
                         this.$emit('closeAdDialog');

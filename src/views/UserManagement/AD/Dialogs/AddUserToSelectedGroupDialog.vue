@@ -158,7 +158,7 @@ export default {
             params.append("searchDn", "");
             params.append("key", this.selectedUserField.value);
             params.append("value", this.userSearchValue);
-            axios.post('/ad/searchEntryUser', params).then(response => {
+            axios.post('/api/ad/search-entry-user', params).then(response => {
                 if (response.data) {
                     this.users = response.data;
                 } else {
@@ -186,7 +186,7 @@ export default {
             params.append("searchDn", "");
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("distinguishedName", data.distinguishedName);
-            axios.post('/ad/addMember2ADGroup', params).then(response => {
+            axios.post('/api/ad/add-member-to-ad-group', params).then(response => {
                 if (response.data) {
                     this.$emit('updateNode', response.data, null);
                     this.$emit('closeAdDialog');

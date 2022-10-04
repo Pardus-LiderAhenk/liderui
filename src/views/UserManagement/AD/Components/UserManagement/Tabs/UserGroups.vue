@@ -141,7 +141,7 @@ export default {
             params.append("dn", this.selectedGroup.distinguishedName);
             params.append("dnList[]", dnList);
 
-            axios.post("/ad/deleteMemberFromGroup", params).then((response) => {
+            axios.post("/api/ad/member-from-group", params).then((response) => {
                 if (response.data) {
                     let index = this.groups.findIndex(function(item, i){
                         return item.distinguishedName === response.data.distinguishedName;

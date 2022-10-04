@@ -141,7 +141,7 @@ export default {
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
                 params.append("value", "group");
-                axios.post('/ad/getChildGroup', params).then(response => {
+                axios.post('/api/ad/child-group', params).then(response => {
                     if (response.data) {
                         this.groups = response.data;
                         this.loading = false;
@@ -188,7 +188,7 @@ export default {
                 "distinguishedName": this.selectedLdapOuDn,
                 "childEntries": this.selectedGroups
             };
-            axios.post('/ad/syncGroupFromAd2Ldap', params).then(response => {
+            axios.post('/api/ad/sync-group-from-ad-to-ldap', params).then(response => {
                 if (response.data.length == 0) {
                     this.$toast.add({
                         severity:'success', 
