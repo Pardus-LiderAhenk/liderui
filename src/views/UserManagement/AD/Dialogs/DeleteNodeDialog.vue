@@ -79,7 +79,7 @@ export default {
         deleteNode() {
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
-            axios.post('/ad/deleteEntry', params).then(response => {
+            axios.post('/api/ad/entry', params).then(response => {
                 this.$emit('closeAdDialog');
                 if (response.data) {
                     this.$emit('deleteNode', this.selectedNode);

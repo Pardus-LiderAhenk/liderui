@@ -293,7 +293,7 @@ export default {
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('settings.console_user_settings.user_roles_get_successfully'),
-                        summary: this.$t('settings.console_user_settings.success'),
+                        summary: this.$t('settings.console_user_settings.successful'),
                         life: 3000
                     });
                 }

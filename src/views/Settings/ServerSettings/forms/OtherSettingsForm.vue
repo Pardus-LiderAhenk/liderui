@@ -140,7 +140,7 @@ export default {
             data.append("ahenkRepoKeyAddress",this.ahenkRepoKeyAddress);
             data.append("selectedRegistrationType", this.selectedRegistrationType);
 
-            axios.post('/lider/settings/update/otherSettings', data).then(response => {
+            axios.post('/api/lider/settings/update/other-settings', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
                     detail: this.$t('settings.server_settings.other_settings.other_server_settings_successfully_update'), 

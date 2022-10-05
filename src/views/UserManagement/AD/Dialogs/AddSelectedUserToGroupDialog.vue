@@ -154,7 +154,7 @@ export default {
             params.append("searchDn", "");
             params.append("key", this.selectedGroupField.value);
             params.append("value", this.groupSearchValue);
-            axios.post('/ad/searchEntryGroup', params).then(response => {
+            axios.post('/api/ad/search-entry-group', params).then(response => {
                 // this.groupSearchValue = '';
                 // this.selectedGroupField = null;
                 if (response.data) {
@@ -184,7 +184,7 @@ export default {
             params.append("searchDn", "");
             params.append("parentName", data.distinguishedName);
             params.append("distinguishedName", this.selectedNode.distinguishedName);
-            axios.post('/ad/addMember2ADGroup', params).then(response => {
+            axios.post('/api/ad/add-member-to-ad-group', params).then(response => {
                 if (response.data) {
                     let userNode = {...this.selectedNode};
                     let isExistMemberOf = false;

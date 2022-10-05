@@ -75,7 +75,7 @@
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
-                searchNodeUrl="/ad/searchEntry"
+                searchNodeUrl="/api/ad/search-entry"
                 @directoryConnection="directoryConnection"
             >
                 <template #contextmenu>
@@ -234,9 +234,7 @@ export default {
 
     created() {
         axios.get("/api/ad/configurations").then((response) => {
-            console.log(response)
             if (response.data) {
-
                 this.enableDeleteUpdate = response.data.enableDelete4Directory;
                 this.domainType = response.data.domainType;
             }

@@ -66,6 +66,7 @@ export default {
     created() {
         axios.get("/api/ad/configurations").then((response) => {
             if (response.data) {
+                console.log(response)
                 this.domainType = response.data.domainType;
                 if (this.domainType == "ACTIVE_DIRECTORY") {
                     this.selectedTab = "ad-management";

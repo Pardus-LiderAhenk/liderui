@@ -109,7 +109,7 @@ export default {
                 params.append("distinguishedName", this.selectedNode.distinguishedName);
                 params.append("name", this.selectedNode.name);
                 params.append("parent", this.selectedNode.parent);
-                axios.post('/ad/getChildEntries', params).then(response => {
+                axios.post('/api/ad/child-entries', params).then(response => {
                     this.loading = false;
                     if (response.data) {
                         this.nodes = response.data;
