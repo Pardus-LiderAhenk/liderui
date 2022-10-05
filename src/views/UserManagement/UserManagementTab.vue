@@ -64,7 +64,7 @@ export default {
     },
 
     created() {
-        axios.get("/ad/configurations").then((response) => {
+        axios.get("/api/ad/configurations").then((response) => {
             if (response.data) {
                 this.domainType = response.data.domainType;
                 if (this.domainType == "ACTIVE_DIRECTORY") {

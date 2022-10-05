@@ -59,14 +59,14 @@
                 <div class="p-field p-col-12">
                     <label for="ahenkRepoAddress">{{$t('settings.server_settings.other_settings.repo_address')}}</label>
                     <InputText id="ahenkRepoAddress" type="text" v-model="ahenkRepoAddress"
-                        placeholder="deb [arch=amd64] http://repo.liderahenk.org/liderahenk stable main"
+                        placeholder="deb [arch=amd64] https://repo.liderahenk.org/liderahenk stable main"
                         class="p-inputtext-sm"
                     />
                 </div>
                 <div class="p-field p-col-12">
                     <label for="ahenkRepoKeyAddress">{{$t('settings.server_settings.other_settings.repo_key_address')}}</label>
                     <InputText id="ahenkRepoKeyAddress" type="text" v-model="ahenkRepoKeyAddress"
-                        placeholder="http://repo.liderahenk.org/liderahenk-archive-keyring.asc"
+                        placeholder="https://repo.liderahenk.org/liderahenk-archive-keyring.asc"
                         class="p-inputtext-sm"
                     />
                 </div>

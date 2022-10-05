@@ -70,8 +70,8 @@
     <div class="p-grid ad-management">
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component ref="adTree" class="border-card"
-                loadNodeUrl="/ad/getDomainEntry"
-                loadNodeOuUrl="/ad/getChildEntriesOu"
+                loadNodeUrl="/api/ad/domain-entry"
+                loadNodeOuUrl="/api/ad/child-entries-ou"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
@@ -233,8 +233,10 @@ export default {
     },
 
     created() {
-        axios.get("/ad/configurations").then((response) => {
+        axios.get("/api/ad/configurations").then((response) => {
+            console.log(response)
             if (response.data) {
+
                 this.enableDeleteUpdate = response.data.enableDelete4Directory;
                 this.domainType = response.data.domainType;
             }

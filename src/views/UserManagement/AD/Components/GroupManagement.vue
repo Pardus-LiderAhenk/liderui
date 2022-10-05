@@ -212,7 +212,6 @@ export default {
                     });
                     this.setSelectedLiderNode(response.data);
                     this.getMemberOfSelectedGroup(this.selectedNode);
-                    this.$emit('deleteMember', this.selectedNode);
                     this.loading = false;
                 }
             }).catch((error) => {
