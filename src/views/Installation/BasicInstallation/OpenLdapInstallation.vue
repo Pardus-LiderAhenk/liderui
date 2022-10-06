@@ -1,5 +1,13 @@
 <template>
     <div class="stepsdemo-content p-fluid">
+        <div class="p-field p-d-flex p-jc-between">
+            <div>
+                <Button label="Back" @click="prevPage()" icon="pi pi-angle-left" />
+            </div>
+            <div class="p-ml-2">
+                <Button label="Next" @click="nextPage()" icon="pi pi-angle-right" iconPos="right" />
+            </div>
+        </div>
         <div class="p-grid p-field">
             <div class="p-col-6">
                 <server-connection ref="serverConnection"></server-connection>
@@ -93,17 +101,8 @@
                                     {{ v$.ldap.liderConsoleUserEmail.email.$message.replace("Value", "Lider console user") }}
                                 </small>
                             </div>
-                            <div class="p-field p-d-flex p-jc-between">
-                                <div>
-                                    <Button label="Back" @click="prevPage()" icon="pi pi-angle-left" />
-                                </div>
-                                <div class="p-ml-2">
-                                    <Button label="Next" @click="nextPage()" icon="pi pi-angle-right" iconPos="right" />
-                                </div>
-                            </div>
                         </div>
                     </form>
-                    
                 </Panel>
             </div>
         </div>
@@ -183,9 +182,9 @@ export default {
             let serverInfo = await this.$refs.serverConnection.getServerConnectionInfo();
 
             this.submitted = true;
-            // if (!isFormValid) {
-            //     return;
-            // }
+            if (!isFormValid) {
+                return;
+            }
 
             let parserDn = this.ldap.baseDn.split(".");
             this.ldap.ldapOrganization = parserDn[0];

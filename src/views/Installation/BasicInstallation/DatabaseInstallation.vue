@@ -1,5 +1,15 @@
 <template>
     <div class="stepsdemo-content p-fluid">
+        <div class="p-field p-d-flex p-jc-end">
+            <div>
+                <Button
+                    icon="pi pi-angle-right"
+                    label="Next"
+                    type="submit"
+                    @click="nextPage()"
+                />
+            </div>
+        </div>
         <div class="p-grid p-field">
             <div class="p-col-6">
                 <server-connection ref="serverConnection"></server-connection>
@@ -78,15 +88,6 @@
                                     {{ v$.database.port.numeric.$message.replace("Value", "Port number") }}
                                 </small>
                             </div>
-                            <div class="p-field p-d-flex p-jc-end">
-                                <div>
-                                    <Button
-                                        icon="pi pi-angle-right"
-                                        label="Next"
-                                        type="submit"
-                                    />
-                                </div>
-                            </div>
                         </div>
                     </form>
                 </Panel>
@@ -160,9 +161,9 @@ export default {
             let serverInfo = await this.$refs.serverConnection.getServerConnectionInfo();
 
             this.submitted = true;
-            // if (!isFormValid) {
-            //     return;
-            // }
+            if (!isFormValid) {
+                return;
+            }
             let params = {
                 dbServerAddress: serverInfo.address,
                 dbServerUsername: serverInfo.username,
@@ -173,7 +174,6 @@ export default {
                 dbPort: this.database.port,
                 dbAction: this.database.action
             };
-
             this.$emit('next-page', { formData: params, pageIndex: 0 });
         },
     }

@@ -1,5 +1,17 @@
 <template>
     <div class="stepsdemo-content">
+        <div class="p-field p-d-flex p-jc-between">
+            <div>
+                <Button label="Back" @click="prevPage()" icon="pi pi-angle-left" />
+            </div>
+            <div class="p-ml-2">
+                <Button label="Start Installation"
+                    @click="confirmDialog = true" icon="pi pi-check"
+                    :disabled="startDisabled"
+                    class="p-button-success"
+                />
+            </div>
+        </div>
         <Panel header="Confirmation">
             <template #header>
                 <h3 style="fontSize: 1.5rem">Confirmation</h3>
@@ -7,6 +19,7 @@
             <template #icons>
                 <i class="pi pi-th-large" style="fontSize: 1.5rem;color:#3296F3;"></i>
             </template>
+            
             <div class="p-grid">
                 <div class="p-field p-col-4">
         <!-- Database Information -->
@@ -198,7 +211,7 @@
                             </div>
                         </div>
 
-                            <div class="p-field p-grid">
+                        <div class="p-field p-grid">
                             <div class="p-col-4">
                                 <label for="class">Service Name: </label>
                             </div>
@@ -225,13 +238,8 @@
                     </Fieldset>
                 </div>
             </div>
-            <div class="p-field p-d-flex p-jc-between">
-                <div>
-                    <Button label="Back" @click="prevPage()" icon="pi pi-angle-left" />
-                </div>
-                <div class="p-ml-2">
-                    <Button label="Start Installation" @click="confirmDialog = true" icon="pi pi-check"/>
-                </div>
+            <div class="p-field" v-if="loading">
+                <ProgressBar :value="value" />
             </div>
         </Panel>
         
@@ -269,7 +277,11 @@ export default {
 
     data() {
         return {
-            confirmDialog: false
+            confirmDialog: false,
+            startDisabled: false,
+            value: 0,
+            loading: false,
+            interval: null,
         }
     },
 
@@ -279,6 +291,7 @@ export default {
         },
 
         async startInstallation() {
+            this.startProgress();
             this.confirmDialog = false;
             console.log(this.formData)
          // this.$emit('complete');
@@ -299,6 +312,23 @@ export default {
                 });
                 console.log("errorr")
             }
+        },
+
+        startProgress() {
+            this.startDisabled = true;
+            this.loading = true;
+            this.interval = setInterval(() => {
+                let newValue = this.value + Math.floor(Math.random() * 10) + 1;
+                if (newValue >= 100) {
+                    newValue = 100;
+                }
+                this.value = newValue;
+            }, 2000);
+        },
+        endProgress() {
+            this.startDisabled = false;
+            clearInterval(this.interval);
+            this.interval = null;
         }
     },
 };

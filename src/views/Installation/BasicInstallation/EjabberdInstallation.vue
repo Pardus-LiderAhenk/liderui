@@ -1,5 +1,13 @@
 <template>
     <div class="stepsdemo-content p-fluid">
+        <div class="p-field p-d-flex p-jc-between">
+            <div>
+                <Button label="Back" @click="prevPage()" icon="pi pi-angle-left" />
+            </div>
+            <div class="p-ml-2">
+                <Button label="Next" @click="nextPage()" icon="pi pi-angle-right" iconPos="right" />
+            </div>
+        </div>
         <div class="p-grid p-field">
             <div class="p-col-6">
                 <server-connection ref="serverConnection"></server-connection>
@@ -54,14 +62,6 @@
                                 <small v-if="v$.ejabberd.liderServerUserPassword.$invalid && submitted" class="p-error">
                                     Password is required
                                 </small>
-                            </div>
-                            <div class="p-field p-d-flex p-jc-between">
-                                <div>
-                                    <Button label="Back" @click="prevPage()" icon="pi pi-angle-left" />
-                                </div>
-                                <div class="p-ml-2">
-                                    <Button label="Next" @click="nextPage()" icon="pi pi-angle-right" iconPos="right" />
-                                </div>
                             </div>
                         </div>
                     </form>
@@ -134,9 +134,9 @@ export default {
             let serverInfo = await this.$refs.serverConnection.getServerConnectionInfo();
 
             this.submitted = true;
-            // if (!isFormValid) {
-            //     return;
-            // }
+            if (!isFormValid) {
+                return;
+            }
             let params = {
                 ejabberdServerAddress: serverInfo.address,
                 ejabberdServerUsername: serverInfo.username,
