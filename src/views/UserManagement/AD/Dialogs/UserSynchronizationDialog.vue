@@ -79,6 +79,7 @@
 <script>
 import {FilterMatchMode} from 'primevue/api';
 import axios from "axios";
+import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement';
 
 export default {
     props: {
@@ -190,8 +191,20 @@ export default {
                 "distinguishedName": this.selectedLdapOuDn,
                 "childEntries": this.selectedUsers
             };
-            axios.post('/api/ad/sync-user-from-ad-to-ldap', params).then(response => {
-                if (response.data.length == 0) {
+            //axios.post('/api/ad/sync-user-from-ad-to-ldap', params).then(response => {
+            const{ response,error } = adManagementService.syncUserFromAdToLdap(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.ad.sync_user_error'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data.length == 0) {
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('user_management.ad.sync_user_success'),
@@ -206,14 +219,16 @@ export default {
                         life: 3000
                     });
                 }
-            }).catch((error) => {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('user_management.ad.sync_user_error'),
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            });
+
+                } 
+                else if(response.status == 417){
+                    return "error";
+
+                }
+
+
+            }
+
             this.selectedLdapOuDn = null;
         }
     },

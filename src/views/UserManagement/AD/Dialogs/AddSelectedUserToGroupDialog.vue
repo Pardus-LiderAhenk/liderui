@@ -81,6 +81,7 @@
 
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
 export default {
 
@@ -154,20 +155,31 @@ export default {
             params.append("searchDn", "");
             params.append("key", this.selectedGroupField.value);
             params.append("value", this.groupSearchValue);
-            axios.post('/api/ad/search-entry-group', params).then(response => {
+            //axios.post('/api/ad/search-entry-group', params).then(response => {
                 // this.groupSearchValue = '';
                 // this.selectedGroupField = null;
-                if (response.data) {
-                    this.groups = response.data;
-                } else {
+            const { response,error } = adManagementService.searchEntryGroup(params);
+            if(error){
+                console.log("error");
+
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.groups = response.data;
+                    
+                    }
+            }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.user_not_found'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
+
                 }
-            });
+            }
         },
 
         addUserToGroup(data) {
@@ -184,8 +196,19 @@ export default {
             params.append("searchDn", "");
             params.append("parentName", data.distinguishedName);
             params.append("distinguishedName", this.selectedNode.distinguishedName);
-            axios.post('/api/ad/add-member-to-ad-group', params).then(response => {
-                if (response.data) {
+            //axios.post('/api/ad/add-member-to-ad-group', params).then(response => {
+            const { response,error } = adManagementService.addMemberToAdGroup(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.add_user_to_group_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
                     let userNode = {...this.selectedNode};
                     let isExistMemberOf = false;
                     for (const key in this.selectedNode.attributesMultiValues) {
@@ -211,15 +234,14 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.add_user_to_group_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+
                 }
-            });
+            }
+                else if(response.status == 417){
+                    console.log("error");
+
+                }
+            }
         },
 
         isExistMember(groupDn) {

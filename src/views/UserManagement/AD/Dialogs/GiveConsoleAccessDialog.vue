@@ -46,6 +46,7 @@
 
 import axios from "axios";
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
 export default {
 
@@ -90,39 +91,44 @@ export default {
             childEntries.push({
                 "distinguishedName" : this.selectedNode.distinguishedName
             });
-            axios.post('/api/ad/move-ad-user-to-ldap', {
+            //axios.post('/api/ad/move-ad-user-to-ldap', {
+            const { response,error } = adManagementService.moveAdUserToLdap({
                 distinguishedName: this.selectedNode.distinguishedName,
                 userPassword: userPassword,
                 childEntries: childEntries
-            }).then(response => {
-                this.$emit('closeAdDialog');
+               
+            });
+            this.$emit('closeAdDialog');
+
+            if (error){
+                this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('user_management.ad.give_console_access_success'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+
+            }
+            else{
+                if(response.status == 200){
+                
                 if (response.data.length > 0) {
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('user_management.ad.user_already_exist_in_lider'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.ad.give_console_access_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+                        });
+                    }
                 }
-            })
-            .catch((error) => { 
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('user_management.ad.give_console_access_error')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            });
-        },
-    }
+                else if(response.status == 417){
+
+                    console.log("test");
+                }           
+            }
+        }
     
+    },
 }
 </script>
 

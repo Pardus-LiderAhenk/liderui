@@ -45,6 +45,7 @@
  */
 
 import axios from "axios";
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
 export default {
 
@@ -79,18 +80,11 @@ export default {
         deleteNode() {
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
-            axios.post('/api/ad/entry', params).then(response => {
-                this.$emit('closeAdDialog');
-                if (response.data) {
-                    this.$emit('deleteNode', this.selectedNode);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.delete_node_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    if (this.selectedNode.type == 'ORGANIZATIONAL_UNIT') {
+           // axios.post('/api/ad/entry', params).then(response => {
+            const{ response,error } = adManagementService.deleteEntry(params);
+            this.$emit('closeAdDialog');
+            if(error){
+                if (this.selectedNode.type == 'ORGANIZATIONAL_UNIT') {
                         this.$toast.add({
                             severity:'warn', 
                             detail: this.$t('user_management.ad.delete_ou_warn'), 
@@ -105,9 +99,21 @@ export default {
                             life: 3000
                         });
                     }
+
+            }else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('deleteNode', this.selectedNode);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.delete_node_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
-            });
-        },
+            }
+        }
     }
 }
 </script>

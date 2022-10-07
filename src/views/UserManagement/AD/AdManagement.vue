@@ -231,7 +231,7 @@ export default {
         UserSynchronizationDialog,
         GroupSynchronizationDialog,
     },
-
+    
     created() {
         axios.get("/api/ad/configurations").then((response) => {
             if (response.data) {

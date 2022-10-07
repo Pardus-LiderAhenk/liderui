@@ -113,8 +113,7 @@
 import {FilterMatchMode} from 'primevue/api';
 import AssignedPolicies from "./AssignedPolicies.vue";
 import { mapActions } from "vuex"
-import axios from "axios";
-
+import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 export default {
     props: {
         selectedNode: {
@@ -202,8 +201,23 @@ export default {
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedNode.distinguishedName);
-            axios.post("/api/ad/member-from-group", params).then((response) => {
-                if (response.data != null) {
+
+
+            //axios.post("/api/ad/member-from-group", params).then((response) => {
+            const { response,error } = adManagementService.deleteMemberUser(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+
+            }
+            else{
+                if(response.status == 200){
+
+                    if (response.data != null) {
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('group_management.delete_member_success_message'), 
@@ -214,14 +228,14 @@ export default {
                     this.getMemberOfSelectedGroup(this.selectedNode);
                     this.loading = false;
                 }
-            }).catch((error) => {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            })
+            }
+                else if(response.status == 417){
+                    return null;
+                }
+
+
+            }
+
         },
 
         getSelectedNodeAttribute() {

@@ -65,7 +65,8 @@
 
 <script>
 import axios from "axios";
-import {FilterMatchMode} from 'primevue/api';
+import { FilterMatchMode } from 'primevue/api';
+import { adManagementService } from "../../../../../../services/UserManagement/AD/AdManagement.js";
 
 export default {
     props: {
@@ -141,8 +142,18 @@ export default {
             params.append("dn", this.selectedGroup.distinguishedName);
             params.append("dnList[]", dnList);
 
-            axios.post("/api/ad/member-from-group", params).then((response) => {
-                if (response.data) {
+            //axios.post("/api/ad/member-from-group", params).then((response) => {
+            const {response,error} = adManagementService.deleteMemberUser(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.delete_member_group_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+            }
+            else{
+                if(response.status == 200){
                     let index = this.groups.findIndex(function(item, i){
                         return item.distinguishedName === response.data.distinguishedName;
                     });
@@ -168,7 +179,10 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                } else {
+                }     
+                          
+                else if(response.status == 417){
+
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.delete_member_group_error'), 
@@ -176,14 +190,7 @@ export default {
                         life: 3000
                     });
                 }
-            }).catch((error) => {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('user_management.delete_member_group_error'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            });
+            }            
         },
 
         updateRowIndex() {

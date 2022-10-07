@@ -105,6 +105,7 @@
 
 import axios from "axios";
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js"
 
 export default {
 
@@ -181,8 +182,19 @@ export default {
                 params.append("telephoneNumber", this.user.telephoneNumber);
                 params.append("homePostalAddress", this.user.homePostalAddress);
                 params.append("uid", this.user.uid);
-                axios.post('/api/ad/add-user-to-ad', params).then(response => {
-                    if (response.data) {
+               // axios.post('/api/ad/add-user-to-ad', params).then(response => {
+                const { response,error } = adManagementService.addAddUserToAd(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.add_user_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data) {
                         this.$emit('appendNode', response.data, this.selectedNode);
                         this.$emit('closeAdDialog');
                         this.$toast.add({
@@ -199,22 +211,22 @@ export default {
                         this.user.homePostalAddress = "";
                         this.user.userPassword = "";
                         this.user.name = "";
-                    } if(response.status == 208) {
-                        this.$toast.add({
-                            severity:'warn', 
-                            detail: this.$t('user_management.user_already_exist'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-                }).catch((error) => {
+                    } 
+                }
+                else if(response.status == 208){
                     this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.add_user_error'), 
+                        severity:'warn', 
+                        detail: this.$t('user_management.user_already_exist'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
-                    });
-                });
+                        });
+
+                }
+                else if(response.status == 417){
+                    console.log("error");
+
+                }
+            }       
             }
         },
 

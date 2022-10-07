@@ -32,6 +32,7 @@
  */
 
 import axios from "axios";
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js"
 
 export default {
 
@@ -80,8 +81,18 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("cn", this.groupName);
-            axios.post('/api/ad/add-group-to-ad', params).then(response => {
-                if (response.data) {
+            //axios.post('/api/ad/add-group-to-ad', params).then(response => {
+            const { response,error } = adManagementService.addGroupToAd(params);
+            if (error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.ad.added_group_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+            }
+            else{
+                if(response.status == 200){
                     this.$emit('appendNode', response.data, this.selectedNode);
                     this.$emit('closeAdDialog');
                     this.$toast.add({
@@ -90,15 +101,14 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.ad.added_group_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+
                 }
-            });
+                else if(response.status == 417){
+
+                    return ("error");
+                }
+            }
+            
             this.groupName = '';
         },
     }

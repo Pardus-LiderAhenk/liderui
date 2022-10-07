@@ -48,7 +48,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
-import axios from "axios";
+import { adManagementService } from '../../../../../../services/UserManagement/AD/AdManagement.js';
 
 export default {
     props: {
@@ -75,24 +75,31 @@ export default {
             let params = new FormData();
             params.append("distinguishedName", this.selectedUser.distinguishedName);
             params.append("userPassword", this.userPassword);
-            axios.post("/api/ad/update-user-password", params).then((response) => {
-                this.$emit('updatedUser', response.data);
-                this.changePasswordDialog = false;
-                this.userPassword = null;
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('user_management.change_user_password_success'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            }).catch((error) => {
+            const { response,error } = adManagementService.updateUserPassword(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.change_user_password_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if( response.status == 200 ){
+                    this.$emit('updatedUser', response.data);
+                    this.changePasswordDialog = false;
+                    this.userPassword = null;
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('user_management.change_user_password_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                });
+                }
+                else if(response.status == 417)
+                return ("errr");
+
+            }
         },
 
         showUpdatePasswordDialog() {
