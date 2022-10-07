@@ -126,8 +126,7 @@ export default {
   },
 
   mounted() {
-    const params = new FormData();
-    axios.post("/conky/list", params).then((response) => {
+    axios.post("/conky/list-all", null).then((response) => {
       if (response.data != null || response.data != "") {
         for (let index = 0; index < response.data.length; index++) {
           const element = response.data[index];
