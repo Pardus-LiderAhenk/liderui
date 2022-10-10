@@ -196,7 +196,7 @@ export default {
         if (message.commandClsId == "INSTALLED_PACKAGES") {
             const params = new FormData();
             params.append("id", message.result.id);
-            axios.post("/command/commandexecutionresult", params)
+            axios.post("/api/command/command-execution-result", params)
             .then((response) => {
                 if (response.data != null) {
                     var packagesList = [];

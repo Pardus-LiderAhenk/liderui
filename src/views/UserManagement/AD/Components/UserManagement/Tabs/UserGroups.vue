@@ -185,7 +185,7 @@ export default {
 
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.delete_member_group_error'), 
+                        detail: this.$t('user_management.error_417_delete_member_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });

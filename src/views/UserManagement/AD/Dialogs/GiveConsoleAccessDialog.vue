@@ -43,8 +43,6 @@
  * Give console access to selected user
  * @see {@link http://www.liderahenk.org/}
  */
-
-import axios from "axios";
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
@@ -102,32 +100,43 @@ export default {
 
             if (error){
                 this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('user_management.ad.give_console_access_success'), 
+                    severity:'error', 
+                    detail: this.$t('user_management.ad.give_console_access_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
 
             }
             else{
-                if(response.status == 200){
-                
-                if (response.data.length > 0) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.ad.user_already_exist_in_lider'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
+                if(response.status == 200){                    
+                        this.$emit('closeAdDialog');
+                    if (response.data.length > 0) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.ad.user_already_exist_in_lider'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } else {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.ad.give_console_access_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
                         });
                     }
                 }
                 else if(response.status == 417){
-
-                    console.log("test");
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.ad.error_417_give_console_access'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }           
             }
         }
-    
+   
     },
 }
 </script>

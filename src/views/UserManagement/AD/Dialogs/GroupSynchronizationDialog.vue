@@ -189,7 +189,7 @@ export default {
                 "distinguishedName": this.selectedLdapOuDn,
                 "childEntries": this.selectedGroups
             };
-            //axios.post('/api/ad/sync-group-from-ad-to-ldap', params).then(response => {
+
             const{response,error} = adManagementService.syncGroupFromAdToLdap(params);
             if(error){
                 this.$toast.add({
@@ -208,8 +208,16 @@ export default {
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
+                    }
                 }
-            }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.ad.error_417_sync_group'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
                 else {
                     this.$toast.add({
                         severity:'warn', 

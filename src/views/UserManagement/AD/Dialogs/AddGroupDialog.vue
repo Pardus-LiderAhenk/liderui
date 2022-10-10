@@ -30,8 +30,6 @@
  * Create Group to AD tree
  * @see {@link http://www.liderahenk.org/}
  */
-
-import axios from "axios";
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js"
 
 export default {
@@ -81,7 +79,7 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("cn", this.groupName);
-            //axios.post('/api/ad/add-group-to-ad', params).then(response => {
+
             const { response,error } = adManagementService.addGroupToAd(params);
             if (error){
                 this.$toast.add({
@@ -104,8 +102,12 @@ export default {
 
                 }
                 else if(response.status == 417){
-
-                    return ("error");
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.ad.error_417_added_group_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
             

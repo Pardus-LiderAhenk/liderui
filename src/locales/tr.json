@@ -1019,6 +1019,13 @@
         "delete_group":"Grup Sil",
         "selected_delete_node": "Seçili Kaydı Sil",
         "selected_dn": "Seçili DN",
+        "error_417_change_user_password" : "Kullanıcı parolasını değiştiriken beklenmedik bir hata alındı. Hata kodu : 417",
+        "error_417_delete_member_group" : "Kullanıcı üye silerken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_417_add_folder":"Klasör oluşturulurken beklenmedik bir hata alındı. Hata kodu : 417",
+        "error_417_add_user_to_group":"Kullanıcı gruba eklenirken beklenmeyen bir hata oluştu. Hata kodu : 417",
+        "error_417_add_user":"Kullanıcı eklenirken beklenmeyen bir hata alındı. Hata kodu : 417",
+        "error_417_user_not_found": "Kullanıcı bulunamadı. Hata kodu : 417",
+        "error_404_delete_node":"Kayıt silinirken hata oluştu. Kayıt bulunamadı. Hata kodu : 404",
         "ad":{
             "add_group":"Grup Ekle",
             "give_console_access": "Konsol Erişimi Ver",
@@ -1052,7 +1059,13 @@
             "already_exist_group_in_ldap": "Gruplar OpenLDAP'ta zaten var",
             "ad_connect_successfully":"Aktif Dizin Sunucusu ile bağlantı başarıyla kuruldu.",
             "ad_connect_not_successfully":"Aktif Dizin Sunucusu ile bağlantı kurulamadı. Lütfen Aktif Dizin ayarlarını kontrol ediniz.",
-            "ad_connecting_wait":"Aktif Dizin Sunucusu ile bağlantı kuruluyor. Lütfen bekleyiniz..."
+            "ad_connecting_wait":"Aktif Dizin Sunucusu ile bağlantı kuruluyor. Lütfen bekleyiniz...",
+            "error_417_added_group_error":"Grup eklenirken beklenmeyen bir hata alındı. Hata kodu : 417",
+            "error_417_give_console_access":"Kullanıcı Lider'e aktarılırken beklenmeyen bir hata alındı. Hata kodu : 417",
+            "error_417_sync_group": "Seçili gruplar OpenLDAP'a aktarılırken beklenmeyen bir  hata oluştu. Hata kodu : 417",
+            "error_417_sync_user": "Seçili kullanıcılar OpenLDAP'a aktarılırken beklenmeyen bir  hata oluştu. Hata kodu : 417",
+            "error_configuraton":"Konfigürasyon hatası alındı.",
+            "error_417_configuration":"AD konfigürasyonu yapılamadı. Beklenmeyen bir hata alındı. Hata kodu : 417"
         },
         "sudo":{
             "selected_node_title":"Kayıt Bilgisi",
@@ -1185,7 +1198,9 @@
         "assigned_policy_empty_message": "Atanmış politika bulunamadı",
         "yes":"Evet",
         "add_client_loading":"İstemciler yükleniyor, lütfen bekleyiniz...",
-        "add_group_loading":"Grup oluşturuluyor, lütfen bekleyiniz..."
+        "add_group_loading":"Grup oluşturuluyor, lütfen bekleyiniz...",
+        "error_417_delete_member_group" : "Üye silinirken beklenmedik bir hata oluştu. Hata kodu : 417"
+
     },
     "policy_management": {
         "title":"Politika Yönetimi",

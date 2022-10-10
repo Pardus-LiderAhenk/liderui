@@ -47,6 +47,7 @@ import UserPermissionsManagement from "@/views/UserManagement/UserPermissionsMan
 
 import { mapActions } from "vuex"
 import axios from "axios";
+import { adManagementService } from "../../services/UserManagement/AD/AdManagement";
 
 export default {
     components: {
@@ -63,16 +64,35 @@ export default {
         }
     },
 
-    created() {
-        axios.get("/api/ad/configurations").then((response) => {
-            if (response.data) {
+    async created() {
+        const{ response,error } =  await adManagementService.configuration();
+        if(error){
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('user_management.ad.error_configuraton'),
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
+        }
+        else{
+            if(response.status == 200){
+                if (response.data) {
 
-                this.domainType = response.data.domainType;
-                if (this.domainType == "ACTIVE_DIRECTORY") {
-                    this.selectedTab = "ad-management";
+                    this.domainType = response.data.domainType;
+                    if (this.domainType == "ACTIVE_DIRECTORY") {
+                        this.selectedTab = "ad-management";
+                    }
                 }
+            }else if(response.status == 417){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.ad.error_417_configuration'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
-        });
+        }
+
         this.setSelectedLiderNode(null);
     },
 

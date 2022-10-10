@@ -1016,6 +1016,13 @@
         "delete_group":"Delete Group",
         "selected_delete_node":"Selected Delete Node",
         "selected_dn": "Selected DN",
+        "error_417_change_user_password" : "An unexpected error was received when changing the user password. Error code : 417",  
+        "error_417_delete_member_group" : "An unexpected error occurred while the user was deleting a member. Error code : 417",     
+        "error_417_add_folder":"An unexpected error was received while creating the folder. Error code : 417", 
+        "error_417_add_user_to_group":"An unexpected error occurred while adding the user to the group. Error code : 417",
+        "error_417_add_user":"An unexpected error was received while adding a user. Error code : 417",
+        "error_417_user_not_found": "User not found. Error code : 417",
+        "error_404_delete_node":"Could not delete AD entry. Not found. Error code : 404",
         "ad":{
             "add_group":"Add Group",
             "give_console_access": "Give Console Access",
@@ -1049,7 +1056,14 @@
             "already_exist_group_in_ldap": "Already exist groups in OpenDLAP",
             "ad_connect_successfully":"Connection to Active Directory Server successfully established.",
             "ad_connect_not_successfully":"Aktif Dizin Sunucusu ile bağlantı kurulamadı. Lütfen Aktif Dizin ayarlarını kontrol ediniz.",
-            "ad_connecting_wait":"Aktif Dizin Sunucusu ile bağlantı kuruluyor. Lütfen bekleyiniz..."
+            "ad_connecting_wait":"Aktif Dizin Sunucusu ile bağlantı kuruluyor. Lütfen bekleyiniz...",
+            "error_417_added_group_error":"An unexpected error was received while adding the group. Error code : 417",
+            "error_417_give_console_access":"An error occurred while moving user to Lider. Error code : 417",
+            "error_417_sync_group": "An unexpected error occurred while importing selected groups into OpenLDAP. Error code : 417",
+            "error_417_sync_user": "An unexpected error occurred while importing selected users into OpenLDAP. Error code : 417",
+            "error_configuraton":"Configuration error received",
+            "error_417_configuration":"Could not get AD configuration.Unexpected error occurred. Error code : 417"
+
         },
         "sudo":{
             "selected_node_title":"Registiration Information",
@@ -1182,7 +1196,8 @@
         "assigned_policy_empty_message": "Assigned policy not found",
         "yes":"Yes",
         "add_client_loading":"Adding clients, please wait...",
-        "add_group_loading":"Creating group, please wait..."
+        "add_group_loading":"Creating group, please wait...",        
+        "error_417_delete_member_group" : "An unexpected error occurred while deleting the member. Error code : 417"
     },
     "policy_management": {
         "title":"Policy Management",

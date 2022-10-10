@@ -263,7 +263,7 @@ export default {
         if (message.commandClsId == "GET_SERVICES") {
             const params = new FormData();
             params.append("id", message.result.id);
-            axios.post("/command/commandexecutionresult", params)
+            axios.post("/api/command/command-execution-result", params)
             .then((response) => {
                 if (response.data != null) {
                   this.selectedServices = null;

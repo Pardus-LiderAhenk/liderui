@@ -112,6 +112,15 @@ export default {
                         });
                     }
                 }
+                
+                else if(response.status == 404){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.error_404_delete_node'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });                    
+                }
             }
         }
     }

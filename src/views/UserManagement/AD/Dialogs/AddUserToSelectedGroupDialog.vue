@@ -159,18 +159,30 @@ export default {
             params.append("searchDn", "");
             params.append("key", this.selectedUserField.value);
             params.append("value", this.userSearchValue);
-            axios.post('/api/ad/search-entry-user', params).then(response => {
-                if (response.data) {
-                    this.users = response.data;
-                } else {
+            const{response,error} = adManagementService.searchEntryUserList(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.user_not_found'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+            }
+            else{
+                if(response.status = 200){
+                    if (response.data) {
+                        this.users = response.data;
+                    } 
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.user_not_found'), 
+                        detail: this.$t('user_management.error_417_user_not_found'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-            });
+            }                
         },
 
         addUserToGroup(data) {
@@ -210,6 +222,14 @@ export default {
                     });
                     
                     } 
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.error_417_add_user_to_group'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         },

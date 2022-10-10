@@ -65,7 +65,6 @@
 <script>
 
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
 import NodeDetail from '@/views/UserManagement/AD/Dialogs/NodeDetail.vue';
 import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 
@@ -111,8 +110,7 @@ export default {
                 params.append("name", this.selectedNode.name);
                 params.append("parent", this.selectedNode.parent);
                 const{ response,error } = await adManagementService.childEntriesList(params);
-              //  axios.post('/api/ad/child-entries', params).then(response => {
-                
+              //  axios.post('/api/ad/child-entries', params).then(response => {                
                 if(error){
                     this.$toast.add({
                             severity:'error', 

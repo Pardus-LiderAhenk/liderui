@@ -31,7 +31,6 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
 export default {
@@ -84,7 +83,6 @@ export default {
             //axios.post('/api/ad/add-ou-to-ad', params).then(response => {
             const { response,error } = adManagementService.addToOuAd(params);
             if(error){
-
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.add_folder_error'), 
@@ -106,6 +104,13 @@ export default {
                     }
             }
                 else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.error_417_add_folder'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    
 
                     }
 

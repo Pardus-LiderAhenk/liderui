@@ -182,7 +182,7 @@ export default {
                 params.append("telephoneNumber", this.user.telephoneNumber);
                 params.append("homePostalAddress", this.user.homePostalAddress);
                 params.append("uid", this.user.uid);
-               // axios.post('/api/ad/add-user-to-ad', params).then(response => {
+
                 const { response,error } = adManagementService.addAddUserToAd(params);
                 if(error){
                     this.$toast.add({
@@ -223,13 +223,20 @@ export default {
 
                 }
                 else if(response.status == 417){
-                    console.log("error");
+                    if(error){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.error_417_add_user'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
 
+                        }
+                    }       
                 }
-            }       
             }
         },
-
+    
         userFormValidation() {
             if (!this.user.uid.trim()) {
                 this.userValidation["uid"] = true;

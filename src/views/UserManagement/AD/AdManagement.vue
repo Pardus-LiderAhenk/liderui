@@ -152,7 +152,7 @@ import GiveConsoleAccessDialog from './Dialogs/GiveConsoleAccessDialog.vue';
 import DeleteNodeDialog from './Dialogs/DeleteNodeDialog.vue';
 import UserSynchronizationDialog from './Dialogs/UserSynchronizationDialog.vue'
 import GroupSynchronizationDialog from './Dialogs/GroupSynchronizationDialog.vue'
-import axios from "axios";
+
 
 export default {
 
@@ -232,13 +232,33 @@ export default {
         GroupSynchronizationDialog,
     },
     
-    created() {
-        axios.get("/api/ad/configurations").then((response) => {
-            if (response.data) {
-                this.enableDeleteUpdate = response.data.enableDelete4Directory;
-                this.domainType = response.data.domainType;
+    async created() {
+        //axios.get("/api/ad/configurations").then((response) => {
+        const{ response,error } =  await adManagementService.configuration();
+        if(error){
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('user_management.ad.error_configuraton'),
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
+        }
+        else{
+            if(response.status == 200){
+                if (response.data) {
+                    this.enableDeleteUpdate = response.data.enableDelete4Directory;
+                    this.domainType = response.data.domainType;
+                }
             }
-        });
+            else if(response.status == 417){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.ad.error_417_configuration'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+        }
         this.setSelectedLiderNode(null);
     },
 

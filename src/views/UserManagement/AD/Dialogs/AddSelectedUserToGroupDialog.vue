@@ -238,7 +238,12 @@ export default {
                 }
             }
                 else if(response.status == 417){
-                    console.log("error");
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.error_417_add_user_to_group'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
 
                 }
             }
