@@ -18,8 +18,8 @@
             </div>
         </div>
         <tree-component ref="tree"
-            loadNodeUrl="/lider/computer/getComputers"
-            loadNodeOuUrl="/lider/computer/getOuDetails"
+            loadNodeUrl="/api/lider/computer/computers"
+            loadNodeOuUrl="/api/lider/computer/ou-details"
             :treeNodeClick="treeNodeClick"
             isAgentTree="true"
             :searchFields="searchFields">
@@ -182,7 +182,7 @@ export default {
                 if (node) {
                     if (node.type == "ORGANIZATIONAL_UNIT") {
                         params.append("searchDn", node.distinguishedName);
-                        axios.post("/lider/computer/getAgentListSize", params).then((response) => {
+                        axios.post("/api/lider/computer/agent-list-size", params).then((response) => {
                             this.agent.total = response.data.agentListSize;
                             this.agent.online = response.data.onlineAgentListSize;
                             this.agent.offline = this.agent.total - this.agent.online;
@@ -200,7 +200,7 @@ export default {
                     }
                 } else {
                     params.append("searchDn", "agents");
-                    axios.post("/lider/computer/getAgentListSize", params).then((response) => {
+                    axios.post("/api/lider/computer/agent-list-size", params).then((response) => {
                         this.agent.total = response.data.agentListSize;
                         this.agent.online = response.data.onlineAgentListSize;
                         this.agent.offline = this.agent.total - this.agent.online;

@@ -76,8 +76,8 @@
     >
         <tree-component 
             ref="agentTree"
-            loadNodeUrl="/lider/computer/getComputers"
-            loadNodeOuUrl="/lider/computer/getOuDetails"
+            loadNodeUrl="/api/lider/computer/computers"
+            loadNodeOuUrl="/api/lider/computer/ou-details"
             :treeNodeClick="node => selectedAgentOu = node"
             :searchFields="searchFields"
             :isMove="true"

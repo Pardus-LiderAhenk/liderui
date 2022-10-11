@@ -151,8 +151,8 @@
         <div class="p-col">
           <tree-component 
             ref="movetree"
-            loadNodeUrl="/lider/computer/getComputers"
-            loadNodeOuUrl="/lider/computer/getOuDetails"
+            loadNodeUrl="/api/lider/computer/computers"
+            loadNodeOuUrl="/api/lider/computer/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFields"
             :isMove="true"
@@ -785,7 +785,7 @@ export default {
         params.append("sourceDN", this.selectedLiderNode.distinguishedName);
         params.append("sourceCN", this.selectedLiderNode.cn);
         params.append("destinationDN", this.moveFolderNode.distinguishedName);
-        axios.post("/lider/computer/move/agent", params).then((response) => {
+        axios.post("/api/lider/computer/move/agent", params).then((response) => {
           if (response.data) {
             // TO DO --> computer tree will be updated
             this.moveAgentDialog = false;
@@ -816,7 +816,7 @@ export default {
       this.task.commandId = "AGENT_INFO";
       const params = new FormData();
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
-      axios.post("/lider/computer/get_agent_info", params).then((response) => {
+      axios.post("/api/lider/computer/get-agent-info", params).then((response) => {
         if (!response.data) {
           this.$toast.add({
             severity:'error', 
@@ -834,7 +834,7 @@ export default {
       this.deleteAgentConfirm = false;
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
       params.append("agentUID", this.selectedLiderNode.uid);
-      axios.post("/lider/computer/delete/agent", params).then((response) => {
+      axios.post("/api/lider/computer/delete/agent", params).then((response) => {
         if (response.data) {
           this.$emit('deleteSelectedAgent', this.selectedLiderNode);
         } else {
@@ -933,7 +933,7 @@ export default {
           params.append("phase", phase);
           params.append("osVersion", arrg.osVersion);
           params.append("agentUid", this.selectedLiderNode.uid);
-          axios.post("/lider/computer/update_agent_info", params).then((response) => {
+          axios.post("/api/lider/computer/update-agent-info", params).then((response) => {
             if (response.data) {
               // TO DO --> computer tree will be updated
               this.selectedAgentInfo = response.data
@@ -980,7 +980,7 @@ export default {
         "uid": this.selectedLiderNode.uid
       });
 
-      axios.post("/lider/computer/deleteComputerOu", ldapEntry).then(response => {
+      axios.post("/api/lider/computer/delete-computer-ou", ldapEntry).then(response => {
         if (response.data) {
           this.$emit('deleteSelectedAgent', this.selectedLiderNode);
           this.$toast.add({
