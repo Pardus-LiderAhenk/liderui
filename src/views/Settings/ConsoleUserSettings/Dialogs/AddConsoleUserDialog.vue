@@ -120,7 +120,7 @@
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
-import { consoleUserSettingsService } from "../../../../services/Settings/ConsoleUserSettingsService/ConsoleUserSettingsService.js";
+import { consoleUserSettingsService } from "../../../../services/Settings/ConsoleUserSettingsService.js";
 
 export default {
     components:{

@@ -188,7 +188,7 @@ import UserDialog from './Dialogs/UsersDialog.vue';
 import UserGroupDialog from './Dialogs/UserGroupsDialog.vue';
 import RoleDialog from './Dialogs/RoleGroupsDialog.vue';
 import AddConsoleUserDialog from './Dialogs/AddConsoleUserDialog.vue';
-import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService/ConsoleUserSettingsService.js";
+import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService.js";
 
 export default {
     components: {
