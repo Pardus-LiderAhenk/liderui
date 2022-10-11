@@ -1465,7 +1465,15 @@
             "an_error_occurred_while_adding_computers_to_the_group":"İstemciler gruba eklenirken hata oluştu",
             "add_existing_group":"Mevcut Gruba Ekle",
             "select_folder":"Klasör Seçiniz",
-            "create_computer_group":"İstemci Grubu Oluştur"
+            "create_computer_group":"İstemci Grubu Oluştur",
+            "session":"Oturum",
+            "not_logged_one_mounth":"Son 1 Ay Oturum Açmayan",
+            "not_logged_two_mounth":"Son 2 Ay Oturum Açmayan",
+            "not_logged_three_mounth":"Son 3 Ay Oturum Açmayan",
+            "logged_one_mounth":"Son 1 Ay Oturum Açan",
+            "logged_two_mounth":"Son 2 Ay Oturum Açan",
+            "logged_three_mounth":"Son 3 Ay Oturum Açan"
+
 
         },
         "task_report":{

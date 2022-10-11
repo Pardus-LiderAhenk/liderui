@@ -1461,9 +1461,14 @@
             "an_error_occurred_while_creating_the_computer_group":"An error occurred while creating the client group",
             "add_existing_group":"Add Existing Group",
             "select_folder":"Select Folder",
-            "create_computer_group":"Create Computer Group"
-
-
+            "create_computer_group":"Create Computer Group",
+            "session":"Session",
+            "not_logged_one_mounth":"Not Logged In Last 1 Month",
+            "not_logged_two_mounth":"Not Logged In Last 2 Months",
+            "not_logged_three_mounth":"Not Logged In Last 3 Months",
+            "logged_one_mounth":"Logged In Last 1 Month",
+            "logged_two_mounth":"Logged In Last 2 Months",
+            "logged_three_mounth":"Logged In Last 3 Months"
         },
         "task_report":{
             "task_report":"Task Report",

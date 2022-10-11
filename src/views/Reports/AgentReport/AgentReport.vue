@@ -145,7 +145,7 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectSessionVersion">Oturum</label>
+        <label for="selectSessionVersion">{{$t('reports.detailed_agent_report.session')}}</label>
         <Dropdown
           id="selectSessionVersion"
           v-model="filter.sessionReportType"
@@ -311,27 +311,27 @@ export default {
       agentVersions: [],
       sessionReportTypes: [
         {
-          name: "Son 1 Ay Oturum Açmayan",
+          name: this.$t('reports.detailed_agent_report.not_logged_one_mounth'),
           value: "LAST_ONE_MONTH_NO_SESSIONS",
         },
         {
-          name: "Son 2 Ay Oturum Açmayan",
+          name: this.$t('reports.detailed_agent_report.not_logged_two_mounth'),
           value: "LAST_TWO_MONTHS_NO_SESSIONS",
         },
         {
-          name: "Son 3 Ay Oturum Açmayan",
+          name: this.$t('reports.detailed_agent_report.not_logged_three_mounth'),
           value: "LAST_THREE_MONTHS_NO_SESSIONS",
         },
         {
-          name: "Son 1 Ayda Oturum Açan",
+          name: this.$t('reports.detailed_agent_report.logged_one_mounth'),
           value: "LAST_ONE_MONTH_SESSIONS",
         },
         {
-          name: "Son 2 Ayda Oturum Açan",
+          name: this.$t('reports.detailed_agent_report.logged_two_mounth'),
           value: "LAST_TWO_MONTHS_SESSIONS",
         },
         {
-          name: "Son 3 Ayda Oturum Açan",
+          name: this.$t('reports.detailed_agent_report.logged_three_mounth'),
           value: "LAST_THREE_MONTHS_SESSIONS",
         },
       ],
