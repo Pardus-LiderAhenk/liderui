@@ -141,6 +141,19 @@
           v-model="filter.agentVersion"
           :options="agentVersions"
           :placeholder="$t('reports.detailed_agent_report.all')"
+          showClear="true"
+        />
+      </div>
+      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+        <label for="selectSessionVersion">Oturum</label>
+        <Dropdown
+          id="selectSessionVersion"
+          v-model="filter.sessionReportType"
+          :options="sessionReportTypes" 
+          optionLabel="name" 
+          optionValue="value"
+          :placeholder="$t('reports.detailed_agent_report.all')"
+          showClear="true"
         />
       </div>
       <div class="p-field p-col-12 p-text-right">
@@ -296,6 +309,32 @@ export default {
       processors: [],
       osVersions: [],
       agentVersions: [],
+      sessionReportTypes: [
+        {
+          name: "Son 1 Ay Oturum Açmayan",
+          value: "LAST_ONE_MONTH_NO_SESSIONS",
+        },
+        {
+          name: "Son 2 Ay Oturum Açmayan",
+          value: "LAST_TWO_MONTHS_NO_SESSIONS",
+        },
+        {
+          name: "Son 3 Ay Oturum Açmayan",
+          value: "LAST_THREE_MONTHS_NO_SESSIONS",
+        },
+        {
+          name: "Son 1 Ayda Oturum Açan",
+          value: "LAST_ONE_MONTH_SESSIONS",
+        },
+        {
+          name: "Son 2 Ayda Oturum Açan",
+          value: "LAST_TWO_MONTHS_SESSIONS",
+        },
+        {
+          name: "Son 3 Ayda Oturum Açan",
+          value: "LAST_THREE_MONTHS_SESSIONS",
+        },
+      ],
       getFilterData: true,
       selectedAgent: null,
       statuses: [
@@ -326,6 +365,7 @@ export default {
         processor: "",
         osVersion: "",
         agentVersion: "",
+        sessionReportType: "",
       },
       items: [
         {
@@ -401,6 +441,7 @@ export default {
       data.append("processor", this.filter.processor);
       data.append("osVersion", this.filter.osVersion);
       data.append("agentVersion", this.filter.agentVersion);
+      data.append("sessionReportType", this.filter.sessionReportType);
       if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
@@ -442,7 +483,6 @@ export default {
           this.osVersions = response.data.osVersions;
           this.agents = response.data.agents.content;
           this.totalElements = response.data.agents.totalElements;
-          
         } else if (response.status == 417) {
           this.$toast.add({
             severity:'error',
@@ -502,6 +542,7 @@ export default {
       data.append("processor", this.filter.processor);
       data.append("osVersion", this.filter.osVersion);
       data.append("agentVersion", this.filter.agentVersion);
+      data.append("sessionReportType", this.filter.sessionReportType);
       if (this.filter.registrationDate[0] != null) {
         data.append(
           "registrationStartDate",
@@ -565,6 +606,7 @@ export default {
         processor: "",
         osVersion: "",
         agentVersion: "",
+        sessionReportType: "",
       };
     },
   },
