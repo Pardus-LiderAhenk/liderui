@@ -21,8 +21,8 @@
   >
     <tree-component 
       ref="agentTree"
-      loadNodeUrl="/lider/computer/getComputers"
-      loadNodeOuUrl="/lider/computer/getOuDetails"
+      loadNodeUrl="/api/lider/computer/computers"
+      loadNodeOuUrl="/api/lider/computer/ou-details"
       :treeNodeClick="node => filter.dn = node.distinguishedName"
       :searchFields="[{key: this.$t('tree.folder'), value: 'ou'}]"
       :isMove="true"

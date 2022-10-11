@@ -552,7 +552,7 @@ export default {
           searchDn = this.rootNode.distinguishedName;
         }
         params.append("searchDn", searchDn);
-        axios.post("/lider/computer/searchOnlineEntries", params).then((response) => {
+        axios.post("/api/lider/computer/search-online-entries", params).then((response) => {
           this.tabIndex = 2;
           this.onlineAgentResults = response.data;
         });

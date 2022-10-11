@@ -181,8 +181,8 @@
                 </div>
                 <tree-component 
                     ref="agenttree"
-                    loadNodeUrl="/lider/computer/getComputers"
-                    loadNodeOuUrl="/lider/computer/getOuDetails"
+                    loadNodeUrl="/api/lider/computer/computers"
+                    loadNodeOuUrl="/api/lider/computer/ou-details"
                     :showCheckbox="agentGroupModal.showCheckbox"
                     :getCheckedNodes="getCheckedAgentNodes"
                     :searchFields="searchAgentFields"

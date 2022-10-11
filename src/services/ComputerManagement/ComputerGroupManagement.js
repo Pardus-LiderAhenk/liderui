@@ -26,7 +26,7 @@ class ComputerGroupManagemetService{
 
 	async getComputers(params) {
         try {
-            const response = await axios.get(liderComputerGetComputersUrl, params);
+            const response = await axios.post(liderComputerGetComputersUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
@@ -35,7 +35,7 @@ class ComputerGroupManagemetService{
 
 	async getOuDetails(params) {
         try {
-            const response = await axios.get(liderComputerOuDetailsUrl, params);
+            const response = await axios.post(liderComputerOuDetailsUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
