@@ -555,7 +555,14 @@
             "delete_folder":"Klasör Sil",
             "delete_folder_warn":"Klasör silinecektir, emin misiniz?",
             "no_delete_folder_warn": "Seçilen klasörün alt klasörü veya istemcileri bulunmaktadır. Silme işlemi için klasör boş olmalıdır.",
-            "delete_folder_success": "Klasör başarıyla silindi"
+            "delete_folder_success": "Klasör başarıyla silindi",
+            "error_agent_list_size":"İstemci sayısı getirilirken hata oluştu. İstemcilerinizi kontrol ediniz",
+            "error_417_agent_list_size":"İstemci sayısı getirilirken beklenmeyen bir hata oluştu. Hata kodu : 417",
+            "error_417_move_agent":"İstemci taşınırken beklenmeyen bir hata oluştu. Hata kodu : 417",
+            "error_417_update_agent_info": "İstemci güncellenirken beklenmeyen bir hata alındı. Hata kodu :417",
+            "error_417_delete_computer_ou" : "Seçilen klasör silinememiştir. Beklenmeyen bir hata oluştu. Hata kodu : 417",
+            "error_online_entries":"Çevrimiçi istemciler beklenmeyen bir hatadan dolayı gösterilemiyor.",
+            "error_404_online_entries":"Çevrimiçi istemciler bulunamamaktadır.Hata kodu : 404"
         },
         "scheduled": {
             "title": "Zamanlanmış Görev Parametreleri",

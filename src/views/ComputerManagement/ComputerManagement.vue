@@ -104,8 +104,8 @@ import RemoteAccess from '@/views/ComputerManagement/Plugins/Task/RemoteAccess/R
 import SecurityManagement from '@/views/ComputerManagement/Plugins/Task/Security/SecurityManagementPage.vue';
 import TaskHistory from '@/views/ComputerManagement/Plugins/Task/TaskHistory/TaskHistory.vue'
 import { mapActions } from "vuex";
-import axios from "axios";
 import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
+import { computerManagementService } from '../../services/ComputerManagement/ComputerManagement.js';
 
 export default {
     components: {
@@ -176,38 +176,72 @@ export default {
             await this.getAgentCountList(node);
         },
 
-        getAgentCountList(node) {
-            return new Promise((resolve, reject)=> {
-                let params = new FormData();
-                if (node) {
-                    if (node.type == "ORGANIZATIONAL_UNIT") {
-                        params.append("searchDn", node.distinguishedName);
-                        axios.post("/api/lider/computer/agent-list-size", params).then((response) => {
+        async getAgentCountList(node) {
+            let params = new FormData();
+            if (node) {
+                if (node.type == "ORGANIZATIONAL_UNIT") {
+                    params.append("searchDn", node.distinguishedName);
+                    const {response,error } = await computerManagementService.agentListSize(params);
+                    if(error){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('computer.agent_info.error_agent_list_size'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        })
+                    }
+                    else{
+                        if(response.status == 200){
                             this.agent.total = response.data.agentListSize;
                             this.agent.online = response.data.onlineAgentListSize;
                             this.agent.offline = this.agent.total - this.agent.online;
-                            resolve(this.agent);
-                        });
-                    } else if (node.type == "AHENK"){
-                        this.agent.total = 1;
-                        if (node.online) {
-                            this.agent.online = 1;
-                        } else {
-                            this.agent.online = 0;
                         }
-                        this.agent.offline = this.agent.total - this.agent.online;
-                        resolve(this.agent);
+                        else if(response.status == 417){
+                            this.$toast.add({
+                                severity:'error', 
+                                detail: this.$t('computer.agent_info.error_417_agent_list_size'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            })
+                        }
+
+                    }                            
+                } else if (node.type == "AHENK"){
+                    this.agent.total = 1;
+                    if (node.online) {
+                        this.agent.online = 1;
+                    } else {
+                        this.agent.online = 0;
                     }
-                } else {
-                    params.append("searchDn", "agents");
-                    axios.post("/api/lider/computer/agent-list-size", params).then((response) => {
+                    this.agent.offline = this.agent.total - this.agent.online;
+                }
+            } else {
+                params.append("searchDn", "agents");
+                const {response,error } = await computerManagementService.agentListSize(params);
+                if(error){
+                    this.$toaagentst.add({
+                        severity:'error', 
+                        detail: this.$t('computer.agent_info.error_agent_list_size'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    })
+                }
+                else{
+                    if(response.status == 200){
                         this.agent.total = response.data.agentListSize;
                         this.agent.online = response.data.onlineAgentListSize;
                         this.agent.offline = this.agent.total - this.agent.online;
-                        resolve(this.agent);
-                    });   
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('computer.agent_info.error_417_agent_list_size'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        })
+                    }
                 }
-            });
+            }
         },
 
         moveSelectedAgent(selectedNode, destinationDn) {

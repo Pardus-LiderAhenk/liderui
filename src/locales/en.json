@@ -553,7 +553,15 @@
             "delete_folder":"Delete Folder",
             "delete_folder_warn":"The folder will be deleted, are you sure?",
             "no_delete_folder_warn": "The selected folder has subfolders or clients. The folder must be empty to delete",
-            "delete_folder_success": "Deleted folder successfully"
+            "delete_folder_success": "Deleted folder successfully",
+            "error_agent_list_size":"An error occurred while getting the client count.Check your clients.",
+            "error_417_agent_list_size":"An unexpected error occurred while fetching the client count. Error code : 417",
+            "error_417_move_agent":"An unexpected error occurred while moving the client. Error code : 417",
+            "error_417_update_agent_info": "An unexpected error was received while updating the client. Error code : 417",
+            "error_417_delete_computer_ou" : "The selected folder could not be deleted. An unexpected error has occurred. Error code : 417",
+            "error_online_entries":"Online clients cannot be shown due to an unexpected error.",
+            "error_404_online_entries":"Online clients not found. Error code : 404"
+
         },
         "scheduled": {
             "title": "Scheduled Task Parameters",

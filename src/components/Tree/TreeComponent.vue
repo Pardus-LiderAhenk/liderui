@@ -243,6 +243,7 @@
 
 <script>
 import axios from "axios";
+import { computerManagementService } from "../../services/ComputerManagement/ComputerManagement";
 
 export default {
 
@@ -542,7 +543,7 @@ export default {
       }
     },
 
-    getOnlineAgents() {
+    async getOnlineAgents() {
       if (this.tabIndex === 2) {
         let searchDn = null;
         let params = new FormData();
@@ -552,10 +553,29 @@ export default {
           searchDn = this.rootNode.distinguishedName;
         }
         params.append("searchDn", searchDn);
-        axios.post("/api/lider/computer/search-online-entries", params).then((response) => {
-          this.tabIndex = 2;
-          this.onlineAgentResults = response.data;
-        });
+        const{response,error} = await computerManagementService.searchOnlineEntries(params);
+        if(error){
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('computer.agent_info.error_online_entries'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          })
+        }
+        else{
+          if(response.status == 200){
+            this.tabIndex = 2;
+            this.onlineAgentResults = response.data;
+          }
+          else if(response.status == 404){
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t('computer.agent_info.error_404_online_entries'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+          })
+          }
+        }
       }
     },
 
