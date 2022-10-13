@@ -6,8 +6,8 @@
                 <div class="p-field">
                     <tree-component 
                         ref="grouptree"
-                        loadNodeUrl="/lider/computer_groups/getGroups"
-                        loadNodeOuUrl="/lider/computer_groups/getOuDetails"
+                        loadNodeUrl="/api/lider/computer-groups/groups"
+                        loadNodeOuUrl="/api/lider/computer-groups/ou-details"
                         :treeNodeClick="selectTreeNodeClick"
                         :searchFields="searchFolderFields"
                     />
@@ -140,7 +140,7 @@ export default {
                 );
             }
 
-            axios.post('/lider/computer_groups/agentReport/existing/group', data).then(response => {
+            axios.post('/lider//api/lider/computer-groups/agent-report/existing/group', data).then(response => {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 

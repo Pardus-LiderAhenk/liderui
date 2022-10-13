@@ -9,8 +9,8 @@
             <div class="p-col-12">
                 <tree-component 
                     ref="agentsTree"
-                    loadNodeUrl="/lider/computer_groups/getGroups"
-                    loadNodeOuUrl="/lider/computer_groups/getOuDetails"
+                    loadNodeUrl="/api/lider/computer-groups/groups"
+                    loadNodeOuUrl="/api/lider/computer-groups/ou-details"
                     :searchFields="searchFields"
                     :treeNodeClick="setSelectedNode"
                 />

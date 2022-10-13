@@ -187,7 +187,7 @@ export default {
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedComputerGroupNode.distinguishedName);
-            axios.post("/lider/computer_groups/delete/group/members", params).then((response) => {
+            axios.post("/api/lider/computer-groups/group/members", params).then((response) => {
                 if (response.data != null) {
                     this.$toast.add({
                         severity:'success', 

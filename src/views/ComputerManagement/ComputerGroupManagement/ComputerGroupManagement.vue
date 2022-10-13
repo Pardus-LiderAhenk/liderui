@@ -7,8 +7,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
-                loadNodeUrl="/lider/computer_groups/getGroups"
-                loadNodeOuUrl="/lider/computer_groups/getOuDetails"
+                loadNodeUrl="/api/lider/computer-groups/groups"
+                loadNodeOuUrl="/api/lider/computer-groups/ou-details"
                 :treeNodeClick="treeNodeClick"
                 :searchFields="searchFields"
                 @handleContextMenu="handleContenxtMenu"
@@ -144,8 +144,8 @@
         <tree-component 
             ref="movetree"
             :isMove="true"
-            loadNodeUrl="/lider/computer_groups/getGroups"
-            loadNodeOuUrl="/lider/computer_groups/getOuDetails"
+            loadNodeUrl="/api/lider/computer-groups/groups"
+            loadNodeOuUrl="/api/lider/computer-groups/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
         />
@@ -503,7 +503,7 @@ export default {
                 this.validation.folderName = true;
                 return;
             }
-            axios.post('/lider/computer_groups/addOu', {
+            axios.post('/api/lider/computer-groups/add-ou', {
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
                 ou: this.folderName,
@@ -532,7 +532,7 @@ export default {
             let params = new FormData();
             params.append("oldDN", this.selectedNode.distinguishedName);
             params.append("newName", "cn="+this.agentGroupModal.groupName);
-            axios.post('/lider/computer_groups/rename/entry', params).then(response => {
+            axios.post('/api/lider/computer-groups/rename/entry', params).then(response => {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 
@@ -578,7 +578,7 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveFolderNode.distinguishedName);
             this.modals.moveNode = false;
-            axios.post('/lider/computer_groups/move/entry', params).then(response => {
+            axios.post('/api/lider/computer-groups/move/entry', params).then(response => {
                 if (response.data) {
                     this.$refs.tree.remove(this.selectedNode);
                     if (this.selectedNode.type === "GROUP") {
@@ -629,7 +629,7 @@ export default {
             }
             this.loading = true;
             this.loadingGroup = true;
-            axios.post('/lider/computer_groups/createNewAgentGroup',{
+            axios.post('/api/lider/computer-groups/create-new-agent-group',{
                 groupName: this.agentGroupModal.groupName,
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 selectedOUDN: this.selectedNode.distinguishedName
@@ -680,7 +680,7 @@ export default {
 
         addClientToGroup() {
             this.loadingGroup = true;
-            axios.post('/lider/computer_groups/group/existing',{
+            axios.post('/api/lider/computer-groups/group/existing',{
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 groupDN: this.selectedNode.distinguishedName
             }).then(response => {
@@ -739,7 +739,7 @@ export default {
             let params = new FormData();
             params.append("dn", this.selectedNode.distinguishedName);
             this.modals.deleteNode = false;
-            axios.post("/lider/computer_groups/deleteEntry", params).then(response => {
+            axios.post("/api/lider/computer-groups/delete-entry", params).then(response => {
                 if (response.data) {
                     this.$refs.tree.remove(this.selectedNode);
                     this.setSelectedComputerGroupNode(null);
