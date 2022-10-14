@@ -1205,7 +1205,13 @@
         "yes":"Yes",
         "add_client_loading":"Adding clients, please wait...",
         "add_group_loading":"Creating group, please wait...",        
-        "error_417_delete_member_group" : "An unexpected error occurred while deleting the member. Error code : 417"
+        "error_417_delete_member_group" : "An unexpected error occurred while deleting the member. Error code : 417",
+        "error_417_delete_node" : "An unexpected error was received while deleting the record. Error code : 417",
+        "error_417_add_client" : "An unexpected error was received while deleting the client. Error code :417",
+        "error_417_created_group" : "An unexpected error was received while creating a group. Error code : 417",
+        "error_417_move_entry" : "An unexpected error was received during record migration. Error code : 417",
+        "error_add_folder": "An error was received while creating the folder."
+
     },
     "policy_management": {
         "title":"Policy Management",
@@ -1476,7 +1482,9 @@
             "not_logged_three_mounth":"Not Logged In Last 3 Months",
             "logged_one_mounth":"Logged In Last 1 Month",
             "logged_two_mounth":"Logged In Last 2 Months",
-            "logged_three_mounth":"Logged In Last 3 Months"
+            "logged_three_mounth":"Logged In Last 3 Months",
+            "error_417_adding_computer_to_group":"An unexpected error occurred while adding clients to the group. Error code : 417"
+
         },
         "task_report":{
             "task_report":"Task Report",

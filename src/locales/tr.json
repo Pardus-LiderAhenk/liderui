@@ -1206,7 +1206,12 @@
         "yes":"Evet",
         "add_client_loading":"İstemciler yükleniyor, lütfen bekleyiniz...",
         "add_group_loading":"Grup oluşturuluyor, lütfen bekleyiniz...",
-        "error_417_delete_member_group" : "Üye silinirken beklenmedik bir hata oluştu. Hata kodu : 417"
+        "error_417_delete_member_group" : "Üye silinirken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_417_delete_node" : "Kayıt silinirken beklenmedik bir hata alındı. Hata kodu : 417",
+        "error_417_add_client" : "İstemci silinirken beklenmeyen bir hata alındı. Hata kodu :417",
+        "error_417_created_group" : "Grup oluşturulurken beklenmeyen bir hata alındı. Hata kodu : 417",
+        "error_417_move_entry" : "Kayıt taşıma sırasında beklenmeyen bir hata alındı. Hata kodu : 417",
+        "error_add_folder": "Klasör oluşturulurken bir hata alındı."
 
     },
     "policy_management": {
@@ -1479,7 +1484,8 @@
             "not_logged_three_mounth":"Son 3 Ay Oturum Açmayan",
             "logged_one_mounth":"Son 1 Ay Oturum Açan",
             "logged_two_mounth":"Son 2 Ay Oturum Açan",
-            "logged_three_mounth":"Son 3 Ay Oturum Açan"
+            "logged_three_mounth":"Son 3 Ay Oturum Açan",
+            "error_417_adding_computer_to_group":"İstemciler gruba eklenirken beklenmeyen bir hata oluştu. Hata kodu : 417"
 
 
         },

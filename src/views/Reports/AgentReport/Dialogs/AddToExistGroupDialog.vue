@@ -41,6 +41,7 @@
  */
 
 import axios from "axios";
+import { computerGroupsManagementService } from "../../../../services/ComputerManagement/ComputerGroupManagement";
 
 export default {
 
@@ -92,7 +93,7 @@ export default {
             this.selectedNode = node;
         },
 
-        addGroup() {
+        async addGroup() {
             if (!this.selectedNode || this.selectedNode.type != "GROUP") {
                 this.$toast.add({
                     severity:'warn', 
@@ -140,26 +141,41 @@ export default {
                 );
             }
 
-            axios.post('/lider//api/lider/computer-groups/agent-report/existing/group', data).then(response => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('reports.detailed_agent_report.computers_successfully_added'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+            const{response,error} = await computerGroupsManagementService.groupExisting(data);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail:  this.$t('reports.detailed_agent_report.an_error_occurred_while_adding_computers_to_the_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('reports.detailed_agent_report.computers_successfully_added'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+
                     this.$toast.add({
                         severity:'error', 
-                        detail:  this.$t('reports.detailed_agent_report.an_error_occurred_while_adding_computers_to_the_group'), 
+                        detail:  this.$t('reports.detailed_agent_report.error_417_adding_computer_to_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-                this.showDialog = false;
-                this.selectedNode = null;
-                this.loading = false;
-            });
+            }
+
+            this.showDialog = false;
+            this.selectedNode = null;
+            this.loading = false;
+
         },
     }
 }

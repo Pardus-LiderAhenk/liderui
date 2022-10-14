@@ -49,6 +49,7 @@
  */
 
 import axios from "axios";
+import { computerGroupsManagementService } from "../../../../services/ComputerManagement/ComputerGroupManagement";
 
 export default {
 
@@ -100,7 +101,7 @@ export default {
             this.selectedOu = node;
         },
 
-        addGroup() {
+        async addGroup() {
             if (!this.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
@@ -153,27 +154,42 @@ export default {
                 );
             }
 
-            axios.post('/api/lider/computer-groups/agent-report/create-agent-group', data).then(response => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('reports.detailed_agent_report.computer_group_successfully_create'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+            const{response,error} = await computerGroupsManagementService.createAgentGroup(data);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('reports.detailed_agent_report.an_error_occurred_while_creating_the_computer_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('reports.detailed_agent_report.computer_group_successfully_create'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });                    
+                    }
+                }
+
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('reports.detailed_agent_report.an_error_occurred_while_creating_the_computer_group'), 
+                        detail: this.$t('reports.detailed_agent_report.error_417_adding_computer_to_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-                this.showDialog = false;
-                this.groupName = '';
-                this.selectedOu = null;
-                this.loading = false;
-            });
+            }
+
+            this.showDialog = false;
+            this.groupName = '';
+            this.selectedOu = null;
+            this.loading = false;
         },
     }
 }
