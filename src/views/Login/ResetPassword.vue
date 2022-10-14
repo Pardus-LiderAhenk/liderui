@@ -65,7 +65,7 @@ export default {
                 "repeatPassword": password
             }
 
-            axios.post('/forgot_password/reset/'+ this.$route.params.uuid , params)
+            axios.post('/api/forgot-password/reset/'+ this.$route.params.uuid , params)
             .then(response => {
                 if (response.status === 200) {
                     this.isPasswordReset = true;

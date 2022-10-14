@@ -175,7 +175,7 @@ export default {
             return new Promise((resolve, reject)=> {
                 let params = new FormData();
                 params.append("userDn", "dashboard");
-                axios.post("/dashboard/info", params).then((response) => {
+                axios.post("/api/dashboard/info", params).then((response) => {
                     if (response.data) {
                         this.totalClientNumber = response.data.totalComputerNumber;
                         this.totalUserNumber = response.data.totalUserNumber;

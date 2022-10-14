@@ -210,7 +210,7 @@ export default {
         }
         this.loading = true;
         params.append("dn", this.selectedLiderNode.distinguishedName);
-        axios.post("/command", params).then((response) => {
+        axios.post("/api/command", params).then((response) => {
             if (response.data != null) {
                 for (let index = 0; index < response.data.length; index++) {
                     const element = response.data[index];
@@ -242,6 +242,7 @@ export default {
         .catch((error) => { 
         this.$toast.add({
             severity:'error', 
+            //new  cache message
             detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
