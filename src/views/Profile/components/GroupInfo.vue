@@ -27,7 +27,7 @@
 
 
 <script>
-import axios from 'axios';
+import { profileService } from '../../../services/Profile/ProfileService.js'
 
 export default {
     props:['user'],
@@ -40,15 +40,37 @@ export default {
         init(user) {
             this.getUserGroupInfo(user);
         },
-        getUserGroupInfo(user) {
+        async getUserGroupInfo(user) {
            if (user) {
                var data = new FormData();
                data.append('searchDn',"");
                data.append('key','sudoUser');
                data.append('value',user.uid);
-                axios.post('/lider/ldap/searchEntry', data).then(response => {
-                    this.userSudoGroups = response.data;
-                }); 
+                //axios.post('/lider/ldap/searchEntry', data).then(response => {
+                const{ response,error } = await profileService.searchEntry(data);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.user_not_found'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+
+                        this.userSudoGroups = response.data;
+
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.error_417_user_not_found'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                    });
+                    }
+                }
            }
         }
     }

@@ -298,7 +298,7 @@ export default {
     },
     searchNodeUrl: {
       type: String,
-      default: "/lider/ldap/searchEntry",
+      default: "/api/lider/ldap/search-entry",
       description: "url for search entry"
     },
     renderSearchContent: {

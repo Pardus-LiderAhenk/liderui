@@ -106,6 +106,7 @@
 <script>
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { profileService } from "../../../../services/Profile/ProfileService.js";
 
 export default {
     props: {
@@ -151,23 +152,36 @@ export default {
             this.addUserGroupNode = node;
         },
 
-        getGroupsOfSelectedUser() {
+        async getGroupsOfSelectedUser() {
             if (this.selectedNode && this.selectedNode.type === "USER") {
                 let params = new FormData();
                 params.append("searchDn", this.userLdapBaseDn.userGroupLdapBaseDn);
                 params.append("key", "member");
                 params.append("value", this.selectedNode.distinguishedName);
-                axios.post("/lider/ldap/searchEntry", params).then((response) => {
-                    this.groups = response.data;
-                    this.updateRowIndex();
-                }).catch((error) => {
+                //axios.post("/lider/ldap/searchEntry", params).then((response) => {
+                const{ response,error } = await profileService.searchEntry(params);
+                if(error){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.change_user_password_error')+ " \n"+error, 
+                        detail: this.$t('user_management.user_not_found'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                });
+                }
+                else{
+                    if(response.status == 200){
+                        this.groups = response.data;
+                        this.updateRowIndex();
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.error_417_user_not_found'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                    });
+                    }
+                }
             }
         },
 
