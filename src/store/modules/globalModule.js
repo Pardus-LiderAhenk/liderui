@@ -45,7 +45,7 @@ const actions = {
                     if (response) {
                         localStorage.setItem("auth_token", response.data.token);
                         axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
-                        axios.post("/liderConsole/profile", {}).then((userresponse) => {
+                        axios.post("/api/lider-console/profile", {}).then((userresponse) => {
                             commit('auth_success', {token:response.data.token,user:userresponse.data});
                             if(!strophe.isConnected) {
                                 strophe.getInstance().connect();

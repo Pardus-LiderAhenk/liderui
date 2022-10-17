@@ -1637,7 +1637,11 @@
             "address":"Adres",
             "update_informations":"Bilgileri Güncelle",
             "information_has_been_successfully_updated":"Bilgiler başarıyla güncellendi.",
-            "change_user_info_confirm_message":"Kullanıcı bilgileri güncellenecektir, emin misiniz?"
+            "change_user_info_confirm_message":"Kullanıcı bilgileri güncellenecektir, emin misiniz?",
+            "error_profile_update": "Kullanıcı bilgileri güncellenirken hata oluştu. Tekrar deneyiniz.",
+            "error_417_profile_update": "Kullanıcı bilgileri güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_get_profile": "Kullanıcının profil bilgileri getirilirken hata oluştu. Tekrar deneyiniz",
+            "error_417_get_profile": "Kullanıcının profil bilgileri getirilirken beklenmedik bir hata alındı. Hata kodu : 417"
         },
         "account_security":{
             "account_security":"Hesap Güvenliği",

@@ -1635,7 +1635,11 @@
             "address":"Address",
             "update_informations":"Update Informations",
             "information_has_been_successfully_updated":"Information has been successfully updated.",
-            "change_user_info_confirm_message": "User information will be updated, are you sure?"
+            "change_user_info_confirm_message": "User information will be updated, are you sure?",
+            "error_profile_update": "An error occurred while updating user information. Try again.",
+            "error_417_profile_update": "An unexpected error occurred while updating user information. Error code : 417",
+            "error_get_profile": "An error occurred while fetching the user's profile information. Try again",
+            "error_417_get_profile": "An unexpected error was received while fetching the user's profile information. Error code : 417"
         },
         "account_security":{
             "account_security":"Account Security",

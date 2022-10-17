@@ -156,7 +156,7 @@ export default {
 
         getPriviliges() {
             return new Promise((resolve, reject)=> {
-                axios.post("/liderConsole/profile", {}).then((response) => {
+                axios.post("/api/lider-console/profile", {}).then((response) => {
                     this.priviliges = response.data.priviliges;
                     resolve(response.data.priviliges);
                 });

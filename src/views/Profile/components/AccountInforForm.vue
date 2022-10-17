@@ -104,9 +104,9 @@ export default {
             let params = new FormData();
             params.append("uid", this.user.uid);
             params.append("userPassword", this.oldPassword);
-            axios.post("/liderConsole/matchesPassword", params).then((response) => {
+            axios.post("/api/lider-console/matches-password", params).then((response) => {
                 if (response.data) {
-                    axios.post("/liderConsole/updatePassword", {
+                    axios.post("/api/lider-console/update-password", {
                         distinguishedName: this.user.distinguishedName,
                         userPassword: this.newPassword
                     }).then((rsp) => {
