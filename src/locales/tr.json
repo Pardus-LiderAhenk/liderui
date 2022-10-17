@@ -263,7 +263,9 @@
                 "server_name": "Sunucu Adı",
                 "username": "Kullanıcı Adı",
                 "get_settings_error_message": "LDAP ayarları getirilirken hata oluştu",
-                "disable_local_user": "Yerel Kullanıcıyı Devre Dışı Bırak"
+                "disable_local_user": "Yerel Kullanıcıyı Devre Dışı Bırak",
+                "error_417_get_settings_configuration":"İstemcinin OpenLDAP veya Active Directory ayarlarında beklenmedik bir hata alındı. Hata kodu : 417",
+                "error_update_directory_domain":"Kullanıcının etki alanı güncellenemedi(Ldap veya AD)."
             },
             "xmessage": {
                 "header": "Anlık Mesaj Gönder",

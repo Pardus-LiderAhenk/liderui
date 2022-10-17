@@ -261,7 +261,10 @@
                 "server_name": "Server Name",
                 "username": "Username",
                 "get_settings_error_message": "An error occurred while getting LDAP settings",
-                "disable_local_user": "Disable Local User"
+                "disable_local_user": "Disable Local User",
+                "error_417_get_settings_configuration":"An unexpected error was received in the client's OpenLDAP or Active Directory settings. Error code : 417",
+                "error_update_directory_domain":"The user's domain could not be updated. Ldap or AD"
+
             },
             "xmessage": {
                 "header": "Send Instant Message",

@@ -6,7 +6,7 @@
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="closeShowTaskDialog"
       :pluginTask="task"
-      executeTaskUrl="/ldapLogin/task/execute"
+      executeTaskUrl="/api/ldap-login/task/execute"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.ldap_login.header") }}
@@ -88,9 +88,8 @@
  * @see {@link http://www.liderahenk.org/}
  * 
  */
-
-import axios from "axios";
 import { mapGetters } from "vuex"
+import { taskService } from "../../../../../services/Task/TaskService";
 
 export default {
   props: {
@@ -128,32 +127,7 @@ export default {
   },
 
   mounted() {
-    axios.get("/ldapLogin/configurations", null).then((response) => {
-      if (response.data != null) {
-        this.ldapServer = response.data.ldapServer;
-        this.ldapRootDn = response.data.ldapRootDn;
-        this.adIpAddress = response.data.adIpAddress;
-        this.adDomainName = response.data.adDomainName;
-        this.adHostName = response.data.adHostName;
-        this.disableLocalUser = response.data.disableLocalUser;
-        this.allowDynamicDNSUpdate = response.data.allowDynamicDNSUpdate;
-
-      } else {
-        this.$toast.add({
-          severity:'error', 
-          detail: this.$t("computer.plugins.ldap_login.get_settings_error_message"), 
-          summary:this.$t("computer.task.toast_summary"), 
-          life: 3000
-        });
-      }
-    })
-    .catch((error) => { 
-      this.$toast.add({
-        severity:'error', 
-        detail: this.$t('computer.plugins.ldap_login.get_settings_error_message')+ " \n"+error, 
-        summary:this.$t("computer.task.toast_summary"), 
-        life: 3000
-      })})
+    this.loginConfigurations(null);
   },
 
   computed:mapGetters(["selectedLiderNode"]),
@@ -207,8 +181,49 @@ export default {
       }
     },
 
+    async loginConfigurations(){
+      const{response,error} = await taskService.configurations();
+      if(error){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.ldap_login.get_settings_error_message')+ " \n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        })
+      }
+      else{
+        if(response.status == 200){
+          if (response.data != null) {
+            this.ldapServer = response.data.ldapServer;
+            this.ldapRootDn = response.data.ldapRootDn;
+            this.adIpAddress = response.data.adIpAddress;
+            this.adDomainName = response.data.adDomainName;
+            this.adHostName = response.data.adHostName;
+            this.disableLocalUser = response.data.disableLocalUser;
+            this.allowDynamicDNSUpdate = response.data.allowDynamicDNSUpdate;
+
+        } else {
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.plugins.ldap_login.get_settings_error_message"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
+          }
+        }
+        else if(response.status == 417){
+          this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.plugins.ldap_login.error_417_get_settings_configuration"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
+        }
+      } 
+    },
+
   // Updated user directory domain field to db by selected dn as OpenLDAP, AD or
-    updateUserDirectoryDomain() {
+    async updateUserDirectoryDomain() {
       var userDirectoryDomain = null;
       if (this.task.commandId == "EXECUTE_LDAP_LOGIN") {
         userDirectoryDomain = "LDAP";
@@ -218,7 +233,27 @@ export default {
       const params = new FormData();
       params.append("dn", this.selectedLiderNode.distinguishedName);
       params.append("userDirectoryDomain", userDirectoryDomain);
-      axios.post("/ldapLogin/updateDirectoryDomain", params).then((response) => {});
+      //axios.post("/api/ldap-login/update-directory-domain", params).then((response) => {});
+      const{response,error} = await taskService.updateDomain(params);
+      if(error){
+        this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.plugins.ldap_login.error_update_directory_domain"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
+
+      }
+      else{
+        if(response.status == 417){
+          this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.plugins.ldap_login.error_417_get_settings_configuration"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });        
+        }
+      }
     }
   },
 };
