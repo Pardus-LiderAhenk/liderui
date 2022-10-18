@@ -28,7 +28,7 @@ class XmppClinet {
 
   connect () {
     axios
-    .post(process.env.VUE_APP_URL + "/api/messaging/getMessagingServerInfo", { })
+    .post(process.env.VUE_APP_URL + "/api/messaging/get-messaging-server-info", { })
     .then(
       (response) => {
         this.connection = new Strophe.Connection(
