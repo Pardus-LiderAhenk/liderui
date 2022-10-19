@@ -197,7 +197,7 @@ export default {
                 });
                 return;
             }
-            axios.post('/policy/update', params).then(response => {
+            axios.post('/api/policy/update', params).then(response => {
                 if (response.data) {
                     this.$emit('updatedPolicy', response.data);
                     this.$emit('closePolicyDialog');

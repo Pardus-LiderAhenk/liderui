@@ -132,7 +132,7 @@ export default {
     },
 
     mounted() {
-        axios.post('/getPluginProfileList', {}).then(response => {
+        axios.post('/api/get-plugin-profile-list', {}).then(response => {
             if (response.data) {
                 this.plugins = response.data;
                 this.addImagePath();

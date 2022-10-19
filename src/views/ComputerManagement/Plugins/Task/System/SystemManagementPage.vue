@@ -93,7 +93,7 @@ export default {
   },
 
   created() {
-    axios.post("/getPluginTaskList", {}).then((response) => {
+    axios.post("/api/get-plugin-task-list", {}).then((response) => {
       for (let index = 0; index < response.data.length; index++) {
         const element = response.data[index];
         if (element.page == "resource-usage") {

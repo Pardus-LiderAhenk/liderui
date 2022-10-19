@@ -71,7 +71,7 @@ export default {
   created() {
     axios
       .post(
-        process.env.VUE_APP_URL + "/getPluginTaskList",
+        process.env.VUE_APP_URL + "/api/get-plugin-task-list",
         {},
       )
       .then((response) => {
