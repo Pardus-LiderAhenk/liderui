@@ -35,7 +35,7 @@ import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTra
 import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.vue";
 import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
 import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
-import UsbManagement from "@/views/ComputerManagement/Plugins/Task/Security/UsbManagement.vue";
+import UsbManagement from "@/views/ComputerManagement/Plugins/Task/Security/Usb/UsbManagement.vue";
 
 export default {
   data() {

@@ -3,12 +3,19 @@
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-6">
         <network-management 
-        v-if="networkManagementState" class="plugin-card" 
-        :pluginTask="pluginTaskNetworkManagement">
+          v-if="networkManagementState" class="plugin-card" 
+          :pluginTask="pluginTaskNetworkManagement">
         </network-management>
       </div>
       <div class="p-col-12 p-md-6 p-lg-6">
-        <usb-management v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement"></usb-management>
+        <usb-management 
+          v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement">
+        </usb-management>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-6">
+        <usb-rule-management 
+          v-if="usbRuleManagementState" class="plugin-card" :pluginTask="pluginTaskUsbRuleManagement">
+        </usb-rule-management>
       </div>
     </div>
   </div>
@@ -22,8 +29,9 @@
  */
 
 import axios from 'axios';
-import NetworkManagement from "@/views/ComputerManagement/Plugins/Task/Security/NetworkManagement/NetworkManagement.vue";
-import UsbManagement from "@/views/ComputerManagement/Plugins/Task/Security/UsbManagement.vue";
+import NetworkManagement from './NetworkManagement/NetworkManagement.vue';
+import UsbManagement from './Usb/UsbManagement.vue';
+import UsbRuleManagement from './Usb/UsbRuleManagement.vue';
 
 
 export default {
@@ -31,14 +39,17 @@ export default {
     return {
       pluginTaskNetworkManagement: null,
       pluginTaskUsbManagement: null,
+      pluginTaskUsbRuleManagement: null,
       
       networkManagementState: false,
       usbManagementState: false,
+      usbRuleManagementState: false,
     };
   },
   components: {
     NetworkManagement,
-    UsbManagement
+    UsbManagement,
+    UsbRuleManagement
   },
 
   created() {
@@ -52,6 +63,10 @@ export default {
         if (element.page == "usb-management") {
           this.pluginTaskUsbManagement = element;
           this.usbManagementState = element.state;
+        }
+        if (element.page == "usb-rule-management") {
+          this.pluginTaskUsbRuleManagement = element;
+          this.usbRuleManagementState = element.state;
         }
       }
     });
