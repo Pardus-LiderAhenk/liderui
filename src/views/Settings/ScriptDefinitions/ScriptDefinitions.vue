@@ -252,7 +252,7 @@ export default {
             var data = new FormData();
             data.append("pageNumber", this.pageNumber);
             data.append("pageSize", this.rowNumber);            
-            axios.post("/script/list", data).then((response) => {
+            axios.post("/api/script/list", data).then((response) => {
             if (response.data != null) {
                 this.scripts = response.data.content;
                 this.totalElements = response.data.totalElements;
@@ -321,7 +321,7 @@ export default {
             const params = {
                 id: this.selectedScript.id
             };
-            axios.post("/script/delete", params).then((response) => {
+            axios.post("/api/script/delete", params).then((response) => {
                 if (response.data != null) {
                     // var index = this.scripts.findIndex(function(item, i){
                     //     return item.id === response.data.id;
@@ -360,7 +360,7 @@ export default {
                     scriptType: this.scriptType,
                     id: this.selectedScript.id
                 };
-                axios.post("/script/update", params).then((response) => {
+                axios.post("/api/script/update", params).then((response) => {
                     if (response.data != null) {
                         this.showTemplateDialog = false;
                         // for (let index = 0; index < this.scripts.length; index++) {
@@ -398,7 +398,7 @@ export default {
                     contents: this.contents,
                     scriptType: this.scriptType
                 };
-                axios.post("/script/add", params).then((response) => {
+                axios.post("/api/script/add", params).then((response) => {
                     if (response.data != null) {
                         this.showTemplateDialog = false;
                         // this.scripts.push(response.data);

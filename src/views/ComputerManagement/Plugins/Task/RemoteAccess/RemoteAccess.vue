@@ -266,7 +266,7 @@ export default {
       }
       const params = new FormData();
       params.append("agentJid", this.selectedLiderNode.uid);
-      axios.post("/select_agent_info/detail", params).then((response) => {
+      axios.post("/api/select-agent-info/detail", params).then((response) => {
         if (response.data != "" && response.data != null) {
           this.host = response.data.ipAddresses.replace(/'/g, "");
         } else {

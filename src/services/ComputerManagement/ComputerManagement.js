@@ -96,7 +96,7 @@ class ComputerManagemetService{
         }
     }
 
-	async agentListSize(params) {
+	async computerAgentListSize(params) {
         try {
             const response = await axios.post(liderComputerAgentListSizeUrl, params);
             return { response };

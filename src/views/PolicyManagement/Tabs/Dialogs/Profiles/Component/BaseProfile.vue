@@ -180,7 +180,7 @@ export default {
         getProfile() {
             let params = new FormData();
             params.append("name", this.pluginProfile.plugin.name)
-            axios.post('/profile/list', params).then(response => {
+            axios.get('/api/profile/list', params).then(response => {
                 if (response.data) {
                     this.profiles = response.data;
                     this.updateRowIndex();
@@ -235,7 +235,7 @@ export default {
                 "profileData": profileData,
                 "plugin": this.pluginProfile.plugin
 			};
-            axios.post('/profile/add', params).then(response => {
+            axios.post('/api/profile/add', params).then(response => {
                 if (response.data) {
                     this.showPluginProfileDialog = false;
                     this.profiles.push(response.data);
@@ -269,7 +269,7 @@ export default {
                 "profileData": profileData,
                 "id": this.selectedProfile.id
 			};
-            axios.post('/profile/update', params).then(response => {
+            axios.post('/api/profile/update', params).then(response => {
                 if (response.data) {
                     this.showPluginProfileDialog = false;
                     this.profiles = this.profiles.filter(profile => profile.id != response.data.id);
@@ -297,7 +297,7 @@ export default {
             let params = {
                 "id": this.selectedProfile.id
 			};
-            axios.post('/profile/delete', params).then(response => {
+            axios.delete('/api/profile/delete', params).then(response => {
                 if (response.data) {
                     this.showDeleteProfileDialog = false;
                     this.profiles = this.profiles.filter(profile => profile.id != response.data.id);

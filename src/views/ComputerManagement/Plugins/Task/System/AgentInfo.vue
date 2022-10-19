@@ -629,7 +629,7 @@ export default {
       this.agentCn = this.selectedLiderNode.cn;
       const params = new URLSearchParams();
       params.append("agentJid", this.selectedLiderNode.uid);
-      axios.post("/select_agent_info/detail", params).then((response) => {
+      axios.post("/api/select-agent-info/detail", params).then((response) => {
         if (response.data != "" && response.data != null) {
         this.selectedAgentInfo = response.data;
         // this.setSelectedAgentInfo(response.data);

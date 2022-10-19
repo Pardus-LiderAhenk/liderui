@@ -135,7 +135,7 @@ export default {
     },
 
     mounted() {
-        axios.post("/script/list", null).then((response) => {
+        axios.post("/api/script/list", null).then((response) => {
             if (response.data != null || response.data != "") {
                 for (let index = 0; index < response.data.length; index++) {
                     const element = response.data[index];

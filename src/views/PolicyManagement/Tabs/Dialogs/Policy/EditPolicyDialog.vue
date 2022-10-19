@@ -149,7 +149,7 @@ export default {
 
     mounted() {
         // get all profile list by deleted is false
-        axios.post('/profile/allList', null).then(response => {
+        axios.get('/api/profile/all-list', null).then(response => {
             if (response.data) {
                 this.profiles = response.data;
             } 

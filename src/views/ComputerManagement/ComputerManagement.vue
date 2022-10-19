@@ -181,7 +181,7 @@ export default {
             if (node) {
                 if (node.type == "ORGANIZATIONAL_UNIT") {
                     params.append("searchDn", node.distinguishedName);
-                    const {response,error } = await computerManagementService.agentListSize(params);
+                    const {response,error } = await computerManagementService.computerAgentListSize(params);
                     if(error){
                         this.$toast.add({
                             severity:'error', 

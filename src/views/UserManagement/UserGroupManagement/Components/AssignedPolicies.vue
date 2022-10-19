@@ -184,7 +184,7 @@ export default {
             let params = {
                 "distinguishedName": this.selectedNode.distinguishedName
             }
-            axios.post('/api/policy/getPoliciesForGroup', params).then(response => {
+            axios.post('/api/policy/policies-for-group', params).then(response => {
                 if (response.data) {
                     this.policies = response.data;
                     this.updateRowIndex();
