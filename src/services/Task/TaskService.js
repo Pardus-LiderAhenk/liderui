@@ -1,7 +1,14 @@
 import axios from "axios";
 
-const  ldapLoginUpdateDomainUrl =  '/api/ldap-login/update-directory-domain';
+const ldapLoginUpdateDomainUrl =  '/api/ldap-login/update-directory-domain';
 const ldapLoginConfigurationsUrl = '/api/ldap-login/configurations';
+const packagesListUrl = '/api/packages/list';
+const packagesUpdateRepoAddrestUrl = '/api/packages/update/repo-address';
+const packagesRepoAddrestUrl = '/api/packages/repo-address';
+const pluginTaskListUrl = '/api/get-plugin-task-list';
+const pluginProfileListUrl = '/api/get-plugin-profile-list';
+
+
 
 class TaskService{
 
@@ -26,6 +33,52 @@ class TaskService{
             return { error: error }
         }
     }
+
+    async packageList(params){
+        try {
+            const response = await axios.post(packagesListUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async packageUpdateRepo(params){
+        try {
+            const response = await axios.post(packagesUpdateRepoAddrestUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async packageRepoAddress(params){
+        try {
+            const response = await axios.get(packagesRepoAddrestUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async pluginTaskList(params){
+        try {
+            const response = await axios.post(pluginTaskListUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async pluginProfileList(params){
+        try {
+            const response = await axios.post(pluginProfileListUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+    
 }
 
 export const taskService = new TaskService(axios);

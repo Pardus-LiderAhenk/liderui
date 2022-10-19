@@ -183,6 +183,7 @@
 
 <script>
 import axios from "axios";
+import { taskService } from "../../../../../services/Task/TaskService";
 
 /**
  * Allows to install or remove selected package or packages in package repository which entered address
@@ -230,7 +231,7 @@ export default {
   },
 
   mounted() {
-    axios.get("/packages/repoAddress", null).then((response) => {
+    axios.get("/api/packages/repo-address", null).then((response) => {
       if (response.data.pardusRepoAddress == null || 
       response.data.pardusRepoAddress == "" && 
       response.data.pardusRepoComponent != null || 
@@ -259,57 +260,72 @@ export default {
 
   methods: {
    
-    updateRepoAddress(){
+    async updateRepoAddress(){
       if (this.update && this.validateForm()) {
         const params = new FormData();
         params.append("pardusRepoAddress", this.repoForm.url);
         params.append("pardusRepoComponent", this.repoForm.component);
-        axios.post("/packages/update/repoAddress", params).then((response) => {
-        if (response.data.pardusRepoAddress != null && response.data.pardusRepoComponent != null) {
+        //axios.post("/api/packages/update/repo-address", params).then((response) => {
+        const{response,error} = await taskService.packageUpdateRepo(params);
+        if(error){
           this.$toast.add({
-            severity:'success', 
-            detail: this.$t('computer.plugins.packages.update_repo_success_message'), 
+            severity:'error', 
+            detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
-          });
+          })
         }
-      })
-    .catch((error) => { 
-      this.$toast.add({
-        severity:'error', 
-        detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, 
-        summary:this.$t("computer.task.toast_summary"), 
-        life: 3000
-        })})
+        else{
+          if(response.status == 200){
+            if (response.data.pardusRepoAddress != null && response.data.pardusRepoComponent != null) {
+              this.$toast.add({
+                severity:'success', 
+                detail: this.$t('computer.plugins.packages.update_repo_success_message'), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
+          }
+          else if(response.status == 417){
+            return "error";
+          }
+        }
       }
     this.update = !this.update;  
     },
 
-    getPackagesList(){
+    async getPackagesList(){
       if (this.validateForm()) {
         this.loading = true;
         const params = new FormData();
         params.append("type", this.type.value);
         params.append("url", this.repoForm.url);
         params.append("component", this.repoForm.component);
-        axios.post("/packages/list", params)
-        .then((response) => {
-        if (response.data != null) {
-          this.packages = response.data;
+        //axios.post("/api/packages/list", params).then((response) => {
+        const{response,error} = await taskService.packageList(params);
+        if(error){
           this.loading = false;
-          if(this.packageInfoList.length > 0){
-            this.packageInfoList = [];
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          })
+        }
+        else{
+          if(response.status == 200){
+            if (response.data != null) {
+              this.packages = response.data;
+              this.loading = false;
+              if(this.packageInfoList.length > 0){
+                this.packageInfoList = [];
+              }
+            }
+          }
+          else if(response.status == 417){
+
           }
         }
-      })
-      .catch((error) => { 
-        this.loading = false;
-        this.$toast.add({
-          severity:'error', 
-          detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, 
-          summary:this.$t("computer.task.toast_summary"), 
-          life: 3000
-        })})
       }
     },
 
