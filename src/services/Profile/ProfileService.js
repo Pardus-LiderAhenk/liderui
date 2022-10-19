@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const liderLdapSearcEntryUrl = '/api/lider/ldap/search-entry';
-const liderConsoleProfilUrl = '/api/lider/console/profile';
+const liderConsoleProfilUrl = '/api/lider-console/profile';
 const liderConsoleUpdateProfilUrl = '/api/lider-console/update-profile';
 const liderConsoleMatchesPasswdUrl = '/api/lider-console/matches-password';
 

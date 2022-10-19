@@ -40,6 +40,7 @@
 <script>
 import axios from "axios";
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import { loginService } from '../../services/Login/LoginService.js'
 
 export default {
      data() {
@@ -67,7 +68,8 @@ export default {
 
             axios.post('/api/forgot-password/reset/'+ this.$route.params.uuid , params)
             .then(response => {
-            //const{response,error} = 
+            //const{response,error} = loginService.resetPassword(this.$route.params.uuid ,params);
+            
                 if (response.status === 200) {
                     this.isPasswordReset = true;
                     this.severity = "success";

@@ -191,7 +191,7 @@ export default {
             let params = {
                 "distinguishedName": this.selectedNode.distinguishedName
             }
-            axios.post('/policy/getPoliciesForGroup', params).then(response => {
+            axios.post('/api/policy/getPoliciesForGroup', params).then(response => {
                 if (response.data) {
                     this.policies = response.data;
                     this.updateRowIndex();
@@ -217,7 +217,7 @@ export default {
             let params = {
                 "id": this.selectedPolicy.commandImpl.id,
 			};
-            axios.post('/policy/unassignment', params).then(response => {
+            axios.post('/api/policy/unassignment', params).then(response => {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 

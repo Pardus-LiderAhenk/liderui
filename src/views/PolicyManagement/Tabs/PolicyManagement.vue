@@ -150,7 +150,7 @@ export default {
     },
 
     mounted() {
-        axios.post('/policy/list', null).then(response => {
+        axios.post('/api/policy/list', null).then(response => {
             if (response.data) {
                 this.policies = response.data;
                 this.updateRowIndex();

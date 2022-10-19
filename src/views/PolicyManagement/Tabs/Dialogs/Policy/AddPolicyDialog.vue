@@ -92,7 +92,7 @@ export default {
                 "description": this.description,
                 "active": this.active
             }
-            axios.post('/policy/add', params).then(response => {
+            axios.post('/api/policy/add', params).then(response => {
                 if (response.data) {
                     this.$emit('appendPolicy', response.data);
                     this.$emit('closePolicyDialog');

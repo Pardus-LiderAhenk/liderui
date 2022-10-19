@@ -76,7 +76,7 @@ export default {
             let params = {
                 "id": this.selectedPolicy.id,
             }
-            axios.post('/policy/delete', params).then(response => {
+            axios.post('/api/policy/delete', params).then(response => {
                 if (response.data) {
                     this.$emit('deletedPolicy', response.data);
                     this.$emit('closePolicyDialog');

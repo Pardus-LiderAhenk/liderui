@@ -8,9 +8,9 @@ class LoginService{
         this.axios = axios
     }
 
-    async registerAndSave(params) {
+    async resetPassword(uuid ,params) {
         try {
-            const response = await axios.post(loginResetPasswordUrl, params);
+            const response = await axios.post(loginResetPasswordUrl+uuid, params);
             return { response };
         } catch (error) {
             return { error: error }

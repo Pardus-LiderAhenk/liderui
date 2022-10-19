@@ -132,7 +132,7 @@ export default {
     },
 
     mounted() {
-        axios.post('/policy/activePolicies', null).then(response => {
+        axios.post('/api/policy/activePolicies', null).then(response => {
             if (response.data) {
                 this.policies = response.data;
                 this.updateRowIndex();
@@ -164,7 +164,7 @@ export default {
                 "dnList": dnList,
 			};
 
-            axios.post('/policy/execute', params).then(response => {
+            axios.post('/api/policy/execute', params).then(response => {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 

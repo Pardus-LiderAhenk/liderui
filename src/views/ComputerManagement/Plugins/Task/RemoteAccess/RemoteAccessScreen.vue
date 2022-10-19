@@ -404,7 +404,7 @@ export default {
     if (this.$route.query.protocol == "vnc") {
       await this.getConnectionData();
 
-      axios.post("/getPluginTaskList", {}).then((response) => {
+      axios.post("/api/get-plugin-task-list", {}).then((response) => {
         for (let index = 0; index < response.data.length; index++) {
           const element = response.data[index];
           if (element.page == "remote-access") {
