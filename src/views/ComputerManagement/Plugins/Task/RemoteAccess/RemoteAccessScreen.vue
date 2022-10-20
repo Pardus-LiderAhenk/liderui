@@ -64,6 +64,7 @@ import GuacMouse from "./lib/GuacMouse";
 import states from "./lib/states";
 import clipboard from "./lib/clipboard";
 import { mapGetters } from "vuex";
+import { taskService } from "../../../../../services/Task/TaskService";
 
 
 Guacamole.Mouse = GuacMouse.mouse;
@@ -404,7 +405,9 @@ export default {
     if (this.$route.query.protocol == "vnc") {
       await this.getConnectionData();
 
-      axios.post("/api/get-plugin-task-list", {}).then((response) => {
+      //axios.post("/api/get-plugin-task-list", {}).then((response) => {
+      const{response,error} = await taskService.pluginTaskList();
+      if(response.status == 200){
         for (let index = 0; index < response.data.length; index++) {
           const element = response.data[index];
           if (element.page == "remote-access") {
@@ -413,8 +416,10 @@ export default {
             this.sendTaskRemoteAccess();
           }
         }
-      });
-
+      }else{
+        return "error";
+      }
+        
     } else if (this.$route.query.protocol == "ssh") {
       this.connectionData = this.$route.query;
       this.connection_info = {

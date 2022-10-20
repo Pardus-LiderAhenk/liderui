@@ -48,6 +48,7 @@ import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTra
 import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.vue";
 import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
 import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
+import { taskService } from '../../../../../services/Task/TaskService';
 
 export default {
   data() {
@@ -93,58 +94,8 @@ export default {
   },
 
   created() {
-    axios.post("/api/get-plugin-task-list", {}).then((response) => {
-      for (let index = 0; index < response.data.length; index++) {
-        const element = response.data[index];
-        if (element.page == "resource-usage") {
-          this.pluginTaskResourceUsage = element;
-          this.resourceUsageState = element.state;
-        }
-        if (element.page == "end-sessions") {
-          this.pluginTaskSessionPowerManagement = element;
-          this.sessionAndPowerState = element.state;
-        }
-        if (element.page == "conky") {
-          this.pluginTaskConky = element;
-          this.conkyState = element.state;
-        }
-        if (element.page == "eta-notify") {
-          this.pluginTaskEtaNotify = element;
-          this.etaNotifyState = element.state;
-        }
-        if (element.page == "file-management") {
-          this.pluginTaskFileManagement = element;
-          this.fileManagementState = element.state;
-        }
-        if (element.page == "local-user") {
-          this.pluginTaskLocalUser = element;
-          this.localUserState = element.state;
-        }
-        if (element.page == "ldap-login") {
-          this.pluginTaskLdapLogin = element;
-          this.ldapLoginState = element.state;
-        }
-        if (element.page == "xmessage") {
-          this.pluginTaskXmessage = element;
-          this.xmessageState = element.state;
-        }
-        if (element.page == "file-transfer") {
-          this.pluginTaskFileTransfer = element;
-          this.fileTransferState = element.state;
-        }
-        if (element.page == "remote-access") {
-          this.pluginTaskRemoteAccess = element;
-          this.remoteAccessState = element.state;
-        }
-        if (element.page == "manage-root") {
-          this.pluginTaskManageRoot = element
-          this.manageRootState = element.state;
-        }
-        if (element.page == "move-agent") {
-          this.pluginTaskAgentInfo = element
-        }
-      }
-    });
+    //axios.post("/api/get-plugin-task-list", {}).then((response) => {
+    this.pluginTaskList();
   },
 
   methods: {
@@ -162,8 +113,71 @@ export default {
 
     addFolder(folder, destinationDn) {
       this.$emit('addFolder', folder, destinationDn);
+    },
+    async pluginTaskList(){
+      const{response,error} = await taskService.pluginTaskList();
+      if(error){
+        return "error";
+      }
+      else{
+        if(response.status == 200){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index];
+            if (element.page == "resource-usage") {
+              this.pluginTaskResourceUsage = element;
+              this.resourceUsageState = element.state;
+            }
+            if (element.page == "end-sessions") {
+              this.pluginTaskSessionPowerManagement = element;
+              this.sessionAndPowerState = element.state;
+            }
+            if (element.page == "conky") {
+              this.pluginTaskConky = element;
+              this.conkyState = element.state;
+            }
+            if (element.page == "eta-notify") {
+              this.pluginTaskEtaNotify = element;
+              this.etaNotifyState = element.state;
+            }
+            if (element.page == "file-management") {
+              this.pluginTaskFileManagement = element;
+              this.fileManagementState = element.state;
+            }
+            if (element.page == "local-user") {
+              this.pluginTaskLocalUser = element;
+              this.localUserState = element.state;
+            }
+            if (element.page == "ldap-login") {
+              this.pluginTaskLdapLogin = element;
+              this.ldapLoginState = element.state;
+            }
+            if (element.page == "xmessage") {
+              this.pluginTaskXmessage = element;
+              this.xmessageState = element.state;
+            }
+            if (element.page == "file-transfer") {
+              this.pluginTaskFileTransfer = element;
+              this.fileTransferState = element.state;
+            }
+            if (element.page == "remote-access") {
+              this.pluginTaskRemoteAccess = element;
+              this.remoteAccessState = element.state;
+            }
+            if (element.page == "manage-root") {
+              this.pluginTaskManageRoot = element
+              this.manageRootState = element.state;
+            }
+            if (element.page == "move-agent") {
+              this.pluginTaskAgentInfo = element
+            }
+          }   
+        }
+        else if(response.status == 417){
+          return "error";
+        }
+      }
     }
-  }
+  },
 };
 </script>
 

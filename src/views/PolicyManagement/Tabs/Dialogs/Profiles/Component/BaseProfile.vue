@@ -134,6 +134,7 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import axios from "axios";
+import { profilesServices } from '../../../../../../services/PolicyManagement/Profiles';
 
 export default {
 
@@ -177,22 +178,30 @@ export default {
             this.$refs.opBaseProfile.toggle(event);
         },
 
-        getProfile() {
+        async getProfile() {
             let params = new FormData();
             params.append("name", this.pluginProfile.plugin.name)
-            axios.get('/api/profile/list', params).then(response => {
-                if (response.data) {
-                    this.profiles = response.data;
-                    this.updateRowIndex();
-                } 
-            }).catch((error) => {
+            //axios.get('/api/profile/list', params).then(response => {
+            const{response,error} = await profilesServices.list(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.get_profile_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.profiles = response.data;
+                        this.updateRowIndex();
+                    } 
+                }
+                else if(response.status == 417){
+                    return "eerrror";
+                }
+            }
         },
 
         updateRowIndex() {
@@ -224,7 +233,7 @@ export default {
         },
         
         // this function is called with ref given by base plugin.
-        saveProfile(profileData) {
+        async  saveProfile(profileData) {
             if (!this.label.trim()) {
                 this.validation.label = true;
                 return;
@@ -235,30 +244,38 @@ export default {
                 "profileData": profileData,
                 "plugin": this.pluginProfile.plugin
 			};
-            axios.post('/api/profile/add', params).then(response => {
-                if (response.data) {
-                    this.showPluginProfileDialog = false;
-                    this.profiles.push(response.data);
-                    this.updateRowIndex();
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('policy_management.add_profile_success'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } 
-            }).catch((error) => {
+            //axios.post('/api/profile/add', params).then(response => {
+            const{response,error} = await profilesServices.add(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.add_profile_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.showPluginProfileDialog = false;
+                        this.profiles.push(response.data);
+                        this.updateRowIndex();
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('policy_management.add_profile_success'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } 
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
 
     // this function is called with ref given by base plugin for updated selected profile.
-        updateProfile(profileData) {
+        async updateProfile(profileData) {
             if (!this.label.trim()) {
                 this.validation.label = true;
                 return;
@@ -269,55 +286,70 @@ export default {
                 "profileData": profileData,
                 "id": this.selectedProfile.id
 			};
-            axios.post('/api/profile/update', params).then(response => {
-                if (response.data) {
-                    this.showPluginProfileDialog = false;
-                    this.profiles = this.profiles.filter(profile => profile.id != response.data.id);
-                    this.profiles.push(response.data);
-                    this.updateRowIndex();
-                    this.selectedProfile = null;
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('policy_management.update_profile_success'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } 
-            }).catch((error) => {
+            //axios.post('/api/profile/update', params).then(response => {
+            const{response,error} = await profilesServices.update(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.update_profile_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.showPluginProfileDialog = false;
+                        this.profiles = this.profiles.filter(profile => profile.id != response.data.id);
+                        this.profiles.push(response.data);
+                        this.updateRowIndex();
+                        this.selectedProfile = null;
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('policy_management.update_profile_success'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } 
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
 
-        deleteProfile() {
+        async deleteProfile() {
             let params = {
                 "id": this.selectedProfile.id
 			};
-            axios.delete('/api/profile/delete', params).then(response => {
-                if (response.data) {
-                    this.showDeleteProfileDialog = false;
-                    this.profiles = this.profiles.filter(profile => profile.id != response.data.id);
-                    this.updateRowIndex();
-                    this.selectedProfile = null;
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('policy_management.delete_profile_success'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } 
-            }).catch((error) => {
+            //axios.delete('/api/profile/delete', params).then(response => {
+            const{ response,error } = profilesServices.delete(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.delete_profile_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status = 200){
+                    if (response.data) {
+                        this.showDeleteProfileDialog = false;
+                        this.profiles = this.profiles.filter(profile => profile.id != response.data.id);
+                        this.updateRowIndex();
+                        this.selectedProfile = null;
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('policy_management.delete_profile_success'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         }
     },
 

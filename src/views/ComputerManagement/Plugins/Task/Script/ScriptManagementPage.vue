@@ -13,6 +13,7 @@
 
 import axios from 'axios';
 import ExecuteScript from "@/views/ComputerManagement/Plugins/Task/Script/ExecuteScript.vue";
+import { taskService } from '../../../../../services/Task/TaskService';
 
 export default {
   data() {
@@ -26,7 +27,14 @@ export default {
   },
 
   created() {
-    axios.post("/api/get-plugin-task-list", {}).then((response) => {
+    this.pluginTaskList();
+  },
+
+  methods: {
+
+    async pluginTaskList(){
+      const{response,error} = await taskService.pluginTaskList();
+      if(response.status == 200){
         for (let index = 0; index < response.data.length; index++) {
           const element = response.data[index];
           if (element.page == "execute-script") {
@@ -34,7 +42,11 @@ export default {
             this.executeScriptState = element.state;
           }
         }
-      });
+      }
+      else{
+        return "error";
+      }
+    }
   },
 };
 </script>

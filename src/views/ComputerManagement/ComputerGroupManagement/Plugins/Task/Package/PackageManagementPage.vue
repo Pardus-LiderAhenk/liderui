@@ -18,7 +18,7 @@
 import axios from 'axios';
 import Packages from "@/views/ComputerManagement/Plugins/Task/Package/Packages.vue";
 import CheckPackage from "@/views/ComputerManagement/Plugins/Task/Package/CheckPackage.vue";
-
+import { taskService } from '../../../../../../services/Task/TaskService';
 
 export default {
   data() {
@@ -36,20 +36,37 @@ export default {
   },
 
   created() {
-    axios
-      .post("/api/get-plugin-task-list",{},).then((response) => {
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          if (element.page == "packages") {
-            this.pluginTaskPackages = element;
-            this.packagesState = element.state;
+    this.pluginTaskList();
+  },
+
+  methods: {
+
+    async pluginTaskList(){
+      const{response,error} = await taskService.pluginTaskList();
+      if(error){
+        return "error";
+      }
+      else{
+        if(response.status == 200){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index];
+            if (element.page == "packages") {
+              this.pluginTaskPackages = element;
+              this.packagesState = element.state;
+              }
+            if (element.page == "check-package") {
+            this.pluginTaskCheckPackage = element;
+            this.checkPackageState = element.state;
+            }
           }
-          if (element.page == "check-package") {
-          this.pluginTaskCheckPackage = element;
-          this.checkPackageState = element.state;
         }
-        }
-      });
+        else if(response.status == 417){
+          return "error";
+
+          }
+        }        
+    }
+    //axios.post("/api/get-plugin-task-list",{},).then((response) => {
   },
 };
 </script>

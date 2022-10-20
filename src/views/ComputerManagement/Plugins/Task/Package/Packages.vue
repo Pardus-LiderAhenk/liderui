@@ -182,7 +182,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { taskService } from "../../../../../services/Task/TaskService";
 
 /**
@@ -231,26 +230,7 @@ export default {
   },
 
   mounted() {
-    axios.get("/api/packages/repo-address", null).then((response) => {
-      if (response.data.pardusRepoAddress == null || 
-      response.data.pardusRepoAddress == "" && 
-      response.data.pardusRepoComponent != null || 
-      response.data.pardusRepoComponent == "") {
-        this.repoForm.url = "http://depo.pardus.org.tr/pardus";
-        this.repoForm.component = "yirmibir main contrib non-free";
-      } else {
-        this.repoForm.url = response.data.pardusRepoAddress;
-        this.repoForm.component = response.data.pardusRepoComponent;
-      }
-    })
-    .catch((error) => { 
-      this.$toast.add({
-        severity:'error', 
-        detail: this.$t('computer.plugins.packages.get_settings_error_message')+ " \n"+error, 
-        summary:this.$t("computer.task.toast_summary"), 
-        life: 3000
-        })
-      })
+
     this.lazyParams = {
       first: 0,
       rows: this.$refs.dt.rows,
@@ -294,6 +274,36 @@ export default {
     this.update = !this.update;  
     },
 
+    async repoAddress(){
+      //axios.get("/api/packages/repo-address", null).then((response) => {
+      const{response,error} = await taskService.packageRepoAddress();
+      if(error){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.packages.get_settings_error_message')+ " \n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        })
+      }
+      else{
+        if(response.status == 200){
+          if (response.data.pardusRepoAddress == null || 
+          response.data.pardusRepoAddress == "" && 
+          response.data.pardusRepoComponent != null || 
+          response.data.pardusRepoComponent == "") {
+            this.repoForm.url = "http://depo.pardus.org.tr/pardus";
+            this.repoForm.component = "yirmibir main contrib non-free";
+      } else {
+          this.repoForm.url = response.data.pardusRepoAddress;
+          this.repoForm.component = response.data.pardusRepoComponent;
+          }
+        }
+        else if(response.status == 417){
+          return "error";
+        }
+      }
+    },
+
     async getPackagesList(){
       if (this.validateForm()) {
         this.loading = true;
@@ -323,7 +333,7 @@ export default {
             }
           }
           else if(response.status == 417){
-
+              return "error";
           }
         }
       }

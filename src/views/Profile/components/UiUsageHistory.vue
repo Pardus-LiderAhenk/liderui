@@ -49,8 +49,7 @@
 
 <script>
 
-import axios from 'axios';
-
+import { systemTaskReportService } from '../../../services/Reports/SystemLogReportService.js'
 export default {
     data() {
         return {
@@ -86,17 +85,27 @@ export default {
             this.rowNumber = event.rows;
             this.getLogs();
         },
-        getLogs() {
+        async getLogs() {
             var data = new FormData();
             data.append("pageNumber", this.pageNumber);
             data.append("pageSize", this.rowNumber);
             data.append('operationType',this.operationType);
 
-            axios.post("/api/operation/login", data).then((response) => {
-                this.records = response.data.content;
-                this.totalElements = response.data.totalElements;
-                this.loading = false;
-            });
+            //axios.post("/api/operation/login", data).then((response) => {
+            const{response,error} = await systemTaskReportService.operationLogin(date);
+            if(error){
+
+            }
+            else{
+                if(response.status == 200){
+                    this.records = response.data.content;
+                    this.totalElements = response.data.totalElements;
+                    this.loading = false;
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
     }
 }

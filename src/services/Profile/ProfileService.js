@@ -5,7 +5,7 @@ const liderConsoleProfilUrl = '/api/lider-console/profile';
 const liderConsoleUpdateProfilUrl = '/api/lider-console/update-profile';
 const liderConsoleMatchesPasswdUrl = '/api/lider-console/matches-password';
 
-class ProfileService{
+class ProfileService {
 
     constructor(axios){
         this.axios = axios

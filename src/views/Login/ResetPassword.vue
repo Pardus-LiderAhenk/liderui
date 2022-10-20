@@ -68,7 +68,7 @@ export default {
 
             axios.post('/api/forgot-password/reset/'+ this.$route.params.uuid , params)
             .then(response => {
-            //const{response,error} = loginService.resetPassword(this.$route.params.uuid ,params);
+            // const{response,error} = loginService.resetPassword(this.$route.params.uuid ,params);
             
                 if (response.status === 200) {
                     this.isPasswordReset = true;

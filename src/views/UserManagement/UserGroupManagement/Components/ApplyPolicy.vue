@@ -93,6 +93,7 @@
 
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { policyService } from "../../../../services/PolicyManagement/PolicyService";
 
 export default {
      props: {
@@ -132,19 +133,7 @@ export default {
     },
 
     mounted() {
-        axios.post('/api/policy/active-policies', null).then(response => {
-            if (response.data) {
-                this.policies = response.data;
-                this.updateRowIndex();
-            } 
-        }).catch((error) => {
-            this.$toast.add({
-                severity:'error', 
-                detail: this.$t('policy_management.get_policy_error')+ " \n"+error, 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-            });
-        });
+        this.activePolicy();
     },
 
     methods:{
@@ -154,8 +143,30 @@ export default {
                 element.index = index + 1;
             }
         },
+        async activePolicy(){
+            const{response,error} = await policyService.policyActivePolicy();
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('policy_management.get_policy_error')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.policies = response.data;
+                        this.updateRowIndex();
+                    }
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
+        },
 
-        applyPolicy() {
+        async applyPolicy() {
             let dnList = [];
             dnList.push(this.selectedNode.distinguishedName);
             let params = {
@@ -164,25 +175,34 @@ export default {
                 "dnList": dnList,
 			};
 
-            axios.post('/api/policy/execute', params).then(response => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.apply_policy_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.$emit('appliedPolicy', this.selectedPolicy);
-                    this.selectedPolicy = null;
-                } 
-            }).catch((error) => {
+            //axios.post('/api/policy/execute', params).then(response => {
+            const{response,error} = policyService.policyExecute(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('group_management.apply_policy_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.apply_policy_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        this.$emit('appliedPolicy', this.selectedPolicy);
+                        this.selectedPolicy = null;
+                    } 
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
+            
             this.applyPolicyConfirmDialog = false;
         }
     }

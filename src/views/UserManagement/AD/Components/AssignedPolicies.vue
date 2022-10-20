@@ -152,6 +152,7 @@
 
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { policyService } from "../../../../services/PolicyManagement/PolicyService";
 import ApplyPolicy from './ApplyPolicy.vue'
 
 export default {
@@ -187,23 +188,31 @@ export default {
     },
 
     methods:{
-        getAssignedPolices() {
+        async getAssignedPolices() {
             let params = {
                 "distinguishedName": this.selectedNode.distinguishedName
             }
-            axios.post('/api/policy/policies-for-group', params).then(response => {
-                if (response.data) {
-                    this.policies = response.data;
-                    this.updateRowIndex();
-                } 
-            }).catch((error) => {
+            //axios.post('/api/policy/policies-for-group', params).then(response => {
+            const{response,error} = await policyService.policyGroup(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.get_policy_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.policies = response.data;
+                        this.updateRowIndex();
+                    } 
+                }
+                else if(response.status == 417){
+                    return "errror";
+                }
+            }                
         },
 
         updateRowIndex() {
@@ -213,30 +222,38 @@ export default {
             }
         },
 
-        unassignPolicy() {
+        async unassignPolicy() {
             let params = {
                 "id": this.selectedPolicy.commandImpl.id,
 			};
-            axios.post('/api/policy/unassignment', params).then(response => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('policy_management.unassign_policy_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.policies = this.policies.filter(policy => policy.policyImpl.id != this.selectedPolicy.policyImpl.id);
-                    this.updateRowIndex();
-                    this.selectedPolicy = null;
-                } 
-            }).catch((error) => {
+            //axios.post('/api/policy/unassignment', params).then(response => {
+            const{response,error} = await policyService.policyUnassigment(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.unassign_policy_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('policy_management.unassign_policy_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        this.policies = this.policies.filter(policy => policy.policyImpl.id != this.selectedPolicy.policyImpl.id);
+                        this.updateRowIndex();
+                        this.selectedPolicy = null;
+                    } 
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
             this.unassignPolicyDialog = false;
         }
     },

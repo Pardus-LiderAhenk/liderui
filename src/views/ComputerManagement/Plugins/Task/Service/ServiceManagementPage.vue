@@ -26,16 +26,35 @@ export default {
   },
 
   created() {
-    axios.post("/api/get-plugin-task-list", {}).then((response) => {
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          if (element.page == "service-list") {
-            this.pluginTaskServiceManagement = element;
-            this.serviceManagementState = element.state;
+    this.pluginTaskList();
+  },
+
+  methods: {
+
+    async pluginTaskList(){
+      const{response,error} = await taskService.pluginTaskList();
+      if(error){
+        return "error";
+      }
+      else{
+        if(response.status == 200){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index];
+            if (element.page == "service-list") {
+              this.pluginTaskServiceManagement = element;
+              this.serviceManagementState = element.state;
+            }
           }
         }
-      });
-  },
+        else if(response.status == 417){
+          return "error";
+
+          }
+        }        
+    }
+},
+
+  
 };
 </script>
 

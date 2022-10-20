@@ -3,6 +3,7 @@ import axios from 'axios';
 const operationLogsUrl = "/api/operation/logs";
 const operationExportUrl = "/api/operation/export";
 const operationTypesUrl = "/api/operation/types";
+const operationLoginUrl = "/api/operation/login";
 
 
 
@@ -35,6 +36,16 @@ class SystemTaskReportService {
     async operationTypes(){
         try {
             const response = await axios.get(operationTypesUrl);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+
+    }
+
+    async operationLogin(){
+        try {
+            const response = await axios.post(operationLoginUrl);
             return { response };
         } catch (error) {
             return { error: error }

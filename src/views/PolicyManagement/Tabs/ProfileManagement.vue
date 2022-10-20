@@ -100,6 +100,7 @@ import LoginManagerProfileDialog from './Dialogs/Profiles/LoginManagerProfileDia
 import UsbProfileDialog from './Dialogs/Profiles/UsbProfileDialog.vue';
 import BrowserProfileDialog from './Dialogs/Profiles/Browser/BrowserProfileDialog.vue';
 import RsyslogProfileDialog from './Dialogs/Profiles/RsyslogProfileDialog.vue';
+import { taskService } from "../../../services/Task/TaskService";
 
 export default {
     data() {
@@ -132,12 +133,9 @@ export default {
     },
 
     mounted() {
-        axios.post('/api/get-plugin-profile-list', {}).then(response => {
-            if (response.data) {
-                this.plugins = response.data;
-                this.addImagePath();
-            } 
-        });
+        //axios.post('/api/get-plugin-profile-list', {}).then(response => {
+        this.pluginProfileList();
+            
     },
 
     methods: {
@@ -180,6 +178,23 @@ export default {
                     element.image = require("@/assets/images/icons/pardus.png");
                 } else {
                     element.image = require("@/assets/images/icons/pardus.png");
+                }
+            }
+        },
+        async pluginProfileList(){
+            const{response,error} = await taskService.pluginProfileList();
+            if(error){
+
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.plugins = response.data;
+                        this.addImagePath();
+                    } 
+                }
+                else if(response.status == 417){
+                    return "error";
                 }
             }
         }
