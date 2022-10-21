@@ -72,8 +72,9 @@
 * @event closePolicyDialog
 */
 
-import axios from "axios";
+import { scriptService } from '../../../../../services/Settings/ScriptDefinitionService.js';
 import BaseProfile from './Component/BaseProfile.vue';
+
 
 export default {
     props: {
@@ -135,26 +136,7 @@ export default {
     },
 
     mounted() {
-        axios.post("/api/script/list", null).then((response) => {
-            if (response.data != null || response.data != "") {
-                for (let index = 0; index < response.data.length; index++) {
-                    const element = response.data[index];
-                    this.scripts.push({
-                        label: element.label,
-                        id: element.id,
-                        contents: element.contents,
-                        scriptType: element.scriptType
-                    });
-                }
-            }
-        }).catch((error) => {
-            this.$toast.add({
-                severity: "error",
-                detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
-                summary: this.$t("computer.task.toast_summary"),
-                life: 3000,
-            });
-        });
+        this.scriptList();
     },
 
     methods: {
@@ -189,6 +171,36 @@ export default {
                 }
                 else if(this.scriptType === 3){
                     this.contents = "#!/usr/bin/env ruby";
+                }
+            }
+        },
+
+        async scriptList(){
+            const { response, error } = await scriptService.scriptList();
+            if(error){
+                this.$toast.add({
+                    severity: "error",
+                    detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
+                    summary: this.$t("computer.task.toast_summary"),
+                    life: 3000,
+                });
+            }
+            else{
+                if(response.status = 200){
+                    if (response.data != null || response.data != "") {
+                        for (let index = 0; index < response.data.length; index++) {
+                            const element = response.data[index];
+                            this.scripts.push({
+                                label: element.label,
+                                id: element.id,
+                                contents: element.contents,
+                                scriptType: element.scriptType
+                            });
+                        }
+                    }
+                }
+                else if(response.status == 417){
+                    return "error";
                 }
             }
         },

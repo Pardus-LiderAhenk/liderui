@@ -114,8 +114,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import { registrationTemplateService } from '../../../../services/Settings/RegistrationTemplates.js'
 export default {
 
     props: {
@@ -205,7 +204,7 @@ export default {
             this.userGroupDialog = false;
         },
 
-        saveRegistrationTemplate() {
+        async saveRegistrationTemplate() {
             if (!this.validateForm()) {
                 return;
             }
@@ -215,29 +214,9 @@ export default {
                 "parentDn": this.agentCreationDN,
                 "templateType": this.templateType,
             }
-            axios.post("/api/registration-templates", params).then((response) => {
-                if (response.data && response.status == 200) {
-                    this.templateText = "";
-                    this.authorizedUserGroupDN = "";
-                    this.agentCreationDN = "";
-                    this.$emit("savedRegistrationTemplate", response.data);
-                    this.showDialog = false;
-                    this.$toast.add({
-                        severity:'success',
-                        detail: this.$t('settings.registiration_template.template_successfully_saved'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.registiration_template.an_error_occurred_while_saving_template'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            })
-            .catch((error) => { 
+            //axios.post("/api/registration-templates", params).then((response) => {
+            const {response, error} = await registrationTemplateService.type(params);
+            if(error){
                 console.log(error)
                 this.$toast.add({
                     severity:'error', 
@@ -245,7 +224,32 @@ export default {
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200) {
+                    if (response.data && response.status == 200) {
+                        this.templateText = "";
+                        this.authorizedUserGroupDN = "";
+                        this.agentCreationDN = "";
+                        this.$emit("savedRegistrationTemplate", response.data);
+                        this.showDialog = false;
+                        this.$toast.add({
+                            severity:'success',
+                            detail: this.$t('settings.registiration_template.template_successfully_saved'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.registiration_template.an_error_occurred_while_saving_template'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+
+                }
+            }
         },
 
         validateForm() {

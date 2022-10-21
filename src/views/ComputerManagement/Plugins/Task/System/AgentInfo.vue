@@ -473,7 +473,8 @@ import axios from "axios";
 import { mapGetters } from "vuex";
 import {FilterMatchMode} from 'primevue/api';
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
-import { computerManagementService } from "../../../../../services/ComputerManagement/ComputerManagement";
+import { computerManagementService } from "../../../../../services/ComputerManagement/ComputerManagement.js";
+import { taskService } from '../../../../../services/Task/TaskService.js';
 
 export default {
   
@@ -625,14 +626,20 @@ export default {
   methods: {
     // ...mapActions(["setSelectedAgentInfo"]),
 
-    getAgentInfo() {
+    async  getAgentInfo() {
       this.agentCn = this.selectedLiderNode.cn;
       const params = new URLSearchParams();
       params.append("agentJid", this.selectedLiderNode.uid);
-      axios.post("/api/select-agent-info/detail", params).then((response) => {
-        if (response.data != "" && response.data != null) {
-        this.selectedAgentInfo = response.data;
-        // this.setSelectedAgentInfo(response.data);
+      //axios.post("/api/select-agent-info/detail", params).then((response) => {
+      const { response,error } = await taskService.agentInfoDetail(params);
+      if(error){
+        return "error";
+      }
+      else{
+        if(response.status == 200){
+          if (response.data != "" && response.data != null) {
+          this.selectedAgentInfo = response.data;
+          // this.setSelectedAgentInfo(response.data);
         } else {
           this.selectedAgentInfo = null;
           this.$toast.add({
@@ -640,9 +647,13 @@ export default {
             detail: this.$t("computer.agent_info.error_message"), 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
-          });
+            });
+          }
         }
-      });
+        else if(response.status == 417){
+          return "error";
+        }
+      }
     },
 
     setAgentInfo(property, value) {

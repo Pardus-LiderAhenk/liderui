@@ -114,8 +114,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import { registrationTemplateService } from  '../../../../services/Settings/RegistrationTemplates.js';
 export default {
 
     props: {
@@ -219,7 +218,7 @@ export default {
             this.userGroupDialog = false;
         },
 
-        updateRegistrationTemplate() {
+        async updateRegistrationTemplate() {
             if (!this.validateForm()) {
                 return;
             }
@@ -230,36 +229,44 @@ export default {
                 "parentDn": this.agentCreationDN,
                 "templateType": this.templateType,
             }
-            axios.put("/api/registration-templates", params).then((response) => {
-                if (response.data && response.status == 200) {
-                    this.templateText = "";
-                    this.authorizedUserGroupDN = "";
-                    this.agentCreationDN = "";
-                    this.$emit("updatedRegistrationTemplate", response.data);
-                    this.showDialog = false;
-                    this.$toast.add({
-                        severity:'success',
-                        detail: this.$t('settings.registiration_template.template_successfully_updated'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.registiration_template.an_error_occurred_while_updating_template'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            })
-            .catch((error) => { 
+            //axios.put("/api/registration-templates", params).then((response) => {
+            const {response,error} = await registrationTemplateService.update(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('settings.registiration_template.an_error_occurred_while_updating_template')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data && response.status == 200) {
+                        this.templateText = "";
+                        this.authorizedUserGroupDN = "";
+                        this.agentCreationDN = "";
+                        this.$emit("updatedRegistrationTemplate", response.data);
+                        this.showDialog = false;
+                        this.$toast.add({
+                            severity:'success',
+                            detail: this.$t('settings.registiration_template.template_successfully_updated'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } 
+                    else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.registiration_template.an_error_occurred_while_updating_template'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
 
         validateForm() {

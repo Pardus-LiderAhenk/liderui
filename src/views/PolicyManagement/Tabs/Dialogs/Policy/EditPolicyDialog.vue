@@ -189,7 +189,7 @@ export default {
 
         },
 
-        updatePolicy() {
+        async updatePolicy() {
             if (!this.label.trim()) {
                 this.validation.label = true;
                 return;
@@ -211,7 +211,7 @@ export default {
                 return;
             }
             //axios.post('/api/policy/update', params).then(response => {
-            const{response,error} = policyService.policyUpdate(params);
+            const{response,error} = await policyService.policyUpdate(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 
