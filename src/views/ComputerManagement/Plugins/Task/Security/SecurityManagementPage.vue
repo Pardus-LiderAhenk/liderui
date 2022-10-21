@@ -1,5 +1,8 @@
 <template>
   <div>
+    <usb-rule-management 
+      v-if="usbRuleManagementState" class="plugin-card" :pluginTask="pluginTaskUsbRuleManagement">
+    </usb-rule-management>
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-6">
         <network-management 
@@ -12,11 +15,6 @@
           v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement">
         </usb-management>
       </div>
-      <div class="p-col-12 p-md-6 p-lg-6">
-        <usb-rule-management 
-          v-if="usbRuleManagementState" class="plugin-card" :pluginTask="pluginTaskUsbRuleManagement">
-        </usb-rule-management>
-      </div>
     </div>
   </div>
 </template>
@@ -28,10 +26,10 @@
  * 
  */
 
-import axios from 'axios';
 import NetworkManagement from './NetworkManagement/NetworkManagement.vue';
 import UsbManagement from './Usb/UsbManagement.vue';
 import UsbRuleManagement from './Usb/UsbRuleManagement.vue';
+import {taskService} from '../../../../../services/Task/TaskService.js'
 
 
 export default {
@@ -46,6 +44,7 @@ export default {
       usbRuleManagementState: false,
     };
   },
+  
   components: {
     NetworkManagement,
     UsbManagement,

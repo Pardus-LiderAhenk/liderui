@@ -444,7 +444,19 @@
                 "mouse_keyboard": "Mouse-Keyboard",
                 "allow": "Allow",
                 "block":"Block",
-                "usb_task_warn": "At least one device must be selected"
+                "usb_task_warn": "At least one device must be selected",
+                "usb_rule_header": "USB Rule Management",
+                "white_black_list":"White / Black USB List",
+                "usb_list_cant_find": "USB list can't find",
+                "manufacturer":"Manufacturer",
+                "model":"Model",
+                "serial_number":"Serial Number",
+                "type":"Type",
+                "edit":"Edit",
+                "add":"Add",
+                "delete":"Delete",
+                "list_usb_rule": "List USB Rule",
+                "delete_usb_rule": "Delete USB Rule"
             },
             "remote_access": {
                 "header": "Remote Access",
