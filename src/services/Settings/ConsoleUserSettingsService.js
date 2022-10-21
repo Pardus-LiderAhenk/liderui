@@ -10,6 +10,9 @@ import axios from 'axios';
  const settingsDeleteOLCAccessRuleUrl = "/api/lider/settings/delete-OLC-access-rule";
  const settingsAddOLCAccessRuleUrl = "/api/lider/settings/add-OLC-access-rule";
  const settingsGetOLCAccessRuleUrl = "/api/lider/settings/OLC-access-rule";
+ const settingsConfigurationsUrl = "/api/lider/settings/configurations";//get
+ const settingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
+ const settingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
 
 class ConsoleUserSettingsService {
 
@@ -102,6 +105,33 @@ class ConsoleUserSettingsService {
     async getOLCAccessRule(params) {
         try {
             const response = await axios.get(settingsGetOLCAccessRuleUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async getConfigurations(params) {
+        try {
+            const response = await axios.get(settingsConfigurationsUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async updateLdap(params){
+        try {
+            const response = await axios.post(settingsUpdateLdapUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async updateOtherSettings(params) {
+        try {
+            const response = await axios.post(settingsUpdateOtherSettingsUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
