@@ -124,8 +124,7 @@ import {FilterMatchMode} from 'primevue/api';
 import AddPolicyDialog from './Dialogs/Policy/AddPolicyDialog.vue'
 import EditPolicyDialog from './Dialogs/Policy/EditPolicyDialog.vue'
 import DeletePolicyDialog from './Dialogs/Policy/DeletePolicyDialog.vue'
-import axios from "axios";
-import { policyService } from '../../../services/PolicyManagement/PolicyService';
+import { policyService } from '../../../services/PolicyManagement/PolicyService.js';
 
 export default {
     data() {
@@ -185,7 +184,7 @@ export default {
         },
 
         async policyList(){
-            const{response,error} = policyService.policyList();
+            const{response,error} = await policyService.policyList();
             if(error){
                 this.$toast.add({
                     severity:'error', 

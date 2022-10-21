@@ -64,7 +64,7 @@ import GuacMouse from "./lib/GuacMouse";
 import states from "./lib/states";
 import clipboard from "./lib/clipboard";
 import { mapGetters } from "vuex";
-import { taskService } from "../../../../../services/Task/TaskService";
+import { taskService } from "../../../../../services/Task/TaskService.js";
 
 
 Guacamole.Mouse = GuacMouse.mouse;

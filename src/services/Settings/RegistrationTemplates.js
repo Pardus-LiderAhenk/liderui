@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const registrationTemplateListUrl = '/api/registration-templates';
-const registrationTemplateTypeUrl = '/api/registration-templates/type/';
+const registrationTemplateTypeUrl = '/api/registration-templates';
 const registrationTemplateUpdateUrl = '/api/registration-templates';
 const registrationTemplateDeleteUrl = '/api/registration-templates/';
 

@@ -12,7 +12,7 @@
  */
 
 import ExecuteScript from "@/views/ComputerManagement/Plugins/Task/Script/ExecuteScript.vue";
-import { taskService } from '../../../../../../services/Task/TaskService';
+import { taskService } from '../../../../../../services/Task/TaskService.js';
 
 export default {
   data() {
@@ -32,9 +32,9 @@ export default {
   methods: {
         //axios.post("/api/get-plugin-task-list", {}).then((response) => {
     async pluginTaskList(){
-      const{response,error} = taskService.pluginTaskList();
+      const{response,error} = await  taskService.pluginTaskList();
       if(error){
-
+        return "error";
       }
       else{
         if(response.status == 200){

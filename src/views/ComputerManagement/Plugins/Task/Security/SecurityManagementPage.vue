@@ -28,7 +28,7 @@
  * 
  */
 
-import axios from 'axios';
+import { taskService } from '../../../../../services/Task/TaskService.js';
 import NetworkManagement from './NetworkManagement/NetworkManagement.vue';
 import UsbManagement from './Usb/UsbManagement.vue';
 import UsbRuleManagement from './Usb/UsbRuleManagement.vue';
