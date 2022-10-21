@@ -7,6 +7,7 @@ const packagesUpdateRepoAddrestUrl = '/api/packages/update/repo-address';
 const packagesRepoAddrestUrl = '/api/packages/repo-address';
 const pluginTaskListUrl = '/api/get-plugin-task-list';
 const pluginProfileListUrl = '/api/get-plugin-profile-list';
+const selectAgentInfoDetailUrl = '/api/select-agent-info/detail';
 
 
 
@@ -73,6 +74,15 @@ class TaskService{
     async pluginProfileList(params){
         try {
             const response = await axios.post(pluginProfileListUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async agentInfoDetail(params){
+        try {
+            const response = await axios.post(selectAgentInfoDetailUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

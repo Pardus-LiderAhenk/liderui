@@ -206,7 +206,8 @@ export default {
                         }
 
                     }                            
-                } else if (node.type == "AHENK"){
+                } 
+                else if (node.type == "AHENK"){
                     this.agent.total = 1;
                     if (node.online) {
                         this.agent.online = 1;
@@ -215,9 +216,10 @@ export default {
                     }
                     this.agent.offline = this.agent.total - this.agent.online;
                 }
-            } else {
+            } 
+            else {
                 params.append("searchDn", "agents");
-                const {response,error } = await computerManagementService.agentListSize(params);
+                const {response,error } = await computerManagementService.computerAgentListSize(params);
                 if(error){
                     this.$toaagentst.add({
                         severity:'error', 

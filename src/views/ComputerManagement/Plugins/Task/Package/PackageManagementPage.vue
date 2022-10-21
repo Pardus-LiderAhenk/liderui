@@ -30,12 +30,11 @@
  * 
  */
 
-import axios from 'axios';
 import InstalledPackagesAndManagement from "@/views/ComputerManagement/Plugins/Task/Package/InstalledPackagesAndManagement.vue";
 import Packages from "@/views/ComputerManagement/Plugins/Task/Package/Packages.vue";
 import Repositories from "@/views/ComputerManagement/Plugins/Task/Package/Repositories.vue";
 import CheckPackage from "@/views/ComputerManagement/Plugins/Task/Package/CheckPackage.vue";
-import { taskService } from '../../../../../services/Task/TaskService';
+import { taskService } from '../../../../../services/Task/TaskService.js';
 
 
 export default {
@@ -60,44 +59,44 @@ export default {
   },
 
   created() {
-     
+     this.pluginTaskList();
   },
 
   methods: {
     async pluginTaskList(){ 
       //axios.post("/api/get-plugin-task-list",{},).then((response) => {
-    const{response,error} = taskService.pluginTaskList();
-    if(error){
-      return "error";
-    }
-    else{
-      if(response.status == 200){
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          if (element.page == "package-management") {
-            this.pluginTaskInstalledPackagesAndManagement = element;
-            this.installedPackagesAndManagementState = element.state;
-          }
-          if (element.page == "repositories") {
-            this.pluginTaskRepositories = element;
-            this.repositoriesState = element.state;
-          }
-          if (element.page == "packages") {
-            this.pluginTaskPackages = element;
-            this.packagesState = element.state;
-          }
-          if (element.page == "check-package") {
-            this.pluginTaskCheckPackage = element;
-            this.checkPackageState = element.state;
-          }
-        }
-      }
-      else if(response.status == 417){
+      const{response,error} =  await taskService.pluginTaskList();
+      if(error){
         return "error";
+      }
+      else{
+        if(response.status == 200){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index];
+            if (element.page == "package-management") {
+              this.pluginTaskInstalledPackagesAndManagement = element;
+              this.installedPackagesAndManagementState = element.state;
+            }
+            if (element.page == "repositories") {
+              this.pluginTaskRepositories = element;
+              this.repositoriesState = element.state;
+            }
+            if (element.page == "packages") {
+              this.pluginTaskPackages = element;
+              this.packagesState = element.state;
+            }
+            if (element.page == "check-package") {
+              this.pluginTaskCheckPackage = element;
+              this.checkPackageState = element.state;
+            }
+          }
+        }
+        else if(response.status == 417){
+          return "error";
+          }
         }
       }
-    }
-  },
+  },  
   
 };
 </script>

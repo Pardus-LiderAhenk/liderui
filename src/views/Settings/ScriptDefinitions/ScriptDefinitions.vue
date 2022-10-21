@@ -189,7 +189,7 @@
  */
 
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
+import { scriptService }  from '../../../services/Settings/ScriptDefinitionService.js';
 
 export default {
     props: {
@@ -248,23 +248,31 @@ export default {
 
     methods: {
 
-        getScripts(){
+        async getScripts(){
             var data = new FormData();
             data.append("pageNumber", this.pageNumber);
             data.append("pageSize", this.rowNumber);            
-            axios.post("/api/script/list", data).then((response) => {
-            if (response.data != null) {
-                this.scripts = response.data.content;
-                this.totalElements = response.data.totalElements;
-            }
-            }).catch((error) => { 
+            //axios.post("/api/script/list", data).then((response) => {
+            const { response,error } = await scriptService.scriptList(data);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data != null) {
+                        this.scripts = response.data.content;
+                        this.totalElements = response.data.totalElements;
+                    }
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
 
         onPage(event) {
@@ -316,40 +324,47 @@ export default {
             }
         },
 
-        deleteScript(){
+        async deleteScript(){
             this.deleteScriptConfirmDialog = false;
             const params = {
                 id: this.selectedScript.id
             };
-            axios.post("/api/script/delete", params).then((response) => {
-                if (response.data != null) {
-                    // var index = this.scripts.findIndex(function(item, i){
-                    //     return item.id === response.data.id;
-                    // });
-                    // if (index > -1) {
-                    //     this.scripts.splice(index, 1);
-                    // }
-                    this.reset();
-                    this.selectedScript = null; 
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.script_definition.deleted_script_success_message'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            })
-            .catch((error) => { 
-            this.$toast.add({
-                severity:'error', 
-                detail: this.$t('settings.script_definition.deleted_script_error_message')+ " \n"+error, 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
+            //axios.post("/api/script/delete", params).then((response) => {
+            const {response,error} = await scriptService.scriptDelete(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.deleted_script_error_message')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
                 });
-            })
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data != null) {
+                        // var index = this.scripts.findIndex(function(item, i){
+                        //     return item.id === response.data.id;
+                        // });
+                        // if (index > -1) {
+                        //     this.scripts.splice(index, 1);
+                        // }
+                        this.reset();
+                        this.selectedScript = null; 
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('settings.script_definition.deleted_script_success_message'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
 
-        scriptOperation(action) {
+        async scriptOperation(action) {
             if (action == "update") {
                 if (!this.validateForm()) {
                     return;
@@ -360,36 +375,45 @@ export default {
                     scriptType: this.scriptType,
                     id: this.selectedScript.id
                 };
-                axios.post("/api/script/update", params).then((response) => {
-                    if (response.data != null) {
-                        this.showTemplateDialog = false;
-                        // for (let index = 0; index < this.scripts.length; index++) {
-                        //     const element = this.scripts[index];
-                        //     if (response.data.id === element.id) {
-                        //         element.label = response.data.label;
-                        //         element.contents = response.data.contents;
-                        //         element.scriptType = response.data.scriptType;
-                        //         element.modifyDate = response.data.modifyDate;
-                        //     }
-                        // }
-                        this.reset();
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('settings.script_definition.updated_script_success_message'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
+                //axios.post("/api/script/update", params).then((response) => {
+                const { response,error } = await scriptService.scriptUpdate(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.script_definition.updated_script_error_message')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
                         });
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data != null) {
+                            this.showTemplateDialog = false;
+                            // for (let index = 0; index < this.scripts.length; index++) {
+                            //     const element = this.scripts[index];
+                            //     if (response.data.id === element.id) {
+                            //         element.label = response.data.label;
+                            //         element.contents = response.data.contents;
+                            //         element.scriptType = response.data.scriptType;
+                            //         element.modifyDate = response.data.modifyDate;
+                            //     }
+                            // }
+                            this.reset();
+                            this.$toast.add({
+                                severity:'success', 
+                                detail: this.$t('settings.script_definition.updated_script_success_message'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                        }
                     }
-                })
-                .catch((error) => { 
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.script_definition.updated_script_error_message')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                    })
-                })
-            } else{
+                    else if(response.status == 417){
+                        return "error";
+                    }
+
+                }
+            } 
+            else{
                 if (!this.validateForm()) {
                     return;
                 }
@@ -398,27 +422,34 @@ export default {
                     contents: this.contents,
                     scriptType: this.scriptType
                 };
-                axios.post("/api/script/add", params).then((response) => {
-                    if (response.data != null) {
-                        this.showTemplateDialog = false;
-                        // this.scripts.push(response.data);
-                        this.reset();
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('settings.script_definition.saved_script_success_message'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
+                //axios.post("/api/script/add", params).then((response) => {
+                const { response,error } = await scriptService.scriptAdd(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.script_definition.saved_script_error_message')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data != null) {
+                            this.showTemplateDialog = false;
+                            // this.scripts.push(response.data);
+                            this.reset();
+                            this.$toast.add({
+                                severity:'success', 
+                                detail: this.$t('settings.script_definition.saved_script_success_message'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                        }
                     }
-                })
-                .catch((error) => { 
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.script_definition.saved_script_error_message')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                    })
-                })
+                    else if(response.status == 417){
+                        return "error";
+                    }
+                }
             }
         },
 

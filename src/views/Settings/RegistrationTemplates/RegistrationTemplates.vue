@@ -147,7 +147,7 @@ import {FilterMatchMode} from 'primevue/api';
 import axios from "axios";
 import AddRegistrationTemplate from './Dialogs/AddRegistrationTemplate.vue'
 import UpdateRegistrationTemplate from './Dialogs/UpdateRegistrationTemplate.vue'
-import { registrationTemplateService } from '../../../services/Settings/RegistrationTemplates';
+import { registrationTemplateService } from '../../../services/Settings/RegistrationTemplates.js';
 
 export default {
     

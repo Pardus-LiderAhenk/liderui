@@ -11,7 +11,6 @@
  * 
  */
 
-import axios from 'axios';
 import ExecuteScript from "@/views/ComputerManagement/Plugins/Task/Script/ExecuteScript.vue";
 import { taskService } from '../../../../../services/Task/TaskService';
 

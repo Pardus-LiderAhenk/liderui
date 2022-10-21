@@ -301,7 +301,7 @@ import ScriptManagement from "@/views/ComputerManagement/ComputerGroupManagement
 import { mapActions } from "vuex"
 import {ref} from 'vue';
 import {FilterMatchMode} from 'primevue/api';
-import { computerGroupsManagementService } from '../../../services/ComputerManagement/ComputerGroupManagement';
+import { computerGroupsManagementService } from '../../../services/ComputerManagement/ComputerGroupManagement.js';
 
 export default {
     setup(){

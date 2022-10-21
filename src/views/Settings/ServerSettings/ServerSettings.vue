@@ -26,6 +26,7 @@ import FileserverSettingsForm from './forms/FileserverSettingsForm.vue';
 import EmailServerSettingsForm from './forms/EmailServerSettingsForm.vue';
 import OtherSettingsForm from './forms/OtherSettingsForm.vue';
 import axios from 'axios';
+import { consoleUserSettingsService } from '../../../services/Settings/ConsoleUserSettingsService';
 
 export default {
     components: {
@@ -41,10 +42,22 @@ export default {
         }
     },
     methods: {
-        getServerSettings() {
-            axios.get('/api/lider/settings/configurations').then(response => {
-                this.serverSettings = response.data;
-            });
+        async getServerSettings() {
+            //axios.get('/api/lider/settings/configurations').then(response => {
+            const { response,error } = await consoleUserSettingsService.getConfigurations();
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    this.serverSettings = response.data;
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
+                
+            
         }
     },
     mounted() {

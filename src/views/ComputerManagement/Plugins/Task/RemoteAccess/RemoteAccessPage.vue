@@ -12,6 +12,7 @@
  */
 
 import RemoteAccess from "@/views/ComputerManagement/Plugins/Task/RemoteAccess/RemoteAccess.vue";
+import { taskService } from '../../../../../services/Task/TaskService.js'
 
 export default {
   data() {

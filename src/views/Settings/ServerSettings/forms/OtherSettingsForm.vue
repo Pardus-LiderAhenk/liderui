@@ -101,7 +101,8 @@
 
 
 <script>
-import axios from 'axios';
+import { consoleUserSettingsService } from '../../../../services/Settings/ConsoleUserSettingsService.js';
+
 export default {
     props:['serverSettings'],
     data() {
@@ -131,7 +132,7 @@ export default {
     },
 
     methods: {
-        submitForm() {
+        async submitForm() {
             let data = new FormData();
             data.append("domainType",this.domainType);
             data.append("sudoRoleType",this.sudoRoleType);
@@ -140,18 +141,29 @@ export default {
             data.append("ahenkRepoKeyAddress",this.ahenkRepoKeyAddress);
             data.append("selectedRegistrationType", this.selectedRegistrationType);
 
-            axios.post('/api/lider/settings/update/other-settings', data).then(response => {
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.server_settings.other_settings.other_server_settings_successfully_update'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                setTimeout(() => {
-                    this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                }, 3000);
-            });
-            this.showDialog = false;
+            //axios.post('/api/lider/settings/update/other-settings', data).then(response => {
+            const { response,error } = await consoleUserSettingsService.updateOtherSettings(data);
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_settings.other_settings.other_server_settings_successfully_update'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                        });
+                    setTimeout(() => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                    }, 3000);
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
+            
+        this.showDialog = false;
         }
     },
 }

@@ -11,8 +11,8 @@
  * 
  */
 
-import axios from 'axios';
 import ServiceManagement from "@/views/ComputerManagement/Plugins/Task/Service/ServiceManagement.vue";
+import { taskService } from '../../../../../services/Task/TaskService.js'
 
 export default {
   data() {

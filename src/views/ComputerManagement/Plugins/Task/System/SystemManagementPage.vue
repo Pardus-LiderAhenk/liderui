@@ -35,8 +35,6 @@
  * @see {@link http://www.liderahenk.org/}
  * 
  */
-import axios from 'axios';
-
 import AgentInfo from "@/views/ComputerManagement/Plugins/Task/System/AgentInfo.vue";
 import ResourceUsage from "@/views/ComputerManagement/Plugins/Task/System/ResourceUsage.vue";
 import SessionAndPowerManagement from "@/views/ComputerManagement/Plugins/Task/System/SessionAndPowerManagement.vue";
@@ -48,7 +46,7 @@ import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTra
 import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.vue";
 import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
 import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
-import { taskService } from '../../../../../services/Task/TaskService';
+import { taskService } from '../../../../../services/Task/TaskService.js';
 
 export default {
   data() {

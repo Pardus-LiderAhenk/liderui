@@ -160,8 +160,8 @@
  * @see {@link http://www.liderahenk.org/}
  * 
  */
-import axios from 'axios';
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
+import { taskService } from '../../../../../services/Task/TaskService.js';
 
 export default {
    data() {
@@ -253,7 +253,7 @@ export default {
       this.remoteAccessConfirmDialog = false;
     },
 
-    getIpAddress() {
+    async getIpAddress() {
       if (this.selectedLiderNode == null || 
         this.selectedLiderNode.type != "AHENK") {
         this.$toast.add({
@@ -266,18 +266,27 @@ export default {
       }
       const params = new FormData();
       params.append("agentJid", this.selectedLiderNode.uid);
-      axios.post("/api/select-agent-info/detail", params).then((response) => {
-        if (response.data != "" && response.data != null) {
-          this.host = response.data.ipAddresses.replace(/'/g, "");
-        } else {
-          this.$toast.add({
+      //axios.post("/api/select-agent-info/detail", params).then((response) => {
+      const { response,error } = await taskService.agentInfoDetail(params);
+      if(error){
+        this.$toast.add({
             severity:'error', 
             detail: this.$t('computer.plugins.remote_access.an_error_occurred_while_fetching_the_ip_address'), 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
           });
+      }
+      else{
+        if(response.status == 200){
+          if (response.data != "" && response.data != null) {
+            this.host = response.data.ipAddresses.replace(/'/g, "");
+          }
         }
-      });
+        else if(response.status == 417){
+          return "error";
+        }
+      }
+
     },
 
     toggle(event) {

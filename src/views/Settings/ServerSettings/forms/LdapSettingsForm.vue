@@ -128,7 +128,7 @@
 
 
 <script>
-import axios from 'axios';
+import { consoleUserSettingsService } from '../../../../services/Settings/ConsoleUserSettingsService.js';
 
 export default {
     props:['serverSettings'],
@@ -192,7 +192,7 @@ export default {
         }
     },
     methods: {
-        submitForm() {
+        async submitForm() {
             var data = new FormData();
             data.append("ldapServer",this.ldapServer);
             data.append("ldapPort",this.ldapPort);
@@ -209,17 +209,27 @@ export default {
             data.append("adUseTLS",this.adUseTLS);
             data.append("adAllowSelfSignedCert",this.adAllowSelfSignedCert);
 
-            axios.post('/api/lider/settings/update/ldap', data).then(response => {
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.server_settings.directory_server_settings.directory_server_settings_successfully_update'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                setTimeout(() => {
-                    this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                }, 3000);
-            });
+            //axios.post('/api/lider/settings/update/ldap', data).then(response => {
+            const { response,error } = await consoleUserSettingsService.updateLdap(data);
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_settings.directory_server_settings.directory_server_settings_successfully_update'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    setTimeout(() => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                    }, 3000);
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
             this.showDialog = false;
         }
     },

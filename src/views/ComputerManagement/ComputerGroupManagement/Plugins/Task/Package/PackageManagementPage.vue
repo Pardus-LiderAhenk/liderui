@@ -15,10 +15,9 @@
  * 
  */
 
-import axios from 'axios';
 import Packages from "@/views/ComputerManagement/Plugins/Task/Package/Packages.vue";
 import CheckPackage from "@/views/ComputerManagement/Plugins/Task/Package/CheckPackage.vue";
-import { taskService } from '../../../../../../services/Task/TaskService';
+import { taskService } from '../../../../../../services/Task/TaskService.js';
 
 export default {
   data() {
