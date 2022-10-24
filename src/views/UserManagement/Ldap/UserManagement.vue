@@ -223,6 +223,7 @@ import GeneralInformations from '@/views/UserManagement/Ldap/Components/GeneralI
 import PasswordChange from '@/views/UserManagement/Ldap/Components/PasswordChange.vue';
 import UserGroups from '@/views/UserManagement/Ldap/Components/UserGroups.vue';
 import SessionHistory from '@/views/UserManagement/Ldap/Components/SessionHistory.vue';
+import { userService } from '../../../services/Settings/UserService';
 
 export default {
     setup(){
@@ -318,12 +319,8 @@ export default {
         }
     },
     created() {
-        axios.get("/api/lider/user/configurations", null).then((response) => {
-            if (response.data != null) {
-                this.userLdapBaseDn = response.data;
-            }
-        });
-        this.setSelectedLiderNode(null);
+        //axios.get("/api/lider/user/configurations", null).then((response) => {
+            this.configuration();
     },
 
     methods: {
@@ -339,7 +336,23 @@ export default {
             this.moveUserNode = node;
         },
 
-        addFolder() {
+        async configuration(){
+            const{response,error} = await userService.userConfigurations();
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data != null) {
+                        this.userLdapBaseDn = response.data;
+                    }
+                }
+            }
+            this.setSelectedLiderNode(null);
+
+        },
+
+        async addFolder() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
@@ -347,29 +360,42 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
-            axios.post('/api/lider/user/add-ou', params).then(response => {
-                this.modals.folderAdd = false;
-                if (response.data) {
-                     this.$refs.tree.append(response.data, this.selectedNode);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.add_folder_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.add_folder_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+            //axios.post('/api/lider/user/add-ou', params).then(response => {
+            const{response,error} = await userService.addOu(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.add_folder_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    this.modals.folderAdd = false;
+                    if (response.data) {
+                        this.$refs.tree.append(response.data, this.selectedNode);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.add_folder_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                    else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.add_folder_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
-            });
+            }
             this.folderName = '';
         },
        
-        moveUser() {
+        async moveUser() {
             if (!this.moveUserNode) {
                 this.$toast.add({
                     severity:'warn', 
@@ -383,26 +409,38 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveUserNode.distinguishedName);
             this.modals.moveUser = false;
-            axios.post('/api/lider/user/move/entry', params).then(response => {
-                if (response.data) {
-                    this.$refs.tree.remove(this.selectedNode);
-                    this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
-                    this.setSelectedLiderNode(null);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.moved_user_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.moved_user_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+            //axios.post('/api/lider/user/move/entry', params).then(response => {
+            const{response,error} = await userService.moveEntry(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.moved_user_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$refs.tree.remove(this.selectedNode);
+                        this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
+                        this.setSelectedLiderNode(null);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.moved_user_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.moved_user_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
-            });
+            }
         },
 
         deleteNode() {
@@ -445,7 +483,7 @@ export default {
             });
         },
 
-        addUser() {
+        async addUser() {
             if (this.userFormValidation()) {
                 this.user.userPassword = this.$refs.password.getPassword();
                 if (!this.user.userPassword) {
@@ -460,32 +498,47 @@ export default {
                 params.append("telephoneNumber", this.user.telephoneNumber);
                 params.append("homePostalAddress", this.user.homePostalAddress);
                 params.append("userPassword", this.user.userPassword);
-                axios.post('/api/lider/user/add-user', params).then(response => {
-                    this.modals.addUser = false;
-                    if (response.data) {
-                        this.$refs.tree.append(response.data, this.selectedNode);
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('user_management.add_user_success'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                        this.user.uid = "";
-                        this.user.cn = "";
-                        this.user.sn = "";
-                        this.user.mail = "";
-                        this.user.telephoneNumber = "";
-                        this.user.homePostalAddress = "";
-                        this.user.userPassword = "";
-                    } else {
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('user_management.add_user_error'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
+                //axios.post('/api/lider/user/add-user', params).then(response => {
+                const{response,error} = await userService.addUser(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.add_user_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+                        this.modals.addUser = false;
+                        if (response.data) {
+                            this.$refs.tree.append(response.data, this.selectedNode);
+                            this.$toast.add({
+                                severity:'success', 
+                                detail: this.$t('user_management.add_user_success'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                            this.user.uid = "";
+                            this.user.cn = "";
+                            this.user.sn = "";
+                            this.user.mail = "";
+                            this.user.telephoneNumber = "";
+                            this.user.homePostalAddress = "";
+                            this.user.userPassword = "";
+                        } else {
+                            this.$toast.add({
+                                severity:'error', 
+                                detail: this.$t('user_management.add_user_error'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                        }
                     }
-                });
+                    else if(response.status == 417){
+                        return "error";
+                    }
+                }
             }
         },
 

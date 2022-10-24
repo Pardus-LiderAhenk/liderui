@@ -253,7 +253,7 @@ export default {
             data.append("pageNumber", this.pageNumber);
             data.append("pageSize", this.rowNumber);            
             //axios.post("/api/script/list", data).then((response) => {
-            const { response,error } = await scriptService.scriptList(data);
+            const { response,error } = await scriptService.scriptList(this.rowNumber,this.pageNumber);
             if(error){
                 this.$toast.add({
                     severity:'error', 

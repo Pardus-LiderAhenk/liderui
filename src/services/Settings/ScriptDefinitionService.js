@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const scriptListUrl  = '/api/script/list';
+const scriptListAllUrl  = '/api/script/list-all';
 const scriptAddUrl = '/api/script/add';
 const scriptDeleteUrl  = '/api/script/delete';
-const scriptupdateUrl = '/api/script/update';
+const scriptUpdateUrl = '/api/script/update';
 
 class ScriptService{
 
@@ -11,9 +12,18 @@ class ScriptService{
         this.axios = axios
     }
 
-    async scriptList(params) {
+    async scriptList(pageSize,pageNumber) {
         try {
-            const response = await axios.post(scriptListUrl, params);
+            const response = await axios.get(scriptListUrl + "/page-size/" + pageSize + "/page-number/" + pageNumber);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async scriptListAll() {
+        try {
+            const response = await axios.get(scriptListAllUrl);
             return { response };
         } catch (error) {
             return { error: error }
@@ -40,7 +50,7 @@ class ScriptService{
 
     async scriptUpdate(params) {
         try {
-            const response = await axios.put(scriptupdateUrl, params);
+            const response = await axios.put(scriptUpdateUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

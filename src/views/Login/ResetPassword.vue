@@ -66,10 +66,14 @@ export default {
                 "repeatPassword": password
             }
 
-            axios.post('/api/forgot-password/reset/'+ this.$route.params.uuid , params)
-            .then(response => {
-            // const{response,error} = loginService.resetPassword(this.$route.params.uuid ,params);
-            
+            //axios.post('/api/forgot-password/reset/'+ this.$route.params.uuid , params)
+            //.then(response => {
+            const{response,error} = loginService.resetPassword(this.$route.params.uuid ,params);
+            if(error){
+                this.severity = "error";
+                this.inlineMessage = this.$t('login.reset_password_inline_message_error');
+            }
+            else{
                 if (response.status === 200) {
                     this.isPasswordReset = true;
                     this.severity = "success";
@@ -77,10 +81,7 @@ export default {
                     this.inlineMessage = response.data[0];
                     this.severity = "error";
                 }
-            }).catch((error) => {
-                this.severity = "error";
-                this.inlineMessage = this.$t('login.reset_password_inline_message_error');
-            });
+            }
         },
     },
 

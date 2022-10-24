@@ -107,6 +107,7 @@
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import { profileService } from "../../../../services/Profile/ProfileService.js";
+import { userService } from "../../../../services/Settings/UserService";
 
 export default {
     props: {
@@ -185,53 +186,59 @@ export default {
             }
         },
 
-        deleteUserFromGroup() {
+        async deleteUserFromGroup() {
             let params = new FormData();
             params.append("dn", this.selectedGroup.distinguishedName);
             params.append("attribute", "member");
             params.append("value", this.selectedNode.distinguishedName);
-            axios.delete("/api/lider/user/attribute-with-value/dn/{dn}/attribute/{attribute}/value/{value}", params).then((response) => {
-                if (response.data) {
-                    let index = this.groups.findIndex(function(item, i){
-                        return item.distinguishedName === response.data.distinguishedName;
-                    });
-                    if (index > -1) {
-                        this.groups.splice(index, 1);
-                    }
-                    let newGroupsDn = [];
-                    if (this.groups){
-                        this.groups.forEach(element => {
-                            newGroupsDn.push(element.distinguishedName);
-                        });
-                    }
-                    this.selectedGroup = null;
-                    this.deleteGroupConfirm = false;
-                    let userNode = {...this.selectedNode};
-                    userNode.attributesMultiValues.memberOf = newGroupsDn;
-                    this.$emit('updatedUser', userNode);
-                    this.updateRowIndex();
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.delete_member_group_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.delete_member_group_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            }).catch((error) => {
+            //axios.delete("/api/lider/user/attribute-with-value/dn/{dn}/attribute/{attribute}/value/{value}", params).then((response) => {
+            const{response,error} = await userService.attributesMultiValues(this.selectedGroup.distinguishedName,"member",this.selectedNode.distinguishedName);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.delete_member_group_error'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        let index = this.groups.findIndex(function(item, i){
+                            return item.distinguishedName === response.data.distinguishedName;
+                        });
+                        if (index > -1) {
+                            this.groups.splice(index, 1);
+                        }
+                        let newGroupsDn = [];
+                        if (this.groups){
+                            this.groups.forEach(element => {
+                                newGroupsDn.push(element.distinguishedName);
+                            });
+                        }
+                        this.selectedGroup = null;
+                        this.deleteGroupConfirm = false;
+                        let userNode = {...this.selectedNode};
+                        userNode.attributesMultiValues.memberOf = newGroupsDn;
+                        this.$emit('updatedUser', userNode);
+                        this.updateRowIndex();
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.delete_member_group_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }   
+                    else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.delete_member_group_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+            }
         },
 
         updateRowIndex() {

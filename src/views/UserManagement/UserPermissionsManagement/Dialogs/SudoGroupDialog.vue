@@ -121,6 +121,7 @@
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import axios from 'axios';
 import {FilterMatchMode} from 'primevue/api';
+import { sudoGroupsService } from '../../../../services/UserManagement/UserPermissionsManagement/SudoGroups';
 
 export default {
     components: {
@@ -229,57 +230,80 @@ export default {
             
         },
 
-        createSudoGroup() {
+        async createSudoGroup() {
             if (!this.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
             }
             let params = this.getSudoGroupParams();
-            axios.post("/api/lider/sudo-groups/create-sudo-group",params).then(response => {
-                if (response.data) {
-                    this.$emit('sudoGroupCreated', response.data, this.isEdit);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_authorization_sudo.authorization_group_successfully_created'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+            //axios.post("/api/lider/sudo-groups/create-sudo-group",params).then(response => {
+            const{ response,error } = await sudoGroupsService.createGroups(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('sudoGroupCreated', response.data, this.isEdit);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_authorization_sudo.authorization_group_successfully_created'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }else {
+                      this.$toast.add({
+                          severity:'error', 
+                          detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
+                          summary:this.$t("computer.task.toast_summary"), 
+                          life: 3000
+                        });
+                    }
                 }
-            });
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
 
-        updateSudoGroup() {
+        async updateSudoGroup() {
             if (!this.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
             }
 
             let params = this.getSudoGroupParams();
-            axios.post("/api/lider/sudo-groups/edit-sudo-group",params).then(response => {
-                if (response.data) {
-                    this.$emit('sudoGroupCreated', response.data, this.isEdit);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_authorization_sudo.authorization_group_successfully_update'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_authorization_sudo.an_error_occurred_while_updating_the_authorization_group'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+            //axios.post("/api/lider/sudo-groups/edit-sudo-group",params).then(response => {
+            const{response,error} = await sudoGroupsService.editGroups(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_authorization_sudo.an_error_occurred_while_updating_the_authorization_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('sudoGroupCreated', response.data, this.isEdit);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_authorization_sudo.authorization_group_successfully_update'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
-            });
+                else if(response.status == 417){
+                    return "error";
+                }
+                }
         },
 
         getSudoGroupParams() {

@@ -3,7 +3,7 @@ import axios from "axios";
 const registrationTemplateListUrl = '/api/registration-templates';
 const registrationTemplateTypeUrl = '/api/registration-templates';
 const registrationTemplateUpdateUrl = '/api/registration-templates';
-const registrationTemplateDeleteUrl = '/api/registration-templates/';
+const registrationTemplateDeleteUrl = '/api/registration-templates';
 
 class RegistrationTemplateService{
 
@@ -20,7 +20,7 @@ class RegistrationTemplateService{
         }
     }
 
-    async type(uuid ,params) {
+    async type(params) {
         try {
             const response = await axios.post(registrationTemplateTypeUrl, params);
             return { response };

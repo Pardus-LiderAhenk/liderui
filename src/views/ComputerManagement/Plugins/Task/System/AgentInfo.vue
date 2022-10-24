@@ -475,6 +475,7 @@ import {FilterMatchMode} from 'primevue/api';
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import { computerManagementService } from "../../../../../services/ComputerManagement/ComputerManagement.js";
 import { taskService } from '../../../../../services/Task/TaskService.js';
+import { userService } from "../../../../../services/Settings/UserService";
 
 export default {
   
@@ -992,7 +993,7 @@ export default {
       }
     },
 
-    addFolder() {
+    async addFolder() {
       if (!this.folderName.trim()) {
         this.validationFolderName = true;
         return;
@@ -1000,15 +1001,26 @@ export default {
       let params = new FormData();
       params.append("parentName", this.selectedLiderNode.distinguishedName);
       params.append("ou", this.folderName);
-      axios.post('/api/lider/user/add-ou', params).then(response => {
-        this.$emit('addFolder', response.data, this.selectedLiderNode.distinguishedName);
-        this.$toast.add({
-            severity:'success', 
-            detail: this.$t('computer.agent_info.add_folder_success'), 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-        });
-      });
+      //axios.post('/api/lider/user/add-ou', params).then(response => {
+      const{ response,error } = await userService.addOu(params);
+      if(error){
+        return "error";
+      }
+      else{
+        if(response.status == 200){
+          this.$emit('addFolder', response.data, this.selectedLiderNode.distinguishedName);
+          this.$toast.add({
+              severity:'success', 
+              detail: this.$t('computer.agent_info.add_folder_success'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+          });
+        }
+        else if(response.status == 417){
+          return "error";
+        }
+      }
+        
       this.folderName = '';
       this.addFolderDialog = false;
     },

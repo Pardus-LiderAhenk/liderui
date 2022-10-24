@@ -924,7 +924,7 @@
             "template_content": "Şablon İçeriği",
             "template_settings": "Şablon Ayarları",
             "created_date":"Oluşturma Tarihi",
-            "modified_date": "Değiştirile Tarihi",
+            "modified_date": "Değiştirilme Tarihi",
             "table_empty_message":"Şablon bulunamadı",
             "search":"Ara",
             "create_template": "Sistem Gözlemcisi Şablonu Oluştur",

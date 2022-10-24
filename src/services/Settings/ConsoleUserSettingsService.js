@@ -1,7 +1,6 @@
 import axios from 'axios';
 
  const settingsEditUserRolesUrl = "/api/lider/settings/edit-user-roles";
- const userAddUserUrl = "/api/lider/user/add-user";
  const olcAccessRuleUrl = "/api/lider/settings/OLC-access-rules";
  const settingsAddMemberToGroupUrl = "/api/lider/settings/add-member-to-group";
  const settingsGetRolesUrl = "/api/lider/settings/roles";
@@ -10,7 +9,7 @@ import axios from 'axios';
  const settingsDeleteOLCAccessRuleUrl = "/api/lider/settings/delete-OLC-access-rule";
  const settingsAddOLCAccessRuleUrl = "/api/lider/settings/add-OLC-access-rule";
  const settingsGetOLCAccessRuleUrl = "/api/lider/settings/OLC-access-rule";
- const settingsConfigurationsUrl = "/api/lider/settings/configurations";//get
+ const settingsConfigurationsUrl = "/api/lider/settings/configurations";
  const settingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
  const settingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
 
@@ -23,16 +22,6 @@ class ConsoleUserSettingsService {
     async editUserRoles(params) {
         try {
             const response = await axios.post(settingsEditUserRolesUrl, params);
-            return { response };
-        } catch (error) {
-            return { error: error }
-        }
-    }
-
-
-    async addUser(params) {
-        try {
-            const response = await axios.post(userAddUserUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

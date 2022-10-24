@@ -35,7 +35,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
+import { sudoGroupsService } from "../../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js";
 
 export default {
 
@@ -77,7 +77,7 @@ export default {
         //     this.moveNodeData = node;
         // },
 
-        moveNode() {
+        async moveNode() {
             if (!this.moveNodeData) {
                 this.$toast.add({
                     severity:'warn', 
@@ -88,31 +88,46 @@ export default {
                 return;
             }
 
-            axios.post('/api/lider/sudo-groups/move/entry', null ,{
-                params: {
+            //axios.post('/api/lider/sudo-groups/move/entry', null ,{
+            //    params: {
+            //        sourceDN: this.selectedNode.distinguishedName,
+            //        destinationDN: this.moveNodeData.distinguishedName
+            //    }
+            //}).then(response => {
+            const {response,error} = await sudoGroupsService.reanameGroups({
+                params : {
                     sourceDN: this.selectedNode.distinguishedName,
                     destinationDN: this.moveNodeData.distinguishedName
-                }
-            }).then(response => {
-                if (response.data) {
-                    this.$emit('moveNode', this.moveNodeData);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail:this.$t('user_management.sudo.move_node_success'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail:this.$t('user_management.sudo.move_node_error'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-                this.$emit('closeSudoDialog');
-                this.moveNodeData = null;
+               }
             });
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail:this.$t('user_management.sudo.move_node_error'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('moveNode', this.moveNodeData);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail:this.$t('user_management.sudo.move_node_success'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
+
+            this.$emit('closeSudoDialog');
+            this.moveNodeData = null;
+
         },
     }
 }

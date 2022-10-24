@@ -92,7 +92,7 @@ export default {
             data.append('operationType',this.operationType);
 
             //axios.post("/api/operation/login", data).then((response) => {
-            const{response,error} = await systemTaskReportService.operationLogin(date);
+            const{response,error} = await systemTaskReportService.operationLogin(data);
             if(error){
 
             }

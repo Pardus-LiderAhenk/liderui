@@ -32,7 +32,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
+import { sudoGroupsService } from "../../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js";
 
 export default {
 
@@ -76,28 +76,40 @@ export default {
     },
 
     methods: {
-        changeFolderName() {
+        async changeFolderName() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
             }
 
-            axios.post('/api/lider/sudo-groups/rename/entry', null, {
+            //axios.post('/api/lider/sudo-groups/rename/entry', null, {
+            const{response,error} = await sudoGroupsService.reanameGroups({
                 params: {
                     oldDN: this.selectedNode.distinguishedName,
                     newName: 'ou=' + this.folderName
                 }
-            }).then(response => {
-                this.$emit('updateNode', response.data, this.selectedNode);
-                this.$toast.add({
-                    severity:'success', 
-                    detail:this.$t('user_management.sudo.update_folder_name_success'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                this.$emit('closeSudoDialog');
-                this.folderName = '';
             });
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    this.$emit('updateNode', response.data, this.selectedNode);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail:this.$t('user_management.sudo.update_folder_name_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
+                
+            this.$emit('closeSudoDialog');
+            this.folderName = '';
+
         },
     },
 

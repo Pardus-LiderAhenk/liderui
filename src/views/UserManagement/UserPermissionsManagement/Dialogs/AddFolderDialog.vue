@@ -32,6 +32,7 @@
  */
 
 import axios from "axios";
+import { sudoGroupsService } from "../../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js";
 
 export default {
 
@@ -72,26 +73,36 @@ export default {
     },
 
     methods: {
-        addFolder() {
+        async addFolder() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
             }
-            axios.post('/api/lider/sudo-groups/add-ou', {
+            //axios.post('/api/lider/sudo-groups/add-ou', {
+            const{ response,error } = await sudoGroupsService.addOu({
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
                 ou: this.folderName,
                 distinguishedName: 'ou=' + this.folderName + ',' + this.selectedNode.distinguishedName,
                 name: this.folderName
-            }).then(response => {
-                this.$emit('appendNode', response.data, this.selectedNode);
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('user_management.sudo.add_folder_success'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
             });
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    this.$emit('appendNode', response.data, this.selectedNode);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('user_management.sudo.add_folder_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
             this.folderName = '';
             this.$emit('closeSudoDialog');
         },

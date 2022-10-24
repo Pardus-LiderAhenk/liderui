@@ -45,6 +45,7 @@
 <script>
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import axios from "axios";
+import { userService } from '../../../../services/Settings/UserService';
 
 export default {
     props: {
@@ -66,30 +67,38 @@ export default {
     },
 
     methods:{
-        updatePassword(){
+        async updatePassword(){
             this.userPassword = this.$refs.password.getPassword();
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
             params.append("userPassword", this.userPassword);
-            axios.post("/api/lider/user/update-user-password", params).then((response) => {
-                this.$emit('updatedUser', response.data);
-                this.changePasswordDialog = false;
-                this.userPassword = null;
-                this.$refs.password.setPasswordForm('', '');
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('user_management.change_user_password_success'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            }).catch((error) => {
+            //axios.post("/api/lider/user/update-user-password", params).then((response) => {
+            const{response,error} = await userService.updatePasswd(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.change_user_password_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    this.$emit('updatedUser', response.data);
+                    this.changePasswordDialog = false;
+                    this.userPassword = null;
+                    this.$refs.password.setPasswordForm('', '');
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('user_management.change_user_password_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
 
         showUpdatePasswordDialog() {

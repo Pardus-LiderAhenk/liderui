@@ -217,6 +217,7 @@
 
 import { FilterMatchMode } from "primevue/api";
 import axios from "axios";
+import { conkyService } from "../../../services/Settings/ConkyService.js";
 
 export default {
   data() {
@@ -281,24 +282,31 @@ export default {
 
   methods: {
 
-    getTemplate(){
-      var data = new FormData();
-      data.append("pageNumber", this.pageNumber);
-      data.append("pageSize", this.rowNumber); 
-      axios.get("/api/conky/list/page-size/{pageSize}/page-number/{pageNumber}", data) .then((response) => {
-        if (response.data != null) {
-          this.templates = response.data.content;
-          this.totalElements = response.data.totalElements;
-        }
-      })
-      .catch((error) => {
+    async getTemplate(){
+      // var data = new FormData();
+      // data.append("pageNumber", this.pageNumber);
+      // data.append("pageSize", this.rowNumber); 
+      //axios.get("/api/conky/list/page-size/{pageSize}/page-number/{pageNumber}", data) .then((response) => {
+      const{response,error} = await conkyService.conkyList(this.rowNumber, this.pageNumber);
+      if(error){
         this.$toast.add({
           severity: "error",
           detail: this.$t("settings.system_monitoring_definitions.get_templates_error_message") +" \n" + error,
           summary: this.$t("computer.task.toast_summary"),
           life: 3000,
         });
-      })
+      }
+      else{
+        if(response.status == 200){
+          if (response.data != null) {
+            this.templates = response.data.content;
+            this.totalElements = response.data.totalElements;
+          }
+        }
+        else if(response.status == 417){
+          return "error";
+        }
+      }
     },
 
     onPage(event) {
@@ -323,12 +331,23 @@ export default {
       this.showTemplateDialog = true;
     },
 
-    deleteTemplate() {
+    async deleteTemplate() {
       this.deleteTemplateConfirmDialog = false;
       const params = {
         id: this.selectedTemplate.id,
       };
-      axios.post("/api/conky/delete", params).then((response) => {
+      //axios.post("/api/conky/delete", params).then((response) => {
+      const{response,error} = await conkyService.conkyDelete(this.selectedTemplate.id);
+      if(error){
+        this.$toast.add({
+            severity: "error",
+            detail:this.$t("settings.system_monitoring_definitions.deleted_template_error_message") +" \n" + error,
+            summary: this.$t("computer.task.toast_summary"),
+            life: 3000,
+          });
+      }
+      else{
+        if(response.status == 200){
           if (response.data != null) {
             // var index = this.templates.findIndex(function (item, i) {
             //   return item.id === response.data.id;
@@ -345,18 +364,15 @@ export default {
               life: 3000,
             });
           }
-        })
-        .catch((error) => {
-          this.$toast.add({
-            severity: "error",
-            detail:this.$t("settings.system_monitoring_definitions.deleted_template_error_message") +" \n" + error,
-            summary: this.$t("computer.task.toast_summary"),
-            life: 3000,
-          });
-        })
+        }
+        else if(response.status == 417){
+          return "error";
+        }
+      }
+          
     },
 
-    templateOperation(action) {
+    async templateOperation(action) {
       if (action == "update") {
         if (!this.validateForm()) {
           return;
@@ -367,36 +383,41 @@ export default {
           settings: this.settings,
           id: this.selectedTemplate.id,
         };
-        axios.post("/api/conky/update", params).then((response) => {
-            if (response.data != null) {
-              this.showTemplateDialog = false;
-              // for (let index = 0; index < this.templates.length; index++) {
-              //   const element = this.templates[index];
-              //   if (response.data.id === element.id) {
-              //     element.label = response.data.label;
-              //     element.contents = response.data.contents;
-              //     element.settings = response.data.settings;
-              //     element.modifyDate = response.data.modifyDate;
-              //   }
-              // }
-              this.reset();
-              this.$toast.add({
-                severity: "success",
-                detail: this.$t("settings.system_monitoring_definitions.updated_template_success_message"),
-                summary: this.$t("computer.task.toast_summary"),
-                life: 3000,
-              });
-            }
-          })
-          .catch((error) => {
-            this.$toast.add({
+        //axios.post("/api/conky/update", params).then((response) => {
+        const{response,error} = await conkyService.conkyUpdate(params);
+        if(error){
+          this.$toast.add({
               severity: "error",
               detail:this.$t("settings.system_monitoring_definitions.updated_template_error_message") +" \n" + error,
               summary: this.$t("computer.task.toast_summary"),
               life: 3000,
             });
-          });
-      } else {
+        }
+        else{
+          if(response.status == 200){
+            if (response.data != null) {
+                this.showTemplateDialog = false;
+                // for (let index = 0; index < this.templates.length; index++) {
+                //   const element = this.templates[index];
+                //   if (response.data.id === element.id) {
+                //     element.label = response.data.label;
+                //     element.contents = response.data.contents;
+                //     element.settings = response.data.settings;
+                //     element.modifyDate = response.data.modifyDate;
+                //   }
+                // }
+                this.reset();
+                this.$toast.add({
+                  severity: "success",
+                  detail: this.$t("settings.system_monitoring_definitions.updated_template_success_message"),
+                  summary: this.$t("computer.task.toast_summary"),
+                  life: 3000,
+                });
+              }
+            }
+          }
+        }
+      else {
         if (!this.validateForm()) {
           return;
         }
@@ -405,7 +426,18 @@ export default {
           contents: this.contents,
           settings: this.settings,
         };
-        axios.post("/api/conky/add", params).then((response) => {
+        //axios.post("/api/conky/add", params).then((response) => {
+        const{response,error} = await conkyService.conkyAdd(params);
+        if(error){
+          this.$toast.add({
+              severity: "error",
+              detail:this.$t("settings.system_monitoring_definitions.saved_template_error_message") + " \n" + error,
+              summary: this.$t("computer.task.toast_summary"),
+              life: 3000,
+            });
+        }
+        else{
+          if(response.status == 200){
             if (response.data != null) {
               this.showTemplateDialog = false;
               // this.templates.push(response.data);
@@ -417,15 +449,11 @@ export default {
                 life: 3000,
               });
             }
-          })
-          .catch((error) => {
-            this.$toast.add({
-              severity: "error",
-              detail:this.$t("settings.system_monitoring_definitions.saved_template_error_message") + " \n" + error,
-              summary: this.$t("computer.task.toast_summary"),
-              life: 3000,
-            });
-          })
+          }
+          else if(response.status == 417){
+            return "error";
+          }
+        }
       }
     },
 

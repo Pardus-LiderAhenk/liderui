@@ -136,7 +136,7 @@ export default {
     },
 
     mounted() {
-        this.scriptList();
+        this.scriptListAll();
     },
 
     methods: {
@@ -175,8 +175,8 @@ export default {
             }
         },
 
-        async scriptList(){
-            const { response, error } = await scriptService.scriptList();
+        async scriptListAll(){
+            const { response, error } = await scriptService.scriptListAll();
             if(error){
                 this.$toast.add({
                     severity: "error",

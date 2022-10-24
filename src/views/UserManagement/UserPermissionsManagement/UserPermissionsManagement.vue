@@ -200,6 +200,7 @@ import {FilterMatchMode} from 'primevue/api';
 import AddFolderDialog from './Dialogs/AddFolderDialog.vue'
 import ChangeFolderNameDialog from './Dialogs/ChangeFolderNameDialog.vue'
 import MoveNodeDialog from './Dialogs/MoveNodeDialog.vue'
+import { sudoGroupsService } from '../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js';
 
 export default {
     data() {
@@ -348,56 +349,72 @@ export default {
             this.modals.sudoGroup = false;
         },
 
-        deleteNode() {
-            axios.delete('/api/lider/sudo-groups/entry/{dn}', null, {
-                params : { dn: this.selectedNode.distinguishedName }
-            }).then(response => {
-                if (response.data) {
-                    this.$refs.tree.remove(this.selectedNode);
-                    this.setSelectedLiderNode(null);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.sudo.registiration_delete'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else{
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.sudo.registiration_delete_error'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+        async deleteNode() {
+            //axios.delete('/api/lider/sudo-groups/entry/{dn}', null, {params : { dn: this.selectedNode.distinguishedName }
+            //}).then(response => {
+            const { response, error } = await sudoGroupsService.entryDelete(this.selectedNode.distinguishedName);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.sudo.registiration_delete_error'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$refs.tree.remove(this.selectedNode);
+                        this.setSelectedLiderNode(null);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.sudo.registiration_delete'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } 
                 }
-                this.modals.deleteNode = false;
-            });
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
+                
+            this.modals.deleteNode = false;
+
         },
 
-        deleteSudoUser() {
-            axios.delete('/api/lider/sudo-groups/delete/sudo/user/dn/{dn}/uid/{uid}', null, {
-                params : { uid: this.deletedSudoUser.uid ,dn: this.selectedNode.distinguishedName }
-            }).then(response => {
-                if (response.data) {
-                   this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.sudo.user_delete'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    }); 
-                    this.sudoUser = this.sudoUser.filter(user => user.uid != this.deletedSudoUser.uid);
-                    this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
-                    this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
-                    this.treeNodeClick(this.selectedNode);
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.sudo.user_delete_error'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+        async deleteSudoUser() {
+            //axios.delete('/api/lider/sudo-groups/delete/sudo/user/dn/{dn}/uid/{uid}', null, {
+            //    params : { uid: this.deletedSudoUser.uid ,dn: this.selectedNode.distinguishedName }
+            //}).then(response => {
+            const { response,error } = await sudoGroupsService.userDelete(this.selectedNode.distinguishedName,this.deletedSudoUser.uid);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.sudo.user_delete_error'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$toast.add({
+                             severity:'success', 
+                             detail: this.$t('user_management.sudo.user_delete'),
+                             summary:this.$t("computer.task.toast_summary"), 
+                             life: 3000
+                        }); 
+                        this.sudoUser = this.sudoUser.filter(user => user.uid != this.deletedSudoUser.uid);
+                        this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
+                        this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+                        this.treeNodeClick(this.selectedNode);
+                    }
                 }
-                
-            });
+                else if(response.status == 417 ){
+                    return "error";
+                }
+            }
             this.modals.deleteSudoUser = false;
             
         },

@@ -121,6 +121,8 @@ import TreeComponent from '@/components/Tree/TreeComponent.vue';
 
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import { consoleUserSettingsService } from "../../../../services/Settings/ConsoleUserSettingsService.js";
+import { userService } from "../../../../services/Settings/UserService.js";
+
 
 export default {
     components:{
@@ -234,7 +236,7 @@ export default {
             data.append('homePostalAddress', this.userForm.homePostalAddress);
             data.append('mail', this.mail);
 
-            const { response, error } = await consoleUserSettingsService.addUser(data);
+            const { response, error } = await userService.addUser(data);
             if(error){
                 this.$toast.add({
                     severity:'error', 
