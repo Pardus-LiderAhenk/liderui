@@ -93,14 +93,14 @@ export default {
     methods: {
         submitForm() {
             var data = new FormData();
-            data.append("fileServerProtocol",this.fileServerProtocol);
-            data.append("fileServerHost",this.fileServerHost);
+            data.append("fileTransferType",this.fileServerProtocol);
+            data.append("fileServerAddress",this.fileServerHost);
             data.append("fileServerPort",this.fileServerPort);
             data.append("fileServerUsername",this.fileServerUsername);
             data.append("fileServerPassword",this.fileServerPassword);
             data.append("fileServerAgentFilePath",this.fileServerAgentFilePath);
 
-            axios.post('/lider/settings/update/fileServer', data).then(response => {
+            axios.post('/api/lider/settings/update/file-server', data).then(response => {
                 this.$toast.add({
                     severity:'success', 
                     detail: this.$t('settings.server_settings.file_server_settings.file_server_settings_successfully_update'), 
