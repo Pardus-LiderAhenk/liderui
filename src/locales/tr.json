@@ -445,7 +445,19 @@
                 "mouse_keyboard": "Fare-Klavye",
                 "allow": "İzin Ver",
                 "block":"Engelle",
-                "usb_task_warn": "En az bir tane aygıt seçmelisiniz"
+                "usb_task_warn": "En az bir tane aygıt seçmelisiniz",
+                "usb_rule_header": "USB Kural Yönetimi",
+                "white_black_list":"Beyaz / Kara USB Listesi",
+                "usb_list_cant_find":"USB listesi bulunamadı",
+                "manufacturer":"Üretici Firma",
+                "model":"Model",
+                "serial_number":"Seri Numarası",
+                "type":"Tipi",
+                "edit":"Düzenle",
+                "add":"Ekle",
+                "delete":"Sil",
+                "list_usb_rule": "USB Kurallarını Listele",
+                "delete_usb_rule": "USB Kurallarını Sil"
             },
             "remote_access": {
                 "header": "Uzak Erişim",
