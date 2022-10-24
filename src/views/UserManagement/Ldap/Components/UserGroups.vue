@@ -107,7 +107,9 @@
 import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import { profileService } from "../../../../services/Profile/ProfileService.js";
-import { userService } from "../../../../services/Settings/UserService";
+import { userService } from "../../../../services/Settings/UserService.js";
+import { userGroupsService } from "../../../../services/Settings/UserGroupsService.js";
+
 
 export default {
     props: {
@@ -192,7 +194,7 @@ export default {
             params.append("attribute", "member");
             params.append("value", this.selectedNode.distinguishedName);
             //axios.delete("/api/lider/user/attribute-with-value/dn/{dn}/attribute/{attribute}/value/{value}", params).then((response) => {
-            const{response,error} = await userService.attributesMultiValues(this.selectedGroup.distinguishedName,"member",this.selectedNode.distinguishedName);
+            const{response,error} = await userService.deleteAttributeAndValue(this.selectedGroup.distinguishedName,"member",this.selectedNode.distinguishedName);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -248,7 +250,7 @@ export default {
             }
         },
 
-        addUserToGroup() {
+        async addUserToGroup() {
             if (!this.addUserGroupNode) {
                 this.$toast.add({
                     severity:'warn', 
@@ -282,26 +284,33 @@ export default {
             member.push(this.selectedNode.distinguishedName);
             params.append("checkedList[]", member);
             params.append("groupDN", this.addUserGroupNode.distinguishedName);
-            axios.post("/api/lider/user-groups/group/existing", params).then((response) => {
-                this.groups.push(response.data);
-                let userNode = {...this.selectedNode};
-                userNode.attributesMultiValues.memberOf = this.groups;
-                this.$emit('updatedUser', userNode);
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('user_management.add_user_to_group_success'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                this.addUserToGroupDialog = false;
-            }).catch((error) => {
+            //axios.post("/api/lider/user-groups/group/existing", params).then((response) => {
+            const{response,error} = await userGroupsService.addGroups(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.add_user_to_group_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }else{
+                if(response.status == 200){
+                    this.groups.push(response.data);
+                    let userNode = {...this.selectedNode};
+                    userNode.attributesMultiValues.memberOf = this.groups;
+                    this.$emit('updatedUser', userNode);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('user_management.add_user_to_group_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    this.addUserToGroupDialog = false;
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }  
         },
 
         isExistMemberInGroup(dn) {

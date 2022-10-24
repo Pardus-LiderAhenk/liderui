@@ -186,7 +186,7 @@ export default {
                 "distinguishedName": this.selectedNode.distinguishedName
             }
             //axios.post('/api/policy/policies-for-group', params).then(response => {
-            const{response,error} = await policyService.policyGroup(params);
+            const{response,error} = await policyService.policyGroup(this.selectedNode.distinguishedName);
             if(error){
                 this.$toast.add({
                     severity:'error', 

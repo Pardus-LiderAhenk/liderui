@@ -64,7 +64,7 @@ class PolicyService {
 
     async policyUpdate (params){
         try {
-            const response = await axios.post(policyUpdateUrl, params);
+            const response = await axios.put(policyUpdateUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
@@ -80,9 +80,9 @@ class PolicyService {
         }
     }
 
-    async policyGroup(params){
+    async policyGroup(dn){
         try {
-            const response = await axios.get(policyPolicyGroupUrl, params);
+            const response = await axios.get(policyPolicyGroupUrl + "/dn/" + dn);
             return { response };
         } catch (error) {
             return { error: error }

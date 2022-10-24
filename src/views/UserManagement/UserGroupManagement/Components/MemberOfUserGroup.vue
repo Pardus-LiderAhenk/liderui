@@ -106,6 +106,7 @@
 import {FilterMatchMode} from 'primevue/api';
 import { mapGetters, mapActions } from "vuex"
 import axios from "axios";
+import { userGroupsService } from '../../../../services/Settings/UserGroupsService.js';
 
 export default {
 
@@ -171,7 +172,7 @@ export default {
             }
         },
 
-        deleteMemberFromGroup(data) {
+        async deleteMemberFromGroup(data) {
             if (this.attributesMultiValue == false) {
                 this.$toast.add({
                         severity:'warn', 
@@ -187,7 +188,17 @@ export default {
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedLiderNode.distinguishedName);
-            axios.post("/api/lider/user-groups/delete/group/members", params).then((response) => {
+            //axios.post("/api/lider/user-groups/delete/group/members", params).then((response) => {
+            const{response,error} = await  userGroupsService.deleteGroupMember(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
                 if (response.data != null) {
                     this.$toast.add({
                         severity:'success', 
@@ -200,14 +211,7 @@ export default {
                     this.$emit('deleteMember', this.selectedLiderNode);
                     this.loading = false;
                 }
-            }).catch((error) => {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            })
+            }
         },
 
         getSelectedNodeAttribute() {
