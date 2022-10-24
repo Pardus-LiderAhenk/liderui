@@ -71,7 +71,7 @@ export default {
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
             params.append("userPassword", this.userPassword);
-            axios.post("/api/lider/user/updateUserPassword", params).then((response) => {
+            axios.post("/api/lider/user/update-user-password", params).then((response) => {
                 this.$emit('updatedUser', response.data);
                 this.changePasswordDialog = false;
                 this.userPassword = null;

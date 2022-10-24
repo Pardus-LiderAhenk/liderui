@@ -188,8 +188,8 @@
   <Dialog :header="$t('reports.system_log_report.select_user_group')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
         <tree-component 
             ref="usertree"
-            loadNodeUrl="/api/lider/user/getUsers"
-            loadNodeOuUrl="/api/lider/user/getOuDetails"
+            loadNodeUrl="/api/lider/user/users"
+            loadNodeOuUrl="/api/lider/user/ou-details"
             :treeNodeClick="treeNodeClick"
         />
         <template #footer>

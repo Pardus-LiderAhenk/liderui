@@ -77,7 +77,7 @@ export default {
                 this.validation.folderName = true;
                 return;
             }
-            axios.post('/lider/sudo_groups/addOu', {
+            axios.post('/api/lider/sudo-groups/add-ou', {
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
                 ou: this.folderName,

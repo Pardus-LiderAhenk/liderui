@@ -148,7 +148,7 @@ export default {
             params.append("telephoneNumber", this.user.telephoneNumber);
             params.append("mail", this.user.mail);
             params.append("homePostalAddress", this.user.homePostalAddress);
-            axios.post("/api/lider/user/editUser", params).then((response) => {
+            axios.post("/api/lider/user/edit-user", params).then((response) => {
                 this.$emit('updatedUser', response.data);
                 this.updateUserConfirm = false;
                 this.$toast.add({

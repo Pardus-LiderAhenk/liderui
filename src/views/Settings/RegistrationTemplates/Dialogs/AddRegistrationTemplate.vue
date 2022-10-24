@@ -97,8 +97,8 @@
     >
         <tree-component 
             ref="userGroupTree"
-            loadNodeUrl="/lider/user_groups/getGroups"
-            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+            loadNodeUrl="/api/lider/user-groups/groups"
+            loadNodeOuUrl="api/lider/user-groups/ou-details"
             :treeNodeClick="node => selectedUserGroup = node"
             :searchFields="searchGroupFields"
         />

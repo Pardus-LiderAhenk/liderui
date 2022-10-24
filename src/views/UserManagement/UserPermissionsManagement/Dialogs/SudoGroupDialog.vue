@@ -97,8 +97,8 @@
         :style="{width: '40vw'}" :modal="true"
     >
         <tree-component 
-            loadNodeUrl="/lider/sudo_groups/getUsers"
-            loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
+            loadNodeUrl="/api/lider/sudo-groups/users"
+            loadNodeOuUrl="/api/lider/sudo-groups/get-ou-details"
             :showCheckbox="true"
             :getCheckedNodes="getCheckedUserNodes"
             :searchFields="userSearchFields"
@@ -235,7 +235,7 @@ export default {
                 return;
             }
             let params = this.getSudoGroupParams();
-            axios.post("/lider/sudo_groups/createSudoGroup",params).then(response => {
+            axios.post("/api/lider/sudo-groups/create-sudo-group",params).then(response => {
                 if (response.data) {
                     this.$emit('sudoGroupCreated', response.data, this.isEdit);
                     this.$toast.add({
@@ -262,7 +262,7 @@ export default {
             }
 
             let params = this.getSudoGroupParams();
-            axios.post("/lider/sudo_groups/editSudoGroup",params).then(response => {
+            axios.post("/api/lider/sudo-groups/edit-sudo-group",params).then(response => {
                 if (response.data) {
                     this.$emit('sudoGroupCreated', response.data, this.isEdit);
                     this.$toast.add({

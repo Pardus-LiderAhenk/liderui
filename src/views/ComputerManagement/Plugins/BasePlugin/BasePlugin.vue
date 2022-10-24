@@ -198,7 +198,7 @@ export default {
     },
     executeTaskUrl: {
       type: String,
-      default: "/lider/task/execute",
+      default: "/api/lider/task/execute",
       description: "url for execute task"
     },
     listenerName: {

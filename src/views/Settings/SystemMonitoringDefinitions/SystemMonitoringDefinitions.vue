@@ -285,7 +285,7 @@ export default {
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
       data.append("pageSize", this.rowNumber); 
-      axios.post("/conky/list", data) .then((response) => {
+      axios.get("/api/conky/list/page-size/{pageSize}/page-number/{pageNumber}", data) .then((response) => {
         if (response.data != null) {
           this.templates = response.data.content;
           this.totalElements = response.data.totalElements;
@@ -328,7 +328,7 @@ export default {
       const params = {
         id: this.selectedTemplate.id,
       };
-      axios.post("/conky/delete", params).then((response) => {
+      axios.post("/api/conky/delete", params).then((response) => {
           if (response.data != null) {
             // var index = this.templates.findIndex(function (item, i) {
             //   return item.id === response.data.id;
@@ -367,7 +367,7 @@ export default {
           settings: this.settings,
           id: this.selectedTemplate.id,
         };
-        axios.post("/conky/update", params).then((response) => {
+        axios.post("/api/conky/update", params).then((response) => {
             if (response.data != null) {
               this.showTemplateDialog = false;
               // for (let index = 0; index < this.templates.length; index++) {
@@ -405,7 +405,7 @@ export default {
           contents: this.contents,
           settings: this.settings,
         };
-        axios.post("/conky/add", params).then((response) => {
+        axios.post("/api/conky/add", params).then((response) => {
             if (response.data != null) {
               this.showTemplateDialog = false;
               // this.templates.push(response.data);

@@ -1000,7 +1000,7 @@ export default {
       let params = new FormData();
       params.append("parentName", this.selectedLiderNode.distinguishedName);
       params.append("ou", this.folderName);
-      axios.post('/api/lider/user/addOu', params).then(response => {
+      axios.post('/api/lider/user/add-ou', params).then(response => {
         this.$emit('addFolder', response.data, this.selectedLiderNode.distinguishedName);
         this.$toast.add({
             severity:'success', 

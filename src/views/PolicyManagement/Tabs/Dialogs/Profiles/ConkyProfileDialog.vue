@@ -97,7 +97,7 @@ export default {
 
     mounted() {
         const params = new FormData();
-        axios.post("/conky/list", params).then((response) => {
+        axios.get("/api/conky/list/page-size/{pageSize}/page-number/{pageNumber}", params).then((response) => {
             if (response.data != null || response.data != "") {
                 for (let index = 0; index < response.data.length; index++) {
                     const element = response.data[index];

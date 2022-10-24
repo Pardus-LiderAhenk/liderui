@@ -7,8 +7,8 @@
         <div class="p-col">
           <tree-component 
             ref="usergrouptree"
-            loadNodeUrl="/lider/user_groups/getGroups"
-            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+            loadNodeUrl="/api/lider/user-groups/groups"
+            loadNodeOuUrl="/api/lider/user-groups/ou-details"
             :treeNodeClick="selectUserGroupNodeClick"
             :searchFields="searchFields"
           />
@@ -190,7 +190,7 @@ export default {
             params.append("dn", this.selectedGroup.distinguishedName);
             params.append("attribute", "member");
             params.append("value", this.selectedNode.distinguishedName);
-            axios.post("/api/lider/user/removeAttributeWithValue", params).then((response) => {
+            axios.delete("/api/lider/user/attribute-with-value/dn/{dn}/attribute/{attribute}/value/{value}", params).then((response) => {
                 if (response.data) {
                     let index = this.groups.findIndex(function(item, i){
                         return item.distinguishedName === response.data.distinguishedName;
@@ -275,7 +275,7 @@ export default {
             member.push(this.selectedNode.distinguishedName);
             params.append("checkedList[]", member);
             params.append("groupDN", this.addUserGroupNode.distinguishedName);
-            axios.post("/lider/user_groups/group/existing", params).then((response) => {
+            axios.post("/api/lider/user-groups/group/existing", params).then((response) => {
                 this.groups.push(response.data);
                 let userNode = {...this.selectedNode};
                 userNode.attributesMultiValues.memberOf = this.groups;

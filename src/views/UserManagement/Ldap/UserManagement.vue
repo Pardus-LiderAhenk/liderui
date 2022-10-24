@@ -7,8 +7,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component
                 ref="tree"
-                loadNodeUrl="/api/lider/user/getUsers"
-                loadNodeOuUrl="/api/lider/user/getOuDetails"
+                loadNodeUrl="/api/lider/user/users"
+                loadNodeOuUrl="/api/lider/user/ou-details"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
@@ -158,8 +158,8 @@
         <tree-component 
             ref="movetree"
             :isMove="true"
-            loadNodeUrl="/api/lider/user/getUsers"
-            loadNodeOuUrl="/api/lider/user/getOuDetails"
+            loadNodeUrl="/api/lider/user/users"
+            loadNodeOuUrl="/api/lider/user/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
         />
@@ -347,7 +347,7 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
-            axios.post('/api/lider/user/addOu', params).then(response => {
+            axios.post('/api/lider/user/add-ou', params).then(response => {
                 this.modals.folderAdd = false;
                 if (response.data) {
                      this.$refs.tree.append(response.data, this.selectedNode);
@@ -407,7 +407,7 @@ export default {
 
         deleteNode() {
             let ldapEntry = [];
-            let deleteUrl = "/api/lider/user/deleteUser";
+            let deleteUrl = "/api/lider/user/delete-user";
             if (this.selectedNode.type === "ORGANIZATIONAL_UNIT") {
                 ldapEntry.push({
                     "distinguishedName": this.selectedNode.distinguishedName,
@@ -415,7 +415,7 @@ export default {
                     "type": this.selectedNode.type,
                     "uid": this.selectedNode.uid
                 });
-                deleteUrl = "/api/lider/user/deleteUserOu";
+                deleteUrl = "/api/lider/user/delete-user-ou";
                 
             } else if (this.selectedNode.type === "USER") {
                 ldapEntry.push({

@@ -7,8 +7,8 @@
         >
             <tree-component 
                 ref="movetree"
-                loadNodeUrl="/lider/sudo_groups/getGroups"
-                loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
+                loadNodeUrl="/api/lider/sudo-groups/groups"
+                loadNodeOuUrl="/api/lider/sudo-groups/get-ou-details"
                 :treeNodeClick="node => moveNodeData = node"
                 :isMove="true"
             />
@@ -88,7 +88,7 @@ export default {
                 return;
             }
 
-            axios.post('/lider/sudo_groups/move/entry', null ,{
+            axios.post('/api/lider/sudo-groups/move/entry', null ,{
                 params: {
                     sourceDN: this.selectedNode.distinguishedName,
                     destinationDN: this.moveNodeData.distinguishedName

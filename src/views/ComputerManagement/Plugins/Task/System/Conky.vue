@@ -126,7 +126,7 @@ export default {
   },
 
   mounted() {
-    axios.post("/conky/list-all", null).then((response) => {
+    axios.get("/api/conky/list-all", null).then((response) => {
       if (response.data != null || response.data != "") {
         for (let index = 0; index < response.data.length; index++) {
           const element = response.data[index];

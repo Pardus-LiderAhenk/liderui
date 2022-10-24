@@ -108,7 +108,7 @@ export default {
             this.loading = true;
             let params = new FormData();
             params.append("uid", this.selectedUser.attributes.sAMAccountName);
-            axios.post("/api/lider/user/getUserSessions", params).then((response) => {
+            axios.get("/api/lider/user//user-session/{uid}", params).then((response) => {
                 if (response.data) {
                     this.sessions = response.data;
                 }

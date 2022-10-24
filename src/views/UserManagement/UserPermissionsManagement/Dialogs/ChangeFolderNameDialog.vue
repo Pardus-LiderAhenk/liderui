@@ -82,7 +82,7 @@ export default {
                 return;
             }
 
-            axios.post('/lider/sudo_groups/rename/entry', null, {
+            axios.post('/api/lider/sudo-groups/rename/entry', null, {
                 params: {
                     oldDN: this.selectedNode.distinguishedName,
                     newName: 'ou=' + this.folderName

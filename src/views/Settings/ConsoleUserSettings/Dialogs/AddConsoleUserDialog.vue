@@ -47,8 +47,8 @@
                 </Toolbar>
                 <tree-component 
                     ref="agentsTree"
-                    loadNodeUrl="/api/lider/user/getUsers"
-                    loadNodeOuUrl="/api/lider/user/getOuDetails"
+                    loadNodeUrl="/api/lider/user/users"
+                    loadNodeOuUrl="/api/lider/user/ou-details"
                     :treeNodeClick="setSelectedUserNode"
                     :searchFields="searchFields"
                 />
@@ -59,8 +59,8 @@
                     <div class="p-col-3">
                         <tree-component 
                             ref="groupstree"
-                            loadNodeUrl="/lider/user_groups/getGroups"
-                            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                            loadNodeUrl="/api/lider/user-groups/groups"
+                            loadNodeOuUrl="/api/lider/user-groups/ou-details"
                             :treeNodeClick="setSelectedGroupNode"
                             :searchFields="searchFieldsFolder"
                         />

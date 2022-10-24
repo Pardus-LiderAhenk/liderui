@@ -7,8 +7,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px; margin-top:10px;">
             <tree-component 
                 ref="tree"
-                loadNodeUrl="/lider/user_groups/getGroups"
-                loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                loadNodeUrl="/api/lider/user-groups/groups"
+                loadNodeOuUrl="/api/lider/user-groups/ou-details"
                 :treeNodeClick="treeNodeClick"
                 :searchFields="searchFields"
                 @handleContextMenu="handleContenxtMenu"
@@ -89,8 +89,8 @@
         <tree-component 
             ref="movetree"
             :isMove="true"
-            loadNodeUrl="/lider/user_groups/getGroups"
-            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+            loadNodeUrl="/api/lider/user-groups/groups"
+            loadNodeOuUrl="/api/lider/user-groups/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
         />
@@ -126,8 +126,8 @@
                 </div>
                 <tree-component 
                     ref="usertree"
-                    loadNodeUrl="/lider/user_groups/getUsers"
-                    loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                    loadNodeUrl="/api/lider/user-groups/users"
+                    loadNodeOuUrl="/api/lider/user-groups/ou-details"
                     :showCheckbox="userGroupModal.showCheckbox"
                     :getCheckedNodes="getCheckedUserNodes"
                     :searchFields="searchUserFields"
@@ -513,7 +513,7 @@ export default {
                 return;
             }
             this.loading = true;
-            axios.post('/lider/user_groups/createNewGroup',{
+            axios.post('/api/lider/user-groups/create-new-group',{
                 groupName: this.userGroupModal.groupName,
                 checkedEntries: JSON.stringify(this.userGroupModal.checkedNodes),
                 selectedOUDN: this.selectedNode.distinguishedName
@@ -546,7 +546,7 @@ export default {
         },
 
         addUserToGroup() {
-            axios.post("/lider/user_groups/group/existing/addUser",{
+            axios.post("/api/lider/user-groups/group/existing/add-user",{
                 checkedEntries: JSON.stringify(this.userGroupModal.checkedNodes),
                 groupDN: this.selectedNode.distinguishedName
             }).then(response => {
@@ -600,7 +600,7 @@ export default {
                 this.validation.folderName = true;
                 return;
             }
-            axios.post('/lider/user_groups/addOu', {
+            axios.post('/api/lider/user-groups/add-ou', {
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
                 ou: this.folderName,
@@ -629,7 +629,7 @@ export default {
             let params = new FormData();
             params.append("oldDN", this.selectedNode.distinguishedName);
             params.append("newName", "cn="+this.userGroupModal.groupName);
-            axios.post('/lider/user_groups/rename/entry', params).then(response => {
+            axios.post('/api/lider/user-groups/rename/entry', params).then(response => {
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 
@@ -675,7 +675,7 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveFolderNode.distinguishedName);
             this.modals.moveNode = false;
-            axios.post('/lider/user_groups/move/entry', params).then(response => {
+            axios.post('/api/lider/user-groups/move/entry', params).then(response => {
                 if (response.data) {
                     this.$refs.tree.remove(this.selectedNode);
                     if (this.selectedNode.type === "GROUP") {
@@ -725,7 +725,7 @@ export default {
             let params = new FormData();
             params.append("dn", this.selectedNode.distinguishedName);
             this.modals.deleteNode = false;
-            axios.post("/lider/user_groups/deleteEntry", params).then(response => {
+            axios.post("/api/lider/user-groups/delete-entry", params).then(response => {
                 if (response.data) {
                     this.$refs.tree.remove(this.selectedNode);
                     this.setSelectedLiderNode(null);

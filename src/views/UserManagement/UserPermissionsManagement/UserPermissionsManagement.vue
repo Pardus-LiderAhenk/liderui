@@ -3,8 +3,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
-                loadNodeUrl="/lider/sudo_groups/getGroups"
-                loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
+                loadNodeUrl="/api/lider/sudo-groups/groups"
+                loadNodeOuUrl="/api/lider/sudo-groups/get-ou-details"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
@@ -349,7 +349,7 @@ export default {
         },
 
         deleteNode() {
-            axios.post('/lider/sudo_groups/deleteEntry', null, {
+            axios.delete('/api/lider/sudo-groups/entry/{dn}', null, {
                 params : { dn: this.selectedNode.distinguishedName }
             }).then(response => {
                 if (response.data) {
@@ -374,7 +374,7 @@ export default {
         },
 
         deleteSudoUser() {
-            axios.post('/lider/sudo_groups/delete/sudo/user', null, {
+            axios.delete('/api/lider/sudo-groups/delete/sudo/user/dn/{dn}/uid/{uid}', null, {
                 params : { uid: this.deletedSudoUser.uid ,dn: this.selectedNode.distinguishedName }
             }).then(response => {
                 if (response.data) {
