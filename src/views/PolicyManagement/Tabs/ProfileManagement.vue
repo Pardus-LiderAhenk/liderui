@@ -184,7 +184,7 @@ export default {
         async pluginProfileList(){
             const{response,error} = await taskService.pluginProfileList();
             if(error){
-
+                return "errr";
             }
             else{
                 if(response.status == 200){

@@ -22,9 +22,7 @@ import UserInfoForm from './components/UserInfoForm.vue';
 import AccountInfoForm from './components/AccountInforForm.vue';
 import UiUsageHistory from './components/UiUsageHistory.vue';
 import GroupInfo from './components/GroupInfo.vue';
-import axios from "axios";
-import { async } from 'q';
-import { profileService } from '../../services/Profile/ProfileService';
+import { profileService } from '../../services/Profile/ProfileService.js';
 
 export default {
     components:{

@@ -8,6 +8,7 @@ const liderComputerGroupsAgentReportCreateNewGroupUrl = '/api/lider/computer-gro
 const liderComputerGroupsMoveEntryUrl = '/api/lider/computer-groups/move/entry';
 const liderComputerGroupsAddOuUrl = '/api/lider/computer-groups/add-ou';
 const liderComputerGroupsRenameEntryUrl = '/api/lider/computer-groups/rename/entry';
+const liderComputerGroupsAddMemberUrl = '/api/lider/computer-groups/group/members';
 
 class ComputerGroupsManagementService{
 
@@ -81,6 +82,15 @@ class ComputerGroupsManagementService{
     async renameEntry(params) {
         try {
             const response = await axios.post(liderComputerGroupsRenameEntryUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async addMember(params) {
+        try {
+            const response = await axios.post(liderComputerGroupsAddMemberUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

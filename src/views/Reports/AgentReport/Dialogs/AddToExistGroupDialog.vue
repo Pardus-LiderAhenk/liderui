@@ -40,8 +40,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
-import { computerGroupsManagementService } from "../../../../services/ComputerManagement/ComputerGroupManagement";
+import { computerGroupsManagementService } from "../../../../services/ComputerManagement/ComputerGroupManagement.js";
 
 export default {
 

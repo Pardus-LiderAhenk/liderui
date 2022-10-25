@@ -56,7 +56,7 @@
 
 
 <script>
-import axios from 'axios';
+import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
 export default {
     props:['serverSettings'],
     data() {
@@ -88,7 +88,7 @@ export default {
         }
     },
     methods: {
-        submitForm() {
+        async submitForm() {
             var data = new FormData();
             data.append("smtpAuth",this.smtpAuth);
             data.append("tlsEnabled",this.tlsEnabled);
@@ -97,17 +97,24 @@ export default {
             data.append("emailUsername",this.emailUsername);
             data.append("emailPassword",this.emailPassword);
 
-            axios.post('/lider/settings/update/emailSettings', data).then(response => {
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.server_settings.mail_server_settings.mail_settings_successfully_update'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                setTimeout(() => {
-                    this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                }, 3000);
-            });
+            //axios.post('/lider/settings/update/emailSettings', data).then(response => {
+            const { response,error} = await  serverSettingService.updateEmail(data);
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_settings.mail_server_settings.mail_settings_successfully_update'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    setTimeout(() => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                    }, 3000)
+                }
+            }
             this.showDialog = false;
         }
     },

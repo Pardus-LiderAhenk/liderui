@@ -188,13 +188,13 @@ export default {
         },
     },
     methods:{
-        addAsConsoleUser(){
+        async addAsConsoleUser(){
             if (this.selectedUserNode) {
                 let data = new FormData();
                 console.log('Selected user node', this.selectedUserNode);
                 data.append('dn', this.selectedUserNode.distinguishedName);
                 data.append('roles[]', ['ROLE_USER']);
-                const {response, error} = consoleUserSettingsService.editUserRoles(data);
+                const {response, error} = await consoleUserSettingsService.editUserRoles(data);
 
                 //axios.post('/lider/settings/editUserRoles',data).then(response => {
                 if(response.status == 200){
@@ -223,9 +223,11 @@ export default {
                 });
         }
         },
+        
         setSelectedUserNode(node) {
             this.selectedUserNode = node;
         },
+
         async addNewConsoleUser(){
             let data = new FormData();
             data.append('uid', this.userForm.uid);
@@ -271,7 +273,8 @@ export default {
                 }
             }
         },
-        setSelectedGroupNode(node) {
+
+        async setSelectedGroupNode(node) {
             this.groupMembers = [];
             this.selectedGroupNode = node;
             node.attributesMultiValues.member.forEach((mem,index) => {
@@ -284,26 +287,31 @@ export default {
             let data = new FormData();
             data.append('dn',node.distinguishedName);
             
-            const {response,error} = consoleUserSettingsService.olcAccessRules(data);
-            if(response.status == 200){
-                this.groupPrivilages = response.data;
-            }
-            else{
+            const {response,error} = await consoleUserSettingsService.olcAccessRules(node.distinguishedName);
+            if(error){
                 this.$toast.add({
                     severity:'error',
                     detail:this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
                     summary:this.$t('settings.console_user_settings.error'),
                     life:3600
-          });
-
-                    
-                }
-
+                    });   
             }
-        
+            else{
+                if(response.status == 200){
+                    this.groupPrivilages = response.data;
+                }
+                else{
+                    this.$toast.add({
+                        severity:'error',
+                        detail:this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                        summary:this.$t('settings.console_user_settings.error'),
+                        life:3600
+                        });     
+                    }
+            }
         },
 
-        addUserToGroup() {
+        async addUserToGroup() {
 
             if (this.selectedUserNode == null || this.selectedGroupNode == null) {
                 this.$toast.add({
@@ -314,30 +322,31 @@ export default {
                 });
                 return;
             }
-
-
+            
             let data = new FormData();
             data.append('distinguishedName',this.selectedUserNode.distinguishedName);
             data.append('parentName',this.selectedGroupNode.distinguishedName);
             //axios.post('/lider/settings/addMemberToGroup', data).then(response => {
-            const {response,error} = consoleUserSettingsService.addMemberToGroup(data);
-            if (response.status === 200) {
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.console_user_settings.user_successfully_add_to_group'), 
-                    summary: this.$t('settings.console_user_settings.successful'), 
-                    life: 3000
-                });
-                this.groupMembers = [];
-                this.groupPrivilages = [];
-                this.selectedGroupNode = null;
-                this.selectedUserNode = null;
-                this.modalVisible = false;
+            const {response,error} = await  consoleUserSettingsService.addMemberToGroup(data);
+            if(error){
+                return "error";
             }
-            
-
-            
+            else{
+                if (response.status === 200) {
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.console_user_settings.user_successfully_add_to_group'), 
+                        summary: this.$t('settings.console_user_settings.successful'), 
+                        life: 3000
+                    });
+                    this.groupMembers = [];
+                    this.groupPrivilages = [];
+                    this.selectedGroupNode = null;
+                    this.selectedUserNode = null;
+                    this.modalVisible = false;
+                } 
+            }
         }
-    
+    }
 }
 </script>

@@ -128,7 +128,7 @@
 
 
 <script>
-import { consoleUserSettingsService } from '../../../../services/Settings/ConsoleUserSettingsService.js';
+import { serverSettingService } from '../../../../services/Settings/ServerSettingsService';
 
 export default {
     props:['serverSettings'],
@@ -210,7 +210,7 @@ export default {
             data.append("adAllowSelfSignedCert",this.adAllowSelfSignedCert);
 
             //axios.post('/api/lider/settings/update/ldap', data).then(response => {
-            const { response,error } = await consoleUserSettingsService.updateLdap(data);
+            const { response,error } = await serverSettingService.updateLdap(data);
             if(error){
                 return "error";
             }

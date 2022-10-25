@@ -134,7 +134,7 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import axios from "axios";
-import { profilesServices } from '../../../../../../services/PolicyManagement/Profiles';
+import { profilesServices } from '../../../../../../services/PolicyManagement/Profiles.js';
 
 export default {
 
@@ -322,7 +322,7 @@ export default {
                 "id": this.selectedProfile.id
 			};
             //axios.delete('/api/profile/delete', params).then(response => {
-            const{ response,error } = profilesServices.delete(params);
+            const{ response,error } = await profilesServices.delete(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

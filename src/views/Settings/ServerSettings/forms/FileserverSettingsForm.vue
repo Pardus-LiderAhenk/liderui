@@ -59,7 +59,7 @@
 
 
 <script>
-import axios from 'axios';
+import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
 export default {
     props:['serverSettings'],
     data() {
@@ -91,7 +91,7 @@ export default {
         }
     },
     methods: {
-        submitForm() {
+        async submitForm() {
             var data = new FormData();
             data.append("fileTransferType",this.fileServerProtocol);
             data.append("fileServerAddress",this.fileServerHost);
@@ -100,17 +100,25 @@ export default {
             data.append("fileServerPassword",this.fileServerPassword);
             data.append("fileServerAgentFilePath",this.fileServerAgentFilePath);
 
-            axios.post('/api/lider/settings/update/file-server', data).then(response => {
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.server_settings.file_server_settings.file_server_settings_successfully_update'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                setTimeout(() => {
-                    this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                }, 3000);
-            });
+            //axios.post('/api/lider/settings/update/file-server', data).then(response => {
+            const { response,error } = await serverSettingService.updateFileServer(data) ;
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_settings.file_server_settings.file_server_settings_successfully_update'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    setTimeout(() => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                    }, 3000);
+
+                }
+            }
             this.showDialog = false;
         }
     },

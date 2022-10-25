@@ -101,7 +101,7 @@
 
 
 <script>
-import { consoleUserSettingsService } from '../../../../services/Settings/ConsoleUserSettingsService.js';
+import { serverSettingService } from '../../../../services/Settings/ServerSettingsService';
 
 export default {
     props:['serverSettings'],
@@ -142,7 +142,7 @@ export default {
             data.append("selectedRegistrationType", this.selectedRegistrationType);
 
             //axios.post('/api/lider/settings/update/other-settings', data).then(response => {
-            const { response,error } = await consoleUserSettingsService.updateOtherSettings(data);
+            const { response,error } = await serverSettingService.updateOtherSettings(data);
             if(error){
                 return "error";
             }

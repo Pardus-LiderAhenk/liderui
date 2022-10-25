@@ -8,7 +8,8 @@ const packagesRepoAddrestUrl = '/api/packages/repo-address';
 const pluginTaskListUrl = '/api/get-plugin-task-list';
 const pluginProfileListUrl = '/api/get-plugin-profile-list';
 const selectAgentInfoDetailUrl = '/api/select-agent-info/detail';
-
+const commandExecuteUrl = '/api/command/command-execution-result';
+const commandUrl = '/api/command';
 
 
 class TaskService{
@@ -83,6 +84,24 @@ class TaskService{
     async agentInfoDetail(params){
         try {
             const response = await axios.post(selectAgentInfoDetailUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async commandExecute(id){
+        try {
+            const response = await axios.get(commandExecuteUrl + "/id/" + id);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async commandfindAll(id){
+        try {
+            const response = await axios.get(commandUrl + "/id/" + id);
             return { response };
         } catch (error) {
             return { error: error }

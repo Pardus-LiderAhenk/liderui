@@ -25,8 +25,7 @@ import XmppSettingsForm from './forms/XmppSettingsForm.vue';
 import FileserverSettingsForm from './forms/FileserverSettingsForm.vue';
 import EmailServerSettingsForm from './forms/EmailServerSettingsForm.vue';
 import OtherSettingsForm from './forms/OtherSettingsForm.vue';
-import axios from 'axios';
-import { consoleUserSettingsService } from '../../../services/Settings/ConsoleUserSettingsService';
+import { serverSettingService } from '../../../services/Settings/ServerSettingsService.js';
 
 export default {
     components: {
@@ -44,7 +43,7 @@ export default {
     methods: {
         async getServerSettings() {
             //axios.get('/api/lider/settings/configurations').then(response => {
-            const { response,error } = await consoleUserSettingsService.getConfigurations();
+            const { response,error } = await serverSettingService.getConfigurations();
             if(error){
                 return "error";
             }

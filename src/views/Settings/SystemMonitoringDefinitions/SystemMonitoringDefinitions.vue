@@ -216,7 +216,6 @@
  */
 
 import { FilterMatchMode } from "primevue/api";
-import axios from "axios";
 import { conkyService } from "../../../services/Settings/ConkyService.js";
 
 export default {
@@ -369,7 +368,7 @@ export default {
           return "error";
         }
       }
-          
+
     },
 
     async templateOperation(action) {

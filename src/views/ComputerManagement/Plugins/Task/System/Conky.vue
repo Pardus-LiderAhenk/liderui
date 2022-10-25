@@ -97,7 +97,6 @@
  *
  */
 
-import axios from "axios";
 import { conkyService } from "../../../../../services/Settings/ConkyService.js";
 
 export default {

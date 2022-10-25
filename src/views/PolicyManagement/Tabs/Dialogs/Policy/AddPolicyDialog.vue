@@ -44,8 +44,7 @@
 * @event appendPolicy
 */
 
-import axios from "axios";
-import { policyService } from "../../../../../services/PolicyManagement/PolicyService";
+import { policyService } from "../../../../../services/PolicyManagement/PolicyService.js";
 
 export default {
 

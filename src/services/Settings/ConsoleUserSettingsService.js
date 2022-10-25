@@ -28,9 +28,9 @@ class ConsoleUserSettingsService {
         }
     }
 
-    async olcAccessRules(params) {
+    async olcAccessRules(dn) {
         try {
-            const response = await axios.get(olcAccessRuleUrl, params);
+            const response = await axios.get(olcAccessRuleUrl + "/dn/" + dn);
             return { response };
         } catch (error) {
             return { error: error }
@@ -46,9 +46,9 @@ class ConsoleUserSettingsService {
         }
     }
 
-    async getRoles(params) {
+    async getRoles() {
         try {
-            const response = await axios.get(settingsGetRolesUrl, params);
+            const response = await axios.get(settingsGetRolesUrl);
             return { response };
         } catch (error) {
             return { error: error }

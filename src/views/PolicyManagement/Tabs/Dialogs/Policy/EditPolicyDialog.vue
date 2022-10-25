@@ -95,10 +95,9 @@
  * @event updatedPolicy
  */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
-import { policyService } from "../../../../../services/PolicyManagement/PolicyService";
-import { profilesServices } from "../../../../../services/PolicyManagement/Profiles";
+import { policyService } from "../../../../../services/PolicyManagement/PolicyService.js";
+import { profilesServices } from "../../../../../services/PolicyManagement/Profiles.js";
 
 export default {
 

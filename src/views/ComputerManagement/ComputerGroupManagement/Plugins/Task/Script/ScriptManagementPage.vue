@@ -30,7 +30,6 @@ export default {
   },
 
   methods: {
-        //axios.post("/api/get-plugin-task-list", {}).then((response) => {
     async pluginTaskList(){
       const{response,error} = await  taskService.pluginTaskList();
       if(error){
