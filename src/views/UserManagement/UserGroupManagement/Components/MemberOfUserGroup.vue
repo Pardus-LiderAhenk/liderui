@@ -105,7 +105,6 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import { mapGetters, mapActions } from "vuex"
-import axios from "axios";
 import { userGroupsService } from '../../../../services/Settings/UserGroupsService.js';
 
 export default {

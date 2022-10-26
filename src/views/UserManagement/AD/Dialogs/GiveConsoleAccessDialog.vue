@@ -80,7 +80,7 @@ export default {
     },
 
     methods: {
-        giveConsoleAccessToUser() {
+        async giveConsoleAccessToUser() {
             if (!this.$refs.password.getPassword()) {
                 return;
             }
@@ -90,7 +90,7 @@ export default {
                 "distinguishedName" : this.selectedNode.distinguishedName
             });
             //axios.post('/api/ad/move-ad-user-to-ldap', {
-            const { response,error } = adManagementService.moveAdUserToLdap({
+            const { response,error } = await adManagementService.moveAdUserToLdap({
                 distinguishedName: this.selectedNode.distinguishedName,
                 userPassword: userPassword,
                 childEntries: childEntries

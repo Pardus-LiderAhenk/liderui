@@ -150,7 +150,6 @@
  * @see {@link http://www.liderahenk.org/}
 */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import { policyService } from "../../../../services/PolicyManagement/PolicyService";
 import ApplyPolicy from './ApplyPolicy.vue'

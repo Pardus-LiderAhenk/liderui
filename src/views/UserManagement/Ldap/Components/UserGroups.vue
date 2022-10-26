@@ -104,7 +104,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import { profileService } from "../../../../services/Profile/ProfileService.js";
 import { userService } from "../../../../services/Settings/UserService.js";

@@ -797,7 +797,7 @@ export default {
         params.append("sourceDN", this.selectedLiderNode.distinguishedName);
         params.append("sourceCN", this.selectedLiderNode.cn);
         params.append("destinationDN", this.moveFolderNode.distinguishedName);
-        const{response,error} = await computerManagementService.moveAgent(params);
+        const{response,error} = await computerManagementService.moveEntry(params);
         if(error){
           this.$toast.add({
             severity:'error', 
@@ -1052,13 +1052,13 @@ export default {
                 summary:this.$t("computer.task.toast_summary"), 
                 life: 3000
             });
-      } else {
-          this.$toast.add({
-              severity:'warn', 
-              detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
-              summary:this.$t("computer.task.toast_summary"), 
-              life: 3000
-          });
+      }   else {
+            this.$toast.add({
+                severity:'warn', 
+                detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
         }
 
 
@@ -1072,9 +1072,9 @@ export default {
           });
         }
       }
-        this.deleteFolderDialog = false;
+      this.deleteFolderDialog = false;
 
-    },
+    }
   },
 };
 </script>

@@ -72,7 +72,7 @@ export default {
     },
 
     methods: {
-        addFolder() {
+        async addFolder() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
@@ -81,7 +81,7 @@ export default {
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
             //axios.post('/api/ad/add-ou-to-ad', params).then(response => {
-            const { response,error } = adManagementService.addToOuAd(params);
+            const { response,error } =  await adManagementService.addToOuAd(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

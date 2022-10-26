@@ -71,7 +71,7 @@ export default {
     },
 
     methods: {
-        addGroup() {
+        async addGroup() {
             if (!this.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
@@ -80,7 +80,7 @@ export default {
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("cn", this.groupName);
 
-            const { response,error } = adManagementService.addGroupToAd(params);
+            const { response,error } = await adManagementService.addGroupToAd(params);
             if (error){
                 this.$toast.add({
                     severity:'error', 

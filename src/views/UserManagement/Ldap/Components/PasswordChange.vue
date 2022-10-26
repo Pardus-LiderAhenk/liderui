@@ -44,7 +44,6 @@
 
 <script>
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
-import axios from "axios";
 import { userService } from '../../../../services/Settings/UserService';
 
 export default {

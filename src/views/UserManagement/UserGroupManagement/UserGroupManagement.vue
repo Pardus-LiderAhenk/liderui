@@ -260,7 +260,6 @@
 
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import NodeDetail from '@/components/Tree/NodeDetail.vue';
-import axios from 'axios';
 import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
 import MemberOfUserGroup from "./Components/MemberOfUserGroup.vue";

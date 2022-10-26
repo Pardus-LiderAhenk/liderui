@@ -46,7 +46,6 @@ import AdManagement from "@/views/UserManagement/AD/AdManagement.vue";
 import UserPermissionsManagement from "@/views/UserManagement/UserPermissionsManagement/UserPermissionsManagement.vue";
 
 import { mapActions } from "vuex"
-import axios from "axios";
 import { adManagementService } from "../../services/UserManagement/AD/AdManagement";
 
 export default {

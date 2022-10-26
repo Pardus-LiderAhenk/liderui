@@ -91,7 +91,6 @@
  * @see {@link http://www.liderahenk.org/}
 */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import { policyService } from "../../../../services/PolicyManagement/PolicyService";
 
@@ -176,7 +175,7 @@ export default {
 			};
 
             //axios.post('/api/policy/execute', params).then(response => {
-            const{response,error} = policyService.policyExecute(params);
+            const{response,error} = await policyService.policyExecute(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

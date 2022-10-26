@@ -134,7 +134,7 @@ class ComputerManagemetService{
 
 	async deleteComputerOu(params) {
         try {
-            const response = await axios.delete(liderComputerDeleteComputerOuUrl, params);
+            const response = await axios.post(liderComputerDeleteComputerOuUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

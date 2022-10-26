@@ -185,7 +185,7 @@ export default {
             }
         },
 
-        deleteMemberFromGroup(data) {
+        async deleteMemberFromGroup(data) {
             if (this.attributesMultiValue == false) {
                 this.$toast.add({
                         severity:'warn', 
@@ -204,7 +204,7 @@ export default {
 
 
             //axios.post("/api/ad/member-from-group", params).then((response) => {
-            const { response,error } = adManagementService.deleteMemberUser(params);
+            const { response,error } = await adManagementService.deleteMemberUser(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

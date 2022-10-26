@@ -31,7 +31,6 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import { sudoGroupsService } from "../../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js";
 
 export default {

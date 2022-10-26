@@ -166,7 +166,7 @@ export default {
     },
 
     methods: {
-        addUser() {
+        async addUser() {
             if (this.userFormValidation()) {
                 if (!this.$refs.password.getPassword()) {
                     return;
@@ -183,7 +183,7 @@ export default {
                 params.append("homePostalAddress", this.user.homePostalAddress);
                 params.append("uid", this.user.uid);
 
-                const { response,error } = adManagementService.addAddUserToAd(params);
+                const { response,error } = await adManagementService.addAddUserToAd(params);
                 if(error){
                     this.$toast.add({
                         severity:'error', 
@@ -229,8 +229,7 @@ export default {
                             detail: this.$t('user_management.error_417_add_user'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
-                        });
-
+                            });
                         }
                     }       
                 }

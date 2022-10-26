@@ -99,9 +99,9 @@ class TaskService{
         }
     }
 
-    async commandfindAll(id){
+    async commandfindAll(dn){
         try {
-            const response = await axios.get(commandUrl + "/id/" + id);
+            const response = await axios.get(commandUrl + "/dn/" + dn);
             return { response };
         } catch (error) {
             return { error: error }

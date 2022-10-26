@@ -44,7 +44,6 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
 export default {
@@ -77,11 +76,11 @@ export default {
     },
 
     methods: {
-        deleteNode() {
+        async deleteNode() {
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
            // axios.post('/api/ad/entry', params).then(response => {
-            const{ response,error } = adManagementService.deleteEntry(params);
+            const{ response,error } = await  adManagementService.deleteEntry(params);
             this.$emit('closeAdDialog');
             if(error){
                 if (this.selectedNode.type == 'ORGANIZATIONAL_UNIT') {

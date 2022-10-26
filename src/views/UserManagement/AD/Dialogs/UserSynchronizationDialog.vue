@@ -176,7 +176,7 @@ export default {
             this.ldapUserOuDialog = true;
         },
 
-        syncUserToLDAP() {
+        async syncUserToLDAP() {
             if (!this.selectedLdapOuDn) {
                 this.$toast.add({
                     severity:'warn', 
@@ -192,7 +192,7 @@ export default {
                 "childEntries": this.selectedUsers
             };
 
-            const{ response,error } = adManagementService.syncUserFromAdToLdap(params);
+            const{ response,error } = await adManagementService.syncUserFromAdToLdap(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

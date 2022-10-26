@@ -135,7 +135,7 @@ export default {
             }
         },
 
-        deleteUserFromGroup() {
+        async deleteUserFromGroup() {
             let params = new FormData();
             let dnList = [];
             dnList.push(this.selectedUser.distinguishedName);
@@ -143,7 +143,7 @@ export default {
             params.append("dnList[]", dnList);
 
             //axios.post("/api/ad/member-from-group", params).then((response) => {
-            const {response,error} = adManagementService.deleteMemberUser(params);
+            const {response,error} = await adManagementService.deleteMemberUser(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

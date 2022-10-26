@@ -79,7 +79,6 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
@@ -137,7 +136,7 @@ export default {
     },
 
     methods: {
-        searchGroup() {
+        async searchGroup() {
             if (!this.selectedGroupField) {
                 this.$toast.add({
                     severity:'warn', 
@@ -158,7 +157,7 @@ export default {
             //axios.post('/api/ad/search-entry-group', params).then(response => {
                 // this.groupSearchValue = '';
                 // this.selectedGroupField = null;
-            const { response,error } = adManagementService.searchEntryGroup(params);
+            const { response,error } = await adManagementService.searchEntryGroup(params);
             if(error){
                 console.log("error");
 
@@ -182,7 +181,7 @@ export default {
             }
         },
 
-        addUserToGroup(data) {
+        async addUserToGroup(data) {
             if (this.isExistMember(data.distinguishedName)) {
                 this.$toast.add({
                     severity:'warn', 
@@ -197,7 +196,7 @@ export default {
             params.append("parentName", data.distinguishedName);
             params.append("distinguishedName", this.selectedNode.distinguishedName);
             //axios.post('/api/ad/add-member-to-ad-group', params).then(response => {
-            const { response,error } = adManagementService.addMemberToAdGroup(params);
+            const { response,error } = await adManagementService.addMemberToAdGroup(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

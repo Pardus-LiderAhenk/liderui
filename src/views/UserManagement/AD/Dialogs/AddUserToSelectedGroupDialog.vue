@@ -79,7 +79,6 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
@@ -141,7 +140,7 @@ export default {
     },
 
     methods: {
-        searchUser() {
+        async searchUser() {
             if (!this.searchUserFields) {
                 this.$toast.add({
                     severity:'warn', 
@@ -159,7 +158,7 @@ export default {
             params.append("searchDn", "");
             params.append("key", this.selectedUserField.value);
             params.append("value", this.userSearchValue);
-            const{response,error} = adManagementService.searchEntryUserList(params);
+            const{response,error} =  await adManagementService.searchEntryUserList(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -185,7 +184,7 @@ export default {
             }                
         },
 
-        addUserToGroup(data) {
+        async addUserToGroup(data) {
             if (this.isExistMember(data.distinguishedName)) {
                 this.$toast.add({
                     severity:'warn', 
@@ -200,7 +199,7 @@ export default {
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("distinguishedName", data.distinguishedName);
             //axios.post('/api/ad/add-member-to-ad-group', params).then(response => {
-            const { response,error } = adManagementService.addMemberToAdGroup(params);
+            const { response,error } = await  adManagementService.addMemberToAdGroup(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

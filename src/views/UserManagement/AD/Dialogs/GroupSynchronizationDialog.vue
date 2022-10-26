@@ -174,7 +174,7 @@ export default {
             this.ldapGroupOuDialog = true;
         },
 
-        syncGroupToLDAP() {
+        async syncGroupToLDAP() {
             if (!this.selectedLdapOuDn) {
                 this.$toast.add({
                     severity:'warn', 
@@ -190,7 +190,7 @@ export default {
                 "childEntries": this.selectedGroups
             };
 
-            const{response,error} = adManagementService.syncGroupFromAdToLdap(params);
+            const{response,error} = await adManagementService.syncGroupFromAdToLdap(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

@@ -70,12 +70,12 @@ export default {
     },
 
     methods:{
-        updatePassword(){
+        async updatePassword(){
             this.userPassword = this.$refs.password.getPassword();
             let params = new FormData();
             params.append("distinguishedName", this.selectedUser.distinguishedName);
             params.append("userPassword", this.userPassword);
-            const { response,error } = adManagementService.updateUserPassword(params);
+            const { response,error } = await adManagementService.updateUserPassword(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 
