@@ -182,7 +182,7 @@
 </template>
 
 <script>
-import { taskService } from "../../../../../services/Task/TaskService";
+import { taskService } from "../../../../../services/Task/TaskService.js";
 
 /**
  * Allows to install or remove selected package or packages in package repository which entered address

@@ -188,7 +188,7 @@ export default {
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedComputerGroupNode.distinguishedName);
             //axios.post("/api/lider/computer-groups/group/members", params).then((response) => {
-            const{response,error} = computerGroupsManagementService.addMember(params);
+            const{response,error} = await computerGroupsManagementService.addMember(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 
