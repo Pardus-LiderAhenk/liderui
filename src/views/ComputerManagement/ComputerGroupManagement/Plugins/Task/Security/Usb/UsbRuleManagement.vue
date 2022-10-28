@@ -13,7 +13,7 @@
       </template>
       <template #pluginTitleButton>
         <div>
-          <Button v-if="isGroup"
+          <Button
             icon="pi pi-list"
             class="p-button-sm p-mr-2"
             :title="$t('computer.plugins.usb.list_usb_rule')"
@@ -152,10 +152,6 @@ export default {
       type: Object,
       description: "Plugin task object",
     },
-    isGroup: {
-      type: Boolean,
-      default: true
-    }
   },
 
   created() {

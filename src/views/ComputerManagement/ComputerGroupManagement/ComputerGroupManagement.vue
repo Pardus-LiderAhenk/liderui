@@ -51,6 +51,13 @@
                         :label="$t('computer.plugins.button.script')"
                     >
                     </Button>
+                    <Button
+                        icon="fas fa-shield-alt"
+                        :class="selectedPluginTab == 'security-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                        @click="setSelectedPluginTab('security-management')"
+                        :label="$t('computer.plugins.button.security')"
+                    >
+                    </Button>
                 </div>
                 <div class="p-col">
                     <keep-alive>
@@ -298,6 +305,7 @@ import NodeDetail from '@/components/Tree/NodeDetail.vue';
 import SystemManagement from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/System/SystemManagementPage.vue";
 import PackageManagement from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/Package/PackageManagementPage.vue";
 import ScriptManagement from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/Script/ScriptManagementPage.vue";
+import SecurityManagement from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/Security/SecurityManagementPage.vue";
 import { mapActions } from "vuex"
 import {ref} from 'vue';
 import {FilterMatchMode} from 'primevue/api';
@@ -315,7 +323,8 @@ export default {
         NodeDetail,
         SystemManagement,
         PackageManagement,
-        ScriptManagement
+        ScriptManagement,
+        SecurityManagement
     },
 
     data() {
@@ -634,7 +643,7 @@ export default {
             }
         },
 
-        groupManagemenet() {
+        async groupManagemenet() {
             if (this.agentGroupModal.checkedNodes.length === 0) {
                 this.$toast.add({
                     severity:'warn', 
@@ -658,7 +667,7 @@ export default {
             }
             this.loading = true;
             this.loadingGroup = true;
-            const{response,error} = await computerGroupsManagementService({
+            const{response,error} = await computerGroupsManagementService.createNewGroup({
                 groupName: this.agentGroupModal.groupName,
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 selectedOUDN: this.selectedNode.distinguishedName

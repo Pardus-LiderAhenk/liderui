@@ -4,12 +4,11 @@
       <div class="p-col-12 p-md-6 p-lg-5">
         <member-of-agent-group class="plugin-card"></member-of-agent-group>
         <session-and-power-management v-if="sessionAndPowerState" 
-        class="plugin-card" 
-        :pluginTask="pluginTaskSessionPowerManagement">
+          class="plugin-card" 
+          :pluginTask="pluginTaskSessionPowerManagement">
         </session-and-power-management>
         <manage-root v-if="manageRootState" class="plugin-card" :pluginTask="pluginTaskManageRoot"></manage-root>
         <ldap-login v-if="ldapLoginState" class="plugin-card" :pluginTask="pluginTaskLdapLogin"></ldap-login>
-        <usb-management v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement"></usb-management>
       </div>
       <div class="p-col-12 p-md-6 p-lg-7">
         <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>
@@ -35,7 +34,6 @@ import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTra
 import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.vue";
 import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
 import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
-import UsbManagement from "@/views/ComputerManagement/Plugins/Task/Security/Usb/UsbManagement.vue";
 
 export default {
   data() {
@@ -46,7 +44,6 @@ export default {
       pluginTaskLdapLogin: null,
       pluginTaskXmessage: null,
       pluginTaskFileTransfer: null,
-      pluginTaskUsbManagement: null,
 
       sessionAndPowerState: false,
       manageRootState: false,
@@ -54,7 +51,6 @@ export default {
       ldapLoginState: false,
       xmessageState: false,
       fileTransferState: false,
-      usbManagementState: false,
     };
   },
   components: {
@@ -65,7 +61,6 @@ export default {
     LdapLogin,
     Conky,
     Xmessage,
-    UsbManagement
   },
 
   created() {
@@ -101,10 +96,6 @@ export default {
             this.pluginTaskManageRoot = element
             this.manageRootState = element.state;
           }
-          if (element.page == "usb-management") {
-          this.pluginTaskUsbManagement = element;
-          this.usbManagementState = element.state;
-        }
         }
       });
   },

@@ -445,7 +445,7 @@
                 "mouse_keyboard": "Fare-Klavye",
                 "allow": "İzin Ver",
                 "block":"Engelle",
-                "usb_task_warn": "En az bir tane aygıt seçmelisiniz",
+                "usb_task_warn": "En az bir tane USB kuralı eklenmelidir",
                 "usb_rule_header": "USB Kural Yönetimi",
                 "white_black_list":"Beyaz / Kara USB Listesi",
                 "usb_list_cant_find":"USB listesi bulunamadı",
@@ -457,7 +457,10 @@
                 "add":"Ekle",
                 "delete":"Sil",
                 "list_usb_rule": "USB Kurallarını Listele",
-                "delete_usb_rule": "USB Kurallarını Sil"
+                "delete_usb_rule": "USB Kurallarını Sil",
+                "description_usb_rule": "İstemcinin USB aygıtlarının seri numarası, model ve üretici firma bazlı olarak yönetimine izin verir. Ayrıca var olan kurallarını da siler.",
+                "deny": "Engelli",
+                "allowed": "İzin Verili"
             },
             "remote_access": {
                 "header": "Uzak Erişim",
