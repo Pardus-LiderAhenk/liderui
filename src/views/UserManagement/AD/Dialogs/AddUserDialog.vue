@@ -103,7 +103,6 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js"
 

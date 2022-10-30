@@ -89,7 +89,7 @@
  * 
  */
 import { mapGetters } from "vuex"
-import { taskService } from "../../../../../services/Task/TaskService";
+import { taskService } from "../../../../../services/Task/TaskService.js";
 
 export default {
   props: {
@@ -241,8 +241,8 @@ export default {
               detail: this.$t("computer.plugins.ldap_login.error_update_directory_domain"), 
               summary:this.$t("computer.task.toast_summary"), 
               life: 3000
-            });
-
+          });
+          
       }
       else{
         if(response.status == 417){

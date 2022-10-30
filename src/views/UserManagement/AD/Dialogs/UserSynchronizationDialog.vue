@@ -78,8 +78,7 @@
 
 <script>
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
-import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement';
+import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 
 export default {
     props: {
@@ -137,26 +136,40 @@ export default {
     },
 
     methods: {
-        getChildUser() {
+        async getChildUser() {
             if (this.selectedNode.type == "ORGANIZATIONAL_UNIT" || this.selectedNode.type == "CONTAINER" || this.selectedNode.isRoot) {
                 this.loading = true;
                 let params = new FormData();
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
                 params.append("value", "user");
-                axios.post('/api/ad/child-user', params).then(response => {
-                    if (response.data) {
-                        this.users = response.data;
-                        this.loading = false;
-                    }
-                }).catch((error) => {
+                //axios.post('/api/ad/child-user', params).then(response => {
+                const { response,error} = await  adManagementService.childUser(params);
+                if(error){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.ad.error_ad_child_entries'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                });    
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data) {
+                            this.users = response.data;
+                            this.loading = false;
+                        }
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_ad_child_entries'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+  
             } 
             if (this.selectedNode.type == 'USER') {
                 this.users.push(this.selectedNode);

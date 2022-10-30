@@ -247,6 +247,15 @@ export default {
                             life: 3000
                         });
                     }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.registiration_template.error_417_saving_template'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    
 
                 }
             }

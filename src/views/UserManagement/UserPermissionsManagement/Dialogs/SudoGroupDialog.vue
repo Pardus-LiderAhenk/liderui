@@ -119,7 +119,6 @@
 
 <script>
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
-import axios from 'axios';
 import {FilterMatchMode} from 'primevue/api';
 import { sudoGroupsService } from '../../../../services/UserManagement/UserPermissionsManagement/SudoGroups';
 
@@ -266,7 +265,12 @@ export default {
                     }
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                          severity:'error', 
+                          detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
+                          summary:this.$t("computer.task.toast_summary"), 
+                          life: 3000
+                    });
                 }
             }
         },

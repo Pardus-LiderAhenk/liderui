@@ -162,7 +162,12 @@ export default {
                     } 
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_get_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
 
@@ -201,7 +206,12 @@ export default {
                     } 
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_apply_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
             this.applyPolicyConfirmDialog = false;

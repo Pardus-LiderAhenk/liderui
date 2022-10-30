@@ -86,7 +86,12 @@ export default {
                 name: this.folderName
             });
             if(error){
-                return "error";
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.sudo.error_add_folder'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
             else{
                 if(response.status == 200){
@@ -99,7 +104,12 @@ export default {
                     });
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.sudo.error_417_add_folder'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
             this.folderName = '';

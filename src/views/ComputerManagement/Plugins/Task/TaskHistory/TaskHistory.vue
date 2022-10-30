@@ -222,32 +222,42 @@ export default {
             });
         }
         else{
-            if (response.data != null) {
-                for (let index = 0; index < response.data.length; index++) {
-                    const element = response.data[index];
-                    let executionResult = null;
-                    let executionDate = null;
-                    let commandExeResultId = null;
+            if(response.status == 200){
+                if (response.data != null) {
+                    for (let index = 0; index < response.data.length; index++) {
+                        const element = response.data[index];
+                        let executionResult = null;
+                        let executionDate = null;
+                        let commandExeResultId = null;
 
-                    if(element.commandExecutions[0].commandExecutionResults.length > 0) {
-                        executionResult = element.commandExecutions[0].commandExecutionResults[0].responseCode;
-						executionDate = element.commandExecutions[0].commandExecutionResults[0].createDate;
-                        commandExeResultId = element.commandExecutions[0].commandExecutionResults[0].id;
+                        if(element.commandExecutions[0].commandExecutionResults.length > 0) {
+                            executionResult = element.commandExecutions[0].commandExecutionResults[0].responseCode;
+			    			executionDate = element.commandExecutions[0].commandExecutionResults[0].createDate;
+                            commandExeResultId = element.commandExecutions[0].commandExecutionResults[0].id;
+                        }
+                        this.taskList.push({
+                            "taskObject": element,
+                            "pluginName": element.task.plugin.name,
+                            "commandClsId": element.task.commandClsId,
+                            "createdDate": element.task.createDate,
+                            "executionDate": executionDate,
+                            "commandOwnerUid": element.commandOwnerUid,
+                            "responseCode": executionResult,
+                            "commandExeResultId": commandExeResultId,
+                            "taskId": element.task.id,
+                            "index": index + 1
+                        });
                     }
-                    this.taskList.push({
-                        "taskObject": element,
-                        "pluginName": element.task.plugin.name,
-                        "commandClsId": element.task.commandClsId,
-                        "createdDate": element.task.createDate,
-                        "executionDate": executionDate,
-                        "commandOwnerUid": element.commandOwnerUid,
-                        "responseCode": executionResult,
-                        "commandExeResultId": commandExeResultId,
-                        "taskId": element.task.id,
-                        "index": index + 1
-                    });
+                    this.loading = false;
                 }
-                this.loading = false;
+            }
+            else if(response.status == 417){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.error_417_get_scripts'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
         }
     },

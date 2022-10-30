@@ -100,9 +100,7 @@ export default {
     },
 
     methods: {
-        asd(data) {
-            console.log(data)
-        },
+        
         async getSessionHistory() {
             this.loading = true;
             let params = new FormData();
@@ -124,7 +122,12 @@ export default {
                     }
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.error_417_session_history'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
                 

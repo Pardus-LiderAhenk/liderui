@@ -289,7 +289,14 @@ export default {
                     }
                   }
                 }
-
+                else if(response.status == 417){
+                  this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('computer.plugins.service_management.error_417_get_service'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                  });
+              }
             }
       }
       if (message.commandClsId == "SERVICE_LIST") {

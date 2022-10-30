@@ -101,7 +101,7 @@
 
 
 <script>
-import { serverSettingService } from '../../../../services/Settings/ServerSettingsService';
+import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
 
 export default {
     props:['serverSettings'],
@@ -144,7 +144,12 @@ export default {
             //axios.post('/api/lider/settings/update/other-settings', data).then(response => {
             const { response,error } = await serverSettingService.updateOtherSettings(data);
             if(error){
-                return "error";
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.other_settings.error_update_other_settings'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
             else{
                 if(response.status == 200){
@@ -153,14 +158,12 @@ export default {
                         detail: this.$t('settings.server_settings.other_settings.other_server_settings_successfully_update'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
-                        });
+                    });
                     setTimeout(() => {
                         this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
                     }, 3000);
                 }
-                else if(response.status == 417){
-                    return "error";
-                }
+                
             }
             
         this.showDialog = false;

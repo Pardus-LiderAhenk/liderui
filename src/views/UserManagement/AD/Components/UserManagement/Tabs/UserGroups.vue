@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import axios from "axios";
+
 import { FilterMatchMode } from 'primevue/api';
 import { adManagementService } from "../../../../../../services/UserManagement/AD/AdManagement.js";
 

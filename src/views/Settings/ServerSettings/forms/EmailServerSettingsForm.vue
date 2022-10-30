@@ -100,7 +100,12 @@ export default {
             //axios.post('/lider/settings/update/emailSettings', data).then(response => {
             const { response,error} = await  serverSettingService.updateEmail(data);
             if(error){
-                return "error";
+                this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('settings.server_settings.mail_server_settings.error_updating_mail_settings'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
             else{
                 if(response.status == 200){

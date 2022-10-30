@@ -223,7 +223,7 @@ import GeneralInformations from '@/views/UserManagement/Ldap/Components/GeneralI
 import PasswordChange from '@/views/UserManagement/Ldap/Components/PasswordChange.vue';
 import UserGroups from '@/views/UserManagement/Ldap/Components/UserGroups.vue';
 import SessionHistory from '@/views/UserManagement/Ldap/Components/SessionHistory.vue';
-import { userService } from '../../../services/Settings/UserService';
+import { userService } from '../../../services/Settings/UserService.js';
 
 export default {
     setup(){
@@ -536,7 +536,12 @@ export default {
                         }
                     }
                     else if(response.status == 417){
-                        return "error";
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.error_417_add_user'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
                     }
                 }
             }

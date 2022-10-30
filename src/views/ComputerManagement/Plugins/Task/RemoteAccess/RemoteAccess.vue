@@ -283,7 +283,12 @@ export default {
           }
         }
         else if(response.status == 417){
-          return "error";
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('computer.plugins.remote_access.error_417_fetching_ip_address'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
         }
       }
 

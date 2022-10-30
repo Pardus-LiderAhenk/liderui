@@ -128,7 +128,7 @@
 
 
 <script>
-import { serverSettingService } from '../../../../services/Settings/ServerSettingsService';
+import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
 
 export default {
     props:['serverSettings'],
@@ -212,7 +212,12 @@ export default {
             //axios.post('/api/lider/settings/update/ldap', data).then(response => {
             const { response,error } = await serverSettingService.updateLdap(data);
             if(error){
-                return "error";
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.directory_server_settings.error_417_update_directory_server_settings'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
             else{
                 if(response.status == 200){
@@ -226,9 +231,7 @@ export default {
                         this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
                     }, 3000);
                 }
-                else if(response.status == 417){
-                    return "error";
-                }
+                
             }
             this.showDialog = false;
         }

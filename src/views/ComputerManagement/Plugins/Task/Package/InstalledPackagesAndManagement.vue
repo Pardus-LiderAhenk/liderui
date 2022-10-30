@@ -229,6 +229,15 @@ export default {
                       this.packages = packagesList;
                     }
                 }
+              else if(response.status == 417){
+                this.$toast.add({
+                  severity:'error', 
+                  detail: this.$t('computer.plugins.installed_packages.error_417_get_packages'), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: 3000
+                });
+                
+              }
 
             }
       }

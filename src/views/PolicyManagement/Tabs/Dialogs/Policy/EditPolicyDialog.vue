@@ -182,7 +182,12 @@ export default {
                         this.profiles = response.data;
                     }
                 }else if(response.status == 417){
-                    return null;
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_get_profile'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
 
@@ -240,7 +245,12 @@ export default {
                     }
                 }
                 else if(response.status = 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_update_profile'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
             this.label = '';

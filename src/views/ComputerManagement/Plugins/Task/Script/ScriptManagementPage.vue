@@ -33,18 +33,33 @@ export default {
 
     async pluginTaskList(){
       const{response,error} = await taskService.pluginTaskList();
-      if(response.status == 200){
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          if (element.page == "execute-script") {
-            this.pluginTaskExecuteScript = element;
-            this.executeScriptState = element.state;
-          }
-        }
+      if(error){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.security.error_plugin_task_list'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
       }
       else{
-        return "error";
-      }
+        if(response.status == 200){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index];
+            if (element.page == "execute-script") {
+              this.pluginTaskExecuteScript = element;
+              this.executeScriptState = element.state;
+            }
+          }
+        }
+        else if(response.status == 417){
+          this.$toast.add({
+              severity:'error', 
+              detail: this.$t('computer.plugins.security.error_417_plugin_task_list'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
+          }
+        }
     }
   },
 };

@@ -374,7 +374,12 @@ export default {
                     } 
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.sudo.registiration_delete_error'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
                 
@@ -411,7 +416,12 @@ export default {
                     }
                 }
                 else if(response.status == 417 ){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.sudo.user_delete_error'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
             this.modals.deleteSudoUser = false;

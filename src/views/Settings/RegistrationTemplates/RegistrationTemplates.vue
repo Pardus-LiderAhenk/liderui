@@ -144,7 +144,6 @@
 */
 
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
 import AddRegistrationTemplate from './Dialogs/AddRegistrationTemplate.vue'
 import UpdateRegistrationTemplate from './Dialogs/UpdateRegistrationTemplate.vue'
 import { registrationTemplateService } from '../../../services/Settings/RegistrationTemplates.js';
@@ -208,13 +207,22 @@ export default {
                     detail: this.$t('settings.registiration_template.an_error_occurred_while_fetching_registration_templates')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
-                 })
-            }else{
+                 });
+            }
+            else{
                 if(response.status == 200){
                     if (response.data) {
                     this.records = response.data.content;
                     this.totalElements = response.data.totalElements;
+                    }
                 }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error',
+                        detail: this.$t('settings.registiration_template.error_417_getting_registration_template'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         },
@@ -260,6 +268,14 @@ export default {
                         this.selectedRecord = null;
                         this.showDeleteDialog = false;
                     }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.registiration_template.error_417_delete_template'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         },

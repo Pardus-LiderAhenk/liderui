@@ -158,7 +158,7 @@ export default {
             params.append("searchDn", "");
             params.append("key", this.selectedUserField.value);
             params.append("value", this.userSearchValue);
-            const{response,error} =  await adManagementService.searchEntryUserList(params);
+            const{response,error} =  await adManagementService.searchEntryUserList("",this.selectedUserField.value,this.userSearchValue);
             if(error){
                 this.$toast.add({
                     severity:'error', 

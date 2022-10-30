@@ -320,7 +320,7 @@ export default {
             detail: this.$t('computer.plugins.packages.update_repo_error_message')+ " \n"+error, 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
-          })
+          });
         }
         else{
           if(response.status == 200){
@@ -333,7 +333,12 @@ export default {
             }
           }
           else if(response.status == 417){
-              return "error";
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t('computer.plugins.packages.error_417_update_repo') ,
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });  
           }
         }
       }

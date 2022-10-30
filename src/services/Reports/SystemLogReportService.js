@@ -43,9 +43,9 @@ class SystemTaskReportService {
 
     }
 
-    async operationLogin(){
+    async operationLogin(data){
         try {
-            const response = await axios.post(operationLoginUrl);
+            const response = await axios.post(operationLoginUrl,data);
             return { response };
         } catch (error) {
             return { error: error }

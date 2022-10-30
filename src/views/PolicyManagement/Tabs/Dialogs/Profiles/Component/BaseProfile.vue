@@ -133,7 +133,6 @@
 */
 
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
 import { profilesServices } from '../../../../../../services/PolicyManagement/Profiles.js';
 
 export default {
@@ -199,7 +198,12 @@ export default {
                     } 
                 }
                 else if(response.status == 417){
-                    return "eerrror";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management. error_417_get_profile'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         },
@@ -269,7 +273,12 @@ export default {
                     } 
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('policy_management.error_417_add_policy'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
                 }
             }
         },
@@ -312,7 +321,12 @@ export default {
                     } 
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_update_profile'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         },
@@ -347,7 +361,12 @@ export default {
                     }
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_delete_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         }

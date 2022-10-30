@@ -270,7 +270,12 @@ export default {
                     }
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.error_417_get_scripts'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
                 }
             }
         },
@@ -359,7 +364,12 @@ export default {
                     }
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.script_definition.error_417_delete_script'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         },
@@ -408,7 +418,12 @@ export default {
                         }
                     }
                     else if(response.status == 417){
-                        return "error";
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.script_definition.error_417_update_script'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
                     }
 
                 }
@@ -447,7 +462,12 @@ export default {
                         }
                     }
                     else if(response.status == 417){
-                        return "error";
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.script_definition.error_417_saved_script'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
                     }
                 }
             }

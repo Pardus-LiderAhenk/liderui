@@ -87,14 +87,19 @@ export default {
         },
         async getLogs() {
             var data = new FormData();
-            data.append("pageNumber", this.pageNumber);
             data.append("pageSize", this.rowNumber);
+            data.append("pageNumber", this.pageNumber);
             data.append('operationType',this.operationType);
 
             //axios.post("/api/operation/login", data).then((response) => {
             const{response,error} = await systemTaskReportService.operationLogin(data);
             if(error){
-
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('reports.task_report.error_operation_login_console_list'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
             else{
                 if(response.status == 200){
@@ -103,7 +108,12 @@ export default {
                     this.loading = false;
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('reports.task_report.error_417_operation_console_list'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });                
                 }
             }
         },

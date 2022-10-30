@@ -80,7 +80,7 @@
  */
 
 import {FilterMatchMode} from 'primevue/api';
-import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js";
 
 export default {
 
@@ -157,9 +157,14 @@ export default {
             //axios.post('/api/ad/search-entry-group', params).then(response => {
                 // this.groupSearchValue = '';
                 // this.selectedGroupField = null;
-            const { response,error } = await adManagementService.searchEntryGroup(params);
+            const { response,error } = await adManagementService.searchEntryGroup("",this.selectedGroupField.value,this.groupSearchValue);
             if(error){
-                console.log("error");
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.user_not_found'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
 
             }
             else{

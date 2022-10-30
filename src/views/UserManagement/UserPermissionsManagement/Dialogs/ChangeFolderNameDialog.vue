@@ -90,7 +90,13 @@ export default {
                 }
             });
             if(error){
-                return "error";
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.sudo.error_update_folder_name'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                
             }
             else{
                 if(response.status == 200){
@@ -103,7 +109,12 @@ export default {
                     });
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.sudo.error_417_update_folder_name'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
                 

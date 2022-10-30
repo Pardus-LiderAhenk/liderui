@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { profileService } from "../../../services/Profile/ProfileService";
+import { profileService } from "../../../services/Profile/ProfileService.js";
 
 export default {
     props:['user'],

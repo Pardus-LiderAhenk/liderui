@@ -575,6 +575,14 @@ export default {
                         this.setSelectedComputerGroupNode(response.data);
                     }
                 }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.error_417_rename_group_name'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
             }
         },
 

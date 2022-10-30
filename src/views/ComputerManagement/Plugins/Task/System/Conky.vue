@@ -177,10 +177,15 @@ export default {
             }
           }
         else if(response.status == 417){
-          return "error";
+          this.$toast.add({
+            severity: "error",
+            detail: this.$t("computer.plugins.conky.error_417_fetching_conky"),
+            summary: this.$t("computer.task.toast_summary"),
+            life: 3000,
+          });
         }
+        
       }
-
     }
   },
   watch: {

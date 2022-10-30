@@ -54,7 +54,12 @@ export default {
     async pluginTaskList(){
       const{response,error} = await taskService.pluginTaskList();
       if(error){
-        return "error";
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.security.error_plugin_task_list'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
       }
       else {
         if(response.status == 200){
@@ -75,8 +80,12 @@ export default {
         }
       }
       else if(response.status == 417){
-        return "error";
-
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.security.error_417_plugin_task_list'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
         }
       }        
     }

@@ -211,6 +211,14 @@ export default {
                         this.loading = false;
                     }
                 }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.error_417_delete_group_member'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
             }
         },
 

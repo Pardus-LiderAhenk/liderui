@@ -120,15 +120,22 @@ export default {
                     });
                 }
                 else{
-                    this.loading = false;
-                    if (response.data) {
-                        this.nodes = response.data;
+                    if(response.status == 200){
+                        this.loading = false;
+                        if (response.data) {
+                            this.nodes = response.data;
+                        }
                     }
-                    
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_417_ad_child_entries'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
             }
-            
-            
             else{
             
                 this.nodes.push(this.selectedNode);

@@ -44,7 +44,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js";
 
 export default {
 

@@ -311,24 +311,22 @@ export default {
 
         async getConsoleUsers(){
         const { response, error } = await consoleUserSettingsService.getConsoleUsers();
-            if (response.status == 200)
-            {
-                this.records = response.data;
+            if (error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                    summary: this.$t('settings.console_user_settings.error'),
+                    life: 3000
+                });
             }
             else{
-                if(response.status == 417){
+                if(response.status == 200){
+                    this.records = response.data;
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('settings.console_user_settings.error_417_get_console_user'),
-                        summary: this.$t('settings.console_user_settings.error'),
-                        life: 3000
-                    });
-
-                }
-                else if(error){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
                         summary: this.$t('settings.console_user_settings.error'),
                         life: 3000
                     });
@@ -336,7 +334,7 @@ export default {
             }               
         },
 
-        updateUserRoles() {
+        async updateUserRoles() {
             this.showUpdateConsoleUserRolesDialog = false;
             if(this.selectedUser) {
                 var data = new FormData();
@@ -344,9 +342,18 @@ export default {
                 data.append('roles[]', this.selectedUser.attributesMultiValues.liderPrivilege);
                 
 
-                const { response,error } = consoleUserSettingsService.editUserRoles(data);
-                if(response.status === 200) {
+                const { response,error } = await consoleUserSettingsService.editUserRoles(data);
+                if(error) {
                     this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.please_select_the_user_you_want_to_be_authorized'),
+                        summary: this.$t('settings.console_user_settings.error'),
+                        life: 3000
+                    });
+                }
+                else {
+                    if(response.status == 200){
+                        this.$toast.add({
                         severity:'success', 
                         detail: this.$t('settings.console_user_settings.users_role_successfully_update'), 
                         summary: this.$t('settings.console_user_settings.successful'), 
@@ -354,14 +361,7 @@ export default {
                     });
                     // FIXME 
                     this.getConsoleUsers();
-                } else {
-                    if(error){
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('settings.console_user_settings.please_select_the_user_you_want_to_be_authorized'),
-                            summary: this.$t('settings.console_user_settings.error'),
-                            life: 3000
-                    });
+
                     }
 
                     else if(response.status == 417){
@@ -385,12 +385,12 @@ export default {
                 }
             }
         },
-        deleteConsoleUser() {
+        async deleteConsoleUser() {
             if (this.selectedUser) {
                 let data = new FormData();
                 data.append('dn',this.selectedUser.distinguishedName);
 
-                const { response,error } = consoleUserSettingsService.deleteConsoleUsers(data);
+                const { response,error } = await consoleUserSettingsService.deleteConsoleUsers(data);
 
                 this.getConsoleUsers();
                     if(response.status == 200){
@@ -434,12 +434,12 @@ export default {
             });
             this.getOlcAccessRules();
         },
-        deleteOlcAccessRule(rule) {
+        async deleteOlcAccessRule(rule) {
             let rules = this.groupPrivilages.filter(p => p.accessDN === rule.accessDN);
 
             if(rules && rules.length > 0) {
 
-            const { response,error } = consoleUserSettingsService.deleteOLCAccessRule(data);
+            const { response,error } = await consoleUserSettingsService.deleteOLCAccessRule(data);
             if(response.status === 200) {
                 this.$toast.add({
                     severity:'success', 
@@ -469,7 +469,7 @@ export default {
             }
         }
         }, 
-        addOlcAccessRule(olcAccessDn, accessType) {
+        async addOlcAccessRule(olcAccessDn, accessType) {
             let data = new FormData();
             data.append('type', 'computers');
             data.append('groupDN', this.selectedGroupNode.distinguishedName);
@@ -477,7 +477,7 @@ export default {
             data.append('accessType',accessType);
 
 
-            const { response,error } = consoleUserSettingsService.addOLCAccessRule(data);
+            const { response,error } = await consoleUserSettingsService.addOLCAccessRule(data);
             if (response.status === 200) {
                 if(response.data) {
                     this.$toast.add({
@@ -499,12 +499,12 @@ export default {
         //    });
 
         },
-        getOlcAccessRules() {
+        async getOlcAccessRules() {
             if(this.selectedGroupNode) {
                 let data = new FormData();
                 data.append('dn',this.selectedGroupNode.distinguishedName);
 
-                const { response,error} = consoleUserSettingsService.getOLCAccessRule(data);
+                const { response,error} = await consoleUserSettingsService.getOLCAccessRule(data);
                 if(response.status == 200){
                     this.groupPrivilages = response.data
                     

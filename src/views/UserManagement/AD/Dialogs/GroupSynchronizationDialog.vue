@@ -78,7 +78,7 @@
 <script>
 import {FilterMatchMode} from 'primevue/api';
 import axios from "axios";
-import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement';
+import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 
 export default {
     props: {
@@ -135,26 +135,39 @@ export default {
     },
 
     methods: {
-        getChildGroup() {
+        async getChildGroup() {
             if (this.selectedNode.type == "ORGANIZATIONAL_UNIT" || this.selectedNode.type == "CONTAINER" || this.selectedNode.isRoot) {
                 this.loading = true;
                 let params = new FormData();
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
                 params.append("value", "group");
-                axios.post('/api/ad/child-group', params).then(response => {
-                    if (response.data) {
-                        this.groups = response.data;
-                        this.loading = false;
-                    }
-                }).catch((error) => {
+                const {response,error} = await adManagementService.childGroupList(this.selectedNode.distinguishedName,"objectclass","group");
+                //axios.post('/api/ad/child-group', params).then(response => {
+                if(error){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.ad.error_ad_child_entries'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                });    
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data) {
+                            this.groups = response.data;
+                            this.loading = false;
+                        }
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_417_ad_child_entries'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }  
             } 
             if (this.selectedNode.type == 'GROUP') {
                 this.groups.push(this.selectedNode);

@@ -283,7 +283,8 @@
                 "conky_error_message": "Conky şablonları getirilirken hata oluştu",
                 "warn_select_template": "Lütfen şablon seçiniz",
                 "content": "Şablon İçeriği",
-                "settings": "Şablon Ayarları"
+                "settings": "Şablon Ayarları",
+                "error_417_fetching_conky" : "Conky şablonları getirilirken beklenmedik bir hata oluştu. Hata kodu : 417"
             },
             "packages":{
                 "header": "Paket Kur Veya Kaldır",
@@ -308,7 +309,8 @@
                 "install": "Kur",
                 "uninstall": "Kaldır",
                 "table_empty_message": "Paket bulunamadı",
-                "search": "Ara"
+                "search": "Ara",
+                "error_417_update_repo" : "Paket deposu güncellenirken beklenmeyen bir hata alındı. Hata kodu : 417"
             },
             "installed_packages":{
                 "header": "Kurulu Paket Yönetimi",
@@ -323,7 +325,8 @@
                 "view_selected_packages": "Seçili paketleri görüntüle",
                 "selected_package_warning": "ahenk ve ahenk-register paketi silinemez",
                 "table_empty_message": "Paket bulunamadı",
-                "search": "Ara"
+                "search": "Ara",
+                "error_417_get_packages" : "Kurulu paketlerin listesi getirilirken beklenmeyen bir hata oluştu. Hata kodu : 417"
             },
             "repositories": {
                 "header": "Depo Yönetimi",
@@ -375,7 +378,8 @@
                 "get_service_error_message": "Servisler getirilirken hata oluştu",
                 "send_task_warning": "En az bir servis seçilmelidir",
                 "change": "Değiştir",
-                "search": "Ara"
+                "search": "Ara",
+                "error_417_get_service" : "Servisler getirilirken beklenmedik bir hata oluştu Hata kodu : 417"
             },
             "execute_script": {
                 "header": "Betik Çalıştır",
@@ -462,6 +466,11 @@
                 "deny": "Engelli",
                 "allowed": "İzin Verili"
             },
+            "security": {
+                "error_plugin_task_list" : "Görev listesi eklentisi getirilirken hata oluştu",
+                "error_417_plugin_task_list" : "Görev listesi eklendisi getirilirken beklenmeyen bir hata oluştu. Hata kodu : 417"
+
+            },
             "remote_access": {
                 "header": "Uzak Erişim",
                 "ip_address": "IP Adresi",
@@ -494,7 +503,8 @@
                 "checking_access": "Bağlantı bilgileri alındı. Erişim kontrol ediliyor...",
                 "client_access": "Ahenk erişiminin sağlanacağı adres : ",
                 "waiting_response": "Kullanıcıya erişim isteği gönderildi. Cevap bekleniyor... ",
-                "ssh_connection": "SSH Bağlantısı"
+                "ssh_connection": "SSH Bağlantısı",
+                "error_417_fetching_ip_address": "Ip adresi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417"
             }
         },
         "agent_info": {
@@ -721,7 +731,9 @@
             "error_olc_rule_deleted":"OLC erişim kuralı silinemedi.",
             "error_417_olc_rule_deleted":"OLC erişim kuralı silinirken beklenmedik bir hata alındı. Hata kodu : 417",
             "olc_access_rule_get":"OLC erişim kuralları başarılı bir şekilde alındı.",
-            "error_417_olc_access_rule":"Açık ldap kontrol kuralı listesi alınamadı. Beklenmeyen bir hata oluştu. Hata kodu : 417"
+            "error_417_olc_access_rule":"Açık ldap kontrol kuralı listesi alınamadı. Beklenmeyen bir hata oluştu. Hata kodu : 417",
+            "error_user_add_to_group":"Kullanıcı gruba eklenemedi. Hata oluştu",
+            "error_417_user_add_to_group":"Kullanıcı gruba eklenirken beklenmedik bir hata oluştu. Hata kodu : 417"
 
         },
 
@@ -731,6 +743,8 @@
             "file_server_setting":"Dosya Sunucusu Ayarları",
             "mail_server_setting":"Email Sunucu Ayarları",
             "other_setting":"Diğer Ayarlar",
+            "error_server_settings":"Sunucu ayarları güncellenirken hata oluştu",
+            "error_417_server_settings":"Sunucu ayarları güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
             "directory_server_settings":{
                 "directory_server_settings":"Dizin Sunucusu Ayarları",
                 "ldap_server_informations":"LDAP Sunucusu Bilgileri",
@@ -763,7 +777,8 @@
                 "update_settings":"Ayarları Güncelle",
                 "cancel":"İptal",
                 "directory_server_notify":"Dizin sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
-                "directory_server_settings_successfully_update":"Dizin sunucu ayarları başarıyla güncellendi"
+                "directory_server_settings_successfully_update":"Dizin sunucu ayarları başarıyla güncellendi",
+                "error_417_update_directory_server_settings":"Dizin sunucusu ayarları güncellenirken hata oluştu"
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Sunucusu Bilgileri",
@@ -782,7 +797,8 @@
                 "cancel":"İptal",
                 "update_settings":"Ayarları Güncelle",
                 "messaging_server_notify":"XMPP sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
-                "messaging_server_settings_successfully_update":"XMPP sunucu ayarları başarıyla güncellendi"
+                "messaging_server_settings_successfully_update":"XMPP sunucu ayarları başarıyla güncellendi",
+                "error_update_messaging_server_settings": "XMPP sunucu ayarları güncellenirken hata oluştu"
             },
             "file_server_settings":{
                 "file_server_information":"Dosya Sunucusu Bilgileri",
@@ -798,7 +814,8 @@
                 "cancel":"İptal",
                 "update_settings":"Ayarları Güncelle",
                 "file_server_notify":"Dosya sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
-                "file_server_settings_successfully_update":"Dosya sunucu ayarları başarıyla güncellendi"
+                "file_server_settings_successfully_update":"Dosya sunucu ayarları başarıyla güncellendi",
+                "error_417_update_file_server_settings": "Dosya sunucu ayarları güncellenirken hata oluştu"
             },
             "mail_server_settings":{
                 "mail_notify":"Email ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
@@ -814,7 +831,8 @@
                 "yes":"Evet",
                 "no":"Hayır",
                 "cancel":"İptal",
-                "update_settings":"Ayarları Güncelle"
+                "update_settings":"Ayarları Güncelle",
+                "error_updating_mail_settings" : "E-mail ayarları güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417"
             },
             "other_settings":{
                 "other_settings":"Diğer Ayarlar",
@@ -838,7 +856,8 @@
                 "registration_template_type": "İstemcilerin hangi kayıt şablon tipine göre kayıt olacağını seçiniz",
                 "default": "Varsayılan(İstemciler, varsayılan olarak Agents klasörü altına kaydedilir)",
                 "ip_address": "IP Adresi(Girilen IP adresi kuralına göre kaydedilir)",
-                "hostname": "Bilgisayar Adı(Girilen bilgisayar adı kuralına göre kaydedilir)"
+                "hostname": "Bilgisayar Adı(Girilen bilgisayar adı kuralına göre kaydedilir)",
+                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu"
             }
         },
         "registiration_template":{
@@ -878,7 +897,11 @@
             "update":"Güncelle",
             "template_successfully_updated":"Şablon başarıyla güncellendi",
             "an_error_occurred_while_updating_template":"Şablon güncellenirken hata oluştu",
-            "update_template": "Kayıt Şablonu Güncelle"
+            "update_template": "Kayıt Şablonu Güncelle",
+            "error_417_saving_template":"Şablon kaydedilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_417_updating_template":"Şablon güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_417_getting_registration_template":"Kayıt şablonları getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_417_delete_template":"Kayıt silinemedi beklenmedik bir hata oluştu. Hata kodu : 417"
         },
         "script_definition": {
             "title": "Betik Tanımlama",
@@ -911,7 +934,11 @@
             "script_name_unique_warn": "Betik adı aynı olamaz",
             "delete_script_confirm_message": "Betik silinecek, emin misiniz?",
             "yes":"Evet",
-            "definition":"Listelenen betikler güncellenebilir veya silinebilir. Betik Adı, Betik Türü ve Betik İçeriği girilerek betik kaydedilebilir. Pardus için betik türü olarak Bash, Python, Perl ve Ruby seçenekleri mevcuttur."
+            "definition":"Listelenen betikler güncellenebilir veya silinebilir. Betik Adı, Betik Türü ve Betik İçeriği girilerek betik kaydedilebilir. Pardus için betik türü olarak Bash, Python, Perl ve Ruby seçenekleri mevcuttur.",
+            "error_417_get_scripts" : "Betikler getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_417_delete_script": "Betik silinirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_417_update_script": "Betik güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_417_saved_script": "Betik kaydedilirken beklenmedik bir hata oluştu. Hata kodu : 417"
         },
 
         "system_monitoring_definitions": {
@@ -945,7 +972,9 @@
             "template_name_unique_warn": "Şablon adı aynı olamaz",
             "delete_template_confirm_message": "Şablon silinecek, emin misiniz?",
             "yes":"Evet",
-            "definition":"Listelenen şablonlar güncellenebilir veya silinebilir. Metin tabanlı bilgilerin Conky uygulaması ile kullanıcının masaüstünde görüntülenmesini sağlar. Şablon İçeriği ve  Şablon Ayarı girilerek şablon kaydedilebilir."
+            "definition":"Listelenen şablonlar güncellenebilir veya silinebilir. Metin tabanlı bilgilerin Conky uygulaması ile kullanıcının masaüstünde görüntülenmesini sağlar. Şablon İçeriği ve  Şablon Ayarı girilerek şablon kaydedilebilir.",
+            "error_417_delete_template": "Şablonlar silinirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_417_saved_template": "Şablon kaydedilirken beklenmedik bir hata oluştu. Hata kodu : 417"
         }
     },
     "user_management":{
@@ -1050,6 +1079,7 @@
         "error_417_add_user":"Kullanıcı eklenirken beklenmeyen bir hata alındı. Hata kodu : 417",
         "error_417_user_not_found": "Kullanıcı bulunamadı. Hata kodu : 417",
         "error_404_delete_node":"Kayıt silinirken hata oluştu. Kayıt bulunamadı. Hata kodu : 404",
+        "error_417_session_history": "Oturum geçmişi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
         "ad":{
             "add_group":"Grup Ekle",
             "give_console_access": "Konsol Erişimi Ver",
@@ -1089,7 +1119,9 @@
             "error_417_sync_group": "Seçili gruplar OpenLDAP'a aktarılırken beklenmeyen bir  hata oluştu. Hata kodu : 417",
             "error_417_sync_user": "Seçili kullanıcılar OpenLDAP'a aktarılırken beklenmeyen bir  hata oluştu. Hata kodu : 417",
             "error_configuraton":"Konfigürasyon hatası alındı.",
-            "error_417_configuration":"AD konfigürasyonu yapılamadı. Beklenmeyen bir hata alındı. Hata kodu : 417"
+            "error_417_configuration":"AD konfigürasyonu yapılamadı. Beklenmeyen bir hata alındı. Hata kodu : 417",
+            "error_417_ad_child_entries":"Seçilen düğümün alt kayıtları getirilirken beklenmedik bir hata oluştu. Hata kodu : 417"
+
         },
         "sudo":{
             "selected_node_title":"Kayıt Bilgisi",
@@ -1139,7 +1171,11 @@
             "move":"Taşı",
             "select_folder_warn":"Lütfen klasör seçiniz",
             "move_node_success":"Kayıt başarıyla taşındı",
-            "move_node_error":"Kayıt taşınırken hata oluştu"
+            "move_node_error":"Kayıt taşınırken hata oluştu",
+            "error_add_folder":"Klasör oluşturulurken hata oluştu",
+            "error_417_add_folder":"Klasör oluştururken beklenmeyen bir hata oluştu. Hata kodu : 417",
+            "error_update_folder_name": "Klasör adı değiştirilirken hata oluştu",
+            "error_417_update_folder_name": "Klasör adı değiştirilirken beklenmeyen bir hata oluştu. Hata kodu : 417"
         }
     },
     "group_management": {
@@ -1228,8 +1264,10 @@
         "error_417_add_client" : "İstemci silinirken beklenmeyen bir hata alındı. Hata kodu :417",
         "error_417_created_group" : "Grup oluşturulurken beklenmeyen bir hata alındı. Hata kodu : 417",
         "error_417_move_entry" : "Kayıt taşıma sırasında beklenmeyen bir hata alındı. Hata kodu : 417",
-        "error_add_folder": "Klasör oluşturulurken bir hata alındı."
-
+        "error_add_folder": "Klasör oluşturulurken bir hata alındı.",
+        "error_417_delete_group_member" : "Üye gruptan silinemedi, beklenmeyen bir hata oluştu Hata kodu : 417",
+        "error_417_rename_group_name" : "Grup ismi değiştirilirken beklenmeyen bir hata alındı. Hata kodu : 417",
+        "error_417_apply_policy": "Politika uygulanırken beklenmedik bir hata oluştu. Hata kodu : 417"
     },
     "policy_management": {
         "title":"Politika Yönetimi",
@@ -1294,6 +1332,15 @@
         "unassign_policy_error": "Politika gruptan kaldırılırken hata oluştu",
         "selected_profile_warn": "En az bir profil seçilmelidir",
         "explanation":"Politika bir kullanıcı grubunun yetki ve kısıtları belirlenir. Bir veya birden fazla profil bir araya gelerek politikayı oluşturur. Politikalar kullanıcının oturum açması esnasında Lider'den sorgulanarak uygulanır.",
+        "error_417_add_policy" : "Politika eklenirken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_417_delete_policy" : "Politika silirken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_417_get_profile" : "Profil listesi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_417_update_profile" : "Profil güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_417_get_policy": "Politika listesi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_get_plugin_profile_list" : "Profil listesi eklentisi getirilirken hata oluştu",
+        "error_417_get_plugin_profile_list" : "Profil listesi eklentisi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_417_unassign_policy": "Politika gruptan kaldırılırken beklenmedik bir hata oluştu. Hata kodu : 417",
+
         "profile":{
             "explanation":"Bir eklentide gerçekleştirilebilecek yapılandırma ayarlarının bütününe Profil denir. Bir veya birden fazla profil bir araya gelerek politikayı oluşturur. Tek başına çalıştırılamaz. Bir politika üzerine eklendikten sonra kullanılabilir. Örneğin; Tarayıcı eklentisi için; Lider Arayüz üzerinden eklenti aracılığı ile anasayfa belirleme gibi yapılandırma ayarlarının belirlenip kaydedilmesi ile profil oluşturulabilir.",
             "login_manager":{
@@ -1551,7 +1598,9 @@
             "error_417_executed_task_list":"Çalıştırılan görevler listesi getirilirken bir hata aluştu. Hata kodu : 417",
             "error_executed_task_export":"Çalıştırılan görevler raporu oluşturulamadı.",
             "error_400_executed_task_export":"Çalıştırılan görevler raporu oluşturulurken bir hata alındı. Hata Kodu : 400",
-            "error_executed_task_plugin":"Çalıştırılan görevler eklentisi getirilirken beklenmedik bir hata ile karşılaşıldı."
+            "error_executed_task_plugin":"Çalıştırılan görevler eklentisi getirilirken beklenmedik bir hata ile karşılaşıldı.",
+            "error_operation_login_console_list":"Sistem güncesinde oturum açan kullanıcı listesi alınırken hata oluştu",
+            "error_417_operation_console_list":"Sistem güncesinde giriş yapan kullanıcı listesi alınırken beklenmedik bir hata oluştu. Hata kodu : 417"
         },
         "system_log_report":{
             "system_log_report":"Sistem Güncesi Raporu",

@@ -45,14 +45,24 @@ export default {
             //axios.get('/api/lider/settings/configurations').then(response => {
             const { response,error } = await serverSettingService.getConfigurations();
             if(error){
-                return "error";
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.error_server_settings'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
             else{
                 if(response.status == 200){
                     this.serverSettings = response.data;
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.error_417_server_settings'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
                 }
             }
                 

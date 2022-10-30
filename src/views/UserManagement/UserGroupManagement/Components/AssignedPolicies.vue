@@ -150,7 +150,7 @@
 */
 
 import {FilterMatchMode} from 'primevue/api';
-import { policyService } from "../../../../services/PolicyManagement/PolicyService";
+import { policyService } from "../../../../services/PolicyManagement/PolicyService.js";
 import ApplyPolicy from "./ApplyPolicy.vue";
 
 export default {
@@ -202,7 +202,12 @@ export default {
                     }
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_get_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         },
@@ -214,12 +219,12 @@ export default {
             }
         },
 
-        unassignPolicy() {
+        async unassignPolicy() {
             let params = {
                 "id": this.selectedPolicy.commandImpl.id,
 			};
             //axios.post('/api/policy/unassignment', params).then(response => {
-            const{response,error} = policyService.policyUnassigment(params);
+            const{response,error} = await  policyService.policyUnassigment(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -243,7 +248,12 @@ export default {
                     } 
                 }
                 else if(response.status == 417){
-                    return "error";
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_unassign_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
             this.unassignPolicyDialog = false;

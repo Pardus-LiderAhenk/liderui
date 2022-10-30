@@ -105,8 +105,13 @@ export default {
                         });
                     }
                 }
-                else if(response.status == 417){
-                    return "error";
+                else if(response.status == 417){                   
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_delete_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
             this.label = '';

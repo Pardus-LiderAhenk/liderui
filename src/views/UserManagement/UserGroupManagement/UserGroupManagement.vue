@@ -627,7 +627,12 @@ export default {
                 name: this.folderName
             });
             if(error){
-                return "error";
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.error_add_folder'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
             else{
                 this.$refs.tree.append(response.data, this.selectedNode);

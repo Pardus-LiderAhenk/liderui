@@ -1052,16 +1052,15 @@ export default {
                 summary:this.$t("computer.task.toast_summary"), 
                 life: 3000
             });
-      }   else {
+          }   
+          else {
             this.$toast.add({
                 severity:'warn', 
                 detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
                 summary:this.$t("computer.task.toast_summary"), 
                 life: 3000
             });
-        }
-
-
+          }
         }
         else if(response.status == 417){
           this.$toast.add({

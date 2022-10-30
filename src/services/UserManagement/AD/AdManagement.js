@@ -15,6 +15,7 @@ const syncUserFromAdToLdapUrl = "/api/ad/sync-user-from-ad-to-ldap";
 const adConfigurations = "/api/ad/configurations";
 const adChildUserUrl = "/api/ad/child-user";
 const adSearchEntryUserUrl = "/api/ad/search-entry-user";
+const adChildGroupUrl = "/api/ad/child-group"
 
 
 class AdManagementService{
@@ -68,9 +69,9 @@ class AdManagementService{
         }
     }
 
-    async searchEntryGroup(params) {
+    async searchEntryGroup(searchDn,key,value) {
         try {
-            const response = await axios.get(adSearchEntryGroupUrl, params);
+            const response = await axios.get(adSearchEntryGroupUrl + "/search-dn/" + searchDn + "/key/" + key + " /value/" + value);
             return { response };
         } catch (error) {
             return { error: error }
@@ -149,9 +150,18 @@ class AdManagementService{
         }
     }
 
-    async searchEntryUserList(params) {
+    async searchEntryUserList(searchDn,key,value) {
         try {
-            const response = await axios.get(adSearchEntryUserUrl, params);
+            const response = await axios.get(adSearchEntryUserUrl + "/search-dn/" + searchDn + "/key/" + key + " /value/" + value);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async childGroupList(searchDn,key,value) {
+        try {
+            const response = await axios.get(adChildGroupUrl + "/searchDn/" + searchDn + "/key/" + key + " /value/" + value);
             return { response };
         } catch (error) {
             return { error: error }

@@ -496,11 +496,11 @@ export default {
       }
     },
 
-    updateScheduledTask(scheduledParam) {
+    async updateScheduledTask(scheduledParam) {
       var params = new FormData();
       params.append("id", this.selectedCommand.id);
       params.append("cronExpression", scheduledParam);
-      const { response, error} = scheduledTaskReportService.scheduledTaskUpdate(params);
+      const { response, error} = await  scheduledTaskReportService.scheduledTaskUpdate(params);
       if (response.status == 200 && response.data != null) {
         this.tasks = this.tasks.filter(command => command.id != response.data.id);
         this.tasks.push(response.data);
@@ -523,11 +523,11 @@ export default {
     }
   },
 
-  cancelScheduledTask() {
+  async cancelScheduledTask() {
     var params = new FormData();
     params.append("id", this.selectedCommand.id);
     //axios.post("/lider/scheduledTask/cancel", params)
-    const{ response, error } = scheduledTaskReportService.scheduledTaskCancel(params);
+    const{ response, error } = await scheduledTaskReportService.scheduledTaskCancel(params);
       if (response.status == 200 && response.data != null) {
         this.tasks = this.tasks.filter(command => command.id != response.data.id);
         this.tasks.push(response.data);
