@@ -1274,7 +1274,13 @@
         "error_add_folder": "An error was received while creating the folder.",
         "error_417_delete_group_member" : "Could not delete member from group. Unexpected error occurred Error code : 417",
         "error_417_rename_group_name" : "An unexpected error was received while changing the group name. Error code : 417",
-        "error_417_apply_policy": "An unexpected error occurred while applying the policy. Error code : 417"
+        "error_417_apply_policy": "An unexpected error occurred while applying the policy. Error code : 417",
+        "domain_admin_success": "Domain admin privileges of selected group updated successfully",
+        "domain_admin_error": "An unexpected error occurred while updating domain admin privileges of selected group. Error code : 417",
+        "domain_admin_privilege": "Domain Admin Privilege",
+        "domain_admin_description": "Privilege of group for clients to domain(Domain Admin)",
+        "domain_admin_privilege_confirm_message": "Domain admin privilege will be given to user group, are you sure?",
+        "domain_admin_delete_confirm_message": "Domain admin privilege will be deleted from user group, are you sure?"
     },
     "policy_management": {
         "title":"Policy Management",

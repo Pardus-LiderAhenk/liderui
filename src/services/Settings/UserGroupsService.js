@@ -8,6 +8,7 @@ const userGroupsRenameEntryUrl = '/api/lider/user-groups/rename/entry';
 const userGroupsMoveEntryUrl = '/api/lider/user-groups/move/entry';
 const userGroupsDeleteEntryUserUrl = '/api/lider/user-groups/delete-entry';
 const userGroupsDeleteGroupMemberUrl = '/api/lider/user-groups/delete/group/members';
+const updateDomainAdminUrl = '/api/lider/user-groups/domain-admin';
 
 
 class UserGroupsService {
@@ -83,6 +84,15 @@ class UserGroupsService {
     async deleteGroupMember(params) {
         try {
             const response = await axios.post(userGroupsDeleteGroupMemberUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async updateDomainAdmin(params) {
+        try {
+            const response = await axios.post(updateDomainAdminUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

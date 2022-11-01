@@ -75,8 +75,8 @@
             </template>
             <template #content>
                 <div class="p-grid p-flex-column">
-                    <div class="p-col">
-                        <DataTable class="p-datatable-sm" 
+                    <div class="p-fluid">
+                        <DataTable class="p-field p-datatable-sm" 
                             :value="selectedNodeSummaryData"
                             responsiveLayout="scroll"
                         >
@@ -88,10 +88,60 @@
                             <Column field="label" :header="$t('group_management.attribute')" style="width:40%"></Column>
                             <Column field="value" :header="$t('group_management.value')" style="width:60%"></Column>
                         </DataTable>
+                        <div class="p-field" style="margin-left:5px;"
+                            v-if="selectedLiderNode && selectedLiderNode.type == 'GROUP'">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-6 p-lg-5">
+                                    <label>{{ $t('group_management.domain_admin_privilege') }}</label>
+                                </div>
+                                <div class="p-col-12 p-md-6 p-lg-7">
+                                    <InputSwitch v-model="isDomainAdmin" 
+                                        v-tooltip.bottom="$t('group_management.domain_admin_description')"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </template>
+            <template #footer>
+                <div v-if="selectedLiderNode && selectedLiderNode.type == 'GROUP'"
+                    class="p-d-flex p-jc-end">
+                    <Button label="Güncelle" icon="pi pi-sync"
+                        @click="domainAdminConfirmDialog = true" class="p-button-sm"
+                    />
+                </div>
+            </template>
         </Card>
+
+        <Dialog :header="$t('computer.task.toast_summary')" 
+            v-model:visible="domainAdminConfirmDialog"  
+            :modal="true" :style="{width: '20vw'}"
+            @hide="domainAdminConfirmDialog = false">
+            <div class="confirmation-content">
+                <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+                <span v-if="isDomainAdmin">
+                    {{ $t('group_management.domain_admin_privilege_confirm_message')}}
+                </span>
+                <span v-else>
+                    {{ $t('group_management.domain_admin_delete_confirm_message')}}
+                </span>
+            </div>
+            <template #footer>
+                <Button 
+                    :label="$t('group_management.cancel')" 
+                    icon="pi pi-times" 
+                    @click="domainAdminConfirmDialog = false" 
+                    class="p-button-text p-button-sm"
+                />
+                <Button 
+                    :label="$t('group_management.yes')"
+                    icon="pi pi-check" 
+                    @click="updateDomainAdmin"
+                    class="p-button-sm"
+                />
+            </template>
+        </Dialog>
     </div>  
 </template>
 
@@ -116,7 +166,9 @@ export default {
             showMemberDialog: false,
             selectedNodeSummaryData: [],
             attributesMultiValue: false,
-            loading: false
+            loading: false,
+            isDomainAdmin: false,
+            domainAdminConfirmDialog: false
         }
     },
 
@@ -169,6 +221,12 @@ export default {
                     }
                 }
             }
+            if (this.selectedLiderNode.attributesMultiValues.liderPrivilege && 
+                this.selectedLiderNode.attributesMultiValues.liderPrivilege.includes("ROLE_DOMAIN_ADMIN")) {
+                this.isDomainAdmin = true;
+            } else {
+                this.isDomainAdmin = false;
+            }
         },
 
         async deleteMemberFromGroup(data) {
@@ -187,7 +245,6 @@ export default {
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedLiderNode.distinguishedName);
-            //axios.post("/api/lider/user-groups/delete/group/members", params).then((response) => {
             const{response,error} = await  userGroupsService.deleteGroupMember(params);
             if(error){
                 this.$toast.add({
@@ -230,6 +287,40 @@ export default {
                 });
             }
             this.selectedNodeSummaryData = nodeSummaryData;
+        },
+
+        async updateDomainAdmin() {
+            const params = new FormData();
+            params.append("isDomainAdmin", this.isDomainAdmin);
+            params.append("dn", this.selectedLiderNode.distinguishedName);
+            const {response,error} = await  userGroupsService.updateDomainAdmin(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.domain_admin_error')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if (response.status == 200) {
+                    this.setSelectedLiderNode(response.data);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('group_management.domain_admin_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.domain_admin_error')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+            this.domainAdminConfirmDialog = false;
         }
     },
 
