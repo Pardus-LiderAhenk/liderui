@@ -504,7 +504,10 @@
                 "client_access": "Ahenk erişiminin sağlanacağı adres : ",
                 "waiting_response": "Kullanıcıya erişim isteği gönderildi. Cevap bekleniyor... ",
                 "ssh_connection": "SSH Bağlantısı",
-                "error_417_fetching_ip_address": "Ip adresi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417"
+                "error_417_fetching_ip_address": "Ip adresi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+                "select_ip_address_warning":"Lütfen IP adresi seçiniz",
+                "select_ip_address":"IP Adresi Seçiniz",
+                "connection_error":"VNC bağlantısı sırasında hata oluştu"
             }
         },
         "agent_info": {

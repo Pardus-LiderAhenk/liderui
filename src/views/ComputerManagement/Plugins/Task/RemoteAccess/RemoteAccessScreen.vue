@@ -9,14 +9,26 @@
     :executeTask="executeTask"
   >
     <template #pluginTitleButton>
-      <Button :label="$t('computer.plugins.remote_access.reconnect')" 
-        class="p-button-raised  p-button-info" 
-        @click="reconnect();" style="margin-right:10px"
-      />
-      <Button :label="$t('computer.plugins.remote_access.close_connection')" 
-        class="p-button-raised  p-button-danger" 
-        @click="closeConnection();"
-      />
+      <div>
+        <label class="p-mr-2" style="font-size:15px;" >{{$t("computer.plugins.remote_access.select_ip_address")}}</label>
+        <Dropdown
+          v-model="selectedIpAddress" :options="ipAddresses" 
+          optionLabel="name" optionValue="value" 
+          placeholder="Lütfen IP seçiniz " class="p-mr-2"
+        />
+        <Button :label="$t('computer.plugins.remote_access.connect')" 
+          class="p-button-raised p-button-sm  p-button-success p-mr-2" 
+          @click="start_connection();"
+        />
+        <!-- <Button :label="$t('computer.plugins.remote_access.reconnect')" 
+          class="p-button-raised  p-button-sm  p-button-info p-mr-2" 
+          @click="reconnect();"
+        /> -->
+        <Button :label="$t('computer.plugins.remote_access.close_connection')" 
+          class="p-button-raised  p-button-sm p-button-danger" 
+          @click="closeConnection();"
+        />
+      </div>
     </template>
     <template #pluginTitle>
      <div>
@@ -99,7 +111,9 @@ export default {
       selectedProtocol:'vnc',
       tunnel:null,
       connectionData:null,
-      defaultSshPort: 22
+      defaultSshPort: 22,
+      selectedIpAddress: null,
+      ipAddresses: [],
     };
   },
   computed: {
@@ -121,9 +135,23 @@ export default {
       if (message.commandClsId == "SETUP-VNC-SERVER") {
         let result = JSON.parse(message.result.responseDataStr);
         this.connection_info = result;
+        console.log(this.connection_info)
+        let ipStr = result.host.replace(/\s+/g, '');
+        let ipList = ipStr.split(",");
+        for (let index = 0; index < ipList.length; index++) {
+          const element = ipList[index];
+          this.ipAddresses.push({
+            name:element,
+            value:element
+          })
+        }
         this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.checking_access")},);
+        this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
         this.title =  this.$t("computer.plugins.remote_access.remote_destktop_access") + " - " + message.commandExecution.uid;
-        this.start_connection();
+        if(ipList.length == 1){
+          this.selectedIpAddress = ipList[0];
+          this.start_connection();
+        }
       }
     },
 
@@ -132,6 +160,7 @@ export default {
     },
 
     async start_connection(){
+      
       let data = new FormData();
       if (this.connectionData && this.connectionData.protocol == 'ssh') {
         data.append("protocol", this.connectionData.protocol);
@@ -145,8 +174,13 @@ export default {
         data.append("username", '');
       }
 
+      if(!this.selectedIpAddress){
+        this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
+        return;
+      }
+
       let checkhostFormdata = new FormData();
-      checkhostFormdata.append('host', this.connection_info.host);
+      checkhostFormdata.append('host', this.selectedIpAddress);
       checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? this.defaultSshPort : this.connection_info.port);
       const hostResponse = await axios.post('/checkhost',checkhostFormdata);
       this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.client_access") + hostResponse.data },);
@@ -257,7 +291,7 @@ export default {
           // Connection has closed
           case Guacamole.Tunnel.State.CLOSED:
             this.connectionState = states.DISCONNECTED;
-            this.status_messages.push({severity: 'warning', content: this.$t("computer.plugins.remote_access.waiting_for_the_user_to_give_permission")},);
+            this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.connection_error")},);
             break;
         }
       };

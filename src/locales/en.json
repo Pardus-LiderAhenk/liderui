@@ -505,8 +505,10 @@
                 "client_access": "Client access will be provided at ",
                 "waiting_response": "An access request has been sent to the user. Waiting for response...",
                 "ssh_connection": "SSH Connection",
-                "error_417_fetching_ip_address": "An unexpected error occurred while fetching the ip address. Error code : 417"
-
+                "error_417_fetching_ip_address": "An unexpected error occurred while fetching the ip address. Error code : 417",
+                "select_ip_address_warning":"Please select IP address",
+                "select_ip_address":"Select IP Address",
+                "connection_error":"An unexpected error occurred while VNC connection"
             }
         },
         "agent_info": {
