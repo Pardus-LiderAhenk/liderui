@@ -38,19 +38,19 @@
           <div class="p-field">
             <Toolbar class="mb-4">
               <template #start>
-                <div class="field-radiobutton p-mr-2">
-                  <RadioButton id="typeWhite" name="typeWhite" value="whitelist" v-model="type" @change="changeUsbListType"/>
-                  <label for="typeWhite">&nbsp; &nbsp;{{$t('policy_management.profile.usb.white_list')}}</label>
-                </div>
-                <div class="field-radiobutton p-mr-2">
-                  <RadioButton id="typeBlack" name="typeBlack" value="blacklist" v-model="type" @change="changeUsbListType"/>
-                  <label for="typeBlack">&nbsp; &nbsp;{{$t('policy_management.profile.usb.black_list')}}</label>
-                </div>
+                <Dropdown 
+                  v-model="type" 
+                  style="min-width: 100%;" 
+                  optionLabel="label" 
+                  optionValue="value" 
+                  :options="options"
+                >
+                </Dropdown>
               </template>
               <template #end>
                 <Button class="p-button-sm" 
                   icon="pi pi-plus"  
-                  :label="type == 'whitelist'? $t('policy_management.profile.usb.white_list_add'):$t('policy_management.profile.usb.black_list_add')" 
+                  :label="$t('computer.plugins.usb.add_usb')"
                   @click.prevent="showUsbItemDialog">
                 </Button>
               </template>
@@ -184,7 +184,17 @@ export default {
       },
       type: "whitelist",
       selectedUsbItem: null,
-      usbItemDialog: false
+      usbItemDialog: false,
+      options: [
+        {
+          label: this.$t('computer.plugins.usb.white_list'), 
+          value: 'whitelist'
+          },
+        {
+          label: this.$t('computer.plugins.usb.black_list'), 
+          value: 'blacklist'
+        }
+      ]
     };
   },
   
@@ -269,6 +279,7 @@ export default {
 
     usbRuleManagementResponse(message) {
       if (message.commandClsId == "GET-USB-RULES") {
+        this.usbRules = [];
         let arrg = JSON.parse(message.result.responseDataStr);
         if (arrg.usb_list.length > 0) {
           this.type = arrg.type;
