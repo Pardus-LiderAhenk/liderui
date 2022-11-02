@@ -87,6 +87,7 @@ export default {
         },
         async getLogs() {
             var data = new FormData();
+
             data.append("pageSize", this.rowNumber);
             data.append("pageNumber", this.pageNumber);
             data.append('operationType',this.operationType);
