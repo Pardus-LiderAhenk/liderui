@@ -28,7 +28,8 @@
                   type="pie" 
                   :width="400" :height="250"
                   :data="chartDiskData" 
-                  :options="diskChartOptions">
+                  :options="diskChartOptions"
+                  :plugins="plugins">
                 </Chart>
               </div>
               <div class="p-grid p-jc-center" style="margin-top:3px">
@@ -64,7 +65,8 @@
                 <Chart type="pie"
                  :data="chartMemoryData" 
                   :width="400" :height="250" 
-                  :options="memoryChartOptions">
+                  :options="memoryChartOptions"
+                  :plugins="plugins">
                 </Chart>
               </div>
               <div class="p-grid p-jc-center" style="margin-top:3px">
@@ -105,8 +107,20 @@
  */
 
 import { mapGetters } from "vuex"
+import Chart from 'primevue/chart'
+import { ref } from 'vue';
+import ChartDataLabels from 'chartjs-plugin-datalabels'
+
+
 
 export default {
+  setup() {
+    const plugins = [ChartDataLabels]
+      // expose to template and other options API hooks
+      return {
+        plugins
+      }
+    },
   props : {
     pluginTask: {
       type: Object,
@@ -192,7 +206,7 @@ export default {
           available : availableMemory
           }
         );
-        let usageMemoryRate = ((usedMemory / totalMemory)*100).toFixed(2);
+        let usageMemoryRate =((usedMemory / totalMemory)*100).toFixed(2);
         let availableMemoryRate = (100 - usageMemoryRate).toFixed(2);
         let usageDiskRate = ((usedDisk / totalDisk)*100).toFixed(2);
         let availableDiskRate = (100 - usageDiskRate).toFixed(2);
@@ -203,16 +217,16 @@ export default {
     },
 
     renderChartDisk(availableMemoryRate, usageMemoryRate) {
-      this.chartDiskData = {
+      this.chartDiskData = ref({
         labels: this.labels,
         datasets: [
           {
-            data: [availableMemoryRate, usageMemoryRate],
+            data: [(availableMemoryRate), (usageMemoryRate)],
             backgroundColor: ["#66BB6A","#20639B"],
             hoverBackgroundColor: ["#81C784", "#20639B"]
           }
         ]
-      };
+      });
     },
     
     renderMemoryDisk(availableMemoryRate, usageMemoryRate) {
@@ -220,7 +234,7 @@ export default {
         labels: this.labels,
         datasets: [
           {
-            data: [availableMemoryRate, usageMemoryRate],
+          data: [("%" , availableMemoryRate), ("%" , usageMemoryRate)],
             backgroundColor: ["#66BB6A","#20639B"],
             hoverBackgroundColor: ["#81C784", "#20639B"]
           }
@@ -229,7 +243,7 @@ export default {
     },
 
     returnOptionForChart(title) {
-      let options = {
+      let options = ref({
       responsive: true,
       plugins: {
         legend: {
@@ -241,17 +255,37 @@ export default {
           //   boxHeight: 10,
           // },
         },
+
         title: {
           display: true,
           align: "center",
           text: title
         },
+
+        datalabels: {
+        color: 'black',
+        labels: {
+            title: {
+              font: {
+                weight: '',
+                size: 12,
+              },
+            },
+            value: {
+              color: 'black',
+              font: {
+                weight: 'bold',
+                size: 12,
+              },
+            },
+          },
+        },
       },
       maintainAspectRatio: false
-      }
+      })
       return options;
     },
-
+ 
     toggle(event, type) {
       if (type == "disk") {
         this.$refs.diskOp.toggle(event);

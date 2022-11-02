@@ -463,9 +463,12 @@
                 "delete":"Delete",
                 "list_usb_rule": "List USB Rule",
                 "delete_usb_rule": "Delete USB Rule",
-                "description_usb_rule": "Allows management of client's USB devices based on serial number, model and manufacturer. It also deletes existing USB rules",
+                "description_usb_rule": "Allows management of client's USB devices based on serial number, model and manufacturer. It also deletes existing USB rules. Allows to create only one list, either black list or white list",
                 "deny": "Deny",
-                "allowed": "Allowed"
+                "allowed": "Allowed",
+                "add_usb": "Add USB",
+                "white_list":"White List",
+                "black_list":"Black List"
             },
             "security": {
                 "error_plugin_task_list" : "An error occurred while fetching the task list plugin.",

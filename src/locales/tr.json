@@ -462,9 +462,12 @@
                 "delete":"Sil",
                 "list_usb_rule": "USB Kurallarını Listele",
                 "delete_usb_rule": "USB Kurallarını Sil",
-                "description_usb_rule": "İstemcinin USB aygıtlarının seri numarası, model ve üretici firma bazlı olarak yönetimine izin verir. Ayrıca var olan kurallarını da siler.",
+                "description_usb_rule": "İstemcinin USB aygıtlarının seri numarası, model ve üretici firma bazlı olarak yönetimine izin verir. Ayrıca var olan kurallarını da siler. Kara liste veya beyaz liste olacak şekilde sadece bir liste oluşturmaya izin verir",
                 "deny": "Engelli",
-                "allowed": "İzin Verili"
+                "allowed": "İzin Verili",
+                "add_usb": "USB Ekle",
+                "white_list":"Beyaz Liste",
+                "black_list":"Kara Liste"
             },
             "security": {
                 "error_plugin_task_list" : "Görev listesi eklentisi getirilirken hata oluştu",
