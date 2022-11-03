@@ -168,7 +168,7 @@ export default {
   },
 
   mounted() {
-    this.renderChartDisk(50, 50);
+    this.renderChartDisk(50,50);
     this.diskChartOptions = this.returnOptionForChart(this.diskTitle);
     this.renderMemoryDisk(50, 50);
     this.memoryChartOptions = this.returnOptionForChart(this.memoryTitle);
@@ -216,17 +216,17 @@ export default {
       }
     },
 
-    renderChartDisk(availableMemoryRate, usageMemoryRate) {
-      this.chartDiskData = ref({
+    renderChartDisk(availableMemoryRate,usageMemoryRate) {
+      this.chartDiskData = {
         labels: this.labels,
         datasets: [
           {
-            data: [(availableMemoryRate), (usageMemoryRate)],
+            data: [availableMemoryRate,usageMemoryRate],
             backgroundColor: ["#66BB6A","#20639B"],
             hoverBackgroundColor: ["#81C784", "#20639B"]
           }
         ]
-      });
+      };
     },
     
     renderMemoryDisk(availableMemoryRate, usageMemoryRate) {
@@ -234,7 +234,7 @@ export default {
         labels: this.labels,
         datasets: [
           {
-          data: [("%" , availableMemoryRate), ("%" , usageMemoryRate)],
+            data: [availableMemoryRate,usageMemoryRate],
             backgroundColor: ["#66BB6A","#20639B"],
             hoverBackgroundColor: ["#81C784", "#20639B"]
           }
@@ -250,10 +250,15 @@ export default {
           display: true,
           position: "top",
           align: "center",
-          // labels: {
+           labels: {
+            render: function (args) {
+              return '%' + args.value;
+            },
+            arc: true
           //   boxWidth: 20,
           //   boxHeight: 10,
           // },
+           },
         },
 
         title: {
@@ -263,8 +268,9 @@ export default {
         },
 
         datalabels: {
-        color: 'black',
+        color: '#f6fbf6',
         labels: {
+            render: 'percentage',
             title: {
               font: {
                 weight: '',
@@ -272,12 +278,13 @@ export default {
               },
             },
             value: {
-              color: 'black',
+              color: '#fecafe',
               font: {
                 weight: 'bold',
                 size: 12,
               },
             },
+            
           },
         },
       },
