@@ -156,6 +156,7 @@ export default {
       
       pluginDescription: this.$t("computer.plugins.resource_usage.description"),
       pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/resourcesUsage/",
+      datalabelsDisplay: false
     };
   },
 
@@ -169,9 +170,9 @@ export default {
 
   mounted() {
     this.renderChartDisk(50,50);
-    this.diskChartOptions = this.returnOptionForChart(this.diskTitle);
+    this.diskChartOptions = this.returnOptionForChart(this.diskTitle, false);
     this.renderMemoryDisk(50, 50);
-    this.memoryChartOptions = this.returnOptionForChart(this.memoryTitle);
+    this.memoryChartOptions = this.returnOptionForChart(this.memoryTitle, false);
   },
 
   methods: {
@@ -183,6 +184,8 @@ export default {
 
     getResourceUsage(message) {
       if (message.commandClsId == "RESOURCE_INFO_FETCHER") {
+        this.diskChartOptions = this.returnOptionForChart(this.diskTitle, true);
+        this.memoryChartOptions = this.returnOptionForChart(this.memoryTitle, true);
         var arrg = JSON.parse(message.result.responseDataStr);
         this.devices = arrg["Device"]
         this.disk = [];
@@ -242,8 +245,8 @@ export default {
       }
     },
 
-    returnOptionForChart(title) {
-      let options = ref({
+    returnOptionForChart(title, display) {
+      let options = {
       responsive: true,
       plugins: {
         legend: {
@@ -258,7 +261,7 @@ export default {
           //   boxWidth: 20,
           //   boxHeight: 10,
           // },
-           },
+          },
         },
 
         title: {
@@ -268,9 +271,12 @@ export default {
         },
 
         datalabels: {
-        color: '#f6fbf6',
-        labels: {
-            render: 'percentage',
+          display: display,
+          color: '#f6fbf6',
+          formatter: function(value) {
+            return '% ' + value;
+          },
+          labels: {
             title: {
               font: {
                 weight: '',
@@ -278,18 +284,17 @@ export default {
               },
             },
             value: {
-              color: '#fecafe',
+              color: 'white',
               font: {
                 weight: 'bold',
                 size: 12,
               },
             },
-            
           },
         },
       },
       maintainAspectRatio: false
-      })
+      }
       return options;
     },
  
