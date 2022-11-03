@@ -46,7 +46,8 @@
                             type="pie" 
                             :width="400" :height="250"
                             :data="agentData" 
-                            :options="options">
+                            :options="options"
+                            :plugins="plugins">
                         </Chart>
                     </template>
                 </Card>
@@ -116,8 +117,16 @@ import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 import axios from "axios";
 import LastActivity from "./LastActivity.vue"
 import TaskActivity from "./TaskActivity.vue"
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 export default {
+    setup() {
+    const plugins = [ChartDataLabels]
+      // expose to template and other options API hooks
+      return {
+        plugins
+      }
+    },
     data() {
         return {
             totalClientNumber: 0,
@@ -146,6 +155,27 @@ export default {
                         display: false,
                         align: "center",
                         text: this.$t('dashboard_screen.clients')
+                    },
+                    datalabels: {
+                    formatter: function(value) {
+                        return '% ' + value;
+                    },
+                    color: 'white',
+                    labels: {
+                        title: {
+                          font: {
+                            weight: '',
+                            size: 12,
+                          },
+                        },
+                        value: {
+                          color: 'white',
+                          font: {
+                            weight: 'bold',
+                            size: 12,
+                          },
+                        },
+                      },
                     },
                 },
             maintainAspectRatio: false

@@ -156,7 +156,6 @@ export default {
       
       pluginDescription: this.$t("computer.plugins.resource_usage.description"),
       pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/resourcesUsage/",
-      datalabelsDisplay: false
     };
   },
 
@@ -246,22 +245,13 @@ export default {
     },
 
     returnOptionForChart(title, display) {
-      let options = {
+      let options = ref({
       responsive: true,
       plugins: {
         legend: {
           display: true,
           position: "top",
           align: "center",
-           labels: {
-            render: function (args) {
-              return '%' + args.value;
-            },
-            arc: true
-          //   boxWidth: 20,
-          //   boxHeight: 10,
-          // },
-          },
         },
 
         title: {
@@ -272,14 +262,14 @@ export default {
 
         datalabels: {
           display: display,
-          color: '#f6fbf6',
+          color: 'white',
           formatter: function(value) {
             return '% ' + value;
           },
           labels: {
             title: {
               font: {
-                weight: '',
+                weight: 'bold',
                 size: 12,
               },
             },
@@ -294,7 +284,7 @@ export default {
         },
       },
       maintainAspectRatio: false
-      }
+      })
       return options;
     },
  
