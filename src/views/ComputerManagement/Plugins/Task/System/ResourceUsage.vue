@@ -268,23 +268,25 @@ export default {
         },
 
         datalabels: {
-        color: '#f6fbf6',
+        color: '#e7f2f8',
         labels: {
             render: 'percentage',
             title: {
-              font: {
-                weight: '',
-                size: 12,
-              },
-            },
-            value: {
-              color: '#fecafe',
               font: {
                 weight: 'bold',
                 size: 12,
               },
             },
-            
+            value: {
+              color: '#e7f2f8',
+              font: {
+                weight: 'bold',
+                size: 12,
+              },
+              formatter: function(value) {
+                            return '% ' + value;
+              },
+            },
           },
         },
       },
