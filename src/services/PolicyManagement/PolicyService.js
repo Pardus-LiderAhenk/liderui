@@ -64,7 +64,7 @@ class PolicyService {
 
     async policyUpdate (params){
         try {
-            const response = await axios.put(policyUpdateUrl, params);
+            const response = await axios.post(policyUpdateUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

@@ -501,17 +501,18 @@ export default {
       params.append("id", this.selectedCommand.id);
       params.append("cronExpression", scheduledParam);
       const { response, error} = await  scheduledTaskReportService.scheduledTaskUpdate(params);
-      if (response.status == 200 && response.data != null) {
-        this.tasks = this.tasks.filter(command => command.id != response.data.id);
-        this.tasks.push(response.data);
-        this.$toast.add({
-          severity:'success', 
-          detail: this.$t('reports.scheduled_task_report.success_scheduled_update'),
-          summary:this.$t("computer.task.toast_summary"), 
-          life: 3000
-        });
-      }
-
+      if (response.status == 200 ){
+        if(response.data != null) {
+          this.tasks = this.tasks.filter(command => command.id != response.data.id);
+          this.tasks.push(response.data);
+          this.$toast.add({
+            severity:'success', 
+            detail: this.$t('reports.scheduled_task_report.success_scheduled_update'),
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+    }
       else if(response.status == 400){
         this.$toast.add({
           severity:'error', 

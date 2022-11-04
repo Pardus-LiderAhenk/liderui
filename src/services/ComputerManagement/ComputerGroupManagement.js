@@ -36,7 +36,7 @@ class ComputerGroupsManagementService{
 
     async deleteEntry(params) {
         try {
-            const response = await axios.delete(liderComputerGroupsDeleteEntryUrl, params);
+            const response = await axios.delete(liderComputerGroupsDeleteEntryUrl + "/dn/" + dn);
             return { response };
         } catch (error) {
             return { error: error }

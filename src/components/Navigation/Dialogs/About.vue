@@ -88,11 +88,9 @@ export default {
                     this.liderapiVersion = response.data;
                 }
                 else if(response.status == 417){
-
+                    return "Versiyon getirilirken hata oluştu";
                 }
             }
-               
-            //});
         }
     }
 }

@@ -42,9 +42,9 @@ class ComputerManagemetService{
         }
     }
 
-	async getOu(params) {
+	async getOu() {
         try {
-            const response = await axios.get(liderComputerOuUrl, params);
+            const response = await axios.get(liderComputerOuUrl);
             return { response };
         } catch (error) {
             return { error: error }

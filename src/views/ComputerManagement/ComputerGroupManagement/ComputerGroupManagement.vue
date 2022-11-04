@@ -808,7 +808,7 @@ export default {
             let params = new FormData();
             params.append("dn", this.selectedNode.distinguishedName);
             this.modals.deleteNode = false;
-            const{response,error} = await computerGroupsManagementService.deleteEntry(params);
+            const{response,error} = await computerGroupsManagementService.deleteEntry(this.selectedNode.distinguishedName);
             if(error){
                 this.$toast.add({
                     severity:'error', 

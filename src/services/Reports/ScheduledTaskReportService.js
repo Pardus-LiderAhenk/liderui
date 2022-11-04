@@ -43,7 +43,7 @@ class ScheduledTaskREportService{
 
     async scheduledTaskUpdate(params) {
         try {
-            const response = await axios.put(scheduleTaskReportUpdatetUrl, params);            
+            const response = await axios.post(scheduleTaskReportUpdatetUrl, params);            
             return { response };
         } catch (error) {
             return { error: error }

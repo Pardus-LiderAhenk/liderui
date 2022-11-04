@@ -8,9 +8,9 @@ class ComponentServie{
         this.axios = axios
     }
 
-    async version(params) {
+    async version() {
         try {
-            const response = await axios.get(liderInfoVersionUrl, params);
+            const response = await axios.get(liderInfoVersionUrl);
             return { response };
         } catch (error) {
             return { error: error }

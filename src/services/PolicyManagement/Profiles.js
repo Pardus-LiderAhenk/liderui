@@ -48,9 +48,9 @@ class ProfilesService {
         }
     }
 
-    async allList(params) {
+    async allList() {
         try {
-            const response = await axios.get(profileAllListUrl, params);
+            const response = await axios.get(profileAllListUrl);
             return { response };
         } catch (error) {
             return { error: error }
