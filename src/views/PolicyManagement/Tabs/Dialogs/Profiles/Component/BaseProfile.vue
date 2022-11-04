@@ -336,7 +336,7 @@ export default {
                 "id": this.selectedProfile.id
 			};
             //axios.delete('/api/profile/delete', params).then(response => {
-            const{ response,error } = await profilesServices.delete(params);
+            const{ response,error } = await profilesServices.delete(this.selectedProfile.id);
             if(error){
                 this.$toast.add({
                     severity:'error', 

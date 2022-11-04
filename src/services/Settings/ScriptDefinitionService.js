@@ -39,9 +39,9 @@ class ScriptService{
         }
     }
 
-    async scriptDelete(params) {
+    async scriptDelete(id) {
         try {
-            const response = await axios.post(scriptDeleteUrl, params);
+            const response = await axios.delete(scriptDeleteUrl + "/id/" + id);
             return { response };
         } catch (error) {
             return { error: error }

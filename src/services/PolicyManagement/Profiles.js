@@ -30,9 +30,9 @@ class ProfilesService {
         }
     }
 
-    async delete(params) {
+    async delete(id) {
         try {
-            const response = await axios.delete(profileDeleteUrl, params);
+            const response = await axios.delete(profileDeleteUrl + "/id/" + id);
             return { response };
         } catch (error) {
             return { error: error }

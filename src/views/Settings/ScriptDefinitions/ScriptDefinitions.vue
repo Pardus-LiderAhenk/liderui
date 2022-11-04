@@ -335,7 +335,7 @@ export default {
                 id: this.selectedScript.id
             };
             //axios.post("/api/script/delete", params).then((response) => {
-            const {response,error} = await scriptService.scriptDelete(params);
+            const {response,error} = await scriptService.scriptDelete(this.selectedScript.id);
             if(error){
                 this.$toast.add({
                     severity:'error', 

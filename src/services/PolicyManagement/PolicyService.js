@@ -35,9 +35,9 @@ class PolicyService {
         }
     }
 
-    async policyDelete(params){
+    async policyDelete(id){
         try {
-            const response = await axios.delete(policyDeleteUrl, params);
+            const response = await axios.delete(policyDeleteUrl + "/id/" + id);
             return { response };
         } catch (error) {
             return { error: error }
