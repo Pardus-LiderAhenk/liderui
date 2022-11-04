@@ -390,7 +390,7 @@ export default {
                 let data = new FormData();
                 data.append('dn',this.selectedUser.distinguishedName);
 
-                const { response,error } = await consoleUserSettingsService.deleteConsoleUsers(data);
+                const { response,error } = await consoleUserSettingsService.deleteConsoleUsers(this.selectedUser.distinguishedName);
 
                 this.getConsoleUsers();
                     if(response.status == 200){
@@ -504,7 +504,7 @@ export default {
                 let data = new FormData();
                 data.append('dn',this.selectedGroupNode.distinguishedName);
 
-                const { response,error} = await consoleUserSettingsService.getOLCAccessRule(data);
+                const { response,error} = await consoleUserSettingsService.getOLCAccessRule(this.selectedGroupNode.distinguishedName);
                 if(response.status == 200){
                     this.groupPrivilages = response.data
                     

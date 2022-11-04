@@ -61,9 +61,9 @@ class ServerSettingsService{
         }
     }
 
-    async getConfigurations(params) {
+    async getConfigurations() {
         try {
-            const response = await axios.get(liderSettingsConfigurationsUrl, params);
+            const response = await axios.get(liderSettingsConfigurationsUrl);
             return { response };
         } catch (error) {
             return { error: error }

@@ -8,7 +8,7 @@ import axios from 'axios';
  const settingsDeleteConsoleUsersUrl = "/api/lider/settings/delete-console-user";
  const settingsDeleteOLCAccessRuleUrl = "/api/lider/settings/delete-OLC-access-rule";
  const settingsAddOLCAccessRuleUrl = "/api/lider/settings/add-OLC-access-rule";
- const settingsGetOLCAccessRuleUrl = "/api/lider/settings/OLC-access-rule";
+ const settingsGetOLCAccessRulesUrl = "/api/lider/settings/OLC-access-rules";
  const settingsConfigurationsUrl = "/api/lider/settings/configurations";
  const settingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
  const settingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
@@ -64,9 +64,9 @@ class ConsoleUserSettingsService {
         }
     }
 
-    async deleteConsoleUsers(params) {
+    async deleteConsoleUsers(dn) {
         try {
-            const response = await axios.delete(settingsDeleteConsoleUsersUrl, params);
+            const response = await axios.delete(settingsDeleteConsoleUsersUrl + "/dn" + dn);
             return { response };
         } catch (error) {
             return { error: error }
@@ -75,7 +75,7 @@ class ConsoleUserSettingsService {
 
     async deleteOLCAccessRule(params) {
         try {
-            const response = await axios.delete(settingsDeleteOLCAccessRuleUrl, params);
+            const response = await axios.post(settingsDeleteOLCAccessRuleUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
@@ -91,18 +91,18 @@ class ConsoleUserSettingsService {
         }
     }
 
-    async getOLCAccessRule(params) {
+    async getOLCAccessRule(dn) {
         try {
-            const response = await axios.get(settingsGetOLCAccessRuleUrl, params);
+            const response = await axios.get(settingsGetOLCAccessRulesUrl + "/dn/" + dn);
             return { response };
         } catch (error) {
             return { error: error }
         }
     }
 
-    async getConfigurations(params) {
+    async getConfigurations() {
         try {
-            const response = await axios.get(settingsConfigurationsUrl, params);
+            const response = await axios.get(settingsConfigurationsUrl);
             return { response };
         } catch (error) {
             return { error: error }
