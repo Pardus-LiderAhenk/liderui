@@ -55,9 +55,9 @@ class ConsoleUserSettingsService {
         }
     }
 
-    async getConsoleUsers(params) {
+    async getConsoleUsers() {
         try {
-            const response = await axios.get(settingsGetConsoleUsersUrl, params);
+            const response = await axios.get(settingsGetConsoleUsersUrl);
             return { response };
         } catch (error) {
             return { error: error }
