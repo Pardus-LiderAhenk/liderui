@@ -393,34 +393,42 @@ export default {
                 const { response,error } = await consoleUserSettingsService.deleteConsoleUsers(this.selectedUser.distinguishedName);
 
                 this.getConsoleUsers();
-                    if(response.status == 200){
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail:  this.$t('settings.console_user_settings.user_roles_deleted_successfully'),  
+                        summary: this.$t('settings.console_user_settings.successful'), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if (response.status = 417){
                         this.$toast.add({
-                            severity:'success', 
-                            detail:  this.$t('settings.console_user_settings.user_roles_deleted_successfully'),  
-                            summary: this.$t('settings.console_user_settings.successful'), 
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_deleted_user'),
+                            summary: this.$t('settings.console_user_settings.error'), 
+                            life: 3000
+                            });
+                    }
+                    else if (error){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
+                            summary: this.$t('settings.console_user_settings.error'), 
                             life: 3000
                         });
                     }
-                    else{
-                        if (response.status = 417){
-                            this.$toast.add({
-                                severity:'error', 
-                                detail: this.$t('settings.console_user_settings.error_417_deleted_user'),
-                                summary: this.$t('settings.console_user_settings.error'), 
-                                life: 3000
-                                });
-
-                        }
-                        else if (error){
-                            this.$toast.add({
-                                severity:'error', 
-                                detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
-                                summary: this.$t('settings.console_user_settings.error'), 
-                                life: 3000
-                                });
-                        }
-                    }                   
-                } 
+                }                   
+            } 
+            else{
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
+                    summary: this.$t('settings.console_user_settings.error'), 
+                    life: 3000
+                });
+            }
+            
             this.showDeleteConsoleUserDialog = false;
         }, 
         setSelectedGroupNode(node) {
@@ -439,7 +447,7 @@ export default {
 
             if(rules && rules.length > 0) {
 
-            const { response,error } = await consoleUserSettingsService.deleteOLCAccessRule(data);
+            const { response,error } = await consoleUserSettingsService.deleteOLCAccessRule(rules);
             if(response.status === 200) {
                 this.$toast.add({
                     severity:'success', 

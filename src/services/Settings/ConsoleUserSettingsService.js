@@ -66,7 +66,7 @@ class ConsoleUserSettingsService {
 
     async deleteConsoleUsers(dn) {
         try {
-            const response = await axios.delete(settingsDeleteConsoleUsersUrl + "/dn" + dn);
+            const response = await axios.delete(settingsDeleteConsoleUsersUrl + "/dn/" + dn);
             return { response };
         } catch (error) {
             return { error: error }

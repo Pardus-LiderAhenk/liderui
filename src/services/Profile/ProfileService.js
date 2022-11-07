@@ -37,15 +37,6 @@ class ProfileService {
             return { error: error }
         }
     }
-
-    async updateProfile(params) {
-        try {
-            const response = await axios.post(liderConsoleMatchesPasswdUrl, params);
-            return { response };
-        } catch (error) {
-            return { error: error }
-        }
-    }
 }
 
 export const profileService = new ProfileService(axios);
