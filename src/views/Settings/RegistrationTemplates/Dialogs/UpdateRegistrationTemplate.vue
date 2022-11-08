@@ -44,7 +44,7 @@
                     <div class="p-inputgroup">
                         <InputText placeholder="cn=adminGroups,ou=User,ou=Groups,dc=liderahenk,dc=org" 
                             v-model="authorizedUserGroupDN" :class="validationErrors.authorizedUserGroupDN ? 'p-invalid':''"
-                        />
+                            disabled="disabled" />
                         <Button icon="pi pi-sitemap" class="p-button-warning"
                             @click="userGroupDialog = true"
                         />
