@@ -51,6 +51,18 @@
                     <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
                     <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
                   </DataTable>
+                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="Tipi" :header="$t('computer.plugins.resource_usage.disk_type')"></Column>
+                    <Column field="ssdTotal" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="ssdUsed" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="ssdAvailable" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  </DataTable>
+                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="Tipi" :header="$t('computer.plugins.resource_usage.disk_type')"></Column>
+                    <Column field="hddTotal" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="hddUsed" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="hddAvailable" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  </DataTable>
                   <div style="margin-top:5px">
                     <small style="font-weight:bold;">
                       {{$t('computer.plugins.resource_usage.disk_partition')}}:&nbsp;
@@ -88,6 +100,18 @@
                     <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
                     <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
                     <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  </DataTable>
+                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="Tipi" :header="$t('computer.plugins.resource_usage.disk_type')"></Column>
+                    <Column field="ssdTotal" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="ssdUsed" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="ssdAvailable" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  </DataTable>
+                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="Tipi" :header="$t('computer.plugins.resource_usage.disk_type')"></Column>
+                    <Column field="hddTotal" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="hddUsed" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="hddAvailable" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
                   </DataTable>
                 </OverlayPanel>
               </div>

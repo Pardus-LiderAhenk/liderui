@@ -88,6 +88,36 @@
                 }}
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ssd_total_disk')}}</b></div>
+            <div class="p-col-8">
+                
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ssd_used_disk')}}</b></div>
+            <div class="p-col-8">
+                
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ssd_available_disk')}}</b></div>
+            <div class="p-col-8">
+                
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.hdd_total_disk')}}</b></div>
+            <div class="p-col-8">
+                
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.hdd_used_disk')}}</b></div>
+            <div class="p-col-8">
+                
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.hdd_available_disk')}}</b></div>
+            <div class="p-col-8">
+                
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.disk_partitions')}}</b></div>
             <div class="p-col-8">
                 {{

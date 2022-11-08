@@ -271,6 +271,17 @@
               }}
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.ssd_title") }}</b></div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.hdd_title") }}</b></div>
+            <DataTable :value="disk"  class="p-datatable-customers" :rows="1">
+            <div class="p-col-10">
+              <Column field="used" header="used"></Column>
+              <Column field="avaible" header="avaible"></Column>
+              <ProgressBar :value="50" :showValue="true"/>
+            </div>
+            </DataTable>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_partitions") }}</b></div>
             <div class="p-col-8">
               {{ getPropertyValue(selectedAgentInfo.properties, "hardware.disk.partitions") }}
@@ -1098,5 +1109,13 @@ export default {
     .p-paginator {
         padding: 1rem;
     }
+}
+::v-deep(.p-progressbar) {
+  height: 1.25rem;
+  background-color: #66BB6A;
+
+  .p-progressbar-value {
+      background-color: #D32F2F;
+  }
 }
 </style>

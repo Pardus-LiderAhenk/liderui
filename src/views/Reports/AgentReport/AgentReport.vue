@@ -156,6 +156,15 @@
           showClear="true"
         />
       </div>
+      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+        <label for="">{{$t('reports.detailed_agent_report.disk_type')}}</label>
+        <Dropdown
+          optionLabel="name" 
+          optionValue="value"
+          :placeholder="$t('')"
+          showClear="true"
+        />
+      </div>
       <div class="p-field p-col-12 p-text-right">
         <div class="p-d-flex p-jc-end">
           <div>
