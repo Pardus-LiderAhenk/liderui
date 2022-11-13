@@ -317,6 +317,7 @@ export default {
       models: [],
       processors: [],
       osVersions: [],
+      dataTpe:[],
       agentVersions: [],
       sessionReportTypes: [
         {
@@ -374,6 +375,7 @@ export default {
         processor: "",
         osVersion: "",
         agentVersion: "",
+        diskType:"",
         sessionReportType: "",
       },
       items: [
@@ -449,6 +451,7 @@ export default {
       data.append("model", this.filter.model);
       data.append("processor", this.filter.processor);
       data.append("osVersion", this.filter.osVersion);
+      data.append("diskType",this.filter.diskType);
       data.append("agentVersion", this.filter.agentVersion);
       data.append("sessionReportType", this.filter.sessionReportType);
       if (this.pageNumber == 1) {
@@ -476,6 +479,7 @@ export default {
       }
 
       const { response, error } = await agentInfoReportService.agentInfoList(data);
+      console.log(response);
       if (error){
             this.$toast.add({
             severity:'error',
@@ -490,6 +494,7 @@ export default {
           this.processors = response.data.processors;
           this.agentVersions = response.data.agentVersions;
           this.osVersions = response.data.osVersions;
+          this.diskType = response.data.diskType;
           this.agents = response.data.agents.content;
           this.totalElements = response.data.agents.totalElements;
         } else if (response.status == 417) {
@@ -550,6 +555,7 @@ export default {
       data.append("model", this.filter.model);
       data.append("processor", this.filter.processor);
       data.append("osVersion", this.filter.osVersion);
+      data.append("diskType",this.filter.diskType);
       data.append("agentVersion", this.filter.agentVersion);
       data.append("sessionReportType", this.filter.sessionReportType);
       if (this.filter.registrationDate[0] != null) {
@@ -615,6 +621,7 @@ export default {
         processor: "",
         osVersion: "",
         agentVersion: "",
+        diskType:"",
         sessionReportType: "",
       };
     },

@@ -51,17 +51,11 @@
                     <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
                     <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
                   </DataTable>
-                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-                    <Column field="Tipi" :header="$t('computer.plugins.resource_usage.disk_type')"></Column>
-                    <Column field="ssdTotal" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
-                    <Column field="ssdUsed" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
-                    <Column field="ssdAvailable" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
-                  </DataTable>
-                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-                    <Column field="Tipi" :header="$t('computer.plugins.resource_usage.disk_type')"></Column>
-                    <Column field="hddTotal" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
-                    <Column field="hddUsed" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
-                    <Column field="hddAvailable" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
+                  <DataTable :value="hddDisk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                    <Column field="type" :header="$t('computer.plugins.resource_usage.disk_type')"></Column> 
+                    <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
+                    <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
+                    <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
                   </DataTable>
                   <div style="margin-top:5px">
                     <small style="font-weight:bold;">
@@ -101,18 +95,6 @@
                     <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
                     <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
                   </DataTable>
-                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-                    <Column field="Tipi" :header="$t('computer.plugins.resource_usage.disk_type')"></Column>
-                    <Column field="ssdTotal" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
-                    <Column field="ssdUsed" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
-                    <Column field="ssdAvailable" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
-                  </DataTable>
-                  <DataTable :value="disk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-                    <Column field="Tipi" :header="$t('computer.plugins.resource_usage.disk_type')"></Column>
-                    <Column field="hddTotal" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
-                    <Column field="hddUsed" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
-                    <Column field="hddAvailable" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
-                  </DataTable>
                 </OverlayPanel>
               </div>
             </div>
@@ -136,7 +118,6 @@ import { ref } from 'vue';
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 
-
 export default {
   setup() {
     const plugins = [ChartDataLabels]
@@ -158,6 +139,12 @@ export default {
       task: null,
       devices: '',
       disk: [{
+          total: '',
+          used: '',
+          available: ''
+        }],
+        hddDisk: [{
+          type:'',
           total: '',
           used: '',
           available: ''
@@ -205,13 +192,23 @@ export default {
       this.showTaskDialog = true;
     },
 
+    diskFormatter(number){
+      return (number/1000).toFixed(2);
+    },
+
+    diskAvaibleArea(total,used){
+      return this.diskFormatter(total-used);
+    },
+
     getResourceUsage(message) {
+      // debugger;
       if (message.commandClsId == "RESOURCE_INFO_FETCHER") {
         this.diskChartOptions = this.returnOptionForChart(this.diskTitle, true);
         this.memoryChartOptions = this.returnOptionForChart(this.memoryTitle, true);
         var arrg = JSON.parse(message.result.responseDataStr);
         this.devices = arrg["Device"]
         this.disk = [];
+        this.hddDisk  = [];
         var totalDisk = arrg["Total Disc"]/1000;
         var usedDisk = (arrg["Usage Disc"]/1000).toFixed(2);
         var availableDisk = (totalDisk - usedDisk).toFixed(2);
@@ -222,6 +219,17 @@ export default {
           available : availableDisk
           }
         );
+  
+        this.hddDisk = arrg["hardware.disk.hdd.info"] || [];
+        this.hddDisk = this.hddDisk.concat(arrg ["hardware.disk.ssd.info"] || []);
+        //this.hddDisk = [].concat(arrg["hardware.disk.hdd.info"] || [], arrg ["hardware.disk.ssd.info"] || []);
+        this.hddDisk.map(element => {
+          element.available = this.diskAvaibleArea(element.total,element.used);
+          element.total = this.diskFormatter(element.total);
+          element.used = this.diskFormatter(element.used);
+          return element;
+        });
+
         this.memory = [];
         var totalMemory = arrg["Total Memory"]/1000;
         var usedMemory = (arrg["Usage"]/1000).toFixed(2);

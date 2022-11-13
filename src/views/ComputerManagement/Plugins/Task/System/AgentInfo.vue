@@ -274,11 +274,20 @@
             <div class="p-col-4"><b>{{ $t("computer.agent_info.ssd_title") }}</b></div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.hdd_title") }}</b></div>
-            <DataTable :value="disk"  class="p-datatable-customers" :rows="1">
+            <DataTable >
             <div class="p-col-10">
-              <Column field="used" header="used"></Column>
+              <Column field="used" header="used">
+                
+            </Column>
               <Column field="avaible" header="avaible"></Column>
-              <ProgressBar :value="50" :showValue="true"/>
+              <Column>
+                <b-progress :max="max" height="2rem">
+                  <b-progress-bar :value="value">
+                    <span>Progress: <strong>{{ 50 }} / {{ 1000 }}</strong></span>
+                  </b-progress-bar>
+                </b-progress>
+              </Column>
+              
             </div>
             </DataTable>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
@@ -518,6 +527,7 @@ export default {
       deleteFolderDialog: false,
       folderName: '',
       validationFolderName: false,
+      diskDimensionsList : [],
       linuxIcon: require("@/assets/images/icons/linux.png"),
       folderItems: [
         {
@@ -641,26 +651,29 @@ export default {
       this.agentCn = this.selectedLiderNode.cn;
       const params = new URLSearchParams();
       params.append("agentJid", this.selectedLiderNode.uid);
-      //axios.post("/api/select-agent-info/detail", params).then((response) => {
+
       const { response,error } = await taskService.agentInfoDetail(params);
+      console.log(typeof response);
+      //this.diskDimensionsList.push(getPropertyValue(selectedAgentInfo.properties, "hdd"),
+      //getPropertyValue(selectedAgentInfo.properties, "ssd"));
       if(error){
         return "error";
       }
       else{
         if(response.status == 200){
           if (response.data != "" && response.data != null) {
-          this.selectedAgentInfo = response.data;
-          // this.setSelectedAgentInfo(response.data);
+            this.selectedAgentInfo = response.data;
+            console.log(response)
         } else {
-          this.selectedAgentInfo = null;
-          this.$toast.add({
-            severity:'error', 
-            detail: this.$t("computer.agent_info.error_message"), 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-            });
+            this.selectedAgentInfo = null;
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.agent_info.error_message"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+              });
+            }
           }
-        }
         else if(response.status == 417){
           return "error";
         }
