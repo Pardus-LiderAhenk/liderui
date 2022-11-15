@@ -159,9 +159,9 @@
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="">{{$t('reports.detailed_agent_report.disk_type')}}</label>
         <Dropdown
-          optionLabel="name" 
-          optionValue="value"
-          :placeholder="$t('')"
+          v-model="filter.diskType"
+          :options="diskTypes"
+          :placeholder="$t('reports.detailed_agent_report.all')"
           showClear="true"
         />
       </div>
@@ -319,6 +319,17 @@ export default {
       osVersions: [],
       dataTpe:[],
       agentVersions: [],
+      diskTypes: [
+        
+          ""
+        ,
+        
+          "hardware.disk.hdd.info"
+        ,
+      
+          "hardware.disk.ssd.info"
+        
+      ],
       sessionReportTypes: [
         {
           name: this.$t('reports.detailed_agent_report.not_logged_one_mounth'),
@@ -375,7 +386,7 @@ export default {
         processor: "",
         osVersion: "",
         agentVersion: "",
-        diskType:"",
+        diskType:"ALL",
         sessionReportType: "",
       },
       items: [
@@ -432,6 +443,7 @@ export default {
       );
       if (filteredProperties != null && filteredProperties.length > 0) {
         propertyValue = filteredProperties[0].propertyValue;
+        console.log(propertyValue)
       }
       return propertyValue;
     },
@@ -479,7 +491,6 @@ export default {
       }
 
       const { response, error } = await agentInfoReportService.agentInfoList(data);
-      console.log(response);
       if (error){
             this.$toast.add({
             severity:'error',
@@ -489,12 +500,13 @@ export default {
           });
       } else{
         if (response.status == 200) {
+          console.log(response.data)
+          
           this.brands = response.data.brands;
           this.models = response.data.models;
           this.processors = response.data.processors;
           this.agentVersions = response.data.agentVersions;
           this.osVersions = response.data.osVersions;
-          this.diskType = response.data.diskType;
           this.agents = response.data.agents.content;
           this.totalElements = response.data.agents.totalElements;
         } else if (response.status == 417) {
@@ -621,7 +633,7 @@ export default {
         processor: "",
         osVersion: "",
         agentVersion: "",
-        diskType:"",
+        diskType:"ALL",
         sessionReportType: "",
       };
     },

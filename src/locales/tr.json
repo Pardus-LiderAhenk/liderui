@@ -604,7 +604,11 @@
             "error_417_update_agent_info": "İstemci güncellenirken beklenmeyen bir hata alındı. Hata kodu :417",
             "error_417_delete_computer_ou" : "Seçilen klasör silinememiştir. Beklenmeyen bir hata oluştu. Hata kodu : 417",
             "error_online_entries":"Çevrimiçi istemciler beklenmeyen bir hatadan dolayı gösterilemiyor.",
-            "error_404_online_entries":"Çevrimiçi istemciler bulunamamaktadır.Hata kodu : 404"
+            "error_404_online_entries":"Çevrimiçi istemciler bulunamamaktadır.Hata kodu : 404",
+            "used": "Kullanılan",
+            "available": "Boş",
+            "total": "Toplam",
+            "disk_type":"Disk Tipi"
         },
         "scheduled": {
             "title": "Zamanlanmış Görev Parametreleri",
@@ -1579,7 +1583,9 @@
             "logged_one_mounth":"Son 1 Ay Oturum Açan",
             "logged_two_mounth":"Son 2 Ay Oturum Açan",
             "logged_three_mounth":"Son 3 Ay Oturum Açan",
-            "error_417_adding_computer_to_group":"İstemciler gruba eklenirken beklenmeyen bir hata oluştu. Hata kodu : 417"
+            "error_417_adding_computer_to_group":"İstemciler gruba eklenirken beklenmeyen bir hata oluştu. Hata kodu : 417",
+            "ssd":"SSD",
+            "hdd":"HDD"
 
 
         },

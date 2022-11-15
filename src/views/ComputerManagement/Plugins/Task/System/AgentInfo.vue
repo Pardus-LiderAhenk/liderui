@@ -272,23 +272,52 @@
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.ssd_title") }}</b></div>
+            <DataTable :value="ssdDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+              <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
+              <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
+                  <template #body="{ data }">
+                      {{ ((data.total)/1000).toFixed(2) }}                
+                  </template>
+              </Column>
+                  <Column field="used" :header="$t('computer.agent_info.used')+ ' (GB)'">
+                  <template #body="{ data }">
+                      {{ ((data.used)/1000).toFixed(2) }}                
+                  </template>
+              </Column>
+              <Column field="avaible" :header="$t('computer.agent_info.available')+ ' (GB)'">
+                  <template #body="{ data }">
+                      {{ ((data.total-data.used)/1000).toFixed(2) }}                
+                  </template>
+              </Column>
+
+            </DataTable>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.hdd_title") }}</b></div>
-            <DataTable >
-            <div class="p-col-10">
-              <Column field="used" header="used">
-                
-            </Column>
-              <Column field="avaible" header="avaible"></Column>
-              <Column>
-                <b-progress :max="max" height="2rem">
-                  <b-progress-bar :value="value">
-                    <span>Progress: <strong>{{ 50 }} / {{ 1000 }}</strong></span>
-                  </b-progress-bar>
-                </b-progress>
+            <DataTable :value="hddDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+
+              <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
+              <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
+                  <template #body="{ data }">
+                      {{ ((data.total)/1000).toFixed(2) }}                
+                  </template>
               </Column>
-              
-            </div>
+                  <Column field="used" :header="$t('computer.agent_info.used')+ ' (GB)'">
+                  <template #body="{ data }">
+                      {{ ((data.used)/1000).toFixed(2) }}                
+                  </template>
+              </Column>
+              <Column field="avaible" :header="$t('computer.agent_info.available')+ ' (GB)'">
+                  <template #body="{ data }">
+                      {{ ((data.total-data.used)/1000).toFixed(2) }}                
+                  </template>
+              </Column>
+          
+                  <!-- <b-progress :max="max" height="2rem">
+                    <b-progress-bar :value="value">
+                      <span>Progress: <strong>{{ 50 }} / {{ 1000 }}</strong></span>
+                    </b-progress-bar>
+                  </b-progress> -->
+                
             </DataTable>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_partitions") }}</b></div>
@@ -527,7 +556,8 @@ export default {
       deleteFolderDialog: false,
       folderName: '',
       validationFolderName: false,
-      diskDimensionsList : [],
+      ssdList : [],
+      hddList : [],
       linuxIcon: require("@/assets/images/icons/linux.png"),
       folderItems: [
         {
@@ -620,7 +650,22 @@ export default {
     }
   },
 
-  computed:mapGetters(["selectedLiderNode"]),
+  computed:{
+      ...mapGetters(["selectedLiderNode"]),
+    
+    hddDataList: {
+
+      get(){
+        return this.getHddDiskValue();
+      }
+    },
+    ssdDataList: {
+
+      get(){
+        return this.getSsdDiskValue();
+      }
+    }
+  },
 
   mounted() {
     if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
@@ -653,9 +698,7 @@ export default {
       params.append("agentJid", this.selectedLiderNode.uid);
 
       const { response,error } = await taskService.agentInfoDetail(params);
-      console.log(typeof response);
-      //this.diskDimensionsList.push(getPropertyValue(selectedAgentInfo.properties, "hdd"),
-      //getPropertyValue(selectedAgentInfo.properties, "ssd"));
+
       if(error){
         return "error";
       }
@@ -812,6 +855,26 @@ export default {
     moveTreeNodeClick(node) {
       //*** This method for tree that is created for folder move dialog.  */
       this.moveFolderNode = node;
+    },
+
+    getSsdDiskValue(){
+        let ssdList = [];
+        let ssdValueList = this.getPropertyValue(this.selectedAgentInfo.properties,"hardware.disk.ssd.info") || [];
+        ssdValueList = eval(ssdValueList);
+        ssdList = ssdList.concat(ssdValueList);
+
+      return ssdList;
+
+    },
+    
+    getHddDiskValue(){
+        let hddList = [];
+        let hddValueList = this.getPropertyValue(this.selectedAgentInfo.properties,"hardware.disk.hdd.info") || [];
+        hddValueList = eval(hddValueList);
+        hddList = hddList.concat(hddValueList);
+
+      return hddList;
+
     },
 
     async moveAgent() {
