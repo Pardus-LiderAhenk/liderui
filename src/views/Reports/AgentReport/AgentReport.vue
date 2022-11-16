@@ -161,6 +161,8 @@
         <Dropdown
           v-model="filter.diskType"
           :options="diskTypes"
+          optionLabel="name"
+          optionValue="value"
           :placeholder="$t('reports.detailed_agent_report.all')"
           showClear="true"
         />
@@ -320,14 +322,18 @@ export default {
       dataTpe:[],
       agentVersions: [],
       diskTypes: [
-        
-          ""
-        ,
-        
-          "hardware.disk.hdd.info"
-        ,
-      
-          "hardware.disk.ssd.info"
+        {
+          name: this.$t('reports.detailed_agent_report.all'),
+          value: ""
+          },
+        {
+          name: this.$t('reports.detailed_agent_report.hdd_title'),
+          value: "hardware.disk.hdd.info"
+          },
+        {
+          name: this.$t('reports.detailed_agent_report.ssd_title'),
+          value: "hardware.disk.ssd.info",
+        }
         
       ],
       sessionReportTypes: [
