@@ -266,7 +266,7 @@ export default {
       }
       const params = new FormData();
       params.append("agentJid", this.selectedLiderNode.uid);
-      //axios.post("/api/select-agent-info/detail", params).then((response) => {
+      
       const { response,error } = await taskService.agentInfoDetail(params);
       if(error){
         this.$toast.add({

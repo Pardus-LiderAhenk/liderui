@@ -30,7 +30,7 @@ export default {
             XMPP.loginToMessagingService(response)
         },
         (error) => {
-          console.log(error);
+          console.log("XMPP service is not running");
         }
       );
   },

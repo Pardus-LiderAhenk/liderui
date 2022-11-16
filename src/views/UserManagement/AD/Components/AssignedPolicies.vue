@@ -191,7 +191,6 @@ export default {
             let params = {
                 "distinguishedName": this.selectedNode.distinguishedName
             }
-            //axios.post('/api/policy/policies-for-group', params).then(response => {
             const{response,error} = await policyService.policyGroup(this.selectedNode.distinguishedName);
             if(error){
                 this.$toast.add({
@@ -230,7 +229,7 @@ export default {
             let params = {
                 "id": this.selectedPolicy.commandImpl.id,
 			};
-            //axios.post('/api/policy/unassignment', params).then(response => {
+
             const{response,error} = await policyService.policyUnassigment(params);
             if(error){
                 this.$toast.add({

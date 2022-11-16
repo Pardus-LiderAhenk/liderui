@@ -363,7 +363,6 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      //axios.post("/operation/export", data, {responseType: 'blob'})
       const { response, error } = await systemTaskReportService.operationExport(data)
       if(error){
             this.$toast.add({

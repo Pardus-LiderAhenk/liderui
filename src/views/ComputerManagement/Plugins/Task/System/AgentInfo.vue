@@ -271,8 +271,8 @@
               }}
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{ $t("computer.agent_info.ssd_title") }}</b></div>
-            <DataTable :value="ssdDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_properties") }}</b></div>
+            <DataTable :value="diskDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
               <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
               <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
                   <template #body="{ data }">
@@ -299,41 +299,12 @@
             </Column>
 
             </DataTable>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{ $t("computer.agent_info.hdd_title") }}</b></div>
-            <DataTable :value="hddDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-
-              <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
-              <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
-                  <template #body="{ data }">
-                      {{ ((data.total)/1000).toFixed(2) }}                
-                  </template>
-              </Column>
-                  <Column field="used" :header="$t('computer.agent_info.used')+ ' (GB)'">
-                  <template #body="{ data }">
-                      {{ ((data.used)/1000).toFixed(2) }}                
-                  </template>
-              </Column>
-              <Column field="avaible" :header="$t('computer.agent_info.available')+ ' (GB)'">
-                  <template #body="{ data }">
-                      {{ ((data.total-data.used)/1000).toFixed(2) }}                
-                  </template>
-              </Column>
-              <Column field="progresBar" header="Durum" :showFilterMatchModes="false" style="min-width: 10rem">
-                <template #body="{ data }">
-                  <ProgressBar :value="data.used" :showValue="true" >
-                    <span><strong>{{ data.total }}</strong></span>
-                </ProgressBar>    
-              </template>
-            </Column>
-          
                   <!-- <b-progress :max="max" height="2rem">
                     <b-progress-bar :value="value">
                       <span>Progress: <strong>{{ 50 }} / {{ 1000 }}</strong></span>
                     </b-progress-bar>
                   </b-progress> -->
                 
-            </DataTable>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_partitions") }}</b></div>
             <div class="p-col-8">
@@ -571,8 +542,7 @@ export default {
       deleteFolderDialog: false,
       folderName: '',
       validationFolderName: false,
-      ssdList : [],
-      hddList : [],
+      diskList : [],
       linuxIcon: require("@/assets/images/icons/linux.png"),
       folderItems: [
         {
@@ -668,18 +638,13 @@ export default {
   computed:{
       ...mapGetters(["selectedLiderNode"]),
     
-    hddDataList: {
+    diskDataList: {
 
       get(){
-        return this.getHddDiskValue();
-      }
-    },
-    ssdDataList: {
-
-      get(){
-        return this.getSsdDiskValue();
+        return this.getDiskValue();
       }
     }
+
   },
 
   mounted() {
@@ -872,23 +837,17 @@ export default {
       this.moveFolderNode = node;
     },
 
-    getSsdDiskValue(){
-        let ssdList = [];
-        let ssdValueList = this.getPropertyValue(this.selectedAgentInfo.properties,"hardware.disk.ssd.info") || [];
-        ssdValueList = eval(ssdValueList);
-        ssdList = ssdList.concat(ssdValueList);
-
-      return ssdList;
-
-    },
-    
-    getHddDiskValue(){
-        let hddList = [];
+    getDiskValue(){
+        let diskList = [];
+        let diskValueList = this.getPropertyValue(this.selectedAgentInfo.properties,"hardware.disk.ssd.info") || [];
+        diskValueList = eval(diskValueList);
         let hddValueList = this.getPropertyValue(this.selectedAgentInfo.properties,"hardware.disk.hdd.info") || [];
         hddValueList = eval(hddValueList);
-        hddList = hddList.concat(hddValueList);
 
-      return hddList;
+        diskList = diskList.concat(diskValueList);
+        diskList = diskList.concat(hddValueList);
+
+      return diskList;
 
     },
 
@@ -1102,7 +1061,7 @@ export default {
       let params = new FormData();
       params.append("parentName", this.selectedLiderNode.distinguishedName);
       params.append("ou", this.folderName);
-      //axios.post('/api/lider/user/add-ou', params).then(response => {
+
       const{ response,error } = await userService.addOu(params);
       if(error){
         return "error";
@@ -1118,7 +1077,7 @@ export default {
           });
         }
         else if(response.status == 417){
-          return "error";
+          return "Could not add folder";
         }
       }
         

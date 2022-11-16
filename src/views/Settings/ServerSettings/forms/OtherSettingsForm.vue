@@ -141,7 +141,6 @@ export default {
             data.append("ahenkRepoKeyAddress",this.ahenkRepoKeyAddress);
             data.append("selectedRegistrationType", this.selectedRegistrationType);
 
-            //axios.post('/api/lider/settings/update/other-settings', data).then(response => {
             const { response,error } = await serverSettingService.updateOtherSettings(data);
             if(error){
                 this.$toast.add({

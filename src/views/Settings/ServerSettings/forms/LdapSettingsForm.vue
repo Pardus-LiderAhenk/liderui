@@ -209,7 +209,6 @@ export default {
             data.append("adUseTLS",this.adUseTLS);
             data.append("adAllowSelfSignedCert",this.adAllowSelfSignedCert);
 
-            //axios.post('/api/lider/settings/update/ldap', data).then(response => {
             const { response,error } = await serverSettingService.updateLdap(data);
             if(error){
                 this.$toast.add({

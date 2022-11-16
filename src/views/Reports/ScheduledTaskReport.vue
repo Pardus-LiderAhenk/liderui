@@ -527,7 +527,7 @@ export default {
   async cancelScheduledTask() {
     var params = new FormData();
     params.append("id", this.selectedCommand.id);
-    //axios.post("/lider/scheduledTask/cancel", params)
+
     const{ response, error } = await scheduledTaskReportService.scheduledTaskCancel(this.selectedCommand.id);
       if (response.status == 200 && response.data != null) {
         this.tasks = this.tasks.filter(command => command.id != response.data.id);

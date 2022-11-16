@@ -196,7 +196,6 @@ export default {
         if (message.commandClsId == "INSTALLED_PACKAGES") {
             const params = new FormData();
             params.append("id", message.result.id);
-            //axios.post("/api/command/command-execution-result", params)
             const{response,error} = await taskService.commandExecute(message.result.id);
             if(error){
               this.$toast.add({

@@ -79,7 +79,7 @@ export default {
         async deleteNode() {
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
-           // axios.post('/api/ad/entry', params).then(response => {
+
             const{ response,error } = await  adManagementService.deleteEntry(this.selectedNode.distinguishedName);
             this.$emit('closeAdDialog');
             if(error){

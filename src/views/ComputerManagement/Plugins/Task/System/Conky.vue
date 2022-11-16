@@ -126,7 +126,7 @@ export default {
   },
 
   mounted() {
-    //axios.get("/api/conky/list-all", null).then((response) => {
+
     this.conkyListAll();
    
   },

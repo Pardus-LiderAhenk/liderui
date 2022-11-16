@@ -154,7 +154,6 @@ export default {
             }
 
             const{response,error} = await computerGroupsManagementService.createAgentGroup(data);
-            console.log(response);
             if(error){
                 this.$toast.add({
                     severity:'error', 

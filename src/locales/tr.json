@@ -608,7 +608,9 @@
             "used": "Kullanılan",
             "available": "Boş",
             "total": "Toplam",
-            "disk_type":"Disk Tipi"
+            "disk_type":"Disk Tipi",
+            "disk_properties": "Disk Özellikleri"
+
         },
         "scheduled": {
             "title": "Zamanlanmış Görev Parametreleri",

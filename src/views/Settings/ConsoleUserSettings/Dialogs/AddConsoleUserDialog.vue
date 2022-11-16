@@ -196,7 +196,6 @@ export default {
                 data.append('roles[]', ['ROLE_USER']);
                 const {response, error} = await consoleUserSettingsService.editUserRoles(data);
 
-                //axios.post('/lider/settings/editUserRoles',data).then(response => {
                 if(response.status == 200){
                     this.$toast.add({
                         severity:'success', 
@@ -327,7 +326,7 @@ export default {
             let data = new FormData();
             data.append('distinguishedName',this.selectedUserNode.distinguishedName);
             data.append('parentName',this.selectedGroupNode.distinguishedName);
-            //axios.post('/lider/settings/addMemberToGroup', data).then(response => {
+
             const {response,error} = await consoleUserSettingsService.addMemberToGroup(data);
             if(error){
 

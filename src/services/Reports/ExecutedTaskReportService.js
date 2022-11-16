@@ -22,7 +22,7 @@ class ExecutedTaskReportService{
     async executedTaskPlugins() {
         try {
             const response = await axios.get(executeTaskPluginstUrl);
-            console.log(response);
+            
             return { response };
         } catch (error) {
             return { error: error }

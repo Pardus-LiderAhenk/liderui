@@ -110,7 +110,7 @@ export default {
                 params.append("name", this.selectedNode.name);
                 params.append("parent", this.selectedNode.parent);
                 const{ response,error } = await adManagementService.childEntriesList(params);
-              //  axios.post('/api/ad/child-entries', params).then(response => {                
+
                 if(error){
                     this.$toast.add({
                             severity:'error', 

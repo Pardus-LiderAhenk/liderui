@@ -252,7 +252,7 @@ export default {
             var data = new FormData();
             data.append("pageNumber", this.pageNumber);
             data.append("pageSize", this.rowNumber);            
-            //axios.post("/api/script/list", data).then((response) => {
+
             const { response,error } = await scriptService.scriptList(this.rowNumber,this.pageNumber);
             if(error){
                 this.$toast.add({
@@ -334,7 +334,7 @@ export default {
             const params = {
                 id: this.selectedScript.id
             };
-            //axios.post("/api/script/delete", params).then((response) => {
+
             const {response,error} = await scriptService.scriptDelete(this.selectedScript.id);
             if(error){
                 this.$toast.add({
@@ -385,7 +385,7 @@ export default {
                     scriptType: this.scriptType,
                     id: this.selectedScript.id
                 };
-                //axios.post("/api/script/update", params).then((response) => {
+
                 const { response,error } = await scriptService.scriptUpdate(params);
                 if(error){
                     this.$toast.add({
@@ -437,7 +437,7 @@ export default {
                     contents: this.contents,
                     scriptType: this.scriptType
                 };
-                //axios.post("/api/script/add", params).then((response) => {
+
                 const { response,error } = await scriptService.scriptAdd(params);
                 if(error){
                     this.$toast.add({

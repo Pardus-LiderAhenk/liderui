@@ -282,10 +282,7 @@ export default {
   methods: {
 
     async getTemplate(){
-      // var data = new FormData();
-      // data.append("pageNumber", this.pageNumber);
-      // data.append("pageSize", this.rowNumber); 
-      //axios.get("/api/conky/list/page-size/{pageSize}/page-number/{pageNumber}", data) .then((response) => {
+
       const{response,error} = await conkyService.conkyList(this.rowNumber, this.pageNumber);
       if(error){
         this.$toast.add({
@@ -340,7 +337,7 @@ export default {
       const params = {
         id: this.selectedTemplate.id,
       };
-      //axios.post("/api/conky/delete", params).then((response) => {
+
       const{response,error} = await conkyService.conkyDelete(this.selectedTemplate.id);
       if(error){
         this.$toast.add({
@@ -392,7 +389,7 @@ export default {
           settings: this.settings,
           id: this.selectedTemplate.id,
         };
-        //axios.post("/api/conky/update", params).then((response) => {
+
         const{response,error} = await conkyService.conkyUpdate(params);
         if(error){
           this.$toast.add({
@@ -435,7 +432,6 @@ export default {
           contents: this.contents,
           settings: this.settings,
         };
-        //axios.post("/api/conky/add", params).then((response) => {
         const{response,error} = await conkyService.conkyAdd(params);
         if(error){
           this.$toast.add({

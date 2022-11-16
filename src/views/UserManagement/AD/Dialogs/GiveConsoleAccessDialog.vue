@@ -89,7 +89,7 @@ export default {
             childEntries.push({
                 "distinguishedName" : this.selectedNode.distinguishedName
             });
-            //axios.post('/api/ad/move-ad-user-to-ldap', {
+
             const { response,error } = await adManagementService.moveAdUserToLdap({
                 distinguishedName: this.selectedNode.distinguishedName,
                 userPassword: userPassword,

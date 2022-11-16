@@ -64,6 +64,13 @@
                     {{ ((data.total-data.used)/1000).toFixed(2) }}                
                 </template>
             </Column>
+            <Column field="progresBar" header="Durum" :showFilterMatchModes="false" style="min-width: 10rem">
+                <template #body="{ data }">
+                  <ProgressBar :value="data.used" :showValue="true" >
+                    <span><strong>{{ data.total }}</strong></span>
+                </ProgressBar>    
+              </template>
+            </Column>
             </DataTable>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.disk_partitions')}}</b></div>

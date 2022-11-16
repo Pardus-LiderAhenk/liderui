@@ -100,7 +100,6 @@ export default {
             data.append("fileServerPassword",this.fileServerPassword);
             data.append("fileServerAgentFilePath",this.fileServerAgentFilePath);
 
-            //axios.post('/api/lider/settings/update/file-server', data).then(response => {
             const { response,error } = await serverSettingService.updateFileServer(data) ;
             if(error){
                 

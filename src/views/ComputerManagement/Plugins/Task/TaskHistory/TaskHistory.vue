@@ -210,7 +210,7 @@ export default {
         }
         this.loading = true;
         params.append("dn", this.selectedLiderNode.distinguishedName);
-        //axios.post("/api/command", params).then((response) => {
+
         const{response,error} = await taskService.commandfindAll(this.selectedLiderNode.distinguishedName);
         if(error){
             this.$toast.add({
@@ -271,7 +271,7 @@ export default {
             try {
                 this.responseDataObj = JSON.parse(responseDataStr);
             } catch (error) {
-                console.log(error)
+                console.log("Could not found  task id");
             }
         }
         this.selectedTaskDetailDialog = true;

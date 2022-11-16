@@ -52,7 +52,7 @@ export default {
   },
 
   created() {
-    //axios.post("/api/get-plugin-task-list",{},).then((response) => {
+
     this.pluginTaskList();
   },
   

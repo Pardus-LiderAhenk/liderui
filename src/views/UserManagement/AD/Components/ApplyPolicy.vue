@@ -132,7 +132,7 @@ export default {
     },
 
     mounted() {
-        //axios.post('/api/policy/active-policies', null).then(response => {
+
         this.activePolicy();
     },
 
@@ -182,7 +182,6 @@ export default {
                 "dnList": dnList,
 			};
 
-            //axios.post('/api/policy/execute', params).then(response => {
             const{response,error} = await policyService.policyExecute(params);
             if(error){
                 this.$toast.add({

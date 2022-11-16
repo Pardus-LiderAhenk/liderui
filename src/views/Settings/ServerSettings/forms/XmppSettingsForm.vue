@@ -111,7 +111,6 @@ export default {
             data.append("xmppPacketReplayTimeout",this.xmppPacketReplayTimeout);
             data.append("xmppPingTimeout",this.xmppPingTimeout);
 
-            //axios.post('/api/lider/settings/update/xmpp', data).then(response => {
             const { response,error } = await serverSettingService.updateXmpp(data);
             if(error){
                 this.$toast.add({

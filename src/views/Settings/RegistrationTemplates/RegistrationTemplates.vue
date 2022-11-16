@@ -184,21 +184,6 @@ export default {
 
     methods: {
         async getRegistrationTemplate(){
-            // axios.get("/api/registration-templates/type/" + this.templateType +"/page-count/" + this.pageNumber + "/page-size/" + this.rowNumber, null)
-            // .then((response) => {
-            //     if (response.data) {
-            //         this.records = response.data.content;
-            //         this.totalElements = response.data.totalElements;
-            //     }
-            // })
-            // .catch((error) => { 
-            //     this.$toast.add({
-            //         severity:'error',
-            //         detail: this.$t('settings.registiration_template.an_error_occurred_while_fetching_registration_templates')+ " \n"+error, 
-            //         summary:this.$t("computer.task.toast_summary"), 
-            //         life: 3000
-            //     })
-            // });
 
             const {response, error} = await registrationTemplateService.list(this.templateType, this.pageNumber, this.rowNumber);
             if(error){
@@ -245,7 +230,7 @@ export default {
         },
 
         async deleteRecord() {
-            //axios.delete("/api/registration-templates/" + this.selectedRecord.id).then((response) => {
+
             const { response,error } = await registrationTemplateService.delete(this.selectedRecord.id);
             if(error){
                 this.$toast.add({

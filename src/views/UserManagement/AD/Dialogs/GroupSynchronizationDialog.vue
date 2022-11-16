@@ -143,7 +143,7 @@ export default {
                 params.append("key", "objectclass");
                 params.append("value", "group");
                 const {response,error} = await adManagementService.childGroupList(this.selectedNode.distinguishedName,"objectclass","group");
-                //axios.post('/api/ad/child-group', params).then(response => {
+
                 if(error){
                     this.$toast.add({
                         severity:'error', 

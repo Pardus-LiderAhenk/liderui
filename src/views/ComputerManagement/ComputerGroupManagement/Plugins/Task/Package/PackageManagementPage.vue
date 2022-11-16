@@ -65,7 +65,7 @@ export default {
           }
         }        
     }
-    //axios.post("/api/get-plugin-task-list",{},).then((response) => {
+    
   },
 };
 </script>

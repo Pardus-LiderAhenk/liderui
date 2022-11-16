@@ -150,7 +150,6 @@ export default {
 
     mounted() {
         // get all profile list by deleted is false
-        //axios.get('/api/profile/all-list', null).then(response => {
         this.allList();
 
         if (this.selectedPolicy) {
@@ -214,7 +213,7 @@ export default {
                 });
                 return;
             }
-            //axios.post('/api/policy/update', params).then(response => {
+
             const{response,error} = await policyService.policyUpdate(params);
             if(error){
                 this.$toast.add({

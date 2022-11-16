@@ -97,7 +97,6 @@ export default {
             data.append("emailUsername",this.emailUsername);
             data.append("emailPassword",this.emailPassword);
 
-            //axios.post('/lider/settings/update/emailSettings', data).then(response => {
             const { response,error} = await  serverSettingService.updateEmail(data);
             if(error){
                 this.$toast.add({

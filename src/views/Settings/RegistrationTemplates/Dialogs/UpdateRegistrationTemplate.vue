@@ -229,7 +229,7 @@ export default {
                 "parentDn": this.agentCreationDN,
                 "templateType": this.templateType,
             }
-            //axios.put("/api/registration-templates", params).then((response) => {
+            
             const {response,error} = await registrationTemplateService.update(params);
             if(error){
                 this.$toast.add({

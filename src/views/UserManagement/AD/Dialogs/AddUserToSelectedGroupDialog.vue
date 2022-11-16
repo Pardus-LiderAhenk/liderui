@@ -198,7 +198,7 @@ export default {
             params.append("searchDn", "");
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("distinguishedName", data.distinguishedName);
-            //axios.post('/api/ad/add-member-to-ad-group', params).then(response => {
+
             const { response,error } = await  adManagementService.addMemberToAdGroup(params);
             if(error){
                 this.$toast.add({

@@ -142,7 +142,6 @@ export default {
             params.append("dn", this.selectedGroup.distinguishedName);
             params.append("dnList[]", dnList);
 
-            //axios.post("/api/ad/member-from-group", params).then((response) => {
             const {response,error} = await adManagementService.deleteMemberUser(params);
             if(error){
                 this.$toast.add({

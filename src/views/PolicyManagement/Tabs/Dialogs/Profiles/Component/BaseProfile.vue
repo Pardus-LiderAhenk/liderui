@@ -180,7 +180,7 @@ export default {
         async getProfile() {
             let params = new FormData();
             params.append("name", this.pluginProfile.plugin.name)
-            //axios.get('/api/profile/list', params).then(response => {
+
             const{response,error} = await profilesServices.list(params);
             if(error){
                 this.$toast.add({
@@ -248,7 +248,7 @@ export default {
                 "profileData": profileData,
                 "plugin": this.pluginProfile.plugin
 			};
-            //axios.post('/api/profile/add', params).then(response => {
+
             const{response,error} = await profilesServices.add(params);
             if(error){
                 this.$toast.add({
@@ -295,7 +295,7 @@ export default {
                 "profileData": profileData,
                 "id": this.selectedProfile.id
 			};
-            //axios.post('/api/profile/update', params).then(response => {
+
             const{response,error} = await profilesServices.update(params);
             if(error){
                 this.$toast.add({
@@ -335,7 +335,7 @@ export default {
             let params = {
                 "id": this.selectedProfile.id
 			};
-            //axios.delete('/api/profile/delete', params).then(response => {
+
             const{ response,error } = await profilesServices.delete(this.selectedProfile.id);
             if(error){
                 this.$toast.add({

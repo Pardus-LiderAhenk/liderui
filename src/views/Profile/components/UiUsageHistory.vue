@@ -91,7 +91,6 @@ export default {
             data.append("pageSize", this.rowNumber);
             data.append('operationType',this.operationType);
 
-            //axios.post("/api/operation/login", data).then((response) => {
             const{response,error} = await systemTaskReportService.operationLogin(data);
             if(error){
                 this.$toast.add({

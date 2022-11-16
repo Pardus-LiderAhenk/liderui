@@ -87,13 +87,7 @@ export default {
                 });
                 return;
             }
-
-            //axios.post('/api/lider/sudo-groups/move/entry', null ,{
-            //    params: {
-            //        sourceDN: this.selectedNode.distinguishedName,
-            //        destinationDN: this.moveNodeData.distinguishedName
-            //    }
-            //}).then(response => {
+            
             const {response,error} = await sudoGroupsService.reanameGroups({
                 params : {
                     sourceDN: this.selectedNode.distinguishedName,

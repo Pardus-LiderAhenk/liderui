@@ -513,7 +513,7 @@ export default {
                 return;
             }
             this.loading = true;
-            //axios.post('/api/lider/user-groups/create-new-group'
+
             const{response,error} = await userGroupsService.createNewGroup(
             {
                 groupName: this.userGroupModal.groupName,
@@ -560,7 +560,7 @@ export default {
         },
 
         async addUserToGroup() {
-            //axios.post("/api/lider/user-groups/group/existing/add-user",{
+
             const{response,error} = await userGroupsService.addUser({
                 checkedEntries: JSON.stringify(this.userGroupModal.checkedNodes),
                 groupDN: this.selectedNode.distinguishedName
@@ -617,7 +617,7 @@ export default {
                 this.validation.folderName = true;
                 return;
             }
-            //axios.post('/api/lider/user-groups/add-ou', 
+
             const{response,error} = await userGroupsService.addOu(
             {
                 parentName: this.selectedNode.distinguishedName,
@@ -657,7 +657,6 @@ export default {
             let params = new FormData();
             params.append("oldDN", this.selectedNode.distinguishedName);
             params.append("newName", "cn="+this.userGroupModal.groupName);
-            //axios.post('/api/lider/user-groups/rename/entry', params).then(response => {
             const{response,error} = await userGroupsService.renameEntry(params);
             if(error){
                 this.$toast.add({
@@ -713,7 +712,7 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveFolderNode.distinguishedName);
             this.modals.moveNode = false;
-            //axios.post('/api/lider/user-groups/move/entry', params).then(response => {
+
             const{response,error} =  await userGroupsService.moveEntry(params);
             if(error){
                 this.$toast.add({
@@ -773,7 +772,7 @@ export default {
             let params = new FormData();
             params.append("dn", this.selectedNode.distinguishedName);
             this.modals.deleteNode = false;
-            //axios.post("/api/lider/user-groups/delete-entry", params).then(response => {
+
             const{response,error} = await userGroupsService.deleteEntry(params);
             if(error){
                 this.$toast.add({

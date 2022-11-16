@@ -105,7 +105,6 @@ export default {
             this.loading = true;
             let params = new FormData();
             params.append("uid", this.selectedUser.attributes.sAMAccountName);
-            //axios.get("/api/lider/user/user-session/{uid}", params).then((response) => {
             const{response,error} = await userService.userSession(params);
             if(error){
                 this.$toast.add({

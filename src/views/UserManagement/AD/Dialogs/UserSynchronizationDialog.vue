@@ -143,7 +143,7 @@ export default {
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
                 params.append("value", "user");
-                //axios.post('/api/ad/child-user', params).then(response => {
+
                 const { response,error} = await  adManagementService.childUser(params);
                 if(error){
                     this.$toast.add({

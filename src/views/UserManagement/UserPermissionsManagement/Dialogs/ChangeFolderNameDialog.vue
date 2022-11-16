@@ -82,7 +82,6 @@ export default {
                 return;
             }
 
-            //axios.post('/api/lider/sudo-groups/rename/entry', null, {
             const{response,error} = await sudoGroupsService.reanameGroups({
                 params: {
                     oldDN: this.selectedNode.distinguishedName,

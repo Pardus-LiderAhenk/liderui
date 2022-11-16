@@ -77,7 +77,7 @@ export default {
                 this.validation.folderName = true;
                 return;
             }
-            //axios.post('/api/lider/sudo-groups/add-ou', {
+
             const{ response,error } = await sudoGroupsService.addOu({
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',

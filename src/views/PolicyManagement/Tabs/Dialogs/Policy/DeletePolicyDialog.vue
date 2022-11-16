@@ -76,7 +76,7 @@ export default {
             let params = {
                 "id": this.selectedPolicy.id,
             }
-            //axios.post('/api/policy/delete', params).then(response => {
+
             const{response,error} = await  policyService.policyDelete(this.selectedPolicy.id);
             if(error){
                 this.$toast.add({

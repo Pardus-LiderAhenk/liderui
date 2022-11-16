@@ -179,7 +179,6 @@ export default {
                 "dnList": dnList,
 			};
 
-            //axios.post('/api/policy/execute', params).then(response => {
             const{response,error} = await policyService.policyExecute(params);
             if(error){
                 this.$toast.add({

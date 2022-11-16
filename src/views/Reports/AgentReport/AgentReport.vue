@@ -449,7 +449,7 @@ export default {
       );
       if (filteredProperties != null && filteredProperties.length > 0) {
         propertyValue = filteredProperties[0].propertyValue;
-        console.log(propertyValue)
+  
       }
       return propertyValue;
     },
@@ -506,7 +506,6 @@ export default {
           });
       } else{
         if (response.status == 200) {
-          console.log(response.data)
           
           this.brands = response.data.brands;
           this.models = response.data.models;

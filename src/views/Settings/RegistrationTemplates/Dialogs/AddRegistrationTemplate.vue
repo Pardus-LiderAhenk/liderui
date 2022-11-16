@@ -214,10 +214,9 @@ export default {
                 "parentDn": this.agentCreationDN,
                 "templateType": this.templateType,
             }
-            //axios.post("/api/registration-templates", params).then((response) => {
+
             const {response, error} = await registrationTemplateService.type(params);
             if(error){
-                console.log(error)
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('settings.registiration_template.an_error_occurred_while_saving_template')+ " \n"+error, 

@@ -349,8 +349,7 @@ export default {
         },
 
         async deleteNode() {
-            //axios.delete('/api/lider/sudo-groups/entry/{dn}', null, {params : { dn: this.selectedNode.distinguishedName }
-            //}).then(response => {
+            
             const { response, error } = await sudoGroupsService.entryDelete(this.selectedNode.distinguishedName);
             if(error){
                 this.$toast.add({
@@ -388,9 +387,7 @@ export default {
         },
 
         async deleteSudoUser() {
-            //axios.delete('/api/lider/sudo-groups/delete/sudo/user/dn/{dn}/uid/{uid}', null, {
-            //    params : { uid: this.deletedSudoUser.uid ,dn: this.selectedNode.distinguishedName }
-            //}).then(response => {
+    
             const { response,error } = await sudoGroupsService.userDelete(this.selectedNode.distinguishedName,this.deletedSudoUser.uid);
             if(error){
                 this.$toast.add({

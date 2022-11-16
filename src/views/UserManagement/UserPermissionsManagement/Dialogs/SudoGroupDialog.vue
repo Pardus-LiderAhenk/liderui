@@ -235,7 +235,7 @@ export default {
                 return;
             }
             let params = this.getSudoGroupParams();
-            //axios.post("/api/lider/sudo-groups/create-sudo-group",params).then(response => {
+
             const{ response,error } = await sudoGroupsService.createGroups(params);
             if(error){
                 this.$toast.add({
@@ -282,7 +282,7 @@ export default {
             }
 
             let params = this.getSudoGroupParams();
-            //axios.post("/api/lider/sudo-groups/edit-sudo-group",params).then(response => {
+
             const{response,error} = await sudoGroupsService.editGroups(params);
             if(error){
                 this.$toast.add({

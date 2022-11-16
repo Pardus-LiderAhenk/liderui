@@ -245,7 +245,7 @@ export default {
         const params = new FormData();
         params.append("pardusRepoAddress", this.repoForm.url);
         params.append("pardusRepoComponent", this.repoForm.component);
-        //axios.post("/api/packages/update/repo-address", params).then((response) => {
+
         const{response,error} = await taskService.packageUpdateRepo(params);
         if(error){
           this.$toast.add({
@@ -275,7 +275,7 @@ export default {
     },
 
     async repoAddress(){
-      //axios.get("/api/packages/repo-address", null).then((response) => {
+
       const{response,error} = await taskService.packageRepoAddress();
       if(error){
         this.$toast.add({
@@ -311,7 +311,7 @@ export default {
         params.append("type", this.type.value);
         params.append("url", this.repoForm.url);
         params.append("component", this.repoForm.component);
-        //axios.post("/api/packages/list", params).then((response) => {
+        
         const{response,error} = await taskService.packageList(params);
         if(error){
           this.loading = false;

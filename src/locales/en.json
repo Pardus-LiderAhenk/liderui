@@ -609,7 +609,8 @@
             "used": "Used",
             "available": "Avaible",
             "total": "Total",
-            "disk_type":"Disk Type"
+            "disk_type":"Disk Type",
+            "disk_properties": "Disk Properties"
 
         },
         "scheduled": {

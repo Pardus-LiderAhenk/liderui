@@ -42,7 +42,7 @@ export default {
     },
     methods: {
         async getServerSettings() {
-            //axios.get('/api/lider/settings/configurations').then(response => {
+
             const { response,error } = await serverSettingService.getConfigurations();
             if(error){
                 this.$toast.add({

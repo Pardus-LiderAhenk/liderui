@@ -46,8 +46,8 @@ export default {
                data.append('searchDn',"");
                data.append('key','sudoUser');
                data.append('value',user.uid);
-                //axios.post('/lider/ldap/searchEntry', data).then(response => {
-                const{ response,error } = await profileService.searchEntry(data);
+
+               const{ response,error } = await profileService.searchEntry(data);
                 if(error){
                     this.$toast.add({
                         severity:'error', 

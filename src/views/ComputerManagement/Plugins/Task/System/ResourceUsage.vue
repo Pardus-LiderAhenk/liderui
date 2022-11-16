@@ -201,7 +201,7 @@ export default {
     },
 
     getResourceUsage(message) {
-      // debugger;
+
       if (message.commandClsId == "RESOURCE_INFO_FETCHER") {
         this.diskChartOptions = this.returnOptionForChart(this.diskTitle, true);
         this.memoryChartOptions = this.returnOptionForChart(this.memoryTitle, true);
@@ -222,8 +222,7 @@ export default {
   
         this.hddDisk = arrg["hardware.disk.hdd.info"] || [];
         this.hddDisk = this.hddDisk.concat(arrg ["hardware.disk.ssd.info"] || []);
-        //this.hddDisk = [].concat(arrg["hardware.disk.hdd.info"] || [], arrg ["hardware.disk.ssd.info"] || []);
-        console.log(arrg)
+
         this.hddDisk.map(element => {
           element.available = this.diskAvaibleArea(element.total,element.used);
           element.total = this.diskFormatter(element.total);

@@ -319,8 +319,8 @@ export default {
         }
     },
     created() {
-        //axios.get("/api/lider/user/configurations", null).then((response) => {
-            this.configuration();
+
+        this.configuration();
     },
 
     methods: {
@@ -360,7 +360,7 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
-            //axios.post('/api/lider/user/add-ou', params).then(response => {
+
             const{response,error} = await userService.addOu(params);
             if(error){
                 this.$toast.add({
@@ -409,7 +409,7 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveUserNode.distinguishedName);
             this.modals.moveUser = false;
-            //axios.post('/api/lider/user/move/entry', params).then(response => {
+
             const{response,error} = await userService.moveEntry(params);
             if(error){
                 this.$toast.add({
@@ -498,7 +498,7 @@ export default {
                 params.append("telephoneNumber", this.user.telephoneNumber);
                 params.append("homePostalAddress", this.user.homePostalAddress);
                 params.append("userPassword", this.user.userPassword);
-                //axios.post('/api/lider/user/add-user', params).then(response => {
+
                 const{response,error} = await userService.addUser(params);
                 if(error){
                     this.$toast.add({

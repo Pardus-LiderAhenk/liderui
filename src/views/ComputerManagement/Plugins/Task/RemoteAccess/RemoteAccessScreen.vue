@@ -438,8 +438,6 @@ export default {
   async mounted() {
     if (this.$route.query.protocol == "vnc") {
       await this.getConnectionData();
-
-      //axios.post("/api/get-plugin-task-list", {}).then((response) => {
       const{response,error} = await taskService.pluginTaskList();
       if(response.status == 200){
         for (let index = 0; index < response.data.length; index++) {

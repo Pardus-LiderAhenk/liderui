@@ -160,7 +160,7 @@ export default {
                 params.append("searchDn", this.userLdapBaseDn.userGroupLdapBaseDn);
                 params.append("key", "member");
                 params.append("value", this.selectedNode.distinguishedName);
-                //axios.post("/lider/ldap/searchEntry", params).then((response) => {
+
                 const{ response,error } = await profileService.searchEntry(params);
                 if(error){
                     this.$toast.add({
@@ -192,7 +192,7 @@ export default {
             params.append("dn", this.selectedGroup.distinguishedName);
             params.append("attribute", "member");
             params.append("value", this.selectedNode.distinguishedName);
-            //axios.delete("/api/lider/user/attribute-with-value/dn/{dn}/attribute/{attribute}/value/{value}", params).then((response) => {
+
             const{response,error} = await userService.deleteAttributeAndValue(this.selectedGroup.distinguishedName,"member",this.selectedNode.distinguishedName);
             if(error){
                 this.$toast.add({
@@ -283,7 +283,7 @@ export default {
             member.push(this.selectedNode.distinguishedName);
             params.append("checkedList[]", member);
             params.append("groupDN", this.addUserGroupNode.distinguishedName);
-            //axios.post("/api/lider/user-groups/group/existing", params).then((response) => {
+
             const{response,error} = await userGroupsService.addGroups(params);
             if(error){
                 this.$toast.add({

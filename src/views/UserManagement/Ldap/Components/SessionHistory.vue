@@ -104,7 +104,7 @@ export default {
             this.loading = true;
             let params = new FormData();
             params.append("uid", this.selectedNode.uid);
-           // axios.get("/api/lider/user/user-session/{uid}", params).then((response) => {
+
             const{response,error} = await userService.userSession(this.selectedNode.uid);
             if(error){
                 this.$toast.add({

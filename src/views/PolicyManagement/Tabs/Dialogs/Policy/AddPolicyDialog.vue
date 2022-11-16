@@ -92,7 +92,6 @@ export default {
                 "description": this.description,
                 "active": this.active
             }
-            //axios.post('/api/policy/add', params).then(response => {
             const{response,error} = await policyService.policyAdd(params);
             if(error){
                 this.$toast.add({

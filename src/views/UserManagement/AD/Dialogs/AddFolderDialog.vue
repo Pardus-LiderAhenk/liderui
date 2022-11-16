@@ -80,7 +80,6 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
-            //axios.post('/api/ad/add-ou-to-ad', params).then(response => {
             const { response,error } =  await adManagementService.addToOuAd(params);
             if(error){
                 this.$toast.add({

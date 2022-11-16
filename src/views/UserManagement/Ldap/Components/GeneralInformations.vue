@@ -149,7 +149,7 @@ export default {
             params.append("telephoneNumber", this.user.telephoneNumber);
             params.append("mail", this.user.mail);
             params.append("homePostalAddress", this.user.homePostalAddress);
-            //axios.post("/api/lider/user/edit-user", params).then((response) => {
+
             const{response,error} = await userService.editUser(params);
             if(error){
                 this.$toast.add({

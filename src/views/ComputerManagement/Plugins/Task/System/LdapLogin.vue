@@ -233,7 +233,7 @@ export default {
       const params = new FormData();
       params.append("dn", this.selectedLiderNode.distinguishedName);
       params.append("userDirectoryDomain", userDirectoryDomain);
-      //axios.post("/api/ldap-login/update-directory-domain", params).then((response) => {});
+
       const{response,error} = await taskService.updateDomain(params);
       if(error){
         this.$toast.add({

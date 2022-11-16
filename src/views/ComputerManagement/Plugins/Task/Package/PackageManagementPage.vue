@@ -64,7 +64,7 @@ export default {
 
   methods: {
     async pluginTaskList(){ 
-      //axios.post("/api/get-plugin-task-list",{},).then((response) => {
+
       const{response,error} =  await taskService.pluginTaskList();
       if(error){
         this.$toast.add({
