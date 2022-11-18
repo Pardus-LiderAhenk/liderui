@@ -7,93 +7,95 @@
             :header="$t('reports.detailed_agent_report.agent_detail')">
             <h4>{{$t('reports.detailed_agent_report.general_information')}}</h4>
             <div class="p-grid">
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.computer_name')}}</b></div>
-            <div class="p-col-8">{{ selectedAgent.hostname }}</div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.mac_address')}}</b></div>
-            <div class="p-col-8">
-                {{ selectedAgent.macAddresses.replace(/'/g, "") }}
-            </div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>JID</b></div>
-            <div class="p-col-8">{{ selectedAgent.jid }}</div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ip_address')}}</b></div>
-            <div class="p-col-8">
-                {{ selectedAgent.ipAddresses.replace(/'/g, "") }}
-            </div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.operating_system_version')}}</b></div>
-            <div class="p-col-8">
-                {{
-                getPropertyValue(selectedAgent.properties, "os.version")
-                }}
-            </div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ahenk_version')}}</b></div>
-            <div class="p-col-8">
-                {{ getPropertyValue(selectedAgent.properties, "agentVersion") }}
-            </div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.create_date')}}</b></div>
-            <div class="p-col-8">{{ selectedAgent.createDate }}</div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.update_date')}}</b></div>
-            <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.computer_name')}}</b></div>
+                <div class="p-col-8">{{ selectedAgent.hostname }}</div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.mac_address')}}</b></div>
+                <div class="p-col-8">
+                    {{ selectedAgent.macAddresses.replace(/'/g, "") }}
+                </div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>JID</b></div>
+                <div class="p-col-8">{{ selectedAgent.jid }}</div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ip_address')}}</b></div>
+                <div class="p-col-8">
+                    {{ selectedAgent.ipAddresses.replace(/'/g, "") }}
+                </div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.operating_system_version')}}</b></div>
+                <div class="p-col-8">
+                    {{
+                    getPropertyValue(selectedAgent.properties, "os.version")
+                    }}
+                </div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.ahenk_version')}}</b></div>
+                <div class="p-col-8">
+                    {{ getPropertyValue(selectedAgent.properties, "agentVersion") }}
+                </div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.create_date')}}</b></div>
+                <div class="p-col-8">{{ selectedAgent.createDate }}</div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.update_date')}}</b></div>
+                <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             </div>
 
             <h4>{{$t('reports.detailed_agent_report.disk_and_memory_information')}}</h4>
-            <div class="p-grid">
+            
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <DataTable :value="disks" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-            <Column field="type" :header="$t('computer.plugins.resource_usage.disk_type')"></Column> 
-            <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'">
-                <template #body="{ data }">
-                    {{ ((data.total)/1000).toFixed(2) }}                
+                <Column field="type" :header="$t('computer.plugins.resource_usage.disk_type')"></Column> 
+                <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'">
+                    <template #body="{ data }">
+                        {{ ((data.total)/1000).toFixed(2) }}                
+                    </template>
+                </Column>
+                    <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'">
+                    <template #body="{ data }">
+                        {{ ((data.used)/1000).toFixed(2) }}                
+                    </template>
+                </Column>
+                <Column field="avaible" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'">
+                    <template #body="{ data }">
+                        {{ ((data.total-data.used)/1000).toFixed(2) }}                
+                    </template>
+                </Column>
+                <Column field="progresBar" :header="$t('computer.plugins.resource_usage.disk_status')" :showFilterMatchModes="false" style="min-width: 10rem">
+                    <template #body="{ data }">
+                        <ProgressBar class="p-progressbar-blue" :value="(100*(data.used/data.total)).toFixed(2)" v-if="Number((100*(data.used/data.total)).toFixed(2)) < 80.00">
+                    </ProgressBar>  
+                        <ProgressBar class="p-progressbar-red" :value="((100*(data.used/data.total)).toFixed(2))" v-else-if="Number((100*(data.used/data.total)).toFixed(2)) > 80.00">
+                    </ProgressBar>  
                 </template>
-            </Column>
-                <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'">
-                <template #body="{ data }">
-                    {{ ((data.used)/1000).toFixed(2) }}                
-                </template>
-            </Column>
-            <Column field="avaible" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'">
-                <template #body="{ data }">
-                    {{ ((data.total-data.used)/1000).toFixed(2) }}                
-                </template>
-            </Column>
-            <Column field="progresBar" header="Durum" :showFilterMatchModes="false" style="min-width: 10rem">
-                <template #body="{ data }">
-                  <ProgressBar :value="data.used" :showValue="true" >
-                    <span><strong>{{ data.total }}</strong></span>
-                </ProgressBar>    
-              </template>
-            </Column>
+                </Column>
             </DataTable>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.disk_partitions')}}</b></div>
-            <div class="p-col-8">
-                {{
-                getPropertyValue(selectedAgent.properties, "hardware.disk.partitions")
-                }}
-            </div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>RAM(GB)</b></div>
-            <div class="p-col-8">
-                {{
-                (
-                    getPropertyValue(
-                    selectedAgent.properties,
-                    "hardware.memory.total"
-                    ) / 1000
-                )
-                    .toFixed(2)
-                    .toLocaleString("tr-TR")
-                }}
-            </div>
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-grid p-fluid">
+                <!-- <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0 p-field" /> -->
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.disk_partitions')}}</b></div>
+                <div class="p-col-8">
+                    {{
+                    getPropertyValue(selectedAgent.properties, "hardware.disk.partitions")
+                    }}
+                </div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>RAM(GB)</b></div>
+                <div class="p-col-8">
+                    {{
+                    (
+                        getPropertyValue(
+                        selectedAgent.properties,
+                        "hardware.memory.total"
+                        ) / 1000
+                    )
+                        .toFixed(2)
+                        .toLocaleString("tr-TR")
+                    }}
+                </div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             </div>
 
             <h4>{{$t('reports.detailed_agent_report.processor_information')}}</h4>
@@ -213,5 +215,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+::v-deep(.p-progressbar-blue) {
+    height: 1.25rem;
+    background-color: #1769aa;
+  
+    .p-progressbar-value {
+        background-color: #419544;
+    }
+    
+  }
+  ::v-deep(.p-progressbar-red) {
+    height: 1.25rem;
+    background-color: #1769aa;
+  
+    .p-progressbar-value {
+        background-color:#D32F2F;
+    }
+    
+  }
 </style>

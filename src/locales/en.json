@@ -185,7 +185,8 @@
                 "memory_usage_detail": "Memory Usage Detail",
                 "disk_partition": "Disk Partition",
                 "description": "Shows instant Disk and RAM usage information",
-                "disk_type":"Disk Type"
+                "disk_type":"Disk Type",
+                "disk_status":"Disk Status"
             },
             "manage_root": {
                 "header": "Root Password Management",
@@ -610,7 +611,8 @@
             "available": "Avaible",
             "total": "Total",
             "disk_type":"Disk Type",
-            "disk_properties": "Disk Properties"
+            "disk_properties": "Disk Properties",
+            "disk_status":"Disk Status"
 
         },
         "scheduled": {

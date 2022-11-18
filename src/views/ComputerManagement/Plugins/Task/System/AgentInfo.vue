@@ -272,40 +272,38 @@
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_properties") }}</b></div>
+            <div class="p-col-8">
             <DataTable :value="diskDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-              <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
-              <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
-                  <template #body="{ data }">
-                      {{ ((data.total)/1000).toFixed(2) }}                
-                  </template>
-              </Column>
-                  <Column field="used" :header="$t('computer.agent_info.used')+ ' (GB)'">
-                  <template #body="{ data }">
-                      {{ ((data.used)/1000).toFixed(2) }}                
-                  </template>
-              </Column>
-              <Column field="avaible" :header="$t('computer.agent_info.available')+ ' (GB)'">
-                  <template #body="{ data }">
-                      {{ ((data.total-data.used)/1000).toFixed(2) }}                
-                  </template>
-              </Column>
+                <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
+                <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
+                    <template #body="{ data }">
+                        {{ ((data.total)/1000).toFixed(2) }}                
+                    </template>
+                </Column>
+                    <Column field="used" :header="$t('computer.agent_info.used')+ ' (GB)'">
+                    <template #body="{ data }" >
+                        {{ ((data.used)/1000).toFixed(2) }}                
+                    </template>
+                </Column>
+                <Column field="avaible" :header="$t('computer.agent_info.available')+ ' (GB)'">
+                    <template #body="{ data }">
+                        {{ ((data.total-data.used)/1000).toFixed(2) }}                
+                    </template>
+                </Column>
 
-              <Column field="progresBar" header="Durum" :showFilterMatchModes="false" style="min-width: 10rem">
-                <template #body="{ data }">
-                  <ProgressBar :value="data.used" :showValue="true" >
-                    <span><strong>{{ data.total }}</strong></span>
-                </ProgressBar>    
-              </template>
-            </Column>
+                <Column field="progresBar" :header="$t('computer.agent_info.disk_status')" :showFilterMatchModes="false" style="min-width: 20rem">
+                  <template #body="{ data }">
+                      <ProgressBar class="p-progressbar-blue" :value="((100*(data.used/data.total)).toFixed(2))" v-if="Number((100*(data.used/data.total)).toFixed(2)) < 80.00">
+                    </ProgressBar>    
 
+                      <ProgressBar class="p-progressbar-red" :value="((100*(data.used/data.total)).toFixed(2))" v-else-if="Number((100*(data.used/data.total)).toFixed(2)) > 80.00">
+                    </ProgressBar>
+                  </template>
+                </Column>
             </DataTable>
-                  <!-- <b-progress :max="max" height="2rem">
-                    <b-progress-bar :value="value">
-                      <span>Progress: <strong>{{ 50 }} / {{ 1000 }}</strong></span>
-                    </b-progress-bar>
-                  </b-progress> -->
-                
-            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+          </div>
+            <!-- <div class="p-grid p-fluid"></div> -->
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-4" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_partitions") }}</b></div>
             <div class="p-col-8">
               {{ getPropertyValue(selectedAgentInfo.properties, "hardware.disk.partitions") }}
@@ -686,7 +684,7 @@ export default {
         if(response.status == 200){
           if (response.data != "" && response.data != null) {
             this.selectedAgentInfo = response.data;
-            console.log(response)
+
         } else {
             this.selectedAgentInfo = null;
             this.$toast.add({
@@ -701,6 +699,14 @@ export default {
           return "error";
         }
       }
+    },
+
+    diskFormatter(number){
+      return (number/1000).toFixed(2);
+    },
+
+    diskAvaibleArea(total,used){
+      return this.diskFormatter((total/used)*100);
     },
 
     setAgentInfo(property, value) {
@@ -1160,12 +1166,22 @@ export default {
         padding: 1rem;
     }
 }
-::v-deep(.p-progressbar) {
+::v-deep(.p-progressbar-blue) {
   height: 1.25rem;
-  background-color: #66BB6A;
+  background-color: #1769aa;
 
   .p-progressbar-value {
-      background-color: #D32F2F;
+      background-color: #419544;
   }
+  
+}
+::v-deep(.p-progressbar-red) {
+  height: 1.25rem;
+  background-color: #1769aa;
+
+  .p-progressbar-value {
+      background-color:#D32F2F;
+  }
+  
 }
 </style>

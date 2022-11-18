@@ -185,7 +185,8 @@
                 "memory_usage_detail": "Bellek Kullanım Detayı",
                 "disk_partition": "Disk Bölümü",
                 "description": "Anlık Disk ve RAM kullanım bilgilerini gösterir",
-                "disk_type":"Disk Tipi"
+                "disk_type":"Disk Tipi",
+                "disk_status":"Disk Durumu"
             },
             "manage_root": {
                 "header": "Root Parola Yönetimi",
@@ -609,7 +610,8 @@
             "available": "Boş",
             "total": "Toplam",
             "disk_type":"Disk Tipi",
-            "disk_properties": "Disk Özellikleri"
+            "disk_properties": "Disk Özellikleri",
+            "disk_status":"Disk Durumu"
 
         },
         "scheduled": {
