@@ -143,12 +143,7 @@ export default {
           used: '',
           available: ''
         }],
-        hddDisk: [{
-          type:'',
-          total: '',
-          used: '',
-          available: ''
-        }],
+        hddDisk: [],
       memory: [{
         total: '',
         used: '',
@@ -222,7 +217,7 @@ export default {
   
         this.hddDisk = arrg["hardware.disk.hdd.info"] || [];
         this.hddDisk = this.hddDisk.concat(arrg ["hardware.disk.ssd.info"] || []);
-
+        this.hddDisk = eval(this.hddDisk);
         this.hddDisk.map(element => {
           element.available = this.diskAvaibleArea(element.total,element.used);
           element.total = this.diskFormatter(element.total);
