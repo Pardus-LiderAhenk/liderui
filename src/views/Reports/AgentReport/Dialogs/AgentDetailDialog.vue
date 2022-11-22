@@ -217,16 +217,16 @@ export default {
 <style lang="scss" scoped>
 ::v-deep(.p-progressbar-blue) {
     height: 1.25rem;
-    background-color: #1769aa;
-  
+    background-color: #419544;
+
     .p-progressbar-value {
-        background-color: #419544;
+        background-color: #1769aa;
     }
     
   }
   ::v-deep(.p-progressbar-red) {
     height: 1.25rem;
-    background-color: #1769aa;
+    background-color: #419544;
   
     .p-progressbar-value {
         background-color:#D32F2F;
