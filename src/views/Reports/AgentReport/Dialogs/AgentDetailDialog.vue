@@ -45,7 +45,39 @@
             </div>
 
             <h4>{{$t('reports.detailed_agent_report.disk_and_memory_information')}}</h4>
-            
+            <div class="p-grid">
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("reports.detailed_agent_report.total_disk_space") }}</b></div>
+            <div class="p-col-8">
+              {{
+                (getPropertyValue(selectedAgent.properties, "hardware.disk.total") / 1000)
+                  .toFixed(2)
+                  .toLocaleString("tr-TR")
+              }}
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("reports.detailed_agent_report.used_disk_space") }}</b></div>
+            <div class="p-col-8">
+              {{
+                (getPropertyValue(selectedAgent.properties, "hardware.disk.used") / 1000)
+                  .toFixed(2)
+                  .toLocaleString("tr-TR")
+              }}
+            </div>
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("reports.detailed_agent_report.free_disk_space") }}</b></div>
+            <div class="p-col-8">
+              {{
+                ((getPropertyValue(selectedAgent.properties, "hardware.disk.total") -
+                    getPropertyValue(
+                        selectedAgent.properties,
+                      "hardware.disk.used"
+                    )) / 1000)
+                  .toFixed(2)
+                  .toLocaleString("tr-TR")
+              }}
+            </div>
+            </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <DataTable :value="disks" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
                 <Column field="type" :header="$t('computer.plugins.resource_usage.disk_type')"></Column> 
