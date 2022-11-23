@@ -907,14 +907,19 @@ export default {
       this.task.commandId = "AGENT_INFO";
       const params = new FormData();
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
-      const{response,error} = await computerManagementService.getAgentInfo(params);
-      if (!response.data) {
-        this.$toast.add({
-          severity:'error', 
-          detail: this.$t("computer.agent_info.delete_client_error"), 
-          summary:this.$t("computer.task.toast_summary"), 
-          life: 3000
-        });
+      const{response,error} = await computerManagementService.getAgentInfo(this.selectedLiderNode.distinguishedName);
+      if(response.status == 200){
+        if (!response.data) {
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t("computer.agent_info.delete_client_error"), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      }
+      else{
+        console.log("Could not get agent")
       }
   
     },
