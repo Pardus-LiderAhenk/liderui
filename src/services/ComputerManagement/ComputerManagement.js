@@ -141,9 +141,9 @@ class ComputerManagemetService{
         }
     }
 
-	async getAgentInfo(agentDN) {
+	async getAgentInfo(params) {
         try {
-            const response = await axios.get(liderComputerGetAgentInfoUrl + "/agentDN/" + agentDN);
+            const response = await axios.post(liderComputerGetAgentInfoUrl,params);
             return { response };
         } catch (error) {
             return { error: error }

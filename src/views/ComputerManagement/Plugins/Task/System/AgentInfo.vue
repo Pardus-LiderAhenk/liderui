@@ -907,7 +907,7 @@ export default {
       this.task.commandId = "AGENT_INFO";
       const params = new FormData();
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
-      const{response,error} = await computerManagementService.getAgentInfo(this.selectedLiderNode.distinguishedName);
+      const{response,error} = await computerManagementService.getAgentInfo(params);
       if(response.status == 200){
         if (!response.data) {
           this.$toast.add({
