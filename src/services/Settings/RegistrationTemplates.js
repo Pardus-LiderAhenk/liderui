@@ -29,9 +29,9 @@ class RegistrationTemplateService{
         }
     }
 
-    async update(uuid ,params) {
+    async update(params) {
         try {
-            const response = await axios.put(registrationTemplateUpdateUrl, params);
+            const response = await axios.put(registrationTemplateUpdateUrl,params );
             return { response };
         } catch (error) {
             return { error: error }

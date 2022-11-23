@@ -134,7 +134,7 @@ class AdManagementService{
     
     async configuration() {
         try {
-            const response = await axios.get(adConfigurations);
+            const response = await axios.post(adConfigurations);
             return { response };
         } catch (error) {
             return { error: error }
