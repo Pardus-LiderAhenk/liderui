@@ -512,7 +512,9 @@
                 "error_417_fetching_ip_address": "Ip adresi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
                 "select_ip_address_warning":"Lütfen IP adresi seçiniz",
                 "select_ip_address":"IP Adresi Seçiniz",
-                "connection_error":"VNC bağlantısı sırasında hata oluştu"
+                "connection_error":"VNC bağlantısı sırasında hata oluştu",
+                "getting_access":"Bağlantı bilgileri alındı",
+                "client_warning":"Ahenkten bağlantı bilgileri alındı uzak erişimi için lütfen IP adresi seçiniz"
             }
         },
         "agent_info": {

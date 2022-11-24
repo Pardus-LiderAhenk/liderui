@@ -14,14 +14,15 @@
         <Dropdown
           v-model="selectedIpAddress" :options="ipAddresses" 
           optionLabel="name" optionValue="value" 
-          placeholder="Lütfen IP seçiniz " class="p-mr-2"
+          placeholder="Lütfen IP seçiniz " class="dropdown-menu p-mr-2"
+           
         />
         <Button :label="$t('computer.plugins.remote_access.connect')" 
           class="p-button-raised p-button-sm  p-button-success p-mr-2" 
           @click="start_connection();"
         />
         <!-- <Button :label="$t('computer.plugins.remote_access.reconnect')" 
-          class="p-button-raised  p-button-sm  p-button-info p-mr-2" 
+          class="p-button-raised  p-button-sm  p-button-info p-mr-2"    class="p-mr-2"
           @click="reconnect();"
         /> -->
         <Button :label="$t('computer.plugins.remote_access.close_connection')" 
@@ -77,6 +78,7 @@ import states from "./lib/states";
 import clipboard from "./lib/clipboard";
 import { mapGetters } from "vuex";
 import { taskService } from "../../../../../services/Task/TaskService.js";
+import { conflicts } from "yargs";
 
 
 Guacamole.Mouse = GuacMouse.mouse;
@@ -128,7 +130,7 @@ export default {
           permission: this.connectionData.permission,
         };
         this.executeTask = true;
-        this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.connection_request_sent")});
+        // this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.connection_request_sent")});
     },
 
     remoteAccessResponse(message) {
@@ -145,8 +147,16 @@ export default {
             value:element
           })
         }
-        this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.checking_access")},);
-        this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
+        if (message.result.responseCode === "TASK_PROCESSED") {
+          // this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.getting_access")},);
+          this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.client_warning")},);
+        }
+        else{
+          this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.connection_error")},);
+        }
+        // this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.checking_access")},);
+        // this.status_messages.push({severity: 'warning', content: this.$t("computer.plugins.remote_access.checking_access")},);
+        // this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
         this.title =  this.$t("computer.plugins.remote_access.remote_destktop_access") + " - " + message.commandExecution.uid;
         if(ipList.length == 1){
           this.selectedIpAddress = ipList[0];
@@ -163,21 +173,29 @@ export default {
       
       let data = new FormData();
       if (this.connectionData && this.connectionData.protocol == 'ssh') {
+        
+        this.selectedIpAddress = this.connection_info.host;
         data.append("protocol", this.connectionData.protocol);
         data.append("port", this.defaultSshPort);
         data.append("password", this.connectionData.sshPassword);
         data.append("username", this.connectionData.sshUsername);
+        console.log(data)
       } else {
+        if(!this.selectedIpAddress){
+          this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
+          return;
+        }
+        this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.connection_request_sent")});
         data.append("protocol", this.connectionData.protocol);
         data.append("port", this.connection_info.port);
         data.append("password", this.connection_info.password);
         data.append("username", '');
       }
 
-      if(!this.selectedIpAddress){
-        this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
-        return;
-      }
+      // if(!this.selectedIpAddress){
+      //   this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
+      //   return;
+      // }
 
       let checkhostFormdata = new FormData();
       checkhostFormdata.append('host', this.selectedIpAddress);
@@ -458,6 +476,10 @@ export default {
         "host": this.$route.query.host,
         "port": this.defaultSshPort
       };
+      this.ipAddresses.push({
+        name:this.connection_info.host,
+        value:this.connection_info.host
+      })
       this.start_connection();
     }
   },
@@ -469,6 +491,8 @@ export default {
 </script>
 
 <style scoped>
+.dropdown-menu { background-color: #FF0000; }
+
 .display {
   overflow: hidden;
   width: 100%;

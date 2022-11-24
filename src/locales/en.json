@@ -513,7 +513,9 @@
                 "error_417_fetching_ip_address": "An unexpected error occurred while fetching the ip address. Error code : 417",
                 "select_ip_address_warning":"Please select IP address",
                 "select_ip_address":"Select IP Address",
-                "connection_error":"An unexpected error occurred while VNC connection"
+                "connection_error":"An unexpected error occurred while VNC connection",
+                "getting_access":"Connection information received",
+                "client_warning":"Ahenk connection information received, please select IP address for remote access"
             }
         },
         "agent_info": {
