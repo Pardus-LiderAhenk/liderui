@@ -14,8 +14,8 @@
         <Dropdown
           v-model="selectedIpAddress" :options="ipAddresses" 
           optionLabel="name" optionValue="value" 
-          placeholder="Lütfen IP seçiniz " class="dropdown-menu p-mr-2"
-           
+          placeholder="Lütfen IP seçiniz " 
+          :class="selectedIpAddress ? '': 'p-invalid'"
         />
         <Button :label="$t('computer.plugins.remote_access.connect')" 
           class="p-button-raised p-button-sm  p-button-success p-mr-2" 
@@ -489,6 +489,14 @@ export default {
   },
 };
 </script>
+
+.plugin-card{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+.plugin-card:hover {
+  box-shadow: 0 8px 20px 0 rgba(155, 150, 150, 0.2);
+} 
 
 <style scoped>
 .dropdown-menu { background-color: #FF0000; }
