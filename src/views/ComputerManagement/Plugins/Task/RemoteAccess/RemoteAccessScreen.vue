@@ -15,7 +15,8 @@
           v-model="selectedIpAddress" :options="ipAddresses" 
           optionLabel="name" optionValue="value" 
           placeholder="Lütfen IP seçiniz " 
-          :class="selectedIpAddress ? '': 'p-invalid'"
+          :class="selectedIpAddress ? 'p-mr-2': 'p-invalid p-mr-2'"
+          
         />
         <Button :label="$t('computer.plugins.remote_access.connect')" 
           class="p-button-raised p-button-sm  p-button-success p-mr-2" 
@@ -78,8 +79,6 @@ import states from "./lib/states";
 import clipboard from "./lib/clipboard";
 import { mapGetters } from "vuex";
 import { taskService } from "../../../../../services/Task/TaskService.js";
-import { conflicts } from "yargs";
-
 
 Guacamole.Mouse = GuacMouse.mouse;
 
@@ -179,7 +178,6 @@ export default {
         data.append("port", this.defaultSshPort);
         data.append("password", this.connectionData.sshPassword);
         data.append("username", this.connectionData.sshUsername);
-        console.log(data)
       } else {
         if(!this.selectedIpAddress){
           this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);

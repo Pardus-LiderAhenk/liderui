@@ -1036,7 +1036,6 @@ export default {
           params.append("hardwareDiskSsdInfo",arrg.hardwareDiskSsdInfo);
           params.append("hardwareDiskHddInfo",arrg.hardwareDiskHddInfo)
           const{response,error} = await computerManagementService.updateAgentInfo(params);
-          console.log(response);
           if(error){
             this.$toast.add({
                 severity:'error', 
