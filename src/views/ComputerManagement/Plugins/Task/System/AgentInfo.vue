@@ -1033,7 +1033,10 @@ export default {
           params.append("phase", phase);
           params.append("osVersion", arrg.osVersion);
           params.append("agentUid", this.selectedLiderNode.uid);
+          params.append("hardwareDiskSsdInfo",arrg.hardwareDiskSsdInfo);
+          params.append("hardwareDiskHddInfo",arrg.hardwareDiskHddInfo)
           const{response,error} = await computerManagementService.updateAgentInfo(params);
+          console.log(response);
           if(error){
             this.$toast.add({
                 severity:'error', 
