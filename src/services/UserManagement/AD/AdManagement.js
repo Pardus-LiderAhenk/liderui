@@ -26,7 +26,7 @@ class AdManagementService{
 
     async updateUserPassword(params) {
         try {
-            const response = await axios.get(adUpdateUserPasswordUrl, params);
+            const response = await axios.post(adUpdateUserPasswordUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

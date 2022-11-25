@@ -157,7 +157,7 @@ export default {
             //axios.post('/api/ad/search-entry-group', params).then(response => {
                 // this.groupSearchValue = '';
                 // this.selectedGroupField = null;
-            const { response,error } = await adManagementService.searchEntryGroup("",this.selectedGroupField.value,this.groupSearchValue);
+            const { response,error } = await adManagementService.searchEntryGroup("searchDn",this.selectedGroupField.value,this.groupSearchValue);
             if(error){
                 this.$toast.add({
                     severity:'error', 
