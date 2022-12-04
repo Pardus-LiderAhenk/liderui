@@ -447,34 +447,35 @@ export default {
 
             if(rules && rules.length > 0) {
 
-            const { response,error } = await consoleUserSettingsService.deleteOLCAccessRule(rules);
-            if(response.status === 200) {
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.console_user_settings.olc_success_rule_deleted'),
-                    summary: this.$t('settings.console_user_settings.successful'),
-                    life: 3000
-                })
-                this.getOlcAccessRules();
-            }
-            else{
-                if(error){
+                const { response,error } = await consoleUserSettingsService.deleteOLCAccessRule(rules[0]);
+            
+                if(response.status == 200) {
                     this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.console_user_settings.error_olc_rule_deleted'),
-                        summary: this.$t('settings.console_user_settings.error'), 
+                        severity:'success', 
+                        detail: this.$t('settings.console_user_settings.olc_success_rule_deleted'),
+                        summary: this.$t('settings.console_user_settings.successful'),
                         life: 3000
-                    });
+                    })
+                    this.getOlcAccessRules();
                 }
-                else if(response.status = 417){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.console_user_settings.error_417_olc_rule_deleted'),
-                        summary: this.$t('settings.console_user_settings.error'), 
-                        life: 3000
-                    });
+                else{
+                    if(error){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_olc_rule_deleted'),
+                            summary: this.$t('settings.console_user_settings.error'), 
+                            life: 3000
+                        });
+                    }
+                    else if(response.status = 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_olc_rule_deleted'),
+                            summary: this.$t('settings.console_user_settings.error'), 
+                            life: 3000
+                        });
+                    }
                 }
-            }
         }
         }, 
         async addOlcAccessRule(olcAccessDn, accessType) {
