@@ -72,9 +72,9 @@ class UserGroupsService {
         }
     }
 
-    async deleteEntry(params) {
+    async deleteEntry(dn) {
         try {
-            const response = await axios.post(userGroupsDeleteEntryUserUrl, params);
+            const response = await axios.delete(userGroupsDeleteEntryUserUrl + "/dn/" + dn );
             return { response };
         } catch (error) {
             return { error: error }
