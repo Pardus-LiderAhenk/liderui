@@ -31,7 +31,7 @@ class ProfileService {
 
     async updateProfile(params) {
         try {
-            const response = await axios.post(liderConsoleUpdateProfilUrl, params);
+            const response = await axios.put(liderConsoleUpdateProfilUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
