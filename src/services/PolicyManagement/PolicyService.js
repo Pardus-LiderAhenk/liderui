@@ -98,9 +98,9 @@ class PolicyService {
         }
     }
 
-    async policyActivePolicy(params){
+    async policyActivePolicy(){
         try {
-            const response = await axios.post(policyActivePolicyUrl, params);
+            const response = await axios.get(policyActivePolicyUrl);
             return { response };
         } catch (error) {
             return { error: error }
