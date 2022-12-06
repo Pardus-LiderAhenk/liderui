@@ -98,9 +98,9 @@ class ComputerGroupsManagementService{
         }
     }
 
-    async deleteMember(dn,dnList) {
+    async deleteMember(params) {
         try {
-            const response = await axios.delete(liderComputerGroupsAddMemberUrl + "/dn/" + dn + "/dnList/" + dnList);
+            const response = await axios.put(liderComputerGroupsDeleteMemberUrl ,params);
             return { response };
         } catch (error) {
             return { error: error }
