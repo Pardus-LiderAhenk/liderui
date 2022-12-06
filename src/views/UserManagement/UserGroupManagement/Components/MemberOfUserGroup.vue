@@ -246,7 +246,6 @@ export default {
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedLiderNode.distinguishedName);
             const{response,error} = await  userGroupsService.deleteGroupMember(params);
-            console.log(response)
             if(error){
                 this.$toast.add({
                     severity:'error', 

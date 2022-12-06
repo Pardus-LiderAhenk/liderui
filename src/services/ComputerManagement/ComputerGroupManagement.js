@@ -9,6 +9,7 @@ const liderComputerGroupsMoveEntryUrl = '/api/lider/computer-groups/move/entry';
 const liderComputerGroupsAddOuUrl = '/api/lider/computer-groups/add-ou';
 const liderComputerGroupsRenameEntryUrl = '/api/lider/computer-groups/rename/entry';
 const liderComputerGroupsAddMemberUrl = '/api/lider/computer-groups/group/members';
+const liderComputerGroupsDeleteMemberUrl = '/api/lider/computer-groups/group/members';
 
 class ComputerGroupsManagementService{
 
@@ -25,9 +26,9 @@ class ComputerGroupsManagementService{
         }
     }
 
-    async createAgentGroup(params) {
+    async createAgentGroup(data) {
         try {
-            const response = await axios.post(liderComputerGroupsAgentReportCreateGroupUrl, params);
+            const response = await axios.post(liderComputerGroupsAgentReportCreateGroupUrl, data);
             return { response };
         } catch (error) {
             return { error: error }
@@ -91,6 +92,15 @@ class ComputerGroupsManagementService{
     async addMember(params) {
         try {
             const response = await axios.post(liderComputerGroupsAddMemberUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async deleteMember(dn,dnList) {
+        try {
+            const response = await axios.delete(liderComputerGroupsAddMemberUrl + "/dn/" + dn + "/dnList/" + dnList);
             return { response };
         } catch (error) {
             return { error: error }
