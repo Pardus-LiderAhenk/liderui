@@ -154,10 +154,7 @@ export default {
             params.append("searchDn", "");
             params.append("key", this.selectedGroupField.value);
             params.append("value", this.groupSearchValue);
-            //axios.post('/api/ad/search-entry-group', params).then(response => {
-                // this.groupSearchValue = '';
-                // this.selectedGroupField = null;
-            const { response,error } = await adManagementService.searchEntryGroup("searchDn",this.selectedGroupField.value,this.groupSearchValue);
+            const { response,error } = await adManagementService.searchEntryGroup(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -173,7 +170,7 @@ export default {
                         this.groups = response.data;
                     
                     }
-            }
+                }
                 else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 

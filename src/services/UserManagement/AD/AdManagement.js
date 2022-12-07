@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const adUpdateUserPasswordUrl = "/api/ad/update-user-password"
-const admemberFromGroupUrl = "/api/ad/member-from-group";
+const adMemberFromGroupUrl = "/api/ad/member-from-group";
 const adChildEntriesListUrl = "/api/ad/child-entries";
 const adAddOuToAdUrl = "/api/ad/add-ou-to-ad";
 const adAddGroupToAdUrl = "/api/ad/add-group-to-ad";
@@ -35,7 +35,7 @@ class AdManagementService{
 
     async deleteMemberUser(params) {
         try {
-            const response = await axios.delete(admemberFromGroupUrl, params);
+            const response = await axios.put(adMemberFromGroupUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
@@ -69,9 +69,9 @@ class AdManagementService{
         }
     }
 
-    async searchEntryGroup(searchDn,key,value) {
+    async searchEntryGroup(params) {
         try {
-            const response = await axios.get(adSearchEntryGroupUrl + "/search-dn/" + searchDn + "/key/" + key + " /value/" + value);
+            const response = await axios.post(adSearchEntryGroupUrl,params);
             return { response };
         } catch (error) {
             return { error: error }
@@ -150,18 +150,18 @@ class AdManagementService{
         }
     }
 
-    async searchEntryUserList(searchDn,key,value) {
+    async searchEntryUserList(params) {
         try {
-            const response = await axios.get(adSearchEntryUserUrl + "/search-dn/" + searchDn + "/key/" + key + " /value/" + value);
+            const response = await axios.post(adSearchEntryUserUrl , params);
             return { response };
         } catch (error) {
             return { error: error }
         }
     }
 
-    async childGroupList(searchDn,key,value) {
+    async childGroupList(params) {
         try {
-            const response = await axios.get(adChildGroupUrl + "/searchDn/" + searchDn + "/key/" + key + " /value/" + value);
+            const response = await axios.post(adChildGroupUrl,params);
             return { response };
         } catch (error) {
             return { error: error }

@@ -195,7 +195,6 @@ export default {
 
             const{response,error} = await userService.deleteAttributeAndValue(this.selectedGroup.distinguishedName,"member",this.selectedNode.distinguishedName);
             console.log("user groups");
-            console.log(response);
             if(error){
                 this.$toast.add({
                     severity:'error', 
