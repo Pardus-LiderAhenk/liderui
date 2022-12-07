@@ -129,6 +129,7 @@ export default {
             data.append("model", this.filter.model);
             data.append("processor", this.filter.processor);
             data.append("osVersion", this.filter.osVersion);
+            data.append("diskType",this.filter.diskType);
             data.append("agentVersion", this.filter.agentVersion);
             data.append("getFilterData", false);
             
