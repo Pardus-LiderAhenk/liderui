@@ -95,7 +95,8 @@
         "name":"Ad",
         "not_found_record": "Kayıt bulunamadı",
         "online_clients": "Çevrimiçi İstemciler",
-        "search_dn": "Arama yapmak için seçilen kayıt"
+        "search_dn": "Arama yapmak için seçilen kayıt",
+        "searching": "Arama yapılıyor, lütfen bekleyiniz..."
 
     },
     "node_detail": {
