@@ -51,7 +51,7 @@
                     <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
                     <Column field="available" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'"></Column>
                   </DataTable>
-                  <DataTable :value="hddDisk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                  <DataTable v-if="hddDisk.length>0"  :value="hddDisk" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
                     <Column field="type" :header="$t('computer.plugins.resource_usage.disk_type')"></Column> 
                     <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'"></Column>
                     <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'"></Column>
@@ -143,12 +143,12 @@ export default {
           used: '',
           available: ''
         }],
-        hddDisk: [{
-          type: '',
-          total: '',
-          used: '',
-          available: ''
-        }],
+      hddDisk: [{
+        type: '',
+        total: '',
+        used: '',
+        available: ''
+      }],
       memory: [{
         total: '',
         used: '',
@@ -201,7 +201,7 @@ export default {
     },
 
     getResourceUsage(message) {
-      //debugger;
+
       if (message.commandClsId == "RESOURCE_INFO_FETCHER") {
         this.diskChartOptions = this.returnOptionForChart(this.diskTitle, true);
         this.memoryChartOptions = this.returnOptionForChart(this.memoryTitle, true);
@@ -209,6 +209,8 @@ export default {
         this.devices = arrg["Device"]
         this.disk = [];
         this.hddDisk  = [];
+        var hddDiskTotal = [];
+        var ssdDiskTotal = [];
         var totalDisk = arrg["Total Disc"]/1000;
         var usedDisk = (arrg["Usage Disc"]/1000).toFixed(2);
         var availableDisk = (totalDisk - usedDisk).toFixed(2);
@@ -219,9 +221,22 @@ export default {
           available : availableDisk
           }
         );
-  
-        this.hddDisk = arrg["hardware.disk.hdd.info"] || [];
-        this.hddDisk = this.hddDisk.concat(arrg ["hardware.disk.ssd.info"] || []);
+
+        if(arrg["hardware.disk.hdd.info"]){
+          for (let index = 0; index < (eval(arrg["hardware.disk.hdd.info"]).length); index++) {
+            let element = (eval(arrg["hardware.disk.hdd.info"])[index]);
+            hddDiskTotal.push(element);
+          }
+        }
+        if(arrg["hardware.disk.ssd.info"]){
+          for (let index = 0; index < (eval(arrg["hardware.disk.ssd.info"]).length); index++) {
+            let element = eval(arrg["hardware.disk.ssd.info"])[index];
+            ssdDiskTotal.push(element);
+          }
+        }
+
+        this.hddDisk = hddDiskTotal || [];
+        this.hddDisk = this.hddDisk.concat(ssdDiskTotal || []);
         this.hddDisk = eval(this.hddDisk);
 
         this.hddDisk.map(element => {

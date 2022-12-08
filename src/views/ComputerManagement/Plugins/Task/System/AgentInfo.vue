@@ -273,7 +273,7 @@
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_properties") }}</b></div>
             <div class="p-col-8">
-            <DataTable :value="diskDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+            <DataTable v-if="diskDataList.length>0" :value="diskDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
                 <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
                 <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
                     <template #body="{ data }">
