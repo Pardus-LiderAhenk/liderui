@@ -43,7 +43,8 @@
               <li style="list-style-type: none;">
                 <div class="p-grid">
                   <div class="p-col-6">{{ $t("computer.plugins.ldap_login.disable_local_user") }}:</div>
-                  <div class="p-col-6"> {{disableLocalUser}} </div>
+                    <div class="p-col-6" v-if="disableLocalUser == true"> aktif </div>
+                    <div class="p-col-6" v-else> pasif </div>
                 </div>
               </li>
             </div>
@@ -69,7 +70,8 @@
               <li style="list-style-type: none;">
                 <div class="p-grid">
                   <div class="p-col-6">{{ $t("computer.plugins.ldap_login.disable_local_user") }}:</div>
-                  <div class="p-col-6"> {{disableLocalUser}} </div>
+                  <div class="p-col-6" v-if="disableLocalUser == true"> aktif </div>
+                  <div class="p-col-6" v-else> pasif </div>
                 </div>
               </li>
             </div>

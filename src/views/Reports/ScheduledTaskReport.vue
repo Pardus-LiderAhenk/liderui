@@ -93,14 +93,12 @@
         </Column>
         <Column :header="$t('reports.scheduled_task_report.total')">
           <template #body="{ data }">
-            {{
-             data.uidList.length
-            }}
+            {{ data.uidList.length }}
           </template>
         </Column>
         <Column :header="$t('reports.scheduled_task_report.successful')">
           <template #body="{ data }">
-            {{ data.successfullTaskCount  }}
+            {{ data.successfullTaskCount }}
           </template>
         </Column>
         <Column :header="$t('reports.scheduled_task_report.waiting')">
@@ -528,10 +526,19 @@ export default {
     var params = new FormData();
     params.append("id", this.selectedCommand.id);
 
-    const{ response, error } = await scheduledTaskReportService.scheduledTaskCancel(this.selectedCommand.id);
+    const{ response, error } = await scheduledTaskReportService.scheduledTaskCancel(params);
+    if(error){
+        this.$toast.add({
+        severity:'error', 
+        detail: this.$t('reports.scheduled_task_report.error_scheduled_cancel'), 
+        summary:this.$t("computer.task.toast_summary"), 
+        life: 3000
+      });
+    }
+    else{
       if (response.status == 200 && response.data != null) {
-        this.tasks = this.tasks.filter(command => command.id != response.data.id);
-        this.tasks.push(response.data);
+        this.tasks = this.tasks.filter(command => command.id != response.data.body.id);
+        this.tasks.push(response.data.body);
         this.$toast.add({
           severity:'success', 
           detail: this.$t('reports.scheduled_task_report.success_scheduled_cancel'), 
@@ -542,14 +549,10 @@ export default {
       else if(response.status == 400){
         console.log("Scheduled task id not found!");
       }
-      this.$toast.add({
-        severity:'error', 
-        detail: this.$t('reports.scheduled_task_report.error_scheduled_cancel'), 
-        summary:this.$t("computer.task.toast_summary"), 
-        life: 3000
-      });
+    }
     this.cancelScheduledTaskDialog = false;
-  }
+    }
+    
   },
 };
 </script>

@@ -142,7 +142,7 @@ export default {
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
                 params.append("value", "group");
-                const {response,error} = await adManagementService.childGroupList(this.selectedNode.distinguishedName,"objectclass","group");
+                const {response,error} = await adManagementService.childGroupList(params);
 
                 if(error){
                     this.$toast.add({

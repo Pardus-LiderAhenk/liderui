@@ -38,7 +38,7 @@ class TaskService{
 
     async packageList(params){
         try {
-            const response = await axios.post(packagesListUrl, params);
+            const response = await axios.post(packagesListUrl,params );
             return { response };
         } catch (error) {
             return { error: error }

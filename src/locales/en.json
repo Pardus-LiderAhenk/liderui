@@ -95,7 +95,8 @@
         "name": "Name",
         "not_found_record": "Not found record",
         "online_clients": "Online Clients",
-        "search_dn": "Selected node to search"
+        "search_dn": "Selected node to search",
+        "searching": "Searching, please wait..."
     },
     "node_detail": {
         "selected_node_title": "Node Information",

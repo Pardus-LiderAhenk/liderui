@@ -35,7 +35,7 @@
                     <DataTable :value="profiles" class="p-datatable-sm" ref="dt"
                         v-model:filters="filters"
                         rowGroupMode="subheader" groupRowsBy="plugin.name"
-                        sortMode="single" sortField="brand" :sortOrder="1"
+                        sortMode="single" sortField="plugin.name" :sortOrder="1"
                         :scrollable="true" scrollHeight="400px"
                         responsiveLayout="scroll" v-model:selection="selectedProfiles"
                         @rowSelect="onRowSelect" :expandableRowGroups="true" v-model:expandedRowGroups="expandedRowGroups">
@@ -175,12 +175,15 @@ export default {
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            }else{
+            }
+            else{
                 if(response.status == 200){
                     if (response.data) {
                         this.profiles = response.data;
+                        console.log(profiles);
                     }
-                }else if(response.status == 417){
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('policy_management.error_417_get_profile'), 

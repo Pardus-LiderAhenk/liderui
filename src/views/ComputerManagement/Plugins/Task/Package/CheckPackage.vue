@@ -21,13 +21,13 @@
           >
           </Button>
         </div>
-      </template> 
+      </template>
       <template #default>
         <div class="p-flex-column">
             <div class="p-fluid p-field p-grid">
                 <div class="p-field p-col-12 p-md-6">
                     <label for="packageName">{{$t('computer.plugins.check_package.package_name')}}</label>
-                    <InputText v-model="packageName" type="text" 
+                    <InputText v-model="packageName" type="text"
                         :class="validationPackageName ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'"
                         placeholder="ahenk"
                     />
@@ -44,8 +44,8 @@
                 <DataTable :value="packages" class="p-datatable-sm"
                     dataKey="id"
                     :paginator="true" :rows="10" ref="dt"
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-                    :rowsPerPageOptions="[10,25,50]" 
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                    :rowsPerPageOptions="[10,25,50]"
                     v-model:filters="filters"
                 >
                     <template #header>
@@ -60,9 +60,9 @@
                             <div class="p-d-flex p-jc-end">
                                 <span class="p-input-icon-left">
                                     <i class="pi pi-search" />
-                                    <InputText v-model="filters['global'].value" 
-                                        class="p-inputtext-sm" 
-                                        :placeholder="$t('computer.plugins.check_package.search')" 
+                                    <InputText v-model="filters['global'].value"
+                                        class="p-inputtext-sm"
+                                        :placeholder="$t('computer.plugins.check_package.search')"
                                     />
                                 </span>
                             </div>
@@ -93,10 +93,11 @@
  * Checks whether the package whose name and version information entered is installed in the selected Agent or Agents
  * commandId: CHECK_PACKAGE
  * @see {@link http://www.liderahenk.org/}
- * 
+ *
  */
 
 import {FilterMatchMode} from 'primevue/api';
+import { mapGetters } from "vuex"
 
 export default {
   props: {
@@ -118,12 +119,17 @@ export default {
       taskValidation: false,
       packages: [],
       packageName: "",
+      result: "",
       version: "",
       filters: {},
       validationPackageName: false,
       pluginDescription: this.$t('computer.plugins.check_package.description'),
       pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/packageControl/",
     }
+  },
+
+  computed: {
+    ...mapGetters(["selectedLiderNode","selectedNodeType"]),
   },
 
   methods: {
@@ -153,31 +159,49 @@ export default {
         this.task.commandId = commandId;
         this.task.parameterMap = {
             "packageName": this.packageName,
-            "packageVersion": this.version
+            "packageVersion": this.version,
+            "packageResult": this.result
         };
+        this.packages = [];
         this.showTaskDialog = true;
     },
 
     checkPackageResponse(message) {
       if (message.commandClsId == "CHECK_PACKAGE") {
-        let responseData = message.result.responseDataStr.split("\n");
-        let responseMessage = message.result.responseMessage;
-        let responsePackageName = responseMessage.split("-")[0].trim();
-        let arrg = JSON.parse(responseData);
-        if (this.isExistPackage("packageName", responsePackageName)) {
-          if (!this.isExistPackage("dn", arrg.dn)) {
-              this.pushPackageList(arrg, responsePackageName);
-          }
-        } else{
+        if (this.selectedNodeType === "computer" && this.selectedLiderNode.type === "AHENK") {
           this.packages = [];
-          if (!this.isExistPackage("dn", arrg.dn)) {
-              this.pushPackageList(arrg, responsePackageName);
-          }
         }
+
+        let responseData = message.result.responseDataStr.split("\n");
+        let arrg = JSON.parse(responseData);
+        if (arrg) {
+          let responseMessage = message.result.responseMessage;
+          let responsePackageName = responseMessage.split("-")[0].trim();
+          let responsePackageResult = responseMessage.split("-")[1].trim()
+          if (this.isExistPackage("dn", arrg.dn)){
+            this.packages = this.packages.filter(clientPackage => clientPackage.dn != arrg.dn);
+          }
+          this.pushPackageList(arrg, responsePackageName, responsePackageResult);
+        }
+
+
+        // if (this.isExistPackage("packageName", responsePackageName)) {
+        //   this.packages = [];
+        //   if (!this.isExistPackage("dn", arrg.dn)) {
+        //     this.packages = [];
+        //     this.pushPackageList(arrg, responsePackageName, responsePackageResult);
+        //   }
+
+        // } else{
+        //   this.packages = [];
+        //   if (!this.isExistPackage("dn", arrg.dn)) {
+        //     this.pushPackageList(arrg, responsePackageName, responsePackageResult);
+        //   }
+        // }
       }
     },
 
-    pushPackageList(arrg, responsePackageName) {
+    pushPackageList(arrg, responsePackageName, responsePackageResult) {
       let result = arrg.res;
       if (result == 0) {
           result = "Paket yüklü değil"
@@ -191,8 +215,8 @@ export default {
       this.packages.push({
           "packageName": responsePackageName,
           "dn": arrg.dn,
-          "result": result,
-          "version": arrg.version.trim("\n")
+          "result": responsePackageResult,
+          "version": arrg.version ? arrg.version.trim("\n"): null
       });
     },
 
@@ -206,7 +230,7 @@ export default {
             if (this.packageName.trim()) {
                 this.validationPackageName = false;
             }
-        },   
+        },
     },
 };
 </script>

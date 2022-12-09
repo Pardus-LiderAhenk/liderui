@@ -43,6 +43,7 @@
                 v-model="repoForm.url" 
                 :class="repoValidation.url ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
                 placeholder="http://depo.pardus.org.tr/pardus"
+                :text="repoForm.url"
               />
               <InputText 
                 :disabled="!update" 
@@ -50,6 +51,7 @@
                 v-model="repoForm.component" 
                 :class="repoValidation.component ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
                 placeholder="ondokuz main contrib non-free"
+                :text="repoForm.component"
               />
               <Button type="button" 
                 class="p-button-sm" 
@@ -211,8 +213,8 @@ export default {
       typeList: [{label: 'deb', value: 'deb'},
         {label: 'deb-src', value: 'deb-src'}],
       repoForm: {
-        url: '',
-        component: ''
+        url: 'http://depo.pardus.org.tr/pardus',
+        component: 'ondokuz main contrib non-free'
       },
       update: false,
       loading: false,
@@ -224,6 +226,8 @@ export default {
       packageInfoList: [],
       pluginDescription: this.$t('computer.plugins.packages.description'),
       pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/packageInstallUninstall/",
+      debUrl: "http://depo.pardus.org.tr/pardus",
+      debPackg: "ondokuz main contrib non-free",
       taskValidation: false,
       repoValidation: {}
     }

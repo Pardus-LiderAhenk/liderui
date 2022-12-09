@@ -187,7 +187,7 @@ export default {
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedComputerGroupNode.distinguishedName);
-            const{response,error} = await computerGroupsManagementService.addMember(params);
+            const{response,error} = await computerGroupsManagementService.deleteMember(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

@@ -63,6 +63,16 @@
           </div>
         </div>
       </div>
+      <div v-if="searchLoading">
+        <!-- <ProgressBar mode="indeterminate" style="height: .5em" /> -->
+        <ProgressSpinner
+          style="width: 20px; height: 20px"
+          strokeWidth="8"
+          fill="var(--surface-ground)"
+          animationDuration=".5s"
+        />
+        <a class="primary">&nbsp;{{$t('tree.searching')}}</a>
+      </div>
     </OverlayPanel>
   </slot>
 
@@ -86,43 +96,45 @@
                 </InputText>
             </span>
           </div>
-          <div class="p-field">
-            <el-tree
-              class="filter-tree"
-              :props="treeProps"
-              :empty-text="$t('tree.not_found_record')"
-              :render-content="renderContent"
-              :load="loadNode"
-              lazy
-              @node-click="handleTreeClick"
-              @node-contextmenu="nodeContextMenu"
-              highlight-current=true
-              accordion="true"
-              ref="tree"
-              :filter-node-method="filterNode"
-              :show-checkbox="showCheckbox"
-              @getCheckedNodes="getCheckedNodes"
-              @check="nodeCheckClicked('mainTree')"
-              node-key="distinguishedName"
-              :getHalfCheckedNodes="getHalfCheckedNodes"
-            >
-              <template #default="{ node, data }">
-                <span class="custom-tree-node">
-                  <span>{{ node.label }}</span>
-                  <span>
-                    <a
-                      @click="append(data)">
-                      Append
-                    </a>
-                    <a
-                      @click="remove(node, data)">
-                      Delete
-                    </a>
+          <ScrollPanel :style="{ 'height': scrollHeight + 'px' }">
+            <div class="p-field">
+              <el-tree
+                class="filter-tree"
+                :props="treeProps"
+                :empty-text="$t('tree.not_found_record')"
+                :render-content="renderContent"
+                :load="loadNode"
+                lazy
+                @node-click="handleTreeClick"
+                @node-contextmenu="nodeContextMenu"
+                highlight-current=true
+                accordion="true"
+                ref="tree"
+                :filter-node-method="filterNode"
+                :show-checkbox="showCheckbox"
+                @getCheckedNodes="getCheckedNodes"
+                @check="nodeCheckClicked('mainTree')"
+                node-key="distinguishedName"
+                :getHalfCheckedNodes="getHalfCheckedNodes"
+              >
+                <template #default="{ node, data }">
+                  <span class="custom-tree-node">
+                    <span>{{ node.label }}</span>
+                    <span>
+                      <a
+                        @click="append(data)">
+                        Append
+                      </a>
+                      <a
+                        @click="remove(node, data)">
+                        Delete
+                      </a>
+                    </span>
                   </span>
-                </span>
-              </template>
-            </el-tree>
-          </div>
+                </template>
+              </el-tree>
+            </div>
+          </ScrollPanel>
         </div>
       </div>
     </TabPanel>
@@ -143,28 +155,30 @@
               </InputText>
           </span>
         </div>
-        <div class="p-field">
-          <el-tree 
-            class="filter-tree"
-            :data="searchResults" 
-            :props="treeProps"
-            :load="searchLoadNode"
-            :show-checkbox="showCheckbox"
-            @getCheckedNodes="getCheckedNodes"
-            @check="nodeCheckClicked('searchTree')"
-            @node-contextmenu="nodeContextMenu"
-            lazy
-            highlight-current=true
-            accordion="true"
-            :filter-node-method="filterNode"
-            ref="searchResultTree"
-            @node-click="handleTreeClick"
-            :render-content="renderSearchContent"
-            :empty-text="$t('tree.not_found_record')"
-            :getHalfCheckedNodes="getHalfCheckedNodes"
-            node-key="distinguishedName">
-          </el-tree>
-        </div>
+        <ScrollPanel :style="{ 'height': scrollHeight + 'px' }">
+          <div class="p-field">
+            <el-tree 
+              class="filter-tree"
+              :data="searchResults" 
+              :props="treeProps"
+              :load="searchLoadNode"
+              :show-checkbox="showCheckbox"
+              @getCheckedNodes="getCheckedNodes"
+              @check="nodeCheckClicked('searchTree')"
+              @node-contextmenu="nodeContextMenu"
+              lazy
+              highlight-current=true
+              accordion="true"
+              :filter-node-method="filterNode"
+              ref="searchResultTree"
+              @node-click="handleTreeClick"
+              :render-content="renderSearchContent"
+              :empty-text="$t('tree.not_found_record')"
+              :getHalfCheckedNodes="getHalfCheckedNodes"
+              node-key="distinguishedName">
+            </el-tree>
+          </div>
+        </ScrollPanel>
       </div>
     </TabPanel>
     <TabPanel v-if="isAgentTree" style="max-height:500px;overflow:auto"
@@ -185,25 +199,27 @@
               </InputText>
           </span>
         </div>
-        <div class="p-field">
-          <el-tree 
-            class="filter-tree"
-            :data="onlineAgentResults" 
-            :props="treeProps"
-            lazy
-            highlight-current=true
-            accordion="true"
-            :filter-node-method="filterNode"
-            ref="onlineResultTree"
-            :show-checkbox="showCheckbox"
-            @getCheckedNodes="getCheckedNodes"
-            @check="nodeCheckClicked('onlineResultTree')"
-            @node-click="handleTreeClick"
-            :render-content="renderSearchContent"
-            :empty-text="$t('tree.not_found_record')"
-            node-key="distinguishedName">
-          </el-tree>
-        </div>
+        <ScrollPanel :style="{ 'height': scrollHeight + 'px' }">
+          <div class="p-field">
+            <el-tree 
+              class="filter-tree"
+              :data="onlineAgentResults" 
+              :props="treeProps"
+              lazy
+              highlight-current=true
+              accordion="true"
+              :filter-node-method="filterNode"
+              ref="onlineResultTree"
+              :show-checkbox="showCheckbox"
+              @getCheckedNodes="getCheckedNodes"
+              @check="nodeCheckClicked('onlineResultTree')"
+              @node-click="handleTreeClick"
+              :render-content="renderSearchContent"
+              :empty-text="$t('tree.not_found_record')"
+              node-key="distinguishedName">
+            </el-tree>
+          </div>
+        </ScrollPanel>
       </div>
     </TabPanel>
   </TabView>
@@ -275,6 +291,12 @@ export default {
     loadNodeUrl: {
       type: String,
       required: true,
+    },
+
+    scrollHeight: {
+      description: "scroll bar height",
+      type: String,
+      default: "575"
     },
     loadNodeOuUrl: {
       type: String,
@@ -375,6 +397,7 @@ export default {
       filterOnlineText: '',
       rootNode: null,
       searchValidation: {},
+      searchLoading: false
     };
   },
 
@@ -518,8 +541,9 @@ export default {
       this.openContextMenu = !this.openContextMenu;
     },
 
-    searchTree() {
+    async searchTree() {
       if (this.validateForm()) {
+        this.searchLoading = true;
         let searchText = "*"+ this.search.text +"*";
         let searchDn = null;
         if (this.selectedNode) {
@@ -535,10 +559,11 @@ export default {
         params.append("searchDn", searchDn);
         params.append("key", this.search.type);
         params.append("value", searchText);
-        axios.post(this.searchNodeUrl, params).then((response) => {
+        await axios.post(this.searchNodeUrl, params).then((response) => {
           this.tabIndex = 1;
           this.searchResults = response.data;
           this.$refs.advancedSearchOp.hide();
+          this.searchLoading = false;
         });
       }
     },
@@ -670,5 +695,20 @@ export default {
     background-color:#2196f3;
     color:white
   }
+  ::v-deep(.custom-scrolltop) {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+
+    &:hover {
+		background-color: var(--primary-color);
+	}
+
+    .p-scrolltop-icon {
+        font-size: 1rem;
+        color: var(--primary-color-text);
+    }
+}
 
 </style>

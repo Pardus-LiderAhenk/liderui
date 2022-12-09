@@ -255,17 +255,19 @@ export default {
                 });
             }
             else{
-                if (response.data != null) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.delete_member_success_message'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.setSelectedLiderNode(response.data);
-                    this.getMemberOfSelectedGroup(this.selectedLiderNode);
-                    this.$emit('deleteMember', this.selectedLiderNode);
-                    this.loading = false;
+                if (response.status == 200) {
+                    if (response.data != null) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.delete_member_success_message'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        this.setSelectedLiderNode(response.data);
+                        this.getMemberOfSelectedGroup(this.selectedLiderNode);
+                        this.$emit('deleteMember', this.selectedLiderNode);
+                        this.loading = false;
+                    }
                 }
             }
         },
