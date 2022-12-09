@@ -273,8 +273,8 @@
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_properties") }}</b></div>
             <div class="p-col-8">
-            <DataTable :value="diskDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-                <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
+             <DataTable v-if="diskDataList.length>0" :value="diskDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+             <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
                 <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
                     <template #body="{ data }">
                         {{ ((data.total)/1000).toFixed(2) }}                
@@ -878,7 +878,9 @@ export default {
               if (response.data) {
                 // TO DO --> computer tree will be updated
                 this.moveAgentDialog = false;
-                this.$emit('moveSelectedAgent', this.selectedLiderNode, this.moveFolderNode.distinguishedName);
+                console.log(response.data)
+                
+                this.$emit('moveSelectedAgent', this.selectedLiderNode, response.data, this.moveFolderNode.distinguishedName);
               }
             }
             else if(response.status == 417){
