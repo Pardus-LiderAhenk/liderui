@@ -22,6 +22,8 @@ class ProfileService {
 
     async getProfile(params) {
         try {
+            console.log(params)
+            console.log("AGAH1GET")
             const response = await axios.post(liderConsoleProfilUrl, params);
             return { response };
         } catch (error) {
@@ -31,6 +33,8 @@ class ProfileService {
 
     async updateProfile(params) {
         try {
+            console.log(params)
+            console.log("AGAH1UPDATE")
             const response = await axios.put(liderConsoleUpdateProfilUrl, params);
             return { response };
         } catch (error) {

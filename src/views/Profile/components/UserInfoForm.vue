@@ -93,23 +93,22 @@ export default {
             mail:null,
             homeDirectory:null,
             createDateStr:null,
+            telephoneNumber:null,
             homePostalAddress:null,
-            telephoneNumber:"",
-            showDialog: false,
+            showDialog: false
         }
     },
     methods: {
         async updateProfile() {
-            let params = {
-                "distinguishedName": this.distinguishedName,
-                "uid": this.uid,
-                "cn": this.cn,
-                "sn": this.sn,
-                "mail": this.mail,
+            const{response,error} = await profileService.updateProfile({
+                distinguishedName: this.distinguishedName,
+                uid: this.uid,
+                cn: this.cn,
+                sn: this.sn,
+                mail: this.mail,
                 telephoneNumber: this.telephoneNumber,
-                "homePostalAddress": this.homePostalAddress
-            }
-            const{response,error} = await profileService.updateProfile(params);
+                homePostalAddress: this.homePostalAddress
+            });
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -119,7 +118,6 @@ export default {
                 });
 
             }
-            
             else{
                 if(response.status == 200){
                     this.$toast.add({
@@ -128,9 +126,8 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                    this.showDialog = false;
+                this.showDialog = false;
                 }
-
                 else if(response.status == 417){                    
                     this.$toast.add({
                         severity:'error', 
@@ -140,11 +137,22 @@ export default {
                     });
                 }
             }
+            //}).then((response) => {
+                // this.uid = response.data.uid;
+                // this.cn = response.data.cn;
+                // this.sn = response.data.sn;
+                // this.distinguishedName = response.data.distinguishedName;
+                // this.mail = response.data.attributes.mail;
+                // this.homeDirectory = response.data.attributes.homeDirectory;
+                // this.createDateStr = response.data.createDateStr;
+                // this.homePostalAddress = response.data.homePostalAddress;
+                
+            //});
         },
-
     },
     watch:  {
         user: function(newVal, oldVal) {
+            console.log(newVal)
             this.uid = newVal.uid;
             this.cn = newVal.cn;
             this.sn = newVal.sn;
@@ -152,6 +160,7 @@ export default {
             this.mail = newVal.attributes.mail;
             this.homeDirectory = newVal.attributes.homeDirectory;
             this.createDateStr = newVal.createDateStr;
+            this.telephoneNumber = newVal.telephoneNumber;
             this.homePostalAddress = newVal.homePostalAddress;
         }
     },
