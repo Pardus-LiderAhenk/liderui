@@ -88,7 +88,8 @@
                 </Column>
                     <Column field="used" :header="$t('computer.plugins.resource_usage.used')+ ' (GB)'">
                     <template #body="{ data }">
-                        {{ ((data.used)/1000).toFixed(2) }}                
+                        {{ ((data.used)/1000).toFixed(2) }}
+                        {{ "(%" + ((100*(data.used/data.total)).toFixed(2)) + ")" }}                
                     </template>
                 </Column>
                 <Column field="avaible" :header="$t('computer.plugins.resource_usage.available')+ ' (GB)'">
@@ -98,9 +99,9 @@
                 </Column>
                 <Column field="progresBar" :header="$t('computer.plugins.resource_usage.disk_status')" :showFilterMatchModes="false" style="min-width: 10rem">
                     <template #body="{ data }">
-                        <ProgressBar class="p-progressbar-blue" :value="(100*(data.used/data.total)).toFixed(2)" v-if="Number((100*(data.used/data.total)).toFixed(2)) < 80.00">
+                        <ProgressBar class="p-progressbar-blue" :value="(100*(data.used/data.total)).toFixed(2)" :showValue="false" v-if="Number((100*(data.used/data.total)).toFixed(2)) < 80.00">
                     </ProgressBar>  
-                        <ProgressBar class="p-progressbar-red" :value="((100*(data.used/data.total)).toFixed(2))" v-else-if="Number((100*(data.used/data.total)).toFixed(2)) > 80.00">
+                        <ProgressBar class="p-progressbar-red" :value="((100*(data.used/data.total)).toFixed(2))" :showValue="false" v-else-if="Number((100*(data.used/data.total)).toFixed(2)) > 80.00">
                     </ProgressBar>  
                 </template>
                 </Column>
