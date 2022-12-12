@@ -54,9 +54,9 @@ class TaskService{
         }
     }
 
-    async packageRepoAddress(params){
+    async packageRepoAddress(){
         try {
-            const response = await axios.get(packagesRepoAddrestUrl, params);
+            const response = await axios.get(packagesRepoAddrestUrl);
             return { response };
         } catch (error) {
             return { error: error }
