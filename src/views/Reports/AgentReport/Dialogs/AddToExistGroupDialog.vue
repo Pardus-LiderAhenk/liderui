@@ -117,6 +117,7 @@ export default {
             data.append("processor", this.filter.processor);
             data.append("osVersion", this.filter.osVersion);
             data.append("agentVersion", this.filter.agentVersion);
+            data.append("diskType",this.filter.diskType);
             data.append("getFilterData", false);
             
             if (this.filter.registrationDate[0] != null) {
@@ -140,7 +141,7 @@ export default {
                 );
             }
 
-            const{response,error} = await computerGroupsManagementService.groupExisting(data);
+            const{response,error} = await computerGroupsManagementService.addAgentToExistingGroupWithAgentReport(data);
             if(error){
                 this.$toast.add({
                     severity:'error', 

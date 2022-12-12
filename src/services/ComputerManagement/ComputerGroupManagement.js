@@ -17,7 +17,7 @@ class ComputerGroupsManagementService{
         this.axios = axios
     }
 
-    async reportExisting(params) {
+    async addAgentToExistingGroupWithAgentReport(params) {
         try {
             const response = await axios.post(liderComputerGroupsAgentReportExistingUrl, params);
             return { response };
