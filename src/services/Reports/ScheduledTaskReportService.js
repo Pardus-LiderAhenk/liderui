@@ -3,8 +3,8 @@ import axios from 'axios';
 const scheduleTaskReportListUrl = "/api/lider/scheduled-task-report/list";
 const scheduleTaskReportPluginsUrl = "/api/lider/scheduled-task-report/plugins";
 const scheduleTaskReportExportUrl = "/api/lider/scheduled-task-report/export";
-const scheduleTaskReportUpdatetUrl = "/api/lider/scheduled-task/update";
-const scheduleTaskReportCanceltUrl = "/api/lider/scheduled-task/cancel";
+const scheduleTaskReportUpdateUrl = "/api/lider/scheduled-task/update";
+const scheduleTaskReportCancelUrl = "/api/lider/scheduled-task/cancel";
 
 
 
@@ -43,16 +43,16 @@ class ScheduledTaskREportService{
 
     async scheduledTaskUpdate(params) {
         try {
-            const response = await axios.post(scheduleTaskReportUpdatetUrl, params);            
+            const response = await axios.post(scheduleTaskReportUpdateUrl, params);            
             return { response };
         } catch (error) {
             return { error: error }
         }
     }
 
-    async scheduledTaskCancel(id) {
+    async scheduledTaskCancel(params) {
         try {
-            const response = await axios.put(scheduleTaskReportCanceltUrl + "/id/" + id);            
+            const response = await axios.post(scheduleTaskReportCancelUrl, params);            
             return { response };
         } catch (error) {
             return { error: error }

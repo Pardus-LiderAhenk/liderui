@@ -427,6 +427,15 @@ export default {
                         ]
                     }
                     break
+                case 'AHENK':
+                    this.contextMenuItems = [
+                        {
+                            label: this.$t('user_management.node_detail'), 
+                            icon:'pi pi-list', 
+                            command: () => {this.showNodeDetailDialog = true}
+                        },
+                    ]
+                    break
                 case 'CONTAINER':
                     if (this.domainType == "ACTIVE_DIRECTORY") {
                         this.contextMenuItems = [

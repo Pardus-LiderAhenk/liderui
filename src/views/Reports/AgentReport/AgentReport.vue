@@ -102,6 +102,7 @@
           :options="brands"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
+          @change="clearEvent($event, 'brand')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -112,6 +113,7 @@
           :options="brands"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
+          @change="clearEvent($event, 'model')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -122,6 +124,7 @@
           :options="processors"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
+          @change="clearEvent($event, 'processor')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -132,6 +135,7 @@
           :options="osVersions"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
+          @change="clearEvent($event, 'osVersion')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -141,7 +145,8 @@
           v-model="filter.agentVersion"
           :options="agentVersions"
           :placeholder="$t('reports.detailed_agent_report.all')"
-          showClear="true"
+          :showClear="true"
+          @change="clearEvent($event, 'agentVersion')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -154,6 +159,7 @@
           optionValue="value"
           :placeholder="$t('reports.detailed_agent_report.all')"
           showClear="true"
+          @change="clearEvent($event, 'sessionReportType')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -165,6 +171,7 @@
           optionValue="value"
           :placeholder="$t('reports.detailed_agent_report.all')"
           showClear="true"
+          @change="clearEvent($event, 'diskType')"
         />
       </div>
       <div class="p-field p-col-12 p-text-right">
@@ -506,7 +513,7 @@ export default {
           });
       } else{
         if (response.status == 200) {
-          
+          console.log(response.data)
           this.brands = response.data.brands;
           this.models = response.data.models;
           this.processors = response.data.processors;
@@ -527,6 +534,14 @@ export default {
       this.loading = false;
       
     },
+
+
+    clearEvent(event, name){
+      if (!event.value) {
+        this.filter[name] = "";
+      }
+    },
+    
     currentPageChange(newCurrentPage) {
       this.loading = true;
       this.getAgents(newCurrentPage);

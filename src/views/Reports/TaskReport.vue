@@ -97,7 +97,15 @@
         </Column>
         <Column :header="$t('reports.task_report.successful')">
           <template #body="{ data }">
-            {{ data.successfullTaskCount  }}
+            {{ 
+              data.successfullTaskCount
+               }}
+            <!-- <Badge
+            :value="data.successfullTaskCount ? $t('reports.scheduled_task_report.error'): $t('reports.scheduled_task_report.successful')" 
+            :severity="data.successfullTaskCount ? 'danger': 'success'">
+            </Badge> -->
+
+
           </template>
         </Column>
         <Column :header="$t('reports.task_report.waiting')">
@@ -107,7 +115,11 @@
         </Column>
         <Column :header="$t('reports.task_report.error')">
             <template #body="{ data }">
-                {{ data.failedTaskCount }}
+              <Badge
+               v-if="data.failedTaskCount"
+               :value= data.failedTaskCount
+               severity="danger" ></Badge>
+              <p v-else>0</p>
             </template>
         </Column>
         <Column :header="$t('reports.task_report.scheduled_task')">
@@ -165,10 +177,22 @@
         </Column>
         <Column :header="$t('reports.task_report.results')">
           <template #body="{data}">
-                {{
+            <Button
+              v-if="data.commandExecutionResults.length > 0 && data.commandExecutionResults[0].responseCode == 'TASK_PROCESSED'"
+              :label="$t('reports.task_report.successful')" class="p-button-success p-button-sm p-button-rounded"
+            ></Button>
+            <Button
+              v-else-if="data.commandExecutionResults.length > 0 && data.commandExecutionResults[0].responseCode != 'TASK_PROCESSED'"
+              :label="$t('reports.task_report.error')" class="p-button-danger p-button-sm p-button-rounded"
+            ></Button>
+            <Button
+              v-else
+              :label="$t('reports.task_report.waiting')" class="p-button-warning p-button-sm p-button-rounded"
+            ></Button>
+                <!-- {{
                     data.commandExecutionResults.length > 0 ? 
                     (data.commandExecutionResults[0].responseCode == "TASK_PROCESSED" ? $t('reports.task_report.successful') : $t('reports.task_report.error'))   : ''
-                }}
+                }} -->
             </template>
         </Column>
          <Column :header="$t('reports.task_report.answer')">

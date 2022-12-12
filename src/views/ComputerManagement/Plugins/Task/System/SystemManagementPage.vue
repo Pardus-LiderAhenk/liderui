@@ -96,8 +96,8 @@ export default {
   },
 
   methods: {
-    moveSelectedAgent(selectedNode, destinationDn) {
-      this.$emit('moveSelectedAgent', selectedNode, destinationDn,);
+    moveSelectedAgent(deletedNode, selectedNode, destinationDn) {
+      this.$emit('moveSelectedAgent', deletedNode, selectedNode, destinationDn,);
     },
 
     deleteSelectedAgent(selectedNode) {
