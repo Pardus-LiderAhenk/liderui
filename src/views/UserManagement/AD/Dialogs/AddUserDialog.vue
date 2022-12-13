@@ -210,27 +210,27 @@ export default {
                         this.user.homePostalAddress = "";
                         this.user.userPassword = "";
                         this.user.name = "";
-                    } 
-                }
-                else if(response.status == 208){
-                    this.$toast.add({
-                        severity:'warn', 
-                        detail: this.$t('user_management.user_already_exist'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                        });
-
-                }
-                else if(response.status == 417){
-                    if(error){
+                        } 
+                    }
+                    else if(response.status == 208){
                         this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('user_management.error_417_add_user'), 
+                            severity:'warn', 
+                            detail: this.$t('user_management.user_already_exist'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                             });
-                        }
-                    }       
+
+                    }
+                    else if(response.status == 417){
+                        if(error){
+                            this.$toast.add({
+                                severity:'error', 
+                                detail: this.$t('user_management.error_417_add_user'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                                });
+                            }
+                        }       
                 }
             }
         },

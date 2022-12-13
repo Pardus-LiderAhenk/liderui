@@ -80,7 +80,7 @@ export default {
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
 
-            const{ response,error } = await  adManagementService.deleteEntry(this.selectedNode.distinguishedName);
+            const{ response,error } = await  adManagementService.deleteEntry(params);
             this.$emit('closeAdDialog');
             if(error){
                 if (this.selectedNode.type == 'ORGANIZATIONAL_UNIT') {
@@ -99,7 +99,8 @@ export default {
                         });
                     }
 
-            }else{
+            }
+            else{
                 if(response.status == 200){
                     if (response.data) {
                         this.$emit('deleteNode', this.selectedNode);

@@ -96,9 +96,9 @@ class AdManagementService{
         }
     }
 
-    async deleteEntry(selectedEntry) {
+    async deleteEntry(params) {
         try {
-            const response = await axios.delete(adEntryUrl + "/selectedEntry/" + selectedEntry);
+            const response = await axios.post(adEntryUrl ,params);
             return { response };
         } catch (error) {
             return { error: error }
