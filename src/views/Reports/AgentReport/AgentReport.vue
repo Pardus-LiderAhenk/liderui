@@ -513,7 +513,6 @@ export default {
           });
       } else{
         if (response.status == 200) {
-          console.log(response.data)
           this.brands = response.data.brands;
           this.models = response.data.models;
           this.processors = response.data.processors;

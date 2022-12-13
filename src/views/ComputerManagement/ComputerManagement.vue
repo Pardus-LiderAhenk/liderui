@@ -247,11 +247,8 @@ export default {
         },
 
         moveSelectedAgent(deletedNode, selectedNode, destinationDn) {
-            console.log("TUNCAYYYYYY")
             this.$refs.tree.remove(deletedNode);
             this.$refs.tree.append(selectedNode, this.$refs.tree.getNode(destinationDn));
-            console.log(selectedNode)
-            console.log(destinationDn)
             this.setSelectedLiderNode(null);
         },
 

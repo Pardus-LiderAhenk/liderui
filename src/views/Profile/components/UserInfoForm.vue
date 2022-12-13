@@ -152,7 +152,6 @@ export default {
     },
     watch:  {
         user: function(newVal, oldVal) {
-            console.log(newVal)
             this.uid = newVal.uid;
             this.cn = newVal.cn;
             this.sn = newVal.sn;

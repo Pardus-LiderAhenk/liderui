@@ -879,9 +879,7 @@ export default {
             if(response.status == 200){
               if (response.data) {
                 // TO DO --> computer tree will be updated
-                this.moveAgentDialog = false;
-                console.log(response.data)
-                
+                this.moveAgentDialog = false;                
                 this.$emit('moveSelectedAgent', this.selectedLiderNode, response.data, this.moveFolderNode.distinguishedName);
               }
             }

@@ -136,7 +136,6 @@ export default {
       if (message.commandClsId == "SETUP-VNC-SERVER") {
         let result = JSON.parse(message.result.responseDataStr);
         this.connection_info = result;
-        console.log(this.connection_info)
         let ipStr = result.host.replace(/\s+/g, '');
         let ipList = ipStr.split(",");
         for (let index = 0; index < ipList.length; index++) {
