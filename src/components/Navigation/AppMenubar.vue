@@ -39,8 +39,8 @@
  * @see {@link http://www.liderahenk.org/}
  */
  
-import axios from 'axios';
 import { profileService } from '../../services/Profile/ProfileService';
+import { serverSettingService } from '../../services/Settings/ServerSettingsService';
 import AboutDialog from './Dialogs/About.vue'
 
 export default {
@@ -327,12 +327,24 @@ export default {
             this.$refs.languageMenu.toggle(event);
         },
 
-        updateUserLanguage(lang){
+        async updateUserLanguage(lang){
             let data = new FormData();
-            data.append('preferredLanguage', lang);
-            axios.post('/changeLanguage' , data).then(response => {
-                this.$router.go();
-            });
+            data.append('langa1799b6ac27611eab3de0242ac130004', lang);
+            // axios.post('/changeLanguage' , data).then(response => {
+            //     this.$router.go();
+            // });
+            const{response,error} = await serverSettingService.changeLanguage(data);
+            console.log(data);
+            if(error){
+                console.log("Error, change language")
+            }
+            else
+            {
+                if(response.status == 200){
+                    this.$router.go();
+                }
+            }
+
             // UPDATE USER STATE
             this.$store.dispatch("updateUserLang", lang);
         }

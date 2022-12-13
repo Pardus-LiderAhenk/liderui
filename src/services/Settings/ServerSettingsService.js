@@ -6,7 +6,7 @@ const liderSettingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
 const liderSettingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
 const liderSettingsUpdateXmppUrl = '/api/lider/settings/update/xmpp';
 const liderSettingsConfigurationsUrl = "/api/lider/settings/configurations";
-
+const liderSettingsChangeLanguageUrl = "/api/lider/change-language";
 
 
 
@@ -64,6 +64,16 @@ class ServerSettingsService{
     async getConfigurations() {
         try {
             const response = await axios.get(liderSettingsConfigurationsUrl);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async changeLanguage(data){
+        try {
+            const response = await axios.post(liderSettingsChangeLanguageUrl,data);
+            console.log(response);
             return { response };
         } catch (error) {
             return { error: error }

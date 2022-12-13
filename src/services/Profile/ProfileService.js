@@ -22,8 +22,6 @@ class ProfileService {
 
     async getProfile(params) {
         try {
-            console.log(params)
-            console.log("AGAH1GET")
             const response = await axios.post(liderConsoleProfilUrl, params);
             return { response };
         } catch (error) {
