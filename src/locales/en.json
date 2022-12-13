@@ -1151,7 +1151,8 @@
             "error_417_sync_user": "An unexpected error occurred while importing selected users into OpenLDAP. Error code : 417",
             "error_configuraton":"Configuration error received",
             "error_417_configuration":"Could not get AD configuration.Unexpected error occurred. Error code : 417",
-            "error_417_ad_child_entries":"An error occurred while getting selected node child entries. Error code : 417"
+            "error_417_ad_child_entries":"An error occurred while getting selected node child entries. Error code : 417",
+            "searching":"Searching, please wait..."
 
         },
         "sudo":{

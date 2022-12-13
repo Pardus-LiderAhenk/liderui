@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="p-field">
-                <DataTable :value="groups" class="p-datatable-sm" v-model:filters="filters">
+                <DataTable :value="groups" class="p-datatable-sm" v-model:filters="filters" :loading="searchLoading">
                     <template #header>
                         <div class="p-d-flex p-jc-end">
                             <span class="p-input-icon-left">
@@ -40,6 +40,11 @@
                                 :placeholder="$t('user_management.search')" 
                                 />
                             </span>
+                        </div>
+                    </template>
+                    <template #loading>
+                        <div class="p-d-flex p-jc-center">
+                            {{$t('user_management.ad.searching')}}
                         </div>
                     </template>
                     <template #empty>
@@ -118,6 +123,7 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
+            searchLoading: false
         }
     },
 
@@ -150,11 +156,13 @@ export default {
                 this.validation.groupSearchValue = true;
                 return;
             }
+            this.searchLoading = true;
             let params = new FormData();
             params.append("searchDn", "");
             params.append("key", this.selectedGroupField.value);
             params.append("value", this.groupSearchValue);
             const { response,error } = await adManagementService.searchEntryGroup(params);
+            this.searchLoading = false;
             if(error){
                 this.$toast.add({
                     severity:'error', 

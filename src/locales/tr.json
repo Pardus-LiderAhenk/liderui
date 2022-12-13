@@ -1147,7 +1147,8 @@
             "error_417_sync_user": "Seçili kullanıcılar OpenLDAP'a aktarılırken beklenmeyen bir  hata oluştu. Hata kodu : 417",
             "error_configuraton":"Konfigürasyon hatası alındı.",
             "error_417_configuration":"AD konfigürasyonu yapılamadı. Beklenmeyen bir hata alındı. Hata kodu : 417",
-            "error_417_ad_child_entries":"Seçilen düğümün alt kayıtları getirilirken beklenmedik bir hata oluştu. Hata kodu : 417"
+            "error_417_ad_child_entries":"Seçilen düğümün alt kayıtları getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "searching":"Arama yapılıyor, lütfen bekleyiniz..."
 
         },
         "sudo":{

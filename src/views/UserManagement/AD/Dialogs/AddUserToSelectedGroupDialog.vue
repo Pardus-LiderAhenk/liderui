@@ -30,7 +30,12 @@
                 </div>
             </div>
             <div class="p-field">
-                <DataTable :value="users" class="p-datatable-sm" v-model:filters="filters">
+                <DataTable :value="users" class="p-datatable-sm" v-model:filters="filters" :loading="searchLoading">
+                    <template #loading>
+                        <div class="p-d-flex p-jc-center">
+                            {{$t('user_management.ad.searching')}}
+                        </div>
+                    </template>
                     <template #header>
                         <div class="p-d-flex p-jc-end">
                             <span class="p-input-icon-left">
@@ -122,6 +127,7 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
+            searchLoading: false
         }
     },
 
@@ -154,11 +160,13 @@ export default {
                 this.validation.userSearchValue = true;
                 return;
             }
+            this.searchLoading = true;
             let params = new FormData();
             params.append("searchDn", "");
             params.append("key", this.selectedUserField.value);
             params.append("value", this.userSearchValue);
             const{response,error} =  await adManagementService.searchEntryUserList(params);
+            this.searchLoading = false;
             if(error){
                 this.$toast.add({
                     severity:'error', 
