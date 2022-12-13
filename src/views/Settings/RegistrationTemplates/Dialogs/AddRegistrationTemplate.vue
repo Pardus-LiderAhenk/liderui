@@ -101,6 +101,8 @@
             loadNodeOuUrl="api/lider/user-groups/ou-details"
             :treeNodeClick="node => selectedUserGroup = node"
             :searchFields="searchGroupFields"
+            :scrollHeight="40"
+
         />
         <template #footer>
             <Button :label="$t('settings.registiration_template.cancel')" icon="pi pi-times" @click="userGroupDialog = false"

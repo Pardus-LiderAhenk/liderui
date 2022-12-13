@@ -10,6 +10,7 @@
                         loadNodeOuUrl="/api/lider/computer-groups/ou-details"
                         :treeNodeClick="selectTreeNodeClick"
                         :searchFields="searchFolderFields"
+                        :scrollHeight="40"
                     />
                 </div>
                 <div class="p-filed p-text-center">

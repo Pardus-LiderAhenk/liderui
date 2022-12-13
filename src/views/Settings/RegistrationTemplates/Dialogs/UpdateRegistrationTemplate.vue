@@ -81,6 +81,8 @@
             :treeNodeClick="node => selectedAgentOu = node"
             :searchFields="searchFields"
             :isMove="true"
+            :scrollHeight="40"
+
         />
         <template #footer>
             <Button :label="$t('settings.registiration_template.cancel')" icon="pi pi-times" @click="agentOuDialog = false"

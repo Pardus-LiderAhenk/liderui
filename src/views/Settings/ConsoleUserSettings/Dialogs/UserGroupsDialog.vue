@@ -13,6 +13,7 @@
                     loadNodeOuUrl="/api/lider/user-groups/ou-details"
                     :searchFields="searchFields"
                     :treeNodeClick="setSelectedNode"
+                    :scrollHeight="40"
                 />
             </div>
             <div class="p-col-12">

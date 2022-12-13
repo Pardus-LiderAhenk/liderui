@@ -26,6 +26,7 @@
       :treeNodeClick="node => filter.dn = node.distinguishedName"
       :searchFields="[{key: this.$t('tree.folder'), value: 'ou'}]"
       :isMove="true"
+      :scrollHeight="40"
     />
     <template #footer>
       <Button :label="$t('reports.detailed_agent_report.cancel')"

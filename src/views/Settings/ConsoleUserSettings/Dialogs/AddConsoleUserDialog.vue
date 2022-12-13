@@ -51,6 +51,7 @@
                     loadNodeOuUrl="/api/lider/user/ou-details"
                     :treeNodeClick="setSelectedUserNode"
                     :searchFields="searchFields"
+                    :scrollHeight="25"
                 />
                 
             </TabPanel>
