@@ -332,10 +332,7 @@ export default {
         },
 
         async deleteProfile() {
-            let params = {
-                "id": this.selectedProfile.id
-			};
-
+            
             const{ response,error } = await profilesServices.delete(this.selectedProfile.id);
             if(error){
                 this.$toast.add({
