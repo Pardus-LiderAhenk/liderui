@@ -117,7 +117,7 @@
                                 <Column :exportable="false" style="min-width:8rem">
                                     <template #body="slotProps">
                                         <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"  
-                                            @click="deleteOlcAccessRule(slotProps.data)"
+                                            @click="showAccessPermissionUserDeleteDiolog = true; selectedOlcAccess = slotProps.data"
                                         />
                                     </template>
                                  </Column>
@@ -161,6 +161,7 @@
         @modalVisibleValue="addConsoleUserModalVisible = $event;"
      />
     
+    
     <LiderConfirmDialog 
         :showDialog="showDeleteConsoleUserDialog"
         @showDialog="showDeleteConsoleUserDialog = $event;"
@@ -175,6 +176,14 @@
         :header="$t('settings.console_user_settings.authority_update')"
         :message="$t('settings.console_user_settings.authority_update_question')"
         @accepted="updateUserRoles"
+    />
+
+    <LiderConfirmDialog 
+        :showDialog="showAccessPermissionUserDeleteDiolog"
+        @showDialog="showAccessPermissionUserDeleteDiolog = $event;"
+        :header="$t('settings.console_user_settings.console_user_permission_deletion_question')"
+        :message="$t('settings.console_user_settings.console_user_permission_deletion_question')"
+        @accepted="deleteOlcAccessRule"
     />
   
 </template>
@@ -254,6 +263,7 @@ export default {
             addConsoleUserModalVisible:false,
             showDeleteConsoleUserDialog:false,
             showUpdateConsoleUserRolesDialog: false,
+            showAccessPermissionUserDeleteDiolog:false,
             selectedGroupNode:null,
             searchFields: [
                 {
@@ -265,6 +275,7 @@ export default {
                     value: "ou"
                 },
             ],
+            selectedOlcAccess: null
         }
     },  
     mounted() {
@@ -310,28 +321,28 @@ export default {
         },
 
         async getConsoleUsers(){
-        const { response, error } = await consoleUserSettingsService.getConsoleUsers();
-            if (error){
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
-                    summary: this.$t('settings.console_user_settings.error'),
-                    life: 3000
-                });
-            }
-            else{
-                if(response.status == 200){
-                    this.records = response.data;
-                }
-                else if(response.status == 417){
+            const { response, error } = await consoleUserSettingsService.getConsoleUsers();
+                if (error){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('settings.console_user_settings.error_417_get_console_user'),
+                        detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
                         summary: this.$t('settings.console_user_settings.error'),
                         life: 3000
                     });
                 }
-            }               
+                else{
+                    if(response.status == 200){
+                        this.records = response.data;
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_get_console_user'),
+                            summary: this.$t('settings.console_user_settings.error'),
+                            life: 3000
+                        });
+                    }
+                }               
         },
 
         async updateUserRoles() {
@@ -387,8 +398,6 @@ export default {
         },
         async deleteConsoleUser() {
             if (this.selectedUser) {
-                let data = new FormData();
-                data.append('dn',this.selectedUser.distinguishedName);
 
                 const { response,error } = await consoleUserSettingsService.deleteConsoleUsers(this.selectedUser.distinguishedName);
 
@@ -442,20 +451,19 @@ export default {
             });
             this.getOlcAccessRules();
         },
-        async deleteOlcAccessRule(rule) {
-            let rules = this.groupPrivilages.filter(p => p.accessDN === rule.accessDN);
-
-            if(rules && rules.length > 0) {
-
-                const { response,error } = await consoleUserSettingsService.deleteOLCAccessRule(rules[0]);
-            
+        async deleteOlcAccessRule() {
+            this.showAccessPermissionUserDeleteDiolog = false;
+            this.selectedOlcAccess = this.groupPrivilages.filter(p => p.accessDN === this.selectedOlcAccess.accessDN);
+            if(this.selectedOlcAccess && this.selectedOlcAccess.length > 0) {
+                const { response,error } = await consoleUserSettingsService.deleteOLCAccessRule(this.selectedOlcAccess[0]);
                 if(response.status == 200) {
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('settings.console_user_settings.olc_success_rule_deleted'),
                         summary: this.$t('settings.console_user_settings.successful'),
                         life: 3000
-                    })
+                    });
+                    this.selectedOlcAccess = null;
                     this.getOlcAccessRules();
                 }
                 else{
@@ -476,8 +484,9 @@ export default {
                         });
                     }
                 }
-        }
+            }
         }, 
+
         async addOlcAccessRule(olcAccessDn, accessType) {
             let data = new FormData();
             data.append('type', 'computers');
@@ -505,9 +514,8 @@ export default {
                     });
                 }
             }
-        //    });
-
         },
+
         async getOlcAccessRules() {
             if(this.selectedGroupNode) {
                 let data = new FormData();
