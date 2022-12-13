@@ -96,7 +96,7 @@
                 </InputText>
             </span>
           </div>
-          <ScrollPanel :style="{ 'height': scrollHeight + 'px' }">
+          <ScrollPanel :style="{ 'height': scrollHeight + 'vh' }">
             <div class="p-field">
               <el-tree
                 class="filter-tree"
@@ -138,6 +138,7 @@
         </div>
       </div>
     </TabPanel>
+    <!-- Search resul tree -->
     <TabPanel style="max-height:500px;overflow:auto">
       <template #header>
         <i class="pi pi-check-circle"></i>
@@ -155,7 +156,7 @@
               </InputText>
           </span>
         </div>
-        <ScrollPanel :style="{ 'height': scrollHeight + 'px' }">
+        <ScrollPanel :style="{ 'height': scrollHeight + 'vh' }">
           <div class="p-field">
             <el-tree 
               class="filter-tree"
@@ -181,6 +182,7 @@
         </ScrollPanel>
       </div>
     </TabPanel>
+    <!-- Online client tree -->
     <TabPanel v-if="isAgentTree" style="max-height:500px;overflow:auto"
       >
       <template #header>
@@ -199,7 +201,7 @@
               </InputText>
           </span>
         </div>
-        <ScrollPanel :style="{ 'height': scrollHeight + 'px' }">
+        <ScrollPanel :style="{ 'height': scrollHeight + 'vh' }">
           <div class="p-field">
             <el-tree 
               class="filter-tree"
@@ -295,8 +297,8 @@ export default {
 
     scrollHeight: {
       description: "scroll bar height",
-      type: String,
-      default: "575"
+      type: Number,
+      default: 60
     },
     loadNodeOuUrl: {
       type: String,

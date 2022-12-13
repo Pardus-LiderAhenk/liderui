@@ -102,6 +102,7 @@
             :showCheckbox="true"
             :getCheckedNodes="getCheckedUserNodes"
             :searchFields="userSearchFields"
+            :scrollHeight="40"
         />
         <template #footer>
             <Button :label="$t('user_authorization_sudo.close')" 

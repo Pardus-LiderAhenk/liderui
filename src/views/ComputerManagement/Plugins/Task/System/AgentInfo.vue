@@ -156,6 +156,7 @@
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFields"
             :isMove="true"
+            :scrollHeight="25"
           />
         </div>
         <div class="p-col p-text-center">

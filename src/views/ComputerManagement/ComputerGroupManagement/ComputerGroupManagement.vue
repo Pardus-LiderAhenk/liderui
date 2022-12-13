@@ -155,6 +155,7 @@
             loadNodeOuUrl="/api/lider/computer-groups/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
+            :scrollHeight="40"
         />
         <div class="p-col p-text-center">
           <small>{{$t('group_management.select_folder_warn')}}</small>
@@ -194,12 +195,13 @@
                     :getCheckedNodes="getCheckedAgentNodes"
                     :searchFields="searchAgentFields"
                     isAgentTree="true"
+                    :scrollHeight="40"
                 />
                 <div class="p-col p-text-center">
                     <small>{{$t('group_management.select_client')}}</small>
                 </div>
             </TabPanel>
-            <TabPanel>
+            <!-- <TabPanel>
                 <template #header>
                     <span>{{$t('group_management.selected_clients')}}
                         <Badge v-if="agentGroupModal.checkedNodes.length > 0" :value="agentGroupModal.checkedNodes.length"></Badge>
@@ -240,7 +242,7 @@
                         </template>
                     </Column>
                 </DataTable>
-            </TabPanel>
+            </TabPanel> -->
             <TabPanel v-if="modals.addClient">
                 <template #header>
                     <span>{{$t('group_management.existing_clients')}}

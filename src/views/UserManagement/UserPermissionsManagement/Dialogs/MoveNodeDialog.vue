@@ -11,6 +11,7 @@
                 loadNodeOuUrl="/api/lider/sudo-groups/get-ou-details"
                 :treeNodeClick="node => moveNodeData = node"
                 :isMove="true"
+                :scrollHeight="25"
             />
             <template #footer>
                 <Button :label="$t('user_management.sudo.cancel')" 

@@ -162,6 +162,7 @@
             loadNodeOuUrl="/api/lider/user/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
+            :scrollHeight="25"
         />
         <div class="p-col p-text-center">
           <small>{{$t('user_management.select_folder_warn')}}</small>

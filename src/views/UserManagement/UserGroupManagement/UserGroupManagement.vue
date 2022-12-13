@@ -93,6 +93,7 @@
             loadNodeOuUrl="/api/lider/user-groups/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
+            :scrollHeight="25"
         />
         <div class="p-col p-text-center">
           <small>{{$t('group_management.select_folder_warn')}}</small>
@@ -110,7 +111,7 @@
     <!-- Add Group Dialog or Add User to Group Dialog -->
     <Dialog :header="modals.addUser? $t('group_management.add_user')
         :$t('group_management.add_group')"
-         v-model:visible="modals.addGroup" :style="{width: '50vw'}" :modal="true">
+         v-model:visible="modals.addGroup" :style="{width: '45vw'}" :modal="true">
         <TabView>
             <TabPanel :header="$t('group_management.group_info')">
                 <div class="p-fluid">
@@ -131,12 +132,13 @@
                     :showCheckbox="userGroupModal.showCheckbox"
                     :getCheckedNodes="getCheckedUserNodes"
                     :searchFields="searchUserFields"
+                    :scrollHeight="40"
                 />
                 <div class="p-col p-text-center">
                     <small>{{$t('group_management.select_user')}}</small>
                 </div>
             </TabPanel>
-            <TabPanel>
+            <!-- <TabPanel>
                 <template #header>
                     <span>{{$t('group_management.selected_users')}}
                         <Badge v-if="userGroupModal.checkedNodes.length > 0" :value="userGroupModal.checkedNodes.length"></Badge>
@@ -177,7 +179,7 @@
                         </template>
                     </Column>
                 </DataTable>
-            </TabPanel>
+            </TabPanel> -->
             <TabPanel v-if="modals.addUser">
                 <template #header>
                     <span>{{$t('group_management.existing_users')}}
