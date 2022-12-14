@@ -1111,6 +1111,7 @@
         "error_417_user_not_found": "User not found. Error code : 417",
         "error_404_delete_node":"Could not delete AD entry. Not found. Error code : 404",
         "error_417_session_history": "An unexpected error occurred while fetching session history. Error code : 417",
+        "error_select_group_empty_member": "The group cannot be transferred because there are no members in the group.",
         "ad":{
             "add_group":"Add Group",
             "give_console_access": "Give Console Access",

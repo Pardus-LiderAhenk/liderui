@@ -77,7 +77,6 @@
 
 <script>
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
 import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 
 export default {
@@ -197,6 +196,24 @@ export default {
                 });
                 return;
             }
+
+            var isExisting = false;
+
+            for (var key in this.selectedNode.attributesMultiValues) {
+			    if (this.selectedNode.attributesMultiValues.hasOwnProperty(key) && key != "member") {
+                    isExisting = true
+                }
+            }
+            if(isExisting == true){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.error_select_group_empty_member'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+            }
+                
+
             this.ldapGroupOuDialog = false;
             let params = {
                 "distinguishedName": this.selectedLdapOuDn,
@@ -213,31 +230,34 @@ export default {
                 });
             }
             else{
-                if(response.status == 200){
-                    if (response.data.length == 0) {
+                if(isExisting == false){
+                    if(response.status == 200){
+                        if (response.data.length == 0) {
+                            this.$toast.add({
+                                severity:'success', 
+                                detail: this.$t('user_management.ad.sync_group_success'),
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                        }
+                    }
+                    else if(response.status == 417){
                         this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('user_management.ad.sync_group_success'),
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_417_sync_group'),
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
                     }
-                }
-                else if(response.status == 417){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.ad.error_417_sync_group'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-                else {
-                    this.$toast.add({
-                        severity:'warn', 
-                        detail: this.$t('user_management.ad.already_exist_group_in_ldap'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+                
+                    else {
+                        this.$toast.add({
+                            severity:'warn', 
+                            detail: this.$t('user_management.ad.already_exist_group_in_ldap'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
             }
 

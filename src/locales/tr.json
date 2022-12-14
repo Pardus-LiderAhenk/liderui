@@ -1107,6 +1107,7 @@
         "error_417_user_not_found": "Kullanıcı bulunamadı. Hata kodu : 417",
         "error_404_delete_node":"Kayıt silinirken hata oluştu. Kayıt bulunamadı. Hata kodu : 404",
         "error_417_session_history": "Oturum geçmişi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+        "error_select_group_empty_member": "Grubun içinde üye bulunmadığı için grup aktarılamıyor.",
         "ad":{
             "add_group":"Grup Ekle",
             "give_console_access": "Konsol Erişimi Ver",
