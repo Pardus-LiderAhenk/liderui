@@ -523,8 +523,9 @@ export default {
             this.$refs.adTree.append(node, parentNode);
         },
 
-        updateNode(node, selectedNode) {
+        updateNode(node, updatedNode) {
             this.selectedNode = node;
+            this.$refs.adTree.updateNode(node.distinguishedName, updatedNode);
             this.setSelectedLiderNode(node);
         },
 

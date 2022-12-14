@@ -219,15 +219,17 @@ export default {
             else{
                 if(response.status == 200){
                     if (response.data) {
-                    this.$emit('updateNode', response.data, null);
-                    this.$emit('closeAdDialog');
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.add_user_to_group_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    
+                        let updatedNode = this.selectedNode;
+                        updatedNode.attributesMultiValues.member = response.data.attributesMultiValues.member;
+                        this.$emit('updateNode', response.data, updatedNode);
+                        
+                        this.$emit('closeAdDialog');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.add_user_to_group_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
                     } 
                 }
                 else if(response.status == 417){

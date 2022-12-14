@@ -84,33 +84,30 @@ export default {
             this.$emit('closeAdDialog');
             if(error){
                 if (this.selectedNode.type == 'ORGANIZATIONAL_UNIT') {
-                        this.$toast.add({
-                            severity:'warn', 
-                            detail: this.$t('user_management.ad.delete_ou_warn'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    } else {
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('user_management.delete_node_error'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-
+                    this.$toast.add({
+                        severity:'warn', 
+                        detail: this.$t('user_management.ad.delete_ou_warn'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.delete_node_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
             }
             else{
                 if(response.status == 200){
-                    if (response.data) {
-                        this.$emit('deleteNode', this.selectedNode);
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('user_management.delete_node_success'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
+                    this.$emit('deleteNode', this.selectedNode);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('user_management.delete_node_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
                 
                 else if(response.status == 404){
