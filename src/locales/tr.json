@@ -395,7 +395,7 @@
             },
             "network_management":{
                 "header": "Ağ Yönetimi",
-                "description": "İstemcinin ağ ayarlarının yönetilmesini sağlar.",
+                "description": "İstemcinin ağ konfigürasyonlarının temel seviyede yapılmasını sağlar.",
                 "current_configuration": "Mevcut Konfigürasyon",
                 "dns": "DNS",
                 "servers": "Sunucular",
