@@ -31,8 +31,6 @@ class ProfileService {
 
     async updateProfile(params) {
         try {
-            console.log(params)
-            console.log("AGAH1UPDATE")
             const response = await axios.put(liderConsoleUpdateProfilUrl, params);
             return { response };
         } catch (error) {
