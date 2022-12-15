@@ -760,8 +760,8 @@
             "error_417_olc_access_rule":"Açık ldap kontrol kuralı listesi alınamadı. Beklenmeyen bir hata oluştu. Hata kodu : 417",
             "error_user_add_to_group":"Kullanıcı gruba eklenemedi. Hata oluştu",
             "error_417_user_add_to_group":"Kullanıcı gruba eklenirken beklenmedik bir hata oluştu. Hata kodu : 417",
-            "console_user_permission_deletion_question":"Konsol kullanıcısı erişim yetkisi silinecektir. Emin misiniz?"
-
+            "console_user_permission_deletion_question":"Konsol kullanıcısı erişim yetkisi silinecektir. Emin misiniz?",
+            "error_226_user_id_found":"Bu kullanıcı adında bir kayıt bulunmuştur. Kullanıcı oluşturulamadı."
         },
 
         "server_settings":{
@@ -1108,6 +1108,7 @@
         "error_404_delete_node":"Kayıt silinirken hata oluştu. Kayıt bulunamadı. Hata kodu : 404",
         "error_417_session_history": "Oturum geçmişi getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
         "error_select_group_empty_member": "Grubun içinde üye bulunmadığı için grup aktarılamıyor.",
+        "add_folder_error_226":"Aynı isimde kayıt bulunmuştur. Bu yüzden klasör/grup oluşturulamadı",
         "ad":{
             "add_group":"Grup Ekle",
             "give_console_access": "Konsol Erişimi Ver",

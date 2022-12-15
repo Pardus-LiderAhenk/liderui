@@ -1079,7 +1079,12 @@ export default {
 
       const{ response,error } = await userService.addOu(params);
       if(error){
-        return "error";
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('user_management.add_folder_error'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+      });
       }
       else{
         if(response.status == 200){
@@ -1092,7 +1097,20 @@ export default {
           });
         }
         else if(response.status == 417){
-          return "Could not add folder";
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('user_management.add_folder_error'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+        else if(response.status == 226){
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('user_management.add_folder_error_226'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
         }
       }
         

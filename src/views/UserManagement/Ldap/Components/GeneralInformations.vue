@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import axios from "axios";
+
 import { userService } from "../../../../services/Settings/UserService";
 
 export default {

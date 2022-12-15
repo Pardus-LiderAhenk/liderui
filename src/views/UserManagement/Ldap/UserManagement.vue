@@ -392,6 +392,14 @@ export default {
                         });
                     }
                 }
+                else if(response.status == 226){
+                    this.$toast.add({
+                      severity:'error', 
+                      detail: this.$t('user_management.add_folder_error_226'), 
+                      summary:this.$t("computer.task.toast_summary"), 
+                      life: 3000
+                    });
+                }
             }
             this.folderName = '';
         },
@@ -541,6 +549,14 @@ export default {
                             severity:'error', 
                             detail: this.$t('user_management.error_417_add_user'), 
                             summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                    else if (response.status ==  226) {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_226_user_id_found'), 
+                            summary: this.$t('settings.console_user_settings.error'), 
                             life: 3000
                         });
                     }

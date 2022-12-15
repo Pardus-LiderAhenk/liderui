@@ -761,7 +761,9 @@
             "error_417_olc_access_rule":"Could not retrieved open ldap  check rule list. Unexpected error occured. Error code : 417",
             "error_user_add_to_group":"The user could not be added to the group. An error occurred",
             "error_417_user_add_to_group":"An unexpected error occurred while adding the user to the group. Error code : 417",
-            "console_user_permission_deletion_question":"Console user access authorization will be deleted. Are you sure?"
+            "console_user_permission_deletion_question":"Console user access authorization will be deleted. Are you sure?",
+            "error_226_user_id_found":"A record was found in this user record. The user could not be created."
+
         },
         "server_settings":{
             "directory_server_setting":"Directory Server Settings",
@@ -1112,6 +1114,7 @@
         "error_404_delete_node":"Could not delete AD entry. Not found. Error code : 404",
         "error_417_session_history": "An unexpected error occurred while fetching session history. Error code : 417",
         "error_select_group_empty_member": "The group cannot be transferred because there are no members in the group.",
+        "add_folder_error_226":"Recorded with the same name. So the folder/group could not be created",
         "ad":{
             "add_group":"Add Group",
             "give_console_access": "Give Console Access",

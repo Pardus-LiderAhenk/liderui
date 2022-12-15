@@ -264,10 +264,19 @@ export default {
                         homePostalAddress : null,
                         mail : null,
                     }
-                } else if (response.status ==  417) {
+                } 
+                else if (response.status ==  417) {
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('settings.console_user_settings.error_417_user_create'), 
+                        summary: this.$t('settings.console_user_settings.error'), 
+                        life: 3000
+                    });
+                }
+                else if (response.status ==  226) {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_226_user_id_found'), 
                         summary: this.$t('settings.console_user_settings.error'), 
                         life: 3000
                     });

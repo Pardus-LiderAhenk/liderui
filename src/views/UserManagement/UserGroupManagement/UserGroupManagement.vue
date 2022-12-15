@@ -93,7 +93,7 @@
             loadNodeOuUrl="/api/lider/user-groups/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
-            :scrollHeight="25"
+            :scrollHeight="40"
         />
         <div class="p-col p-text-center">
           <small>{{$t('group_management.select_folder_warn')}}</small>
