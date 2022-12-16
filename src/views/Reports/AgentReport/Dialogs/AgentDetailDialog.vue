@@ -79,7 +79,7 @@
             </div>
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <DataTable :value="disks" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+            <DataTable v-if="disks.length>0" :value="disks" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
                 <Column field="type" :header="$t('computer.plugins.resource_usage.disk_type')"></Column> 
                 <Column field="total" :header="$t('computer.plugins.resource_usage.total') + ' (GB)'">
                     <template #body="{ data }">
