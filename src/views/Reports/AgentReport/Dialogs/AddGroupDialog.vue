@@ -170,7 +170,7 @@ export default {
                     if (response.data) {
                         this.$toast.add({
                             severity:'success', 
-                            detail: this.$t('reports.detailed_agent_report.computer_group_successfully_create'), 
+                            detail: this.$t('reports.detailed_agent_report.computers_successfully_added'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });                    
