@@ -760,6 +760,7 @@
             "olc_access_rule_get":"OLC access rules successfully retrieved.",
             "error_417_olc_access_rule":"Could not retrieved open ldap  check rule list. Unexpected error occured. Error code : 417",
             "error_user_add_to_group":"The user could not be added to the group. An error occurred",
+            "user_add_to_group":"The user has been successfully added to the group",
             "error_417_user_add_to_group":"An unexpected error occurred while adding the user to the group. Error code : 417",
             "console_user_permission_deletion_question":"Console user access authorization will be deleted. Are you sure?",
             "error_226_user_id_found":"A record was found in this user record. The user could not be created."
