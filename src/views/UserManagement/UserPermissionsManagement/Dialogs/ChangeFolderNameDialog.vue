@@ -82,12 +82,7 @@ export default {
                 return;
             }
 
-            const{response,error} = await sudoGroupsService.reanameGroups({
-                params: {
-                    oldDN: this.selectedNode.distinguishedName,
-                    newName: 'ou=' + this.folderName
-                }
-            });
+            const{response,error} = await sudoGroupsService.renameGroups(this.selectedNode.distinguishedName,'ou=' + this.folderName);
             if(error){
                 this.$toast.add({
                     severity:'error', 

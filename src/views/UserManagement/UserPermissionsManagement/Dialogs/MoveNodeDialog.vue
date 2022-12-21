@@ -89,12 +89,7 @@ export default {
                 return;
             }
             
-            const {response,error} = await sudoGroupsService.reanameGroups({
-                params : {
-                    sourceDN: this.selectedNode.distinguishedName,
-                    destinationDN: this.moveNodeData.distinguishedName
-               }
-            });
+            const {response,error} = await sudoGroupsService.moveGroups(this.selectedNode.distinguishedName,this.moveNodeData.distinguishedName);
             if(error){
                 this.$toast.add({
                     severity:'error', 
