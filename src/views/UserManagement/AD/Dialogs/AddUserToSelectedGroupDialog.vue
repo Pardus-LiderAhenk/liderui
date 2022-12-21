@@ -86,6 +86,7 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
+import { mapGetters } from "vuex"
 
 export default {
 
@@ -132,6 +133,8 @@ export default {
     },
 
     computed: {
+        ...mapGetters(["selectedLiderNode"]),
+
         showDialog: {
             get () {
                 return this.addMemberDialog
@@ -245,9 +248,9 @@ export default {
 
         isExistMember(userDn) {
             let isExist = false;
-            for (const key in this.selectedNode.attributesMultiValues) {
-                if (Object.hasOwnProperty.call(this.selectedNode.attributesMultiValues, key)) {
-                    const element = this.selectedNode.attributesMultiValues[key];
+            for (const key in this.selectedLiderNode.attributesMultiValues) {
+                if (Object.hasOwnProperty.call(this.selectedLiderNode.attributesMultiValues, key)) {
+                    const element = this.selectedLiderNode.attributesMultiValues[key];
                     if (key == "member" && element.length > 0) {
                         for (let index = 0; index < element.length; index++) {
                             const member = element[index];

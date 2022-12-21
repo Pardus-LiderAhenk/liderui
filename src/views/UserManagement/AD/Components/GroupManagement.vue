@@ -274,19 +274,19 @@ export default {
     },
 
     watch: {
-        // selectedNode() {
-        //     if (this.selectedNode) {
-        //         this.getMemberOfSelectedGroup(this.selectedNode);
-        //         this.getSelectedNodeAttribute();
-        //     }
-        // },
-
-        selectedLiderNodeNode() {
-            if (this.selectedLiderNodeNode) {
-                this.getMemberOfSelectedGroup(this.selectedLiderNode);
+        selectedNode() {
+            if (this.selectedNode) {
+                this.getMemberOfSelectedGroup(this.selectedNode);
                 this.getSelectedNodeAttribute();
             }
-        }
+        },
+
+        // selectedLiderNodeNode() {
+        //     if (this.selectedLiderNodeNode) {
+        //         this.getMemberOfSelectedGroup(this.selectedLiderNode);
+        //         this.getSelectedNodeAttribute();
+        //     }
+        // }
     },
 }
 </script>
