@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="p-col-6">
-                        <password-component ref="userForm.userPassword"></password-component>
+                        <password-component ref="password"></password-component>
                     </div>
                     <div class="p-col-12 p-d-flex p-jc-end">
                         <Button icon="pi pi-user-plus" :label="$t('settings.console_user_settings.create')" @click="addNewConsoleUser"></Button>
@@ -230,6 +230,10 @@ export default {
         },
 
         async addNewConsoleUser(){
+            this.userForm.userPassword = this.$refs.password.getPassword();
+            if (!this.userForm.userPassword) {
+                return;
+            }
             let data = new FormData();
             data.append('uid', this.userForm.uid);
             data.append('cn',this.userForm.cn);
