@@ -345,26 +345,34 @@ export default {
             if(error){
 
                 this.$toast.add({
-                    severity:'success', 
+                    severity:'error', 
                     detail: this.$t('settings.console_user_settings.error_user_add_to_group'), 
-                    summary: this.$t('settings.console_user_settings.successful'), 
+                    summary: this.$t('settings.console_user_settings.error'), 
                     life: 3000
                 });                
             }
             else{
-                if (response.status === 200) {
+                
+                if (response.status == 200) {
                     
                     this.groupMembers = [];
                     this.groupPrivilages = [];
                     this.selectedGroupNode = null;
                     this.selectedUserNode = null;
                     this.modalVisible = false;
+
+                    this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('settings.console_user_settings.user_add_to_group'), 
+                    summary: this.$t('settings.console_user_settings.successful'), 
+                    life: 3000
+                }); 
                 } 
                 else if(response.status == 417){
                     this.$toast.add({
-                        severity:'success', 
+                        severity:'error', 
                         detail: this.$t('settings.console_user_settings.error_417_user_add_to_group'), 
-                        summary: this.$t('settings.console_user_settings.successful'), 
+                        summary: this.$t('settings.console_user_settings.error'), 
                         life: 3000
                     });                    
                 }

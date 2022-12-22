@@ -4,6 +4,7 @@ const sudoGroupsDeleteUrl = '/api/lider/sudo-groups/entry';
 const userOfSudoGroupDeleteUrl = '/api/lider/sudo-groups/delete/sudo/user'
 const sudoGroupsAddUrl = '/api/lider/sudo-groups/add-ou';
 const sudoGroupsRenameUrl = '/api/lider/sudo-groups/rename/entry';
+const sudoGroupsMoveUrl = '/api/lider/sudo-groups/move/entry';
 const createSudoGroupsUrl = '/api/lider/sudo-groups/create-sudo-group';
 const editSudoGroupsUrl = '/api/lider/sudo-groups/edit-sudo-group';
 const userAttributeAndValueDelete = '/api/lider/user/attribute-with-value';
@@ -18,7 +19,7 @@ class SudoGroupsService{
 
     async entryDelete(dn) {
         try {
-            const response = await axios.delete(sudoGroupsDeleteUrl + "/dn/" + dn );
+            const response = await axios.delete(sudoGroupsDeleteUrl + "/dn/" + dn);
             return { response };
         } catch (error) {
             return { error: error }
@@ -43,9 +44,18 @@ class SudoGroupsService{
         }
     }
 
-    async reanameGroups(params) {
+    async renameGroups(oldDN,newName) {
         try {
-            const response = await axios.post(sudoGroupsRenameUrl,params);
+            const response = await axios.put(sudoGroupsRenameUrl + "/oldDN/" + oldDN + "/newName/" + newName);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async moveGroups(sourceDN,destinationDN) {
+        try {
+            const response = await axios.put(sudoGroupsMoveUrl + "/sourceDN/" + sourceDN + "/destinationDN/" + destinationDN);
             return { response };
         } catch (error) {
             return { error: error }

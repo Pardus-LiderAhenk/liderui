@@ -759,6 +759,7 @@
             "olc_access_rule_get":"OLC erişim kuralları başarılı bir şekilde alındı.",
             "error_417_olc_access_rule":"Açık ldap kontrol kuralı listesi alınamadı. Beklenmeyen bir hata oluştu. Hata kodu : 417",
             "error_user_add_to_group":"Kullanıcı gruba eklenemedi. Hata oluştu",
+            "user_add_to_group":"Kullanıcı başarıyla gruba eklendi.",
             "error_417_user_add_to_group":"Kullanıcı gruba eklenirken beklenmedik bir hata oluştu. Hata kodu : 417",
             "console_user_permission_deletion_question":"Konsol kullanıcısı erişim yetkisi silinecektir. Emin misiniz?",
             "error_226_user_id_found":"Bu kullanıcı adında bir kayıt bulunmuştur. Kullanıcı oluşturulamadı."
