@@ -180,7 +180,6 @@ export default {
                 if(response.status == 200){
                     if (response.data) {
                         this.profiles = response.data;
-                        console.log(profiles);
                     }
                 }
                 else if(response.status == 417){

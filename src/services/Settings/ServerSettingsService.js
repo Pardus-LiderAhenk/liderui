@@ -73,7 +73,6 @@ class ServerSettingsService{
     async changeLanguage(data){
         try {
             const response = await axios.post(liderSettingsChangeLanguageUrl,data);
-            console.log(response);
             return { response };
         } catch (error) {
             return { error: error }

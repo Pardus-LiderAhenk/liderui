@@ -334,7 +334,6 @@ export default {
             //     this.$router.go();
             // });
             const{response,error} = await serverSettingService.changeLanguage(data);
-            console.log(data);
             if(error){
                 console.log("Error, change language")
             }
