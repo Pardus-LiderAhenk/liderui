@@ -81,7 +81,7 @@ export default {
                 username: this.username
             }
             axios.post(process.env.VUE_APP_URL + "/api/forgot-password/", params).then(response => {
-                if (response.status === 200) {
+                if (response.status == 200) {
                     this.severity = "success";
                     this.inlineMessage = response.data[0];
                 }

@@ -549,6 +549,14 @@ export default {
           label: this.$t('computer.agent_info.add_folder'),
           icon: 'pi pi-folder-open',
           command: () => {
+            if(!this.selectedLiderNode){
+              this.$toast.add({
+                severity:'warn', 
+                detail: this.$t("computer.agent_info.select_node_warn"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
             if (this.selectedLiderNode && this.selectedLiderNode.type == "ORGANIZATIONAL_UNIT") {
               this.addFolderDialog = true;
             }
@@ -558,6 +566,14 @@ export default {
           label: this.$t('computer.agent_info.delete_folder'),
           icon: 'pi pi-trash',
           command: () => {
+            if(!this.selectedLiderNode){
+              this.$toast.add({
+                severity:'warn', 
+                detail: this.$t("computer.agent_info.select_node_warn"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
             if (this.selectedLiderNode && this.selectedLiderNode.type == "ORGANIZATIONAL_UNIT") {
               this.deleteFolderDialog = true;
             }
