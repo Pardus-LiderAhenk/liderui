@@ -65,8 +65,8 @@
 <script>
 
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
 import NodeDetail from '@/views/UserManagement/AD/Dialogs/NodeDetail.vue';
+import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 
 export default {
     props: {
@@ -101,7 +101,7 @@ export default {
     },
 
     methods: {
-        getChildEntries() {
+        async getChildEntries() {
             this.nodes = [];
             if (this.selectedNode.type != "USER" && this.selectedNode.type != "GROUP") {
                 this.loading = true;
@@ -109,25 +109,40 @@ export default {
                 params.append("distinguishedName", this.selectedNode.distinguishedName);
                 params.append("name", this.selectedNode.name);
                 params.append("parent", this.selectedNode.parent);
-                axios.post('/ad/getChildEntries', params).then(response => {
-                    this.loading = false;
-                    if (response.data) {
-                        this.nodes = response.data;
-                    }
-                })
-                .catch((error) => {
+                const{ response,error } = await adManagementService.childEntriesList(params);
+
+                if(error){
                     this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.ad.error_ad_child_entries'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_ad_child_entries'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
                     });
-                });
-            } else {
-                this.nodes.push(this.selectedNode);
+                }
+                else{
+                    if(response.status == 200){
+                        this.loading = false;
+                        if (response.data) {
+                            this.nodes = response.data;
+                        }
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_417_ad_child_entries'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
             }
+            else{
             
-        },
+                this.nodes.push(this.selectedNode);
+            
+            }                
+
+    },
 
         selectedNodeDetail(node) {
             this.selectedNodeTable = node;

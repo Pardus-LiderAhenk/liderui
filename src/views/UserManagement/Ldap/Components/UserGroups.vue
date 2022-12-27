@@ -7,8 +7,8 @@
         <div class="p-col">
           <tree-component 
             ref="usergrouptree"
-            loadNodeUrl="/lider/user_groups/getGroups"
-            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+            loadNodeUrl="/api/lider/user-groups/groups"
+            loadNodeOuUrl="/api/lider/user-groups/ou-details"
             :treeNodeClick="selectUserGroupNodeClick"
             :searchFields="searchFields"
           />
@@ -104,8 +104,11 @@
 </template>
 
 <script>
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { profileService } from "../../../../services/Profile/ProfileService.js";
+import { userService } from "../../../../services/Settings/UserService.js";
+import { userGroupsService } from "../../../../services/Settings/UserGroupsService.js";
+
 
 export default {
     props: {
@@ -151,73 +154,92 @@ export default {
             this.addUserGroupNode = node;
         },
 
-        getGroupsOfSelectedUser() {
+        async getGroupsOfSelectedUser() {
             if (this.selectedNode && this.selectedNode.type === "USER") {
                 let params = new FormData();
                 params.append("searchDn", this.userLdapBaseDn.userGroupLdapBaseDn);
                 params.append("key", "member");
                 params.append("value", this.selectedNode.distinguishedName);
-                axios.post("/lider/ldap/searchEntry", params).then((response) => {
-                    this.groups = response.data;
-                    this.updateRowIndex();
-                }).catch((error) => {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.change_user_password_error')+ " \n"+error, 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                });
-            }
-        },
 
-        deleteUserFromGroup() {
-            let params = new FormData();
-            params.append("dn", this.selectedGroup.distinguishedName);
-            params.append("attribute", "member");
-            params.append("value", this.selectedNode.distinguishedName);
-            axios.post("/lider/user/removeAttributeWithValue", params).then((response) => {
-                if (response.data) {
-                    let index = this.groups.findIndex(function(item, i){
-                        return item.distinguishedName === response.data.distinguishedName;
-                    });
-                    if (index > -1) {
-                        this.groups.splice(index, 1);
-                    }
-                    let newGroupsDn = [];
-                    if (this.groups){
-                        this.groups.forEach(element => {
-                            newGroupsDn.push(element.distinguishedName);
-                        });
-                    }
-                    this.selectedGroup = null;
-                    this.deleteGroupConfirm = false;
-                    let userNode = {...this.selectedNode};
-                    userNode.attributesMultiValues.memberOf = newGroupsDn;
-                    this.$emit('updatedUser', userNode);
-                    this.updateRowIndex();
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.delete_member_group_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+                const{ response,error } = await profileService.searchEntry(params);
+                if(error){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.delete_member_group_error'), 
+                        detail: this.$t('user_management.user_not_found'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-            }).catch((error) => {
+                else{
+                    if(response.status == 200){
+                        this.groups = response.data;
+                        this.updateRowIndex();
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.error_417_user_not_found'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                    });
+                    }
+                }
+            }
+        },
+
+        async deleteUserFromGroup() {
+            let params = new FormData();
+            params.append("dn", this.selectedGroup.distinguishedName);
+            params.append("attribute", "member");
+            params.append("value", this.selectedNode.distinguishedName);
+
+            const{response,error} = await userService.deleteAttributeAndValue(this.selectedGroup.distinguishedName,"member",this.selectedNode.distinguishedName);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.delete_member_group_error'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        let index = this.groups.findIndex(function(item, i){
+                            return item.distinguishedName === response.data.distinguishedName;
+                        });
+                        if (index > -1) {
+                            this.groups.splice(index, 1);
+                        }
+                        let newGroupsDn = [];
+                        if (this.groups){
+                            this.groups.forEach(element => {
+                                newGroupsDn.push(element.distinguishedName);
+                            });
+                        }
+                        this.selectedGroup = null;
+                        this.deleteGroupConfirm = false;
+                        let userNode = {...this.selectedNode};
+                        userNode.attributesMultiValues.memberOf = newGroupsDn;
+                        this.$emit('updatedUser', userNode);
+                        this.updateRowIndex();
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.delete_member_group_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }   
+                    else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.delete_member_group_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+            }
         },
 
         updateRowIndex() {
@@ -227,7 +249,7 @@ export default {
             }
         },
 
-        addUserToGroup() {
+        async addUserToGroup() {
             if (!this.addUserGroupNode) {
                 this.$toast.add({
                     severity:'warn', 
@@ -261,26 +283,33 @@ export default {
             member.push(this.selectedNode.distinguishedName);
             params.append("checkedList[]", member);
             params.append("groupDN", this.addUserGroupNode.distinguishedName);
-            axios.post("/lider/user_groups/group/existing", params).then((response) => {
-                this.groups.push(response.data);
-                let userNode = {...this.selectedNode};
-                userNode.attributesMultiValues.memberOf = this.groups;
-                this.$emit('updatedUser', userNode);
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('user_management.add_user_to_group_success'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                this.addUserToGroupDialog = false;
-            }).catch((error) => {
+
+            const{response,error} = await userGroupsService.addGroups(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.add_user_to_group_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }else{
+                if(response.status == 200){
+                    this.groups.push(response.data);
+                    let userNode = {...this.selectedNode};
+                    userNode.attributesMultiValues.memberOf = this.groups;
+                    this.$emit('updatedUser', userNode);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('user_management.add_user_to_group_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    this.addUserToGroupDialog = false;
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }  
         },
 
         isExistMemberInGroup(dn) {

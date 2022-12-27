@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
 import ConkyProfileDialog from './Dialogs/Profiles/ConkyProfileDialog.vue';
 import ScriptProfileDialog from './Dialogs/Profiles/ScriptProfileDialog.vue';
@@ -100,6 +99,7 @@ import LoginManagerProfileDialog from './Dialogs/Profiles/LoginManagerProfileDia
 import UsbProfileDialog from './Dialogs/Profiles/UsbProfileDialog.vue';
 import BrowserProfileDialog from './Dialogs/Profiles/Browser/BrowserProfileDialog.vue';
 import RsyslogProfileDialog from './Dialogs/Profiles/RsyslogProfileDialog.vue';
+import { taskService } from "../../../services/Task/TaskService.js";
 
 export default {
     data() {
@@ -132,12 +132,9 @@ export default {
     },
 
     mounted() {
-        axios.post('/getPluginProfileList', {}).then(response => {
-            if (response.data) {
-                this.plugins = response.data;
-                this.addImagePath();
-            } 
-        });
+        
+        this.pluginProfileList();
+            
     },
 
     methods: {
@@ -180,6 +177,33 @@ export default {
                     element.image = require("@/assets/images/icons/pardus.png");
                 } else {
                     element.image = require("@/assets/images/icons/pardus.png");
+                }
+            }
+        },
+        async pluginProfileList(){
+            const{response,error} = await taskService.pluginProfileList();
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('policy_management.error_get_plugin_profile_list'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.plugins = response.data;
+                        this.addImagePath();
+                    } 
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_get_plugin_profile_list'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
             }
         }

@@ -32,7 +32,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
+import { sudoGroupsService } from "../../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js";
 
 export default {
 
@@ -76,28 +76,45 @@ export default {
     },
 
     methods: {
-        changeFolderName() {
+        async changeFolderName() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
             }
 
-            axios.post('/lider/sudo_groups/rename/entry', null, {
-                params: {
-                    oldDN: this.selectedNode.distinguishedName,
-                    newName: 'ou=' + this.folderName
-                }
-            }).then(response => {
-                this.$emit('updateNode', response.data, this.selectedNode);
+            const{response,error} = await sudoGroupsService.renameGroups(this.selectedNode.distinguishedName,'ou=' + this.folderName);
+            if(error){
                 this.$toast.add({
-                    severity:'success', 
-                    detail:this.$t('user_management.sudo.update_folder_name_success'), 
+                    severity:'error', 
+                    detail: this.$t('user_management.sudo.error_update_folder_name'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-                this.$emit('closeSudoDialog');
-                this.folderName = '';
-            });
+                
+            }
+            else{
+                if(response.status == 200){
+                    this.$emit('updateNode', response.data, this.selectedNode);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail:this.$t('user_management.sudo.update_folder_name_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.sudo.error_417_update_folder_name'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+                
+            this.$emit('closeSudoDialog');
+            this.folderName = '';
+
         },
     },
 

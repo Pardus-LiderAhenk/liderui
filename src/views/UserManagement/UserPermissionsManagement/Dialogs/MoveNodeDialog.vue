@@ -7,10 +7,11 @@
         >
             <tree-component 
                 ref="movetree"
-                loadNodeUrl="/lider/sudo_groups/getGroups"
-                loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
+                loadNodeUrl="/api/lider/sudo-groups/groups"
+                loadNodeOuUrl="/api/lider/sudo-groups/get-ou-details"
                 :treeNodeClick="node => moveNodeData = node"
                 :isMove="true"
+                :scrollHeight="25"
             />
             <template #footer>
                 <Button :label="$t('user_management.sudo.cancel')" 
@@ -35,7 +36,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
+import { sudoGroupsService } from "../../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js";
 
 export default {
 
@@ -77,7 +78,7 @@ export default {
         //     this.moveNodeData = node;
         // },
 
-        moveNode() {
+        async moveNode() {
             if (!this.moveNodeData) {
                 this.$toast.add({
                     severity:'warn', 
@@ -87,22 +88,29 @@ export default {
                 });
                 return;
             }
-
-            axios.post('/lider/sudo_groups/move/entry', null ,{
-                params: {
-                    sourceDN: this.selectedNode.distinguishedName,
-                    destinationDN: this.moveNodeData.distinguishedName
+            
+            const {response,error} = await sudoGroupsService.moveGroups(this.selectedNode.distinguishedName,this.moveNodeData.distinguishedName);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail:this.$t('user_management.sudo.move_node_error'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('moveNode', this.moveNodeData);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail:this.$t('user_management.sudo.move_node_success'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
-            }).then(response => {
-                if (response.data) {
-                    this.$emit('moveNode', this.moveNodeData);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail:this.$t('user_management.sudo.move_node_success'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
                         detail:this.$t('user_management.sudo.move_node_error'),
@@ -110,9 +118,11 @@ export default {
                         life: 3000
                     });
                 }
-                this.$emit('closeSudoDialog');
-                this.moveNodeData = null;
-            });
+            }
+
+            this.$emit('closeSudoDialog');
+            this.moveNodeData = null;
+
         },
     }
 }

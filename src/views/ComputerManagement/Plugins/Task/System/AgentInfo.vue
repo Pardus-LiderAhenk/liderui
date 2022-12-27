@@ -151,11 +151,12 @@
         <div class="p-col">
           <tree-component 
             ref="movetree"
-            loadNodeUrl="/lider/computer/getComputers"
-            loadNodeOuUrl="/lider/computer/getOuDetails"
+            loadNodeUrl="/api/lider/computer/computers"
+            loadNodeOuUrl="/api/lider/computer/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFields"
             :isMove="true"
+            :scrollHeight="25"
           />
         </div>
         <div class="p-col p-text-center">
@@ -271,6 +272,40 @@
               }}
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_properties") }}</b></div>
+            <div class="p-col-8">
+            <DataTable v-if="diskDataList.length>0" :value="diskDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
+                <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
+                <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
+                    <template #body="{ data }">
+                        {{ ((data.total)/1000).toFixed(2) }}                
+                    </template>
+                </Column>
+                    <Column field="used" :header="$t('computer.agent_info.used')+ ' (GB)'">
+                    <template #body="{ data }" >
+                        {{ ((data.used)/1000).toFixed(2) }}     
+                        {{ "(%" + ((100*(data.used/data.total)).toFixed(2)) + ")" }}           
+                    </template>
+                </Column>
+                <Column field="avaible" :header="$t('computer.agent_info.available')+ ' (GB)'">
+                    <template #body="{ data }">
+                        {{ ((data.total-data.used)/1000).toFixed(2) }}                
+                    </template>
+                </Column>
+
+                <Column field="progresBar" :header="$t('computer.agent_info.disk_status')" :showFilterMatchModes="false" style="min-width: 20rem">
+                  <template #body="{ data }">
+                      <ProgressBar class="p-progressbar-blue" :value="((100*(data.used/data.total)).toFixed(2))" :showValue="false"  v-if="Number((100*(data.used/data.total)).toFixed(2)) < 80.00">
+                    </ProgressBar>    
+
+                      <ProgressBar class="p-progressbar-red" :value="((100*(data.used/data.total)).toFixed(2))" :showValue="false" v-else-if="Number((100*(data.used/data.total)).toFixed(2)) > 80.00">
+                    </ProgressBar>
+                  </template>
+                </Column>
+            </DataTable>
+          </div>
+            <!-- <div class="p-grid p-fluid"></div> -->
+            <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-4" />
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_partitions") }}</b></div>
             <div class="p-col-8">
               {{ getPropertyValue(selectedAgentInfo.properties, "hardware.disk.partitions") }}
@@ -469,10 +504,12 @@
  * 
  */
 
-import axios from "axios";
 import { mapGetters } from "vuex";
 import {FilterMatchMode} from 'primevue/api';
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
+import { computerManagementService } from "../../../../../services/ComputerManagement/ComputerManagement.js";
+import { taskService } from '../../../../../services/Task/TaskService.js';
+import { userService } from "../../../../../services/Settings/UserService";
 
 export default {
   
@@ -505,12 +542,21 @@ export default {
       deleteFolderDialog: false,
       folderName: '',
       validationFolderName: false,
+      diskList : [],
       linuxIcon: require("@/assets/images/icons/linux.png"),
       folderItems: [
         {
           label: this.$t('computer.agent_info.add_folder'),
           icon: 'pi pi-folder-open',
           command: () => {
+            if(!this.selectedLiderNode){
+              this.$toast.add({
+                severity:'warn', 
+                detail: this.$t("computer.agent_info.select_node_warn"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
             if (this.selectedLiderNode && this.selectedLiderNode.type == "ORGANIZATIONAL_UNIT") {
               this.addFolderDialog = true;
             }
@@ -520,6 +566,14 @@ export default {
           label: this.$t('computer.agent_info.delete_folder'),
           icon: 'pi pi-trash',
           command: () => {
+            if(!this.selectedLiderNode){
+              this.$toast.add({
+                severity:'warn', 
+                detail: this.$t("computer.agent_info.select_node_warn"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
             if (this.selectedLiderNode && this.selectedLiderNode.type == "ORGANIZATIONAL_UNIT") {
               this.deleteFolderDialog = true;
             }
@@ -597,7 +651,17 @@ export default {
     }
   },
 
-  computed:mapGetters(["selectedLiderNode"]),
+  computed:{
+      ...mapGetters(["selectedLiderNode"]),
+    
+    diskDataList: {
+
+      get(){
+        return this.getDiskValue();
+      }
+    }
+
+  },
 
   mounted() {
     if (this.selectedLiderNode != null && this.selectedLiderNode.type == "AHENK") {
@@ -624,24 +688,43 @@ export default {
   methods: {
     // ...mapActions(["setSelectedAgentInfo"]),
 
-    getAgentInfo() {
+    async  getAgentInfo() {
       this.agentCn = this.selectedLiderNode.cn;
       const params = new URLSearchParams();
       params.append("agentJid", this.selectedLiderNode.uid);
-      axios.post("/select_agent_info/detail", params).then((response) => {
-        if (response.data != "" && response.data != null) {
-        this.selectedAgentInfo = response.data;
-        // this.setSelectedAgentInfo(response.data);
+
+      const { response,error } = await taskService.agentInfoDetail(params);
+
+      if(error){
+        return "error";
+      }
+      else{
+        if(response.status == 200){
+          if (response.data != "" && response.data != null) {
+            this.selectedAgentInfo = response.data;
+
         } else {
-          this.selectedAgentInfo = null;
-          this.$toast.add({
-            severity:'error', 
-            detail: this.$t("computer.agent_info.error_message"), 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-          });
+            this.selectedAgentInfo = null;
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.agent_info.error_message"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+              });
+            }
+          }
+        else if(response.status == 417){
+          return "error";
         }
-      });
+      }
+    },
+
+    diskFormatter(number){
+      return (number/1000).toFixed(2);
+    },
+
+    diskAvaibleArea(total,used){
+      return this.diskFormatter((total/used)*100);
     },
 
     setAgentInfo(property, value) {
@@ -778,29 +861,55 @@ export default {
       this.moveFolderNode = node;
     },
 
-    moveAgent() {
+    getDiskValue(){
+        let diskList = [];
+        let diskValueList = this.getPropertyValue(this.selectedAgentInfo.properties,"hardware.disk.ssd.info") || [];
+        diskValueList = eval(diskValueList);
+        let hddValueList = this.getPropertyValue(this.selectedAgentInfo.properties,"hardware.disk.hdd.info") || [];
+        hddValueList = eval(hddValueList);
+
+        diskList = diskList.concat(diskValueList);
+        diskList = diskList.concat(hddValueList);
+
+      return diskList;
+
+    },
+
+    async moveAgent() {
       if (this.moveFolderNode != null && this.moveFolderNode.type == "ORGANIZATIONAL_UNIT") {
         this.task.commandId = "MOVE_AGENT";
         const params = new FormData();
         params.append("sourceDN", this.selectedLiderNode.distinguishedName);
         params.append("sourceCN", this.selectedLiderNode.cn);
         params.append("destinationDN", this.moveFolderNode.distinguishedName);
-        axios.post("/lider/computer/move/agent", params).then((response) => {
-          if (response.data) {
-            // TO DO --> computer tree will be updated
-            this.moveAgentDialog = false;
-            this.$emit('moveSelectedAgent', this.selectedLiderNode, this.moveFolderNode.distinguishedName);
-          }
-        })
-        .catch((error) => {
+        const{response,error} = await computerManagementService.moveEntry(params);
+        if(error){
           this.$toast.add({
             severity:'error', 
             detail: this.$t("computer.agent_info.move_client_error")+"\n"+error, 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
           });
-        });
-      } else {
+        }
+        else{
+            if(response.status == 200){
+              if (response.data) {
+                // TO DO --> computer tree will be updated
+                this.moveAgentDialog = false;                
+                this.$emit('moveSelectedAgent', this.selectedLiderNode, response.data, this.moveFolderNode.distinguishedName);
+              }
+            }
+            else if(response.status == 417){
+              this.$toast.add({
+                severity:'error', 
+                detail: this.$t("computer.agent_info.error_417_move_agent"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
+          }
+      }
+      } 
+      else {
         this.$toast.add({
           severity:'warn', 
           detail: this.$t("computer.agent_info.select_folder_warn"), 
@@ -810,13 +919,14 @@ export default {
       }
     },
 
-    updateAgentInfo() {
+    async updateAgentInfo() {
       this.loading = true;
       this.updateAgentConfirm = false;
       this.task.commandId = "AGENT_INFO";
       const params = new FormData();
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
-      axios.post("/lider/computer/get_agent_info", params).then((response) => {
+      const{response,error} = await computerManagementService.getAgentInfo(params);
+      if(response.status == 200){
         if (!response.data) {
           this.$toast.add({
             severity:'error', 
@@ -825,16 +935,29 @@ export default {
             life: 3000
           });
         }
-      });
+      }
+      else{
+        console.log("Could not get agent")
+      }
+  
     },
 
-    deleteAgent() {
+    async deleteAgent() {
       this.task.commandId = "DELETE_AGENT";
       const params = new FormData();
       this.deleteAgentConfirm = false;
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
       params.append("agentUID", this.selectedLiderNode.uid);
-      axios.post("/lider/computer/delete/agent", params).then((response) => {
+      const{response,error} = await computerManagementService.deleteAgent(params);
+      if(error){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t("computer.agent_info.delete_client_error")+"\n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
+      else{
         if (response.data) {
           this.$emit('deleteSelectedAgent', this.selectedLiderNode);
         } else {
@@ -845,18 +968,10 @@ export default {
             life: 3000
           });
         }
-      })
-      .catch((error) => { 
-        this.$toast.add({
-          severity:'error', 
-          detail: this.$t("computer.agent_info.delete_client_error")+"\n"+error, 
-          summary:this.$t("computer.task.toast_summary"), 
-          life: 3000
-        });
-      });
+      }
     },
 
-    renameAgent() {
+    async renameAgent() {
       if (!this.newHostname.trim()) {
         this.validationRenameAgent = true;
         return;
@@ -867,52 +982,55 @@ export default {
       params.append("agentDN", this.selectedLiderNode.distinguishedName);
       params.append("cn", this.selectedLiderNode.cn);
       params.append("newHostname", this.newHostname);
-      axios.post("/lider/computer/rename/agent", params).then((response) => {
-        if (response.data) {
-          let newDn = this.selectedLiderNode.distinguishedName.replace("cn="+this.selectedLiderNode.cn, "cn="+this.newHostname);
-          this.selectedLiderNode.distinguishedName = newDn;
-          this.selectedLiderNode.name = this.newHostname;
-          this.selectedLiderNode.cn = this.newHostname;
-          this.selectedLiderNode.uid = this.newHostname;
-          this.selectedLiderNode.attributes.uid = this.newHostname;
-          this.selectedLiderNode.attributes.cn = this.newHostname;
-          this.selectedLiderNode.attributes.entryDN = newDn;
-          this.$emit('renameSelectedAgent', this.selectedLiderNode);
-           this.$toast.add({
-            severity:'success', 
-            detail: this.$t("computer.agent_info.rename_success"), 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 5000
-          });
-        } else {
-          this.$toast.add({
-            severity:'error', 
-            detail: this.$t("computer.agent_info.delete_client_error"), 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-          });
+      const{response,error} = await computerManagementService.renameAgent(params);
+      if(error){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t("computer.agent_info.rename_error")+"\n"+error, 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
+      else{
+        if(response.status == 200){
+          if (response.data) {
+            let newDn = this.selectedLiderNode.distinguishedName.replace("cn="+this.selectedLiderNode.cn, "cn="+this.newHostname);
+            this.selectedLiderNode.distinguishedName = newDn;
+            this.selectedLiderNode.name = this.newHostname;
+            this.selectedLiderNode.cn = this.newHostname;
+            this.selectedLiderNode.uid = this.newHostname;
+            this.selectedLiderNode.attributes.uid = this.newHostname;
+            this.selectedLiderNode.attributes.cn = this.newHostname;
+            this.selectedLiderNode.attributes.entryDN = newDn;
+            this.$emit('renameSelectedAgent', this.selectedLiderNode);
+              this.$toast.add({
+                severity:'success', 
+                detail: this.$t("computer.agent_info.rename_success"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 5000
+              });
+        } 
+          else {
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.agent_info.delete_client_error"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
+          }
         }
-      })
-      .catch((error) => {
-        if (error.response.status == 409) {
+        else if (error.response.status == 409) {
           this.$toast.add({
             severity:'error', 
             detail: this.$t("computer.agent_info.rename_same_hostname_error"), 
             summary:this.$t("computer.task.toast_summary"), 
             life: 5000
-          });
-        } else {
-          this.$toast.add({
-            severity:'error', 
-            detail: this.$t("computer.agent_info.rename_error")+"\n"+error, 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-          });
-        }
-      });
+            });
+          }
+      }
     },
 
-    responseAgentInfo(message) {
+    async responseAgentInfo(message) {
       if (message.commandClsId == "AGENT_INFO") {
         this.loading = false;
         var arrg = JSON.parse(message.result.responseDataStr);
@@ -933,24 +1051,40 @@ export default {
           params.append("phase", phase);
           params.append("osVersion", arrg.osVersion);
           params.append("agentUid", this.selectedLiderNode.uid);
-          axios.post("/lider/computer/update_agent_info", params).then((response) => {
-            if (response.data) {
-              // TO DO --> computer tree will be updated
-              this.selectedAgentInfo = response.data
-            } else {
-              this.$toast.add({
+          params.append("hardwareDiskSsdInfo",arrg.hardwareDiskSsdInfo);
+          params.append("hardwareDiskHddInfo",arrg.hardwareDiskHddInfo)
+          const{response,error} = await computerManagementService.updateAgentInfo(params);
+          if(error){
+            this.$toast.add({
                 severity:'error', 
                 detail: this.$t("computer.agent_info.delete_client_error"), 
                 summary:this.$t("computer.task.toast_summary"), 
                 life: 3000
               });
+          }
+          else{
+            if(response.status == 200){
+              if (response.data) {
+              // TO DO --> computer tree will be updated
+                this.selectedAgentInfo = response.data
+              } 
             }
-          });
+            else if(response.status == 417){
+              this.$toast.add({
+                severity:'error', 
+                detail: this.$t("computer.agent_info.error_417_update_agent_info"), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
+
+
+          }
         }
       }
     },
 
-    addFolder() {
+    async addFolder() {
       if (!this.folderName.trim()) {
         this.validationFolderName = true;
         return;
@@ -958,20 +1092,49 @@ export default {
       let params = new FormData();
       params.append("parentName", this.selectedLiderNode.distinguishedName);
       params.append("ou", this.folderName);
-      axios.post('/lider/user/addOu', params).then(response => {
-        this.$emit('addFolder', response.data, this.selectedLiderNode.distinguishedName);
+
+      const{ response,error } = await userService.addOu(params);
+      if(error){
         this.$toast.add({
-            severity:'success', 
-            detail: this.$t('computer.agent_info.add_folder_success'), 
+          severity:'error', 
+          detail: this.$t('user_management.add_folder_error'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+      });
+      }
+      else{
+        if(response.status == 200){
+          this.$emit('addFolder', response.data, this.selectedLiderNode.distinguishedName);
+          this.$toast.add({
+              severity:'success', 
+              detail: this.$t('computer.agent_info.add_folder_success'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+          });
+        }
+        else if(response.status == 417){
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('user_management.add_folder_error'), 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
-        });
-      });
+          });
+        }
+        else if(response.status == 226){
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('user_management.add_folder_error_226'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      }
+        
       this.folderName = '';
       this.addFolderDialog = false;
     },
 
-    deleteFolder() {
+    async deleteFolder() {
       let ldapEntry = [];
       ldapEntry.push({
         "distinguishedName": this.selectedLiderNode.distinguishedName,
@@ -980,26 +1143,47 @@ export default {
         "uid": this.selectedLiderNode.uid
       });
 
-      axios.post("/lider/computer/deleteComputerOu", ldapEntry).then(response => {
-        if (response.data) {
-          this.$emit('deleteSelectedAgent', this.selectedLiderNode);
-          this.$toast.add({
-              severity:'success', 
-              detail: this.$t('computer.agent_info.delete_folder_success'), 
-              summary:this.$t("computer.task.toast_summary"), 
-              life: 3000
-          });
-      } else {
-          this.$toast.add({
+      const{response,error} = await computerManagementService.deleteComputerOu(ldapEntry);
+      if(error){
+        this.$toast.add({
               severity:'warn', 
               detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
               summary:this.$t("computer.task.toast_summary"), 
               life: 3000
           });
+      }
+      else{
+        if(response.status == 200){
+          if (response.data) {
+            this.$emit('deleteSelectedAgent', this.selectedLiderNode);
+            this.$toast.add({
+                severity:'success', 
+                detail: this.$t('computer.agent_info.delete_folder_success'), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
+          }   
+          else {
+            this.$toast.add({
+                severity:'warn', 
+                detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+            });
+          }
         }
-        this.deleteFolderDialog = false;
-      });
-    },
+        else if(response.status == 417){
+          this.$toast.add({
+              severity:'error', 
+              detail: this.$t('computer.agent_info.error_417_delete_computer_ou'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+          });
+        }
+      }
+      this.deleteFolderDialog = false;
+
+    }
   },
 };
 </script>
@@ -1024,5 +1208,23 @@ export default {
     .p-paginator {
         padding: 1rem;
     }
+}
+::v-deep(.p-progressbar-blue) {
+  height: 1.25rem;
+  background-color: #419544;
+
+  .p-progressbar-value {
+    background-color: #1769aa;
+  }
+  
+}
+::v-deep(.p-progressbar-red) {
+  height: 1.25rem;
+  background-color: #419544;
+
+  .p-progressbar-value {
+      background-color:#D32F2F;
+  }
+  
 }
 </style>

@@ -3,8 +3,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
-                loadNodeUrl="/lider/sudo_groups/getGroups"
-                loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
+                loadNodeUrl="/api/lider/sudo-groups/groups"
+                loadNodeOuUrl="/api/lider/sudo-groups/get-ou-details"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
@@ -193,13 +193,13 @@
 
 
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
-import axios from 'axios';
 import { mapActions } from "vuex"
 import SudoGroupDialog from './Dialogs/SudoGroupDialog.vue';
 import {FilterMatchMode} from 'primevue/api';
 import AddFolderDialog from './Dialogs/AddFolderDialog.vue'
 import ChangeFolderNameDialog from './Dialogs/ChangeFolderNameDialog.vue'
 import MoveNodeDialog from './Dialogs/MoveNodeDialog.vue'
+import { sudoGroupsService } from '../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js';
 
 export default {
     data() {
@@ -348,20 +348,31 @@ export default {
             this.modals.sudoGroup = false;
         },
 
-        deleteNode() {
-            axios.post('/lider/sudo_groups/deleteEntry', null, {
-                params : { dn: this.selectedNode.distinguishedName }
-            }).then(response => {
-                if (response.data) {
-                    this.$refs.tree.remove(this.selectedNode);
-                    this.setSelectedLiderNode(null);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.sudo.registiration_delete'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else{
+        async deleteNode() {
+            
+            const { response, error } = await sudoGroupsService.entryDelete(this.selectedNode.distinguishedName);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.sudo.registiration_delete_error'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$refs.tree.remove(this.selectedNode);
+                        this.setSelectedLiderNode(null);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.sudo.registiration_delete'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } 
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.sudo.registiration_delete_error'),
@@ -369,26 +380,39 @@ export default {
                         life: 3000
                     });
                 }
-                this.modals.deleteNode = false;
-            });
+            }
+                
+            this.modals.deleteNode = false;
+
         },
 
-        deleteSudoUser() {
-            axios.post('/lider/sudo_groups/delete/sudo/user', null, {
-                params : { uid: this.deletedSudoUser.uid ,dn: this.selectedNode.distinguishedName }
-            }).then(response => {
-                if (response.data) {
-                   this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.sudo.user_delete'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    }); 
-                    this.sudoUser = this.sudoUser.filter(user => user.uid != this.deletedSudoUser.uid);
-                    this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
-                    this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
-                    this.treeNodeClick(this.selectedNode);
-                } else {
+        async deleteSudoUser() {
+    
+            const { response,error } = await sudoGroupsService.userDelete(this.selectedNode.distinguishedName,this.deletedSudoUser.uid);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.sudo.user_delete_error'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$toast.add({
+                             severity:'success', 
+                             detail: this.$t('user_management.sudo.user_delete'),
+                             summary:this.$t("computer.task.toast_summary"), 
+                             life: 3000
+                        }); 
+                        this.sudoUser = this.sudoUser.filter(user => user.uid != this.deletedSudoUser.uid);
+                        this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
+                        this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+                        this.treeNodeClick(this.selectedNode);
+                    }
+                }
+                else if(response.status == 417 ){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.sudo.user_delete_error'),
@@ -396,8 +420,7 @@ export default {
                         life: 3000
                     });
                 }
-                
-            });
+            }
             this.modals.deleteSudoUser = false;
             
         },

@@ -11,8 +11,8 @@
  * 
  */
 
-import axios from 'axios';
 import ServiceManagement from "@/views/ComputerManagement/Plugins/Task/Service/ServiceManagement.vue";
+import { taskService } from '../../../../../services/Task/TaskService.js'
 
 export default {
   data() {
@@ -26,16 +26,44 @@ export default {
   },
 
   created() {
-    axios.post("/getPluginTaskList", {}).then((response) => {
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          if (element.page == "service-list") {
-            this.pluginTaskServiceManagement = element;
-            this.serviceManagementState = element.state;
+    this.pluginTaskList();
+  },
+
+  methods: {
+
+    async pluginTaskList(){
+      const{response,error} = await taskService.pluginTaskList();
+      if(error){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.security.error_plugin_task_list'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
+      else{
+        if(response.status == 200){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index];
+            if (element.page == "service-list") {
+              this.pluginTaskServiceManagement = element;
+              this.serviceManagementState = element.state;
+            }
           }
         }
-      });
-  },
+        else if(response.status == 417){
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('computer.plugins.security.error_417_plugin_task_list'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      }        
+    }
+},
+
+  
 };
 </script>
 

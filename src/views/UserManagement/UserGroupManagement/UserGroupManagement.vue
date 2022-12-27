@@ -7,8 +7,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px; margin-top:10px;">
             <tree-component 
                 ref="tree"
-                loadNodeUrl="/lider/user_groups/getGroups"
-                loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                loadNodeUrl="/api/lider/user-groups/groups"
+                loadNodeOuUrl="/api/lider/user-groups/ou-details"
                 :treeNodeClick="treeNodeClick"
                 :searchFields="searchFields"
                 @handleContextMenu="handleContenxtMenu"
@@ -89,10 +89,11 @@
         <tree-component 
             ref="movetree"
             :isMove="true"
-            loadNodeUrl="/lider/user_groups/getGroups"
-            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+            loadNodeUrl="/api/lider/user-groups/groups"
+            loadNodeOuUrl="/api/lider/user-groups/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
+            :scrollHeight="40"
         />
         <div class="p-col p-text-center">
           <small>{{$t('group_management.select_folder_warn')}}</small>
@@ -110,7 +111,7 @@
     <!-- Add Group Dialog or Add User to Group Dialog -->
     <Dialog :header="modals.addUser? $t('group_management.add_user')
         :$t('group_management.add_group')"
-         v-model:visible="modals.addGroup" :style="{width: '50vw'}" :modal="true">
+         v-model:visible="modals.addGroup" :style="{width: '45vw'}" :modal="true">
         <TabView>
             <TabPanel :header="$t('group_management.group_info')">
                 <div class="p-fluid">
@@ -126,17 +127,18 @@
                 </div>
                 <tree-component 
                     ref="usertree"
-                    loadNodeUrl="/lider/user_groups/getUsers"
-                    loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                    loadNodeUrl="/api/lider/user-groups/users"
+                    loadNodeOuUrl="/api/lider/user-groups/ou-details"
                     :showCheckbox="userGroupModal.showCheckbox"
                     :getCheckedNodes="getCheckedUserNodes"
                     :searchFields="searchUserFields"
+                    :scrollHeight="40"
                 />
                 <div class="p-col p-text-center">
                     <small>{{$t('group_management.select_user')}}</small>
                 </div>
             </TabPanel>
-            <TabPanel>
+            <!-- <TabPanel>
                 <template #header>
                     <span>{{$t('group_management.selected_users')}}
                         <Badge v-if="userGroupModal.checkedNodes.length > 0" :value="userGroupModal.checkedNodes.length"></Badge>
@@ -177,7 +179,7 @@
                         </template>
                     </Column>
                 </DataTable>
-            </TabPanel>
+            </TabPanel> -->
             <TabPanel v-if="modals.addUser">
                 <template #header>
                     <span>{{$t('group_management.existing_users')}}
@@ -260,12 +262,12 @@
 
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import NodeDetail from '@/components/Tree/NodeDetail.vue';
-import axios from 'axios';
 import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
 import MemberOfUserGroup from "./Components/MemberOfUserGroup.vue";
 import AssignedPolicies from "./Components/AssignedPolicies.vue";
 import {FilterMatchMode} from 'primevue/api';
+import { userGroupsService } from '../../../services/Settings/UserGroupsService.js'
 
 export default {
 
@@ -507,18 +509,29 @@ export default {
             }
         },
 
-        createUserGroup() {
+        async createUserGroup() {
             if (!this.userGroupModal.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
             }
             this.loading = true;
-            axios.post('/lider/user_groups/createNewGroup',{
+
+            const{response,error} = await userGroupsService.createNewGroup(
+            {
                 groupName: this.userGroupModal.groupName,
                 checkedEntries: JSON.stringify(this.userGroupModal.checkedNodes),
                 selectedOUDN: this.selectedNode.distinguishedName
-            }).then(response => {
-                    this.loading = false;
+            });
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.created_group_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                this.loading = false;
                 if (response.data === "") {
                     this.$toast.add({
                         severity:'error', 
@@ -526,7 +539,8 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                } else {
+                } 
+                else {
                     this.$refs.tree.append(response.data, this.selectedNode);
                     this.userGroupModal = {
                         showCheckbox: true,
@@ -542,14 +556,26 @@ export default {
                         life: 3000
                     });
                 }
-            });
+
+            }
+                
         },
 
-        addUserToGroup() {
-            axios.post("/lider/user_groups/group/existing/addUser",{
+        async addUserToGroup() {
+
+            const{response,error} = await userGroupsService.addUser({
                 checkedEntries: JSON.stringify(this.userGroupModal.checkedNodes),
                 groupDN: this.selectedNode.distinguishedName
-            }).then(response => {
+            });
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.select_user'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 5000
+                });
+            }
+            else{
                 this.loading = false;
                 if (response.data) {
                     this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
@@ -568,26 +594,19 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                } else {
+                } 
+                else {
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('group_management.add_user_error'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
-                    });
-                    
+                    }); 
+
                 }
-            })
-            .catch((error) => {
-                if (error.response.status == "NOT_ACCEPTABLE") {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('group_management.select_user'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 5000
-                    });
-                } 
-            });
+
+            }
+
         },
 
         moveTreeNodeClick(node) {
@@ -595,18 +614,29 @@ export default {
             this.moveFolderNode = node;
         },
 
-        addFolder() {
+        async addFolder() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
             }
-            axios.post('/lider/user_groups/addOu', {
+
+            const{response,error} = await userGroupsService.addOu(
+            {
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
                 ou: this.folderName,
                 distinguishedName: 'ou=' + this.folderName + ',' + this.selectedNode.distinguishedName,
                 name: this.folderName
-            }).then(response => {
+            });
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.error_add_folder'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
                 this.$refs.tree.append(response.data, this.selectedNode);
                 this.modals.folderAdd = false;
                 this.$toast.add({
@@ -615,12 +645,12 @@ export default {
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
             this.folderName = '';
             this.modals.folderAdd = false;
         },
 
-        changeGroupName() {
+        async changeGroupName() {
             if (!this.userGroupModal.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
@@ -629,7 +659,16 @@ export default {
             let params = new FormData();
             params.append("oldDN", this.selectedNode.distinguishedName);
             params.append("newName", "cn="+this.userGroupModal.groupName);
-            axios.post('/lider/user_groups/rename/entry', params).then(response => {
+            const{response,error} = await userGroupsService.renameEntry(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.rename_group_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
                 if (response.data) {
                     this.$toast.add({
                         severity:'success', 
@@ -649,10 +688,10 @@ export default {
                         life: 3000
                     });
                 }
-            });
+            }
         },
 
-        moveNode() {
+        async moveNode() {
             if (!this.moveFolderNode) {
                 this.$toast.add({
                     severity:'warn', 
@@ -675,7 +714,17 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveFolderNode.distinguishedName);
             this.modals.moveNode = false;
-            axios.post('/lider/user_groups/move/entry', params).then(response => {
+
+            const{response,error} =  await userGroupsService.moveEntry(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.move_node_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
                 if (response.data) {
                     this.$refs.tree.remove(this.selectedNode);
                     if (this.selectedNode.type === "GROUP") {
@@ -699,7 +748,7 @@ export default {
                         life: 3000
                     });
                 }
-            });
+            }
         },
 
         getCheckedUserNodes(nodes) {
@@ -721,11 +770,21 @@ export default {
             )
         }, 
 
-        deleteNode() {
+        async deleteNode() {
             let params = new FormData();
             params.append("dn", this.selectedNode.distinguishedName);
             this.modals.deleteNode = false;
-            axios.post("/lider/user_groups/deleteEntry", params).then(response => {
+
+            const{response,error} = await userGroupsService.deleteEntry(this.selectedNode.distinguishedName);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.delete_node_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
                 if (response.data) {
                     this.$refs.tree.remove(this.selectedNode);
                     this.setSelectedLiderNode(null);
@@ -743,6 +802,7 @@ export default {
                         life: 3000
                     });
                 }
+            }
             }).catch((error) => {
                 if (error.response.status == 409){
                      this.$toast.add({

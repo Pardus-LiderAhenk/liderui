@@ -13,6 +13,7 @@
         "@ismailbasaran/vuestrophejs": "^1.4.2",
         "axios": "^0.21.1",
         "chart.js": "^3.3.2",
+        "chartjs-plugin-datalabels": "^2.1.0",
         "core-js": "^3.9.0",
         "element-plus": "^1.0.2-beta.36",
         "mitt": "^2.1.0",

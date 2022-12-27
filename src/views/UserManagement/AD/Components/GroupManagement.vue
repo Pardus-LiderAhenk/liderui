@@ -112,9 +112,8 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import AssignedPolicies from "./AssignedPolicies.vue";
-import { mapActions } from "vuex"
-import axios from "axios";
-
+import { mapActions, mapGetters } from "vuex"
+import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 export default {
     props: {
         selectedNode: {
@@ -145,6 +144,10 @@ export default {
             this.getSelectedNodeAttribute();
             this.getMemberOfSelectedGroup(this.selectedNode);
         }
+    },
+
+    computed: {
+        ...mapGetters(["selectedLiderNode"]),
     },
 
     methods: {
@@ -186,7 +189,7 @@ export default {
             }
         },
 
-        deleteMemberFromGroup(data) {
+        async deleteMemberFromGroup(data) {
             if (this.attributesMultiValue == false) {
                 this.$toast.add({
                         severity:'warn', 
@@ -202,34 +205,59 @@ export default {
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedNode.distinguishedName);
-            axios.post("/lider/user_groups/delete/group/members", params).then((response) => {
-                if (response.data != null) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.delete_member_success_message'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.setSelectedLiderNode(response.data);
-                    this.getMemberOfSelectedGroup(this.selectedNode);
-                    this.$emit('deleteMember', this.selectedNode);
-                    this.loading = false;
-                }
-            }).catch((error) => {
+
+            const { response,error } = await adManagementService.deleteMemberUser(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            })
+
+            }
+            else{
+                if(response.status == 200){
+
+                    if (response.data != null) {
+                        this.members = this.members.filter(member => member.memberDn != data.memberDn);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.delete_member_success_message'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        this.setSelectedLiderNode(response.data);
+                        this.getSelectedNodeAttribute();
+                        this.loading = false;
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.error_417_delete_member_group'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
         },
 
         getSelectedNodeAttribute() {
             let nodeSummaryData = [];
-            nodeSummaryData.push({
-                'label': this.$t('group_management.name'),
-                'value': this.selectedNode.name,
+            let memberCount = 0;
+            if (this.selectedLiderNode.type == 'GROUP') {
+                for (var key in this.selectedLiderNode.attributesMultiValues) {
+                    if (this.selectedLiderNode.attributesMultiValues.hasOwnProperty(key) && key == "member") {
+                        memberCount = this.selectedLiderNode.attributesMultiValues[key].length;
+                    }
+                }
+                
+            }
+            nodeSummaryData.push(
+                {
+                    'label': this.$t('group_management.name'),
+                    'value': this.selectedNode.name,
                 },
                 {
                     'label': this.$t('group_management.type'),
@@ -238,7 +266,7 @@ export default {
             if (this.selectedNode.type == "GROUP") {
                 nodeSummaryData.push({
                 'label': this.$t('group_management.number_of_member'),
-                'value': this.members.length
+                'value': memberCount
                 });
             }
             this.selectedNodeSummaryData = nodeSummaryData;
@@ -251,7 +279,14 @@ export default {
                 this.getMemberOfSelectedGroup(this.selectedNode);
                 this.getSelectedNodeAttribute();
             }
-        }
+        },
+
+        // selectedLiderNodeNode() {
+        //     if (this.selectedLiderNodeNode) {
+        //         this.getMemberOfSelectedGroup(this.selectedLiderNode);
+        //         this.getSelectedNodeAttribute();
+        //     }
+        // }
     },
 }
 </script>

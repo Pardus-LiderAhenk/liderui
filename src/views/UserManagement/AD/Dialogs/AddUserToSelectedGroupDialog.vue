@@ -30,7 +30,12 @@
                 </div>
             </div>
             <div class="p-field">
-                <DataTable :value="users" class="p-datatable-sm" v-model:filters="filters">
+                <DataTable :value="users" class="p-datatable-sm" v-model:filters="filters" :loading="searchLoading">
+                    <template #loading>
+                        <div class="p-d-flex p-jc-center">
+                            {{$t('user_management.ad.searching')}}
+                        </div>
+                    </template>
                     <template #header>
                         <div class="p-d-flex p-jc-end">
                             <span class="p-input-icon-left">
@@ -79,8 +84,9 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
+import { mapGetters } from "vuex"
 
 export default {
 
@@ -122,10 +128,13 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
+            searchLoading: false
         }
     },
 
     computed: {
+        ...mapGetters(["selectedLiderNode"]),
+
         showDialog: {
             get () {
                 return this.addMemberDialog
@@ -140,7 +149,7 @@ export default {
     },
 
     methods: {
-        searchUser() {
+        async searchUser() {
             if (!this.searchUserFields) {
                 this.$toast.add({
                     severity:'warn', 
@@ -154,25 +163,39 @@ export default {
                 this.validation.userSearchValue = true;
                 return;
             }
+            this.searchLoading = true;
             let params = new FormData();
             params.append("searchDn", "");
             params.append("key", this.selectedUserField.value);
             params.append("value", this.userSearchValue);
-            axios.post('/ad/searchEntryUser', params).then(response => {
-                if (response.data) {
-                    this.users = response.data;
-                } else {
+            const{response,error} =  await adManagementService.searchEntryUserList(params);
+            this.searchLoading = false;
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.user_not_found'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+            }
+            else{
+                if(response.status = 200){
+                    if (response.data) {
+                        this.users = response.data;
+                    } 
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.user_not_found'), 
+                        detail: this.$t('user_management.error_417_user_not_found'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-            });
+            }                
         },
 
-        addUserToGroup(data) {
+        async addUserToGroup(data) {
             if (this.isExistMember(data.distinguishedName)) {
                 this.$toast.add({
                     severity:'warn', 
@@ -186,32 +209,48 @@ export default {
             params.append("searchDn", "");
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("distinguishedName", data.distinguishedName);
-            axios.post('/ad/addMember2ADGroup', params).then(response => {
-                if (response.data) {
-                    this.$emit('updateNode', response.data, null);
-                    this.$emit('closeAdDialog');
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.add_user_to_group_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
+
+            const { response,error } = await  adManagementService.addMemberToAdGroup(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.add_user_to_group_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
                     });
-                } else {
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        let updatedNode = this.selectedNode;
+                        updatedNode.attributesMultiValues.member = response.data.attributesMultiValues.member;
+                        this.$emit('updateNode', response.data, updatedNode);
+                        
+                        this.$emit('closeAdDialog');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.add_user_to_group_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } 
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.add_user_to_group_error'), 
+                        detail: this.$t('user_management.error_417_add_user_to_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-            });
+            }
         },
 
         isExistMember(userDn) {
             let isExist = false;
-            for (const key in this.selectedNode.attributesMultiValues) {
-                if (Object.hasOwnProperty.call(this.selectedNode.attributesMultiValues, key)) {
-                    const element = this.selectedNode.attributesMultiValues[key];
+            for (const key in this.selectedLiderNode.attributesMultiValues) {
+                if (Object.hasOwnProperty.call(this.selectedLiderNode.attributesMultiValues, key)) {
+                    const element = this.selectedLiderNode.attributesMultiValues[key];
                     if (key == "member" && element.length > 0) {
                         for (let index = 0; index < element.length; index++) {
                             const member = element[index];

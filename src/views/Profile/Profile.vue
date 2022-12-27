@@ -22,7 +22,7 @@ import UserInfoForm from './components/UserInfoForm.vue';
 import AccountInfoForm from './components/AccountInforForm.vue';
 import UiUsageHistory from './components/UiUsageHistory.vue';
 import GroupInfo from './components/GroupInfo.vue';
-import axios from "axios";
+import { profileService } from '../../services/Profile/ProfileService.js';
 
 export default {
     components:{
@@ -64,14 +64,43 @@ export default {
         }
     },
     mounted() {
-        axios.post("/liderConsole/profile", {
-        }).then((response) => {
-            this.user = response.data;
-            this.$refs.uiusagecomp.init();
-            this.$refs.groupinfocomp.init(response.data);
-        });
+
+        this.getProfile();
         
     },
+
+    methods : {
+
+        async getProfile(){
+            const{response,error} = await profileService.getProfile({});
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('profile.user_information.error_get_profile'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+
+            }
+            else{
+                if(response.status == 200){
+                    this.user = response.data;
+                    this.$refs.uiusagecomp.init();
+                    this.$refs.groupinfocomp.init(response.data);
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('profile.user_information.error_417_get_profile'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+
+        }
+    },
+
 }
 </script>
 

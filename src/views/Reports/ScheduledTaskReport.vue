@@ -93,14 +93,12 @@
         </Column>
         <Column :header="$t('reports.scheduled_task_report.total')">
           <template #body="{ data }">
-            {{
-             data.uidList.length
-            }}
+            {{ data.uidList.length }}
           </template>
         </Column>
         <Column :header="$t('reports.scheduled_task_report.successful')">
           <template #body="{ data }">
-            {{ data.successfullTaskCount  }}
+            {{ data.successfullTaskCount }}
           </template>
         </Column>
         <Column :header="$t('reports.scheduled_task_report.waiting')">
@@ -154,7 +152,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left=""> {{$t('reports.scheduled_task_report.total_result')}} : {{ totalElements }} </template>
+        <template> {{$t('reports.scheduled_task_report.total_result')}} : {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -215,7 +213,8 @@
       />
     </template>
   </Dialog>
-  <Dialog :header="$t('reports.scheduled_task_report.cancel_scheduled_task')" v-model:visible="cancelScheduledTaskDialog" 
+  <Dialog :header="$t('reports.scheduled_task_report.cancel_scheduled_task')" 
+    v-model:visible="cancelScheduledTaskDialog" 
     :style="{width: '20vw'}" :modal="true">
     <div class="p-fluid">
         <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
@@ -241,8 +240,8 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import moment from "moment";
+import { scheduledTaskReportService } from "../../services/Reports/ScheduledTaskReportService.js";
 
 export default {
   data() {
@@ -283,7 +282,7 @@ export default {
       )[0];
     },
 
-    getTasks() {
+    async getTasks() {
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
@@ -317,33 +316,49 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/lider/scheduledTaskReport/list/", data).then((response) => {
-        this.tasks = response.data.content;
-        this.totalElements = response.data.totalElements;
-        this.loading = false;
-        let successfullTaskCount = 0;
-        let failedTaskCount = 0;
-        this.tasks = this.tasks.map( task => {
-          task.commandExecutions.map( commandExecution => {
-            if(commandExecution.commandExecutionResults != null && commandExecution.commandExecutionResults.length != 0) {
-							if(commandExecution.commandExecutionResults[0].responseCode == "TASK_PROCESSED") {
-								successfullTaskCount++;
-							}
-							if(commandExecution.commandExecutionResults[0].responseCode == "TASK_ERROR") {
-								failedTaskCount++
-							}
-						}
-          },[successfullTaskCount, failedTaskCount]);
 
-          task.successfullTaskCount = successfullTaskCount;
-          task.failedTaskCount = failedTaskCount;
-          task.waitingTaskCount = task.uidList.length - successfullTaskCount - failedTaskCount;
-          successfullTaskCount = 0;
-          failedTaskCount = 0;
-          return task;
-        }, [successfullTaskCount, failedTaskCount]);
-
-      });
+      const {response, error} = await scheduledTaskReportService.scheduledTaskList(data)
+      if (error) { 
+            this.$toast.add({
+              severity:'error',
+              detail: this.$t('reports.scheduled_task_report.error_scheduled_task'),
+              summary: this.$t("computer.task.toast_summary"),
+              life:3600
+            });
+      } else {
+        if(response.status == 200){
+          this.tasks = response.data.content;
+          this.totalElements = response.data.totalElements;
+          this.loading = false;
+          let successfullTaskCount = 0;
+          let failedTaskCount = 0;
+          this.tasks = this.tasks.map( task => {
+            task.commandExecutions.map( commandExecution => {
+              if(commandExecution.commandExecutionResults != null && commandExecution.commandExecutionResults.length != 0) {
+                if(commandExecution.commandExecutionResults[0].responseCode == "TASK_PROCESSED") {
+                  successfullTaskCount++;
+                }
+                if(commandExecution.commandExecutionResults[0].responseCode == "TASK_ERROR") {
+                  failedTaskCount++
+                }
+              }
+            },[successfullTaskCount, failedTaskCount]);
+            task.successfullTaskCount = successfullTaskCount;
+            task.failedTaskCount = failedTaskCount;
+            task.waitingTaskCount = task.uidList.length - successfullTaskCount - failedTaskCount;
+            successfullTaskCount = 0;
+            failedTaskCount = 0;
+            return task;
+          }, [successfullTaskCount, failedTaskCount]);
+        } else if (response.status == 417 ){
+          this.$toast.add({
+            severity:'error',
+            detail: this.$t('reports.scheduled_task_report.error_code_417'),
+            summary: this.$t("computer.task.toast_summary"),
+            life:3600
+          });
+        }
+      }  
     },
     currentPageChange(newCurrentPage) {
       this.loading = true;
@@ -376,7 +391,7 @@ export default {
       }
       this.getTasks(this.currentPage, this.showedTotalElementCount);
     },
-    exportToExcel() {
+    async exportToExcel() {
       this.loading = true;
       var data = new FormData();
       if(this.filter.task != null) {
@@ -402,16 +417,38 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/lider/scheduledTaskReport/export", data, {responseType: 'blob'})
-      .then((response) => {
-        let blob = new Blob([response.data]);
-        let link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "Scheduled_Tasks_Report.xlsx";
-        this.loading = false;
-        link.click();
-      });
+      let responseType = {
+          responseType: 'blob'
+        }
+
+      const {response, error} = await scheduledTaskReportService.scheduledTaskExport(data,responseType)
+      if(error){
+            this.$toast.add({
+            severity:'error',
+            detail:this.$t("reports.scheduled_task_report.error_scheduled_task_export"),
+            summary:this.$t("computer.task.toast_summary"),
+            life:3600
+          });
+      }else{
+          if(response.status == 200){
+              let blob = new Blob([response.data]);
+              let link = document.createElement("a");
+              link.href = window.URL.createObjectURL(blob);
+              link.download = "Scheduled_Tasks_Report.xlsx";
+              this.loading = false;
+              link.click();
+          }
+          else if(response.status == 400){
+            this.$toast.add({
+            severity:'error',
+            detail: this.$t('reports.scheduled_task_report.error_code_400'),
+            summary: this.$t("computer.task.toast_summary"),
+            life:3600
+          });
+          }
+      }        
     },
+
     clearFilterFields() {
       this.filter = {
         taskSendDate: '',
@@ -420,12 +457,31 @@ export default {
         task:null
       };
     },
-    getPlugins(){
-        // /lider/executedTaskReport/plugins
-        axios.post("/lider/executedTaskReport/plugins", {}).then((response) => {
-            this.plugins = response.data;
-        });
+
+    async getPlugins(){
+      const { response, error } = await scheduledTaskReportService.scheduledTaskPlugins();
+      if (error){
+        this.$toast.add({
+          severity:'error',
+          detail: this.$t('reports.scheduled_task_report.error_scheduled_task_plugins'),
+          summary:this.$t("computer.task.toast_summary"),
+          life:3600
+        });        
+      } else {
+        if(response.status == 200){
+          this.plugins = response.data;
+        }
+        else if(response.status == 417){
+          this.$toast.add({
+            severity:'error',
+            detail:this.$t('reports.scheduled_task_report.error_code_plugins_417'),
+            summary:this.$t("computer.task.toast_summary"),
+            life:3600
+        });        
+        }
+      }                            
     },
+
     getTaskName(data) {
       if (data != null && data.task != null && data.task != '') {
         let plugin =  this.plugins.find(plugin => plugin.commandId === data.task.commandClsId );
@@ -438,57 +494,65 @@ export default {
       }
     },
 
-    updateScheduledTask(scheduledParam) {
+    async updateScheduledTask(scheduledParam) {
       var params = new FormData();
       params.append("id", this.selectedCommand.id);
       params.append("cronExpression", scheduledParam);
-      axios.post("/lider/scheduledTask/update", params).then((response) => {
-        if (response.status == 200 && response.data != null) {
+      const { response, error} = await  scheduledTaskReportService.scheduledTaskUpdate(params);
+      if (response.status == 200 ){
+        if(response.data != null) {
           this.tasks = this.tasks.filter(command => command.id != response.data.id);
           this.tasks.push(response.data);
           this.$toast.add({
             severity:'success', 
-            detail: "Zamanlanmış görev başarıyla güncellendi", 
+            detail: this.$t('reports.scheduled_task_report.success_scheduled_update'),
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
           });
         }
-      })
-      .catch((error) => {
-        this.$toast.add({
-          severity:'error', 
-          detail: "Zamanlanmış görev güncellenirken hata oluştu \n"+error,
-          summary:this.$t("computer.task.toast_summary"), 
-          life: 3000
-        });
-      });
-    },
-
-    cancelScheduledTask() {
-      var params = new FormData();
-      params.append("id", this.selectedCommand.id);
-      axios.post("/lider/scheduledTask/cancel", params).then((response) => {
-        if (response.status == 200 && response.data != null) {
-          this.tasks = this.tasks.filter(command => command.id != response.data.id);
-          this.tasks.push(response.data);
-          this.$toast.add({
-            severity:'success', 
-            detail: "Zamanlanmış görev başarıyla iptal edildi", 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-          });
-        }
-      })
-      .catch((error) => {
-        this.$toast.add({
-          severity:'error', 
-          detail: "Zamanlanmış görev iptal edilirken hata oluştu \n"+error, 
-          summary:this.$t("computer.task.toast_summary"), 
-          life: 3000
-        });
-      });
-      this.cancelScheduledTaskDialog = false;
     }
+      else if(response.status == 400){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('reports.scheduled_task_report.error_scheduled_update'),
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+    
+      });
+    }
+  },
+
+  async cancelScheduledTask() {
+    var params = new FormData();
+    params.append("id", this.selectedCommand.id);
+
+    const{ response, error } = await scheduledTaskReportService.scheduledTaskCancel(params);
+    if(error){
+        this.$toast.add({
+        severity:'error', 
+        detail: this.$t('reports.scheduled_task_report.error_scheduled_cancel'), 
+        summary:this.$t("computer.task.toast_summary"), 
+        life: 3000
+      });
+    }
+    else{
+      if (response.status == 200 && response.data != null) {
+        this.tasks = this.tasks.filter(command => command.id != response.data.body.id);
+        this.tasks.push(response.data.body);
+        this.$toast.add({
+          severity:'success', 
+          detail: this.$t('reports.scheduled_task_report.success_scheduled_cancel'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
+      else if(response.status == 400){
+        console.log("Scheduled task id not found!");
+      }
+    }
+    this.cancelScheduledTaskDialog = false;
+    }
+    
   },
 };
 </script>

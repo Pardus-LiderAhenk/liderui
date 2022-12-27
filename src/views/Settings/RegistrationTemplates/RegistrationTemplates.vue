@@ -144,9 +144,9 @@
 */
 
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
 import AddRegistrationTemplate from './Dialogs/AddRegistrationTemplate.vue'
 import UpdateRegistrationTemplate from './Dialogs/UpdateRegistrationTemplate.vue'
+import { registrationTemplateService } from '../../../services/Settings/RegistrationTemplates.js';
 
 export default {
     
@@ -183,22 +183,33 @@ export default {
     },
 
     methods: {
-        getRegistrationTemplate(){
-            axios.get("/api/registration-templates/type/" + this.templateType +"/page-count/" + this.pageNumber + "/page-size/" + this.rowNumber, null)
-            .then((response) => {
-                if (response.data) {
-                    this.records = response.data.content;
-                    this.totalElements = response.data.totalElements;
-                }
-            })
-            .catch((error) => { 
+        async getRegistrationTemplate(){
+
+            const {response, error} = await registrationTemplateService.list(this.templateType, this.pageNumber, this.rowNumber);
+            if(error){
                 this.$toast.add({
                     severity:'error',
                     detail: this.$t('settings.registiration_template.an_error_occurred_while_fetching_registration_templates')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
-                })
-            });
+                 });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                    this.records = response.data.content;
+                    this.totalElements = response.data.totalElements;
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error',
+                        detail: this.$t('settings.registiration_template.error_417_getting_registration_template'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
         },
 
         savedTemplate(data) {
@@ -218,36 +229,40 @@ export default {
             this.getRegistrationTemplate();
         },
 
-        deleteRecord() {
-            axios.delete("/api/registration-templates/" + this.selectedRecord.id).then((response) => {
-                if (response.status == 200) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.registiration_template.template_successfully_deleted'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.records = this.records.filter(template => template.id != this.selectedRecord.id);
-                    this.resetPaginator();
-                    this.selectedRecord = null;
-                    this.showDeleteDialog = false;
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.registiration_template.an_error_occurred_while_deleting_template'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            })
-            .catch((error) => { 
+        async deleteRecord() {
+
+            const { response,error } = await registrationTemplateService.delete(this.selectedRecord.id);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('settings.registiration_template.an_error_occurred_while_deleting_template')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }else{
+                if(response.status == 200){
+                    if (response.status == 200) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('settings.registiration_template.template_successfully_deleted'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        this.records = this.records.filter(template => template.id != this.selectedRecord.id);
+                        this.resetPaginator();
+                        this.selectedRecord = null;
+                        this.showDeleteDialog = false;
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.registiration_template.error_417_delete_template'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
         },
 
         onPage(event) {

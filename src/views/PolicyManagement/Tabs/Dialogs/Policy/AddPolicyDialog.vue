@@ -44,7 +44,7 @@
 * @event appendPolicy
 */
 
-import axios from "axios";
+import { policyService } from "../../../../../services/PolicyManagement/PolicyService.js";
 
 export default {
 
@@ -82,7 +82,7 @@ export default {
     },
 
     methods: {
-        addPolicy() {
+        async addPolicy() {
             if (!this.label.trim()) {
                 this.validation.label = true;
                 return;
@@ -92,32 +92,44 @@ export default {
                 "description": this.description,
                 "active": this.active
             }
-            axios.post('/policy/add', params).then(response => {
-                if (response.data) {
-                    this.$emit('appendPolicy', response.data);
-                    this.$emit('closePolicyDialog');
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('policy_management.add_policy_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('policy_management.add_policy_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            }).catch((error) => {
+            const{response,error} = await policyService.policyAdd(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.add_policy_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('appendPolicy', response.data);
+                        this.$emit('closePolicyDialog');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('policy_management.add_policy_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('policy_management.add_policy_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_add_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
             this.label = '';
             this.description = '';
         }

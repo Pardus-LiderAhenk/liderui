@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
 
 export default {
     props:['serverSettings'],
@@ -101,7 +101,7 @@ export default {
         }
     },
     methods: {
-        submitForm() {
+        async submitForm() {
             var data = new FormData();
             data.append("xmppHost",this.xmppHost);
             data.append("xmppPort",this.xmppPort);
@@ -111,17 +111,29 @@ export default {
             data.append("xmppPacketReplayTimeout",this.xmppPacketReplayTimeout);
             data.append("xmppPingTimeout",this.xmppPingTimeout);
 
-            axios.post('/lider/settings/update/xmpp', data).then(response => {
+            const { response,error } = await serverSettingService.updateXmpp(data);
+            if(error){
                 this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.server_settings.messaging_server_settings.messaging_server_settings_successfully_update'),
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.messaging_server_settings.error_update_messaging_server_settings'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-                setTimeout(() => {
-                    this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                }, 3000);
-            });
+            }
+            else{
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_settings.messaging_server_settings.messaging_server_settings_successfully_update'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    setTimeout(() => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                    }, 3000);
+                }
+
+            }
             this.showDialog = false;
         }   
     },

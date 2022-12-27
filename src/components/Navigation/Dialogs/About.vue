@@ -42,6 +42,7 @@
 
 <script>
 import axios from 'axios';
+import { componentService } from '../../../services/Components/Component';
 
 export default {
 
@@ -75,11 +76,21 @@ export default {
     },
 
     methods: {
-        getVersion() {
+        async getVersion() {
             // this.lideruiVersion = process.env.VUE_APP_VERSION = require('../../../../package.json').version;
-            axios.get("/lider-info/version", {}).then((response) => {
-               this.liderapiVersion = response.data;
-            });
+            //axios.get("/lider-info/version", {}).then((response) => {
+            const{response,error} = await componentService.version();
+            if(error){
+
+            }
+            else{
+                if(response.status == 200){
+                    this.liderapiVersion = response.data;
+                }
+                else if(response.status == 417){
+                    return "Versiyon getirilirken hata oluştu";
+                }
+            }
         }
     }
 }

@@ -6,10 +6,11 @@
                 <div class="p-field">
                     <tree-component 
                         ref="grouptree"
-                        loadNodeUrl="/lider/computer_groups/getGroups"
-                        loadNodeOuUrl="/lider/computer_groups/getOuDetails"
+                        loadNodeUrl="/api/lider/computer-groups/groups"
+                        loadNodeOuUrl="/api/lider/computer-groups/ou-details"
                         :treeNodeClick="selectTreeNodeClick"
                         :searchFields="searchFolderFields"
+                        :scrollHeight="40"
                     />
                 </div>
                 <div class="p-filed p-text-center">
@@ -40,7 +41,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
+import { computerGroupsManagementService } from "../../../../services/ComputerManagement/ComputerGroupManagement.js";
 
 export default {
 
@@ -92,7 +93,7 @@ export default {
             this.selectedNode = node;
         },
 
-        addGroup() {
+        async addGroup() {
             if (!this.selectedNode || this.selectedNode.type != "GROUP") {
                 this.$toast.add({
                     severity:'warn', 
@@ -117,6 +118,7 @@ export default {
             data.append("processor", this.filter.processor);
             data.append("osVersion", this.filter.osVersion);
             data.append("agentVersion", this.filter.agentVersion);
+            data.append("diskType",this.filter.diskType);
             data.append("getFilterData", false);
             
             if (this.filter.registrationDate[0] != null) {
@@ -140,26 +142,41 @@ export default {
                 );
             }
 
-            axios.post('/lider/computer_groups/agentReport/existing/group', data).then(response => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('reports.detailed_agent_report.computers_successfully_added'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+            const{response,error} = await computerGroupsManagementService.addAgentToExistingGroupWithAgentReport(data);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail:  this.$t('reports.detailed_agent_report.an_error_occurred_while_adding_computers_to_the_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('reports.detailed_agent_report.computers_successfully_added'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+
                     this.$toast.add({
                         severity:'error', 
-                        detail:  this.$t('reports.detailed_agent_report.an_error_occurred_while_adding_computers_to_the_group'), 
+                        detail:  this.$t('reports.detailed_agent_report.error_417_adding_computer_to_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-                this.showDialog = false;
-                this.selectedNode = null;
-                this.loading = false;
-            });
+            }
+
+            this.showDialog = false;
+            this.selectedNode = null;
+            this.loading = false;
+
         },
     }
 }

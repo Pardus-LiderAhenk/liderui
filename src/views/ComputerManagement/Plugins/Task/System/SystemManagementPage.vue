@@ -35,8 +35,6 @@
  * @see {@link http://www.liderahenk.org/}
  * 
  */
-import axios from 'axios';
-
 import AgentInfo from "@/views/ComputerManagement/Plugins/Task/System/AgentInfo.vue";
 import ResourceUsage from "@/views/ComputerManagement/Plugins/Task/System/ResourceUsage.vue";
 import SessionAndPowerManagement from "@/views/ComputerManagement/Plugins/Task/System/SessionAndPowerManagement.vue";
@@ -48,6 +46,7 @@ import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTra
 import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.vue";
 import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
 import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
+import { taskService } from '../../../../../services/Task/TaskService.js';
 
 export default {
   data() {
@@ -93,63 +92,12 @@ export default {
   },
 
   created() {
-    axios.post("/getPluginTaskList", {}).then((response) => {
-      for (let index = 0; index < response.data.length; index++) {
-        const element = response.data[index];
-        if (element.page == "resource-usage") {
-          this.pluginTaskResourceUsage = element;
-          this.resourceUsageState = element.state;
-        }
-        if (element.page == "end-sessions") {
-          this.pluginTaskSessionPowerManagement = element;
-          this.sessionAndPowerState = element.state;
-        }
-        if (element.page == "conky") {
-          this.pluginTaskConky = element;
-          this.conkyState = element.state;
-        }
-        if (element.page == "eta-notify") {
-          this.pluginTaskEtaNotify = element;
-          this.etaNotifyState = element.state;
-        }
-        if (element.page == "file-management") {
-          this.pluginTaskFileManagement = element;
-          this.fileManagementState = element.state;
-        }
-        if (element.page == "local-user") {
-          this.pluginTaskLocalUser = element;
-          this.localUserState = element.state;
-        }
-        if (element.page == "ldap-login") {
-          this.pluginTaskLdapLogin = element;
-          this.ldapLoginState = element.state;
-        }
-        if (element.page == "xmessage") {
-          this.pluginTaskXmessage = element;
-          this.xmessageState = element.state;
-        }
-        if (element.page == "file-transfer") {
-          this.pluginTaskFileTransfer = element;
-          this.fileTransferState = element.state;
-        }
-        if (element.page == "remote-access") {
-          this.pluginTaskRemoteAccess = element;
-          this.remoteAccessState = element.state;
-        }
-        if (element.page == "manage-root") {
-          this.pluginTaskManageRoot = element
-          this.manageRootState = element.state;
-        }
-        if (element.page == "move-agent") {
-          this.pluginTaskAgentInfo = element
-        }
-      }
-    });
+    this.pluginTaskList();
   },
 
   methods: {
-    moveSelectedAgent(selectedNode, destinationDn) {
-      this.$emit('moveSelectedAgent', selectedNode, destinationDn,);
+    moveSelectedAgent(deletedNode, selectedNode, destinationDn) {
+      this.$emit('moveSelectedAgent', deletedNode, selectedNode, destinationDn,);
     },
 
     deleteSelectedAgent(selectedNode) {
@@ -162,8 +110,81 @@ export default {
 
     addFolder(folder, destinationDn) {
       this.$emit('addFolder', folder, destinationDn);
+    },
+    async pluginTaskList(){
+      const{response,error} = await taskService.pluginTaskList();
+      if(error){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.security.error_plugin_task_list'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
+      else{
+        if(response.status == 200){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index];
+            if (element.page == "resource-usage") {
+              this.pluginTaskResourceUsage = element;
+              this.resourceUsageState = element.state;
+            }
+            if (element.page == "end-sessions") {
+              this.pluginTaskSessionPowerManagement = element;
+              this.sessionAndPowerState = element.state;
+            }
+            if (element.page == "conky") {
+              this.pluginTaskConky = element;
+              this.conkyState = element.state;
+            }
+            if (element.page == "eta-notify") {
+              this.pluginTaskEtaNotify = element;
+              this.etaNotifyState = element.state;
+            }
+            if (element.page == "file-management") {
+              this.pluginTaskFileManagement = element;
+              this.fileManagementState = element.state;
+            }
+            if (element.page == "local-user") {
+              this.pluginTaskLocalUser = element;
+              this.localUserState = element.state;
+            }
+            if (element.page == "ldap-login") {
+              this.pluginTaskLdapLogin = element;
+              this.ldapLoginState = element.state;
+            }
+            if (element.page == "xmessage") {
+              this.pluginTaskXmessage = element;
+              this.xmessageState = element.state;
+            }
+            if (element.page == "file-transfer") {
+              this.pluginTaskFileTransfer = element;
+              this.fileTransferState = element.state;
+            }
+            if (element.page == "remote-access") {
+              this.pluginTaskRemoteAccess = element;
+              this.remoteAccessState = element.state;
+            }
+            if (element.page == "manage-root") {
+              this.pluginTaskManageRoot = element
+              this.manageRootState = element.state;
+            }
+            if (element.page == "move-agent") {
+              this.pluginTaskAgentInfo = element
+            }
+          }   
+        }
+        else if(response.status == 417){
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('computer.plugins.security.error_417_plugin_task_list'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      }
     }
-  }
+  },
 };
 </script>
 

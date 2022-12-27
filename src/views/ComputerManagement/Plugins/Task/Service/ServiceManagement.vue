@@ -181,7 +181,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { taskService } from "../../../../../services/Task/TaskService.js";
 import {FilterMatchMode} from 'primevue/api';
 /**
  * Allows to list, active, inactive, enabled and disabled services on client
@@ -259,34 +259,45 @@ export default {
         }
     },
 
-    serviceManagementResponse(message) {
+    async serviceManagementResponse(message) {
         if (message.commandClsId == "GET_SERVICES") {
             const params = new FormData();
             params.append("id", message.result.id);
-            axios.post("/command/commandexecutionresult", params)
-            .then((response) => {
-                if (response.data != null) {
-                  this.selectedServices = null;
-                  let arrg = JSON.parse(response.data.responseDataStr);
-                  this.services = arrg["service_list"]
-                  for (let index = 0; index < this.services.length; index++) {
-                    const element = this.services[index];
-                    element.id = index + 1;
-                    element.selectDisabled = true;
-                  }
-                  if (this.selectedServices != null) {
+
+            const{response,error} = await taskService.commandExecute(message.result.id);
+            if(error){
+              this.$toast.add({
+                severity:'error', 
+                detail: this.$t('computer.plugins.service_management.get_service_error_message')+ " \n"+error, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
+            else{
+                if(response.status == 200){
+                  if (response.data != null) {
                     this.selectedServices = null;
+                    let arrg = JSON.parse(response.data.responseDataStr);
+                    this.services = arrg["service_list"]
+                    for (let index = 0; index < this.services.length; index++) {
+                      const element = this.services[index];
+                      element.id = index + 1;
+                      element.selectDisabled = true;
+                    }
+                    if (this.selectedServices != null) {
+                      this.selectedServices = null;
+                    }
                   }
                 }
-            })
-            .catch((error) => { 
-            this.$toast.add({
-              severity:'error', 
-              detail: this.$t('computer.plugins.service_management.get_service_error_message')+ " \n"+error, 
-              summary:this.$t("computer.task.toast_summary"), 
-              life: 3000
-            })
-          })
+                else if(response.status == 417){
+                  this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('computer.plugins.service_management.error_417_get_service'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                  });
+              }
+            }
       }
       if (message.commandClsId == "SERVICE_LIST") {
         if (message.result.responseCode == "TASK_PROCESSED") {

@@ -7,8 +7,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component 
                 ref="tree"
-                loadNodeUrl="/lider/computer_groups/getGroups"
-                loadNodeOuUrl="/lider/computer_groups/getOuDetails"
+                loadNodeUrl="/api/lider/computer-groups/groups"
+                loadNodeOuUrl="/api/lider/computer-groups/ou-details"
                 :treeNodeClick="treeNodeClick"
                 :searchFields="searchFields"
                 @handleContextMenu="handleContenxtMenu"
@@ -49,6 +49,13 @@
                         :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                         @click="setSelectedPluginTab('script-management')"
                         :label="$t('computer.plugins.button.script')"
+                    >
+                    </Button>
+                    <Button
+                        icon="fas fa-shield-alt"
+                        :class="selectedPluginTab == 'security-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                        @click="setSelectedPluginTab('security-management')"
+                        :label="$t('computer.plugins.button.security')"
                     >
                     </Button>
                 </div>
@@ -144,10 +151,11 @@
         <tree-component 
             ref="movetree"
             :isMove="true"
-            loadNodeUrl="/lider/computer_groups/getGroups"
-            loadNodeOuUrl="/lider/computer_groups/getOuDetails"
+            loadNodeUrl="/api/lider/computer-groups/groups"
+            loadNodeOuUrl="/api/lider/computer-groups/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
+            :scrollHeight="40"
         />
         <div class="p-col p-text-center">
           <small>{{$t('group_management.select_folder_warn')}}</small>
@@ -181,18 +189,19 @@
                 </div>
                 <tree-component 
                     ref="agenttree"
-                    loadNodeUrl="/lider/computer/getComputers"
-                    loadNodeOuUrl="/lider/computer/getOuDetails"
+                    loadNodeUrl="/api/lider/computer/computers"
+                    loadNodeOuUrl="/api/lider/computer/ou-details"
                     :showCheckbox="agentGroupModal.showCheckbox"
                     :getCheckedNodes="getCheckedAgentNodes"
                     :searchFields="searchAgentFields"
                     isAgentTree="true"
+                    :scrollHeight="40"
                 />
                 <div class="p-col p-text-center">
                     <small>{{$t('group_management.select_client')}}</small>
                 </div>
             </TabPanel>
-            <TabPanel>
+            <!-- <TabPanel>
                 <template #header>
                     <span>{{$t('group_management.selected_clients')}}
                         <Badge v-if="agentGroupModal.checkedNodes.length > 0" :value="agentGroupModal.checkedNodes.length"></Badge>
@@ -233,7 +242,7 @@
                         </template>
                     </Column>
                 </DataTable>
-            </TabPanel>
+            </TabPanel> -->
             <TabPanel v-if="modals.addClient">
                 <template #header>
                     <span>{{$t('group_management.existing_clients')}}
@@ -298,10 +307,11 @@ import NodeDetail from '@/components/Tree/NodeDetail.vue';
 import SystemManagement from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/System/SystemManagementPage.vue";
 import PackageManagement from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/Package/PackageManagementPage.vue";
 import ScriptManagement from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/Script/ScriptManagementPage.vue";
-import axios from 'axios';
+import SecurityManagement from "@/views/ComputerManagement/ComputerGroupManagement/Plugins/Task/Security/SecurityManagementPage.vue";
 import { mapActions } from "vuex"
 import {ref} from 'vue';
 import {FilterMatchMode} from 'primevue/api';
+import { computerGroupsManagementService } from '../../../services/ComputerManagement/ComputerGroupManagement.js';
 
 export default {
     setup(){
@@ -315,7 +325,8 @@ export default {
         NodeDetail,
         SystemManagement,
         PackageManagement,
-        ScriptManagement
+        ScriptManagement,
+        SecurityManagement
     },
 
     data() {
@@ -498,18 +509,19 @@ export default {
             this.moveFolderNode = node;
         },
 
-        addFolder() {
+        async addFolder() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
             }
-            axios.post('/lider/computer_groups/addOu', {
+            const{response,error} = await computerGroupsManagementService.addOu({
                 parentName: this.selectedNode.distinguishedName,
                 type:'ORGANIZATIONAL_UNIT',
                 ou: this.folderName,
                 distinguishedName: 'ou=' + this.folderName + ',' + this.selectedNode.distinguishedName,
                 name: this.folderName
-            }).then(response => {
+            })
+            if(response.status == 200){
                 this.$refs.tree.append(response.data, this.selectedNode);
                 this.modals.folderAdd = false;
                 this.$toast.add({
@@ -518,12 +530,21 @@ export default {
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.error_add_folder'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+    
             this.folderName = '';
             this.modals.folderAdd = false;
         },
 
-        changeGroupName() {
+        async changeGroupName() {
             if (!this.agentGroupModal.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
@@ -532,30 +553,42 @@ export default {
             let params = new FormData();
             params.append("oldDN", this.selectedNode.distinguishedName);
             params.append("newName", "cn="+this.agentGroupModal.groupName);
-            axios.post('/lider/computer_groups/rename/entry', params).then(response => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.rename_group_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.selectedNode.distinguishedName = response.data.distinguishedName;
-                    this.selectedNode.name = response.data.name;
-                    this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
-                    this.setSelectedComputerGroupNode(response.data);
-                } else {
+            const{response,error} = await computerGroupsManagementService.renameEntry(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.rename_group_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200) {
+                    if (response.data) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.rename_group_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                            });
+                        this.selectedNode.distinguishedName = response.data.distinguishedName;
+                        this.selectedNode.name = response.data.name;
+                        this.$refs.tree.updateNode(this.selectedNode.distinguishedName, this.selectedNode);
+                        this.setSelectedComputerGroupNode(response.data);
+                    }
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.rename_group_error'), 
+                        detail: this.$t('group_management.error_417_rename_group_name'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-            });
+            }
         },
 
-        moveNode() {
+        async moveNode() {
             if (!this.moveFolderNode) {
                 this.$toast.add({
                     severity:'warn', 
@@ -578,34 +611,49 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveFolderNode.distinguishedName);
             this.modals.moveNode = false;
-            axios.post('/lider/computer_groups/move/entry', params).then(response => {
-                if (response.data) {
-                    this.$refs.tree.remove(this.selectedNode);
-                    if (this.selectedNode.type === "GROUP") {
-                        this.selectedNode.distinguishedName = "cn="+ this.selectedNode.cn + ","+ this.moveFolderNode.distinguishedName;
-                    } else {
-                        this.selectedNode.distinguishedName = "ou="+ this.selectedNode.ou + ","+ this.moveFolderNode.distinguishedName;
+            const{ response,error } = await computerGroupsManagementService.moveEntry(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.move_node_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$refs.tree.remove(this.selectedNode);
+                        if (this.selectedNode.type === "GROUP") {
+                            this.selectedNode.distinguishedName = "cn="+ this.selectedNode.cn + ","+ this.moveFolderNode.distinguishedName;
+                        } else {
+                            this.selectedNode.distinguishedName = "ou="+ this.selectedNode.ou + ","+ this.moveFolderNode.distinguishedName;
+                        }
+                        this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveFolderNode.distinguishedName));
+                        this.setSelectedComputerGroupNode(null);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.move_node_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
                     }
-                    this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveFolderNode.distinguishedName));
-                    this.setSelectedComputerGroupNode(null);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.move_node_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.move_node_error'), 
+                        detail: this.$t('group_management.error_417_move_entry'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-            });
+
+
+            }
         },
 
-        groupManagemenet() {
+        async groupManagemenet() {
             if (this.agentGroupModal.checkedNodes.length === 0) {
                 this.$toast.add({
                     severity:'warn', 
@@ -622,44 +670,19 @@ export default {
             }
         },
 
-        createAgentGroup() {
+        async createAgentGroup() {
             if (!this.agentGroupModal.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
             }
             this.loading = true;
             this.loadingGroup = true;
-            axios.post('/lider/computer_groups/createNewAgentGroup',{
+            const{response,error} = await computerGroupsManagementService.createNewGroup({
                 groupName: this.agentGroupModal.groupName,
                 checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
                 selectedOUDN: this.selectedNode.distinguishedName
-            }).then(response => {
-                this.loading = false;
-                this.loadingGroup = false;
-                if (response.data === "") {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('group_management.created_group_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$refs.tree.append(response.data, this.selectedNode);
-                    this.agentGroupModal = {
-                        showCheckbox: true,
-                        groupName:'',
-                        checkedNodes: []
-                    }
-                    this.modals.addGroup = false;
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.created_group_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
             })
-            .catch((error) => {
+            if(error){
                 if (error.response.status == "NOT_ACCEPTABLE") {
                     this.$toast.add({
                         severity:'error', 
@@ -668,7 +691,44 @@ export default {
                         life: 5000
                     });
                 } 
-            });
+            }
+            else{
+                if(response.status == 200){
+                    this.loading = false;
+                    this.loadingGroup = false;
+                    if (response.data === "") {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('group_management.created_group_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } else {
+                        this.$refs.tree.append(response.data, this.selectedNode);
+                        this.agentGroupModal = {
+                            showCheckbox: true,
+                            groupName:'',
+                            checkedNodes: []
+                        }
+                        this.modals.addGroup = false;
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.created_group_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.error_417_created_group'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+
         },
 
         showAddClientDialog() {
@@ -678,41 +738,52 @@ export default {
             this.getMemberOfSelectedGroup();
         },
 
-        addClientToGroup() {
+        async addClientToGroup() {
             this.loadingGroup = true;
-            axios.post('/lider/computer_groups/group/existing',{
-                checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
-                groupDN: this.selectedNode.distinguishedName
-            }).then(response => {
+            const{response,error} = await computerGroupsManagementService.groupExisting(
+                {checkedEntries: JSON.stringify(this.agentGroupModal.checkedNodes),
+                groupDN: this.selectedNode.distinguishedName});
+
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.add_client_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
                 this.loading = false;
                 this.loadingGroup = false;
-                if (response.data) {
-                    this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
-                    this.setSelectedComputerGroupNode(response.data);
-                    this.agentGroupModal = {
-                        showCheckbox: true,
-                        groupName:'',
-                        checkedNodes: [],
-                        existingClients: []
+                if(response.status == 200){
+                    if (response.data) {
+                        this.selectedNode.attributesMultiValues = response.data.attributesMultiValues;
+                        this.setSelectedComputerGroupNode(response.data);
+                        this.agentGroupModal = {
+                            showCheckbox: true,
+                            groupName:'',
+                            checkedNodes: [],
+                            existingClients: []
+                        }
+                        this.modals.addGroup = false;
+                        this.modals.addClient = false;
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.add_client_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
                     }
-                    this.modals.addGroup = false;
-                    this.modals.addClient = false;
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.add_client_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.add_client_error'), 
+                        detail: this.$t('group_management.error_417_add_client'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                    
                 }
-            });
+            }
         },
 
         getMemberOfSelectedGroup() {
@@ -735,29 +806,41 @@ export default {
             }
         },
 
-        deleteNode() {
+        async deleteNode() {
             let params = new FormData();
             params.append("dn", this.selectedNode.distinguishedName);
             this.modals.deleteNode = false;
-            axios.post("/lider/computer_groups/deleteEntry", params).then(response => {
-                if (response.data) {
-                    this.$refs.tree.remove(this.selectedNode);
-                    this.setSelectedComputerGroupNode(null);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.delete_node_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+            const{response,error} = await computerGroupsManagementService.deleteEntry(this.selectedNode.distinguishedName);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('group_management.delete_node_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$refs.tree.remove(this.selectedNode);
+                        this.setSelectedComputerGroupNode(null);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.delete_node_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){                    
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('group_management.delete_node_error'), 
+                        detail: this.$t('group_management.error_417_delete_node'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-            });
+            }
         },
 
         getCheckedAgentNodes(nodes) {

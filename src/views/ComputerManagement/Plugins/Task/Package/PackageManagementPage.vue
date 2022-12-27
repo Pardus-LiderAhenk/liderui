@@ -30,11 +30,11 @@
  * 
  */
 
-import axios from 'axios';
 import InstalledPackagesAndManagement from "@/views/ComputerManagement/Plugins/Task/Package/InstalledPackagesAndManagement.vue";
 import Packages from "@/views/ComputerManagement/Plugins/Task/Package/Packages.vue";
 import Repositories from "@/views/ComputerManagement/Plugins/Task/Package/Repositories.vue";
 import CheckPackage from "@/views/ComputerManagement/Plugins/Task/Package/CheckPackage.vue";
+import { taskService } from '../../../../../services/Task/TaskService.js';
 
 
 export default {
@@ -59,28 +59,55 @@ export default {
   },
 
   created() {
-    axios.post("/getPluginTaskList",{},).then((response) => {
-      for (let index = 0; index < response.data.length; index++) {
-        const element = response.data[index];
-        if (element.page == "package-management") {
-          this.pluginTaskInstalledPackagesAndManagement = element;
-          this.installedPackagesAndManagementState = element.state;
+     this.pluginTaskList();
+  },
+
+  methods: {
+    async pluginTaskList(){ 
+
+      const{response,error} =  await taskService.pluginTaskList();
+      if(error){
+        this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.security.error_plugin_task_list'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+      }
+      else{
+        if(response.status == 200){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index];
+            if (element.page == "package-management") {
+              this.pluginTaskInstalledPackagesAndManagement = element;
+              this.installedPackagesAndManagementState = element.state;
+            }
+            if (element.page == "repositories") {
+              this.pluginTaskRepositories = element;
+              this.repositoriesState = element.state;
+            }
+            if (element.page == "packages") {
+              this.pluginTaskPackages = element;
+              this.packagesState = element.state;
+            }
+            if (element.page == "check-package") {
+              this.pluginTaskCheckPackage = element;
+              this.checkPackageState = element.state;
+            }
+          }
         }
-        if (element.page == "repositories") {
-          this.pluginTaskRepositories = element;
-          this.repositoriesState = element.state;
-        }
-        if (element.page == "packages") {
-          this.pluginTaskPackages = element;
-          this.packagesState = element.state;
-        }
-        if (element.page == "check-package") {
-          this.pluginTaskCheckPackage = element;
-          this.checkPackageState = element.state;
+        else if(response.status == 417){
+          this.$toast.add({
+            severity:'error', 
+            detail: this.$t('computer.plugins.security.error_417_plugin_task_list'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+          }
         }
       }
-    });
-  },
+  },  
+  
 };
 </script>
 

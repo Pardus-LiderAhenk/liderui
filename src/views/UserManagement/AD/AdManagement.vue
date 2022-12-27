@@ -70,12 +70,12 @@
     <div class="p-grid ad-management">
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component ref="adTree" class="border-card"
-                loadNodeUrl="/ad/getDomainEntry"
-                loadNodeOuUrl="/ad/getChildEntriesOu"
+                loadNodeUrl="/api/ad/domain-entry"
+                loadNodeOuUrl="/api/ad/child-entries-ou"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
-                searchNodeUrl="/ad/searchEntry"
+                searchNodeUrl="/api/ad/search-entry"
                 @directoryConnection="directoryConnection"
             >
                 <template #contextmenu>
@@ -152,7 +152,8 @@ import GiveConsoleAccessDialog from './Dialogs/GiveConsoleAccessDialog.vue';
 import DeleteNodeDialog from './Dialogs/DeleteNodeDialog.vue';
 import UserSynchronizationDialog from './Dialogs/UserSynchronizationDialog.vue'
 import GroupSynchronizationDialog from './Dialogs/GroupSynchronizationDialog.vue'
-import axios from "axios";
+import { adManagementService } from '../../../services/UserManagement/AD/AdManagement.js'
+
 
 export default {
 
@@ -231,15 +232,10 @@ export default {
         UserSynchronizationDialog,
         GroupSynchronizationDialog,
     },
-
+    
     created() {
-        axios.get("/ad/configurations").then((response) => {
-            if (response.data) {
-                this.enableDeleteUpdate = response.data.enableDelete4Directory;
-                this.domainType = response.data.domainType;
-            }
-        });
-        this.setSelectedLiderNode(null);
+
+        this.configurations();
     },
 
     methods:{
@@ -254,6 +250,37 @@ export default {
         treeNodeClick(node) {
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
+        },
+
+        async configurations(){
+            const{ response,error } =  await adManagementService.configuration();
+            if(error){
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('user_management.ad.error_configuraton'),
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+                });
+            }
+            else{
+
+                if(response.status == 200){
+                    if (response.data) {
+                        this.enableDeleteUpdate = response.data.enableDelete4Directory;
+                        this.domainType = response.data.domainType;
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.ad.error_417_configuration'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                        });
+                    }
+                }
+                
+                this.setSelectedLiderNode(null);
         },
 
         handleContenxtMenu(data, node, treenode, tree){
@@ -331,7 +358,7 @@ export default {
                                 command: () => {this.modals.addGroupDialog = true;}
                             },
                         ]
-                        if (this.enableDeleteUpdate == "true") {
+                        if (this.enableDeleteUpdate == true) {
                             this.contextMenuItems.push({
                                 label: this.$t('user_management.delete_folder'), 
                                 icon:"pi pi-trash", 
@@ -378,7 +405,7 @@ export default {
                             },
                             
                         ]
-                        if (this.enableDeleteUpdate == "true") {
+                        if (this.enableDeleteUpdate == true) {
                             this.contextMenuItems.push({
                                 label: this.$t('user_management.delete_user'), 
                                 icon:"pi pi-user-minus", 
@@ -399,6 +426,15 @@ export default {
                             },
                         ]
                     }
+                    break
+                case 'AHENK':
+                    this.contextMenuItems = [
+                        {
+                            label: this.$t('user_management.node_detail'), 
+                            icon:'pi pi-list', 
+                            command: () => {this.showNodeDetailDialog = true}
+                        },
+                    ]
                     break
                 case 'CONTAINER':
                     if (this.domainType == "ACTIVE_DIRECTORY") {
@@ -453,7 +489,7 @@ export default {
                                 command: () => {this.modals.addMemberDialog = true}
                             },
                         ]
-                        if (this.enableDeleteUpdate == "true") {
+                        if (this.enableDeleteUpdate == true) {
                             this.contextMenuItems.push({
                                 label: this.$t('user_management.delete_group'), 
                                 icon:"pi pi-trash", 
@@ -484,16 +520,17 @@ export default {
         },
 
         appendNode(node, parentNode) {
-            this.$refs.tree.append(node, parentNode);
+            this.$refs.adTree.append(node, parentNode);
         },
 
-        updateNode(node, selectedNode) {
+        updateNode(node, updatedNode) {
             this.selectedNode = node;
+            this.$refs.adTree.updateNode(node.distinguishedName, updatedNode);
             this.setSelectedLiderNode(node);
         },
 
         deleteNode(selectedNode) {
-            this.$refs.tree.remove(selectedNode);
+            this.$refs.adTree.remove(selectedNode);
             this.selectedNode = null;
             this.setSelectedLiderNode(null);
         },

@@ -9,10 +9,12 @@
             <div class="p-col-12">
                 <tree-component 
                     ref="agentsTree"
-                    loadNodeUrl="/lider/user/getUsers"
-                    loadNodeOuUrl="/lider/user/getOuDetails"
+                    loadNodeUrl="/api/lider/user/users"
+                    loadNodeOuUrl="/api/lider/user/ou-details"
                     :searchFields="searchFields"
                     :treeNodeClick="setSelectedNode"
+                    :scrollHeight="40"
+
                 />
             </div>
             <div class="p-col-12">

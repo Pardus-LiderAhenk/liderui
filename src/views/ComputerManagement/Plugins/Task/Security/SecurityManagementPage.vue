@@ -1,14 +1,19 @@
 <template>
   <div>
+    <usb-rule-management 
+      v-if="usbRuleManagementState" class="plugin-card" :pluginTask="pluginTaskUsbRuleManagement">
+    </usb-rule-management>
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-6">
         <network-management 
-        v-if="networkManagementState" class="plugin-card" 
-        :pluginTask="pluginTaskNetworkManagement">
+          v-if="networkManagementState" class="plugin-card" 
+          :pluginTask="pluginTaskNetworkManagement">
         </network-management>
       </div>
       <div class="p-col-12 p-md-6 p-lg-6">
-        <usb-management v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement"></usb-management>
+        <usb-management 
+          v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement">
+        </usb-management>
       </div>
     </div>
   </div>
@@ -21,9 +26,10 @@
  * 
  */
 
-import axios from 'axios';
-import NetworkManagement from "@/views/ComputerManagement/Plugins/Task/Security/NetworkManagement/NetworkManagement.vue";
-import UsbManagement from "@/views/ComputerManagement/Plugins/Task/Security/UsbManagement.vue";
+import NetworkManagement from './NetworkManagement/NetworkManagement.vue';
+import UsbManagement from './Usb/UsbManagement.vue';
+import UsbRuleManagement from './Usb/UsbRuleManagement.vue';
+import { taskService } from '../../../../../services/Task/TaskService.js'
 
 
 export default {
@@ -31,19 +37,40 @@ export default {
     return {
       pluginTaskNetworkManagement: null,
       pluginTaskUsbManagement: null,
+      pluginTaskUsbRuleManagement: null,
       
       networkManagementState: false,
       usbManagementState: false,
+      usbRuleManagementState: false,
     };
   },
+
   components: {
     NetworkManagement,
-    UsbManagement
+    UsbManagement,
+    UsbRuleManagement
   },
 
   created() {
-    axios.post("/getPluginTaskList",{},).then((response) => {
-      for (let index = 0; index < response.data.length; index++) {
+
+    this.pluginTaskList();
+  },
+  
+  methods: {
+
+  async pluginTaskList(){
+    const{response,error} = await taskService.pluginTaskList();
+    if(error){
+      this.$toast.add({
+          severity:'error', 
+          detail: this.$t('computer.plugins.security.error_plugin_task_list'), 
+          summary:this.$t("computer.task.toast_summary"), 
+          life: 3000
+        });
+    }
+    else{
+      if(response.status == 200){
+        for (let index = 0; index < response.data.length; index++) {
         const element = response.data[index];
         if (element.page == "network-manager") {
           this.pluginTaskNetworkManagement = element;
@@ -53,9 +80,24 @@ export default {
           this.pluginTaskUsbManagement = element;
           this.usbManagementState = element.state;
         }
+        if (element.page == "usb-rule-management") {
+          this.pluginTaskUsbRuleManagement = element;
+          this.usbRuleManagementState = element.state;
+        }
       }
-    });
+      }
+      else if(response.status == 417){
+        this.$toast.add({
+            severity:'error', 
+            detail: this.$t('computer.plugins.security.error_417_plugin_task_list'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+          });
+        }
+      }        
+    }
   },
+
 };
 </script>
 

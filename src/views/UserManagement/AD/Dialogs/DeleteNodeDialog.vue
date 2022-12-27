@@ -44,7 +44,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js";
 
 export default {
 
@@ -76,12 +76,31 @@ export default {
     },
 
     methods: {
-        deleteNode() {
+        async deleteNode() {
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
-            axios.post('/ad/deleteEntry', params).then(response => {
-                this.$emit('closeAdDialog');
-                if (response.data) {
+
+            const{ response,error } = await  adManagementService.deleteEntry(params);
+            this.$emit('closeAdDialog');
+            if(error){
+                if (this.selectedNode.type == 'ORGANIZATIONAL_UNIT') {
+                    this.$toast.add({
+                        severity:'warn', 
+                        detail: this.$t('user_management.ad.delete_ou_warn'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.delete_node_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+            else{
+                if(response.status == 200){
                     this.$emit('deleteNode', this.selectedNode);
                     this.$toast.add({
                         severity:'success', 
@@ -89,25 +108,18 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                } else {
-                    if (this.selectedNode.type == 'ORGANIZATIONAL_UNIT') {
-                        this.$toast.add({
-                            severity:'warn', 
-                            detail: this.$t('user_management.ad.delete_ou_warn'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    } else {
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('user_management.delete_node_error'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
                 }
-            });
-        },
+                
+                else if(response.status == 404){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.error_404_delete_node'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });                    
+                }
+            }
+        }
     }
 }
 </script>

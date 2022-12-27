@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="p-field">
-                <DataTable :value="groups" class="p-datatable-sm" v-model:filters="filters">
+                <DataTable :value="groups" class="p-datatable-sm" v-model:filters="filters" :loading="searchLoading">
                     <template #header>
                         <div class="p-d-flex p-jc-end">
                             <span class="p-input-icon-left">
@@ -40,6 +40,11 @@
                                 :placeholder="$t('user_management.search')" 
                                 />
                             </span>
+                        </div>
+                    </template>
+                    <template #loading>
+                        <div class="p-d-flex p-jc-center">
+                            {{$t('user_management.ad.searching')}}
                         </div>
                     </template>
                     <template #empty>
@@ -79,8 +84,8 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js";
 
 export default {
 
@@ -118,6 +123,7 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
+            searchLoading: false
         }
     },
 
@@ -136,7 +142,7 @@ export default {
     },
 
     methods: {
-        searchGroup() {
+        async searchGroup() {
             if (!this.selectedGroupField) {
                 this.$toast.add({
                     severity:'warn', 
@@ -150,27 +156,42 @@ export default {
                 this.validation.groupSearchValue = true;
                 return;
             }
+            this.searchLoading = true;
             let params = new FormData();
             params.append("searchDn", "");
             params.append("key", this.selectedGroupField.value);
             params.append("value", this.groupSearchValue);
-            axios.post('/ad/searchEntryGroup', params).then(response => {
-                // this.groupSearchValue = '';
-                // this.selectedGroupField = null;
-                if (response.data) {
-                    this.groups = response.data;
-                } else {
+            const { response,error } = await adManagementService.searchEntryGroup(params);
+            this.searchLoading = false;
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.user_not_found'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.groups = response.data;
+                    
+                    }
+                }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.user_not_found'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
+
                 }
-            });
+            }
         },
 
-        addUserToGroup(data) {
+        async addUserToGroup(data) {
             if (this.isExistMember(data.distinguishedName)) {
                 this.$toast.add({
                     severity:'warn', 
@@ -184,8 +205,19 @@ export default {
             params.append("searchDn", "");
             params.append("parentName", data.distinguishedName);
             params.append("distinguishedName", this.selectedNode.distinguishedName);
-            axios.post('/ad/addMember2ADGroup', params).then(response => {
-                if (response.data) {
+
+            const { response,error } = await adManagementService.addMemberToAdGroup(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.add_user_to_group_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
                     let userNode = {...this.selectedNode};
                     let isExistMemberOf = false;
                     for (const key in this.selectedNode.attributesMultiValues) {
@@ -211,15 +243,19 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                } else {
+
+                }
+            }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.add_user_to_group_error'), 
+                        detail: this.$t('user_management.error_417_add_user_to_group'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
+
                 }
-            });
+            }
         },
 
         isExistMember(groupDn) {

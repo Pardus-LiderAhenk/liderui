@@ -23,14 +23,14 @@ export default {
 
   mounted: function () {
     axios
-      .post(process.env.VUE_APP_URL + "/api/messaging/getMessagingServerInfo", { })
+      .post(process.env.VUE_APP_URL + "/api/messaging/get-messaging-server-info", { })
       .then(
         (response) => {
             console.log(response)
             XMPP.loginToMessagingService(response)
         },
         (error) => {
-          console.log(error);
+          console.log("XMPP service is not running");
         }
       );
   },

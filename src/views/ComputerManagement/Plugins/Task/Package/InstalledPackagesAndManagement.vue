@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {taskService} from "../../../../../services/Task/TaskService.js";
 import {FilterMatchMode} from 'primevue/api';
 /**
  * Allows to list and uninstall installed packages on client
@@ -192,41 +192,53 @@ export default {
         }
     },
 
-    installedPackageManagementResponse(message) {
+    async installedPackageManagementResponse(message) {
         if (message.commandClsId == "INSTALLED_PACKAGES") {
             const params = new FormData();
             params.append("id", message.result.id);
-            axios.post("/command/commandexecutionresult", params)
-            .then((response) => {
-                if (response.data != null) {
-                    var packagesList = [];
-                    var responseData = response.data.responseDataStr.split("\n");
-                    for (let index = 0; index < responseData.length; index++) {
-                      const element = responseData[index];
-                      packagesList.push({
-                          "tag": "u",
-                          "id": index + 1,
-                          "packageName": element.split(",")[1],
-                          "version": element.split(",")[2]
-                      });
+            const{response,error} = await taskService.commandExecute(message.result.id);
+            if(error){
+              this.$toast.add({
+                severity:'error', 
+                detail: this.$t('computer.plugins.installed_packages.get_packages_error_message')+ " \n"+error, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+              });
+            }
+            else{
+                if(response.status == 200){
+                  if (response.data != null) {
+                      var packagesList = [];
+                      var responseData = response.data.responseDataStr.split("\n");
+                      for (let index = 0; index < responseData.length; index++) {
+                        const element = responseData[index];
+                        packagesList.push({
+                            "tag": "u",
+                            "id": index + 1,
+                            "packageName": element.split(",")[1],
+                            "version": element.split(",")[2]
+                        });
+                      }
+                      if (this.selectedPackages != null) {
+                        this.selectedPackages = null;
+                      }
+                      if (this.packageInfoList.length > 0) {
+                        this.packageInfoList = [];
+                      }
+                      this.packages = packagesList;
                     }
-                    if (this.selectedPackages != null) {
-                      this.selectedPackages = null;
-                    }
-                    if (this.packageInfoList.length > 0) {
-                      this.packageInfoList = [];
-                    }
-                    this.packages = packagesList;
                 }
-            })
-            .catch((error) => { 
-            this.$toast.add({
-              severity:'error', 
-              detail: this.$t('computer.plugins.installed_packages.get_packages_error_message')+ " \n"+error, 
-              summary:this.$t("computer.task.toast_summary"), 
-              life: 3000
-            })
-          })
+              else if(response.status == 417){
+                this.$toast.add({
+                  severity:'error', 
+                  detail: this.$t('computer.plugins.installed_packages.error_417_get_packages'), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: 3000
+                });
+                
+              }
+
+            }
       }
       if (message.commandClsId == "PACKAGE_MANAGEMENT") {
         if (message.result.responseCode == "TASK_PROCESSED") {

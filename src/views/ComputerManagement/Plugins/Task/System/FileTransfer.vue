@@ -126,7 +126,7 @@ export default {
     return {
       demo: [],
       file: null,
-      executeTaskUrl:"/file_transfer/task/execute",
+      executeTaskUrl:"/api/file-transfer/task/execute",
       showTaskDialog: false,
       task: null,
       localPath: '',

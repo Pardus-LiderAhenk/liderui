@@ -40,6 +40,7 @@
 <script>
 import axios from "axios";
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import { loginService } from '../../services/Login/LoginService.js'
 
 export default {
      data() {
@@ -55,7 +56,7 @@ export default {
     },
 
     methods: {
-        resetPassword() {
+        async resetPassword() {
             let password = this.$refs.resetConsolePassword.getPassword();
             if (!password) {
                 return;
@@ -65,8 +66,14 @@ export default {
                 "repeatPassword": password
             }
 
-            axios.post('/forgot_password/reset/'+ this.$route.params.uuid , params)
-            .then(response => {
+            //axios.post('/api/forgot-password/reset/'+ this.$route.params.uuid , params)
+            //.then(response => {
+            const{response,error} = await loginService.resetPassword(this.$route.params.uuid ,params);
+            if(error){
+                this.severity = "error";
+                this.inlineMessage = this.$t('login.reset_password_inline_message_error');
+            }
+            else{
                 if (response.status === 200) {
                     this.isPasswordReset = true;
                     this.severity = "success";
@@ -74,10 +81,7 @@ export default {
                     this.inlineMessage = response.data[0];
                     this.severity = "error";
                 }
-            }).catch((error) => {
-                this.severity = "error";
-                this.inlineMessage = this.$t('login.reset_password_inline_message_error');
-            });
+            }
         },
     },
 

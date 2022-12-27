@@ -21,11 +21,12 @@
   >
     <tree-component 
       ref="agentTree"
-      loadNodeUrl="/lider/computer/getComputers"
-      loadNodeOuUrl="/lider/computer/getOuDetails"
+      loadNodeUrl="/api/lider/computer/computers"
+      loadNodeOuUrl="/api/lider/computer/ou-details"
       :treeNodeClick="node => filter.dn = node.distinguishedName"
       :searchFields="[{key: this.$t('tree.folder'), value: 'ou'}]"
       :isMove="true"
+      :scrollHeight="40"
     />
     <template #footer>
       <Button :label="$t('reports.detailed_agent_report.cancel')"
@@ -102,6 +103,7 @@
           :options="brands"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
+          @change="clearEvent($event, 'brand')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -112,6 +114,7 @@
           :options="brands"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
+          @change="clearEvent($event, 'model')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -122,6 +125,7 @@
           :options="processors"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
+          @change="clearEvent($event, 'processor')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -132,6 +136,7 @@
           :options="osVersions"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
+          @change="clearEvent($event, 'osVersion')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -141,6 +146,33 @@
           v-model="filter.agentVersion"
           :options="agentVersions"
           :placeholder="$t('reports.detailed_agent_report.all')"
+          :showClear="true"
+          @change="clearEvent($event, 'agentVersion')"
+        />
+      </div>
+      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+        <label for="selectSessionVersion">{{$t('reports.detailed_agent_report.session')}}</label>
+        <Dropdown
+          id="selectSessionVersion"
+          v-model="filter.sessionReportType"
+          :options="sessionReportTypes" 
+          optionLabel="name" 
+          optionValue="value"
+          :placeholder="$t('reports.detailed_agent_report.all')"
+          showClear="true"
+          @change="clearEvent($event, 'sessionReportType')"
+        />
+      </div>
+      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+        <label for="">{{$t('reports.detailed_agent_report.disk_type')}}</label>
+        <Dropdown
+          v-model="filter.diskType"
+          :options="diskTypes"
+          optionLabel="name"
+          optionValue="value"
+          :placeholder="$t('reports.detailed_agent_report.all')"
+          showClear="true"
+          @change="clearEvent($event, 'diskType')"
         />
       </div>
       <div class="p-field p-col-12 p-text-right">
@@ -263,7 +295,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template #left=""> Toplam Sonuç: {{ totalElements }} </template>
+        <template> Toplam Sonuç: {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
@@ -274,11 +306,11 @@
  * Detailed Agent Report.
  * @see {@link http://www.liderahenk.org/}
  */
-import axios from "axios";
 import moment from "moment";
 import AddGroupDialog from './Dialogs/AddGroupDialog.vue'
 import AddToExistGroupDialog from './Dialogs/AddToExistGroupDialog.vue'
 import AgentDetailDialog from './Dialogs/AgentDetailDialog.vue'
+import { agentInfoReportService } from "../../../services/Reports/AgentInfoReportService.js";
 
 export default {
   data() {
@@ -295,7 +327,49 @@ export default {
       models: [],
       processors: [],
       osVersions: [],
+      dataTpe:[],
       agentVersions: [],
+      diskTypes: [
+        {
+          name: this.$t('reports.detailed_agent_report.all'),
+          value: ""
+          },
+        {
+          name: this.$t('reports.detailed_agent_report.hdd_title'),
+          value: "hardware.disk.hdd.info"
+          },
+        {
+          name: this.$t('reports.detailed_agent_report.ssd_title'),
+          value: "hardware.disk.ssd.info",
+        }
+        
+      ],
+      sessionReportTypes: [
+        {
+          name: this.$t('reports.detailed_agent_report.not_logged_one_mounth'),
+          value: "LAST_ONE_MONTH_NO_SESSIONS",
+        },
+        {
+          name: this.$t('reports.detailed_agent_report.not_logged_two_mounth'),
+          value: "LAST_TWO_MONTHS_NO_SESSIONS",
+        },
+        {
+          name: this.$t('reports.detailed_agent_report.not_logged_three_mounth'),
+          value: "LAST_THREE_MONTHS_NO_SESSIONS",
+        },
+        {
+          name: this.$t('reports.detailed_agent_report.logged_one_mounth'),
+          value: "LAST_ONE_MONTH_SESSIONS",
+        },
+        {
+          name: this.$t('reports.detailed_agent_report.logged_two_mounth'),
+          value: "LAST_TWO_MONTHS_SESSIONS",
+        },
+        {
+          name: this.$t('reports.detailed_agent_report.logged_three_mounth'),
+          value: "LAST_THREE_MONTHS_SESSIONS",
+        },
+      ],
       getFilterData: true,
       selectedAgent: null,
       statuses: [
@@ -326,6 +400,8 @@ export default {
         processor: "",
         osVersion: "",
         agentVersion: "",
+        diskType:"ALL",
+        sessionReportType: "",
       },
       items: [
         {
@@ -381,10 +457,11 @@ export default {
       );
       if (filteredProperties != null && filteredProperties.length > 0) {
         propertyValue = filteredProperties[0].propertyValue;
+  
       }
       return propertyValue;
     },
-    getAgents() {
+    async getAgents() {
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
@@ -400,7 +477,9 @@ export default {
       data.append("model", this.filter.model);
       data.append("processor", this.filter.processor);
       data.append("osVersion", this.filter.osVersion);
+      data.append("diskType",this.filter.diskType);
       data.append("agentVersion", this.filter.agentVersion);
+      data.append("sessionReportType", this.filter.sessionReportType);
       if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
@@ -424,17 +503,45 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/lider/agent_info/list", data).then((response) => {
-        this.brands = response.data.brands;
-        this.models = response.data.models;
-        this.processors = response.data.processors;
-        this.agentVersions = response.data.agentVersions;
-        this.osVersions = response.data.osVersions;
-        this.agents = response.data.agents.content;
-        this.totalElements = response.data.agents.totalElements;
-        this.loading = false;
-      });
+
+      const { response, error } = await agentInfoReportService.agentInfoList(data);
+      if (error){
+            this.$toast.add({
+            severity:'error',
+            detail: this.$t('reports.task_report.agent_info_report_error'),
+            summary:this.$t("computer.task.toast_summary"),
+            life:3600
+          });
+      } else{
+        if (response.status == 200) {
+          this.brands = response.data.brands;
+          this.models = response.data.models;
+          this.processors = response.data.processors;
+          this.agentVersions = response.data.agentVersions;
+          this.osVersions = response.data.osVersions;
+          this.agents = response.data.agents.content;
+          this.totalElements = response.data.agents.totalElements;
+        } else if (response.status == 417) {
+          this.$toast.add({
+            severity:'error',
+            detail: this.$t('reports.task_report.error_417_agent_info_list'),
+            summary:this.$t("computer.task.toast_summary"),
+            life:3600
+          });
+        }
+      }
+
+      this.loading = false;
+      
     },
+
+
+    clearEvent(event, name){
+      if (!event.value) {
+        this.filter[name] = "";
+      }
+    },
+    
     currentPageChange(newCurrentPage) {
       this.loading = true;
       this.getAgents(newCurrentPage);
@@ -466,7 +573,7 @@ export default {
       }
       this.getAgents(this.currentPage, this.showedTotalElementCount);
     },
-    exportToExcel() {
+    async exportToExcel() {
       this.loading = true;
       var data = new FormData();
       data.append("status", this.filter.status);
@@ -480,7 +587,9 @@ export default {
       data.append("model", this.filter.model);
       data.append("processor", this.filter.processor);
       data.append("osVersion", this.filter.osVersion);
+      data.append("diskType",this.filter.diskType);
       data.append("agentVersion", this.filter.agentVersion);
+      data.append("sessionReportType", this.filter.sessionReportType);
       if (this.filter.registrationDate[0] != null) {
         data.append(
           "registrationStartDate",
@@ -501,16 +610,34 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      axios.post("/lider/agent_info/export", data, {responseType: 'blob'})
-      .then((response) => {
-        let blob = new Blob([response.data]);
-        let link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "Agent Report.xlsx";
-        this.loading = false;
-        link.click();
-      });
+      const { response, error } = await agentInfoReportService.agentInfoExport(data)
+      if (error){
+            this.$toast.add({
+            severity:'error',
+            detail:this.$t('reports.task_report.agent_info_report_export_error'),
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });
+
+      }else{
+        if(response.status == 200){
+          let blob = new Blob([response.data])
+          let link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "Agent Report.xlsx";
+          this.loading = false;
+          link.click();
+        }
+        else if(response.status == 400)
+        this.$toast.add({
+            severity:'error',
+            detail:this.$t('reports.task_report.error_400_agent_info_report'),
+            summary:this.$t("computer.toast_summary"),
+            life:3600
+          });      
+        }
     },
+
     clearFilterFields() {
       this.filter = {
         dn: "",
@@ -526,6 +653,8 @@ export default {
         processor: "",
         osVersion: "",
         agentVersion: "",
+        diskType:"ALL",
+        sessionReportType: "",
       };
     },
   },

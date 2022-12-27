@@ -7,8 +7,8 @@
         <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
             <tree-component
                 ref="tree"
-                loadNodeUrl="/lider/user/getUsers"
-                loadNodeOuUrl="/lider/user/getOuDetails"
+                loadNodeUrl="/api/lider/user/users"
+                loadNodeOuUrl="/api/lider/user/ou-details"
                 :treeNodeClick="treeNodeClick"
                 @handleContextMenu="handleContenxtMenu"
                 :searchFields="searchFields"
@@ -158,10 +158,11 @@
         <tree-component 
             ref="movetree"
             :isMove="true"
-            loadNodeUrl="/lider/user/getUsers"
-            loadNodeOuUrl="/lider/user/getOuDetails"
+            loadNodeUrl="/api/lider/user/users"
+            loadNodeOuUrl="/api/lider/user/ou-details"
             :treeNodeClick="moveTreeNodeClick"
             :searchFields="searchFolderFields"
+            :scrollHeight="25"
         />
         <div class="p-col p-text-center">
           <small>{{$t('user_management.select_folder_warn')}}</small>
@@ -223,6 +224,7 @@ import GeneralInformations from '@/views/UserManagement/Ldap/Components/GeneralI
 import PasswordChange from '@/views/UserManagement/Ldap/Components/PasswordChange.vue';
 import UserGroups from '@/views/UserManagement/Ldap/Components/UserGroups.vue';
 import SessionHistory from '@/views/UserManagement/Ldap/Components/SessionHistory.vue';
+import { userService } from '../../../services/Settings/UserService.js';
 
 export default {
     setup(){
@@ -318,12 +320,8 @@ export default {
         }
     },
     created() {
-        axios.get("/lider/user/configurations", null).then((response) => {
-            if (response.data != null) {
-                this.userLdapBaseDn = response.data;
-            }
-        });
-        this.setSelectedLiderNode(null);
+
+        this.configuration();
     },
 
     methods: {
@@ -339,7 +337,23 @@ export default {
             this.moveUserNode = node;
         },
 
-        addFolder() {
+        async configuration(){
+            const{response,error} = await userService.userConfigurations();
+            if(error){
+                return "error";
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data != null) {
+                        this.userLdapBaseDn = response.data;
+                    }
+                }
+            }
+            this.setSelectedLiderNode(null);
+
+        },
+
+        async addFolder() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
@@ -347,29 +361,50 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
-            axios.post('/lider/user/addOu', params).then(response => {
-                this.modals.folderAdd = false;
-                if (response.data) {
-                     this.$refs.tree.append(response.data, this.selectedNode);
+
+            const{response,error} = await userService.addOu(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.add_folder_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    this.modals.folderAdd = false;
+                    if (response.data) {
+                        this.$refs.tree.append(response.data, this.selectedNode);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.add_folder_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                    else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.add_folder_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 226){
                     this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.add_folder_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.add_folder_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
+                      severity:'error', 
+                      detail: this.$t('user_management.add_folder_error_226'), 
+                      summary:this.$t("computer.task.toast_summary"), 
+                      life: 3000
                     });
                 }
-            });
+            }
             this.folderName = '';
         },
        
-        moveUser() {
+        async moveUser() {
             if (!this.moveUserNode) {
                 this.$toast.add({
                     severity:'warn', 
@@ -383,31 +418,43 @@ export default {
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveUserNode.distinguishedName);
             this.modals.moveUser = false;
-            axios.post('/lider/user/move/entry', params).then(response => {
-                if (response.data) {
-                    this.$refs.tree.remove(this.selectedNode);
-                    this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
-                    this.setSelectedLiderNode(null);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.moved_user_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.moved_user_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+
+            const{response,error} = await userService.moveEntry(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.moved_user_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$refs.tree.remove(this.selectedNode);
+                        this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
+                        this.setSelectedLiderNode(null);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.moved_user_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.moved_user_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
-            });
+            }
         },
 
         deleteNode() {
             let ldapEntry = [];
-            let deleteUrl = "/lider/user/deleteUser";
+            let deleteUrl = "/api/lider/user/delete-user";
             if (this.selectedNode.type === "ORGANIZATIONAL_UNIT") {
                 ldapEntry.push({
                     "distinguishedName": this.selectedNode.distinguishedName,
@@ -415,7 +462,7 @@ export default {
                     "type": this.selectedNode.type,
                     "uid": this.selectedNode.uid
                 });
-                deleteUrl = "/lider/user/deleteUserOu";
+                deleteUrl = "/api/lider/user/delete-user-ou";
                 
             } else if (this.selectedNode.type === "USER") {
                 ldapEntry.push({
@@ -445,7 +492,7 @@ export default {
             });
         },
 
-        addUser() {
+        async addUser() {
             if (this.userFormValidation()) {
                 this.user.userPassword = this.$refs.password.getPassword();
                 if (!this.user.userPassword) {
@@ -460,32 +507,60 @@ export default {
                 params.append("telephoneNumber", this.user.telephoneNumber);
                 params.append("homePostalAddress", this.user.homePostalAddress);
                 params.append("userPassword", this.user.userPassword);
-                axios.post('/lider/user/addUser', params).then(response => {
-                    this.modals.addUser = false;
-                    if (response.data) {
-                        this.$refs.tree.append(response.data, this.selectedNode);
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('user_management.add_user_success'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                        this.user.uid = "";
-                        this.user.cn = "";
-                        this.user.sn = "";
-                        this.user.mail = "";
-                        this.user.telephoneNumber = "";
-                        this.user.homePostalAddress = "";
-                        this.user.userPassword = "";
-                    } else {
+
+                const{response,error} = await userService.addUser(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.add_user_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+                        this.modals.addUser = false;
+                        if (response.data) {
+                            this.$refs.tree.append(response.data, this.selectedNode);
+                            this.$toast.add({
+                                severity:'success', 
+                                detail: this.$t('user_management.add_user_success'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                            this.user.uid = "";
+                            this.user.cn = "";
+                            this.user.sn = "";
+                            this.user.mail = "";
+                            this.user.telephoneNumber = "";
+                            this.user.homePostalAddress = "";
+                            this.user.userPassword = "";
+                        } else {
+                            this.$toast.add({
+                                severity:'error', 
+                                detail: this.$t('user_management.add_user_error'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                        }
+                    }
+                    else if(response.status == 417){
                         this.$toast.add({
                             severity:'error', 
-                            detail: this.$t('user_management.add_user_error'), 
+                            detail: this.$t('user_management.error_417_add_user'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
                     }
-                });
+                    else if (response.status ==  226) {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_226_user_id_found'), 
+                            summary: this.$t('settings.console_user_settings.error'), 
+                            life: 3000
+                        });
+                    }
+                }
             }
         },
 

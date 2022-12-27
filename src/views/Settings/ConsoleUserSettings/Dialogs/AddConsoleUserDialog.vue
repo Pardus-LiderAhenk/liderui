@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="p-col-6">
-                        <password-component ref="userForm.userPassword"></password-component>
+                        <password-component ref="password"></password-component>
                     </div>
                     <div class="p-col-12 p-d-flex p-jc-end">
                         <Button icon="pi pi-user-plus" :label="$t('settings.console_user_settings.create')" @click="addNewConsoleUser"></Button>
@@ -47,10 +47,11 @@
                 </Toolbar>
                 <tree-component 
                     ref="agentsTree"
-                    loadNodeUrl="/lider/user/getUsers"
-                    loadNodeOuUrl="/lider/user/getOuDetails"
+                    loadNodeUrl="/api/lider/user/users"
+                    loadNodeOuUrl="/api/lider/user/ou-details"
                     :treeNodeClick="setSelectedUserNode"
                     :searchFields="searchFields"
+                    :scrollHeight="25"
                 />
                 
             </TabPanel>
@@ -59,8 +60,8 @@
                     <div class="p-col-3">
                         <tree-component 
                             ref="groupstree"
-                            loadNodeUrl="/lider/user_groups/getGroups"
-                            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                            loadNodeUrl="/api/lider/user-groups/groups"
+                            loadNodeOuUrl="/api/lider/user-groups/ou-details"
                             :treeNodeClick="setSelectedGroupNode"
                             :searchFields="searchFieldsFolder"
                         />
@@ -118,8 +119,11 @@
 
 <script>
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
-import axios from 'axios';
+
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import { consoleUserSettingsService } from "../../../../services/Settings/ConsoleUserSettingsService.js";
+import { userService } from "../../../../services/Settings/UserService.js";
+
 
 export default {
     components:{
@@ -185,13 +189,14 @@ export default {
         },
     },
     methods:{
-        addAsConsoleUser(){
+        async addAsConsoleUser(){
             if (this.selectedUserNode) {
                 let data = new FormData();
-                console.log('Selected user node', this.selectedUserNode);
                 data.append('dn', this.selectedUserNode.distinguishedName);
                 data.append('roles[]', ['ROLE_USER']);
-                axios.post('/lider/settings/editUserRoles',data).then(response => {
+                const {response, error} = await consoleUserSettingsService.editUserRoles(data);
+
+                if(response.status == 200){
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('settings.console_user_settings.the_user_has_been_successfully_authorized'), 
@@ -199,20 +204,35 @@ export default {
                         life: 3000
                     });
                     this.$emit('updateConsoleUsers');
-                });
-            } else {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.console_user_settings.please_select_the_user_you_want_to_be_authorized'),
-                    summary: this.$t('settings.console_user_settings.user_not_select'),
-                    life: 3000
-                });
-        }
+                }
+                else if (response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_417_edit_user_roles'),
+                        summary: this.$t('settings.console_user_settings.user_not_select'),
+                        life: 3000
+                    });
+                }
+                } 
+                else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.please_select_the_user_you_want_to_be_authorized'),
+                        summary: this.$t('settings.console_user_settings.user_not_select'),
+                        life: 3000
+                    });
+                }
         },
+        
         setSelectedUserNode(node) {
             this.selectedUserNode = node;
         },
-        addNewConsoleUser(){
+
+        async addNewConsoleUser(){
+            this.userForm.userPassword = this.$refs.password.getPassword();
+            if (!this.userForm.userPassword) {
+                return;
+            }
             let data = new FormData();
             data.append('uid', this.userForm.uid);
             data.append('cn',this.userForm.cn);
@@ -220,9 +240,17 @@ export default {
             data.append('userPassword', this.userForm.userPassword);
             data.append('telephoneNumber', this.userForm.telephoneNumber);
             data.append('homePostalAddress', this.userForm.homePostalAddress);
-            data.append('mail', this.mail);
+            data.append('mail', this.userForm.mail);
 
-            axios.post('/lider/user/addUser', data).then(response => {
+            const { response, error } = await userService.addUser(data);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'), 
+                    summary: this.$t('settings.console_user_settings.error'), 
+                    life: 3000
+                });
+            } else {
                 if(response.status == 200) {
                     this.$toast.add({
                         severity:'success', 
@@ -230,7 +258,6 @@ export default {
                         summary: this.$t('settings.console_user_settings.successful'), 
                         life: 3000
                     });
-
                     this.userForm = {
                         cn : null,
                         uid: null,
@@ -240,18 +267,27 @@ export default {
                         homePostalAddress : null,
                         mail : null,
                     }
-                } else {
+                } 
+                else if (response.status ==  417) {
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'), 
+                        detail: this.$t('settings.console_user_settings.error_417_user_create'), 
                         summary: this.$t('settings.console_user_settings.error'), 
                         life: 3000
                     });
-
                 }
-            }); 
+                else if (response.status ==  226) {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_226_user_id_found'), 
+                        summary: this.$t('settings.console_user_settings.error'), 
+                        life: 3000
+                    });
+                }
+            }
         },
-        setSelectedGroupNode(node) {
+
+        async setSelectedGroupNode(node) {
             this.groupMembers = [];
             this.selectedGroupNode = node;
             node.attributesMultiValues.member.forEach((mem,index) => {
@@ -263,12 +299,32 @@ export default {
 
             let data = new FormData();
             data.append('dn',node.distinguishedName);
-            axios.post('/lider/settings/getOLCAccessRules', data ).then(response => {
-                this.groupPrivilages = response.data;
-            });
             
+            const {response,error} = await consoleUserSettingsService.olcAccessRules(node.distinguishedName);
+            if(error){
+                this.$toast.add({
+                    severity:'error',
+                    detail:this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                    summary:this.$t('settings.console_user_settings.error'),
+                    life:3600
+                    });   
+            }
+            else{
+                if(response.status == 200){
+                    this.groupPrivilages = response.data;
+                }
+                else{
+                    this.$toast.add({
+                        severity:'error',
+                        detail:this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                        summary:this.$t('settings.console_user_settings.error'),
+                        life:3600
+                        });     
+                    }
+            }
         },
-        addUserToGroup() {
+
+        async addUserToGroup() {
 
             if (this.selectedUserNode == null || this.selectedGroupNode == null) {
                 this.$toast.add({
@@ -279,29 +335,47 @@ export default {
                 });
                 return;
             }
-
-
+            
             let data = new FormData();
             data.append('distinguishedName',this.selectedUserNode.distinguishedName);
             data.append('parentName',this.selectedGroupNode.distinguishedName);
-            axios.post('/lider/settings/addMemberToGroup', data).then(response => {
-                if (response.status === 200) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.console_user_settings.user_successfully_add_to_group'), 
-                        summary: this.$t('settings.console_user_settings.successful'), 
-                        life: 3000
-                    });
 
+            const {response,error} = await consoleUserSettingsService.addMemberToGroup(data);
+            if(error){
+
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.error_user_add_to_group'), 
+                    summary: this.$t('settings.console_user_settings.error'), 
+                    life: 3000
+                });                
+            }
+            else{
+                
+                if (response.status == 200) {
+                    
                     this.groupMembers = [];
                     this.groupPrivilages = [];
                     this.selectedGroupNode = null;
                     this.selectedUserNode = null;
                     this.modalVisible = false;
-                }
-            });
 
-            
+                    this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('settings.console_user_settings.user_add_to_group'), 
+                    summary: this.$t('settings.console_user_settings.successful'), 
+                    life: 3000
+                }); 
+                } 
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.error_417_user_add_to_group'), 
+                        summary: this.$t('settings.console_user_settings.error'), 
+                        life: 3000
+                    });                    
+                }
+            }
         }
     }
 }

@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { profileService } from "../../../services/Profile/ProfileService.js";
 
 export default {
     props:['user'],
@@ -93,13 +93,14 @@ export default {
             mail:null,
             homeDirectory:null,
             createDateStr:null,
+            telephoneNumber:null,
             homePostalAddress:null,
             showDialog: false
         }
     },
     methods: {
-        updateProfile() {
-            axios.post("/liderConsole/updateProfile", {
+        async updateProfile() {
+            const{response,error} = await profileService.updateProfile({
                 distinguishedName: this.distinguishedName,
                 uid: this.uid,
                 cn: this.cn,
@@ -107,7 +108,36 @@ export default {
                 mail: this.mail,
                 telephoneNumber: this.telephoneNumber,
                 homePostalAddress: this.homePostalAddress
-            }).then((response) => {
+            });
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('profile.user_information.error_profile_update'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+
+            }
+            else{
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('profile.user_information.information_has_been_successfully_updated'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                this.showDialog = false;
+                }
+                else if(response.status == 417){                    
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('profile.user_information.error_417_profile_update'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+            //}).then((response) => {
                 // this.uid = response.data.uid;
                 // this.cn = response.data.cn;
                 // this.sn = response.data.sn;
@@ -116,14 +146,8 @@ export default {
                 // this.homeDirectory = response.data.attributes.homeDirectory;
                 // this.createDateStr = response.data.createDateStr;
                 // this.homePostalAddress = response.data.homePostalAddress;
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('profile.user_information.information_has_been_successfully_updated'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                this.showDialog = false;
-            });
+                
+            //});
         },
     },
     watch:  {
@@ -135,6 +159,7 @@ export default {
             this.mail = newVal.attributes.mail;
             this.homeDirectory = newVal.attributes.homeDirectory;
             this.createDateStr = newVal.createDateStr;
+            this.telephoneNumber = newVal.telephoneNumber;
             this.homePostalAddress = newVal.homePostalAddress;
         }
     },

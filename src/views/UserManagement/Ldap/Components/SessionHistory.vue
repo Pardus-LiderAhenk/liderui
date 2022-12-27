@@ -69,7 +69,7 @@
 
 <script>
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
+import { userService } from '../../../../services/Settings/UserService';
 
 export default {
 
@@ -100,22 +100,30 @@ export default {
     },
 
     methods: {
-        getSessionHistory() {
+        async getSessionHistory() {
             this.loading = true;
             let params = new FormData();
             params.append("uid", this.selectedNode.uid);
-            axios.post("/lider/user/getUserSessions", params).then((response) => {
-                if (response.data) {
-                    this.sessions = response.data;
-                }
-            }).catch((error) => {
+
+            const{response,error} = await userService.userSession(this.selectedNode.uid);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.session_history_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.sessions = response.data;
+                    }
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
+            
             this.loading = false;
         },
 

@@ -47,7 +47,11 @@
                                 <span>{{$t('settings.script_definition.table_empty_message')}}</span>
                             </div>
                         </template>
-                        <Column field="rowIndex" header="#" style="width:5%"></Column>
+                        <Column header="#" style="width:5%">
+                            <template #body="{index}">
+                                <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+                            </template>
+                        </Column>
                         <Column field="label" :header="$t('settings.script_definition.script_name')" style="width:25%"></Column>
                         <Column field="scriptType" :header="$t('settings.script_definition.type')" ></Column>
                         <Column field="createDate" :header="$t('settings.script_definition.created_date')" ></Column>
@@ -76,6 +80,14 @@
                             </template>
                         </Column>
                     </DataTable>
+                    <Paginator
+                        v-model:first="first"
+                        :rows="10"
+                        :totalRecords="totalElements"
+                        :rowsPerPageOptions="[10, 25, 50, 100]"
+                        @page="onPage($event)"
+                    >
+                    </Paginator>
                 </template>
             </Card>
         </div>
@@ -177,7 +189,7 @@
  */
 
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
+import { scriptService }  from '../../../services/Settings/ScriptDefinitionService.js';
 
 export default {
     props: {
@@ -222,27 +234,58 @@ export default {
             label: "",
             contents: "#!/bin/bash\nset -e",
             validationErrors:{},
-            validationScriptLabel: false
+            validationScriptLabel: false,
+            pageNumber: 1,
+            rowNumber: 10,
+            totalElements:0,
+            first : 0,
         }
     },
 
-    created() {
-        axios.post("/script/list", null).then((response) => {
-            if (response.data != null) {
-                this.scripts = response.data;
-                this.updateRowIndex();
-            }
-        }).catch((error) => { 
-            this.$toast.add({
-                severity:'error', 
-                detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-            });
-        });
+    mounted() {
+        this.getScripts();
     },
 
     methods: {
+
+        async getScripts(){
+            var data = new FormData();
+            data.append("pageNumber", this.pageNumber);
+            data.append("pageSize", this.rowNumber);            
+
+            const { response,error } = await scriptService.scriptList(this.rowNumber,this.pageNumber);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data != null) {
+                        this.scripts = response.data.content;
+                        this.totalElements = response.data.totalElements;
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.error_417_get_scripts'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+                }
+            }
+        },
+
+        onPage(event) {
+            this.pageNumber = event.page + 1;
+            this.rowNumber = event.rows;
+            this.getScripts();
+        },
+
         editScript(data){
             var type = null;
             if (data.scriptType === "BASH") {
@@ -286,40 +329,52 @@ export default {
             }
         },
 
-        deleteScript(){
+        async deleteScript(){
             this.deleteScriptConfirmDialog = false;
             const params = {
                 id: this.selectedScript.id
             };
-            axios.post("/script/delete", params).then((response) => {
-                if (response.data != null) {
-                    var index = this.scripts.findIndex(function(item, i){
-                        return item.id === response.data.id;
-                    });
-                    if (index > -1) {
-                        this.scripts.splice(index, 1);
+
+            const {response,error} = await scriptService.scriptDelete(this.selectedScript.id);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.deleted_script_error_message')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data != null) {
+                        // var index = this.scripts.findIndex(function(item, i){
+                        //     return item.id === response.data.id;
+                        // });
+                        // if (index > -1) {
+                        //     this.scripts.splice(index, 1);
+                        // }
+                        this.reset();
+                        this.selectedScript = null; 
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('settings.script_definition.deleted_script_success_message'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
                     }
-                    this.selectedScript = null; 
+                }
+                else if(response.status == 417){
                     this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.script_definition.deleted_script_success_message'), 
+                        severity:'error', 
+                        detail: this.$t('settings.script_definition.error_417_delete_script'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                    this.updateRowIndex();
                 }
-            })
-            .catch((error) => { 
-            this.$toast.add({
-                severity:'error', 
-                detail: this.$t('settings.script_definition.deleted_script_error_message')+ " \n"+error, 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-                });
-            })
+            }
         },
 
-        scriptOperation(action) {
+        async scriptOperation(action) {
             if (action == "update") {
                 if (!this.validateForm()) {
                     return;
@@ -330,35 +385,50 @@ export default {
                     scriptType: this.scriptType,
                     id: this.selectedScript.id
                 };
-                axios.post("/script/update", params).then((response) => {
-                    if (response.data != null) {
-                        this.showTemplateDialog = false;
-                        for (let index = 0; index < this.scripts.length; index++) {
-                            const element = this.scripts[index];
-                            if (response.data.id === element.id) {
-                                element.label = response.data.label;
-                                element.contents = response.data.contents;
-                                element.scriptType = response.data.scriptType;
-                                element.modifyDate = response.data.modifyDate;
-                            }
+
+                const { response,error } = await scriptService.scriptUpdate(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.script_definition.updated_script_error_message')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                        });
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data != null) {
+                            this.showTemplateDialog = false;
+                            // for (let index = 0; index < this.scripts.length; index++) {
+                            //     const element = this.scripts[index];
+                            //     if (response.data.id === element.id) {
+                            //         element.label = response.data.label;
+                            //         element.contents = response.data.contents;
+                            //         element.scriptType = response.data.scriptType;
+                            //         element.modifyDate = response.data.modifyDate;
+                            //     }
+                            // }
+                            this.reset();
+                            this.$toast.add({
+                                severity:'success', 
+                                detail: this.$t('settings.script_definition.updated_script_success_message'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
                         }
+                    }
+                    else if(response.status == 417){
                         this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('settings.script_definition.updated_script_success_message'), 
+                            severity:'error', 
+                            detail: this.$t('settings.script_definition.error_417_update_script'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
                     }
-                })
-                .catch((error) => { 
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.script_definition.updated_script_error_message')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                    })
-                })
-            } else{
+
+                }
+            } 
+            else{
                 if (!this.validateForm()) {
                     return;
                 }
@@ -367,27 +437,39 @@ export default {
                     contents: this.contents,
                     scriptType: this.scriptType
                 };
-                axios.post("/script/add", params).then((response) => {
-                    if (response.data != null) {
-                        this.showTemplateDialog = false;
-                        this.scripts.push(response.data);
+
+                const { response,error } = await scriptService.scriptAdd(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.script_definition.saved_script_error_message')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data != null) {
+                            this.showTemplateDialog = false;
+                            // this.scripts.push(response.data);
+                            this.reset();
+                            this.$toast.add({
+                                severity:'success', 
+                                detail: this.$t('settings.script_definition.saved_script_success_message'), 
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                        }
+                    }
+                    else if(response.status == 417){
                         this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('settings.script_definition.saved_script_success_message'), 
+                            severity:'error', 
+                            detail: this.$t('settings.script_definition.error_417_saved_script'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
-                        this.updateRowIndex();
                     }
-                })
-                .catch((error) => { 
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.script_definition.saved_script_error_message')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                    })
-                })
+                }
             }
         },
 
@@ -415,12 +497,13 @@ export default {
             return isExist;
         },
         
-        updateRowIndex() {
-            for (let index = 0; index < this.scripts.length; index++) {
-                const element = this.scripts[index];
-                element.rowIndex = index + 1;
-            }
+        reset(){
+            this.pageNumber = 1;
+            this.rowNumber = 10;
+            this.getScripts();
+            this.first = 0;
         }
+ 
     },
 
     watch: {
@@ -434,3 +517,10 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
+    }
+}
+</style>

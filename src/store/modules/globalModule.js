@@ -28,14 +28,27 @@ const actions = {
     setSelectedNodeType({ commit }, node) {
         commit("setSelectedNodeType", node);
     },
-    logout({ commit }) {
+    logout({ commit },user) {
+        //logout yapıp yönlendireceğiz aşağıdaki gibi olacak
         return new Promise((resolve, reject) => {
-            commit('logout')
-            localStorage.removeItem('auth_token')
-            delete axios.defaults.headers.common['Authorization']
-            strophe.getInstance().disconnect();
-            router.push('/login')
-            resolve()
+            axios.post(process.env.VUE_APP_URL + "/api/auth/logout", user).then(
+                (response) => {
+                    if(response){
+                        commit('/api/auth/logout')
+                        localStorage.removeItem('auth_token')
+                        delete axios.defaults.headers.common['Authorization']
+                        strophe.getInstance().disconnect();
+                        router.push('/login')
+                        resolve()
+                    }
+                    else {
+                        reject("Error");
+                    }
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
         })
     },
     login({ commit }, user) {
@@ -45,7 +58,7 @@ const actions = {
                     if (response) {
                         localStorage.setItem("auth_token", response.data.token);
                         axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
-                        axios.post("/liderConsole/profile", {}).then((userresponse) => {
+                        axios.post("/api/lider-console/profile", {}).then((userresponse) => {
                             commit('auth_success', {token:response.data.token,user:userresponse.data});
                             if(!strophe.isConnected) {
                                 strophe.getInstance().connect();

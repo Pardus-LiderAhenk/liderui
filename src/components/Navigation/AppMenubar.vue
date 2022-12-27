@@ -39,7 +39,8 @@
  * @see {@link http://www.liderahenk.org/}
  */
  
-import axios from 'axios';
+import { profileService } from '../../services/Profile/ProfileService';
+import { serverSettingService } from '../../services/Settings/ServerSettingsService';
 import AboutDialog from './Dialogs/About.vue'
 
 export default {
@@ -150,17 +151,35 @@ export default {
     methods: {
 
         async showMenuBar() {
-            const data = await this.getPriviliges();
+            await this.getPriviliges();
             this.setMenuBar();
         },
 
-        getPriviliges() {
-            return new Promise((resolve, reject)=> {
-                axios.post("/liderConsole/profile", {}).then((response) => {
+        async getPriviliges() {
+            const {response, error} = await profileService.getProfile();
+            if (error) {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: "Lütfen dosya seçiniz", 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });                
+            } 
+            else {
+                if(response.status == 200)
+                {
                     this.priviliges = response.data.priviliges;
-                    resolve(response.data.priviliges);
-                });
-            });
+
+                }
+                else if (response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: "", 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
         },
 
         isExistPrivilege(value){
@@ -308,12 +327,23 @@ export default {
             this.$refs.languageMenu.toggle(event);
         },
 
-        updateUserLanguage(lang){
+        async updateUserLanguage(lang){
             let data = new FormData();
-            data.append('preferredLanguage', lang);
-            axios.post('/changeLanguage' , data).then(response => {
-                this.$router.go();
-            });
+            data.append('langa1799b6ac27611eab3de0242ac130004', lang);
+            // axios.post('/changeLanguage' , data).then(response => {
+            //     this.$router.go();
+            // });
+            const{response,error} = await serverSettingService.changeLanguage(data);
+            if(error){
+                console.log("Error, change language")
+            }
+            else
+            {
+                if(response.status == 200){
+                    this.$router.go();
+                }
+            }
+
             // UPDATE USER STATE
             this.$store.dispatch("updateUserLang", lang);
         }

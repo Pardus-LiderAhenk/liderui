@@ -95,7 +95,8 @@
         "name": "Name",
         "not_found_record": "Not found record",
         "online_clients": "Online Clients",
-        "search_dn": "Selected node to search"
+        "search_dn": "Selected node to search",
+        "searching": "Searching, please wait..."
     },
     "node_detail": {
         "selected_node_title": "Node Information",
@@ -184,7 +185,9 @@
                 "disk_usage_detail": "Disk Usage Detail",
                 "memory_usage_detail": "Memory Usage Detail",
                 "disk_partition": "Disk Partition",
-                "description": "Shows instant Disk and RAM usage information"
+                "description": "Shows instant Disk and RAM usage information",
+                "disk_type":"Disk Type",
+                "disk_status":"Disk Status"
             },
             "manage_root": {
                 "header": "Root Password Management",
@@ -261,7 +264,10 @@
                 "server_name": "Server Name",
                 "username": "Username",
                 "get_settings_error_message": "An error occurred while getting LDAP settings",
-                "disable_local_user": "Disable Local User"
+                "disable_local_user": "Disable Local User",
+                "error_417_get_settings_configuration":"An unexpected error was received in the client's OpenLDAP or Active Directory settings. Error code : 417",
+                "error_update_directory_domain":"The user's domain could not be updated. Ldap or AD"
+
             },
             "xmessage": {
                 "header": "Send Instant Message",
@@ -279,7 +285,8 @@
                 "conky_error_message": "An error occurred while getting conky templates",
                 "warn_select_template": "Please select template",
                 "content": "Template Content",
-                "settings": "Template Settings"
+                "settings": "Template Settings",
+                "error_417_fetching_conky" : "An unexpected error occurred while fetching Conky templates. Error code : 417"
             },
             "packages":{
                 "header": "Package Install or Uninstall",
@@ -304,7 +311,9 @@
                 "install": "Install",
                 "uninstall": "Uninstall",
                 "table_empty_message": "Package not found",
-                "search": "Search"
+                "search": "Search",
+                "error_417_update_repo" : "An unexpected error was received while updating the package repository. Error code : 417"
+
             },
             "installed_packages":{
                 "header": "Installed Package Management",
@@ -319,7 +328,8 @@
                 "view_selected_packages": "View selected packages",
                 "selected_package_warning": "Can not be deleted ahenk and ahenk-register",
                 "table_empty_message": "Package not found",
-                "search": "Search"
+                "search": "Search",
+                "error_417_get_packages" : "An unexpected error occurred while fetching the list of installed packages. Error code : 417"
             },
             "repositories": {
                 "header": "Repository Management",
@@ -371,7 +381,9 @@
                 "get_service_error_message": "An error occurred while getting services",
                 "send_task_warning": "At least one service must be selected",
                 "change": "Change",
-                "search": "Search"
+                "search": "Search",
+                "error_417_get_service" : "An unexpected error occurred while fetching services Error code : 417"
+
             },
             "execute_script": {
                 "header": "Execute Script",
@@ -441,7 +453,30 @@
                 "mouse_keyboard": "Mouse-Keyboard",
                 "allow": "Allow",
                 "block":"Block",
-                "usb_task_warn": "At least one device must be selected"
+                "usb_task_warn": "At least one USB rule must be added",
+                "usb_rule_header": "USB Rule Management",
+                "white_black_list":"White / Black USB List",
+                "usb_list_cant_find": "USB list can't find",
+                "manufacturer":"Manufacturer",
+                "model":"Model",
+                "serial_number":"Serial Number",
+                "type":"Type",
+                "edit":"Edit",
+                "add":"Add",
+                "delete":"Delete",
+                "list_usb_rule": "List USB Rule",
+                "delete_usb_rule": "Delete USB Rule",
+                "description_usb_rule": "Allows management of client's USB devices based on serial number, model and manufacturer. It also deletes existing USB rules. Allows to create only one list, either black list or white list",
+                "deny": "Deny",
+                "allowed": "Allowed",
+                "add_usb": "Add USB",
+                "white_list":"White List",
+                "black_list":"Black List"
+            },
+            "security": {
+                "error_plugin_task_list" : "An error occurred while fetching the task list plugin.",
+                "error_417_plugin_task_list" : "An unexpected error occurred while fetching the task list plugin. Error code : 417"
+
             },
             "remote_access": {
                 "header": "Remote Access",
@@ -475,7 +510,13 @@
                 "checking_access": "Connection information received. Checking access...",
                 "client_access": "Client access will be provided at ",
                 "waiting_response": "An access request has been sent to the user. Waiting for response...",
-                "ssh_connection": "SSH Connection"
+                "ssh_connection": "SSH Connection",
+                "error_417_fetching_ip_address": "An unexpected error occurred while fetching the ip address. Error code : 417",
+                "select_ip_address_warning":"Please select IP address",
+                "select_ip_address":"Select IP Address",
+                "connection_error":"An unexpected error occurred while VNC connection",
+                "getting_access":"Connection information received",
+                "client_warning":"Ahenk connection information received, please select IP address for remote access"
             }
         },
         "agent_info": {
@@ -502,6 +543,14 @@
             "total_disk": "Total Disk Space(GB)",
             "used_disk": "Used Disk Space(GB)",
             "available_disk": "Available Disk Space(GB)",
+            "ssd_title":"SSD (Solid-State Drive)",
+            "ssd_total_disk": "Ssd total Disk Space(GB)",
+            "ssd_used_disk":"Ssd used Disk Space(GB)",
+            "ssd_available_disk": "Ssd available Disk Space(GB)",
+            "hdd_title":"HDD (Hard Disk Drive)",
+            "hdd_total_disk": "Hdd total Disk Space(GB)",
+            "hdd_used_disk":"Hdd used Disk Space(GB)",
+            "hdd_available_disk": "Hdd available Disk Space(GB))",
             "disk_partitions":"Disk Partitions",
             "memory": "Memory(GB)",
             "physical_core_count": "Physical Core Count",
@@ -553,7 +602,21 @@
             "delete_folder":"Delete Folder",
             "delete_folder_warn":"The folder will be deleted, are you sure?",
             "no_delete_folder_warn": "The selected folder has subfolders or clients. The folder must be empty to delete",
-            "delete_folder_success": "Deleted folder successfully"
+            "delete_folder_success": "Deleted folder successfully",
+            "error_agent_list_size":"An error occurred while getting the client count.Check your clients.",
+            "error_417_agent_list_size":"An unexpected error occurred while fetching the client count. Error code : 417",
+            "error_417_move_agent":"An unexpected error occurred while moving the client. Error code : 417",
+            "error_417_update_agent_info": "An unexpected error was received while updating the client. Error code : 417",
+            "error_417_delete_computer_ou" : "The selected folder could not be deleted. An unexpected error has occurred. Error code : 417",
+            "error_online_entries":"Online clients cannot be shown due to an unexpected error.",
+            "error_404_online_entries":"Online clients not found. Error code : 404",
+            "used": "Used",
+            "available": "Avaible",
+            "total": "Total",
+            "disk_type":"Disk Type",
+            "disk_properties": "Disk Properties",
+            "disk_status":"Disk Status"
+
         },
         "scheduled": {
             "title": "Scheduled Task Parameters",
@@ -684,14 +747,33 @@
             "please_select_user_and_group":"Please select user and group.",
             "user_successfully_add_to_group":"The user has been successfully added to the group.",
             "create":"Create",
-            "authorization":"Authorization"
+            "authorization":"Authorization",
+            "error_417_edit_user_roles":"Could not edit user roles in ldap entries. Unexpected error occured. Error code : 417",
+            "error_417_user_create":"The user has not  been  created. Unexpected error occured. Error code : 417",
+            "error_417_deleted_user":"The selected user not deleted. Unexpected error occurred. Error code : 417",
+            "error_417_get_console_user":"Could not get console users list. Unexpected error occurred. Error code : 417",
+            "user_roles_get_successfully":"User roles get successfully",
+            "error_417_get_user_roles":"Failed to get user roles. Unexpected error occured. Error code : 417",
+            "olc_success_rule_deleted":"OLC Access rule has been deleted.",
+            "error_olc_rule_deleted":"OLC access rule has not been deleted.",
+            "error_417_olc_rule_deleted":"An unexpected error was received while deleting the OLC access rule. Error code : 417",
+            "olc_access_rule_get":"OLC access rules successfully retrieved.",
+            "error_417_olc_access_rule":"Could not retrieved open ldap  check rule list. Unexpected error occured. Error code : 417",
+            "error_user_add_to_group":"The user could not be added to the group. An error occurred",
+            "user_add_to_group":"The user has been successfully added to the group",
+            "error_417_user_add_to_group":"An unexpected error occurred while adding the user to the group. Error code : 417",
+            "console_user_permission_deletion_question":"Console user access authorization will be deleted. Are you sure?",
+            "error_226_user_id_found":"A record was found in this user record. The user could not be created."
+
         },
         "server_settings":{
             "directory_server_setting":"Directory Server Settings",
             "xmpp_server_setting":"XMPP Server Settings",
             "file_server_setting":"File Server Settings",
             "mail_server_setting":"Mail Server Settings",
-            "other_setting":"Other Setting",
+            "other_setting":"Other Settings",
+            "error_server_settings":"An error occurred while updating server settings",
+            "error_417_server_settings":"An unexpected error occurred while updating server settings. Error code : 417",
             "directory_server_settings":{
                 "directory_server_settings":"Directory Server Settings",
                 "ldap_server_informations":"LDAP Server Information",
@@ -724,7 +806,9 @@
                 "update_settings":"Update Settings",
                 "cancel":"Cancel",
                 "directory_server_notify":"Directory server settings will be updated and you will be redirected to login page, are you sure?",
-                "directory_server_settings_successfully_update":"Directory server settings updated successfully"
+                "directory_server_settings_successfully_update":"Directory server settings updated successfully",
+                "error_417_update_directory_server_settings":"An error occurred while updating the directory server settings"
+
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Server Information",
@@ -742,8 +826,9 @@
                 "no":"No",
                 "cancel":"Cancel",
                 "update_settings":"Update Settings",
-                "file_server_notify":"File server settings will be updated and you will be redirected to login page, are you sure?",
-                "file_server_settings_successfully_update":"File server settings updated successfully"
+                "messaging_server_notify":"The XMPP server settings will be updated and you will be redirected to the login page, are you sure?",
+                "messaging_server_settings_successfully_update":"XMPP server settings updated successfully",
+                "error_update_messaging_server_settings": "An error occurred while updating the XMPP server settings"
             },
             "file_server_settings":{
                 "file_server_information":"File Server Information",
@@ -759,7 +844,9 @@
                 "cancel":"Cancel",
                 "update_settings":"Update Settings",
                 "file_server_notify":"File server settings will be updated and you will be redirected to login page, are you sure?",
-                "file_server_settings_successfully_update":"File server settings updated successfully"
+                "file_server_settings_successfully_update":"File server settings updated successfully",
+                "error_417_update_file_server_settings": "Error updating file server settings"
+
             },
             "mail_server_settings":{
                 "mail_notify":"Email settings will be updated and you will be directed to the login page, are you sure?",
@@ -775,7 +862,9 @@
                 "yes":"Yes",
                 "no":"No",
                 "update_settings":"Update Settings",
-                "cancel":"Cancel"
+                "cancel":"Cancel",
+                "error_updating_mail_settings" : "An unexpected error occurred while updating the e-mail settings. Error code : 417"
+
             },
             "other_settings":{
                 "other_settings":"Other Settings",
@@ -783,7 +872,8 @@
                 "domain_type":"Select which domain the clients will be taken to",
                 "ldap":"LDAP",
                 "active_directory_or_samba":"Active Directory or SAMBA",
-                "none":"None (When this option is selected, the client will not be included in the domain. The client can be logged in as a local user.)",
+                "none":"None (When this option is selected, the client will not be included in the domain. The client can be logged in as a local user)",
+                "none_sudo":"None (When this option is selected, the users will be able to access sudo authorization only through the local user)",
                 "ahenk_repo_setting":"Ahenk Repo Settings",
                 "repo_address":"Repo Address",
                 "repo_key_address":"Repo Key Address",
@@ -798,7 +888,9 @@
                 "registration_template_type": "Select by which registration template type clients will register",
                 "default": "Default(Clients are saved under the Agents folder as default)",
                 "ip_address": "IP Address(It is registered according to the entered IP address rule)",
-                "hostname": "Hostname(It is registered according to the entered hostname rule)"
+                "hostname": "Hostname(It is registered according to the entered hostname rule)",
+                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu"
+
             }
         },
         "registiration_template":{
@@ -838,7 +930,11 @@
             "update":"Update",
             "template_successfully_updated":"Template updated successfully",
             "an_error_occurred_while_updating_template":"An error occurred while updating template",
-            "update_template": "Update Registration Template"
+            "update_template": "Update Registration Template",
+            "error_417_saving_template":"An unexpected error occurred while saving the template. Error code : 417",
+            "error_417_updating_template":"An unexpected error occurred while updating the template. Error code : 417",
+            "error_417_getting_registration_template":"An unexpected error occurred while fetching registration templates. Error code : 417",
+            "error_417_delete_template":"The template was not deleted. An unexpected error has occurred. Error code : 417"
         },
 
         "script_definition": {
@@ -872,7 +968,12 @@
             "script_name_unique_warn": "Script name can not be same",
             "delete_script_confirm_message": "The script will be deleted, are you sure?",
             "yes":"Yes",
-            "definition": "The listed scripts can be updated or deleted. New script can be saved by entering the Script Name, Script Type and Script Content. Bash, Python, Perl and Ruby options are available as script types for Pardus."
+            "definition": "The listed scripts can be updated or deleted. New script can be saved by entering the Script Name, Script Type and Script Content. Bash, Python, Perl and Ruby options are available as script types for Pardus.",
+            "error_417_get_scripts" : "An unexpected error occurred while fetching scripts. Error code : 417",
+            "error_417_delete_script": "An unexpected error occurred while deleting the script. Error code : 417",
+            "error_417_update_script": "An unexpected error occurred while updating the script. Error code : 417",
+            "error_417_saved_script": "An unexpected error occurred while saving the script. Error code : 417"
+
         },
         "system_monitoring_definitions": {
             "title": "System Monitoring Template Definition",
@@ -905,7 +1006,9 @@
             "template_name_unique_warn": "Template name can not be same",
             "delete_template_confirm_message": "The Template will be deleted, are you sure?",
             "yes":"Yes",
-            "definition": "The listed template can be updated or deleted. Allows to text-based information to be displayed on the desktop with Conky application. Template can be saved entering Content and Setting"
+            "definition": "The listed template can be updated or deleted. Allows to text-based information to be displayed on the desktop with Conky application. Template can be saved entering Content and Setting",
+            "error_417_delete_template": "An unexpected error occurred while deleting templates. Error code : 417",
+            "error_417_saved_template": "An unexpected error occurred while saving templates. Error code : 417"
         }
     },
     "user_management":{
@@ -1003,6 +1106,16 @@
         "delete_group":"Delete Group",
         "selected_delete_node":"Selected Delete Node",
         "selected_dn": "Selected DN",
+        "error_417_change_user_password" : "An unexpected error was received when changing the user password. Error code : 417",  
+        "error_417_delete_member_group" : "An unexpected error occurred while the user was deleting a member. Error code : 417",     
+        "error_417_add_folder":"An unexpected error was received while creating the folder. Error code : 417", 
+        "error_417_add_user_to_group":"An unexpected error occurred while adding the user to the group. Error code : 417",
+        "error_417_add_user":"An unexpected error was received while adding a user. Error code : 417",
+        "error_417_user_not_found": "User not found. Error code : 417",
+        "error_404_delete_node":"Could not delete AD entry. Not found. Error code : 404",
+        "error_417_session_history": "An unexpected error occurred while fetching session history. Error code : 417",
+        "error_select_group_empty_member": "The group cannot be transferred because there are no members in the group.",
+        "add_folder_error_226":"Recorded with the same name. So the folder/group could not be created",
         "ad":{
             "add_group":"Add Group",
             "give_console_access": "Give Console Access",
@@ -1036,7 +1149,16 @@
             "already_exist_group_in_ldap": "Already exist groups in OpenDLAP",
             "ad_connect_successfully":"Connection to Active Directory Server successfully established.",
             "ad_connect_not_successfully":"Aktif Dizin Sunucusu ile bağlantı kurulamadı. Lütfen Aktif Dizin ayarlarını kontrol ediniz.",
-            "ad_connecting_wait":"Aktif Dizin Sunucusu ile bağlantı kuruluyor. Lütfen bekleyiniz..."
+            "ad_connecting_wait":"Aktif Dizin Sunucusu ile bağlantı kuruluyor. Lütfen bekleyiniz...",
+            "error_417_added_group_error":"An unexpected error was received while adding the group. Error code : 417",
+            "error_417_give_console_access":"An error occurred while moving user to Lider. Error code : 417",
+            "error_417_sync_group": "An unexpected error occurred while importing selected groups into OpenLDAP. Error code : 417",
+            "error_417_sync_user": "An unexpected error occurred while importing selected users into OpenLDAP. Error code : 417",
+            "error_configuraton":"Configuration error received",
+            "error_417_configuration":"Could not get AD configuration.Unexpected error occurred. Error code : 417",
+            "error_417_ad_child_entries":"An error occurred while getting selected node child entries. Error code : 417",
+            "searching":"Searching, please wait..."
+
         },
         "sudo":{
             "selected_node_title":"Registiration Information",
@@ -1086,7 +1208,11 @@
             "move":"Move",
             "select_folder_warn":"Please select a folder",
             "move_node_success":"Moved node successfully",
-            "move_node_error":"An error occurred while moving node"
+            "move_node_error":"An error occurred while moving node",
+            "error_add_folder":"An error occurred while creating the folder.",
+            "error_417_add_folder":"An unexpected error occurred while creating the folder. Error code : 417",
+            "error_update_folder_name": "An error occurred while changing the folder name",
+            "error_417_update_folder_name": "An unexpected error occurred while changing the folder name. Error code : 417"
         }
     },
     "group_management": {
@@ -1168,6 +1294,23 @@
         "assigned_policies": "Assigned Policies",
         "assigned_policy_empty_message": "Assigned policy not found",
         "yes":"Yes",
+        "add_client_loading":"Adding clients, please wait...",
+        "add_group_loading":"Creating group, please wait...",        
+        "error_417_delete_member_group" : "An unexpected error occurred while deleting the member. Error code : 417",
+        "error_417_delete_node" : "An unexpected error was received while deleting the record. Error code : 417",
+        "error_417_add_client" : "An unexpected error was received while deleting the client. Error code :417",
+        "error_417_created_group" : "An unexpected error was received while creating a group. Error code : 417",
+        "error_417_move_entry" : "An unexpected error was received during record migration. Error code : 417",
+        "error_add_folder": "An error was received while creating the folder.",
+        "error_417_delete_group_member" : "Could not delete member from group. Unexpected error occurred Error code : 417",
+        "error_417_rename_group_name" : "An unexpected error was received while changing the group name. Error code : 417",
+        "error_417_apply_policy": "An unexpected error occurred while applying the policy. Error code : 417",
+        "domain_admin_success": "Domain admin privileges of selected group updated successfully",
+        "domain_admin_error": "An unexpected error occurred while updating domain admin privileges of selected group. Error code : 417",
+        "domain_admin_privilege": "Domain Admin Privilege",
+        "domain_admin_description": "Privilege of group for clients to domain(Domain Admin)",
+        "domain_admin_privilege_confirm_message": "Domain admin privilege will be given to user group, are you sure?",
+        "domain_admin_delete_confirm_message": "Domain admin privilege will be deleted from user group, are you sure?"
         "add_client_loading": "Adding clients, please wait...",
         "add_group_loading": "Creating group, please wait...",
         "delete_admin_group_error": "Admin Group can not be deleted"
@@ -1235,6 +1378,14 @@
         "unassign_policy_error": "An error occured while deleting policy in group",
         "selected_profile_warn": "At least one profile must be selected",
         "explanation":"The policy defines the authority and restrictions of a user group. One or more profiles come together to form the policy. Policies are applied by querying from Lider during user login.",
+        "error_417_add_policy" : "An unexpected error occurred while loading the policy. Error code : 417",
+        "error_417_delete_policy" : "An unexpected error occurred while deleting the policy. Error code : 417",
+        "error_417_get_profile" : "An unexpected error occurred while fetching the profile list. Error code : 417",
+        "error_417_update_profile" : "An unexpected error occurred while updating the profile. Error code : 417",
+        "error_417_get_policy": "An error occured while getting profile list. Error code : 417",
+        "error_get_plugin_profile_list" : "Error fetching profile list plugin",
+        "error_417_get_plugin_profile_list" : "An error was received while retrieving the add-on profile list. An unexpected error has occurred. Error code : 417",
+        "error_417_unassign_policy": "An unexpected error occurred while removing the policy from the group. Error code : 417",
         "profile":{
             "explanation":"The set of configuration settings that can be performed in a plugin is called a Profile.One or more profiles come together to form the policy. It cannot be operated alone. It can be used after it has been added to a policy.For example, a profile can be created for the Browser add-on by specifying and saving the configuration settings such as the homepage setting via Lider via the add-on.",
             "login_manager":{
@@ -1416,6 +1567,14 @@
             "total_disk_space":"Total Disk Space(GB)",
             "used_disk_space":"Used Disk Space(GB)",
             "free_disk_space":"Free Disk Space",
+            "ssd_title":"SSD (Solid-State Drive)",
+            "ssd_total_disk": "Ssd total Disk Space(GB)",
+            "ssd_used_disk":"Ssd used Disk Space(GB)",
+            "ssd_available_disk": "Ssd available Disk Space(GB)",
+            "hdd_title":"HDD (Hard Disk Drive)",
+            "hdd_total_disk": "Hdd total Disk Space(GB)",
+            "hdd_used_disk":"Hdd used Disk Space(GB)",
+            "hdd_available_disk": "Hdd available Disk Space(GB))",
             "disk_partitions":"Disk Partitions",
             "processor_information":"Agent Information",
             "number_of_physical_cores":"Number of Pyhsical Cores",
@@ -1428,14 +1587,22 @@
             "group_is_creating_please_wait":"Group is creating. Please wait...",
             "add_computer_group":"Add Computer Group",
             "please_select_group":"Please select group",
+            "disk_type":"Disk Type",
             "cancel":"Cancel",
             "add":"Add",
             "computer_group_successfully_create":"Computer group successfully created",
             "an_error_occurred_while_creating_the_computer_group":"An error occurred while creating the client group",
             "add_existing_group":"Add Existing Group",
             "select_folder":"Select Folder",
-            "create_computer_group":"Create Computer Group"
-
+            "create_computer_group":"Create Computer Group",
+            "session":"Session",
+            "not_logged_one_mounth":"Not Logged In Last 1 Month",
+            "not_logged_two_mounth":"Not Logged In Last 2 Months",
+            "not_logged_three_mounth":"Not Logged In Last 3 Months",
+            "logged_one_mounth":"Logged In Last 1 Month",
+            "logged_two_mounth":"Logged In Last 2 Months",
+            "logged_three_mounth":"Logged In Last 3 Months",
+            "error_417_adding_computer_to_group":"An unexpected error occurred while adding clients to the group. Error code : 417"
 
         },
         "task_report":{
@@ -1469,8 +1636,23 @@
             "task_detail":"Task Detail",
             "total_result":"Total Result",
             "task_sent_ahenk_list":"Task Sent Ahenk List",
-            "close":"Close"
-            
+            "close":"Close",
+            "agent_info_report_error":"Could not retrieve agent info list",
+            "error_417_agent_info_list":"Could not retrieve agents list. Error code : 417",
+            "agent_info_report_export_error":"Could not create agent task report.",
+            "error_400_agent_info_report":"Could not create agent task report. Error code : 400",
+            "error_get_operation_log_list":"Could not retrieve operation log list!",
+            "error_417_operation_log":"Unexpected error occured while getting the system log list. Error code: 417",
+            "error_operation_log_export":"Could not created system log task report",
+            "error_400_operation_export_report":"Unexpected error occured while creating the system log report. Error code: 400",
+            "error_operation_log_types": "Could not retrieve operation log type.",
+            "error_executed_task_list":"Could not retrieve executed task list!",
+            "error_417_executed_task_list":"Unexpected error occured while getting the executed task list. Error code: 417",
+            "error_executed_task_export":"Could not created executed task report",
+            "error_400_executed_task_export":"Unexpected error occured while creating the executed task report. Error code: 400",
+            "error_executed_task_plugin":"Failed to import executed task plugins",
+            "error_operation_login_console_list":"Error getting list of logged in console in system log",
+            "error_417_operation_console_list":"An unexpected error occurred while retrieving the list of logged in users in the system log. Error code : 417"
         },
         "system_log_report":{
             "system_log_report":"System Log Report",
@@ -1541,7 +1723,17 @@
             "scheduled_task_will_be_canceled_are_you_sure":"The scheduled task will be cancelled, are you sure?",
             "close":"Close",
             "yes":"Yes",
-            "cancel_scheduled_task": "Cancel Scheduled Task"
+            "cancel_scheduled_task": "Cancel Scheduled Task",
+            "error_scheduled_task": "An error occurred while getting the scheduled task report",
+            "error_code_417": "Unexpected error occured while getting the scheduled task report. Error code: 417",
+            "error_scheduled_task_export":"Could not created scheduled task report",
+            "error_code_400":"Could not create scheduled task report. Error code : 400",
+            "error_scheduled_task_plugins":"Failed to import scheduled task plugins",
+            "error_code_plugins_417": "Unexpected error occured while getting the scheduled task plugins. Error code: 417",
+            "success_scheduled_update":"Scheduled task updated successfully",
+            "error_scheduled_update":"Scheduled task id not found!!",
+            "success_scheduled_cancel":"Scheduled task canceled successfully",
+            "error_scheduled_cancel":"Error canceling scheduled task"
         }
     },
     "profile":{
@@ -1560,7 +1752,11 @@
             "address":"Address",
             "update_informations":"Update Informations",
             "information_has_been_successfully_updated":"Information has been successfully updated.",
-            "change_user_info_confirm_message": "User information will be updated, are you sure?"
+            "change_user_info_confirm_message": "User information will be updated, are you sure?",
+            "error_profile_update": "An error occurred while updating user information. Try again.",
+            "error_417_profile_update": "An unexpected error occurred while updating user information. Error code : 417",
+            "error_get_profile": "An error occurred while fetching the user's profile information. Try again",
+            "error_417_get_profile": "An unexpected error was received while fetching the user's profile information. Error code : 417"
         },
         "account_security":{
             "account_security":"Account Security",

@@ -76,8 +76,8 @@
     >
         <tree-component 
             ref="agentTree"
-            loadNodeUrl="/lider/computer/getComputers"
-            loadNodeOuUrl="/lider/computer/getOuDetails"
+            loadNodeUrl="/api/lider/computer/computers"
+            loadNodeOuUrl="/api/lider/computer/ou-details"
             :treeNodeClick="node => selectedAgentOu = node"
             :searchFields="searchFields"
             :isMove="true"
@@ -97,10 +97,12 @@
     >
         <tree-component 
             ref="userGroupTree"
-            loadNodeUrl="/lider/user_groups/getGroups"
-            loadNodeOuUrl="/lider/user_groups/getOuDetails"
+            loadNodeUrl="/api/lider/user-groups/groups"
+            loadNodeOuUrl="api/lider/user-groups/ou-details"
             :treeNodeClick="node => selectedUserGroup = node"
             :searchFields="searchGroupFields"
+            :scrollHeight="40"
+
         />
         <template #footer>
             <Button :label="$t('settings.registiration_template.cancel')" icon="pi pi-times" @click="userGroupDialog = false"
@@ -114,8 +116,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import { registrationTemplateService } from '../../../../services/Settings/RegistrationTemplates.js'
 export default {
 
     props: {
@@ -205,7 +206,7 @@ export default {
             this.userGroupDialog = false;
         },
 
-        saveRegistrationTemplate() {
+        async saveRegistrationTemplate() {
             if (!this.validateForm()) {
                 return;
             }
@@ -215,37 +216,50 @@ export default {
                 "parentDn": this.agentCreationDN,
                 "templateType": this.templateType,
             }
-            axios.post("/api/registration-templates", params).then((response) => {
-                if (response.data && response.status == 200) {
-                    this.templateText = "";
-                    this.authorizedUserGroupDN = "";
-                    this.agentCreationDN = "";
-                    this.$emit("savedRegistrationTemplate", response.data);
-                    this.showDialog = false;
-                    this.$toast.add({
-                        severity:'success',
-                        detail: this.$t('settings.registiration_template.template_successfully_saved'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.registiration_template.an_error_occurred_while_saving_template'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            })
-            .catch((error) => { 
-                console.log(error)
+
+            const {response, error} = await registrationTemplateService.type(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('settings.registiration_template.an_error_occurred_while_saving_template')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200) {
+                    if (response.data && response.status == 200) {
+                        this.templateText = "";
+                        this.authorizedUserGroupDN = "";
+                        this.agentCreationDN = "";
+                        this.$emit("savedRegistrationTemplate", response.data);
+                        this.showDialog = false;
+                        this.$toast.add({
+                            severity:'success',
+                            detail: this.$t('settings.registiration_template.template_successfully_saved'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.registiration_template.an_error_occurred_while_saving_template'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.registiration_template.error_417_saving_template'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    
+
+                }
+            }
         },
 
         validateForm() {

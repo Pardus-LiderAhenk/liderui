@@ -97,7 +97,7 @@
  *
  */
 
-import axios from "axios";
+import { conkyService } from "../../../../../services/Settings/ConkyService.js";
 
 export default {
   props: {
@@ -126,31 +126,13 @@ export default {
   },
 
   mounted() {
-    const params = new FormData();
-    axios.post("/conky/list", params).then((response) => {
-      if (response.data != null || response.data != "") {
-        for (let index = 0; index < response.data.length; index++) {
-          const element = response.data[index];
-          this.templates.push({
-            label: element.label,
-            id: element.id,
-            contents: element.contents,
-            settings: element.settings,
-          });
-        }
-      }
-    })
-    .catch((error) => {
-      this.$toast.add({
-        severity: "error",
-        detail: this.$t("computer.plugins.conky.conky_error_message") +" \n" + error,
-        summary: this.$t("computer.task.toast_summary"),
-        life: 3000,
-      });
-    });
+
+    this.conkyListAll();
+   
   },
 
   methods: {
+
     sendTaskConky(removeConky) {
       this.conkyValidation = false;
       if (!removeConky && !this.selectedTemplate) {
@@ -168,6 +150,43 @@ export default {
       };
       this.showTaskDialog = true;
     },
+
+    async conkyListAll(){
+
+      const{response,error} = await conkyService.conkyListAll();
+      if(error){
+        this.$toast.add({
+          severity: "error",
+          detail: this.$t("computer.plugins.conky.conky_error_message") +" \n" + error,
+          summary: this.$t("computer.task.toast_summary"),
+          life: 3000,
+        });
+      }
+      else{
+        if(response.status == 200){
+          if (response.data != null || response.data != "") {
+            for (let index = 0; index < response.data.length; index++) {
+                const element = response.data[index];
+                this.templates.push({
+                  label: element.label,
+                  id: element.id,
+                  contents: element.contents,
+                  settings: element.settings,
+                });
+              }
+            }
+          }
+        else if(response.status == 417){
+          this.$toast.add({
+            severity: "error",
+            detail: this.$t("computer.plugins.conky.error_417_fetching_conky"),
+            summary: this.$t("computer.task.toast_summary"),
+            life: 3000,
+          });
+        }
+        
+      }
+    }
   },
   watch: {
     selectedTemplate() {

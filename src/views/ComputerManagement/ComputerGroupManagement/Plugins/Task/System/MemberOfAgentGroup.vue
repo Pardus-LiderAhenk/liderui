@@ -105,7 +105,7 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import { mapGetters, mapActions } from "vuex"
-import axios from "axios";
+import {computerGroupsManagementService} from "../../../../../../services/ComputerManagement/ComputerGroupManagement.js";
 
 export default {
 
@@ -171,7 +171,7 @@ export default {
             }
         },
 
-        deleteMemberFromGroup(data) {
+        async deleteMemberFromGroup(data) {
             if (this.attributesMultiValue == false) {
                 this.$toast.add({
                         severity:'warn', 
@@ -187,26 +187,38 @@ export default {
             dnList.push(data.memberDn)
             params.append("dnList[]", dnList);
             params.append("dn", this.selectedComputerGroupNode.distinguishedName);
-            axios.post("/lider/computer_groups/delete/group/members", params).then((response) => {
-                if (response.data != null) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('group_management.delete_member_success_message'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.setSelectedComputerGroupNode(response.data);
-                    this.getMemberOfSelectedGroup(this.selectedComputerGroupNode);
-                    this.loading = false;
-                }
-            }).catch((error) => {
+            const{response,error} = await computerGroupsManagementService.deleteMember(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            })
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data != null) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('group_management.delete_member_success_message'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        this.setSelectedComputerGroupNode(response.data);
+                        this.getMemberOfSelectedGroup(this.selectedComputerGroupNode);
+                        this.loading = false;
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.error_417_delete_group_member'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
         },
 
         getSelectedNodeAttribute() {

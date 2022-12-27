@@ -6,8 +6,8 @@
             <tree-component 
                 ref="movetree"
                 :isMove="true"
-                loadNodeUrl="/lider/user/getUsers"
-                loadNodeOuUrl="/lider/user/getOuDetails"
+                loadNodeUrl="/api/lider/user/users"
+                loadNodeOuUrl="/api/lider/user/ou-details"
                 :treeNodeClick="node => selectedLdapOuDn = node.distinguishedName"
                 :searchFields="searchFolderFields"
             />
@@ -78,7 +78,7 @@
 
 <script>
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
+import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 
 export default {
     props: {
@@ -136,26 +136,40 @@ export default {
     },
 
     methods: {
-        getChildUser() {
+        async getChildUser() {
             if (this.selectedNode.type == "ORGANIZATIONAL_UNIT" || this.selectedNode.type == "CONTAINER" || this.selectedNode.isRoot) {
                 this.loading = true;
                 let params = new FormData();
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
                 params.append("value", "user");
-                axios.post('/ad/getChildUser', params).then(response => {
-                    if (response.data) {
-                        this.users = response.data;
-                        this.loading = false;
-                    }
-                }).catch((error) => {
+
+                const { response,error} = await  adManagementService.childUser(params);
+                if(error){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.ad.error_ad_child_entries'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                });    
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data) {
+                            this.users = response.data;
+                            this.loading = false;
+                        }
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_ad_child_entries'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+  
             } 
             if (this.selectedNode.type == 'USER') {
                 this.users.push(this.selectedNode);
@@ -175,7 +189,7 @@ export default {
             this.ldapUserOuDialog = true;
         },
 
-        syncUserToLDAP() {
+        async syncUserToLDAP() {
             if (!this.selectedLdapOuDn) {
                 this.$toast.add({
                     severity:'warn', 
@@ -190,8 +204,20 @@ export default {
                 "distinguishedName": this.selectedLdapOuDn,
                 "childEntries": this.selectedUsers
             };
-            axios.post('/ad/syncUserFromAd2Ldap', params).then(response => {
-                if (response.data.length == 0) {
+
+            const{ response,error } = await adManagementService.syncUserFromAdToLdap(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.ad.sync_user_error'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data.length == 0) {
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('user_management.ad.sync_user_success'),
@@ -206,14 +232,18 @@ export default {
                         life: 3000
                     });
                 }
-            }).catch((error) => {
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('user_management.ad.sync_user_error'),
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            });
+
+                } 
+                else if(response.status == 417){            
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.ad.error_417_sync_user'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                        });
+                    }
+                }
+
             this.selectedLdapOuDn = null;
         }
     },

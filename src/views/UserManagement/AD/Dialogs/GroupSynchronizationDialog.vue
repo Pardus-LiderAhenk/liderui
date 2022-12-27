@@ -6,8 +6,8 @@
             <tree-component 
                 ref="movetree"
                 :isMove="true"
-                loadNodeUrl="/lider/user_groups/getGroups"
-                loadNodeOuUrl="/lider/user_groups/getOuDetails"
+                loadNodeUrl="/api/lider/user-groups/groups"
+                loadNodeOuUrl="/api/lider/user-groups/ou-details"
                 :treeNodeClick="node => selectedLdapOuDn = node.distinguishedName"
                 :searchFields="searchFolderFields"
             />
@@ -77,7 +77,7 @@
 
 <script>
 import {FilterMatchMode} from 'primevue/api';
-import axios from "axios";
+import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 
 export default {
     props: {
@@ -134,26 +134,39 @@ export default {
     },
 
     methods: {
-        getChildGroup() {
+        async getChildGroup() {
             if (this.selectedNode.type == "ORGANIZATIONAL_UNIT" || this.selectedNode.type == "CONTAINER" || this.selectedNode.isRoot) {
                 this.loading = true;
                 let params = new FormData();
                 params.append("searchDn", this.selectedNode.distinguishedName);
                 params.append("key", "objectclass");
                 params.append("value", "group");
-                axios.post('/ad/getChildGroup', params).then(response => {
-                    if (response.data) {
-                        this.groups = response.data;
-                        this.loading = false;
-                    }
-                }).catch((error) => {
+                const {response,error} = await adManagementService.childGroupList(params);
+
+                if(error){
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('user_management.ad.error_ad_child_entries'),
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                });    
+                }
+                else{
+                    if(response.status == 200){
+                        if (response.data) {
+                            this.groups = response.data;
+                            this.loading = false;
+                        }
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_417_ad_child_entries'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }  
             } 
             if (this.selectedNode.type == 'GROUP') {
                 this.groups.push(this.selectedNode);
@@ -173,7 +186,7 @@ export default {
             this.ldapGroupOuDialog = true;
         },
 
-        syncGroupToLDAP() {
+        async syncGroupToLDAP() {
             if (!this.selectedLdapOuDn) {
                 this.$toast.add({
                     severity:'warn', 
@@ -183,36 +196,72 @@ export default {
                 });
                 return;
             }
+
+            var isExisting = false;
+
+            for (var key in this.selectedNode.attributesMultiValues) {
+			    if (this.selectedNode.attributesMultiValues.hasOwnProperty(key) && key != "member") {
+                    isExisting = true
+                }
+            }
+            if(isExisting == true){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.error_select_group_empty_member'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                    });
+            }
+                
+
             this.ldapGroupOuDialog = false;
             let params = {
                 "distinguishedName": this.selectedLdapOuDn,
                 "childEntries": this.selectedGroups
             };
-            axios.post('/ad/syncGroupFromAd2Ldap', params).then(response => {
-                if (response.data.length == 0) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.ad.sync_group_success'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'warn', 
-                        detail: this.$t('user_management.ad.already_exist_group_in_ldap'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            }).catch((error) => {
+
+            const{response,error} = await adManagementService.syncGroupFromAdToLdap(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.ad.sync_group_error'),
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
-            this.selectedLdapOuDn = null;
+            }
+            else{
+                if(isExisting == false){
+                    if(response.status == 200){
+                        if (response.data.length == 0) {
+                            this.$toast.add({
+                                severity:'success', 
+                                detail: this.$t('user_management.ad.sync_group_success'),
+                                summary:this.$t("computer.task.toast_summary"), 
+                                life: 3000
+                            });
+                        }
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('user_management.ad.error_417_sync_group'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                
+                    else {
+                        this.$toast.add({
+                            severity:'warn', 
+                            detail: this.$t('user_management.ad.already_exist_group_in_ldap'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+            }
+
+        this.selectedLdapOuDn = null;
         }
     },
 
@@ -224,6 +273,7 @@ export default {
         },
     }
 }
+
 </script>
 
 <style lang="scss" scoped>

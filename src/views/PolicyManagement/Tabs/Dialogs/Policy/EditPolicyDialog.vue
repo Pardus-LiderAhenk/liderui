@@ -35,7 +35,7 @@
                     <DataTable :value="profiles" class="p-datatable-sm" ref="dt"
                         v-model:filters="filters"
                         rowGroupMode="subheader" groupRowsBy="plugin.name"
-                        sortMode="single" sortField="brand" :sortOrder="1"
+                        sortMode="single" sortField="plugin.name" :sortOrder="1"
                         :scrollable="true" scrollHeight="400px"
                         responsiveLayout="scroll" v-model:selection="selectedProfiles"
                         @rowSelect="onRowSelect" :expandableRowGroups="true" v-model:expandedRowGroups="expandedRowGroups">
@@ -95,8 +95,9 @@
  * @event updatedPolicy
  */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { policyService } from "../../../../../services/PolicyManagement/PolicyService.js";
+import { profilesServices } from "../../../../../services/PolicyManagement/Profiles.js";
 
 export default {
 
@@ -149,18 +150,7 @@ export default {
 
     mounted() {
         // get all profile list by deleted is false
-        axios.post('/profile/allList', null).then(response => {
-            if (response.data) {
-                this.profiles = response.data;
-            } 
-        }).catch((error) => {
-            this.$toast.add({
-                severity:'error', 
-                detail: this.$t('policy_management.get_profile_error')+ " \n"+error, 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-            });
-        });
+        this.allList();
 
         if (this.selectedPolicy) {
             this.label = this.selectedPolicy.label;
@@ -176,7 +166,35 @@ export default {
             this.$refs.opProfileList.toggle(event);
         },
 
-        updatePolicy() {
+        async allList(){
+            const{response,error} = await profilesServices.allList();
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('policy_management.get_profile_error')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.profiles = response.data;
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_get_profile'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+
+        },
+
+        async updatePolicy() {
             if (!this.label.trim()) {
                 this.validation.label = true;
                 return;
@@ -197,25 +215,45 @@ export default {
                 });
                 return;
             }
-            axios.post('/policy/update', params).then(response => {
-                if (response.data) {
-                    this.$emit('updatedPolicy', response.data);
-                    this.$emit('closePolicyDialog');
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('policy_management.update_profile_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
+
+            const{response,error} = await policyService.policyUpdate(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('policy_management.update_profile_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status === 200){
+                    if (response.data) {
+                        this.$emit('updatedPolicy', response.data);
+                        this.$emit('closePolicyDialog');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('policy_management.update_profile_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    } else {
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('policy_management.update_profile_error'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status = 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('policy_management.update_profile_error'), 
+                        detail: this.$t('policy_management.error_417_update_profile'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
                 }
-            });
+            }
             this.label = '';
             this.description = '';
             this.selectedProfiles = [];

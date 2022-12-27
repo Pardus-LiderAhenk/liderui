@@ -97,11 +97,12 @@
         :style="{width: '40vw'}" :modal="true"
     >
         <tree-component 
-            loadNodeUrl="/lider/sudo_groups/getUsers"
-            loadNodeOuUrl="/lider/sudo_groups/getOuDetails"
+            loadNodeUrl="/api/lider/sudo-groups/users"
+            loadNodeOuUrl="/api/lider/sudo-groups/get-ou-details"
             :showCheckbox="true"
             :getCheckedNodes="getCheckedUserNodes"
             :searchFields="userSearchFields"
+            :scrollHeight="40"
         />
         <template #footer>
             <Button :label="$t('user_authorization_sudo.close')" 
@@ -119,8 +120,8 @@
 
 <script>
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
-import axios from 'axios';
 import {FilterMatchMode} from 'primevue/api';
+import { sudoGroupsService } from '../../../../services/UserManagement/UserPermissionsManagement/SudoGroups';
 
 export default {
     components: {
@@ -229,57 +230,85 @@ export default {
             
         },
 
-        createSudoGroup() {
+        async createSudoGroup() {
             if (!this.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
             }
             let params = this.getSudoGroupParams();
-            axios.post("/lider/sudo_groups/createSudoGroup",params).then(response => {
-                if (response.data) {
-                    this.$emit('sudoGroupCreated', response.data, this.isEdit);
+
+            const{ response,error } = await sudoGroupsService.createGroups(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('sudoGroupCreated', response.data, this.isEdit);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_authorization_sudo.authorization_group_successfully_created'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }else {
+                      this.$toast.add({
+                          severity:'error', 
+                          detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
+                          summary:this.$t("computer.task.toast_summary"), 
+                          life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
                     this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_authorization_sudo.authorization_group_successfully_created'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
+                          severity:'error', 
+                          detail: this.$t('user_authorization_sudo.an_error_occurred_while_creating_the_authorization_group'), 
+                          summary:this.$t("computer.task.toast_summary"), 
+                          life: 3000
                     });
                 }
-            });
+            }
         },
 
-        updateSudoGroup() {
+        async updateSudoGroup() {
             if (!this.groupName.trim()) {
                 this.validation.groupName = true;
                 return;
             }
 
             let params = this.getSudoGroupParams();
-            axios.post("/lider/sudo_groups/editSudoGroup",params).then(response => {
-                if (response.data) {
-                    this.$emit('sudoGroupCreated', response.data, this.isEdit);
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_authorization_sudo.authorization_group_successfully_update'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                } else {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_authorization_sudo.an_error_occurred_while_updating_the_authorization_group'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+
+            const{response,error} = await sudoGroupsService.editGroups(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_authorization_sudo.an_error_occurred_while_updating_the_authorization_group'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('sudoGroupCreated', response.data, this.isEdit);
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_authorization_sudo.authorization_group_successfully_update'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
                 }
-            });
+                else if(response.status == 417){
+                    return "error";
+                }
+                }
         },
 
         getSudoGroupParams() {

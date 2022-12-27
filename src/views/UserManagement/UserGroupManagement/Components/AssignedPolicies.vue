@@ -149,8 +149,8 @@
  * @see {@link http://www.liderahenk.org/}
 */
 
-import axios from "axios";
 import {FilterMatchMode} from 'primevue/api';
+import { policyService } from "../../../../services/PolicyManagement/PolicyService.js";
 import ApplyPolicy from "./ApplyPolicy.vue";
 
 export default {
@@ -180,23 +180,36 @@ export default {
     },
 
     methods:{
-        getAssignedPolices() {
+        async getAssignedPolices() {
             let params = {
                 "distinguishedName": this.selectedNode.distinguishedName
             }
-            axios.post('/policy/getPoliciesForGroup', params).then(response => {
-                if (response.data) {
-                    this.policies = response.data;
-                    this.updateRowIndex();
-                } 
-            }).catch((error) => {
+
+            const{response,error} = await policyService.policyGroup(this.selectedNode.distinguishedName);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.get_policy_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.policies = response.data;
+                        this.updateRowIndex();
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_get_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
         },
 
         updateRowIndex() {
@@ -206,30 +219,43 @@ export default {
             }
         },
 
-        unassignPolicy() {
+        async unassignPolicy() {
             let params = {
                 "id": this.selectedPolicy.commandImpl.id,
 			};
-            axios.post('/policy/unassignment', params).then(response => {
-                if (response.data) {
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('policy_management.unassign_policy_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.policies = this.policies.filter(policy => policy.policyImpl.id != this.selectedPolicy.policyImpl.id);
-                    this.updateRowIndex();
-                    this.selectedPolicy = null;
-                } 
-            }).catch((error) => {
+
+            const{response,error} = await  policyService.policyUnassigment(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('policy_management.unassign_policy_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
-                });
-            });
+                    });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('policy_management.unassign_policy_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        this.policies = this.policies.filter(policy => policy.policyImpl.id != this.selectedPolicy.policyImpl.id);
+                        this.updateRowIndex();
+                        this.selectedPolicy = null;
+                    } 
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_unassign_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
             this.unassignPolicyDialog = false;
         }
     },

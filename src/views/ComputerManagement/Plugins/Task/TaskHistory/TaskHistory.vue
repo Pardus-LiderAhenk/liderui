@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { taskService } from "../../../../../services/Task/TaskService.js";
 import {FilterMatchMode} from 'primevue/api';
 import { mapGetters } from "vuex"
 /**
@@ -196,7 +196,7 @@ export default {
       }
     },
 
-    getTaskHistory() {
+    async getTaskHistory() {
         this.taskList = [];
         const params = new FormData();
         if (this.selectedLiderNode == null) {
@@ -210,43 +210,56 @@ export default {
         }
         this.loading = true;
         params.append("dn", this.selectedLiderNode.distinguishedName);
-        axios.post("/command", params).then((response) => {
-            if (response.data != null) {
-                for (let index = 0; index < response.data.length; index++) {
-                    const element = response.data[index];
-                    let executionResult = null;
-                    let executionDate = null;
-                    let commandExeResultId = null;
 
-                    if(element.commandExecutions[0].commandExecutionResults.length > 0) {
-                        executionResult = element.commandExecutions[0].commandExecutionResults[0].responseCode;
-						executionDate = element.commandExecutions[0].commandExecutionResults[0].createDate;
-                        commandExeResultId = element.commandExecutions[0].commandExecutionResults[0].id;
-                    }
-                    this.taskList.push({
-                        "taskObject": element,
-                        "pluginName": element.task.plugin.name,
-                        "commandClsId": element.task.commandClsId,
-                        "createdDate": element.task.createDate,
-                        "executionDate": executionDate,
-                        "commandOwnerUid": element.commandOwnerUid,
-                        "responseCode": executionResult,
-                        "commandExeResultId": commandExeResultId,
-                        "taskId": element.task.id,
-                        "index": index + 1
-                    });
-                }
-                this.loading = false;
-            }
-        })
-        .catch((error) => { 
-        this.$toast.add({
-            severity:'error', 
-            detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
+        const{response,error} = await taskService.commandfindAll(this.selectedLiderNode.distinguishedName);
+        if(error){
+            this.$toast.add({
+                severity:'error', 
+                //new  cache message
+                detail: this.$t('settings.script_definition.get_scripts_error_message')+ " \n"+error, 
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
             });
-        });
+        }
+        else{
+            if(response.status == 200){
+                if (response.data != null) {
+                    for (let index = 0; index < response.data.length; index++) {
+                        const element = response.data[index];
+                        let executionResult = null;
+                        let executionDate = null;
+                        let commandExeResultId = null;
+
+                        if(element.commandExecutions[0].commandExecutionResults.length > 0) {
+                            executionResult = element.commandExecutions[0].commandExecutionResults[0].responseCode;
+			    			executionDate = element.commandExecutions[0].commandExecutionResults[0].createDate;
+                            commandExeResultId = element.commandExecutions[0].commandExecutionResults[0].id;
+                        }
+                        this.taskList.push({
+                            "taskObject": element,
+                            "pluginName": element.task.plugin.name,
+                            "commandClsId": element.task.commandClsId,
+                            "createdDate": element.task.createDate,
+                            "executionDate": executionDate,
+                            "commandOwnerUid": element.commandOwnerUid,
+                            "responseCode": executionResult,
+                            "commandExeResultId": commandExeResultId,
+                            "taskId": element.task.id,
+                            "index": index + 1
+                        });
+                    }
+                    this.loading = false;
+                }
+            }
+            else if(response.status == 417){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.script_definition.error_417_get_scripts'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+        }
     },
 
     executedTaskDetail(data) {
@@ -258,7 +271,7 @@ export default {
             try {
                 this.responseDataObj = JSON.parse(responseDataStr);
             } catch (error) {
-                console.log(error)
+                console.log("Could not found  task id");
             }
         }
         this.selectedTaskDetailDialog = true;

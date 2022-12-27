@@ -99,7 +99,8 @@
 </template>
 
 <script>
-import axios from "axios";
+
+import { userService } from "../../../../services/Settings/UserService";
 
 export default {
     props: {
@@ -140,7 +141,7 @@ export default {
             }
         },
 
-        updateUserInfo() {
+        async updateUserInfo() {
             let params = new FormData();
             params.append("distinguishedName", this.selectedNode.distinguishedName);
             params.append("cn", this.user.cn);
@@ -148,23 +149,31 @@ export default {
             params.append("telephoneNumber", this.user.telephoneNumber);
             params.append("mail", this.user.mail);
             params.append("homePostalAddress", this.user.homePostalAddress);
-            axios.post("/lider/user/editUser", params).then((response) => {
-                this.$emit('updatedUser', response.data);
-                this.updateUserConfirm = false;
-                this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('user_management.update_user_success'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            }).catch((error) => {
+
+            const{response,error} = await userService.editUser(params);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('user_management.update_user_error')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-            });
+            }
+            else{
+                if(response.status == 200){
+                    this.$emit('updatedUser', response.data);
+                    this.updateUserConfirm = false;
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('user_management.update_user_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else if(response.status == 417){
+                    return "error";
+                }
+            }
         },
 
         userFormValidation() {

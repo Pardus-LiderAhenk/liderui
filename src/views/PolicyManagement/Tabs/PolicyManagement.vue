@@ -124,7 +124,7 @@ import {FilterMatchMode} from 'primevue/api';
 import AddPolicyDialog from './Dialogs/Policy/AddPolicyDialog.vue'
 import EditPolicyDialog from './Dialogs/Policy/EditPolicyDialog.vue'
 import DeletePolicyDialog from './Dialogs/Policy/DeletePolicyDialog.vue'
-import axios from "axios";
+import { policyService } from '../../../services/PolicyManagement/PolicyService.js';
 
 export default {
     data() {
@@ -150,19 +150,7 @@ export default {
     },
 
     mounted() {
-        axios.post('/policy/list', null).then(response => {
-            if (response.data) {
-                this.policies = response.data;
-                this.updateRowIndex();
-            } 
-        }).catch((error) => {
-            this.$toast.add({
-                severity:'error', 
-                detail: this.$t('policy_management.get_policy_error')+ " \n"+error, 
-                summary:this.$t("computer.task.toast_summary"), 
-                life: 3000
-            });
-        });
+        this.policyList();
     },
 
     methods:{
@@ -193,6 +181,34 @@ export default {
             this.policies = this.policies.filter(policy => policy.id != updatedPolicy.id);
             this.policies.push(updatedPolicy);
             this.updateRowIndex();
+        },
+
+        async policyList(){
+            const{response,error} = await policyService.policyList();
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('policy_management.get_policy_error')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.policies = response.data;
+                        this.updateRowIndex();
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('policy_management.error_417_get_policy'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ import Calendar from 'primevue/calendar';
 import Card from 'primevue/card';
 import Carousel from 'primevue/carousel';
 import Chart from 'primevue/chart';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Checkbox from 'primevue/checkbox';
 import Chip from 'primevue/chip';
 import Chips from 'primevue/chips';
@@ -109,7 +110,7 @@ export default {
         app.directive('ripple', Ripple);
         // app.directive('code', CodeHighlight);
         app.directive('badge', BadgeDirective);
-
+        app.use(ChartDataLabels);
         app.component('Accordion', Accordion);
         app.component('AccordionTab', AccordionTab);
         app.component('AutoComplete', AutoComplete);

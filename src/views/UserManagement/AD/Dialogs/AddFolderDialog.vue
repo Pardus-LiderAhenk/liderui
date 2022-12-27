@@ -31,7 +31,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
-import axios from "axios";
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";
 
 export default {
 
@@ -72,7 +72,7 @@ export default {
     },
 
     methods: {
-        addFolder() {
+        async addFolder() {
             if (!this.folderName.trim()) {
                 this.validation.folderName = true;
                 return;
@@ -80,27 +80,43 @@ export default {
             let params = new FormData();
             params.append("parentName", this.selectedNode.distinguishedName);
             params.append("ou", this.folderName);
-            axios.post('/ad/addOu2AD', params).then(response => {
-                if (response.data) {
-                    this.$emit('appendNode', response.data, this.selectedNode);
-                    this.$emit('closeAdDialog');
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('user_management.add_folder_success'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
+            const { response,error } =  await adManagementService.addToOuAd(params);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.add_folder_error'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
                     });
-                } else {
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+                        this.$emit('appendNode', response.data, this.selectedNode);
+                        this.$emit('closeAdDialog');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.add_folder_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+            }
+                else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('user_management.add_folder_error'), 
+                        detail: this.$t('user_management.error_417_add_folder'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                }
-            });
-            this.folderName = '';
+                    
+
+                    }
+
+            }       
+        this.folderName = '';
         },
+
     }
     
 }

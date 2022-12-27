@@ -35,7 +35,7 @@
                     </div>
                     <div class="p-field-radiobutton">
                         <RadioButton id="sudoRoleType3" name="sudoRoleType" value="NONE"  v-model="sudoRoleType"/>
-                        <label for="sudoRoleType3">{{$t('settings.server_settings.other_settings.none')}}</label>
+                        <label for="sudoRoleType3">{{$t('settings.server_settings.other_settings.none_sudo')}}</label>
                     </div>
                 </div>
             </Fieldset>
@@ -59,14 +59,14 @@
                 <div class="p-field p-col-12">
                     <label for="ahenkRepoAddress">{{$t('settings.server_settings.other_settings.repo_address')}}</label>
                     <InputText id="ahenkRepoAddress" type="text" v-model="ahenkRepoAddress"
-                        placeholder="deb [arch=amd64] http://repo.liderahenk.org/liderahenk stable main"
+                        placeholder="deb [arch=amd64] https://repo.liderahenk.org/liderahenk stable main"
                         class="p-inputtext-sm"
                     />
                 </div>
                 <div class="p-field p-col-12">
                     <label for="ahenkRepoKeyAddress">{{$t('settings.server_settings.other_settings.repo_key_address')}}</label>
                     <InputText id="ahenkRepoKeyAddress" type="text" v-model="ahenkRepoKeyAddress"
-                        placeholder="http://repo.liderahenk.org/liderahenk-archive-keyring.asc"
+                        placeholder="https://repo.liderahenk.org/liderahenk-archive-keyring.asc"
                         class="p-inputtext-sm"
                     />
                 </div>
@@ -101,7 +101,8 @@
 
 
 <script>
-import axios from 'axios';
+import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
+
 export default {
     props:['serverSettings'],
     data() {
@@ -131,7 +132,7 @@ export default {
     },
 
     methods: {
-        submitForm() {
+        async submitForm() {
             let data = new FormData();
             data.append("domainType",this.domainType);
             data.append("sudoRoleType",this.sudoRoleType);
@@ -140,18 +141,31 @@ export default {
             data.append("ahenkRepoKeyAddress",this.ahenkRepoKeyAddress);
             data.append("selectedRegistrationType", this.selectedRegistrationType);
 
-            axios.post('/lider/settings/update/otherSettings', data).then(response => {
+            const { response,error } = await serverSettingService.updateOtherSettings(data);
+            if(error){
                 this.$toast.add({
-                    severity:'success', 
-                    detail: this.$t('settings.server_settings.other_settings.other_server_settings_successfully_update'), 
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.other_settings.error_update_other_settings'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-                setTimeout(() => {
-                    this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                }, 3000);
-            });
-            this.showDialog = false;
+            }
+            else{
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_settings.other_settings.other_server_settings_successfully_update'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    setTimeout(() => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                    }, 3000);
+                }
+                
+            }
+            
+        this.showDialog = false;
         }
     },
 }

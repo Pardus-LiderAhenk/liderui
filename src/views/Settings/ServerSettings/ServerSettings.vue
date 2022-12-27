@@ -25,7 +25,7 @@ import XmppSettingsForm from './forms/XmppSettingsForm.vue';
 import FileserverSettingsForm from './forms/FileserverSettingsForm.vue';
 import EmailServerSettingsForm from './forms/EmailServerSettingsForm.vue';
 import OtherSettingsForm from './forms/OtherSettingsForm.vue';
-import axios from 'axios';
+import { serverSettingService } from '../../../services/Settings/ServerSettingsService.js';
 
 export default {
     components: {
@@ -41,10 +41,32 @@ export default {
         }
     },
     methods: {
-        getServerSettings() {
-            axios.get('/lider/settings/configurations').then(response => {
-                this.serverSettings = response.data;
-            });
+        async getServerSettings() {
+
+            const { response,error } = await serverSettingService.getConfigurations();
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.error_server_settings'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    this.serverSettings = response.data;
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.error_417_server_settings'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                }
+            }
+                
+            
         }
     },
     mounted() {
