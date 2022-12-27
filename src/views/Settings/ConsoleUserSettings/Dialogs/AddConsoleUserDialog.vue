@@ -192,7 +192,6 @@ export default {
         async addAsConsoleUser(){
             if (this.selectedUserNode) {
                 let data = new FormData();
-                console.log('Selected user node', this.selectedUserNode);
                 data.append('dn', this.selectedUserNode.distinguishedName);
                 data.append('roles[]', ['ROLE_USER']);
                 const {response, error} = await consoleUserSettingsService.editUserRoles(data);
@@ -241,7 +240,7 @@ export default {
             data.append('userPassword', this.userForm.userPassword);
             data.append('telephoneNumber', this.userForm.telephoneNumber);
             data.append('homePostalAddress', this.userForm.homePostalAddress);
-            data.append('mail', this.mail);
+            data.append('mail', this.userForm.mail);
 
             const { response, error } = await userService.addUser(data);
             if(error){
