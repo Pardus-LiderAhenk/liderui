@@ -1310,9 +1310,7 @@
         "domain_admin_privilege": "Domain Admin Privilege",
         "domain_admin_description": "Privilege of group for clients to domain(Domain Admin)",
         "domain_admin_privilege_confirm_message": "Domain admin privilege will be given to user group, are you sure?",
-        "domain_admin_delete_confirm_message": "Domain admin privilege will be deleted from user group, are you sure?"
-        "add_client_loading": "Adding clients, please wait...",
-        "add_group_loading": "Creating group, please wait...",
+        "domain_admin_delete_confirm_message": "Domain admin privilege will be deleted from user group, are you sure?",
         "delete_admin_group_error": "Admin Group can not be deleted"
     },
     "policy_management": {

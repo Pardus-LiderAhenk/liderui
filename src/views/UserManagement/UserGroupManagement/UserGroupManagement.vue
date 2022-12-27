@@ -785,7 +785,7 @@ export default {
                 });
             }
             else{
-                if (response.data) {
+                if (response.status == 200) {
                     this.$refs.tree.remove(this.selectedNode);
                     this.setSelectedLiderNode(null);
                     this.$toast.add({
@@ -794,7 +794,16 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                } else {
+                } 
+                else if(response.status == 409){
+                     this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.delete_admin_group_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else {
                     this.$toast.add({
                         severity:'error', 
                         detail: this.$t('group_management.delete_node_error'), 
@@ -803,23 +812,7 @@ export default {
                     });
                 }
             }
-            }).catch((error) => {
-                if (error.response.status == 409){
-                     this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('group_management.delete_admin_group_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }else{
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('group_management.delete_node_error'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            });
+    
         },
 
         updateSelectedNode(data){
