@@ -803,6 +803,23 @@ export default {
                     });
                 }
             }
+            }).catch((error) => {
+                if (error.response.status == 409){
+                     this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.delete_admin_group_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }else{
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.delete_node_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            });
         },
 
         updateSelectedNode(data){
