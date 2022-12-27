@@ -1304,7 +1304,7 @@
         "domain_admin_privilege": "Etki Alanı Yetkisi",
         "domain_admin_description": "İstemcilerin etki alanına girmesi için etki alanı yetkisi (Domain Admin)",
         "domain_admin_privilege_confirm_message": "Kullanıcı grubuna etki alanı yetkisi verilecektir, emin misiniz?",
-        "domain_admin_delete_confirm_message": "Kullanıcı grubundan etki alanı yetkisi silinecektir, emin misiniz?"
+        "domain_admin_delete_confirm_message": "Kullanıcı grubundan etki alanı yetkisi silinecektir, emin misiniz?",
         "delete_admin_group_error": "Admin Grup silinemez."
     },
     "policy_management": {
