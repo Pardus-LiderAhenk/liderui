@@ -6,8 +6,9 @@
 
 export const PreferencesChrome = {
     //		General preference
-            checkDefaultBrowser: "",
-            homePage: "",
+            DefaultBrowserSettingEnabled: "",
+            ShowHomeButton : "",
+            HomepageLocation: "",
             pageMode: "",
             useDownloadDir: "",
             downloadDir: "",

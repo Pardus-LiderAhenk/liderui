@@ -3,27 +3,52 @@
         <div class="p-fluid p-formgrid">
             <h6>{{$t('policy_management.profile.browser.start')}}</h6>
             <div class="p-field p-grid">
-                <InputSwitch id="checkDefaultBrowser" class="p-col-fixed" v-model="checkDefaultBrowser"/>
-                <label for="checkDefaultBrowser" class="p-col">{{$t('policy_management.profile.browser.browser_settings_notify')}}</label>
+                <InputSwitch id="DefaultBrowserSettingEnabled" class="p-col-fixed" v-model="checkDefaultBrowser"/>
+                <label for="DefaultBrowserSettingEnabled" class="p-col">{{$t("Chrome'un varsayılan tarayıcı olduğunu her zaman kontrol et")}}</label>
+            </div>
+            <h6>{{$t('Yer işaret çubuğu')}}</h6>
+            <div class="p-field p-grid">
+                <InputSwitch id="DefaultBrowserSettingEnabled" class="p-col-fixed" v-model="checkDefaultBrowser"/>
+                <label for="DefaultBrowserSettingEnabled" class="p-col">{{$t("Yer işaret çubuğunu göster")}}</label>
             </div>
             <div class="p-field">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-12 p-md-6">
-                        <label>{{$t('policy_management.profile.browser.when_firefox_start')}}</label>
-                        <Dropdown
-                            v-model="pageMode"
-                            :options="[{name:$t('policy_management.profile.browser.show_homepage'), value:'1'},
-                                {name: $t('policy_management.profile.browser.show_blank_page'), value:'0'},
-                                {name: $t('policy_management.profile.browser.show_windows_and_tabs_from_last_time'), value: '3'}]"
-                            optionLabel="name"
-                            optionValue="value"
-                        >
-                        </Dropdown>
+                        <label>{{$t('Chrome başlatıldığında')}}</label>
+                        <div class="p-field p-grid">
+                            <InputSwitch id="ShowHomeButton" class="p-col-fixed" v-model="checkDefaultBrowser"/>
+                            <label for="ShowHomeButton" class="p-col">{{$t("Ana Sayfa düğmesini göster")}}</label>
+                        </div>
+
+                        <div class="p-field p-grid">
+                            <RadioButton value="true" v-model="useDownloadDir" id="useDownloadDir1"/>
+                            <label for="useDownloadDir1" class="p-col">{{$t('Yeni sekme sayfası')}}</label>
+                            <InputText class="p-inputtext-sm p-col" type="text" 
+                                :disabled="useDownloadDir == 'false'"
+                                v-model="downloadDir" 
+                                :placeholder="$t('policy_management.profile.browser.save_directory')"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <RadioButton id="useDownloadDir2" value="false" v-model="useDownloadDir"/>
+                            <label for="useDownloadDir2" class="p-col">{{$t('')}}</label>
+                        </div>
+                        
+                        <h6>{{$t('policy_management.profile.browser.downloads')}}</h6>
+                        <div class="p-field p-grid">
+                            <RadioButton value="true" v-model="useDownloadDir" id=""/>
+                            <label for="" class="p-col">{{$t('')}}</label>
+                            <InputText class="p-inputtext-sm p-col" type="text" 
+                                :disabled="useDownloadDir == 'false'"
+                                v-model="downloadDir" 
+                                :placeholder="$t('')"/>
+                        </div>
+                        <div class="p-field p-grid">
+                            <RadioButton id="useDownloadDir2" value="false" v-model="useDownloadDir"/>
+                            <label for="useDownloadDir2" class="p-col">{{$t('')}}</label>
+                        </div>
+                        
                     </div>
-                    <div class="p-field p-col-12 p-md-6">
-                        <label>{{$t('policy_management.profile.browser.homepage')}}</label>
-                        <InputText class="p-inputtext-sm" type="text" v-model="homePage" placeholder="https://liderahenk.org/"/>
-                    </div>
+                   
                 </div>
             </div>
             <h6>{{$t('policy_management.profile.browser.downloads')}}</h6>

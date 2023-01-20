@@ -26,6 +26,13 @@
                         </TabPanel>
                         <TabPanel>
                             <template #header>
+                                <i class="pi pi-clone"></i>
+                                <span>&nbsp;{{$t('Eklenti ayarları')}}</span>
+                            </template>
+                            <extension-settings :selectedProfileData="selectedProfileData" ref="extensionSettings"></extension-settings>
+                        </TabPanel>
+                        <TabPanel>
+                            <template #header>
                                 <i class="pi pi-lock"></i>
                                 <span>&nbsp;{{$t('policy_management.profile.browser.privacy_settings')}}</span>
                             </template>
@@ -63,6 +70,7 @@ import GeneralSettings from './Tabs/GeneralSettings.vue';
 import PrivacySettings from './Tabs/PrivacySettings.vue';
 import ProxySettings from './Tabs/ProxySettings.vue';
 import OtherSettings from './Tabs/OtherSettings.vue';
+import ExtensionSettings from './Tabs/ExtensionSettings.vue';
 
 export default {
     props: {
@@ -80,7 +88,8 @@ export default {
         BaseProfile,
         GeneralSettings,
         PrivacySettings,
-        ProxySettings
+        ProxySettings,
+        ExtensionSettings
 
     },
 
@@ -144,6 +153,11 @@ export default {
 
             let privacyPreferences = this.$refs.privacySettings.getPrivacyPreferences();
             privacyPreferences.forEach(element => {
+                preferencesChromeList.push(element);
+            });
+
+            let extensionPreferences = this.$refs.extensionSettings.getExtensionPreferences();
+            extensionPreferences.forEach(element => {
                 preferencesChromeList.push(element);
             });
 
