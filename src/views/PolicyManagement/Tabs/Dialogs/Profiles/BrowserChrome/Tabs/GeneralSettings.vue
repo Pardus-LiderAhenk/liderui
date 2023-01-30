@@ -1,102 +1,87 @@
 <template>
     <div>
         <div class="p-fluid p-formgrid">
-            <h6>{{$t('policy_management.profile.browser.start')}}</h6>
-            <div class="p-field p-grid">
-                <InputSwitch id="DefaultBrowserSettingEnabled" class="p-col-fixed" v-model="checkDefaultBrowser"/>
-                <label for="DefaultBrowserSettingEnabled" class="p-col">{{$t("Chrome'un varsayılan tarayıcı olduğunu her zaman kontrol et")}}</label>
+            <h6>{{$t('Chrome Başlangıçta')}}</h6>
+            <!-- <div class="p-field p-grid">
+                <InputSwitch id="" class="p-col-fixed" v-model=""/>
+                <label for="" class="p-col">{{$t("Yeni sekme sayfasını aç")}}</label>
             </div>
-            <h6>{{$t('Yer işaret çubuğu')}}</h6>
             <div class="p-field p-grid">
-                <InputSwitch id="DefaultBrowserSettingEnabled" class="p-col-fixed" v-model="checkDefaultBrowser"/>
-                <label for="DefaultBrowserSettingEnabled" class="p-col">{{$t("Yer işaret çubuğunu göster")}}</label>
-            </div>
-            <div class="p-field">
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col-12 p-md-6">
-                        <label>{{$t('Chrome başlatıldığında')}}</label>
-                        <div class="p-field p-grid">
-                            <InputSwitch id="ShowHomeButton" class="p-col-fixed" v-model="checkDefaultBrowser"/>
-                            <label for="ShowHomeButton" class="p-col">{{$t("Ana Sayfa düğmesini göster")}}</label>
-                        </div>
+                <InputSwitch id="" class="p-col-fixed" v-model=""/>
+                <label for="" class="p-col">{{$t("Kaldığım yerde devam et")}}</label>
+            </div> -->
+            <div class="p-field p-grid" >
+                <InputSwitch id="NewTabPageLocation" class="p-col-fixed"  v-model="NewTabPageLocation"/>
+                <label for="NewTabPageLocation" class="p-col">{{$t("Belirli bi sayfayı aç")}}</label>
 
-                        <div class="p-field p-grid">
-                            <RadioButton value="true" v-model="useDownloadDir" id="useDownloadDir1"/>
-                            <label for="useDownloadDir1" class="p-col">{{$t('Yeni sekme sayfası')}}</label>
-                            <InputText class="p-inputtext-sm p-col" type="text" 
-                                :disabled="useDownloadDir == 'false'"
-                                v-model="downloadDir" 
-                                :placeholder="$t('policy_management.profile.browser.save_directory')"/>
-                        </div>
-                        <div class="p-field p-grid">
-                            <RadioButton id="useDownloadDir2" value="false" v-model="useDownloadDir"/>
-                            <label for="useDownloadDir2" class="p-col">{{$t('')}}</label>
-                        </div>
-                        
-                        <h6>{{$t('policy_management.profile.browser.downloads')}}</h6>
-                        <div class="p-field p-grid">
-                            <RadioButton value="true" v-model="useDownloadDir" id=""/>
-                            <label for="" class="p-col">{{$t('')}}</label>
-                            <InputText class="p-inputtext-sm p-col" type="text" 
-                                :disabled="useDownloadDir == 'false'"
-                                v-model="downloadDir" 
-                                :placeholder="$t('')"/>
-                        </div>
-                        <div class="p-field p-grid">
-                            <RadioButton id="useDownloadDir2" value="false" v-model="useDownloadDir"/>
-                            <label for="useDownloadDir2" class="p-col">{{$t('')}}</label>
-                        </div>
-                        
-                    </div>
-                   
-                </div>
+                <InputText class="p-inputtext-sm p-col" type="text" 
+                    :disabled="NewTabPageLocation == 'false'"
+                    v-model="NewTabPageLocation" 
+                    :placeholder="$t('https://www.google.com')"/>
             </div>
-            <h6>{{$t('policy_management.profile.browser.downloads')}}</h6>
-            <div class="p-field p-grid">
-                <RadioButton value="true" v-model="useDownloadDir" id="useDownloadDir1"/>
-                <label for="useDownloadDir1" class="p-col">{{$t('policy_management.profile.browser.save_files_here')}}</label>
+
+            <h6>{{$t('Görünüm')}}</h6>
+            <div class="p-field">
+                <InputSwitch id="ShowHomeButton" class="p-col-fixed" v-model="ShowHomeButton"/>
+                <label for="ShowHomeButton" class="p-col">{{$t("Anasayfa butonunu göster ")}}</label>
+            </div>
+            <div class="p-field p-grid" v-if="ShowHomeButton == true">
+                <InputSwitch id="HomepageIsNewTabPage" class="p-col-fixed" v-model="HomepageIsNewTabPage"/>
+                <label for="HomepageIsNewTabPage" class="p-col">{{$t("Yeni sekme sayfasını aç")}}</label>
+            </div>
+            <div class="p-field p-grid" v-if="ShowHomeButton == true" >
+                <InputSwitch id="HomepageLocation" class="p-col-fixed" v-model="HomepageLocation"/>
+                <label for="HomepageLocation" class="p-col">{{$t("Belirli bi sayfayı aç")}}</label>
+
                 <InputText class="p-inputtext-sm p-col" type="text" 
                     :disabled="useDownloadDir == 'false'"
                     v-model="downloadDir" 
-                    :placeholder="$t('policy_management.profile.browser.save_directory')"/>
+                    :placeholder="$t('liderahenk.com')"/>
+            </div>
+
+            <h6>{{$t('indirilenler')}}</h6>
+            <div class="p-field p-grid">
+                <RadioButton value="true" v-model="DefaultDownloadDirectory" id="DefaultDownloadDirectory"/>
+                <label for="DefaultDownloadDirectory" class="p-col">{{$t('policy_management.profile.browser.save_files_here')}}</label>
+                <InputText class="p-inputtext-sm p-col" type="text" 
+                    :disabled="useDownloadDir == 'false'"
+                    v-model="downloadDir" 
+                    :placeholder="$t('/home/${user_name}/Downloads')"/>
             </div>
             <div class="p-field p-grid">
-                <RadioButton id="useDownloadDir2" value="false" v-model="useDownloadDir"/>
-                <label for="useDownloadDir2" class="p-col">{{$t('policy_management.profile.browser.ask_each_time_where_to_save_files')}}</label>
+                <RadioButton id="PromptForDownloadLocation" value="false" v-model="PromptForDownloadLocation"/>
+                <label for="PromptForDownloadLocation" class="p-col">{{$t('İndirmeden önce her dosyanın nereye kaydedileceğini sor')}}</label>
             </div>
+
             <h6>Sekmeler</h6>
             <div class="p-field p-grid">
-                <InputSwitch id="openNewWindow" class="p-col-fixed" v-model="openNewWindow"/>
-                <label for="openNewWindow" class="p-col">{{$t('policy_management.profile.browser.open_links_in_new_tab')}}</label>
+                <InputSwitch id="BrowserSignin" class="p-col-fixed" v-model="BrowserSignin"/>
+                <label for="BrowserSignin" class="p-col">{{$t('Chrome da oturum açmaya izin ver')}}</label>
             </div>
             <div class="p-field p-grid">
-                <InputSwitch id="warnOnClose" class="p-col-fixed" v-model="warnOnClose"/>
-                <label for="warnOnClose" class="p-col">{{$t('policy_management.profile.browser.multiple_tabs_warnings')}}</label>
+                <InputSwitch id="AutoFillEnabled" class="p-col-fixed" v-model="AutoFillEnabled"/>
+                <label for="AutoFillEnabled" class="p-col">{{$t('Aramaları ve URL leri otomatik tamamla')}}</label>
             </div>
             <div class="p-field p-grid">
-                <InputSwitch id="warnOnOpen" class="p-col-fixed" v-model="warnOnOpen"/>
-                <label for="warnOnOpen" class="p-col">{{$t('policy_management.profile.browser.firefox_slowing_warning')}}</label>
+                <InputSwitch id="SafeBrowsingEnabled" class="p-col-fixed" v-model="SafeBrowsingEnabled"/>
+                <label for="SafeBrowsingEnabled" class="p-col">{{$t('Aramaları ve göz atmayı daha iyi yap')}}</label>
             </div>
             <div class="p-field p-grid">
-                <InputSwitch id="restoreOnDemand" class="p-col-fixed" v-model="restoreOnDemand"/>
-                <label for="restoreOnDemand" class="p-col">{{$t('policy_management.profile.browser.loading_tabs_until_selected')}}</label>
+                <InputSwitch id="AllowSystemNotifications" class="p-col-fixed" v-model="AllowSystemNotifications"/>
+                <label for="AllowSystemNotifications" class="p-col">{{$t('Goggle Chrome un sistem bildirimlerini kullanmasına izin ver')}}</label>
             </div>
             <div class="p-field p-grid">
-                <InputSwitch id="loadInBackground" class="p-col-fixed" v-model="loadInBackground"/>
-                <label for="loadInBackground" class="p-col">{{$t('policy_management.profile.browser.when_the_new_tabs_opens_switch_to_that')}}</label>
+                <InputSwitch id="IncognitoModeAvailability" class="p-col-fixed" v-model="IncognitoModeAvailability"/>
+                <label for="IncognitoModeAvailability" class="p-col">{{$t('Gizli mod kullanmasına izin ver')}}</label>
             </div>
-            <h6>{{$t('policy_management.profile.browser.plugin_installation')}}</h6>
-            <div class="p-field p-grid">
-                <InputSwitch id="enableXpInstall" class="p-col-fixed" v-model="enableXpInstall"/>
-                <label for="enableXpInstall" class="p-col">{{$t('policy_management.profile.browser.block_plugin_installation')}}</label>
-            </div>
+            
         </div>
     </div>
 </template>
 
 <script>
 
-import Preferences from './PreferencesChrome.js'
+import PreferencesChrome from './PreferencesChrome'
 
 export default {
 
@@ -110,17 +95,19 @@ export default {
     data() {
         return {
     //		General preferences
-            checkDefaultBrowser: false,
-            homePage: "",
-            pageMode: "1",
-            useDownloadDir: "false",
-            downloadDir: "",
-            openNewWindow: false,
-            warnOnClose: false,
-            warnOnOpen: false,
-            restoreOnDemand: false,
-            loadInBackground: false,
-            enableXpInstall: false,
+            NewTabPageLocation : "",
+            HomepageIsNewTabPage : false,
+            ShowHomeButton : false,
+            HomepageLocation : "",
+            DefaultDownloadDirectory:"",
+            PromptForDownloadLocation: false,
+            SideSearchEnabled:"",
+            BookmarkBarEnabled: false,
+            IncognitoModeAvailability: "1",
+            BrowserSignin:false,
+            AutoFillEnabled:false,
+            SafeBrowsingEnabled:false,
+            AllowSystemNotifications:false,
             generalPreferences: []
         }
     },
@@ -129,41 +116,39 @@ export default {
         if (this.selectedProfileData) {
             this.setGeneralPreferences();
         } else {
-            this.checkDefaultBrowser = false,
-            this.homePage = "";
-            this.pageMode = "1";
-            this.useDownloadDir = "false";
-            this.downloadDir = "";
-            this.openNewWindow = false;
-            this.warnOnClose = false;
-            this.warnOnOpen = false;
-            this.restoreOnDemand = false;
-            this.loadInBackground = false;
-            this.enableXpInstall = false;
+            this.NewTabPageLocation = "",
+            this.HomepageIsNewTabPage = false,
+            this.ShowHomeButton = false,
+            this.HomepageLocation = "";
+            this.DefaultDownloadDirectory = "";
+            this.PromptForDownloadLocation = false;
+            this.SideSearchEnabled = "";
+            this.BookmarkBarEnabled = false;
+            this.IncognitoModeAvailability = "1";
+            this.BrowserSignin=false;
+            this.AutoFillEnabled=false;
+            this.SafeBrowsingEnabled=false;
+            this.AllowSystemNotifications=false;
         }
     },
 
     methods: {
         getGeneralPreferences() {
-            this.addToPreferences(Preferences.checkDefaultBrowser, this.checkDefaultBrowser.toString());
-            this.addToPreferences(Preferences.pageMode, this.pageMode);
-            if (this.homePage) {
-                this.addToPreferences(Preferences.homePage, this.homePage);
-            }
-            if (this.useDownloadDir == "true") {
-                this.addToPreferences(Preferences.useDownloadDir, "true");
-                this.addToPreferences(Preferences.useCustomDownloadDir, "2");
-                this.addToPreferences(Preferences.downloadDir, this.downloadDir);
+
+            if (this.ShowHomeButton == "true") {
+                this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, "true");
+                this.addToPreferences(PreferencesChrome.HomepageLocation, "");
             } else {
-                this.addToPreferences(Preferences.useDownloadDir, "false");
-                this.addToPreferences(Preferences.useCustomDownloadDir, "1");
+                this.addToPreferences(PreferencesChrome.HomepageLocation, "false");
+                this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, "");
             }
-            this.openNewWindow ? this.addToPreferences(Preferences.openNewWindow, "3"): this.addToPreferences(Preferences.openNewWindow, "2");
-            this.warnOnClose ? this.addToPreferences(Preferences.warnOnClose, "true") : this.addToPreferences(Preferences.warnOnClose, "false");
-            this.warnOnOpen ? this.addToPreferences(Preferences.warnOnOpen, "true") : this.addToPreferences(Preferences.warnOnOpen, "false");
-            this.restoreOnDemand ? this.addToPreferences(Preferences.restoreOnDemand, "true") : this.addToPreferences(Preferences.restoreOnDemand, "false");
-            this.loadInBackground ? this.addToPreferences(Preferences.loadInBackground, "false") : this.addToPreferences(Preferences.loadInBackground, "true");
-            this.enableXpInstall ? this.addToPreferences(Preferences.enableXpInstall, "false") : this.addToPreferences(Preferences.enableXpInstall, "true");
+            this.SideSearchEnabled ? this.addToPreferences(PreferencesChrome.SideSearchEnabled, "true") : this.addToPreferences(PreferencesChrome.SideSearchEnabled, "false");
+            this.BookmarkBarEnabled ? this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "true") : this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "false");
+            this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "true") : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "false");
+            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, "true") : this.addToPreferences(PreferencesChrome.BrowserSignin, "false");
+            this.AutoFillEnabled ? this.addToPreferences(PreferencesChrome.AutoFillEnabled, "true") : this.addToPreferences(PreferencesChrome.AutoFillEnabled, "false");
+            this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true");
+            this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true");
 
             return this.generalPreferences;
         },
@@ -178,40 +163,27 @@ export default {
         setGeneralPreferences() {
             let prefList = this.selectedProfileData.preferences;
             prefList.forEach(element => {
-                if (element.preferenceName == Preferences.checkDefaultBrowser) {
-                    if (element.value == 'true') {
-                        this.checkDefaultBrowser = true;
-                    }
+    
+                if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == "true") {
+                    this.IncognitoModeAvailability = true;
                 }
-                if (element.preferenceName == Preferences.pageMode) {
-                    this.pageMode = element.value;
+                if (element.preferenceName == PreferencesChrome.SideSearchEnabled && element.value == "true") {
+                    this.SideSearchEnabled = true;
                 }
-                if (element.preferenceName == Preferences.homePage) {
-                    this.homePage = element.value;
+                if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == "true") {
+                    this.IncognitoModeAvailability = true;
                 }
-                if (element.preferenceName == Preferences.useDownloadDir) {
-                     this.useDownloadDir = element.value;
+                if (element.preferenceName == PreferencesChrome.BrowserSignin && element.value == "true") {
+                    this.BrowserSignin = true;
                 }
-                if (element.preferenceName == Preferences.downloadDir) {
-                    this.downloadDir = element.value;
+                if (element.preferenceName == PreferencesChrome.AutoFillEnabled && element.value == "false") {
+                    this.AutoFillEnabled = true;
                 }
-                if (element.preferenceName == Preferences.openNewWindow && element.value == "3") {
-                    this.openNewWindow = true;
+                if (element.preferenceName == PreferencesChrome.SafeBrowsingEnabled && element.value == "true") {
+                    this.SafeBrowsingEnabled = true;
                 }
-                if (element.preferenceName == Preferences.warnOnClose && element.value == "true") {
-                    this.warnOnClose = true;
-                }
-                if (element.preferenceName == Preferences.warnOnOpen && element.value == "true") {
-                    this.warnOnOpen = true;
-                }
-                if (element.preferenceName == Preferences.loadInBackground && element.value == "false") {
-                    this.loadInBackground = true;
-                }
-                if (element.preferenceName == Preferences.restoreOnDemand && element.value == "true") {
-                    this.restoreOnDemand = true;
-                }
-                if (element.preferenceName == Preferences.enableXpInstall && element.value == "false") {
-                    this.enableXpInstall = true;
+                if (element.preferenceName == PreferencesChrome.AllowSystemNotifications && element.value == "false") {
+                    this.AllowSystemNotifications = true;
                 }
             });
         }

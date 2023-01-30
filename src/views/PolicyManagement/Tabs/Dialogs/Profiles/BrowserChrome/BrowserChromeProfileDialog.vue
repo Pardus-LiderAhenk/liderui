@@ -167,7 +167,7 @@ export default {
             });
 
             this.profileData = {
-                "preferences": preferencesChromeList
+                "preferences": data
             }
         },
     },

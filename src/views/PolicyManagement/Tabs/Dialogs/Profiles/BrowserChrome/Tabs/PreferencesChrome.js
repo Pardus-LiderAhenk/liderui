@@ -6,19 +6,27 @@
 
 export const PreferencesChrome = {
     //		General preference
-            DefaultBrowserSettingEnabled: "",
-            ShowHomeButton : "",
-            HomepageLocation: "",
-            pageMode: "",
-            useDownloadDir: "",
-            downloadDir: "",
-            useCustomDownloadDir: "",
-            openNewWindow: "",
-            warnOnClose: "",
-            warnOnOpen: "",
-            restoreOnDemand: "",
-            loadInBackground: "",
-            enableXpInstall: "",
+    //Başlangıçta
+            NewTabPageLocation:"NewTabPageLocation",
+            HomepageIsNewTabPage:"HomepageIsNewTabPage",//yeni sekme aç
+            ShowHomeButton : "ShowHomeButton",//true
+            HomepageLocation : "HomepageLocation", //url gir input alanı
+    //indirme alanı
+            DefaultDownloadDirectory : "DefaultDownloadDirectory",///home/${user_name}/Downloads
+            PromptForDownloadLocation : "PromptForDownloadLocation", //indirme konumunu her seferinde sor
+            //sekmeler
+
+            SideSearchEnabled : "SideSearchEnabled",
+            BookmarkBarEnabled : "BookmarkBarEnabled",
+            IncognitoModeAvailability: "IncognitoModeAvailability",
+            
+            BrowserSignin:"BrowserSignin",
+            AutoFillEnabled:"AutoFillEnabled",
+            SafeBrowsingEnabled:"SafeBrowsingEnabled",
+            AllowSystemNotifications:"AllowSystemNotifications",
+
+
+
             //Proxy preference
             proxyType: "",
             httpProxy: "",
