@@ -10,6 +10,10 @@ const policyExecuteUrl = '/api/policy/execute';
 const policyPolicyGroupUrl = '/api/policy/policies-for-group';
 const policyPolicyUnassigmentUrl = '/api/policy/unassignment';
 const policyActivePolicyUrl = '/api/policy/active-policies';
+const addPolicyExceptionUrl = '/api/policy-exception/add';
+const getPolicyExceptionByDnUrl = '/api/policy-exception/list/dn/{dn}';
+const getPolicyExceptionByPolicyUrl = '/api/policy-exception/list/policy/{id}';
+const deletePolicyExceptionUrl = '/api/policy-exception/delete/{id}';
 
 class PolicyService {
 
@@ -101,6 +105,33 @@ class PolicyService {
     async policyActivePolicy(){
         try {
             const response = await axios.get(policyActivePolicyUrl);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async addPolicyException(params) {
+        try {
+            const response = await axios.post(addPolicyExceptionUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async getPolicyExceptionByPolicy(id) {
+        try {
+            const response = await axios.get(getPolicyExceptionByPolicyUrl.replace("{id}", id));
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async deletePolicyException(id) {
+        try {
+            const response = await axios.delete(deletePolicyExceptionUrl.replace("{id}", id));
             return { response };
         } catch (error) {
             return { error: error }

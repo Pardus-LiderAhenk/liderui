@@ -1,14 +1,29 @@
 <template>
     <Dialog :header="$t('computer.task.toast_summary')" 
         v-model:visible="applyPolicyConfirmDialog"  
-        :modal="true" :style="{width: '20vw'}"
+        :modal="true" :style="{width: '30vw'}"
         @hide="applyPolicyConfirmDialog = false">
-        <div class="confirmation-content">
-            <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
-            <span>
-                {{ $t('group_management.apply_policy_confirm_message')}}
-            </span>
+        <div class="p-fluid">
+            <div class="p-field">
+                <div class="confirmation-content">
+                    <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+                    <span>
+                        {{ $t('group_management.apply_policy_confirm_message')}}
+                    </span>
+                </div>
+            </div>
+            <div class="p-field p-d-flex p-jc-start">
+                <div>
+                    <Button type="button" class="p-button-sm p-button-link" label="Add Policy Exception"
+                        :badge="policyExceptionData ? policyExceptionData.members.length : '0'" 
+                        @click="addPolicyExceptionDialog = true"
+                        badgeClass="p-badge-danger"
+                        v-tooltip.bottom="'Exception users and groups'"
+                    />
+                </div>
+            </div>
         </div>
+        
         <template #footer>
             <Button 
                 :label="$t('group_management.cancel')" 
@@ -69,7 +84,6 @@
                                     :title="$t('group_management.apply_policy')" 
                                     @click.prevent="applyPolicyConfirmDialog= true; selectedPolicy = slotProps.data">
                                 </Button>
-                                
                             </div>
                         </template>
                     </Column>
@@ -82,6 +96,15 @@
             />
         </template>
     </Dialog>
+
+    <AddPolicyExceptionDialog v-if="addPolicyExceptionDialog"
+        :addPolicyExceptionDialog="addPolicyExceptionDialog"
+        @close-policy-exception-dialog="addPolicyExceptionDialog = false"
+        :selectedPolicy="selectedPolicy"
+        @addPolicyException="(event) => policyExceptionData = event"
+        :selectedPolicyException="policyExceptionData? policyExceptionData.members: []"
+    >
+    </AddPolicyExceptionDialog>
     </div>
 </template>
 
@@ -93,8 +116,12 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import { policyService } from "../../../../services/PolicyManagement/PolicyService.js";
+import AddPolicyExceptionDialog from "./AddPolicyExceptionDialog.vue"
 
 export default {
+    components: {
+        AddPolicyExceptionDialog
+    },
      props: {
         applyPolicyDialog: {
             type: Boolean,
@@ -114,6 +141,8 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
+            addPolicyExceptionDialog: false,
+            policyExceptionData: null
         }
     },
 
@@ -179,8 +208,25 @@ export default {
                 "dnList": dnList,
 			};
 
+            console.log(this.policyExceptionData)
+
+            if (this.policyExceptionData && this.policyExceptionData.members.length > 0) {
+                const{response,error} = await  policyService.addPolicyException(this.policyExceptionData);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    this.addPolicyExceptionDialog = false;
+                } else {
+                    console.log(response)
+                }
+            }
+
             const{response,error} = await policyService.policyExecute(params);
-            if(error){
+            if(error) {
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('group_management.apply_policy_error')+ " \n"+error, 
@@ -188,7 +234,7 @@ export default {
                     life: 3000
                 });
             }
-            else{
+            else {
                 if(response.status == 200){
                     if (response.data) {
                         this.$toast.add({
