@@ -38,7 +38,7 @@
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
                 <div class="p-col-4"><b>Policy Exception</b></div>
                 <div class="p-col-8">
-                    <Button type="button" class="p-button-sm p-button-link" label="Click For Policy Exception List"
+                    <Button type="button" class="p-button-link" label="Click For Policy Exception List"
                         @click="policyExceptionDialogList = true"
                         badgeClass="p-badge-danger"
                         style="margin-left: -10px"
@@ -155,8 +155,6 @@
         :policyExceptionDialogList="policyExceptionDialogList"
         @close-policy-exception-list-dialog="policyExceptionDialogList = false"
         :selectedPolicy="selectedPolicy ? selectedPolicy.policyImpl : null"
-        @addPolicyException="(event) => policyExceptionData = event"
-        :selectedPolicyException="policyExceptionData? policyExceptionData.members: []"
     >
     </PolicyExceptionListDialog>
     </div>
@@ -279,7 +277,7 @@ export default {
                 }
             }
             this.unassignPolicyDialog = false;
-        }
+        },
     },
 
     watch: {

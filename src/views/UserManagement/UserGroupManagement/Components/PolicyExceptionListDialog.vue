@@ -16,7 +16,13 @@
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
                         :rowsPerPageOptions="[10,25,50]">
                         <template #header>
-                            <div class="p-d-flex p-jc-end">
+                            <div class="p-field p-d-flex p-jc-between">
+                                <div>
+                                    <Button type="button" class="p-button-sm" label="Add Policy Exception"
+                                        @click="addPolicyExceptionDialog = true"
+                                        icon="pi pi-plus"
+                                    />
+                                </div>
                                 <div>
                                     <span class="p-input-icon-left">
                                         <i class="pi pi-search"/>
@@ -94,6 +100,14 @@
                 />
             </template>
         </Dialog>
+
+        <AddPolicyExceptionDialog v-if="addPolicyExceptionDialog"
+            :addPolicyExceptionDialog="addPolicyExceptionDialog"
+            @close-policy-exception-dialog="addPolicyExceptionDialog = false"
+            :selectedPolicy="selectedPolicy"
+            @addPolicyException="addPolicyException"
+        >
+        </AddPolicyExceptionDialog>
     </div>  
 </template>
 
@@ -107,8 +121,13 @@
 import {FilterMatchMode} from 'primevue/api';
 import { mapGetters, mapActions } from "vuex"
 import { policyService } from '../../../../services/PolicyManagement/PolicyService';
+import AddPolicyExceptionDialog from "./AddPolicyExceptionDialog.vue"
 
 export default {
+
+    components: {
+        AddPolicyExceptionDialog
+    },
 
     props: ["policyExceptionDialogList", "selectedPolicy"],
 
@@ -119,7 +138,8 @@ export default {
             loading: false,
             domainAdminConfirmDialog: false,
             selectedPolicyException: null,
-            deletePolicyExceptionConfirm: false
+            deletePolicyExceptionConfirm: false,
+            addPolicyExceptionDialog: false
         }
     },
 
@@ -172,7 +192,6 @@ export default {
 
         async deleteEntryFromPolicyException() {
             const{response,error} = await policyService.deletePolicyException(this.selectedPolicyException.id);
-            console.log(response)
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -192,6 +211,23 @@ export default {
                     });
                 }
                 this.deletePolicyExceptionConfirm = false;
+            }
+        },
+
+        async addPolicyException(data) {
+            if (data && data.members.length > 0) {
+                const { response,error } = await  policyService.addPolicyException(data);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    this.addPolicyExceptionDialog = false;
+                } else {
+                    this.getPolicyExceptionOfSelectedPolicy();
+                }
             }
         }
 

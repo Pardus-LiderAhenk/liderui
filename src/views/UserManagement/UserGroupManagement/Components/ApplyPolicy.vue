@@ -14,7 +14,7 @@
             </div>
             <div class="p-field p-d-flex p-jc-start">
                 <div>
-                    <Button type="button" class="p-button-sm p-button-link" label="Add Policy Exception"
+                    <Button type="button" class="p-button-link" label="Add Policy Exception"
                         :badge="policyExceptionData ? policyExceptionData.members.length : '0'" 
                         @click="addPolicyExceptionDialog = true"
                         badgeClass="p-badge-danger"
@@ -208,8 +208,6 @@ export default {
                 "dnList": dnList,
 			};
 
-            console.log(this.policyExceptionData)
-
             if (this.policyExceptionData && this.policyExceptionData.members.length > 0) {
                 const{response,error} = await  policyService.addPolicyException(this.policyExceptionData);
                 if(error){
@@ -220,12 +218,10 @@ export default {
                         life: 3000
                     });
                     this.addPolicyExceptionDialog = false;
-                } else {
-                    console.log(response)
                 }
             }
 
-            const{response,error} = await policyService.policyExecute(params);
+            const {response,error} = await policyService.policyExecute(params);
             if(error) {
                 this.$toast.add({
                     severity:'error', 

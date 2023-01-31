@@ -84,35 +84,6 @@
                 />
             </template>
         </Dialog>
-
-        <Dialog :header="$t('computer.task.toast_summary')" 
-            v-model:visible="domainAdminConfirmDialog"  
-            :modal="true" :style="{width: '20vw'}"
-            @hide="domainAdminConfirmDialog = false">
-            <div class="confirmation-content">
-                <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
-                <span v-if="isDomainAdmin">
-                    {{ $t('group_management.domain_admin_privilege_confirm_message')}}
-                </span>
-                <span v-else>
-                    {{ $t('group_management.domain_admin_delete_confirm_message')}}
-                </span>
-            </div>
-            <template #footer>
-                <Button 
-                    :label="$t('group_management.cancel')" 
-                    icon="pi pi-times" 
-                    @click="domainAdminConfirmDialog = false" 
-                    class="p-button-text p-button-sm"
-                />
-                <Button 
-                    :label="$t('group_management.yes')"
-                    icon="pi pi-check" 
-                    @click="updateDomainAdmin"
-                    class="p-button-sm"
-                />
-            </template>
-        </Dialog>
     </div>  
 </template>
 
@@ -127,7 +98,6 @@
 import {FilterMatchMode} from 'primevue/api';
 import { mapGetters, mapActions } from "vuex"
 import { userGroupsService } from '../../../../services/Settings/UserGroupsService.js';
-import { policyService } from '../../../../services/PolicyManagement/PolicyService';
 
 export default {
 
@@ -141,7 +111,6 @@ export default {
             attributesMultiValue: false,
             loading: false,
             isDomainAdmin: false,
-            domainAdminConfirmDialog: false,
             selectedMembers: [],
             label: "",
             description: ""
@@ -180,14 +149,14 @@ export default {
         },
 
         getMemberOfSelectedGroup(node) {
-            this.selectedPolicyException.forEach(element => {
-                this.selectedMembers.push({
-                    member: element
-                })
-            });
-            // this.selectedMembers = this.selectedPolicyException;
-            console.log(this.selectedPolicyException)
-            console.log(node)
+            if (this.selectedPolicyException) {
+                this.selectedPolicyException.forEach(element => {
+                    this.selectedMembers.push({
+                        member: element
+                    });
+                });
+            }
+
             this.members = [];
             for (var key in node.attributesMultiValues) {
 				if (node.attributesMultiValues.hasOwnProperty(key) && key == "member") {
@@ -217,11 +186,11 @@ export default {
         async deleteMemberFromGroup(data) {
             if (this.attributesMultiValue == false) {
                 this.$toast.add({
-                        severity:'warn', 
-                        detail: this.$t('group_management.delete_member_warning_message'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+                    severity:'warn', 
+                    detail: this.$t('group_management.delete_member_warning_message'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
                 return;
             }
             this.loading = true;
@@ -317,13 +286,14 @@ export default {
         this.getMemberOfSelectedGroup(this.selectedLiderNode);
     },
 
-    watch: {
-        selectedPolicyException() {
-            console.log(this.selectedPolicyException)
-            this.selectedMembers = this.selectedPolicyException;
-           
-        }
-    },
+    // watch: {
+    //     selectedPolicyException() {
+    //         if (this.selectedPolicyException) {
+    //             console.log(this.selectedPolicyException)
+    //             this.selectedMembers = this.selectedPolicyException;    
+    //         }
+    //     }
+    // },
 }
 </script>
 
