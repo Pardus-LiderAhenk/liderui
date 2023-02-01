@@ -146,28 +146,28 @@ export default {
                 preferencesChromeList.push(element);
             });
 
-            let proxyPreferences = this.$refs.proxySettings.getProxyPreferences();
-            proxyPreferences.forEach(element => {
-                preferencesChromeList.push(element);
-            });
+            // let proxyPreferences = this.$refs.proxySettings.getProxyPreferences();
+            // proxyPreferences.forEach(element => {
+            //     preferencesChromeList.push(element);
+            // });
 
             let privacyPreferences = this.$refs.privacySettings.getPrivacyPreferences();
             privacyPreferences.forEach(element => {
                 preferencesChromeList.push(element);
             });
 
-            let extensionPreferences = this.$refs.extensionSettings.getExtensionPreferences();
-            extensionPreferences.forEach(element => {
-                preferencesChromeList.push(element);
-            });
+            // let extensionPreferences = this.$refs.extensionSettings.getExtensionPreferences();
+            // extensionPreferences.forEach(element => {
+            //     preferencesChromeList.push(element);
+            // });
 
-            let otherPreferences = this.$refs.otherSettings.getOtherPreferences();
-            otherPreferences.forEach(element => {
-                preferencesChromeList.push(element);
-            });
+            // let otherPreferences = this.$refs.otherSettings.getOtherPreferences();
+            // otherPreferences.forEach(element => {
+            //     preferencesChromeList.push(element);
+            // });
 
             this.profileData = {
-                "preferences": data
+                "preferencesChrome": preferencesChromeList
             }
         },
     },

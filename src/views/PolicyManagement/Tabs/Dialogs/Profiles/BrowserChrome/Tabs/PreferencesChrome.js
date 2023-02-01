@@ -26,34 +26,6 @@ export const PreferencesChrome = {
             AllowSystemNotifications:"AllowSystemNotifications",
 
 
-
-            //Proxy preference
-            proxyType: "",
-            httpProxy: "",
-            httpPort: "",
-            useThisServerForAllProtocols: "",
-            sslProxy: "",
-            sslPort: "",
-            ftpProxy: "",
-            ftpPort: "",
-            socksProxy: "",
-            socksPort: "",
-            socksVersion: "",
-            remoteDns: "",
-            autoProxyConfigUrl: "",
-            dontPromptForAuth: "",
-            noProxyOn: "",
-            //Privacy preference
-            dontWantToBeTracked: "",
-            rememberBrowsingDownloadHistory: "",
-            rememberSearchFormHistory: "",
-            acceptCookiesFromSites: "",
-            clearHistoryOnClose: "",
-            suggestHistory: "",
-            suggestBookmarks: "",
-            suggestOpenTabs: "",
-            keepCookiesUntil: "",
-
 }
 //taslarda command name göre ilerliyoruz
 //policy ileriliyoruz 

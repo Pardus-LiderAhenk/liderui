@@ -7,12 +7,12 @@
         </div>
         <h6>{{$t('policy_management.profile.privacy.history')}}</h6>
         <div class="p-field p-grid">
-            <InputSwitch  class="p-col-fixed" id="rememberBrowsingDownloadHistory" v-model="rememberBrowsingDownloadHistory"/>
-            <label for="rememberBrowsingDownloadHistory" class="p-col">{{$t('policy_management.profile.privacy.remember_browsing_and_download_history')}}</label>
+            <InputSwitch  class="p-col-fixed" id="AllowDeletingBrowserHistory" v-model="AllowDeletingBrowserHistory"/>
+            <label for="AllowDeletingBrowserHistory" class="p-col">{{$t('Tarayıcı geçmişi silinmesine izin ver')}}</label>
         </div>
         <div class="p-field p-grid">
-            <InputSwitch  class="p-col-fixed" id="rememberSearchFormHistory" v-model="rememberSearchFormHistory"/>
-            <label for="rememberSearchFormHistory" class="p-col">{{$t('policy_management.profile.privacy.remember_search_and_form_history')}}</label>
+            <InputSwitch  class="p-col-fixed" id="SavingBrowserHistoryDisabled" v-model="SavingBrowserHistoryDisabled"/>
+            <label for="SavingBrowserHistoryDisabled" class="p-col">{{$t('Tarayıcı geçmişini kaydetme')}}</label>
         </div>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="acceptCookiesFromSites" v-model="acceptCookiesFromSites"/>
