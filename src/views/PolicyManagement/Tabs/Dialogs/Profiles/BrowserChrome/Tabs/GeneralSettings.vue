@@ -134,13 +134,16 @@ export default {
 
     methods: {
         getGeneralPreferences() {
+            if(this.NewTabPageLocation){
+                this.addToPreferences(PreferencesChrome.NewTabPageLocation,this.NewTabPageLocation);
+            }
 
             if (this.ShowHomeButton == "true") {
                 this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, "true");
-                this.addToPreferences(PreferencesChrome.HomepageLocation, "");
+                this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocation);
             } else {
                 this.addToPreferences(PreferencesChrome.HomepageLocation, "false");
-                this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, "");
+                this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, this.HomepageLocation);
             }
             this.SideSearchEnabled ? this.addToPreferences(PreferencesChrome.SideSearchEnabled, "true") : this.addToPreferences(PreferencesChrome.SideSearchEnabled, "false");
             this.BookmarkBarEnabled ? this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "true") : this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "false");

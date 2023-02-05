@@ -13,14 +13,14 @@
                         <TabPanel>
                             <template #header>
                                 <i class="pi pi-home"></i>
-                                <span>&nbsp;{{$t('policy_management.profile.browser.general_settings')}}</span>
+                                <span>&nbsp;{{$t('policy_management.profile.chrome_browser.general_settings')}}</span>
                             </template>
                             <general-settings :selectedProfileData="selectedProfileData" ref="generalSettings"></general-settings>
                         </TabPanel>
                         <TabPanel>
                             <template #header>
                                 <i class="pi pi-globe"></i>
-                                <span>&nbsp;{{$t('policy_management.profile.browser.proxy_settings')}}</span>
+                                <span>&nbsp;{{$t('policy_management.profile.chrome_browser.proxy_settings')}}</span>
                             </template>
                             <proxy-settings :selectedProfileData="selectedProfileData" ref="proxySettings"></proxy-settings>
                         </TabPanel>
@@ -34,14 +34,14 @@
                         <TabPanel>
                             <template #header>
                                 <i class="pi pi-lock"></i>
-                                <span>&nbsp;{{$t('policy_management.profile.browser.privacy_settings')}}</span>
+                                <span>&nbsp;{{$t('policy_management.profile.chrome_browser.privacy_settings')}}</span>
                             </template>
                             <privacy-settings :selectedProfileData="selectedProfileData" ref="privacySettings"></privacy-settings>
                         </TabPanel>
                         <TabPanel>
                             <template #header>
                                 <i class="pi pi-cog"></i>
-                                <span>&nbsp;{{$t('policy_management.profile.browser.other_settings')}}</span>
+                                <span>&nbsp;{{$t('policy_management.profile.chrome_browser.other_settings')}}</span>
                             </template>
                             <other-settings :selectedProfileData="selectedProfileData" ref="otherSettings"></other-settings>
                         </TabPanel>

@@ -15,8 +15,8 @@
             <label for="SavingBrowserHistoryDisabled" class="p-col">{{$t('Tarayıcı geçmişini kaydetme')}}</label>
         </div>
         <div class="p-field p-grid">
-            <InputSwitch  class="p-col-fixed" id="acceptCookiesFromSites" v-model="acceptCookiesFromSites"/>
-            <label for="acceptCookiesFromSites" class="p-col">{{$t('policy_management.profile.privacy.accept_cookies')}}</label>
+            <InputSwitch  class="p-col-fixed" id="DefaultCookiesSetting" v-model="DefaultCookiesSetting"/>
+            <label for="DefaultCookiesSetting" class="p-col">{{$t('Çerezleri kabul et')}}</label>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-4">

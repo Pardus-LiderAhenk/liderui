@@ -7,8 +7,8 @@
 export const PreferencesChrome = {
     //		General preference
     //Başlangıçta
-            NewTabPageLocation:"NewTabPageLocation",
-            HomepageIsNewTabPage:"HomepageIsNewTabPage",//yeni sekme aç
+            NewTabPageLocation: "NewTabPageLocation",
+            HomepageIsNewTabPage: "HomepageIsNewTabPage",//yeni sekme aç
             ShowHomeButton : "ShowHomeButton",//true
             HomepageLocation : "HomepageLocation", //url gir input alanı
     //indirme alanı
@@ -20,10 +20,10 @@ export const PreferencesChrome = {
             BookmarkBarEnabled : "BookmarkBarEnabled",
             IncognitoModeAvailability: "IncognitoModeAvailability",
             
-            BrowserSignin:"BrowserSignin",
-            AutoFillEnabled:"AutoFillEnabled",
-            SafeBrowsingEnabled:"SafeBrowsingEnabled",
-            AllowSystemNotifications:"AllowSystemNotifications",
+            BrowserSignin: "BrowserSignin",
+            AutoFillEnabled: "AutoFillEnabled",
+            SafeBrowsingEnabled: "SafeBrowsingEnabled",
+            AllowSystemNotifications: "AllowSystemNotifications",
 
 
 }

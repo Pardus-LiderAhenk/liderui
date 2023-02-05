@@ -1518,10 +1518,76 @@
                 "address_bar":"Adres Çubuğu (Adres çubuğunu kullanırken, öner)",
                 "bookmarks":"Yer imleri",
                 "open_tabs":"Açık sekmeler"
+            },
+            "chrome_browser":{
+                "general_settings":"Genel Ayarlar",
+                "proxy_settings":"Vekil Sunucu Ayarları",
+                "privacy_settings":"Gizlilik ayarları",
+                "other_settings":"Diğer Ayarlar",
+                "start":"Başlangıç",
+                "when_firefox_start":"Firefox başlatıldığında",
+                "show_homepage":"Anasayfayı göster",
+                "show_blank_page":"Boş sayfa göster",
+                "show_windows_and_tabs_from_last_time":"Geçen seferden kalan pencere ve sekmeleri göster",
+                "homepage":"Ana Sayfa",
+                "downloads":"İndirilenler",
+                "save_files_here":"Dosyaları buraya kaydet",
+                "save_directory":"/home/kullanıcıAdı/İndirilenler",
+                "ask_each_time_where_to_save_files":"Dosyaların nereye kaydedileceğini her seferinde sor",
+                "open_links_in_new_tab":"Bağlantıları yeni sekmede aç",
+                "multiple_tabs_warnings":"Birden fazla sekme kapatılırken beni uyar",
+                "loading_tabs_until_selected":"Seçilene kadar sekmeleri yükleme",
+                "when_the_new_tabs_opens_switch_to_that":"Yeni sekme açıldığında, ona geç",
+                "plugin_installation":"Eklenti Kurulumu",
+                "block_plugin_installation":"Eklenti kurulumunu engelle",
+                "feature_name_cannot_be_null":"Özellik adı boş bırakılamaz",
+                "feature_value_cannot_be_null":"Özellik değeri boş bırakılamaz",
+                "chrome_feature_cannot_find":"Chrome tarayıcı özellikleri bulunamadı",
+                "feature_name":"Özellik Adı",
+                "value":"Değer"
+            },
+            "chrome_proxy":{
+                "configuring_proxy_server_to_access_the_internet":"İnternete Erişmek İçin Vekil Sunucu Yapılandır",
+                "manuel_configuration":"Elle Yapılandırma",
+                "http_proxy_server":"HTTP Vekil Sunucu",
+                "http_port":"HTTP Port",
+                "browser_settings_notify":"Firefox'un varsayılan tarayıcı olduğunu her zaman kontrol et",
+                "ssl_proxy_server":"SSL Vekil Sunucu",
+                "ssl_port":"SSL Port",
+                "ftp_proxy_server":"FTP Vekil Sunucu",
+                "ftp_port":"FTP Port",
+                "socks_proxy_server":"SOCKS Vekil Sunucu",
+                "socks_port":"SOCKS Port",
+                "socks_version":"SOCKS Sürümü",
+                "remote_dns":"Uzak DNS",
+                "using_proxy_server":"Vekil Sunucu Kullanma",
+                "automatic_proxy_configuration_url":"Otomatik Vekil Sunucu Yapılandırma URL'i",
+                "donot_ask_for_authorization_if_password_is_saved":"Eğer parola kaydedildiyse yetkilendirme için sorma",
+                "use_system_proxy_settings":"Sistem vekil sunucu ayarlarını kullan",
+                "automatically_discover_proxy_settings_for_this_network":"Bu ağ için vekil sunucu ayarlarını otomatik keşfet"
+            },
+            "chrome_privacy":{
+                "being_tracked":"Takip Edilme",
+                "tell_the_sites_that_ı_dont_want_to_be_tracked":"Sitelere takip edilmek istemediğimi söyle",
+                "history":"Geçmiş",
+                "remember_browsing_and_download_history":"Gezinme ve indirme geçmişini hatırla",
+                "remember_search_and_form_history":"Arama ve form geçmişini hatırla",
+                "accept_cookies":"Çerezleri kabul et",
+                "accept_third_party_cookies":"Üçüncü şahıs çerezleri kabul et",
+                "always":"Her zaman",
+                "from_those_visited":"Ziyaret edilenlerden",
+                "never":"Asla",
+                "keep_it_until_that_time":"Şu zamana dek tut",
+                "keep_it_until_it_expires":"Süresi dolana dek tut",
+                "when_firefox_closed":"Firefox kapatıldığında",
+                "clear_history_when_firefox_is_closed":"Firefox kapatıldığında geçmişi temizle",
+                "address_bar":"Adres Çubuğu (Adres çubuğunu kullanırken, öner)",
+                "bookmarks":"Yer imleri",
+                "open_tabs":"Açık sekmeler"
             }
 
-            
-            
+
+
         }
     },
     "reports": {
