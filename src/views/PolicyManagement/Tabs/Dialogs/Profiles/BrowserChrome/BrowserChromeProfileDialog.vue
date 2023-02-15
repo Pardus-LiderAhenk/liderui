@@ -24,13 +24,13 @@
                             </template>
                             <proxy-settings :selectedProfileData="selectedProfileData" ref="proxySettings"></proxy-settings>
                         </TabPanel>
-                        <TabPanel>
+                        <!-- <TabPanel>
                             <template #header>
                                 <i class="pi pi-clone"></i>
                                 <span>&nbsp;{{$t('Eklenti ayarları')}}</span>
                             </template>
                             <extension-settings :selectedProfileData="selectedProfileData" ref="extensionSettings"></extension-settings>
-                        </TabPanel>
+                        </TabPanel> -->
                         <TabPanel>
                             <template #header>
                                 <i class="pi pi-lock"></i>
@@ -70,7 +70,6 @@ import GeneralSettings from './Tabs/GeneralSettings.vue';
 import PrivacySettings from './Tabs/PrivacySettings.vue';
 import ProxySettings from './Tabs/ProxySettings.vue';
 import OtherSettings from './Tabs/OtherSettings.vue';
-import ExtensionSettings from './Tabs/ExtensionSettings.vue';
 
 export default {
     props: {
@@ -89,8 +88,7 @@ export default {
         GeneralSettings,
         PrivacySettings,
         ProxySettings,
-        ExtensionSettings
-
+        OtherSettings
     },
 
     data(){
@@ -161,10 +159,10 @@ export default {
             //     preferencesChromeList.push(element);
             // });
 
-            // let otherPreferences = this.$refs.otherSettings.getOtherPreferences();
-            // otherPreferences.forEach(element => {
-            //     preferencesChromeList.push(element);
-            // });
+            let otherPreferences = this.$refs.otherSettings.getOtherPreferences();
+            otherPreferences.forEach(element => {
+                preferencesChromeList.push(element);
+            });
 
             this.profileData = {
                 "preferencesChrome": preferencesChromeList

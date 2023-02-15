@@ -25,6 +25,14 @@ export const PreferencesChrome = {
             SafeBrowsingEnabled: "SafeBrowsingEnabled",
             AllowSystemNotifications: "AllowSystemNotifications",
 
+            //privacy settins
+            AllowDeletingBrowserHistory: "AllowDeletingBrowserHistory",
+            SavingBrowserHistoryDisabled: "SavingBrowserHistoryDisabled",
+            DefaultCookiesSetting: "DefaultCookiesSetting",
+            
+            ClearBrowsingDataOnExitList: "ClearBrowsingDataOnExitList",
+
+
 
 }
 //taslarda command name göre ilerliyoruz

@@ -1,10 +1,7 @@
 <template>
     <div class="p-fluid p-formgrid">
         <h6>{{$t('policy_management.profile.privacy.being_tracked')}}</h6>
-        <div class="p-field p-grid">
-            <InputSwitch  class="p-col-fixed" id="dontWantToBeTracked" v-model="dontWantToBeTracked"/>
-            <label for="dontWantToBeTracked" class="p-col">{{$t('policy_management.profile.privacy.tell_the_sites_that_ı_dont_want_to_be_tracked')}}</label>
-        </div>
+        
         <h6>{{$t('policy_management.profile.privacy.history')}}</h6>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="AllowDeletingBrowserHistory" v-model="AllowDeletingBrowserHistory"/>
@@ -18,54 +15,51 @@
             <InputSwitch  class="p-col-fixed" id="DefaultCookiesSetting" v-model="DefaultCookiesSetting"/>
             <label for="DefaultCookiesSetting" class="p-col">{{$t('Çerezleri kabul et')}}</label>
         </div>
-        <div class="p-fluid p-formgrid p-grid">
-            <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('policy_management.profile.privacy.accept_third_party_cookies')}}</label>
-                <Dropdown :disabled="!acceptCookiesFromSites"
-                    v-model="acceptThirdPartyCookies"
-                    :options="[{name: $t('policy_management.profile.privacy.always'), value:'0'},
-                            {name: $t('policy_management.profile.privacy.from_those_visited'), value: '1'},
-                            {name: $t('policy_management.profile.privacy.never'), value: '2'}]"
-                    optionLabel="name" optionValue="value"
-                >
-                </Dropdown>
-            </div>
-            <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('policy_management.profile.privacy.keep_it_until_that_time')}}</label>
-                <Dropdown :disabled="!acceptCookiesFromSites"
-                    v-model="keepCookiesUntil"
-                    :options="[{name: $t('policy_management.profile.privacy.keep_it_until_it_expires'), value:'0'},
-                            {name: $t('policy_management.profile.privacy.when_firefox_closed'), value: '2'}]"
-                    optionLabel="name" optionValue="value"
-                >
-                </Dropdown>
-            </div>
+        <div class="p-field p-grid">
+            <InputSwitch  class="p-col-fixed" id="HttpsOnlyMode" v-model="HttpsOnlyMode"/>
+            <label for="HttpsOnlyMode" class="p-col">{{$t('Her zaman güvenli bağlantıları kullan(Https)')}}</label>
         </div>
         <div class="p-field p-grid">
-            <InputSwitch  class="p-col-fixed" id="clearHistoryOnClose" v-model="clearHistoryOnClose"/>
-            <label for="clearHistoryOnClose" class="p-col">{{$t('policy_management.profile.privacy.clear_history_when_firefox_is_closed')}}</label>
+            <InputSwitch  class="p-col-fixed" id="DnsOverHttpsMode" v-model="DnsOverHttpsMode"/>
+            <label for="DnsOverHttpsMode" class="p-col">{{$t('Güvenli DNS kullan')}}</label>
         </div>
-        <h6>{{$t('policy_management.profile.privacy.address_bar')}}</h6>
-        <div class="p-fluid p-formgrid p-grid">
-            <div class="p-field p-grid p-col-12 p-md-3">
-                <InputSwitch class="p-col-fixed" id="suggestHistory" v-model="suggestHistory"/>
-                <label for="suggestHistory" class="p-col">{{$t('policy_management.profile.privacy.history')}}</label>
-            </div>
-            <div class="p-field p-grid p-col-12 p-md-3">
-                <InputSwitch  class="p-col-fixed" id="suggestBookmarks" v-model="suggestBookmarks"/>
-                <label for="suggestBookmarks" class="p-col">{{$t('policy_management.profile.privacy.bookmarks')}}</label>
-            </div>
-            <div class="p-field p-grid p-col-12 p-md-4">
-                <InputSwitch  class="p-col-fixed" id="suggestOpenTabs" v-model="suggestOpenTabs"/>
-                <label for="suggestOpenTabs" class="p-col">{{$t('policy_management.profile.privacy.open_tabs')}}</label>
-            </div>
+
+        <h6>{{$t('Tarama geçmişi verileri temizle')}}</h6>
+        <div class="field-checkbox">
+            <Checkbox inputId="browsing_history" name="Tarama geçmişi" value="browsing_history" v-model="ClearBrowsingDataOnExitList" />
+            <label for="browsing_history">Tarama geçmişi</label>
         </div>
+        <div class="field-checkbox">
+            <Checkbox inputId="download_history" name="İndirme geçmişi" value="download_history" v-model="ClearBrowsingDataOnExitList" />
+            <label for="download_history">İndirme geçmişi</label>
+        </div>
+        <div class="field-checkbox">
+            <Checkbox inputId="cookies_and_other_site_data" name="Çerezler ve diğer site verileri" value="cookies_and_other_site_data" v-model="ClearBrowsingDataOnExitList" />
+            <label for="cookies_and_other_site_data">Çerezler ve diğer site verileri</label>
+        </div>
+        <div class="field-checkbox">
+            <Checkbox inputId="cached_images_and_files" name="Önbelleğe alınan resimler ve dosyalar" value="cached_images_and_files" v-model="ClearBrowsingDataOnExitList" />
+            <label for="cached_images_and_files">Önbelleğe alınan resimler ve dosyalar</label>
+        </div>
+        <div class="field-checkbox">
+            <Checkbox inputId="password_signin" name="Şifreler ve diğer oturum açma verileri" value="password_signin" v-model="ClearBrowsingDataOnExitList" />
+            <label for="password_signin">Şifreler ve diğer oturum açma verileri</label>
+        </div>
+        <div class="field-checkbox">
+            <Checkbox inputId="autofill" name="Formu otomatik doldurma verileri" value="autofill" v-model="ClearBrowsingDataOnExitList" />
+            <label for="autofill">Formu otomatik doldurma verileri</label>
+        </div>
+
+
 
     </div>
 </template>
 
 <script>
 import Preferences from './PreferencesChrome.js';
+import Checkbox from 'primevue/checkbox';
+
+
 
 export default {
     props: {
@@ -81,12 +75,11 @@ export default {
             dontWantToBeTracked: false,
             rememberBrowsingDownloadHistory: false,
             rememberSearchFormHistory: false,
-            acceptCookiesFromSites: false,
-            clearHistoryOnClose: false,
-            suggestHistory: false,
-            suggestBookmarks: false,
-            suggestOpenTabs: false,
-            keepCookiesUntil: "0",
+            DnsOverHttpsMode:"",
+            HttpsOnlyMode:"",
+            AllowDeletingBrowserHistory:false,
+            DefaultCookiesSetting:"1",
+            ClearBrowsingDataOnExitList: [],
             proxyPreferences: []
         }
     },
@@ -95,30 +88,21 @@ export default {
         if (this.selectedProfileData) {
             this.setPrivacyPreferences();
         } else {
-            this.acceptThirdPartyCookies = "2";
-            this.dontWantToBeTracked = false;
-            this.rememberBrowsingDownloadHistory = false;
-            this.rememberSearchFormHistory = false;
-            this.acceptCookiesFromSites = false;
-            this.clearHistoryOnClose = false;
-            this.suggestHistory = false;
-            this.suggestBookmarks = false;
-            this.suggestOpenTabs = false;
-            this.keepCookiesUntil = "0";
+            this.DnsOverHttpsMode = "",
+            this.HttpsOnlyMode = "",
+            this.AllowDeletingBrowserHistory = false,
+            this.DefaultCookiesSetting = "1",
+            this.ClearBrowsingDataOnExitList = []
         }
     },
 
     methods: {
         getPrivacyPreferences() {
-            this.addToPreferences(Preferences.dontWantToBeTracked, this.dontWantToBeTracked.toString());
-            this.addToPreferences(Preferences.rememberBrowsingDownloadHistory, this.rememberBrowsingDownloadHistory.toString());
-            this.addToPreferences(Preferences.rememberSearchFormHistory, this.rememberSearchFormHistory.toString());
-            this.addToPreferences(Preferences.acceptCookiesFromSites, this.acceptThirdPartyCookies);
-            this.addToPreferences(Preferences.keepCookiesUntil, this.keepCookiesUntil);
-            this.addToPreferences(Preferences.clearHistoryOnClose, this.clearHistoryOnClose.toString());
-            this.addToPreferences(Preferences.suggestHistory, this.suggestHistory.toString());
-            this.addToPreferences(Preferences.suggestBookmarks, this.suggestBookmarks.toString());
-            this.addToPreferences(Preferences.suggestOpenTabs, this.suggestOpenTabs.toString());
+            this.addToPreferences(Preferences.DnsOverHttpsMode, this.DnsOverHttpsMode.toString());
+            this.addToPreferences(Preferences.HttpsOnlyMode, this.HttpsOnlyMode.toString());
+            this.addToPreferences(Preferences.AllowDeletingBrowserHistory, this.AllowDeletingBrowserHistory);
+            this.addToPreferences(Preferences.DefaultCookiesSetting, this.DefaultCookiesSetting.toString());
+            this.addToPreferences(Preferences.ClearBrowsingDataOnExitList, this.ClearBrowsingDataOnExitList);
 
             return this.proxyPreferences;
         },

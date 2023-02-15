@@ -11,11 +11,9 @@
                 <label for="" class="p-col">{{$t("Kaldığım yerde devam et")}}</label>
             </div> -->
             <div class="p-field p-grid" >
-                <InputSwitch id="NewTabPageLocation" class="p-col-fixed"  v-model="NewTabPageLocation"/>
                 <label for="NewTabPageLocation" class="p-col">{{$t("Belirli bi sayfayı aç")}}</label>
 
                 <InputText class="p-inputtext-sm p-col" type="text" 
-                    :disabled="NewTabPageLocation == 'false'"
                     v-model="NewTabPageLocation" 
                     :placeholder="$t('https://www.google.com')"/>
             </div>
@@ -101,10 +99,10 @@ export default {
             HomepageLocation : "",
             DefaultDownloadDirectory:"",
             PromptForDownloadLocation: false,
-            SideSearchEnabled:"",
+            SideSearchEnabled: false,
             BookmarkBarEnabled: false,
-            IncognitoModeAvailability: "1",
-            BrowserSignin:false,
+            IncognitoModeAvailability: "1", //0 = Incognito mode available, 1 = Incognito mode disabled,2 = Incognito mode forced
+            BrowserSignin:"1", //0 = Disable browser sign-in,1 = Enable browser sign-in,2 = Force users to sign-in to use the browser
             AutoFillEnabled:false,
             SafeBrowsingEnabled:false,
             AllowSystemNotifications:false,
@@ -122,10 +120,10 @@ export default {
             this.HomepageLocation = "";
             this.DefaultDownloadDirectory = "";
             this.PromptForDownloadLocation = false;
-            this.SideSearchEnabled = "";
+            this.SideSearchEnabled = false;
             this.BookmarkBarEnabled = false;
             this.IncognitoModeAvailability = "1";
-            this.BrowserSignin=false;
+            this.BrowserSignin="1";
             this.AutoFillEnabled=false;
             this.SafeBrowsingEnabled=false;
             this.AllowSystemNotifications=false;
@@ -135,20 +133,22 @@ export default {
     methods: {
         getGeneralPreferences() {
             if(this.NewTabPageLocation){
-                this.addToPreferences(PreferencesChrome.NewTabPageLocation,this.NewTabPageLocation);
+                this.addToPreferences(PreferencesChrome.NewTabPageLocation,this.NewTabPageLocation.toString);
             }
 
             if (this.ShowHomeButton == "true") {
                 this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, "true");
-                this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocation);
+                this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocation.toString());
             } else {
-                this.addToPreferences(PreferencesChrome.HomepageLocation, "false");
+                this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocation.toString());
                 this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, this.HomepageLocation);
             }
+            this.addToPreferences(PreferencesChrome.DefaultDownloadDirectory, this.DefaultDownloadDirectory.toString());
+            this.PromptForDownloadLocation ? this.addToPreferences(PreferencesChrome.PromptForDownloadLocation, "true") : this.addToPreferences(PreferencesChrome.PromptForDownloadLocation, "false");
             this.SideSearchEnabled ? this.addToPreferences(PreferencesChrome.SideSearchEnabled, "true") : this.addToPreferences(PreferencesChrome.SideSearchEnabled, "false");
             this.BookmarkBarEnabled ? this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "true") : this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "false");
-            this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "true") : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "false");
-            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, "true") : this.addToPreferences(PreferencesChrome.BrowserSignin, "false");
+            this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "1") : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "0");
+            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, "1") : this.addToPreferences(PreferencesChrome.BrowserSignin, "0");
             this.AutoFillEnabled ? this.addToPreferences(PreferencesChrome.AutoFillEnabled, "true") : this.addToPreferences(PreferencesChrome.AutoFillEnabled, "false");
             this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true");
             this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true");
@@ -166,17 +166,33 @@ export default {
         setGeneralPreferences() {
             let prefList = this.selectedProfileData.preferences;
             prefList.forEach(element => {
+
+                if (element.preferenceName == PreferencesChrome.NewTabPageLocation) {
+                    this.NewTabPageLocation = element.value;
+                }
+
+                if (element.preferenceName == PreferencesChrome.HomepageIsNewTabPage && element.value == "true") {
+                    this.HomepageIsNewTabPage = true;
+                }
+
+                if (element.preferenceName == PreferencesChrome.HomepageLocation) {
+                    this.HomepageLocation = element.value;
+                }
+
+                if (element.preferenceName == PreferencesChrome.DefaultDownloadDirectory) {
+                    this.DefaultDownloadDirectory = element.value;
+                }
     
-                if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == "true") {
-                    this.IncognitoModeAvailability = true;
+                if (element.preferenceName == PreferencesChrome.PromptForDownloadLocation && element.value == "true") {
+                    this.PromptForDownloadLocation = true;
                 }
                 if (element.preferenceName == PreferencesChrome.SideSearchEnabled && element.value == "true") {
                     this.SideSearchEnabled = true;
                 }
-                if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == "true") {
+                if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == "1") {
                     this.IncognitoModeAvailability = true;
                 }
-                if (element.preferenceName == PreferencesChrome.BrowserSignin && element.value == "true") {
+                if (element.preferenceName == PreferencesChrome.BrowserSignin && element.value == "1") {
                     this.BrowserSignin = true;
                 }
                 if (element.preferenceName == PreferencesChrome.AutoFillEnabled && element.value == "false") {

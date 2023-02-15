@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import Preferences from './PreferencesChrome.js';
+import  PreferencesChrome from './PreferencesChrome';
 
 export default {
     props: {
@@ -120,10 +120,10 @@ export default {
 
         isExistPref(preferenceName) {
             let isExist = false;
-            var defaultPrefList = Object.keys(Preferences);
+            var defaultPrefList = Object.keys(PreferencesChrome);
             for (let index = 0; index < defaultPrefList.length; index++) {
                 const element = defaultPrefList[index];
-                if(Preferences[element] == preferenceName){
+                if(PreferencesChrome[element] == preferenceName){
                     isExist = true;
                 }
                 
