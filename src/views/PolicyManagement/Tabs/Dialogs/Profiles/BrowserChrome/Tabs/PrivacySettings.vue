@@ -26,27 +26,27 @@
 
         <h6>{{$t('Tarama geçmişi verileri temizle')}}</h6>
         <div class="field-checkbox">
-            <Checkbox inputId="browsing_history" name="Tarama geçmişi" value="browsing_history" v-model="ClearBrowsingDataOnExitList" />
+            <Checkbox inputId="browsing_history" name="Tarama geçmişi" :binary="true" v-model="browsingHistory" />
             <label for="browsing_history">Tarama geçmişi</label>
         </div>
         <div class="field-checkbox">
-            <Checkbox inputId="download_history" name="İndirme geçmişi" value="download_history" v-model="ClearBrowsingDataOnExitList" />
+            <Checkbox inputId="download_history" name="İndirme geçmişi" :binary="true" v-model="downloadHistory" />
             <label for="download_history">İndirme geçmişi</label>
         </div>
         <div class="field-checkbox">
-            <Checkbox inputId="cookies_and_other_site_data" name="Çerezler ve diğer site verileri" value="cookies_and_other_site_data" v-model="ClearBrowsingDataOnExitList" />
+            <Checkbox inputId="cookies_and_other_site_data" name="Çerezler ve diğer site verileri" value="cookies_and_other_site_data" v-model="cookiesAndOtherSiteData" />
             <label for="cookies_and_other_site_data">Çerezler ve diğer site verileri</label>
         </div>
         <div class="field-checkbox">
-            <Checkbox inputId="cached_images_and_files" name="Önbelleğe alınan resimler ve dosyalar" value="cached_images_and_files" v-model="ClearBrowsingDataOnExitList" />
+            <Checkbox inputId="cached_images_and_files" name="Önbelleğe alınan resimler ve dosyalar" value="cached_images_and_files" v-model="cachedImagesAndFiles" />
             <label for="cached_images_and_files">Önbelleğe alınan resimler ve dosyalar</label>
         </div>
         <div class="field-checkbox">
-            <Checkbox inputId="password_signin" name="Şifreler ve diğer oturum açma verileri" value="password_signin" v-model="ClearBrowsingDataOnExitList" />
+            <Checkbox inputId="password_signin" name="Şifreler ve diğer oturum açma verileri" value="password_signin" v-model="passwordSignin" />
             <label for="password_signin">Şifreler ve diğer oturum açma verileri</label>
         </div>
         <div class="field-checkbox">
-            <Checkbox inputId="autofill" name="Formu otomatik doldurma verileri" value="autofill" v-model="ClearBrowsingDataOnExitList" />
+            <Checkbox inputId="autofill" name="Formu otomatik doldurma verileri" value="autofill" v-model="autofill" />
             <label for="autofill">Formu otomatik doldurma verileri</label>
         </div>
 
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import Preferences from './PreferencesChrome.js';
+import Preferences, { PreferencesChrome } from './PreferencesChrome.js';
 import Checkbox from 'primevue/checkbox';
 
 
@@ -80,7 +80,13 @@ export default {
             AllowDeletingBrowserHistory:false,
             DefaultCookiesSetting:"1",
             ClearBrowsingDataOnExitList: [],
-            proxyPreferences: []
+            proxyPreferences: [],
+            browsingHistory: false,
+            downloadHistory: false,
+            cookiesAndOtherSiteData: false,
+            cachedImagesAndFiles: false,
+            passwordSignin: false,
+            autofill: false
         }
     },
 
@@ -98,11 +104,17 @@ export default {
 
     methods: {
         getPrivacyPreferences() {
-            this.addToPreferences(Preferences.DnsOverHttpsMode, this.DnsOverHttpsMode.toString());
-            this.addToPreferences(Preferences.HttpsOnlyMode, this.HttpsOnlyMode.toString());
-            this.addToPreferences(Preferences.AllowDeletingBrowserHistory, this.AllowDeletingBrowserHistory);
-            this.addToPreferences(Preferences.DefaultCookiesSetting, this.DefaultCookiesSetting.toString());
-            this.addToPreferences(Preferences.ClearBrowsingDataOnExitList, this.ClearBrowsingDataOnExitList);
+            this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, this.DnsOverHttpsMode.toString());
+            this.addToPreferences(PreferencesChrome.HttpsOnlyMode, this.HttpsOnlyMode.toString());
+            this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, this.AllowDeletingBrowserHistory);
+            this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, this.DefaultCookiesSetting.toString());
+            this.addToPreferences(PreferencesChrome.ClearBrowsingDataOnExitList, this.ClearBrowsingDataOnExitList);
+            if (this.browsingHistory) {
+                this.ClearBrowsingDataOnExitList.push("browsing_history")
+            }
+            if (this.downloadHistory) {
+                this.ClearBrowsingDataOnExitList.push("download_history")
+            }
 
             return this.proxyPreferences;
         },
@@ -138,20 +150,10 @@ export default {
                 if (element.preferenceName == Preferences.suggestOpenTabs && element.value == "true") {
                     this.suggestOpenTabs = true;
                 }
-                if (element.preferenceName == Preferences.keepCookiesUntil) {
-                    this.keepCookiesUntil = element.value;
-                    if (element.value != "0") {
-                        this.acceptCookiesFromSites = true;
-                    }
-                    this.keepCookiesUntil = element.value;
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList){
+                    this.ClearBrowsingDataOnExitList = element.value;
                 }
-                if (element.preferenceName == Preferences.acceptCookiesFromSites) {
-                    this.keepCookiesUntil = element.value;
-                    if (element.value != "2") {
-                        this.acceptCookiesFromSites = true;
-                    }
-                    this.acceptThirdPartyCookies = element.value;
-                }
+                
             });
         }
     }
