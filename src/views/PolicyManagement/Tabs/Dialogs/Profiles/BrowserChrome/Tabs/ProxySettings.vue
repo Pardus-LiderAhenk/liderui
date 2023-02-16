@@ -10,53 +10,72 @@
             >
             </Dropdown>
         </div>
-        <h6>{{$t('policy_management.profile.proxy.manuel_configuration')}}</h6>
+        <div v-if="proxyType == '0'">
+        </div>
+
+        <div v-if="proxyType == '1'">
+        <h6>{{$t('Elle Yapılandırma')}}</h6>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('policy_management.profile.proxy.http_proxy_server')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="httpProxy"/>
+                <label>{{$t('HTTP Vekili')}}</label>
+                <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="httpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('policy_management.profile.proxy.http_port')}}</label>
+                <label>{{$t('HTTP Port')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="httpPort"/>
             </div>
         </div>
-        <div class="p-field p-grid">
-            <InputSwitch :disabled="proxyType == '1'"  class="p-col-fixed" id="useThisServerForAllProtocols" v-model="useThisServerForAllProtocols"/>
-            <label for="useThisServerForAllProtocols" class="p-col" >{{$t('policy_management.profile.proxy.browser_settings_notify')}}</label>
-        </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('policy_management.profile.proxy.ssl_proxy_server')}}</label>
+                <label>{{$t('HTTPS Vekili')}}</label>
+                <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="httpProxy"/>
+            </div>
+            <div class="p-field p-col-12 p-md-4">
+                <label>{{$t('HTTPS Port')}}</label>
+                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="httpPort"/>
+            </div>
+        </div>
+        
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-8">
+                <label>{{$t('FTP Veklisi')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="sslProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('policy_management.profile.proxy.ssl_port')}}</label>
+                <label>{{$t('FTP Port')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="sslPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('policy_management.profile.proxy.ftp_proxy_server')}}</label>
+                <label>{{$t('Socks Makinesi')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="ftpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('policy_management.profile.proxy.ftp_port')}}</label>
+                <label>{{$t('Socks Port')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="ftpPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('policy_management.profile.proxy.socks_proxy_server')}}</label>
+                <label>{{$t('Ana Bilgisayarları Yok Say')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="socksProxy"/>
             </div>
-            <div class="p-field p-col-12 p-md-2">
-                <label>{{$t('policy_management.profile.proxy.socks_port')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="socksPort"/>
-            </div>
-            
+
         </div>
+        </div>
+        
+        <div v-if="proxyType == '2'">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-8">
+                    <label>{{$t("Yapılandırma URL'si")}}</label>
+                    <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="xxx"/>
+                </div>
     
+            </div>
+        </div>
+        
+
     </div>
 </template>
 
