@@ -26,9 +26,18 @@
         <DataTable :value="otherPreferences" responsiveLayout="scroll"
             class="p-datatable-sm p-field">
             <template #empty>
-                <div class="p-d-flex p-jc-center">
-                    <span>{{$t('policy_management.profile.browser.firefox_feature_cannot_find')}}</span>
-                </div>
+            <div class="p-d-flex p-jc-center">
+            <OverlayPanel>
+                <div><h5>{{ $t('testt') }}</h5></div>
+                <ul>
+                  <li>
+                    <small>{{ pluginDescription }}</small>
+                  </li>
+                </ul>
+                  {{ $t('test2') }}...
+            </OverlayPanel>
+                
+            </div>
             </template>
             <Column field="preferenceName" :header="$t('policy_management.profile.browser.feature_name')" style="width:40%"></Column>
             <Column field="value" :header="$t('policy_management.profile.browser.value')" style="width:40%"></Column>
