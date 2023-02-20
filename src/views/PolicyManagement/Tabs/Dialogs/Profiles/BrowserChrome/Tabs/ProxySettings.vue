@@ -1,6 +1,6 @@
 <template>
     <div class="p-fluid p-formgrid">
-        <h6>{{$t('policy_management.profile.proxy.configuring_proxy_server_to_access_the_internet')}}</h6>
+        <h6>{{$t('policy_management.profile.chrome_proxy.configuring_proxy_server_to_access_the_internet')}}</h6>
         <div class="p-field p-col-12 p-md-12">
             <Dropdown
                 v-model="proxyType"
@@ -14,51 +14,51 @@
         </div>
 
         <div v-if="proxyType == '1'">
-        <h6>{{$t('Elle Yapılandırma')}}</h6>
+        <h6>{{$t('policy_management.profile.chrome_proxy.manuel_configuration')}}</h6>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('HTTP Vekili')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.http_proxy_server')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="httpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('HTTP Port')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.http_port')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="httpPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('HTTPS Vekili')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.https_proxy_server')}}</label>
                 <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="httpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('HTTPS Port')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.https_port')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="httpPort"/>
             </div>
         </div>
         
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('FTP Veklisi')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.ftp_proxy_server')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="sslProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('FTP Port')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.ftp_port')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="sslPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('Socks Makinesi')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.socks_proxy_server')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="ftpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
-                <label>{{$t('Socks Port')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.socks_port')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="ftpPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
-                <label>{{$t('Ana Bilgisayarları Yok Say')}}</label>
+                <label>{{$t('policy_management.profile.chrome_proxy.main_computer_ignore')}}</label>
                 <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="socksProxy"/>
             </div>
 
@@ -68,7 +68,7 @@
         <div v-if="proxyType == '2'">
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col-12 p-md-8">
-                    <label>{{$t("Yapılandırma URL'si")}}</label>
+                    <label>{{$t("policy_management.profile.chrome_proxy.configuration_url")}}</label>
                     <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="xxx"/>
                 </div>
     

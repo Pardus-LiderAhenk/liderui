@@ -5,55 +5,55 @@
         <h6>{{$t('Geçmiş')}}</h6>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="AllowDeletingBrowserHistory" v-model="AllowDeletingBrowserHistory"/>
-            <label for="AllowDeletingBrowserHistory" class="p-col">{{$t('Tarayıcı geçmişi silinmesine izin ver')}}</label>
+            <label for="AllowDeletingBrowserHistory" class="p-col">{{$t('policy_management.profile.chrome_privacy.browser_history_remove')}}</label>
         </div>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="SavingBrowserHistoryDisabled" v-model="SavingBrowserHistoryDisabled"/>
-            <label for="SavingBrowserHistoryDisabled" class="p-col">{{$t('Tarayıcı geçmişini kaydetme')}}</label>
+            <label for="SavingBrowserHistoryDisabled" class="p-col">{{$t('policy_management.profile.chrome_privacy.save_browsing_history')}}</label>
         </div>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="DefaultCookiesSetting" v-model="DefaultCookiesSetting"/>
-            <label for="DefaultCookiesSetting" class="p-col">{{$t('Çerezleri kabul et')}}</label>
+            <label for="DefaultCookiesSetting" class="p-col">{{$t('policy_management.profile.chrome_privacy.accept_cookies')}}</label>
         </div>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="HttpsOnlyMode" v-model="HttpsOnlyMode"/>
-            <label for="HttpsOnlyMode" class="p-col">{{$t('Her zaman güvenli bağlantıları kullan(Https)')}}</label>
+            <label for="HttpsOnlyMode" class="p-col">{{$t('policy_management.profile.chrome_privacy.secure_https')}}</label>
         </div>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="DnsOverHttpsMode" v-model="DnsOverHttpsMode"/>
-            <label for="DnsOverHttpsMode" class="p-col">{{$t('Güvenli DNS kullan')}}</label>
+            <label for="DnsOverHttpsMode" class="p-col">{{$t('policy_management.profile.chrome_privacy.secure_dns')}}</label>
         </div>
 
-        <h6>{{$t('Tarama geçmişi verileri temizle')}}</h6>
+        <h6>{{$t('policy_management.profile.chrome_privacy.clear_browsing_data_history')}}</h6>
 
         <div class="field-checkbox">
-            <Checkbox inputId="browsing_history" name="Tarama geçmişi" :binary="true" v-model="browsingHistory" />
-            <label for="browsing_history">Tarama geçmişi</label>
+            <Checkbox inputId="browsing_history" name="browsing_history" :binary="true" v-model="browsingHistory" />
+            <label for="browsing_history">{{$t('policy_management.profile.chrome_privacy.browsing_history')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="download_history" name="İndirme geçmişi" :binary="true" v-model="downloadHistory" />
-            <label for="download_history">İndirme geçmişi</label>
+            <Checkbox inputId="download_history" name="download_history" :binary="true" v-model="downloadHistory" />
+            <label for="download_history">{{$t('policy_management.profile.chrome_privacy.download_history')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="cookies_and_other_site_data" name="Çerezler ve diğer site verileri" value="cookies_and_other_site_data" v-model="cookiesAndOtherSiteData" />
-            <label for="cookies_and_other_site_data">Çerezler ve diğer site verileri</label>
+            <Checkbox inputId="cookies_and_other_site_data" name="cookies_and_other_site_data" value="cookies_and_other_site_data" v-model="cookiesAndOtherSiteData" />
+            <label for="cookies_and_other_site_data">{{$t('policy_management.profile.chrome_privacy.cookies_and_otherSite_data')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="cached_images_and_files" name="Önbelleğe alınan resimler ve dosyalar" value="cached_images_and_files" v-model="cachedImagesAndFiles" />
-            <label for="cached_images_and_files">Önbelleğe alınan resimler ve dosyalar</label>
+            <Checkbox inputId="cached_images_and_files" name="cached_images_and_files" value="cached_images_and_files" v-model="cachedImagesAndFiles" />
+            <label for="cached_images_and_files">{{$t('policy_management.profile.chrome_privacy.cache_image_and_file')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="password_signin" name="Şifreler ve diğer oturum açma verileri" value="password_signin" v-model="passwordSignin" />
-            <label for="password_signin">Şifreler ve diğer oturum açma verileri</label>
+            <Checkbox inputId="password_signin" name="password_signin" value="password_signin" v-model="passwordSignin" />
+            <label for="password_signin">{{$t('policy_management.profile.chrome_privacy.password_and_other_open_session')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="autofill" name="Formu otomatik doldurma verileri" value="autofill" v-model="autofill" />
-            <label for="autofill">Formu otomatik doldurma verileri</label>
+            <Checkbox inputId="autofill" name="autofill" value="autofill" v-model="autofill" />
+            <label for="autofill">{{$t('policy_management.profile.chrome_privacy.autofill_form')}}</label>
         </div>
         
     </div>
