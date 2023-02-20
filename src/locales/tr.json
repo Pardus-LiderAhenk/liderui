@@ -1557,6 +1557,9 @@
                 "value":"Değer"
             },
             "chrome_proxy":{
+                "disabled":"Devre dışı bırak",
+                "manuel":"Elle yapılandırma",
+                "automatic":"Otomatik vekil sunucusu bulma",
                 "configuring_proxy_server_to_access_the_internet":"İnternete Erişmek İçin Vekil Sunucu Yapılandır",
                 "manuel_configuration":"Elle Yapılandırma",
                 "http_proxy_server":"HTTP Vekil Sunucu",

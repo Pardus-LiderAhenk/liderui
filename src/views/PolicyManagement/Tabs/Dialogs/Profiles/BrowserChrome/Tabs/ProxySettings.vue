@@ -18,48 +18,48 @@
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
                 <label>{{$t('policy_management.profile.chrome_proxy.http_proxy_server')}}</label>
-                <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="httpProxy"/>
+                <InputText  class="p-inputtext-sm" type="text" v-model="httpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
                 <label>{{$t('policy_management.profile.chrome_proxy.http_port')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="httpPort"/>
+                <InputText class="p-inputtext-sm" type="text" v-model="httpPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
                 <label>{{$t('policy_management.profile.chrome_proxy.https_proxy_server')}}</label>
-                <InputText :disabled="proxyType != '1'" class="p-inputtext-sm" type="text" v-model="httpProxy"/>
+                <InputText class="p-inputtext-sm" type="text" v-model="httpsProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
                 <label>{{$t('policy_management.profile.chrome_proxy.https_port')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="httpPort"/>
+                <InputText class="p-inputtext-sm" type="text" v-model="httpsPort"/>
             </div>
         </div>
         
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
                 <label>{{$t('policy_management.profile.chrome_proxy.ftp_proxy_server')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="sslProxy"/>
+                <InputText  class="p-inputtext-sm" type="text" v-model="ftpProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
                 <label>{{$t('policy_management.profile.chrome_proxy.ftp_port')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="sslPort"/>
+                <InputText class="p-inputtext-sm" type="text" v-model="ftpPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
                 <label>{{$t('policy_management.profile.chrome_proxy.socks_proxy_server')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="ftpProxy"/>
+                <InputText class="p-inputtext-sm" type="text" v-model="socksProxy"/>
             </div>
             <div class="p-field p-col-12 p-md-4">
                 <label>{{$t('policy_management.profile.chrome_proxy.socks_port')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="ftpPort"/>
+                <InputText class="p-inputtext-sm" type="text" v-model="socksPort"/>
             </div>
         </div>
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
                 <label>{{$t('policy_management.profile.chrome_proxy.main_computer_ignore')}}</label>
-                <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="socksProxy"/>
+                <InputText class="p-inputtext-sm" type="text" v-model="mainIgnore"/>
             </div>
 
         </div>
@@ -69,7 +69,7 @@
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col-12 p-md-8">
                     <label>{{$t("policy_management.profile.chrome_proxy.configuration_url")}}</label>
-                    <InputText :disabled="proxyType == '1'" class="p-inputtext-sm" type="text" v-model="xxx"/>
+                    <InputText class="p-inputtext-sm" type="text" v-model="autoConfiguration"/>
                 </div>
     
             </div>
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import Preferences from './PreferencesChrome.js';
+import PreferencesChrome from './PreferencesChrome.js';
 
 export default {
     props: {
@@ -95,22 +95,18 @@ export default {
             proxyType: "0",
             httpProxy: "",
             httpPort: "",
-            useThisServerForAllProtocols: false,
-            sslProxy: "",
-            sslPort: "",
+            httpsProxy: "",
+            httpsPort: "",
             ftpProxy: "",
             ftpPort: "",
             socksProxy: "",
             socksPort: "",
-            socksVersion: "5",
-            remoteDns: false,
-            autoProxyConfigUrl: "",
-            dontPromptForAuth: false,
-            noProxyOn: "localhost, 127.0.0.1",
+            mainIgnore:"",
+            autoConfiguration:"",
             proxyOptions: [
-                {name: this.$t('Devre dışı bırak'), value: "0"},
-                {name: this.$t('Manuel proxy ayarı'), value:"1"},
-                {name: this.$t('Proxy otomatik bulma'), value: "2"},
+                {name: this.$t('policy_management.profile.chrome_proxy.disabled'), value: "0"},
+                {name: this.$t('policy_management.profile.chrome_proxy.manuel'), value:"1"},
+                {name: this.$t('policy_management.profile.chrome_proxy.automatic'), value: "2"},
             ],
             proxyPreferences: []
         }
@@ -140,38 +136,34 @@ export default {
 
     methods: {
         getProxyPreferences() {
-            this.addToPreferences(Preferences.proxyType, this.proxyType);
-            this.addToPreferences(Preferences.useThisServerForAllProtocols, this.useThisServerForAllProtocols.toString());
-            this.addToPreferences(Preferences.dontPromptForAuth, this.dontPromptForAuth.toString());
-            this.addToPreferences(Preferences.remoteDns, this.remoteDns.toString());
+            this.addToPreferences(PreferencesChrome.proxyType, this.proxyType);
+            this.addToPreferences(PreferencesChrome.useThisServerForAllProtocols, this.useThisServerForAllProtocols.toString());
+            this.addToPreferences(PreferencesChrome.dontPromptForAuth, this.dontPromptForAuth.toString());
+            this.addToPreferences(PreferencesChrome.remoteDns, this.remoteDns.toString());
             if (this.proxyType == "1") {
                 if (this.httpProxy != "" && this.httpProxy != null) {
-                    this.addToPreferences(Preferences.httpProxy, this.httpProxy);
+                    this.addToPreferences(PreferencesChrome.httpProxy, this.httpProxy);
                 }
                 if (this.httpPort != "" && this.httpPort != null) {
-                    this.addToPreferences(Preferences.httpPort, this.httpPort);
+                    this.addToPreferences(PreferencesChrome.httpPort, this.httpPort);
                 }
                 if (this.sslProxy != "" && this.sslProxy != null) {
-                    this.addToPreferences(Preferences.sslProxy, this.sslProxy);
+                    this.addToPreferences(PreferencesChrome.sslProxy, this.httpsProxy);
                 }
                 if (this.sslPort != "" && this.sslPort != null) {
-                    this.addToPreferences(Preferences.sslPort, this.sslPort);
+                    this.addToPreferences(PreferencesChrome.sslPort, this.httpsPort);
                 }
                 if (this.ftpProxy != "" && this.ftpProxy != null) {
-                    this.addToPreferences(Preferences.ftpProxy, this.ftpProxy);
+                    this.addToPreferences(PreferencesChrome.ftpProxy, this.ftpProxy);
                 }
                 if (this.ftpPort != "" && this.ftpPort != null) {
-                    this.addToPreferences(Preferences.ftpPort, this.ftpPort);
+                    this.addToPreferences(PreferencesChrome.ftpPort, this.ftpPort);
                 }
                 if (this.socksProxy != "" && this.socksProxy != null) {
-                    this.addToPreferences(Preferences, this.socksProxy);
+                    this.addToPreferences(PreferencesChrome, this.socksProxy);
                 }
                 if (this.socksPort != "" && this.socksPort != null) {
-                    this.addToPreferences(Preferences.socksPort, this.socksPort);
-                }
-                this.addToPreferences(Preferences.socksVersion, this.socksVersion);
-                if (this.noProxyOn != "" && this.noProxyOn != null) {
-                    this.addToPreferences(Preferences.noProxyOn, this.noProxyOn);
+                    this.addToPreferences(PreferencesChrome.socksPort, this.socksPort);
                 }
             }
             if (this.proxyType == "2") {
@@ -192,49 +184,43 @@ export default {
         setProxyPreferences() {
             let prefList = this.selectedProfileData.preferences;
             prefList.forEach(element => {
-                if (element.preferenceName == Preferences.proxyType) {
+                if (element.preferenceName == PreferencesChrome.proxyType) {
                     this.proxyType = element.value;
                 }
-                if (element.preferenceName == Preferences.useThisServerForAllProtocols && element.value == 'true') {
+                if (element.preferenceName == PreferencesChrome.useThisServerForAllProtocols && element.value == 'true') {
                     this.useThisServerForAllProtocols = true;
                 }
-                if (element.preferenceName == Preferences.dontPromptForAuth && element.value == 'true') {
+                if (element.preferenceName == PreferencesChrome.dontPromptForAuth && element.value == 'true') {
                     this.dontPromptForAuth = true;
                 }
-                if (element.preferenceName == Preferences.remoteDns && element.value == 'true') {
+                if (element.preferenceName == PreferencesChrome.remoteDns && element.value == 'true') {
                     this.remoteDns = true;
                 }
-                if (element.preferenceName == Preferences.httpProxy) {
+                if (element.preferenceName == PreferencesChrome.httpProxy) {
                     this.httpProxy = element.value;
                 }
-                if (element.preferenceName == Preferences.httpPort) {
+                if (element.preferenceName == PreferencesChrome.httpPort) {
                     this.httpPort = element.value;
                 }
-                if (element.preferenceName == Preferences.sslProxy) {
+                if (element.preferenceName == PreferencesChrome.httpsProxy) {
                     this.sslProxy = element.value;
                 }
-                if (element.preferenceName == Preferences.sslPort) {
+                if (element.preferenceName == PreferencesChrome.httpsPort) {
                     this.sslPort = element.value;
                 }
-                if (element.preferenceName == Preferences.ftpProxy) {
+                if (element.preferenceName == PreferencesChrome.ftpProxy) {
                     this.ftpProxy = element.value;
                 }
-                if (element.preferenceName == Preferences.ftpPort) {
+                if (element.preferenceName == PreferencesChrome.ftpPort) {
                     this.ftpPort = element.value;
                 }
-                if (element.preferenceName == Preferences.socksProxy) {
+                if (element.preferenceName == PreferencesChrome.socksProxy) {
                     this.socksProxy = element.value;
                 }
-                if (element.preferenceName == Preferences.socksPort) {
+                if (element.preferenceName == PreferencesChrome.socksPort) {
                     this.socksPort = element.value;
                 }
-                if (element.preferenceName == Preferences.socksVersion) {
-                    this.socksVersion = element.value;
-                }
-                if (element.preferenceName == Preferences.noProxyOn) {
-                    this.noProxyOn = element.value;
-                }
-                if (element.preferenceName == Preferences.autoProxyConfigUrl) {
+                if (element.preferenceName == PreferencesChrome.autoProxyConfigUrl) {
                     this.autoProxyConfigUrl = element.value;
                 }
             });

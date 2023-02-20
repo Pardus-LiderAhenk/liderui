@@ -1561,6 +1561,9 @@
                 "value":"Value"
             },
             "chrome_proxy":{
+                "disabled":"Disabled",
+                "manuel":"Manuel Configuration",
+                "automatic":"Automatic",
                 "configuring_proxy_server_to_access_the_internet":"Configuring a Proxy Server to Access the Internet",
                 "manuel_configuration":"Manuel configuration",
                 "http_proxy_server":"HTTP Proxy",

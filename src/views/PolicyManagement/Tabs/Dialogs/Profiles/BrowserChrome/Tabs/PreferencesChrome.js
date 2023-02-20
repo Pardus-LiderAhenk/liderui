@@ -5,32 +5,40 @@
 
 
 export const PreferencesChrome = {
-    //		General preference
-    //Başlangıçta
+    //	    General preference
+
             NewTabPageLocation: "NewTabPageLocation",
             HomepageIsNewTabPage: "HomepageIsNewTabPage",//yeni sekme aç
             ShowHomeButton : "ShowHomeButton",//true
             HomepageLocation : "HomepageLocation", //url gir input alanı
-    //indirme alanı
             DefaultDownloadDirectory : "DefaultDownloadDirectory",///home/${user_name}/Downloads
             PromptForDownloadLocation : "PromptForDownloadLocation", //indirme konumunu her seferinde sor
-            //sekmeler
-
             SideSearchEnabled : "SideSearchEnabled",
             BookmarkBarEnabled : "BookmarkBarEnabled",
             IncognitoModeAvailability: "IncognitoModeAvailability",
-            
             BrowserSignin: "BrowserSignin",
             AutoFillEnabled: "AutoFillEnabled",
             SafeBrowsingEnabled: "SafeBrowsingEnabled",
             AllowSystemNotifications: "AllowSystemNotifications",
-
-            //privacy settins
+            //privacy 
+            DnsOverHttpsMode: "DnsOverHttpsMode",
+            HttpsOnlyMode:"HttpsOnlyMode",
             AllowDeletingBrowserHistory: "AllowDeletingBrowserHistory",
             SavingBrowserHistoryDisabled: "SavingBrowserHistoryDisabled",
             DefaultCookiesSetting: "DefaultCookiesSetting",
-            
             ClearBrowsingDataOnExitList: "ClearBrowsingDataOnExitList",
+            //proxy
+            proxyType: "",
+            httpProxy: "",
+            httpPort: "",
+            httpsProxy: "",
+            httpsPort: "",
+            ftpProxy: "",
+            ftpPort: "",
+            socksProxy: "",
+            socksPort: "",
+            mainIgnore:"",
+            autoConfiguration:""
 
 
 

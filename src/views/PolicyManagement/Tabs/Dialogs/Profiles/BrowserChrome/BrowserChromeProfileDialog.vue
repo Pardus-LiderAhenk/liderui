@@ -139,15 +139,16 @@ export default {
 
         getProfileData() {
             let preferencesChromeList = [];
+            let proxyList = [];
             let generalPreferences = this.$refs.generalSettings.getGeneralPreferences();
             generalPreferences.forEach(element => {
                 preferencesChromeList.push(element);
             });
 
-            // let proxyPreferences = this.$refs.proxySettings.getProxyPreferences();
-            // proxyPreferences.forEach(element => {
-            //     preferencesChromeList.push(element);
-            // });
+            let proxyPreferences = this.$refs.proxySettings.getProxyPreferences();
+            proxyPreferences.forEach(element => {
+                proxyList.push(element);
+            });
 
             let privacyPreferences = this.$refs.privacySettings.getPrivacyPreferences();
             privacyPreferences.forEach(element => {
@@ -165,7 +166,8 @@ export default {
             });
 
             this.profileData = {
-                "preferencesChrome": preferencesChromeList
+                "preferencesChrome": preferencesChromeList,
+                "proxyListChrome": proxyList
             }
         },
     },
