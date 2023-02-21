@@ -20,6 +20,7 @@ export const PreferencesChrome = {
             AutoFillEnabled: "AutoFillEnabled",
             SafeBrowsingEnabled: "SafeBrowsingEnabled",
             AllowSystemNotifications: "AllowSystemNotifications",
+            BlockExternalExtensions: "BlockExternalExtensions",
             //privacy 
             DnsOverHttpsMode: "DnsOverHttpsMode",
             HttpsOnlyMode:"HttpsOnlyMode",
@@ -28,22 +29,22 @@ export const PreferencesChrome = {
             DefaultCookiesSetting: "DefaultCookiesSetting",
             ClearBrowsingDataOnExitList: "ClearBrowsingDataOnExitList",
             //proxy
-            proxyType: "",
-            httpProxy: "",
-            httpPort: "",
-            httpsProxy: "",
-            httpsPort: "",
-            ftpProxy: "",
-            ftpPort: "",
-            socksProxy: "",
-            socksPort: "",
-            mainIgnore:"",
-            autoConfiguration:""
+            proxyType: "proxyType",
+            httpProxy: "httpProxy",
+            httpPort: "httpPort",
+            httpsProxy: "httpsProxy",
+            httpsPort: "httpsPort",
+            ftpProxy: "ftpProxy",
+            ftpPort: "ftpPort",
+            socksProxy: "socksProxy",
+            socksPort: "socksPort",
+            mainIgnore:"mainIgnore",
+            autoConfiguration:"autoConfiguration"
 
 
 
 }
-//taslarda command name göre ilerliyoruz
+//tasklarda command name göre ilerliyoruz
 //policy ileriliyoruz 
 
 export default PreferencesChrome;

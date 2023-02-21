@@ -1,5 +1,6 @@
 <template>
     <div class="p-fluid">
+        <h6>{{$t('policy_management.profile.chrome_browser.description')}}</h6>
         <div class="p-fluid p-field p-grid">
             <div class="p-field p-col-12 p-md-5">
                 <InputText :class="validation.preferenceName ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'"
@@ -23,8 +24,7 @@
                 </Button>
             </div>
         </div>
-        <DataTable :value="otherPreferences" responsiveLayout="scroll"
-            class="p-datatable-sm p-field">
+        <DataTable :value="otherPreferences" responsiveLayout="scroll" class="p-datatable-sm p-field">
             <template #empty>
             <div class="p-d-flex p-jc-center">
             <OverlayPanel>

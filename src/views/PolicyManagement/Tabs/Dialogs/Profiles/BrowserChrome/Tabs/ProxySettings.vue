@@ -126,8 +126,6 @@ export default {
             this.ftpPort = "";
             this.socksProxy = "";
             this.socksPort = "";
-            this.socksVersion = "5";
-            this.remoteDns = false;
             this.autoProxyConfigUrl = "";
             this.dontPromptForAuth = false;
             this.noProxyOn = "localhost; 127.0.0.1";
@@ -139,7 +137,6 @@ export default {
             this.addToPreferences(PreferencesChrome.proxyType, this.proxyType);
             this.addToPreferences(PreferencesChrome.useThisServerForAllProtocols, this.useThisServerForAllProtocols.toString());
             this.addToPreferences(PreferencesChrome.dontPromptForAuth, this.dontPromptForAuth.toString());
-            this.addToPreferences(PreferencesChrome.remoteDns, this.remoteDns.toString());
             if (this.proxyType == "1") {
                 if (this.httpProxy != "" && this.httpProxy != null) {
                     this.addToPreferences(PreferencesChrome.httpProxy, this.httpProxy);

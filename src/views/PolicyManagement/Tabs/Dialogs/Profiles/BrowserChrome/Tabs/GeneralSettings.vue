@@ -67,6 +67,12 @@
                 <label for="IncognitoModeAvailability" class="p-col">{{$t('policy_management.profile.chrome_browser.accept_incognita_mode')}}</label>
             </div>
             
+            <h6>{{$t('policy_management.profile.chrome_browser.extension_install')}}</h6>
+            <div class="p-field p-grid">
+                <InputSwitch id="BlockExternalExtensions" class="p-col-fixed" v-model="BlockExternalExtensions"/>
+                <label for="BlockExternalExtensions" class="p-col">{{$t("policy_management.profile.chrome_browser.extension_block")}}</label>
+            </div>
+
         </div>
     </div>
 </template>
@@ -100,6 +106,7 @@ export default {
             AutoFillEnabled:false,
             SafeBrowsingEnabled:false,
             AllowSystemNotifications:false,
+            BlockExternalExtensions: false,
             generalPreferences: []
         }
     },
@@ -121,6 +128,7 @@ export default {
             this.AutoFillEnabled=false;
             this.SafeBrowsingEnabled=false;
             this.AllowSystemNotifications=false;
+            this.BlockExternalExtensions=false;
         }
     },
 
@@ -146,6 +154,8 @@ export default {
             this.AutoFillEnabled ? this.addToPreferences(PreferencesChrome.AutoFillEnabled, "true") : this.addToPreferences(PreferencesChrome.AutoFillEnabled, "false");
             this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true");
             this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true");
+
+            this.BlockExternalExtensions ? this.addToPreferences(PreferencesChrome.BlockExternalExtensions, "false") : this.addToPreferences(PreferencesChrome.BlockExternalExtensions, "true");
 
             return this.generalPreferences;
         },
@@ -198,6 +208,10 @@ export default {
                 if (element.preferenceName == PreferencesChrome.AllowSystemNotifications && element.value == "false") {
                     this.AllowSystemNotifications = true;
                 }
+                if (element.preferenceName == PreferencesChrome.BlockExternalExtensions && element.value == "false") {
+                    this.BlockExternalExtensions = true;
+                }
+                
             });
         }
     },

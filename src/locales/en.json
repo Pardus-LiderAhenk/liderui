@@ -1558,7 +1558,10 @@
                 "feature_value_cannot_be_null":"Property value cannot be blank",
                 "chrome_feature_cannot_find":"Chrome browser features not found",
                 "feature_name":"Property Name",
-                "value":"Value"
+                "value":"Value",
+                "extension_install":"Plugin Installation",
+                "extension_block":"Block Plugin Installation",
+                "description":"To learn the following feature and its value, you can look at the values on your browser by typing chrome://policy in your browser"
             },
             "chrome_proxy":{
                 "disabled":"Disabled",

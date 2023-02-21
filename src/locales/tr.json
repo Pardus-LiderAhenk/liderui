@@ -1554,7 +1554,10 @@
                 "feature_value_cannot_be_null":"Özellik değeri boş bırakılamaz",
                 "chrome_feature_cannot_find":"Chrome tarayıcı özellikleri bulunamadı",
                 "feature_name":"Özellik Adı",
-                "value":"Değer"
+                "value":"Değer",
+                "extension_install":"Eklenti Kurulumu",
+                "extension_block":"Eklenti Kurulumunu Engelle",
+                "description":"Aşağıdaki özellik ve değerini öğrenmek için tarayıcınıza chrome://policy yazarak tarayıcınız üzerindeki değerlere bakabilirsiniz"
             },
             "chrome_proxy":{
                 "disabled":"Devre dışı bırak",
