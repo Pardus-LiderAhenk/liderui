@@ -3,6 +3,8 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
+import { getInnerRange } from "@vue/compiler-core";
+
 
 export const PreferencesChrome = {
     //	    General preference
@@ -29,17 +31,14 @@ export const PreferencesChrome = {
             DefaultCookiesSetting: "DefaultCookiesSetting",
             ClearBrowsingDataOnExitList: "ClearBrowsingDataOnExitList",
             //proxy
-            proxyType: "proxyType",
-            httpProxy: "httpProxy",
-            httpPort: "httpPort",
-            httpsProxy: "httpsProxy",
-            httpsPort: "httpsPort",
-            ftpProxy: "ftpProxy",
-            ftpPort: "ftpPort",
-            socksProxy: "socksProxy",
-            socksPort: "socksPort",
-            mainIgnore:"mainIgnore",
-            autoConfiguration:"autoConfiguration"
+            http_proxy_head: "export http_proxy='http://",
+            https_proxy_head: "export https_proxy='https://",
+            ftp_proxy_head: "export ftp_proxy='http://",
+            socks_proxy_head: "export socks_proxy='https://",
+            no_proxy: "export no_proxy="
+
+            
+    
 
 
 

@@ -24,13 +24,6 @@
                             </template>
                             <proxy-settings :selectedProfileData="selectedProfileData" ref="proxySettings"></proxy-settings>
                         </TabPanel>
-                        <!-- <TabPanel>
-                            <template #header>
-                                <i class="pi pi-clone"></i>
-                                <span>&nbsp;{{$t('Eklenti ayarları')}}</span>
-                            </template>
-                            <extension-settings :selectedProfileData="selectedProfileData" ref="extensionSettings"></extension-settings>
-                        </TabPanel> -->
                         <TabPanel>
                             <template #header>
                                 <i class="pi pi-lock"></i>
@@ -154,11 +147,6 @@ export default {
             privacyPreferences.forEach(element => {
                 preferencesChromeList.push(element);
             });
-
-            // let extensionPreferences = this.$refs.extensionSettings.getExtensionPreferences();
-            // extensionPreferences.forEach(element => {
-            //     preferencesChromeList.push(element);
-            // });
 
             let otherPreferences = this.$refs.otherSettings.getOtherPreferences();
             otherPreferences.forEach(element => {

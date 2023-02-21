@@ -101,7 +101,7 @@ export default {
             ftpPort: "",
             socksProxy: "",
             socksPort: "",
-            mainIgnore:"",
+            ignoreHosts:"",
             autoConfiguration:"",
             proxyOptions: [
                 {name: this.$t('policy_management.profile.chrome_proxy.disabled'), value: "0"},
@@ -119,15 +119,14 @@ export default {
             this.proxyType = "0";
             this.httpProxy = "";
             this.httpPort = "";
-            this.useThisServerForAllProtocols = false;
-            this.sslProxy = "";
-            this.sslPort = "";
+            this.httpsProxy = "";
+            this.httpPort = "";
             this.ftpProxy = "";
             this.ftpPort = "";
             this.socksProxy = "";
             this.socksPort = "";
-            this.autoProxyConfigUrl = "";
-            this.dontPromptForAuth = false;
+            this.ignoreHosts="",
+            this.autoProxyCoautoConfigurationnfigUrl = "";
             this.noProxyOn = "localhost; 127.0.0.1";
         }
     },
@@ -138,34 +137,25 @@ export default {
             this.addToPreferences(PreferencesChrome.useThisServerForAllProtocols, this.useThisServerForAllProtocols.toString());
             this.addToPreferences(PreferencesChrome.dontPromptForAuth, this.dontPromptForAuth.toString());
             if (this.proxyType == "1") {
-                if (this.httpProxy != "" && this.httpProxy != null) {
-                    this.addToPreferences(PreferencesChrome.httpProxy, this.httpProxy);
+                if (this.httpProxy != "" && this.httpProxy != null && this.httpPort != "" && this.httpPort != null) {
+                    this.addToPreferences(PreferencesChrome.http_proxy_head + this.httpProxy+":"+this.httpPort+"/'")
                 }
-                if (this.httpPort != "" && this.httpPort != null) {
-                    this.addToPreferences(PreferencesChrome.httpPort, this.httpPort);
+                if (this.httpsProxy != "" && this.httpsProxy != null && this.httpsPort != "" && this.httpsPort != null) {
+                    this.addToPreferences(PreferencesChrome.https_proxy_head + this.httpsProxy+":"+this.httpsPort+"/'")
                 }
-                if (this.sslProxy != "" && this.sslProxy != null) {
-                    this.addToPreferences(PreferencesChrome.sslProxy, this.httpsProxy);
+                if (this.ftpProxy != "" && this.ftpProxy != null && this.ftpPort != "" && this.ftpPort != null) {
+                    this.addToPreferences(PreferencesChrome.ftp_proxy_head + this.ftpProxy+":"+this.ftpPort+"/'")
                 }
-                if (this.sslPort != "" && this.sslPort != null) {
-                    this.addToPreferences(PreferencesChrome.sslPort, this.httpsPort);
+                if (this.socksProxy != "" && this.socksProxy != null && this.socksPort != "" && this.socksPort != null) {
+                    this.addToPreferences(PreferencesChrome.socks_proxy_head + this.socksProxy+":"+this.socksPort+"/'")
                 }
-                if (this.ftpProxy != "" && this.ftpProxy != null) {
-                    this.addToPreferences(PreferencesChrome.ftpProxy, this.ftpProxy);
-                }
-                if (this.ftpPort != "" && this.ftpPort != null) {
-                    this.addToPreferences(PreferencesChrome.ftpPort, this.ftpPort);
-                }
-                if (this.socksProxy != "" && this.socksProxy != null) {
-                    this.addToPreferences(PreferencesChrome, this.socksProxy);
-                }
-                if (this.socksPort != "" && this.socksPort != null) {
-                    this.addToPreferences(PreferencesChrome.socksPort, this.socksPort);
+                if (this.ignoreHosts != "" && this.ignoreHosts != null) {
+                    this.addToPreferences(PreferencesChrome.no_proxy + this.ignoreHosts);
                 }
             }
             if (this.proxyType == "2") {
                 if (this.autoProxyConfigUrl != "" && this.autoProxyConfigUrl != null) {
-                    this.addToPreferences(Preferences.autoProxyConfigUrl, this.autoProxyConfigUrl);
+                    this.addToPreferences(PreferencesChrome.no_proxy, this.autoProxyConfigUrl);
                 }
             }
             return this.proxyPreferences;
