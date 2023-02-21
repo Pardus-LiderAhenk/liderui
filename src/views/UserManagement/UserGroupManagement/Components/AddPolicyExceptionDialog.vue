@@ -240,15 +240,15 @@ export default {
                 });
                 return;
             }
-            if (!this.label.trim()) {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: "Ad giriniz", 
-                    summary: this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                return;
-            }
+            // if (!this.label.trim()) {
+            //     this.$toast.add({
+            //         severity:'warn', 
+            //         detail: "Ad giriniz", 
+            //         summary: this.$t("computer.task.toast_summary"), 
+            //         life: 3000
+            //     });
+            //     return;
+            // }
 
             let params = {
                 "members": members,
