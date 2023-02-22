@@ -104,7 +104,7 @@ export default {
         },
 
         setOtherPreferences() {
-            let prefList = this.selectedProfileData.preferences;
+            let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
                 if(!this.isExistPref(element.preferenceName)){
                     this.otherPreferences.push({

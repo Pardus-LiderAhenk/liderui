@@ -28,6 +28,7 @@ export const PreferencesChrome = {
             DefaultCookiesSetting: "DefaultCookiesSetting",
             ClearBrowsingDataOnExitList: "ClearBrowsingDataOnExitList",
             //proxy setting
+            proxy_disabled : "export proxy=",
             http_proxy_head: "export http_proxy='http://",
             https_proxy_head: "export https_proxy='https://",
             ftp_proxy_head: "export ftp_proxy='http://",

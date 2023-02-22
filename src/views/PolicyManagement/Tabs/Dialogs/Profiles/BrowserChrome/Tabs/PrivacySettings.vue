@@ -142,7 +142,7 @@ export default {
         },
 
         setPrivacyPreferences() {
-            let prefList = this.selectedProfileData.preferences;
+            let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
                 if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode && element.value == "true") {
                     this.dontWantToBeTracked = element.value;

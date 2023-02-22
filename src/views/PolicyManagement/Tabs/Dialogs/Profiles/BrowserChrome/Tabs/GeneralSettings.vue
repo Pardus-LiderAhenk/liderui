@@ -149,7 +149,6 @@ export default {
             this.AutoFillEnabled ? this.addToPreferences(PreferencesChrome.AutoFillEnabled, "true") : this.addToPreferences(PreferencesChrome.AutoFillEnabled, "false");
             this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true");
             this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true");
-
             this.BlockExternalExtensions ? this.addToPreferences(PreferencesChrome.BlockExternalExtensions, "false") : this.addToPreferences(PreferencesChrome.BlockExternalExtensions, "true");
 
             return this.generalPreferences;
@@ -163,11 +162,15 @@ export default {
         },
 
         setGeneralPreferences() {
-            let prefList = this.selectedProfileData.preferences;
+            let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
 
                 if (element.preferenceName == PreferencesChrome.NewTabPageLocation) {
                     this.NewTabPageLocation = element.value;
+                }
+
+                if (element.preferenceName == PreferencesChrome.ShowHomeButton && element.value == "true") {
+                    this.ShowHomeButton = true;
                 }
 
                 if (element.preferenceName == PreferencesChrome.HomepageIsNewTabPage && element.value == "true") {
@@ -188,6 +191,11 @@ export default {
                 if (element.preferenceName == PreferencesChrome.SideSearchEnabled && element.value == "true") {
                     this.SideSearchEnabled = true;
                 }
+
+                if (element.preferenceName == PreferencesChrome.BookmarkBarEnabled && element.value == "true") {
+                    this.BookmarkBarEnabled = true;
+                }
+
                 if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == "1") {
                     this.IncognitoModeAvailability = true;
                 }

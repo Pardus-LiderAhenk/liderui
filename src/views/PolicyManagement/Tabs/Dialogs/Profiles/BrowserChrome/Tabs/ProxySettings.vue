@@ -134,6 +134,9 @@ export default {
     methods: {
         getProxyPreferences() {
             this.addToPreferences(PreferencesChrome.proxyType, this.proxyType);
+            if(this.proxyType == "0"){
+                this.addToPreferences(PreferencesChrome.proxy_disabled)
+            }
             if (this.proxyType == "1") {
                 if (this.httpProxy != "" && this.httpProxy != null && this.httpPort != "" && this.httpPort != null) {
                     this.addToPreferences(PreferencesChrome.http_proxy_head + this.httpProxy+":"+this.httpPort+"/'")
@@ -167,7 +170,7 @@ export default {
         },
 
         setProxyPreferences() {
-            let prefList = this.selectedProfileData.preferences;
+            let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
                 if (element.preferenceName == PreferencesChrome.proxyType) {
                     this.proxyType = element.value;
