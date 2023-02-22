@@ -97,7 +97,6 @@
 
 import {FilterMatchMode} from 'primevue/api';
 import { mapGetters, mapActions } from "vuex"
-import { userGroupsService } from '../../../../services/Settings/UserGroupsService.js';
 
 export default {
 
@@ -140,8 +139,6 @@ export default {
 
 
     methods: {
-        ...mapActions(["setSelectedLiderNode"]),
-
         initFilters() {
             this.filters = {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
@@ -175,58 +172,9 @@ export default {
                     }
                 }
             }
-            if (this.selectedLiderNode.attributesMultiValues.liderPrivilege && 
-                this.selectedLiderNode.attributesMultiValues.liderPrivilege.includes("ROLE_DOMAIN_ADMIN")) {
-                this.isDomainAdmin = true;
-            } else {
-                this.isDomainAdmin = false;
-            }
         },
 
-        async deleteMemberFromGroup(data) {
-            if (this.attributesMultiValue == false) {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('group_management.delete_member_warning_message'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-                return;
-            }
-            this.loading = true;
-            const params = new FormData();
-            var dnList = [];
-            dnList.push(data.member)
-            params.append("dnList[]", dnList);
-            params.append("dn", this.selectedLiderNode.distinguishedName);
-            const{response,error} = await  userGroupsService.deleteGroupMember(params);
-            if(error){
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            }
-            else{
-                if (response.status == 200) {
-                    if (response.data != null) {
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('group_management.delete_member_success_message'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                        this.setSelectedLiderNode(response.data);
-                        this.getMemberOfSelectedGroup(this.selectedLiderNode);
-                        this.$emit('deleteMember', this.selectedLiderNode);
-                        this.loading = false;
-                    }
-                }
-            }
-        },
-
-        async addPolicyException(data) {
+        async addPolicyException() {
             let members = [];
             this.selectedMembers.forEach(element => {
                 members.push(element.member);
@@ -252,48 +200,20 @@ export default {
 
             let params = {
                 "members": members,
-                "dn": data.member,
+                // "dn": data.member,
                 "policy": this.selectedPolicy,
                 "label": this.label,
                 "description": this.description,
-                "dnType": this.selectedLiderNode.type,
+                // "dnType": this.selectedLiderNode.type,
             }
             this.$emit('addPolicyException', params);
             this.showDialog = false;
-        },
-
-        getSelectedNodeAttribute() {
-            let nodeSummaryData = [];
-            nodeSummaryData.push({
-                'label': this.$t('group_management.name'),
-                'value': this.selectedLiderNode.name,
-                },
-                {
-                    'label': this.$t('group_management.type'),
-                    'value': this.selectedLiderNode.type,
-                });
-            if (this.selectedLiderNode.type == "GROUP") {
-                nodeSummaryData.push({
-                'label': this.$t('group_management.number_of_member'),
-                'value': this.members.length
-                });
-            }
-            this.selectedNodeSummaryData = nodeSummaryData;
         },
     },
 
     mounted() {
         this.getMemberOfSelectedGroup(this.selectedLiderNode);
     },
-
-    // watch: {
-    //     selectedPolicyException() {
-    //         if (this.selectedPolicyException) {
-    //             console.log(this.selectedPolicyException)
-    //             this.selectedMembers = this.selectedPolicyException;    
-    //         }
-    //     }
-    // },
 }
 </script>
 

@@ -3,7 +3,7 @@
         <Dialog
             header="İstisnai Kullanıcı ve Grup Listesi" 
             :modal="true"
-            :style="{ width: '40vw'}"
+            :style="{ width: '50vw'}"
             v-model:visible="showDialog">
             <div class="p-fluid">
                 <div class="p-field">
@@ -18,9 +18,13 @@
                         <template #header>
                             <div class="p-field p-d-flex p-jc-between">
                                 <div>
-                                    <Button type="button" class="p-button-sm" label="Add Policy Exception"
-                                        @click="addPolicyExceptionDialog = true"
-                                        icon="pi pi-plus"
+                                    <Button type="button" class="p-button-sm p-mr-2" v-tooltip.bottom="'Add User'"
+                                        @click="addPolicyExceptionDialog = true; type = 'user'"
+                                        icon="pi pi-user-plus"
+                                    />
+                                    <Button type="button" class="p-button-sm" v-tooltip.bottom="'Add Grup'"
+                                        @click="addPolicyExceptionDialog = true; type = 'group'"
+                                        icon="pi pi-users"
                                     />
                                 </div>
                                 <div>
@@ -106,6 +110,7 @@
             @close-policy-exception-dialog="addPolicyExceptionDialog = false"
             :selectedPolicy="selectedPolicy"
             @addPolicyException="addPolicyException"
+            :type="type"
         >
         </AddPolicyExceptionDialog>
     </div>  
@@ -119,7 +124,7 @@
  */
 
 import {FilterMatchMode} from 'primevue/api';
-import { policyService } from '../../../../services/PolicyManagement/PolicyService';
+import { policyService } from "../../../../../services/PolicyManagement/PolicyService.js";
 import AddPolicyExceptionDialog from "./AddPolicyExceptionDialog.vue"
 
 export default {
@@ -138,7 +143,8 @@ export default {
             domainAdminConfirmDialog: false,
             selectedPolicyException: null,
             deletePolicyExceptionConfirm: false,
-            addPolicyExceptionDialog: false
+            addPolicyExceptionDialog: false,
+            type: "user"
         }
     },
 
