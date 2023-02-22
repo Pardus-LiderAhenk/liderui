@@ -1596,7 +1596,8 @@
                 "cookies_and_otherSite_data":"Cookies and other site data",
                 "cache_image_and_file":"Cached images and files",
                 "password_and_other_open_session":"Passwords and other login data",
-                "autofill_form":"Form autofill data"
+                "autofill_form":"Form autofill data",
+                "history":"History"
             }
             
             

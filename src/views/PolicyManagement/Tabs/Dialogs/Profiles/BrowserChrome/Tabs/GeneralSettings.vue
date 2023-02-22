@@ -2,7 +2,6 @@
     <div>
         <div class="p-fluid p-formgrid">
             <h6>{{$t('policy_management.profile.chrome_browser.start')}}</h6>
-
             <div class="p-field p-grid" >
                 <label for="NewTabPageLocation" class="p-col">{{$t("policy_management.profile.chrome_browser.new_tab_page_location")}}</label>
 
@@ -10,9 +9,7 @@
                     v-model="NewTabPageLocation" 
                     :placeholder="$t('https://www.google.com')"/>
             </div>
-
             <h6>{{$t('policy_management.profile.chrome_browser.appearance')}}</h6>
-
             <div class="p-field p-grid">
                 <InputSwitch id="ShowHomeButton" class="p-col-fixed" v-model="ShowHomeButton"/>
                 <label for="ShowHomeButton" class="p-col">{{$t("policy_management.profile.chrome_browser.show_homepage")}}</label>
@@ -30,7 +27,6 @@
                     v-model="downloadDir" 
                     :placeholder="$t('https://liderahenk.org/')"/>
             </div>
-
             <h6>{{$t('policy_management.profile.chrome_browser.downloads')}}</h6>
             <div class="p-field p-grid">
                 <RadioButton value="true" v-model="DefaultDownloadDirectory" id="DefaultDownloadDirectory"/>
@@ -44,7 +40,6 @@
                 <RadioButton id="PromptForDownloadLocation" value="false" v-model="PromptForDownloadLocation"/>
                 <label for="PromptForDownloadLocation" class="p-col">{{$t('policy_management.profile.chrome_browser.ask_each_time_where_to_save_files')}}</label>
             </div>
-
             <h6>{{$t('policy_management.profile.chrome_browser.tabs')}}</h6>
             <div class="p-field p-grid">
                 <InputSwitch id="BrowserSignin" class="p-col-fixed" v-model="BrowserSignin"/>
@@ -72,7 +67,6 @@
                 <InputSwitch id="BlockExternalExtensions" class="p-col-fixed" v-model="BlockExternalExtensions"/>
                 <label for="BlockExternalExtensions" class="p-col">{{$t("policy_management.profile.chrome_browser.extension_block")}}</label>
             </div>
-
         </div>
     </div>
 </template>
@@ -92,7 +86,7 @@ export default {
 
     data() {
         return {
-    //		General preferences
+    
             NewTabPageLocation : "",
             HomepageIsNewTabPage : false,
             ShowHomeButton : false,
@@ -101,13 +95,14 @@ export default {
             PromptForDownloadLocation: false,
             SideSearchEnabled: false,
             BookmarkBarEnabled: false,
-            IncognitoModeAvailability: "1", //0 = Incognito mode available, 1 = Incognito mode disabled,2 = Incognito mode forced
-            BrowserSignin:"1", //0 = Disable browser sign-in,1 = Enable browser sign-in,2 = Force users to sign-in to use the browser
+            IncognitoModeAvailability: "1", 
+            BrowserSignin:"1", 
             AutoFillEnabled:false,
             SafeBrowsingEnabled:false,
             AllowSystemNotifications:false,
             BlockExternalExtensions: false,
             generalPreferences: []
+            
         }
     },
 

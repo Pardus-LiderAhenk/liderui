@@ -126,7 +126,7 @@ export default {
             this.socksProxy = "";
             this.socksPort = "";
             this.ignoreHosts="",
-            this.autoProxyCoautoConfigurationnfigUrl = "";
+            this.autoConfiguration = "";
             this.noProxyOn = "localhost; 127.0.0.1";
         }
     },
@@ -134,8 +134,6 @@ export default {
     methods: {
         getProxyPreferences() {
             this.addToPreferences(PreferencesChrome.proxyType, this.proxyType);
-            this.addToPreferences(PreferencesChrome.useThisServerForAllProtocols, this.useThisServerForAllProtocols.toString());
-            this.addToPreferences(PreferencesChrome.dontPromptForAuth, this.dontPromptForAuth.toString());
             if (this.proxyType == "1") {
                 if (this.httpProxy != "" && this.httpProxy != null && this.httpPort != "" && this.httpPort != null) {
                     this.addToPreferences(PreferencesChrome.http_proxy_head + this.httpProxy+":"+this.httpPort+"/'")
@@ -154,8 +152,8 @@ export default {
                 }
             }
             if (this.proxyType == "2") {
-                if (this.autoProxyConfigUrl != "" && this.autoProxyConfigUrl != null) {
-                    this.addToPreferences(PreferencesChrome.no_proxy, this.autoProxyConfigUrl);
+                if (this.autoConfiguration != "" && this.autoConfiguration != null) {
+                    this.addToPreferences(PreferencesChrome.pac_proxy  + this.autoConfiguration);
                 }
             }
             return this.proxyPreferences;
@@ -173,15 +171,6 @@ export default {
             prefList.forEach(element => {
                 if (element.preferenceName == PreferencesChrome.proxyType) {
                     this.proxyType = element.value;
-                }
-                if (element.preferenceName == PreferencesChrome.useThisServerForAllProtocols && element.value == 'true') {
-                    this.useThisServerForAllProtocols = true;
-                }
-                if (element.preferenceName == PreferencesChrome.dontPromptForAuth && element.value == 'true') {
-                    this.dontPromptForAuth = true;
-                }
-                if (element.preferenceName == PreferencesChrome.remoteDns && element.value == 'true') {
-                    this.remoteDns = true;
                 }
                 if (element.preferenceName == PreferencesChrome.httpProxy) {
                     this.httpProxy = element.value;
@@ -207,8 +196,11 @@ export default {
                 if (element.preferenceName == PreferencesChrome.socksPort) {
                     this.socksPort = element.value;
                 }
-                if (element.preferenceName == PreferencesChrome.autoProxyConfigUrl) {
-                    this.autoProxyConfigUrl = element.value;
+                if (element.preferenceName == PreferencesChrome.ignoreHosts) {
+                    this.socksPoignoreHostsrt = element.value;
+                }
+                if (element.preferenceName == PreferencesChrome.autoConfiguration) {
+                    this.autoConfiguration = element.value;
                 }
             });
         }

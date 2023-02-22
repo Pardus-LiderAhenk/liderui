@@ -1596,11 +1596,12 @@
                 "cookies_and_otherSite_data":"Çerezler ve diğer site verileri",
                 "cache_image_and_file":"Önbelleğe alınan resimler ve dosyalar",
                 "password_and_other_open_session":"Şifreler ve diğer oturum açma verileri",
-                "autofill_form":"Formu otomatik doldurma verileri"
+                "autofill_form":"Formu otomatik doldurma verileri",
+                "history":"Geçmiş"
             }
 
 
-
+            
         }
     },
     "reports": {

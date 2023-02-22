@@ -52,7 +52,7 @@
 
 <script>
 /**
- * Firefox browser profile dialog
+ * Chrome browser profile dialog
  * @see {@link http://www.liderahenk.org/}
 * emits this event
 * @event closePolicyDialog

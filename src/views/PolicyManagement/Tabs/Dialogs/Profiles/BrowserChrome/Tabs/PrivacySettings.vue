@@ -1,8 +1,7 @@
 <template>
     <div class="p-fluid p-formgrid">
         
-        
-        <h6>{{$t('Geçmiş')}}</h6>
+        <h6>{{$t('policy_management.profile.chrome_privacy.history')}}</h6>
         <div class="p-field p-grid">
             <InputSwitch  class="p-col-fixed" id="AllowDeletingBrowserHistory" v-model="AllowDeletingBrowserHistory"/>
             <label for="AllowDeletingBrowserHistory" class="p-col">{{$t('policy_management.profile.chrome_privacy.browser_history_remove')}}</label>

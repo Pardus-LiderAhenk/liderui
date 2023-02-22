@@ -1,6 +1,5 @@
 <template>
     <div class="p-fluid">
-        <h6>{{$t('policy_management.profile.chrome_browser.description')}}</h6>
         <div class="p-fluid p-field p-grid">
             <div class="p-field p-col-12 p-md-5">
                 <InputText :class="validation.preferenceName ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'"
@@ -24,21 +23,10 @@
                 </Button>
             </div>
         </div>
+        <div>
+            <small>{{$t('policy_management.profile.chrome_browser.description')}}</small>
+        </div>
         <DataTable :value="otherPreferences" responsiveLayout="scroll" class="p-datatable-sm p-field">
-            <template #empty>
-            <div class="p-d-flex p-jc-center">
-            <OverlayPanel>
-                <div><h5>{{ $t('testt') }}</h5></div>
-                <ul>
-                  <li>
-                    <small>{{ pluginDescription }}</small>
-                  </li>
-                </ul>
-                  {{ $t('test2') }}...
-            </OverlayPanel>
-                
-            </div>
-            </template>
             <Column field="preferenceName" :header="$t('policy_management.profile.browser.feature_name')" style="width:40%"></Column>
             <Column field="value" :header="$t('policy_management.profile.browser.value')" style="width:40%"></Column>
             <Column :exportable="false">
