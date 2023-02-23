@@ -105,6 +105,10 @@
                             <DataTable class="p-datatable-sm" 
                                 :value="policies" v-model:filters="filters"
                                 responsiveLayout="scroll"
+                                :paginator="true" :rows="10" ref="dt"
+                                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                                :rowsPerPageOptions="[10,25,50,100]"  style="margin-top: 2em"
+
                             >
                             <template #header>
                                 <div class="p-d-flex p-jc-end">
