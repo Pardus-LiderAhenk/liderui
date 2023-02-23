@@ -28,7 +28,6 @@
                                 :class="active ? 'p-button-success p-button-sm':'p-button-sm p-button-danger'"
                             />
                         </div>
-                        
                     </div>
                 </div>
                 <div class="p-field">
