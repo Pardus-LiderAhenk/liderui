@@ -111,7 +111,7 @@
  */
 
 import {FilterMatchMode} from 'primevue/api';
-import AssignedPolicies from "./AssignedPolicies.vue";
+import AssignedPolicies from "../../Components/Policy/AssignedPolicies.vue";
 import { mapActions, mapGetters } from "vuex"
 import { adManagementService } from '../../../../services/UserManagement/AD/AdManagement.js';
 export default {

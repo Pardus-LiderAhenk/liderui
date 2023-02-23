@@ -265,7 +265,7 @@ import NodeDetail from '@/components/Tree/NodeDetail.vue';
 import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
 import MemberOfUserGroup from "./Components/MemberOfUserGroup.vue";
-import AssignedPolicies from "./Components/AssignedPolicies.vue";
+import AssignedPolicies from "../Components/Policy/AssignedPolicies.vue";
 import {FilterMatchMode} from 'primevue/api';
 import { userGroupsService } from '../../../services/Settings/UserGroupsService.js'
 

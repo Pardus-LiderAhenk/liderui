@@ -172,7 +172,7 @@ import ApplyPolicy from "./ApplyPolicy.vue";
 import PolicyExceptionListDialog from "./PolicyExceptionListDialog.vue"
 
 export default {
-     props: {
+    props: {
         selectedNode: {
             type: Object,
             description: "selected node",
@@ -201,10 +201,6 @@ export default {
 
     methods:{
         async getAssignedPolices() {
-            let params = {
-                "distinguishedName": this.selectedNode.distinguishedName
-            }
-
             const{response,error} = await policyService.policyGroup(this.selectedNode.distinguishedName);
             if(error){
                 this.$toast.add({
@@ -279,6 +275,14 @@ export default {
             this.unassignPolicyDialog = false;
         },
     },
+
+    // mounted() {
+    //     if (this.selectedNode && this.selectedNode.type == "GROUP") {
+    //         this.getAssignedPolices();
+    //     } else {
+    //         this.policies = [];
+    //     }
+    // },
 
     watch: {
         selectedNode() {
