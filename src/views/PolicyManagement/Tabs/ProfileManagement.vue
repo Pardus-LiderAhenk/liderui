@@ -87,6 +87,11 @@
             @close-profile-dialog="modals.rsyslogProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </rsyslog-profile-dialog>
+        <browser-chrome-profile-dialog v-if="modals.browserChromeProfileDialog" 
+        :browserChromeProfileDialog="modals.browserChromeProfileDialog"
+        @close-profile-dialog="modals.browserChromeProfileDialog=false;"
+        :pluginProfile="selectedProfile">
+        </browser-chrome-profile-dialog>
         <!-- Profile Dialogs END -->
 	</div>
 </template>
@@ -100,6 +105,7 @@ import UsbProfileDialog from './Dialogs/Profiles/UsbProfileDialog.vue';
 import BrowserProfileDialog from './Dialogs/Profiles/Browser/BrowserProfileDialog.vue';
 import RsyslogProfileDialog from './Dialogs/Profiles/RsyslogProfileDialog.vue';
 import { taskService } from "../../../services/Task/TaskService.js";
+import BrowserChromeProfileDialog from './Dialogs/Profiles/BrowserChrome/BrowserChromeProfileDialog.vue';
 
 export default {
     data() {
@@ -111,7 +117,8 @@ export default {
                 browserProfileDialog: false,
                 loginManagerProfileDialog: false,
                 rsyslogProfileDialog: false,
-                usbProfileDialog: false
+                usbProfileDialog: false,
+                browserChromeProfileDialog: false
             },
             selectedProfile: null,
             profileImage: require("@/assets/images/icons/pardus.png"),
@@ -127,7 +134,8 @@ export default {
         LoginManagerProfileDialog,
         UsbProfileDialog,
         BrowserProfileDialog,
-        RsyslogProfileDialog
+        RsyslogProfileDialog,
+        BrowserChromeProfileDialog
         
     },
 
@@ -157,6 +165,9 @@ export default {
             }
             if (profile.page == "usb-profile") {
                 this.modals.usbProfileDialog = true;
+            }
+            if (profile.page == "browser-chrome-profile") {
+                this.modals.browserChromeProfileDialog = true;
             }
         },
 
