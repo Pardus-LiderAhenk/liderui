@@ -15,9 +15,9 @@
                                 <Button :label="$t('settings.console_user_settings.add_console_user')"  class="p-mr-2" 
                                     @click="addConsoleUserModalVisible = true"
                                 />
-                                <Button :label="$t('settings.console_user_settings.delete_users_console_authority')" 
+                                <!-- <Button :label="$t('settings.console_user_settings.delete_users_console_authority')" 
                                     @click="showDeleteConsoleUserDialog = true"
-                                />
+                                /> -->
                             </div>
                             <div class="p-col-12">
                                 <DataTable :value="records" responsiveLayout="scroll"
@@ -32,6 +32,26 @@
                                     </Column>
                                     <Column field="uid" header="UID"></Column>
                                     <Column field="distinguishedName" :header="$t('settings.console_user_settings.registiration_dn')"></Column>
+                                    <Column :exportable="false">
+                                        <template #body="slotProps">
+                                            <div class="p-d-flex p-jc-end">
+                                                <Button class="p-button-sm p-button-rounded" 
+                                                    icon="pi pi-unlock"
+                                                    :title="$t('parola değiştirme')" 
+                                                    @click.prevent="selectedUser = slotProps.data; modals.showChangeConsoleUserDiolog = true" >                                               </Button>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column>
+                                        <template #body="slotProps">
+                                            <div class="p-d-flex p-jc-end">
+                                                <Button class="p-button-danger p-button-sm p-button-rounded" 
+                                                    icon="pi pi-trash"
+                                                    :title="$t('Silme')" 
+                                                    @click.prevent="selectedUser = slotProps.data; showDeleteConsoleUserDialog = true"/>
+                                            </div>
+                                        </template>
+                                    </Column>                                    
                                 </DataTable>
                             </div>
                         </div>
@@ -262,6 +282,7 @@ export default {
             roleGroupModalVisible:false,
             addConsoleUserModalVisible:false,
             showDeleteConsoleUserDialog:false,
+            showChangeConsoleUserDiolog:false,
             showUpdateConsoleUserRolesDialog: false,
             showAccessPermissionUserDeleteDiolog:false,
             selectedGroupNode:null,
@@ -333,6 +354,7 @@ export default {
                 else{
                     if(response.status == 200){
                         this.records = response.data;
+                        console.log(response.data)
                     }
                     else if(response.status == 417){
                         this.$toast.add({
