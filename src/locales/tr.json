@@ -765,11 +765,11 @@
             "error_226_user_id_found":"Bu kullanıcı adında bir kayıt bulunmuştur. Kullanıcı oluşturulamadı.",
             "error_417_change_password":"Kullanıcı parolasını değiştirirken beklenmedik bir hata alındı. Hata kodu : 417",
             "error_change_password":"Kullanıcı parolası değiştirilemedi. Hata oluştu",
-            "change_password":"Parola Değiştirme",
+            "change_password":"Parola Değiştir",
             "yes":"Evet",
             "cancel":"İptal",
             "delete":"Sil",
-            "console_user_change_password":"Konsol kullanıcısı parola değiştirme",
+            "console_user_change_password":"Bildirim",
             "console_user_change_password_question":"Konsol kullanıcısı parola değiştirilecektir. Emin misiniz?"
 
         },

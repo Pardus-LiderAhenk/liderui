@@ -770,7 +770,7 @@
             "yes":"Yes",
             "cancel":"Cancel",
             "delete":"Delete",
-            "console_user_change_password":"Console user password change",
+            "console_user_change_password":"Notification",
             "console_user_change_password_question":"Console user password will be changed. Are you sure?"
         },
         "server_settings":{

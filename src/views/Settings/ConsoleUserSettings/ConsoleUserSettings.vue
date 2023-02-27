@@ -36,8 +36,8 @@
                                     class="p-button-text p-button-sm"
                                 />
                                 <Button 
-                                    label="Parola Değiştir"
-                                    icon="pi pi-check" 
+                                    :label="$t('settings.console_user_settings.change_password')" 
+                                    icon="pi pi-unlock" 
                                     @click="showUpdatePasswordDialog"
                                     class="p-button-sm"
                                 />
