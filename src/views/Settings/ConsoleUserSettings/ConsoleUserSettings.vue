@@ -36,9 +36,9 @@
                                     class="p-button-text p-button-sm"
                                 />
                                 <Button 
-                                    :label="$t('settings.console_user_settings.yes')"
+                                    label="Parola Değiştir"
                                     icon="pi pi-check" 
-                                    @click="updatePassword"
+                                    @click="showUpdatePasswordDialog"
                                     class="p-button-sm"
                                 />
                                 </template>
@@ -495,18 +495,15 @@ export default {
                     life: 3000
                 });
             }
-            
             this.showDeleteConsoleUserDialog = false;
         }, 
 
         async updatePassword(){
-            this.userPassword = this.$refs.password.getPassword();
             let params = new FormData();
             params.append("distinguishedName", this.selectedUser.distinguishedName);
             params.append("userPassword", this.userPassword);
 
             if (this.selectedUser) {
-
                 const{response,error} = await userService.updatePasswd(params);
                 if(error){
                     this.$toast.add({
@@ -547,7 +544,6 @@ export default {
                     life: 3000
                 });
             }
-
             this.showChangePasswordConsoleUserDialog = false;
         },
 
@@ -654,11 +650,11 @@ export default {
                     }                    
                 }
             },
-            showUpdatePasswordDialog() {
+        showUpdatePasswordDialog() {
             if (this.selectedUser && this.selectedUser.type === "USER") {
                 this.userPassword = this.$refs.password.getPassword();
                 if (this.userPassword) {
-                    this.changePasswordDialog = true;
+                    this.showChangePasswordConsoleUserDialog = true;
                 }
             } else {
                 this.$toast.add({
