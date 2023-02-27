@@ -763,8 +763,15 @@
             "user_add_to_group":"The user has been successfully added to the group",
             "error_417_user_add_to_group":"An unexpected error occurred while adding the user to the group. Error code : 417",
             "console_user_permission_deletion_question":"Console user access authorization will be deleted. Are you sure?",
-            "error_226_user_id_found":"A record was found in this user record. The user could not be created."
-
+            "error_226_user_id_found":"A record was found in this user record. The user could not be created.",
+            "error_417_change_password":"An unexpected error was received when changing the user password. Error code : 417",
+            "error_change_password":"The user password could not be changed. An error occurred",
+            "change_password":"Change Password",
+            "yes":"Yes",
+            "cancel":"Cancel",
+            "delete":"Delete",
+            "console_user_change_password":"Console user password change",
+            "console_user_change_password_question":"Console user password will be changed. Are you sure?"
         },
         "server_settings":{
             "directory_server_setting":"Directory Server Settings",

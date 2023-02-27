@@ -762,7 +762,16 @@
             "user_add_to_group":"Kullanıcı başarıyla gruba eklendi.",
             "error_417_user_add_to_group":"Kullanıcı gruba eklenirken beklenmedik bir hata oluştu. Hata kodu : 417",
             "console_user_permission_deletion_question":"Konsol kullanıcısı erişim yetkisi silinecektir. Emin misiniz?",
-            "error_226_user_id_found":"Bu kullanıcı adında bir kayıt bulunmuştur. Kullanıcı oluşturulamadı."
+            "error_226_user_id_found":"Bu kullanıcı adında bir kayıt bulunmuştur. Kullanıcı oluşturulamadı.",
+            "error_417_change_password":"Kullanıcı parolasını değiştirirken beklenmedik bir hata alındı. Hata kodu : 417",
+            "error_change_password":"Kullanıcı parolası değiştirilemedi. Hata oluştu",
+            "change_password":"Parola Değiştirme",
+            "yes":"Evet",
+            "cancel":"İptal",
+            "delete":"Sil",
+            "console_user_change_password":"Konsol kullanıcısı parola değiştirme",
+            "console_user_change_password_question":"Konsol kullanıcısı parola değiştirilecektir. Emin misiniz?"
+
         },
 
         "server_settings":{

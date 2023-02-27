@@ -19,6 +19,30 @@
                                     @click="showDeleteConsoleUserDialog = true"
                                 /> -->
                             </div>
+                            <!-- password change dialog -->
+                            <Dialog 
+                                :header="$t('settings.console_user_settings.change_password')" 
+                                v-model:visible="changePasswordDialog"  
+                                :modal="true" 
+                                @hide="changePasswordDialog = false">
+                                <div>
+                                    <password-component ref="password"></password-component>
+                                </div>
+                                <template #footer>
+                                <Button 
+                                    :label="$t('settings.console_user_settings.cancel')" 
+                                    icon="pi pi-times" 
+                                    @click="changePasswordDialog = false" 
+                                    class="p-button-text p-button-sm"
+                                />
+                                <Button 
+                                    :label="$t('settings.console_user_settings.yes')"
+                                    icon="pi pi-check" 
+                                    @click="updatePassword"
+                                    class="p-button-sm"
+                                />
+                                </template>
+                            </Dialog>
                             <div class="p-col-12">
                                 <DataTable :value="records" responsiveLayout="scroll"
                                     v-model:filters="filters"
@@ -32,26 +56,22 @@
                                     </Column>
                                     <Column field="uid" header="UID"></Column>
                                     <Column field="distinguishedName" :header="$t('settings.console_user_settings.registiration_dn')"></Column>
-                                    <Column :exportable="false">
-                                        <template #body="slotProps">
-                                            <div class="p-d-flex p-jc-end">
-                                                <Button class="p-button-sm p-button-rounded" 
-                                                    icon="pi pi-unlock"
-                                                    :title="$t('parola değiştirme')" 
-                                                    @click.prevent="selectedUser = slotProps.data; modals.showChangeConsoleUserDiolog = true" >                                               </Button>
-                                            </div>
-                                        </template>
-                                    </Column>
                                     <Column>
                                         <template #body="slotProps">
                                             <div class="p-d-flex p-jc-end">
+                                                <Button class="p-button-sm p-button-rounded p-mr-2" 
+                                                    icon="pi pi-unlock"
+                                                    v-tooltip.bottom="$t('settings.console_user_settings.change_password')"
+                                                    @click.prevent="selectedUser = slotProps.data; changePasswordDialog = true"/>
+
                                                 <Button class="p-button-danger p-button-sm p-button-rounded" 
                                                     icon="pi pi-trash"
-                                                    :title="$t('Silme')" 
+                                                    v-tooltip.bottom="$t('settings.console_user_settings.delete')"
                                                     @click.prevent="selectedUser = slotProps.data; showDeleteConsoleUserDialog = true"/>
                                             </div>
                                         </template>
-                                    </Column>                                    
+                                    </Column>
+                                                    
                                 </DataTable>
                             </div>
                         </div>
@@ -137,7 +157,7 @@
                                 <Column :exportable="false" style="min-width:8rem">
                                     <template #body="slotProps">
                                         <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"  
-                                            @click="showAccessPermissionUserDeleteDiolog = true; selectedOlcAccess = slotProps.data"
+                                            @click="showAccessPermissionUserDeleteDialog = true; selectedOlcAccess = slotProps.data"
                                         />
                                     </template>
                                  </Column>
@@ -199,11 +219,19 @@
     />
 
     <LiderConfirmDialog 
-        :showDialog="showAccessPermissionUserDeleteDiolog"
-        @showDialog="showAccessPermissionUserDeleteDiolog = $event;"
+        :showDialog="showAccessPermissionUserDeleteDialog"
+        @showDialog="showAccessPermissionUserDeleteDialog = $event;"
         :header="$t('settings.console_user_settings.console_user_permission_deletion_question')"
         :message="$t('settings.console_user_settings.console_user_permission_deletion_question')"
         @accepted="deleteOlcAccessRule"
+    />
+
+    <LiderConfirmDialog 
+        :showDialog="showChangePasswordConsoleUserDialog"
+        @showDialog="showChangePasswordConsoleUserDialog = $event;"
+        :header="$t('settings.console_user_settings.console_user_change_password')"
+        :message="$t('settings.console_user_settings.console_user_change_password_question')"
+        @accepted="updatePassword"
     />
   
 </template>
@@ -218,6 +246,8 @@ import UserGroupDialog from './Dialogs/UserGroupsDialog.vue';
 import RoleDialog from './Dialogs/RoleGroupsDialog.vue';
 import AddConsoleUserDialog from './Dialogs/AddConsoleUserDialog.vue';
 import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService.js";
+import { userService } from '../../../services/Settings/UserService';
+import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 
 export default {
     components: {
@@ -282,9 +312,12 @@ export default {
             roleGroupModalVisible:false,
             addConsoleUserModalVisible:false,
             showDeleteConsoleUserDialog:false,
-            showChangeConsoleUserDiolog:false,
+            showChangePasswordConsoleUserDialog:false,
             showUpdateConsoleUserRolesDialog: false,
-            showAccessPermissionUserDeleteDiolog:false,
+            showAccessPermissionUserDeleteDialog:false,
+            showAccessPermissionUserChangePasswordDialog:false,
+            changePasswordDialog: false,
+            userPassword: null,
             selectedGroupNode:null,
             searchFields: [
                 {
@@ -302,6 +335,10 @@ export default {
     mounted() {
         this.getRoles();
         this.getConsoleUsers();
+    },
+
+    components: {
+        PasswordComponent
     },
 
     methods: {
@@ -354,7 +391,6 @@ export default {
                 else{
                     if(response.status == 200){
                         this.records = response.data;
-                        console.log(response.data)
                     }
                     else if(response.status == 417){
                         this.$toast.add({
@@ -462,6 +498,59 @@ export default {
             
             this.showDeleteConsoleUserDialog = false;
         }, 
+
+        async updatePassword(){
+            this.userPassword = this.$refs.password.getPassword();
+            let params = new FormData();
+            params.append("distinguishedName", this.selectedUser.distinguishedName);
+            params.append("userPassword", this.userPassword);
+
+            if (this.selectedUser) {
+
+                const{response,error} = await userService.updatePasswd(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.change_user_password_error')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+                        this.$emit('updatedUser', response.data);
+                        this.changePasswordDialog = false;
+                        this.userPassword = null;
+                        this.$refs.password.setPasswordForm('', '');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.change_user_password_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_change_password'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+            }
+            else{
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.error_change_password'),
+                    summary: this.$t('computer.task.toast_summaryta'), 
+                    life: 3000
+                });
+            }
+
+            this.showChangePasswordConsoleUserDialog = false;
+        },
+
         setSelectedGroupNode(node) {
             this.groupMembers = [];
             this.selectedGroupNode = node;
@@ -564,8 +653,23 @@ export default {
                     });
                     }                    
                 }
+            },
+            showUpdatePasswordDialog() {
+            if (this.selectedUser && this.selectedUser.type === "USER") {
+                this.userPassword = this.$refs.password.getPassword();
+                if (this.userPassword) {
+                    this.changePasswordDialog = true;
+                }
+            } else {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('user_management.select_user_warn'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
-        }
+        },
+    }
    
 }
 </script>
