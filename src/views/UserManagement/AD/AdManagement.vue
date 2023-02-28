@@ -1,4 +1,8 @@
 <template>
+    <div>
+
+
+    
     <!-- context menu Dialog -->
     <node-detail
         :showNodeDetailDialog="showNodeDetailDialog"
@@ -129,6 +133,7 @@
             </Card>
         </div>
     </div>
+</div>
 </template>
 
 <script>
