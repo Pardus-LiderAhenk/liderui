@@ -170,6 +170,38 @@
         </template>
     </Dialog>
     <!-- Move Selected Node Dialog End -->
+
+    <!-- Add Group Dialog -->
+    <Dialog 
+        :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.move_group')
+        :$t('group_management.move_folder')" 
+        v-model:visible="modals.addToGroup" :style="{width: '40vw'}" :modal="true"
+    >  
+        <tree-component 
+                ref="tree"
+                loadNodeUrl="/api/lider/computer-groups/groups"
+                loadNodeOuUrl="/api/lider/computer-groups/ou-details"
+                :treeNodeClick="treeNodeClick"
+                :searchFields="searchFields"
+                :showCheckbox="agentGroupModal.showCheckbox"
+                :getCheckedNodes="getCheckedAgentNodes"
+                @handleContextMenu="handleContenxtMenu"
+            >
+            </tree-component>
+        <div class="p-col p-text-center">
+          <small>{{$t('group_management.select_folder_warn')}}</small>
+        </div>
+        <template #footer>
+            <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
+                @click="modals.addToGroup = false" class="p-button-text p-button-sm"
+            />
+            <Button :label="$t('group_management.add')" icon="el-icon-rank" 
+                @click="groupManagemenet" class="p-button-sm"
+            />
+        </template>
+    </Dialog>
+    <!-- Add Group Dialog End -->
+
     <!-- Add Group Dialog or Add Client to Group Dialog -->
     <Dialog :header="modals.addClient? $t('group_management.add_client')
         :$t('group_management.add_group')"
@@ -334,6 +366,7 @@ export default {
             selectedPluginTab: "system-management",
             showNodeDetailDialog: false,
             moveFolderNode: null,
+            // addGroupNode : null,
             showContextMenu: false,
             loading: false,
             loadingGroup: false,
@@ -344,7 +377,8 @@ export default {
                 addClient: false,
                 addGroup: false,
                 deleteNode: false,
-                moveNode: false
+                moveNode: false,
+                addToGroup: false
             },
             folderName:'',
             selectedAgents: [],
@@ -494,6 +528,11 @@ export default {
                             icon:"pi pi-trash", 
                             command:() => {this.modals.deleteNode = true;}
                         },
+                        {
+                            label: 'AGAH', 
+                            icon:"fas fa-users", 
+                            command: () => {this.showAddGroupDialog()}
+                        },
                     ]
             }
             this.$refs.rightMenu.style.top = data.clientY + 'px';
@@ -508,6 +547,10 @@ export default {
             //*** This method for tree that is created for folder move dialog.  */
             this.moveFolderNode = node;
         },
+
+        // addTreeNodeClick(node) {
+        //     this.addGroupNode = node;
+        // },
 
         async addFolder() {
             if (!this.folderName.trim()) {
@@ -663,7 +706,7 @@ export default {
                 });
                 return;
             }
-            if (this.modals.addClient) {
+            if (this.modals.addClient || this.modals.addToGroup) {
                 this.addClientToGroup();
             } else {
                 this.createAgentGroup();
@@ -738,6 +781,14 @@ export default {
             this.getMemberOfSelectedGroup();
         },
 
+        showAddGroupDialog() {
+            this.agentGroupModal.groupName = this.selectedNode.cn;
+            // this.modals.addGroup = true;
+            // this.modals.addClient = true;
+            this.modals.addToGroup = true;
+            this.getMemberOfSelectedGroup();
+        },
+
         async addClientToGroup() {
             this.loadingGroup = true;
             const{response,error} = await computerGroupsManagementService.groupExisting(
@@ -767,6 +818,7 @@ export default {
                         }
                         this.modals.addGroup = false;
                         this.modals.addClient = false;
+                        this.modals.addToGroup = false;
                         this.$toast.add({
                             severity:'success', 
                             detail: this.$t('group_management.add_client_success'), 
@@ -791,6 +843,7 @@ export default {
 				if (this.selectedNode.attributesMultiValues.hasOwnProperty(key) && key == "member") {
 					if(this.selectedNode.attributesMultiValues[key].length > 1) {
                         this.attributesMultiValue = true;
+                        console.log(this.selectedNode.attributesMultiValues)
 						for(var i = 0; i< this.selectedNode.attributesMultiValues[key].length; i++) {
                             this.agentGroupModal.existingClients.push({
                                 "distinguishedName": this.selectedNode.attributesMultiValues[key][i],
