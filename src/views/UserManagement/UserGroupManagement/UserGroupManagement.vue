@@ -486,7 +486,7 @@ export default {
                             command:() => {this.modals.deleteNode = true;}
                         },
                         {
-                            label: 'AGAH', 
+                            label: 'Grup Ekle', 
                             icon:"fas fa-users", 
                             command: () => {this.showAddGroupDialog()}
                         },
