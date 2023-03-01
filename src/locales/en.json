@@ -1248,6 +1248,7 @@
         "number_of_member": "Number of Member",
         "select_node_warn": "Please select a node",
         "add_group": "Add Group",
+        "create_group": "Create Group",
         "add_folder":"Add Folder",
         "delete_group": "Delete Group",
         "rename_group": "Rename Group",

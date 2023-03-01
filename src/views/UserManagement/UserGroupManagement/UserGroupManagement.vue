@@ -110,8 +110,8 @@
     <!-- Move Selected Node Dialog End -->
 
     <!-- Add Group To Group Dialog -->
-    <Dialog :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.move_group')
-        :$t('group_management.move_folder')" 
+    <Dialog :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.add_group')
+        :$t('group_management.add_group')" 
         v-model:visible="modals.addToGroup" :style="{width: '40vw'}" :modal="true">
         <tree-component 
             ref="tree"
@@ -125,13 +125,13 @@
         >
         </tree-component>
         <div class="p-col p-text-center">
-          <small>{{$t('group_management.select_folder_warn')}}</small>
+          <small>{{$t('group_management.group_name_warn')}}</small>
         </div>
         <template #footer>
             <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
                 @click="modals.addToGroup = false" class="p-button-text p-button-sm"
             />
-            <Button :label="$t('group_management.move')" icon="el-icon-rank" 
+            <Button :label="$t('group_management.add')" icon="el-icon-rank" 
                 @click="groupManagemenet" class="p-button-sm"
             />
         </template>
@@ -140,7 +140,7 @@
 
     <!-- Add Group Dialog or Add User to Group Dialog -->
     <Dialog :header="modals.addUser? $t('group_management.add_user')
-        :$t('group_management.add_group')"
+        :$t('group_management.create_group')"
          v-model:visible="modals.addGroup" :style="{width: '45vw'}" :modal="true">
         <TabView>
             <TabPanel :header="$t('group_management.group_info')">
@@ -430,7 +430,7 @@ export default {
                                 command: () => {this.showNodeDetailDialog = true}
                             },
                             {
-                                label: this.$t('group_management.add_group'), 
+                                label: this.$t('group_management.create_group'), 
                                 icon:"fas fa-users", 
                                 command: () => {this.modals.addUser = false; 
                                     this.userGroupModal.groupName = '';
@@ -486,7 +486,7 @@ export default {
                             command:() => {this.modals.deleteNode = true;}
                         },
                         {
-                            label: 'Grup Ekle', 
+                            label: this.$t('group_management.add_group'), 
                             icon:"fas fa-users", 
                             command: () => {this.showAddGroupDialog()}
                         },
