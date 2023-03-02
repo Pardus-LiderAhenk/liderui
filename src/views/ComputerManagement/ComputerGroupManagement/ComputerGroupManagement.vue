@@ -173,8 +173,8 @@
 
     <!-- Add Group Dialog -->
     <Dialog 
-        :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.move_group')
-        :$t('group_management.move_folder')" 
+        :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.add_group')
+        :$t('group_management.add_group')" 
         v-model:visible="modals.addToGroup" :style="{width: '40vw'}" :modal="true"
     >  
         <tree-component 
@@ -189,7 +189,7 @@
             >
             </tree-component>
         <div class="p-col p-text-center">
-          <small>{{$t('group_management.select_folder_warn')}}</small>
+          <small>{{$t('group_management.group_name_warn')}}</small>
         </div>
         <template #footer>
             <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
@@ -204,7 +204,7 @@
 
     <!-- Add Group Dialog or Add Client to Group Dialog -->
     <Dialog :header="modals.addClient? $t('group_management.add_client')
-        :$t('group_management.add_group')"
+        :$t('group_management.create_group')"
          v-model:visible="modals.addGroup" :style="{width: '50vw'}" :modal="true">
         <TabView>
             <TabPanel :header="$t('group_management.group_info')">
@@ -453,7 +453,7 @@ export default {
                                 command: () => {this.showNodeDetailDialog = true}
                             },
                             {
-                                label: this.$t('group_management.add_group'), 
+                                label: this.$t('group_management.create_group'), 
                                 icon:"fas fa-users", 
                                 command: () => {this.modals.addClient = false; 
                                     this.modals.addGroup = true;
@@ -529,7 +529,7 @@ export default {
                             command:() => {this.modals.deleteNode = true;}
                         },
                         {
-                            label: 'AGAH', 
+                            label: this.$t('group_management.add_group'), 
                             icon:"fas fa-users", 
                             command: () => {this.showAddGroupDialog()}
                         },

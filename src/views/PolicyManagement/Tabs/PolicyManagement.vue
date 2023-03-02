@@ -77,11 +77,11 @@
                                                 :title="$t('policy_management.edit')" 
                                                 @click.prevent="editPolicy(slotProps.data)">
                                             </Button>
-                                            <Button class="p-mr-2 p-button-sm p-button-rounded p-button-secondary" 
+                                            <!-- <Button class="p-mr-2 p-button-sm p-button-rounded p-button-secondary" 
                                                 icon="pi pi-list"
                                                 title="Policy Exception List" 
                                                 @click.prevent="policyExceptionList(slotProps.data)">
-                                            </Button>
+                                            </Button> -->
                                             <Button class="p-button-danger p-button-sm p-button-rounded" 
                                                 icon="pi pi-trash" 
                                                 :title="$t('policy_management.delete')"
