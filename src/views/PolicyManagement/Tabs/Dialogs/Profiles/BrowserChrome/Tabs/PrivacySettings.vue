@@ -76,9 +76,10 @@ export default {
     data () {
         return {
 
-            DnsOverHttpsMode:"",
-            HttpsOnlyMode:"",
+            DnsOverHttpsMode:"off",
+            HttpsOnlyMode:"disallowed",
             AllowDeletingBrowserHistory:false,
+            SavingBrowserHistoryDisabled:false,
             DefaultCookiesSetting:"1",
             ClearBrowsingDataOnExitList: [],
             browsingHistory: false,
@@ -96,10 +97,11 @@ export default {
         if (this.selectedProfileData) {
             this.setPrivacyPreferences();
         } else {
-            this.DnsOverHttpsMode = "",
-            this.HttpsOnlyMode = "",
+            this.DnsOverHttpsMode = "off",
+            this.HttpsOnlyMode = "disallowed",
             this.AllowDeletingBrowserHistory = false,
             this.DefaultCookiesSetting = "1",
+            this.SavingBrowserHistoryDisabled = false,
             this.ClearBrowsingDataOnExitList = []
         }
     },
@@ -108,7 +110,8 @@ export default {
         getPrivacyPreferences() {
             this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, this.DnsOverHttpsMode.toString());
             this.addToPreferences(PreferencesChrome.HttpsOnlyMode, this.HttpsOnlyMode.toString());
-            this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, this.AllowDeletingBrowserHistory);
+            this.AllowDeletingBrowserHistory ? this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "true") : this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "false");
+            this.SavingBrowserHistoryDisabled ? this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "true") : this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "false");
             this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, this.DefaultCookiesSetting.toString());
             this.addToPreferences(PreferencesChrome.ClearBrowsingDataOnExitList, this.ClearBrowsingDataOnExitList);
             if (this.browsingHistory) {
@@ -144,17 +147,20 @@ export default {
         setPrivacyPreferences() {
             let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
-                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode && element.value == "true") {
+                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode && element.value == "automatic") {
                     this.dontWantToBeTracked = element.value;
                 }
-                if (element.preferenceName == PreferencesChrome.HttpsOnlyMode && element.value == "true") {
+                if (element.preferenceName == PreferencesChrome.HttpsOnlyMode && element.value == "allowed") {
                     this.dontWantToBeTracked = element.value;
                 }
                 if (element.preferenceName == PreferencesChrome.AllowDeletingBrowserHistory && element.value == "true") {
+                    this.AllowDeletingBrowserHistory = true;
+                }
+                if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == "2") {
                     this.dontWantToBeTracked = element.value;
                 }
-                if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == "true") {
-                    this.dontWantToBeTracked = element.value;
+                if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled && element.value == "true") {
+                    this.SavingBrowserHistoryDisabled = true;
                 }
                 if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList){
                     this.ClearBrowsingDataOnExitList = element.value;

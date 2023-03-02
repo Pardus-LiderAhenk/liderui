@@ -32,12 +32,12 @@
                 <RadioButton value="true" v-model="DefaultDownloadDirectory" id="DefaultDownloadDirectory"/>
                 <label for="DefaultDownloadDirectory" class="p-col">{{$t('policy_management.profile.chrome_browser.save_files_here')}}</label>
                 <InputText class="p-inputtext-sm p-col" type="text" 
-                    :disabled="useDownloadDir == 'false'"
+                    :disabled="DefaultDownloadDirectory == 'false'"
                     v-model="downloadDir" 
                     :placeholder="$t('policy_management.profile.chrome_browser.save_directory')"/>
             </div>
             <div class="p-field p-grid">
-                <RadioButton id="PromptForDownloadLocation" value="false" v-model="PromptForDownloadLocation"/>
+                <RadioButton id="PromptForDownloadLocation" value="false" v-model="DefaultDownloadDirectory"/>
                 <label for="PromptForDownloadLocation" class="p-col">{{$t('policy_management.profile.chrome_browser.ask_each_time_where_to_save_files')}}</label>
             </div>
             <h6>{{$t('policy_management.profile.chrome_browser.tabs')}}</h6>
@@ -130,7 +130,7 @@ export default {
     methods: {
         getGeneralPreferences() {
             if(this.NewTabPageLocation){
-                this.addToPreferences(PreferencesChrome.NewTabPageLocation,this.NewTabPageLocation.toString);
+                this.addToPreferences(PreferencesChrome.NewTabPageLocation,this.NewTabPageLocation);
             }
 
             if (this.ShowHomeButton == "true") {
