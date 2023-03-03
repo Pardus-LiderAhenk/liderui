@@ -1329,7 +1329,9 @@
         "click_exception_list":"Click For Policy Exception List",
         "add_policy_exception":"Add policy Exception",
         "entry_dn":"Entry DN",
-        "created_data":"Created Date"
+        "created_data":"Created Date",
+        "exception_users_groups":"Exception users and groups"
+
 
  
 

@@ -19,8 +19,7 @@
                         :badge="policyExceptionData ? policyExceptionData.members.length : '0'" 
                         @click="addPolicyExceptionDialog = true"
                         badgeClass="p-badge-danger"
-                        v-tooltip.bottom="'Exception users and groups'"
-                    />
+                        v-tooltip.bottom="$t('group_management.exception_users_groups')"/>
                 </div>
             </div>
         </div>

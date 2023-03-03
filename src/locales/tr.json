@@ -1325,7 +1325,8 @@
         "click_exception_list":"Politika İstisna Listesi İçin Tıklayınız",
         "add_policy_exception":"Politika İstisnası Ekle",
         "entry_dn":"Giriş DN",
-        "created_data":"Oluşturulma Tarihi"
+        "created_data":"Oluşturulma Tarihi",
+        "exception_users_groups":"İstisna kullanıcıları ve grupları"
 
     },
     "policy_management": {
