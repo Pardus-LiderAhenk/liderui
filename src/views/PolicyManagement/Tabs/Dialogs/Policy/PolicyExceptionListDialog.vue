@@ -1,7 +1,7 @@
 <template>
     <div>
         <Dialog
-            header="$t('group_management.exception_user_group_list')" 
+            :header="$t('group_management.exception_user_group_list')"
             :modal="true"
             :style="{ width: '50vw'}"
             v-model:visible="showDialog">

@@ -182,7 +182,7 @@ export default {
             if (members.length == 0) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "$t('group_management.select_least_one_member')",
+                    detail: this.$t("group_management.select_least_one_member"),
                     summary: this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

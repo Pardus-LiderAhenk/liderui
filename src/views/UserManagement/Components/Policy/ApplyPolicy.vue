@@ -14,7 +14,8 @@
             </div>
             <div class="p-field p-d-flex p-jc-start">
                 <div>
-                    <Button type="button" class="p-button-link" label="Add Policy Exception"
+                    <Button type="button" class="p-button-link" 
+                        :label="$t('group_management.add_policy_exception')"
                         :badge="policyExceptionData ? policyExceptionData.members.length : '0'" 
                         @click="addPolicyExceptionDialog = true"
                         badgeClass="p-badge-danger"

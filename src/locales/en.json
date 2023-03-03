@@ -1325,7 +1325,12 @@
         "selected_record_will_be_excluded":"The selected record will be excluded from being exceptional, are you sure?",
         "error_selected_user_group_list":"Error fetching exceptional user and group list for selected policy",
         "error_deleting_policy":"Error deleting policy exception",
-        "selected_policy_found":"No exception for the selected policy was found"
+        "selected_policy_found":"No exception for the selected policy was found",
+        "click_exception_list":"Click For Policy Exception List",
+        "add_policy_exception":"Add policy Exception",
+        "entry_dn":"Entry DN",
+        "created_data":"Created Date"
+
  
 
     },

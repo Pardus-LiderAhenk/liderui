@@ -175,7 +175,7 @@ export default {
             if (this.checkedNodes.length == 0) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: label="$t('group_management.select_least_one_member')", 
+                    detail: this.$t("group_management.select_least_one_member"), 
                     summary: this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });

@@ -1321,7 +1321,12 @@
         "selected_record_will_be_excluded":"Seçilen kayıt istisnai olmaktan çıkarılacak, emin misiniz?",
         "error_selected_user_group_list":"Seçilen politikaya ait istisnai kullanıcı ve grup listesi getirilirken hata oluştu",
         "error_deleting_policy":"Politika istisnası silinirken hata oluştu",
-        "selected_policy_found":"Seçilen politikaya ait istisnası bulunamadı"
+        "selected_policy_found":"Seçilen politikaya ait istisnası bulunamadı",
+        "click_exception_list":"Politika İstisna Listesi İçin Tıklayınız",
+        "add_policy_exception":"Politika İstisnası Ekle",
+        "entry_dn":"Giriş DN",
+        "created_data":"Oluşturulma Tarihi"
+
     },
     "policy_management": {
         "title":"Politika Yönetimi",

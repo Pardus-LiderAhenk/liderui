@@ -38,7 +38,8 @@
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
                 <div class="p-col-4"><b>Policy Exception</b></div>
                 <div class="p-col-8">
-                    <Button type="button" class="p-button-link" label="Click For Policy Exception List"
+                    <Button type="button" class="p-button-link" 
+                        :label="$t('group_management.click_exception_list')" 
                         @click="policyExceptionDialogList = true"
                         badgeClass="p-badge-danger"
                         style="margin-left: -10px"

@@ -1,7 +1,7 @@
 <template>
     <div>
         <Dialog
-            header="$t('group_management.exception_user_group_list')" 
+            :header="$t('group_management.exception_user_group_list')" 
             :modal="true"
             :style="{ width: '40vw'}"
             v-model:visible="showDialog">
@@ -18,7 +18,8 @@
                         <template #header>
                             <div class="p-field p-d-flex p-jc-between">
                                 <div>
-                                    <Button type="button" class="p-button-sm" label="Add Policy Exception"
+                                    <Button type="button" class="p-button-sm"
+                                        :label="$t('group_management.add_policy_exception')"
                                         @click="addPolicyExceptionDialog = true"
                                         icon="pi pi-plus"
                                     />
@@ -45,9 +46,11 @@
                                 <span>{{ index + 1 }}</span>
                             </template>
                         </Column>
-                        <Column field="dn" header="Entry DN">
+                        <Column field="dn" 
+                        :header="$t('group_management.entry_dn')">
                         </Column>
-                        <Column field="createDate" header="Created Date">
+                        <Column field="createDate" 
+                        :header="$t('group_management.created_data')">
                         </Column>
                         <Column :exportable="false" style="width: 10%">
                             <template #body="slotProps">
