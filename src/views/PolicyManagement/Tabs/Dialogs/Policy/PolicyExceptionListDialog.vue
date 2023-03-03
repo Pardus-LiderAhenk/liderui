@@ -1,7 +1,7 @@
 <template>
     <div>
         <Dialog
-            header="İstisnai Kullanıcı ve Grup Listesi" 
+            header="$t('group_management.exception_user_group_list')" 
             :modal="true"
             :style="{ width: '50vw'}"
             v-model:visible="showDialog">
@@ -86,7 +86,7 @@
             <div class="confirmation-content">
                 <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
                 <span>
-                    Seçilen kayıt istisnai olmaktan çıkartılacaktır, emin misiniz?
+                    $t('group_management.selected_record_will_be_excluded')
                 </span>
             </div>
             <template #footer>
@@ -180,7 +180,7 @@ export default {
             if(error){
                 this.$toast.add({
                     severity:'error', 
-                    detail: "Seçilen politikaya ait istisnai kullanıcı ve grup listesi getirilirken hata oluştu", 
+                    detail: "$t('group_management.error_selected_user_group_list')", 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -195,7 +195,7 @@ export default {
             if(error){
                 this.$toast.add({
                     severity:'error', 
-                    detail: "Politika istisnası slinirken hata oluştu", 
+                    detail: "$t('group_management.error_deleting_policy')", 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -205,7 +205,7 @@ export default {
                 } else if (response.status == 404) {
                     this.$toast.add({
                         severity:'error', 
-                        detail: "Seçilen politikaya ait istisnası bulunamadı", 
+                        detail: "$t('group_management.selected_policy_found')", 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });

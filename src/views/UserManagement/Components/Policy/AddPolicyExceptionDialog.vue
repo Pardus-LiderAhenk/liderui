@@ -8,11 +8,11 @@
             <div class="p-fluid">
                 <div class="p-field p-grid">
                     <div class="p-col">
-                        <label>Adı</label>
+                        <label>{{$t('group_management.name')}}</label>
                         <InputText type="text" class="p-inputtext-sm" v-model="label"/>
                     </div>
                     <div class="p-col">
-                        <label>Açıklama</label>
+                        <label>{{$t('group_management.description')}}</label>
                         <InputText type="text" class="p-inputtext-sm" v-model="description"/>
                     </div>
                 </div>
@@ -182,7 +182,7 @@ export default {
             if (members.length == 0) {
                 this.$toast.add({
                     severity:'warn', 
-                    detail: "En az 1 tane üye seçiniz", 
+                    detail: "$t('group_management.select_least_one_member')",
                     summary: this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
