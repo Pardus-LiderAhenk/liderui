@@ -1614,12 +1614,12 @@
                 "secure_https":"Always use secure connections (warn you before uploading sites that upgrade browsing to HTTPS and don't support this extension)",
                 "secure_dns":"Use secure DNS",
                 "clear_browsing_data_history":"Clear browsing history data",
-                "browsing_history":"Browsing history",
-                "download_history":"Download history",
-                "cookies_and_otherSite_data":"Cookies and other site data",
-                "cache_image_and_file":"Cached images and files",
-                "password_and_other_open_session":"Passwords and other login data",
-                "autofill_form":"Form autofill data",
+                "browsing_history":" Browsing history",
+                "download_history":" Download history",
+                "cookies_and_otherSite_data":" Cookies and other site data",
+                "cache_image_and_file":" Cached images and files",
+                "password_and_other_open_session":" Passwords and other login data",
+                "autofill_form":" Form autofill data",
                 "history":"History"
             }
             
