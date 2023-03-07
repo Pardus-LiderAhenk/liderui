@@ -15,6 +15,22 @@
                 <label for="ShowHomeButton" class="p-col">{{$t("policy_management.profile.chrome_browser.show_homepage")}}</label>
             </div>
             <div class="p-field p-grid" v-if="ShowHomeButton == true">
+                <RadioButton value="true" v-model="HomepageIsNewTabPage"/>
+                <label class="p-col">{{$t("policy_management.profile.chrome_browser.new_tab_page_open")}}</label>
+            </div>
+            <div class="p-field p-grid" v-if="ShowHomeButton == true">
+                <RadioButton value="false" v-model="HomepageIsNewTabPage"/>
+                <label class="p-col">{{$t("policy_management.profile.chrome_browser.open_specific_page")}}</label>
+
+                <InputText class="p-inputtext-sm p-col" type="text" 
+                    :disabled="HomepageIsNewTabPage == 'true'"
+                    v-model="downloadDir" 
+                    :placeholder="$t('https://liderahenk.org/')"/>
+            </div>
+
+
+
+            <!-- <div class="p-field p-grid" v-if="ShowHomeButton == true">
                 <InputSwitch id="HomepageIsNewTabPage" class="p-col-fixed" v-model="HomepageIsNewTabPage"/>
                 <label for="HomepageIsNewTabPage" class="p-col">{{$t("policy_management.profile.chrome_browser.new_tab_page_open")}}</label>
             </div>
@@ -26,7 +42,7 @@
                     :disabled="useDownloadDir == 'false'"
                     v-model="downloadDir" 
                     :placeholder="$t('https://liderahenk.org/')"/>
-            </div>
+            </div> -->
             <h6>{{$t('policy_management.profile.chrome_browser.downloads')}}</h6>
             <div class="p-field p-grid">
                 <RadioButton value="true" v-model="DefaultDownloadDirectory" id="DefaultDownloadDirectory"/>
@@ -86,22 +102,23 @@ export default {
 
     data() {
         return {
-    
             NewTabPageLocation : "",
-            HomepageIsNewTabPage : false,
+            HomepageIsNewTabPage : "true",
             ShowHomeButton : false,
             HomepageLocation : "",
-            DefaultDownloadDirectory:"",
+            DefaultDownloadDirectory:"true",
             PromptForDownloadLocation: false,
             SideSearchEnabled: false,
             BookmarkBarEnabled: false,
-            IncognitoModeAvailability: "1", 
-            BrowserSignin:"1", 
+            IncognitoModeAvailability: false, 
+            BrowserSignin: false, 
             AutoFillEnabled:false,
             SafeBrowsingEnabled:false,
             AllowSystemNotifications:false,
             BlockExternalExtensions: false,
-            generalPreferences: []
+            generalPreferences: [],
+            downloadDir: ""
+            
             
         }
     },
@@ -114,16 +131,17 @@ export default {
             this.HomepageIsNewTabPage = false,
             this.ShowHomeButton = false,
             this.HomepageLocation = "";
-            this.DefaultDownloadDirectory = "";
+            this.DefaultDownloadDirectory = "true";
             this.PromptForDownloadLocation = false;
             this.SideSearchEnabled = false;
             this.BookmarkBarEnabled = false;
-            this.IncognitoModeAvailability = "1";
-            this.BrowserSignin="1";
+            this.IncognitoModeAvailability = false;
+            this.BrowserSignin= false;
             this.AutoFillEnabled=false;
             this.SafeBrowsingEnabled=false;
             this.AllowSystemNotifications=false;
             this.BlockExternalExtensions=false;
+
         }
     },
 
@@ -132,20 +150,27 @@ export default {
             if(this.NewTabPageLocation){
                 this.addToPreferences(PreferencesChrome.NewTabPageLocation,this.NewTabPageLocation);
             }
-
-            if (this.ShowHomeButton == "true") {
-                this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, "true");
-                this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocation.toString());
+            if (this.ShowHomeButton) {
+                this.addToPreferences(PreferencesChrome.ShowHomeButton, "true");
+                if (this.HomepageIsNewTabPage == "true") {
+                    this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, "true");
+                } else {
+                    this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocation);
+                } 
             } else {
-                this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocation.toString());
-                this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, this.HomepageLocation);
+                this.addToPreferences(PreferencesChrome.ShowHomeButton, "false");
             }
-            this.addToPreferences(PreferencesChrome.DefaultDownloadDirectory, this.DefaultDownloadDirectory.toString());
-            this.PromptForDownloadLocation ? this.addToPreferences(PreferencesChrome.PromptForDownloadLocation, "true") : this.addToPreferences(PreferencesChrome.PromptForDownloadLocation, "false");
+            
+            if (this.DefaultDownloadDirectory == "true") {
+                this.addToPreferences(PreferencesChrome.DefaultDownloadDirectory, this.downloadDir);
+            } else {
+                this.addToPreferences(PreferencesChrome.PromptForDownloadLocation, "true");
+            }
+
             this.SideSearchEnabled ? this.addToPreferences(PreferencesChrome.SideSearchEnabled, "true") : this.addToPreferences(PreferencesChrome.SideSearchEnabled, "false");
             this.BookmarkBarEnabled ? this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "true") : this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "false");
             this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "1") : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "0");
-            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, "1") : this.addToPreferences(PreferencesChrome.BrowserSignin, "0");
+            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, "0") : this.addToPreferences(PreferencesChrome.BrowserSignin, "1");
             this.AutoFillEnabled ? this.addToPreferences(PreferencesChrome.AutoFillEnabled, "true") : this.addToPreferences(PreferencesChrome.AutoFillEnabled, "false");
             this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true");
             this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true");
@@ -169,12 +194,12 @@ export default {
                     this.NewTabPageLocation = element.value;
                 }
 
-                if (element.preferenceName == PreferencesChrome.ShowHomeButton && element.value == "true") {
-                    this.ShowHomeButton = true;
-                }
-
                 if (element.preferenceName == PreferencesChrome.HomepageIsNewTabPage && element.value == "true") {
                     this.HomepageIsNewTabPage = true;
+                }
+                
+                if (element.preferenceName == PreferencesChrome.ShowHomeButton && element.value == "true") {
+                    this.ShowHomeButton = true;
                 }
 
                 if (element.preferenceName == PreferencesChrome.HomepageLocation) {
