@@ -24,7 +24,7 @@
 
                 <InputText class="p-inputtext-sm p-col" type="text" 
                     :disabled="HomepageIsNewTabPage == 'true'"
-                    v-model="downloadDir" 
+                    v-model="HomepageLocation" 
                     :placeholder="$t('https://liderahenk.org/')"/>
             </div>
 
