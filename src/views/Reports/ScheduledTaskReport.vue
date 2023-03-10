@@ -227,9 +227,9 @@
             @click="cancelScheduledTaskDialog = false" class="p-button-text p-button-sm"
         />
         <Button :label="$t('reports.scheduled_task_report.yes')" icon="pi pi-check"
-            @click="cancelScheduledTask" class="p-button-sm" disabled="loading"
+            @click="cancelScheduledTask" class="p-button-sm" :disabled="cancelScheduledTaskLoading"
         />
-        <div>
+        <div v-if="cancelScheduledTaskLoading">
           <div class="p-text-center">
             <ProgressSpinner
               style="width: 20px; height: 20px"
@@ -243,7 +243,6 @@
           </div>
         </div>
     </template>
-    
   </Dialog>
 </template>
 
@@ -273,6 +272,7 @@ export default {
       plugins:[],
       showScheduled: false,
       cancelScheduledTaskDialog: false,
+      cancelScheduledTaskLoading:false,
       filter: {
         taskSendDate: '',
         taskSendStartDate:'',
@@ -539,7 +539,7 @@ export default {
   async cancelScheduledTask() {
     var params = new FormData();
     params.append("id", this.selectedCommand.id);
-    this.loading = true;
+    this.cancelScheduledTaskLoading = true;
     const{ response, error } = await scheduledTaskReportService.scheduledTaskCancel(params);
     if(error){
         this.$toast.add({
@@ -564,6 +564,7 @@ export default {
         console.log("Scheduled task id not found!");
       }
     }
+    this.cancelScheduledTaskLoading = false;
     this.cancelScheduledTaskDialog = false;
     }
     
