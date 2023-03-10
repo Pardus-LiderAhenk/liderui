@@ -156,7 +156,7 @@ export default {
             }
             if (this.proxyType == "2") {
                 if (this.autoConfiguration != "" && this.autoConfiguration != null) {
-                    this.addToPreferences(PreferencesChrome.pac_proxy  + this.autoConfiguration);
+                    this.addToPreferences(PreferencesChrome.pac_proxy  + '"' +this.autoConfiguration+ '"');
                 }
             }
             return this.proxyPreferences;
