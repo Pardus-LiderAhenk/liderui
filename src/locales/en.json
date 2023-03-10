@@ -167,7 +167,7 @@
             },
             "base_plugin": {
                 "loading_default_text": "Sent task, please wait...",
-                "scheduled_loading_default_text": "Sent scheduled  task, please wait...",
+                "scheduled_loading_default_text": "Scheduled task canceled, please wait...",
                 "task_confirm_question": "The task will be sent, are you sure?",
                 "scheduled_task_confirm_question": "The scheduled task will be sent, are you sure?",
                 "warning": "Warning",

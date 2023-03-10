@@ -167,7 +167,7 @@
             },
             "base_plugin": {
                 "loading_default_text": "Görev gönderildi, lütfen bekleyiniz...",
-                "scheduled_loading_default_text": "Zamanlanmış görev gönderildi, lütfen bekleyiniz...",
+                "scheduled_loading_default_text": "Zamanlanmış görev iptal edildi, lütfen bekleyiniz...",
                 "task_confirm_question": "Görev gönderilecek, emin misiniz?",
                 "scheduled_task_confirm_question": "Zamanlanmış görev gönderilecek, emin misiniz?",
                 "warning": "Uyarı",
