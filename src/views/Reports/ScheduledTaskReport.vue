@@ -227,9 +227,23 @@
             @click="cancelScheduledTaskDialog = false" class="p-button-text p-button-sm"
         />
         <Button :label="$t('reports.scheduled_task_report.yes')" icon="pi pi-check"
-            @click="cancelScheduledTask" class="p-button-sm"
+            @click="cancelScheduledTask" class="p-button-sm" disabled="loading"
         />
+        <div>
+          <div class="p-text-center">
+            <ProgressSpinner
+              style="width: 20px; height: 20px"
+              strokeWidth="8"
+              fill="var(--surface-ground)"
+              animationDuration=".5s"
+            />
+            <a class="primary">
+              &nbsp;{{$t('computer.plugins.base_plugin.scheduled_loading_default_text')}}
+            </a>
+          </div>
+        </div>
     </template>
+    
   </Dialog>
 </template>
 
@@ -525,7 +539,7 @@ export default {
   async cancelScheduledTask() {
     var params = new FormData();
     params.append("id", this.selectedCommand.id);
-
+    this.loading = true;
     const{ response, error } = await scheduledTaskReportService.scheduledTaskCancel(params);
     if(error){
         this.$toast.add({
