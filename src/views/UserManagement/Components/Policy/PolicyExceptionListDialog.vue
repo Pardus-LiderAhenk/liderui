@@ -121,6 +121,7 @@
  * 
  */
 
+import { memberExpression } from '@babel/types';
 import {FilterMatchMode} from 'primevue/api';
 import { policyService } from '../../../../services/PolicyManagement/PolicyService';
 import AddPolicyExceptionDialog from "./AddPolicyExceptionDialog.vue"
@@ -213,19 +214,40 @@ export default {
 
         async addPolicyException(data) {
             if (data && data.members.length > 0) {
-                const { response,error } = await  policyService.addPolicyException(data);
-                if(error){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    this.addPolicyExceptionDialog = false;
-                } else {
-                    this.getPolicyExceptionOfSelectedPolicy();
+                for (let index = 0; index < data.members.length; index++) {
+                    const element = data.members[index];
+                    if (this.isExistDn(element)) {
+                        data.members = data.members.filter(dn => dn != element);    
+                    }
+                }
+                if (data.members.length > 0) {
+                    const { response,error } = await  policyService.addPolicyException(data);
+                    if(error){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('group_management.delete_member_error_message')+ " \n"+error, 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        this.addPolicyExceptionDialog = false;
+                    } else {
+                        this.getPolicyExceptionOfSelectedPolicy();
+                    }
                 }
             }
+        },
+
+        isExistDn(dn) {
+            let isExist = false;
+            if (this.members.length > 0) {
+                for (let index = 0; index < this.members.length; index++) {
+                    const element = this.members[index];
+                    if (dn == element.dn) {
+                        isExist = true;
+                    }
+                }
+            }
+            return isExist;
         }
     },
 
