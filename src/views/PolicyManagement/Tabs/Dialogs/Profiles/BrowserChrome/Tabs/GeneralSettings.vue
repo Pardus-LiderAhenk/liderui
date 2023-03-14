@@ -170,7 +170,7 @@ export default {
             this.SideSearchEnabled ? this.addToPreferences(PreferencesChrome.SideSearchEnabled, "true") : this.addToPreferences(PreferencesChrome.SideSearchEnabled, "false");
             this.BookmarkBarEnabled ? this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "true") : this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "false");
             this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, 1) : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, 0);
-            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, 0) : this.addToPreferences(PreferencesChrome.BrowserSignin, 1);
+            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, parseInt(0)) : this.addToPreferences(PreferencesChrome.BrowserSignin, parseInt(1));
             this.AutoFillEnabled ? this.addToPreferences(PreferencesChrome.AutoFillEnabled, "true") : this.addToPreferences(PreferencesChrome.AutoFillEnabled, "false");
             this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true");
             this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true");
