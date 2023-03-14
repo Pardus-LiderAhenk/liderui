@@ -175,19 +175,19 @@ export default {
             for (let index = 0; index < this.plugins.length; index++) {
                 const element = this.plugins[index];
                 if (element.page == "execute-script-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/script_icon.png");
                 } else if (element.page == "conky-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/conky_icon.png");
                 } else if (element.page == "browser-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/firefox_icon.png");
                 } else if (element.page == "login-manager-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/session_management_icon.png");
                 } else if (element.page == "rsyslog-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/rsyslog_icon.png");
                 } else if (element.page == "usb-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/usb_icon.png");
                 } else {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/chrome_icon.png");
                 }
             }
         },
@@ -256,7 +256,7 @@ export default {
 	}
 
 	img {
-		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+		//box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 		margin: 2rem 0;
 	}
 
