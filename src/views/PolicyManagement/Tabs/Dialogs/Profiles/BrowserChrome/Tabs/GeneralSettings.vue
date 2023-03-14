@@ -110,8 +110,8 @@ export default {
             PromptForDownloadLocation: false,
             SideSearchEnabled: false,
             BookmarkBarEnabled: false,
-            IncognitoModeAvailability: false, 
-            BrowserSignin: false, 
+            IncognitoModeAvailability: 0, 
+            BrowserSignin: 0, 
             AutoFillEnabled:false,
             SafeBrowsingEnabled:false,
             AllowSystemNotifications:false,
@@ -135,8 +135,8 @@ export default {
             this.PromptForDownloadLocation = false;
             this.SideSearchEnabled = false;
             this.BookmarkBarEnabled = false;
-            this.IncognitoModeAvailability = false;
-            this.BrowserSignin= false;
+            this.IncognitoModeAvailability = 0;
+            this.BrowserSignin= 0;
             this.AutoFillEnabled=false;
             this.SafeBrowsingEnabled=false;
             this.AllowSystemNotifications=false;

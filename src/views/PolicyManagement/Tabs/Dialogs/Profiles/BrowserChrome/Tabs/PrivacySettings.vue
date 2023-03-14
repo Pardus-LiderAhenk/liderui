@@ -80,7 +80,7 @@ export default {
             HttpsOnlyMode:"disallowed",
             AllowDeletingBrowserHistory:false,
             SavingBrowserHistoryDisabled:false,
-            DefaultCookiesSetting:"1",
+            DefaultCookiesSetting:1,
             ClearBrowsingDataOnExitList: [],
             browsingHistory: false,
             downloadHistory: false,
@@ -100,7 +100,7 @@ export default {
             this.DnsOverHttpsMode = "off",
             this.HttpsOnlyMode = "disallowed",
             this.AllowDeletingBrowserHistory = false,
-            this.DefaultCookiesSetting = "1",
+            this.DefaultCookiesSetting = 1,
             this.SavingBrowserHistoryDisabled = false,
             this.ClearBrowsingDataOnExitList = []
         }
@@ -108,11 +108,11 @@ export default {
 
     methods: {
         getPrivacyPreferences() {
-            this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, this.DnsOverHttpsMode.toString());
-            this.addToPreferences(PreferencesChrome.HttpsOnlyMode, this.HttpsOnlyMode.toString());
+            this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, this.DnsOverHttpsMode);
+            this.addToPreferences(PreferencesChrome.HttpsOnlyMode, this.HttpsOnlyMode);
             this.AllowDeletingBrowserHistory ? this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "true") : this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "false");
             this.SavingBrowserHistoryDisabled ? this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "true") : this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "false");
-            this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, this.DefaultCookiesSetting.toString());
+            this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, this.DefaultCookiesSetting);
             this.addToPreferences(PreferencesChrome.ClearBrowsingDataOnExitList, this.ClearBrowsingDataOnExitList);
             if (this.browsingHistory) {
                 this.ClearBrowsingDataOnExitList.push("browsing_history")
