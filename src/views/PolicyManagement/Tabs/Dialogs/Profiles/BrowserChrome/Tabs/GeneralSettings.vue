@@ -105,13 +105,13 @@ export default {
             NewTabPageLocation : "",
             HomepageIsNewTabPage : "true",
             ShowHomeButton : false,
-            HomepageLocation : "",
+            HomepageLocation : false,
             DefaultDownloadDirectory:"true",
             PromptForDownloadLocation: false,
             SideSearchEnabled: false,
             BookmarkBarEnabled: false,
-            IncognitoModeAvailability: 0, 
-            BrowserSignin: 0, 
+            IncognitoModeAvailability: false, 
+            BrowserSignin: false, 
             AutoFillEnabled:false,
             SafeBrowsingEnabled:false,
             AllowSystemNotifications:false,
@@ -130,13 +130,13 @@ export default {
             this.NewTabPageLocation = "",
             this.HomepageIsNewTabPage = false,
             this.ShowHomeButton = false,
-            this.HomepageLocation = "";
+            this.HomepageLocation = false;
             this.DefaultDownloadDirectory = "true";
             this.PromptForDownloadLocation = false;
             this.SideSearchEnabled = false;
             this.BookmarkBarEnabled = false;
-            this.IncognitoModeAvailability = 0;
-            this.BrowserSignin= 0;
+            this.IncognitoModeAvailability = false;
+            this.BrowserSignin= false;
             this.AutoFillEnabled=false;
             this.SafeBrowsingEnabled=false;
             this.AllowSystemNotifications=false;
@@ -169,8 +169,8 @@ export default {
 
             this.SideSearchEnabled ? this.addToPreferences(PreferencesChrome.SideSearchEnabled, "true") : this.addToPreferences(PreferencesChrome.SideSearchEnabled, "false");
             this.BookmarkBarEnabled ? this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "true") : this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "false");
-            this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "1") : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, "0");
-            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, "0") : this.addToPreferences(PreferencesChrome.BrowserSignin, "1");
+            this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, 1) : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, 0);
+            this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, 0) : this.addToPreferences(PreferencesChrome.BrowserSignin, 1);
             this.AutoFillEnabled ? this.addToPreferences(PreferencesChrome.AutoFillEnabled, "true") : this.addToPreferences(PreferencesChrome.AutoFillEnabled, "false");
             this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true");
             this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true");
@@ -221,11 +221,11 @@ export default {
                     this.BookmarkBarEnabled = true;
                 }
 
-                if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == "1") {
-                    this.IncognitoModeAvailability = true;
+                if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == 1) {
+                    this.IncognitoModeAvailability = element.value;
                 }
-                if (element.preferenceName == PreferencesChrome.BrowserSignin && element.value == "1") {
-                    this.BrowserSignin = true;
+                if (element.preferenceName == PreferencesChrome.BrowserSignin && element.value == 1) {
+                    this.BrowserSignin = element.value;
                 }
                 if (element.preferenceName == PreferencesChrome.AutoFillEnabled && element.value == "false") {
                     this.AutoFillEnabled = true;

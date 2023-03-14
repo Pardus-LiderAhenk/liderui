@@ -76,11 +76,11 @@ export default {
     data () {
         return {
 
-            DnsOverHttpsMode:"off",
-            HttpsOnlyMode:"disallowed",
+            DnsOverHttpsMode:false,
+            HttpsOnlyMode:false,
             AllowDeletingBrowserHistory:false,
             SavingBrowserHistoryDisabled:false,
-            DefaultCookiesSetting:1,
+            DefaultCookiesSetting:false,
             ClearBrowsingDataOnExitList: [],
             browsingHistory: false,
             downloadHistory: false,
@@ -97,10 +97,10 @@ export default {
         if (this.selectedProfileData) {
             this.setPrivacyPreferences();
         } else {
-            this.DnsOverHttpsMode = "off",
-            this.HttpsOnlyMode = "disallowed",
+            this.DnsOverHttpsMode = false,
+            this.HttpsOnlyMode = false,
             this.AllowDeletingBrowserHistory = false,
-            this.DefaultCookiesSetting = 1,
+            this.DefaultCookiesSetting = false,
             this.SavingBrowserHistoryDisabled = false,
             this.ClearBrowsingDataOnExitList = []
         }
@@ -108,11 +108,12 @@ export default {
 
     methods: {
         getPrivacyPreferences() {
-            this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, this.DnsOverHttpsMode);
-            this.addToPreferences(PreferencesChrome.HttpsOnlyMode, this.HttpsOnlyMode);
+            //this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, this.DnsOverHttpsMode);
+            this.DnsOverHttpsMode ? this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, "off") : this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, "automatic");
+            this.HttpsOnlyMode ? this.addToPreferences(PreferencesChrome.HttpsOnlyMode, "allowed") : this.addToPreferences(PreferencesChrome.HttpsOnlyMode, "disallowed");
             this.AllowDeletingBrowserHistory ? this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "true") : this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "false");
             this.SavingBrowserHistoryDisabled ? this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "true") : this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "false");
-            this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, this.DefaultCookiesSetting);
+            this.DefaultCookiesSetting ? this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, 1) : this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, 2);
             this.addToPreferences(PreferencesChrome.ClearBrowsingDataOnExitList, this.ClearBrowsingDataOnExitList);
             if (this.browsingHistory) {
                 this.ClearBrowsingDataOnExitList.push("browsing_history")
@@ -148,16 +149,16 @@ export default {
             let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
                 if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode && element.value == "automatic") {
-                    this.dontWantToBeTracked = element.value;
+                    this.DnsOverHttpsMode = element.value;
                 }
                 if (element.preferenceName == PreferencesChrome.HttpsOnlyMode && element.value == "allowed") {
-                    this.dontWantToBeTracked = element.value;
+                    this.HttpsOnlyMode = element.value;
                 }
                 if (element.preferenceName == PreferencesChrome.AllowDeletingBrowserHistory && element.value == "true") {
                     this.AllowDeletingBrowserHistory = true;
                 }
-                if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == "2") {
-                    this.dontWantToBeTracked = element.value;
+                if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == 2) {
+                    this.DefaultCookiesSetting = element.value;
                 }
                 if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled && element.value == "true") {
                     this.SavingBrowserHistoryDisabled = true;
