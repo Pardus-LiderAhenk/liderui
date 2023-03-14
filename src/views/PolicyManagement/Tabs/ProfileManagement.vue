@@ -36,8 +36,8 @@
                                 Not found profile
                             </template>
                         <template #grid="slotProps">
-                            <div class="p-col-12 p-md-4">
-                                <div class="product-grid-item card">
+                            <div class="p-col-12 p-md-3">
+                                <div class="product-grid-item card" @click="showProfile(slotProps.data)">
                                     <div class="product-grid-item-content">
                                         <img :src="slotProps.data.image" :alt="slotProps.data.name"
                                         style="width: 30%"/>
@@ -45,9 +45,9 @@
                                         <div class="plugin-description">{{slotProps.data.description}}</div>
                                     </div>
                                     <div class="p-d-flex p-jc-end">
-                                        <Button icon="pi pi-pencil" class="p-button-sm" :label="$t('policy_management.edit')"
+                                        <!-- <Button icon="pi pi-pencil" class="p-button-sm" :label="$t('policy_management.edit')"
                                             @click.prevent="showProfile(slotProps.data)">
-                                        </Button>
+                                        </Button> -->
                                     </div>
                                 </div>
                             </div>
@@ -232,7 +232,8 @@ export default {
 }
 
 .card:hover {
-  box-shadow: 0 8px 20px 0 rgba(155, 150, 150, 0.2);
+  box-shadow: 0 8px 20px 0 rgba(155, 150, 150, 0.5);
+  cursor: pointer;
 } 
 
 .plugin-name {
