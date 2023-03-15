@@ -113,7 +113,7 @@ export default {
             this.HttpsOnlyMode ? this.addToPreferences(PreferencesChrome.HttpsOnlyMode, "allowed") : this.addToPreferences(PreferencesChrome.HttpsOnlyMode, "disallowed");
             this.AllowDeletingBrowserHistory ? this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "true") : this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "false");
             this.SavingBrowserHistoryDisabled ? this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "true") : this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "false");
-            this.DefaultCookiesSetting ? this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, 1) : this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, 2);
+            this.DefaultCookiesSetting ? this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, parseInt(1)) : this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, parseInt(2));
             this.addToPreferences(PreferencesChrome.ClearBrowsingDataOnExitList, this.ClearBrowsingDataOnExitList);
             if (this.browsingHistory) {
                 this.ClearBrowsingDataOnExitList.push("browsing_history")
@@ -148,7 +148,7 @@ export default {
         setPrivacyPreferences() {
             let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
-                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode  && element.value == "automatic") {
+                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode  && element.value == "off") {
                     this.DnsOverHttpsMode = true;
                 }
                 if (element.preferenceName == PreferencesChrome.HttpsOnlyMode && element.value == "allowed") {
@@ -157,8 +157,8 @@ export default {
                 if (element.preferenceName == PreferencesChrome.AllowDeletingBrowserHistory && element.value == "true") {
                     this.AllowDeletingBrowserHistory = true;
                 }
-                if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == 2) {
-                    this.DefaultCookiesSetting = element.value;
+                if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == 1) {
+                    this.DefaultCookiesSetting = true;
                 }
                 if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled) {
                     this.SavingBrowserHistoryDisabled = true;
