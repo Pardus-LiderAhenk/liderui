@@ -24,7 +24,7 @@
 
                 <InputText class="p-inputtext-sm p-col" type="text" 
                     :disabled="HomepageIsNewTabPage == 'true'"
-                    v-model="HomepageLocation" 
+                    v-model="HomepageLocationString" 
                     :placeholder="$t('https://liderahenk.org/')"/>
             </div>
 
@@ -117,9 +117,8 @@ export default {
             AllowSystemNotifications:false,
             BlockExternalExtensions: false,
             generalPreferences: [],
-            downloadDir: ""
-            
-            
+            downloadDir: "",
+            HomepageLocationString: ""
         }
     },
 
@@ -155,7 +154,7 @@ export default {
                 if (this.HomepageIsNewTabPage == "true") {
                     this.addToPreferences(PreferencesChrome.HomepageIsNewTabPage, "true");
                 } else {
-                    this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocation);
+                    this.addToPreferences(PreferencesChrome.HomepageLocation, this.HomepageLocationString);
                 } 
             } else {
                 this.addToPreferences(PreferencesChrome.ShowHomeButton, "false");
@@ -203,7 +202,8 @@ export default {
                 }
 
                 if (element.preferenceName == PreferencesChrome.HomepageLocation) {
-                    this.HomepageLocation = element.value;
+                    this.HomepageIsNewTabPage = "false";
+                    this.HomepageLocationString = element.value;
                 }
 
                 if (element.preferenceName == PreferencesChrome.DefaultDownloadDirectory) {
