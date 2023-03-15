@@ -36,22 +36,22 @@
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="cookies_and_other_site_data" name="cookies_and_other_site_data" value="cookies_and_other_site_data" v-model="cookiesAndOtherSiteData" />
+            <Checkbox inputId="cookies_and_other_site_data" name="cookies_and_other_site_data" :binary="true" value="cookies_and_other_site_data" v-model="cookiesAndOtherSiteData" />
             <label for="cookies_and_other_site_data">{{$t('policy_management.profile.chrome_privacy.cookies_and_otherSite_data')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="cached_images_and_files" name="cached_images_and_files" value="cached_images_and_files" v-model="cachedImagesAndFiles" />
+            <Checkbox inputId="cached_images_and_files" name="cached_images_and_files" :binary="true" value="cached_images_and_files" v-model="cachedImagesAndFiles" />
             <label for="cached_images_and_files">{{$t('policy_management.profile.chrome_privacy.cache_image_and_file')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="password_signin" name="password_signin" value="password_signin" v-model="passwordSignin" />
+            <Checkbox inputId="password_signin" name="password_signin" :binary="true" value="password_signin" v-model="passwordSignin" />
             <label for="password_signin">{{$t('policy_management.profile.chrome_privacy.password_and_other_open_session')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="autofill" name="autofill" value="autofill" v-model="autofill" />
+            <Checkbox inputId="autofill" name="autofill" :binary="true" value="autofill" v-model="autofill" />
             <label for="autofill">{{$t('policy_management.profile.chrome_privacy.autofill_form')}}</label>
         </div>
         
@@ -148,11 +148,11 @@ export default {
         setPrivacyPreferences() {
             let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
-                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode && element.value == "automatic") {
-                    this.DnsOverHttpsMode = element.value;
+                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode  && element.value == "automatic") {
+                    this.DnsOverHttpsMode = true;
                 }
                 if (element.preferenceName == PreferencesChrome.HttpsOnlyMode && element.value == "allowed") {
-                    this.HttpsOnlyMode = element.value;
+                    this.HttpsOnlyMode = true;
                 }
                 if (element.preferenceName == PreferencesChrome.AllowDeletingBrowserHistory && element.value == "true") {
                     this.AllowDeletingBrowserHistory = true;
@@ -160,11 +160,26 @@ export default {
                 if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == 2) {
                     this.DefaultCookiesSetting = element.value;
                 }
-                if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled && element.value == "true") {
+                if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled) {
                     this.SavingBrowserHistoryDisabled = true;
                 }
-                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList){
-                    this.ClearBrowsingDataOnExitList = element.value;
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList.browsingHistory){ 
+                    this.browsingHistory = true;
+                }
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList  && element.value == "true"){ 
+                    this.downloadHistory = true;
+                }
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList && element.value == "true" ){ 
+                    this.cookiesAndOtherSiteData = true;
+                }
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList && element.value == "true"){ 
+                    this.cachedImagesAndFiles = true;
+                }
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList && element.value == "true" ){ 
+                    this.passwordSignin = true;
+                }
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList && element.value == "true" ){ 
+                    this.autofill = true;
                 }
                 
             });

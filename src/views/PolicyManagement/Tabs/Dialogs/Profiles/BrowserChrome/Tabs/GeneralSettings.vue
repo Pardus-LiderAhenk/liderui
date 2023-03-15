@@ -169,12 +169,12 @@ export default {
 
             this.SideSearchEnabled ? this.addToPreferences(PreferencesChrome.SideSearchEnabled, "true") : this.addToPreferences(PreferencesChrome.SideSearchEnabled, "false");
             this.BookmarkBarEnabled ? this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "true") : this.addToPreferences(PreferencesChrome.BookmarkBarEnabled, "false");
-            this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, 1) : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, 0);
+            this.IncognitoModeAvailability ? this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, parseInt(1)) : this.addToPreferences(PreferencesChrome.IncognitoModeAvailability, parseInt(0));
             this.BrowserSignin ? this.addToPreferences(PreferencesChrome.BrowserSignin, parseInt(0)) : this.addToPreferences(PreferencesChrome.BrowserSignin, parseInt(1));
             this.AutoFillEnabled ? this.addToPreferences(PreferencesChrome.AutoFillEnabled, "true") : this.addToPreferences(PreferencesChrome.AutoFillEnabled, "false");
-            this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true");
-            this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true");
-            this.BlockExternalExtensions ? this.addToPreferences(PreferencesChrome.BlockExternalExtensions, "false") : this.addToPreferences(PreferencesChrome.BlockExternalExtensions, "true");
+            this.SafeBrowsingEnabled ? this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "true") : this.addToPreferences(PreferencesChrome.SafeBrowsingEnabled, "false");
+            this.AllowSystemNotifications ? this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "true") : this.addToPreferences(PreferencesChrome.AllowSystemNotifications, "false");
+            this.BlockExternalExtensions ? this.addToPreferences(PreferencesChrome.BlockExternalExtensions, "true") : this.addToPreferences(PreferencesChrome.BlockExternalExtensions, "false");
 
             return this.generalPreferences;
         },
@@ -194,8 +194,8 @@ export default {
                     this.NewTabPageLocation = element.value;
                 }
 
-                if (element.preferenceName == PreferencesChrome.HomepageIsNewTabPage && element.value == "true") {
-                    this.HomepageIsNewTabPage = true;
+                if (element.preferenceName == PreferencesChrome.HomepageIsNewTabPage) {
+                    this.HomepageIsNewTabPage = element.value;
                 }
                 
                 if (element.preferenceName == PreferencesChrome.ShowHomeButton && element.value == "true") {
@@ -210,8 +210,8 @@ export default {
                     this.DefaultDownloadDirectory = element.value;
                 }
     
-                if (element.preferenceName == PreferencesChrome.PromptForDownloadLocation && element.value == "true") {
-                    this.PromptForDownloadLocation = true;
+                if (element.preferenceName == PreferencesChrome.PromptForDownloadLocation ) {
+                    this.PromptForDownloadLocation = element.value;
                 }
                 if (element.preferenceName == PreferencesChrome.SideSearchEnabled && element.value == "true") {
                     this.SideSearchEnabled = true;
@@ -222,21 +222,21 @@ export default {
                 }
 
                 if (element.preferenceName == PreferencesChrome.IncognitoModeAvailability && element.value == 1) {
-                    this.IncognitoModeAvailability = element.value;
+                    this.IncognitoModeAvailability = true;
                 }
-                if (element.preferenceName == PreferencesChrome.BrowserSignin && element.value == 1) {
-                    this.BrowserSignin = element.value;
+                if (element.preferenceName == PreferencesChrome.BrowserSignin && element.value == 0) {
+                    this.BrowserSignin = true;
                 }
-                if (element.preferenceName == PreferencesChrome.AutoFillEnabled && element.value == "false") {
+                if (element.preferenceName == PreferencesChrome.AutoFillEnabled && element.value == "true") {
                     this.AutoFillEnabled = true;
                 }
                 if (element.preferenceName == PreferencesChrome.SafeBrowsingEnabled && element.value == "true") {
                     this.SafeBrowsingEnabled = true;
                 }
-                if (element.preferenceName == PreferencesChrome.AllowSystemNotifications && element.value == "false") {
+                if (element.preferenceName == PreferencesChrome.AllowSystemNotifications && element.value == "true") {
                     this.AllowSystemNotifications = true;
                 }
-                if (element.preferenceName == PreferencesChrome.BlockExternalExtensions && element.value == "false") {
+                if (element.preferenceName == PreferencesChrome.BlockExternalExtensions && element.value == "true") {
                     this.BlockExternalExtensions = true;
                 }
                 
