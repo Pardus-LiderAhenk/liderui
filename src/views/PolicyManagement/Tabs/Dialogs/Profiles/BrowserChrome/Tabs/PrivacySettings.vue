@@ -61,9 +61,6 @@
 
 <script>
 import  PreferencesChrome  from './PreferencesChrome.js';
-import Checkbox from 'primevue/checkbox';
-
-
 
 export default {
     props: {
@@ -163,25 +160,28 @@ export default {
                 if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled) {
                     this.SavingBrowserHistoryDisabled = true;
                 }
-                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList.browsingHistory){ 
-                    this.browsingHistory = true;
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList){ 
+                    element.value.forEach(el => {
+                        if (el == "browsing_history") {
+                            this.browsingHistory = true;
+                        }
+                        if (el == "autofill") {
+                            this.autofill = true;
+                        }
+                        if (el == "download_history") {
+                            this.downloadHistory = true;
+                        }
+                        if (el == "cookies_and_other_site_data") {
+                            this.cookiesAndOtherSiteData = true;
+                        }
+                        if (el == "cached_images_and_files") {
+                            this.cachedImagesAndFiles = true;
+                        }
+                        if (el == "password_signin") {
+                            this.passwordSignin = true;
+                        }
+                    });
                 }
-                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList  && element.value == "true"){ 
-                    this.downloadHistory = true;
-                }
-                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList && element.value == "true" ){ 
-                    this.cookiesAndOtherSiteData = true;
-                }
-                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList && element.value == "true"){ 
-                    this.cachedImagesAndFiles = true;
-                }
-                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList && element.value == "true" ){ 
-                    this.passwordSignin = true;
-                }
-                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList && element.value == "true" ){ 
-                    this.autofill = true;
-                }
-                
             });
         }
     }
