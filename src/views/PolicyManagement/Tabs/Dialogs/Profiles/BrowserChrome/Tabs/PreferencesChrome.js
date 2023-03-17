@@ -28,13 +28,18 @@ export const PreferencesChrome = {
             DefaultCookiesSetting: "DefaultCookiesSetting",
             ClearBrowsingDataOnExitList: "ClearBrowsingDataOnExitList",
             //proxy setting
-            proxy_disabled : "export proxy=",
-            http_proxy_head: "export http_proxy='http://",
-            https_proxy_head: "export https_proxy='https://",
-            ftp_proxy_head: "export ftp_proxy='http://",
-            socks_proxy_head: "export socks_proxy='https://",
-            no_proxy: "export no_proxy=",
-            pac_proxy: "export PROXY="
+            proxyType:"type",
+            proxy_disabled_mode : "gsettings set org.gnome.system.proxy mode 'none'",
+            http_proxy_host: "httpHost",
+            http_proxy_port: "httpPort",
+            https_proxy_host: "httpsHost",
+            https_proxy_port: "httpsPort",
+            ftp_proxy_host: "ftpHost",
+            ftp_proxy_port: "ftpPort",
+            socks_proxy_host: "socksHost",
+            socks_proxy_port: "socksPort",
+            ignore_proxy: "ignore-hosts",
+            autoconfiguration_proxy: "autoconfig-url"
 
 };
 
