@@ -105,8 +105,7 @@ export default {
 
     methods: {
         getPrivacyPreferences() {
-            //this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, this.DnsOverHttpsMode);
-            this.DnsOverHttpsMode ? this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, "off") : this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, "automatic");
+            this.DnsOverHttpsMode ? this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, "automatic") : this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, "off");
             this.HttpsOnlyMode ? this.addToPreferences(PreferencesChrome.HttpsOnlyMode, "allowed") : this.addToPreferences(PreferencesChrome.HttpsOnlyMode, "disallowed");
             this.AllowDeletingBrowserHistory ? this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "true") : this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "false");
             this.SavingBrowserHistoryDisabled ? this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "true") : this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "false");
@@ -145,7 +144,7 @@ export default {
         setPrivacyPreferences() {
             let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
-                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode  && element.value == "off") {
+                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode  && element.value == "automatic") {
                     this.DnsOverHttpsMode = true;
                 }
                 if (element.preferenceName == PreferencesChrome.HttpsOnlyMode && element.value == "allowed") {
