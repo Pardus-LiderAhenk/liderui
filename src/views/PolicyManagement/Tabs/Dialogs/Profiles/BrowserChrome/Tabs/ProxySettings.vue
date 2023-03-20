@@ -59,7 +59,7 @@
         <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-12 p-md-8">
                 <label>{{$t('policy_management.profile.chrome_proxy.main_computer_ignore')}}</label>
-                <InputText class="p-inputtext-sm" type="text" v-model="mainIgnore"/>
+                <InputText class="p-inputtext-sm" type="text" v-model="ignoreHosts"/>
             </div>
 
         </div>
@@ -116,7 +116,7 @@ export default {
         if (this.selectedProfileData) {
             this.setProxyPreferences();
         } else {
-            this.proxyType = "";
+            this.proxyType = "0";
             this.httpProxy = "";
             this.httpPort = "";
             this.httpsProxy = "";
@@ -169,7 +169,7 @@ export default {
             }
             if (this.proxyType == "2") {
                 if (this.autoConfiguration != "" && this.autoConfiguration != null) {
-                    this.addToPreferences("auto",this.autoConfiguration);
+                    this.addToPreferences(PreferencesChrome.autoconfiguration_proxy,this.autoConfiguration);
                 }
             }
             return this.proxyPreferences;
@@ -183,7 +183,7 @@ export default {
         },
 
         setProxyPreferences() {
-            let prefList = this.selectedProfileData.preferencesChrome;
+            let prefList = this.selectedProfileData.proxyListChrome;
             prefList.forEach(element => {
                 if (element.preferenceName == PreferencesChrome.proxyType) {
                     this.proxyType = element.value;
@@ -192,7 +192,7 @@ export default {
                     this.httpProxy = element.value;
                 }
                 if (element.preferenceName == PreferencesChrome.http_proxy_port) {
-                    this.httpPort = true;
+                    this.httpPort = element.value;
                 }
                 if (element.preferenceName == PreferencesChrome.https_proxy_host) {
                     this.httpsProxy = element.value;

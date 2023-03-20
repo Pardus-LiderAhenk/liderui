@@ -1568,7 +1568,7 @@
                 "auto_fill_search":"Aramaları ve URL leri otomatik tamamla",
                 "make_seach_browsing_better":"Aramaları ve göz atmayı daha iyi yap",
                 "allow_chrome_use_system_notification":"Google Chrome'un sistem bildirimlerini kullanmasına izin ver",
-                "accept_incognita_mode":"Gizli mod kullanmasına izin ver",
+                "accept_incognita_mode":"Gizli mod kullanmasına izin verme",
                 "loading_tabs_until_selected":"Seçilene kadar sekmeleri yükleme",
                 "when_the_new_tabs_opens_switch_to_that":"Yeni sekme açıldığında, ona geç",
                 "plugin_installation":"Eklenti Kurulumu",

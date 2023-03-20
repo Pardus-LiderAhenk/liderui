@@ -242,7 +242,7 @@ export default {
                 
             });
         }
-    },
+    }
 }
 </script>
 

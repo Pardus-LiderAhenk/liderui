@@ -157,7 +157,7 @@ export default {
                 if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == 1) {
                     this.DefaultCookiesSetting = true;
                 }
-                if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled) {
+                if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled && element.value == "true") {
                     this.SavingBrowserHistoryDisabled = true;
                 }
                 if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList){ 
