@@ -121,10 +121,10 @@
  * 
  */
 
-import { memberExpression } from '@babel/types';
 import {FilterMatchMode} from 'primevue/api';
 import { policyService } from '../../../../services/PolicyManagement/PolicyService';
 import AddPolicyExceptionDialog from "./AddPolicyExceptionDialog.vue"
+import { mapGetters } from "vuex"
 
 export default {
 
@@ -151,6 +151,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters(["selectedLiderNode"]),
         showDialog: {
             get () {
                 return this.policyExceptionDialogList
@@ -171,10 +172,10 @@ export default {
             }
         },
 
-        async getPolicyExceptionOfSelectedPolicy() {
+        async getPolicyExceptionByPolicyAndByGroupDn() {
 
             this.loading = true;
-            const{response,error} = await policyService.getPolicyExceptionByPolicy(this.selectedPolicy.id);
+            const{response,error} = await policyService.getPolicyExceptionByPolicyAndByGroupDn(this.selectedPolicy.id, this.selectedLiderNode.distinguishedName);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -231,7 +232,7 @@ export default {
                         });
                         this.addPolicyExceptionDialog = false;
                     } else {
-                        this.getPolicyExceptionOfSelectedPolicy();
+                        this.getPolicyExceptionByPolicyAndByGroupDn();
                     }
                 }
             }
@@ -252,7 +253,7 @@ export default {
     },
 
     mounted() {
-        this.getPolicyExceptionOfSelectedPolicy();
+        this.getPolicyExceptionByPolicyAndByGroupDn();
     },
 }
 </script>

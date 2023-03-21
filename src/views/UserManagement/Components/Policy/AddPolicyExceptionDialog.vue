@@ -205,6 +205,7 @@ export default {
                 "label": this.label,
                 "description": this.description,
                 // "dnType": this.selectedLiderNode.type,
+                "groupDn": this.selectedLiderNode.distinguishedName
             }
             this.$emit('addPolicyException', params);
             this.showDialog = false;
