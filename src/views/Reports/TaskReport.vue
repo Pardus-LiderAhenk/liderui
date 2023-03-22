@@ -202,7 +202,7 @@
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
                   icon="pi pi-list"
-                  v-tooltip.left="'Task Details'"
+                  v-tooltip.left="$t('reports.task_report.selected_task_detail')"
                   @click="showTaskExecutionsResultDialog(data.id)"
                 />
               </div>
@@ -240,8 +240,12 @@
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>{{$t('reports.task_report.execution_result')}}</b></div>
-      <div class="p-col-8">
-        {{ selectedTaskExecutionResult.responseCode == "TASK_PROCESSED" ? 'BAŞARILI' : 'HATA' }}
+      <div class="p-col-8" v-if="selectedTaskExecutionResult.commandExecutionResults.length == 0">
+          {{$t('reports.task_report.waiting')}}
+      </div>
+      <div class="p-col-8" v-else> 
+        {{ selectedTaskExecutionResult.commandExecutionResults.length > 0 && 
+          selectedTaskExecutionResult.commandExecutionResults[0].responseCode == "TASK_PROCESSED" ? $t('reports.task_report.successful') : $t('reports.task_report.error') }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b>{{$t('reports.task_report.create_date')}}</b></div>
@@ -347,6 +351,8 @@
           (executionResult) => executionResult.id === id
         )[0];
         this.taskExecutionsResultDialog = true;
+        console.log(this.selectedTaskExecutionResult)
+        console.log(this.selectedTask)
       },
 
       async getTasks() {
