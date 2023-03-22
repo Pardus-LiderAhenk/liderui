@@ -4,7 +4,7 @@
  */
 
 export const Preferences = {
-    //		General preference
+            //General preference
             checkDefaultBrowser: "browser.shell.checkDefaultBrowser",
             homePage: "browser.startup.homepage",
             pageMode: "browser.startup.page",

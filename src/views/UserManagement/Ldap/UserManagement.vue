@@ -204,6 +204,33 @@
         </template>
     </Dialog>
     <!-- Delete Selected Node Dialog End -->
+    <!-- Disable Enable Selected User Dialog -->
+    <Dialog
+        :header="$t('computer.task.toast_summary')" 
+        v-model:visible="modals.disable"  
+        :modal="true" 
+        @hide="modals.disable = false">
+        <div class="confirmation-content">
+            <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
+            <span v-if="selectedNode.type == 'USER' && isUserDisabled">will be enabled</span>
+            <span v-else>will be disable</span>
+        </div>
+        <template #footer>
+        <Button 
+            :label="$t('user_management.cancel')" 
+            icon="pi pi-times" 
+            @click="modals.disable = false" 
+            class="p-button-text p-button-sm"
+        />
+        <Button
+            :label="$t('user_management.yes')"
+            icon="pi pi-check" 
+            @click="userEnableDisable"
+            class="p-button-sm"
+        />
+        </template>
+    </Dialog>
+ <!-- Disable Enable Selected User Dialog End -->
 </template>
 
 <script>
@@ -217,7 +244,7 @@ import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import NodeDetail from '@/components/Tree/NodeDetail.vue';
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import axios from 'axios';
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
 
 import GeneralInformations from '@/views/UserManagement/Ldap/Components/GeneralInformations.vue';
@@ -250,7 +277,8 @@ export default {
                 folderAdd: false,
                 moveUser: false,
                 deleteNode: false,
-                addUser: false
+                addUser: false,
+                disable: false, 
             },
             folderName:'',
             user:{
@@ -260,7 +288,7 @@ export default {
                 mail: "",
                 telephoneNumber: "",
                 homePostalAddress: "",
-                userPassword: ""
+                userPassword: "",
             },
             selectedAgents: [],
             showContextMenu: false,
@@ -324,12 +352,37 @@ export default {
         this.configuration();
     },
 
+    computed:{
+        ...mapGetters(["selectedLiderNode"]),
+        isUserDisabled: {
+            get() {
+                return this.getUserStatus();
+            },
+            set() {
+              return true;  
+            },
+        }
+    },
+
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
 
         treeNodeClick(node) {
+            console.log(node)
+
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
+            this.getUserStatus();
+        },
+
+        getUserStatus(){
+            let disabled = false;
+            if (this.selectedNode && this.selectedNode.type == 'USER') {
+                if (this.selectedNode.attributes.pwdAccountLockedTime) {
+                    disabled = true;
+                }
+            }
+            return disabled;
         },
 
         moveTreeNodeClick(node) {
@@ -450,6 +503,39 @@ export default {
                     }
                 }
             }
+        },
+
+        async userEnableDisable(){
+            // let params = {
+            // "dn": this.selectedNode.distinguishedName,};
+            let disableUrl = "/api/lider/user/user-enable-disable";
+            let params = new FormData();
+            params.append("dn", this.selectedNode.distinguishedName);
+            params.append("isDisableUser", this.isUserDisabled ? false : true);
+            
+            await axios.post(disableUrl, params).then(response => {
+                this.modals.disable = false;
+                console.log(response.data)
+                if (response.data) {
+                    this.setSelectedLiderNode(response.data);
+                    this.selectedNode = response.data;
+                    this.$refs.tree.updateNode(response.data.distinguishedName, response.data);
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('user_management.delete_node_success'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.delete_node_error'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            });
+
         },
 
         deleteNode() {
@@ -675,6 +761,11 @@ export default {
                             icon:"pi pi-user-minus", 
                             command:() => {this.modals.deleteNode = true;}
                         },
+                        // {
+                        //     label: this.isUserDisabled ? this.$t('Enable'): 'Disable', 
+                        //     icon:"pi pi-user-user", 
+                        //     command:() => {this.modals.disable = true;}
+                        // },
                     ]
             }
             this.$refs.rightMenu.style.top = data.clientY + 'px';
@@ -692,7 +783,13 @@ export default {
                 this.userFormValidation();
             },
             deep: true,
-        }
+        },
+        selectedLiderNode(){
+            if (this.selectedLiderNode && this.selectedLiderNode.type == 'USER'){
+                this.selectedNode = this.selectedLiderNode;
+                this.getUserStatus();
+            }
+        },
     }
 }
 </script>

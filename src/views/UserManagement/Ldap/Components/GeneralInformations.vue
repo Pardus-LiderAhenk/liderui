@@ -25,7 +25,21 @@
     </Dialog>
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-col-12">
-            <h3>{{$t('user_management.general_information')}}</h3>
+            <div class="p-d-flex p-jc-between">
+                <div>
+                    <h3>{{$t('user_management.general_information')}}</h3>
+                </div>
+                <div>
+                    <!-- <Button 
+                        :label="user.userStatus ? 'Pasif': 'Aktif'" v-tooltip.left="'status'"
+                        :class="user.userStatus ? 'p-button-sm p-button-danger': 'p-button-sm p-button-success'">
+                    </Button> -->
+                    <!-- <Badge 
+                        :value="user.userStatus ? 'Pasif': 'Aktif'" 
+                        :severity="user.userStatus ? 'danger': 'success'">
+                    </Badge> -->
+                </div>
+            </div>
         </div>
         <div class="p-field p-col-12">
             <label for="firstname6">{{$t('user_management.uid')}}</label>
@@ -92,9 +106,10 @@
         <Button 
             icon="pi pi-refresh"
             class="p-button-sm"
-            type="button" @click="showUpdateUserDialog" 
+            type="button" 
+            @click="showUpdateUserDialog" 
             :label="$t('user_management.update')" 
-        />
+        />    
     </div>
 </template>
 
@@ -119,7 +134,8 @@ export default {
                 sn: "",
                 mail: "",
                 telephoneNumber: "",
-                homePostalAddress: ""
+                homePostalAddress: "",
+                userStatus: "",
             },
             userValidation: {},
         }
@@ -149,6 +165,8 @@ export default {
             params.append("telephoneNumber", this.user.telephoneNumber);
             params.append("mail", this.user.mail);
             params.append("homePostalAddress", this.user.homePostalAddress);
+            params.append("userStatus", this.user.userStatus);
+
 
             const{response,error} = await userService.editUser(params);
             if(error){
@@ -220,6 +238,7 @@ export default {
                 this.user.mail = this.selectedNode.attributes.mail;
                 this.user.telephoneNumber = this.selectedNode.attributes.telephoneNumber;
                 this.user.homePostalAddress = this.selectedNode.attributes.homePostalAddress;
+                this.user.userStatus = this.selectedNode.attributes.pwdAccountLockedTime;
                 this.userValidation = {};
             } else {
                 this.user = {};
@@ -235,3 +254,8 @@ export default {
     }
 }
 </script>
+<style>
+.btn-float-left{
+	float: left;	
+}
+</style>

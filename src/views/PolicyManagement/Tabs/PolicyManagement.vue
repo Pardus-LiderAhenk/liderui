@@ -77,6 +77,11 @@
                                                 :title="$t('policy_management.edit')" 
                                                 @click.prevent="editPolicy(slotProps.data)">
                                             </Button>
+                                            <!-- <Button class="p-mr-2 p-button-sm p-button-rounded p-button-secondary" 
+                                                icon="pi pi-list"
+                                                title="Policy Exception List" 
+                                                @click.prevent="policyExceptionList(slotProps.data)">
+                                            </Button> -->
                                             <Button class="p-button-danger p-button-sm p-button-rounded" 
                                                 icon="pi pi-trash" 
                                                 :title="$t('policy_management.delete')"
@@ -111,6 +116,13 @@
             @deleted-policy="deletedPolicy"
             @close-policy-dialog="modals.deletePolicyDialog = false">
         </delete-policy-dialog>
+
+    <policy-exception-list-dialog v-if="modals.policyExceptionDialogList"
+        :policyExceptionDialogList="modals.policyExceptionDialogList"
+        @close-policy-exception-list-dialog="modals.policyExceptionDialogList = false"
+        :selectedPolicy="selectedPolicy ? selectedPolicy : null"
+    >
+    </policy-exception-list-dialog>
 <!-- Dialogs END -->
     </div>
 </template>
@@ -125,6 +137,7 @@ import AddPolicyDialog from './Dialogs/Policy/AddPolicyDialog.vue'
 import EditPolicyDialog from './Dialogs/Policy/EditPolicyDialog.vue'
 import DeletePolicyDialog from './Dialogs/Policy/DeletePolicyDialog.vue'
 import { policyService } from '../../../services/PolicyManagement/PolicyService.js';
+import PolicyExceptionListDialog from './Dialogs/Policy/PolicyExceptionListDialog.vue'
 
 export default {
     data() {
@@ -139,6 +152,7 @@ export default {
                 addPolicyDialog: false,
                 editPolicyDialog: false,
                 deletePolicyDialog: false,
+                policyExceptionDialogList: false
             },
         }
     },
@@ -146,7 +160,8 @@ export default {
     components: {
         AddPolicyDialog,
         EditPolicyDialog,
-        DeletePolicyDialog
+        DeletePolicyDialog,
+        PolicyExceptionListDialog
     },
 
     mounted() {
@@ -209,7 +224,12 @@ export default {
                     });
                 }
             }
-        }
+        },
+
+        policyExceptionList(selectedPolicy) {
+            this.selectedPolicy = selectedPolicy;
+            this.modals.policyExceptionDialogList = true;
+        },
     }
 }
 </script>

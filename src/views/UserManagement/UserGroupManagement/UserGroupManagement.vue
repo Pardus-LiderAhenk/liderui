@@ -102,15 +102,45 @@
             <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
                 @click="modals.moveNode = false" class="p-button-text p-button-sm"
             />
-            <Button :label="$t('group_management.move')" icon="el-icon-rank" 
+            <Button :label="$t('group_management.add')" icon="el-icon-rank" 
                 @click="moveNode" class="p-button-sm"
             />
         </template>
     </Dialog>
     <!-- Move Selected Node Dialog End -->
+
+    <!-- Add Group To Group Dialog -->
+    <Dialog :header="selectedNode && selectedNode.type=='GROUP'? $t('group_management.add_group')
+        :$t('group_management.add_group')" 
+        v-model:visible="modals.addToGroup" :style="{width: '40vw'}" :modal="true">
+        <tree-component 
+            ref="tree"
+            loadNodeUrl="/api/lider/user-groups/groups"
+            loadNodeOuUrl="/api/lider/user-groups/ou-details"
+            :treeNodeClick="treeNodeClick"
+            :searchFields="searchFields"
+            :showCheckbox="userGroupModal.showCheckbox"
+            :getCheckedNodes="getCheckedUserNodes"
+            @handleContextMenu="handleContenxtMenu"
+        >
+        </tree-component>
+        <div class="p-col p-text-center">
+          <small>{{$t('group_management.group_name_warn')}}</small>
+        </div>
+        <template #footer>
+            <Button :label="$t('group_management.cancel')" icon="pi pi-times" 
+                @click="modals.addToGroup = false" class="p-button-text p-button-sm"
+            />
+            <Button :label="$t('group_management.add')" icon="el-icon-rank" 
+                @click="groupManagemenet" class="p-button-sm"
+            />
+        </template>
+    </Dialog>
+    <!-- Add Group To Group Dialog End -->
+
     <!-- Add Group Dialog or Add User to Group Dialog -->
     <Dialog :header="modals.addUser? $t('group_management.add_user')
-        :$t('group_management.add_group')"
+        :$t('group_management.create_group')"
          v-model:visible="modals.addGroup" :style="{width: '45vw'}" :modal="true">
         <TabView>
             <TabPanel :header="$t('group_management.group_info')">
@@ -265,7 +295,7 @@ import NodeDetail from '@/components/Tree/NodeDetail.vue';
 import { mapActions, mapGetters } from "vuex"
 import {ref} from 'vue';
 import MemberOfUserGroup from "./Components/MemberOfUserGroup.vue";
-import AssignedPolicies from "./Components/AssignedPolicies.vue";
+import AssignedPolicies from "../Components/Policy/AssignedPolicies.vue";
 import {FilterMatchMode} from 'primevue/api';
 import { userGroupsService } from '../../../services/Settings/UserGroupsService.js'
 
@@ -296,6 +326,7 @@ export default {
                 addUser: false,
                 moveNode: false,
                 deleteNode: false,
+                addToGroup: false,
             },
             folderName:'',
             validation: {
@@ -399,7 +430,7 @@ export default {
                                 command: () => {this.showNodeDetailDialog = true}
                             },
                             {
-                                label: this.$t('group_management.add_group'), 
+                                label: this.$t('group_management.create_group'), 
                                 icon:"fas fa-users", 
                                 command: () => {this.modals.addUser = false; 
                                     this.userGroupModal.groupName = '';
@@ -454,6 +485,11 @@ export default {
                             icon:"pi pi-trash", 
                             command:() => {this.modals.deleteNode = true;}
                         },
+                        {
+                            label: this.$t('group_management.add_group'), 
+                            icon:"fas fa-users", 
+                            command: () => {this.showAddGroupDialog()}
+                        },
                     ]
             }
             this.$refs.rightMenu.style.top = data.clientY + 'px';
@@ -468,6 +504,14 @@ export default {
             this.userGroupModal.groupName = this.selectedNode.cn;
             this.modals.addGroup = true;
             this.modals.addUser = true;
+            this.getMemberOfSelectedGroup();
+        },
+
+        showAddGroupDialog() {
+            this.userGroupModal.groupName = this.selectedNode.cn;
+            // this.modals.addGroup = true;
+            // this.modals.addUser = true;
+            this.modals.addToGroup = true;
             this.getMemberOfSelectedGroup();
         },
 
@@ -502,7 +546,7 @@ export default {
                 });
                 return;
             }
-            if (this.modals.addUser) {
+            if (this.modals.addUser || this.modals.addToGroup) {
                 this.addUserToGroup();
             } else {
                 this.createUserGroup();
@@ -588,6 +632,7 @@ export default {
                     }
                     this.modals.addGroup = false;
                     this.modals.addUser = false;
+                    this.modals.addToGroup = false;
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('group_management.add_user_success'), 

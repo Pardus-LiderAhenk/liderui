@@ -36,8 +36,8 @@
                                 Not found profile
                             </template>
                         <template #grid="slotProps">
-                            <div class="p-col-12 p-md-4">
-                                <div class="product-grid-item card">
+                            <div class="p-col-12 p-md-3">
+                                <div class="product-grid-item card" @click="showProfile(slotProps.data)">
                                     <div class="product-grid-item-content">
                                         <img :src="slotProps.data.image" :alt="slotProps.data.name"
                                         style="width: 30%"/>
@@ -45,9 +45,9 @@
                                         <div class="plugin-description">{{slotProps.data.description}}</div>
                                     </div>
                                     <div class="p-d-flex p-jc-end">
-                                        <Button icon="pi pi-pencil" class="p-button-sm" :label="$t('policy_management.edit')"
+                                        <!-- <Button icon="pi pi-pencil" class="p-button-sm" :label="$t('policy_management.edit')"
                                             @click.prevent="showProfile(slotProps.data)">
-                                        </Button>
+                                        </Button> -->
                                     </div>
                                 </div>
                             </div>
@@ -87,6 +87,11 @@
             @close-profile-dialog="modals.rsyslogProfileDialog=false;"
             :pluginProfile="selectedProfile">
         </rsyslog-profile-dialog>
+        <browser-chrome-profile-dialog v-if="modals.browserChromeProfileDialog" 
+        :browserChromeProfileDialog="modals.browserChromeProfileDialog"
+        @close-profile-dialog="modals.browserChromeProfileDialog=false;"
+        :pluginProfile="selectedProfile">
+        </browser-chrome-profile-dialog>
         <!-- Profile Dialogs END -->
 	</div>
 </template>
@@ -100,6 +105,7 @@ import UsbProfileDialog from './Dialogs/Profiles/UsbProfileDialog.vue';
 import BrowserProfileDialog from './Dialogs/Profiles/Browser/BrowserProfileDialog.vue';
 import RsyslogProfileDialog from './Dialogs/Profiles/RsyslogProfileDialog.vue';
 import { taskService } from "../../../services/Task/TaskService.js";
+import BrowserChromeProfileDialog from './Dialogs/Profiles/BrowserChrome/BrowserChromeProfileDialog.vue';
 
 export default {
     data() {
@@ -111,7 +117,8 @@ export default {
                 browserProfileDialog: false,
                 loginManagerProfileDialog: false,
                 rsyslogProfileDialog: false,
-                usbProfileDialog: false
+                usbProfileDialog: false,
+                browserChromeProfileDialog: false
             },
             selectedProfile: null,
             profileImage: require("@/assets/images/icons/pardus.png"),
@@ -127,7 +134,8 @@ export default {
         LoginManagerProfileDialog,
         UsbProfileDialog,
         BrowserProfileDialog,
-        RsyslogProfileDialog
+        RsyslogProfileDialog,
+        BrowserChromeProfileDialog
         
     },
 
@@ -158,25 +166,28 @@ export default {
             if (profile.page == "usb-profile") {
                 this.modals.usbProfileDialog = true;
             }
+            if (profile.page == "browser-chrome-profile") {
+                this.modals.browserChromeProfileDialog = true;
+            }
         },
 
         addImagePath() {
             for (let index = 0; index < this.plugins.length; index++) {
                 const element = this.plugins[index];
                 if (element.page == "execute-script-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/script_icon.png");
                 } else if (element.page == "conky-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/conky_icon.png");
                 } else if (element.page == "browser-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/firefox_icon.png");
                 } else if (element.page == "login-manager-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/session_management_icon.png");
                 } else if (element.page == "rsyslog-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/rsyslog_icon.png");
                 } else if (element.page == "usb-profile") {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/usb_icon.png");
                 } else {
-                    element.image = require("@/assets/images/icons/pardus.png");
+                    element.image = require("@/assets/images/icons/chrome_icon.png");
                 }
             }
         },
@@ -221,7 +232,8 @@ export default {
 }
 
 .card:hover {
-  box-shadow: 0 8px 20px 0 rgba(155, 150, 150, 0.2);
+  box-shadow: 0 8px 20px 0 rgba(155, 150, 150, 0.5);
+  cursor: pointer;
 } 
 
 .plugin-name {
@@ -245,7 +257,7 @@ export default {
 	}
 
 	img {
-		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+		//box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 		margin: 2rem 0;
 	}
 
