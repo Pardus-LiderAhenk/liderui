@@ -761,11 +761,11 @@ export default {
                             icon:"pi pi-user-minus", 
                             command:() => {this.modals.deleteNode = true;}
                         },
-                        {
-                            label: this.isUserDisabled ? this.$t('Enable'): 'Disable', 
-                            icon:"pi pi-user-user", 
-                            command:() => {this.modals.disable = true;}
-                        },
+                        // {
+                        //     label: this.isUserDisabled ? this.$t('Enable'): 'Disable', 
+                        //     icon:"pi pi-user-user", 
+                        //     command:() => {this.modals.disable = true;}
+                        // },
                     ]
             }
             this.$refs.rightMenu.style.top = data.clientY + 'px';

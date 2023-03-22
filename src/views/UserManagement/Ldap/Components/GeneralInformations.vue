@@ -30,10 +30,10 @@
                     <h3>{{$t('user_management.general_information')}}</h3>
                 </div>
                 <div>
-                    <Button 
+                    <!-- <Button 
                         :label="user.userStatus ? 'Pasif': 'Aktif'" v-tooltip.left="'status'"
                         :class="user.userStatus ? 'p-button-sm p-button-danger': 'p-button-sm p-button-success'">
-                    </Button>
+                    </Button> -->
                     <!-- <Badge 
                         :value="user.userStatus ? 'Pasif': 'Aktif'" 
                         :severity="user.userStatus ? 'danger': 'success'">
