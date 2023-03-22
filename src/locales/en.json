@@ -167,6 +167,7 @@
             },
             "base_plugin": {
                 "loading_default_text": "Sent task, please wait...",
+                "scheduled_loading_default_text": "Scheduled task canceled, please wait...",
                 "task_confirm_question": "The task will be sent, are you sure?",
                 "scheduled_task_confirm_question": "The scheduled task will be sent, are you sure?",
                 "warning": "Warning",
@@ -1572,7 +1573,7 @@
                 "auto_fill_search":"Auto complete searches and URLs",
                 "make_seach_browsing_better":"Make searches and browsing better",
                 "allow_chrome_use_system_notification":"Allow Google Chrome to use system notifications",
-                "accept_incognita_mode":"Allow to use incognito mode",
+                "accept_incognita_mode":"Do not allow to use incognito mode",
                 "loading_tabs_until_selected":"Loading tabs until selected",
                 "when_the_new_tabs_opens_switch_to_that":"When the new tab opens, switch to it",
                 "plugin_installation":"Plugin Installation",

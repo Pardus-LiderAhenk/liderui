@@ -36,22 +36,22 @@
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="cookies_and_other_site_data" name="cookies_and_other_site_data" value="cookies_and_other_site_data" v-model="cookiesAndOtherSiteData" />
+            <Checkbox inputId="cookies_and_other_site_data" name="cookies_and_other_site_data" :binary="true" value="cookies_and_other_site_data" v-model="cookiesAndOtherSiteData" />
             <label for="cookies_and_other_site_data">{{$t('policy_management.profile.chrome_privacy.cookies_and_otherSite_data')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="cached_images_and_files" name="cached_images_and_files" value="cached_images_and_files" v-model="cachedImagesAndFiles" />
+            <Checkbox inputId="cached_images_and_files" name="cached_images_and_files" :binary="true" value="cached_images_and_files" v-model="cachedImagesAndFiles" />
             <label for="cached_images_and_files">{{$t('policy_management.profile.chrome_privacy.cache_image_and_file')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="password_signin" name="password_signin" value="password_signin" v-model="passwordSignin" />
+            <Checkbox inputId="password_signin" name="password_signin" :binary="true" value="password_signin" v-model="passwordSignin" />
             <label for="password_signin">{{$t('policy_management.profile.chrome_privacy.password_and_other_open_session')}}</label>
         </div>
         <br>
         <div class="field-checkbox">
-            <Checkbox inputId="autofill" name="autofill" value="autofill" v-model="autofill" />
+            <Checkbox inputId="autofill" name="autofill" :binary="true" value="autofill" v-model="autofill" />
             <label for="autofill">{{$t('policy_management.profile.chrome_privacy.autofill_form')}}</label>
         </div>
         
@@ -61,9 +61,6 @@
 
 <script>
 import  PreferencesChrome  from './PreferencesChrome.js';
-import Checkbox from 'primevue/checkbox';
-
-
 
 export default {
     props: {
@@ -76,11 +73,11 @@ export default {
     data () {
         return {
 
-            DnsOverHttpsMode:"off",
-            HttpsOnlyMode:"disallowed",
+            DnsOverHttpsMode:false,
+            HttpsOnlyMode:false,
             AllowDeletingBrowserHistory:false,
             SavingBrowserHistoryDisabled:false,
-            DefaultCookiesSetting:"1",
+            DefaultCookiesSetting:false,
             ClearBrowsingDataOnExitList: [],
             browsingHistory: false,
             downloadHistory: false,
@@ -97,10 +94,10 @@ export default {
         if (this.selectedProfileData) {
             this.setPrivacyPreferences();
         } else {
-            this.DnsOverHttpsMode = "off",
-            this.HttpsOnlyMode = "disallowed",
+            this.DnsOverHttpsMode = false,
+            this.HttpsOnlyMode = false,
             this.AllowDeletingBrowserHistory = false,
-            this.DefaultCookiesSetting = "1",
+            this.DefaultCookiesSetting = false,
             this.SavingBrowserHistoryDisabled = false,
             this.ClearBrowsingDataOnExitList = []
         }
@@ -108,11 +105,11 @@ export default {
 
     methods: {
         getPrivacyPreferences() {
-            this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, this.DnsOverHttpsMode.toString());
-            this.addToPreferences(PreferencesChrome.HttpsOnlyMode, this.HttpsOnlyMode.toString());
+            this.DnsOverHttpsMode ? this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, "automatic") : this.addToPreferences(PreferencesChrome.DnsOverHttpsMode, "off");
+            this.HttpsOnlyMode ? this.addToPreferences(PreferencesChrome.HttpsOnlyMode, "allowed") : this.addToPreferences(PreferencesChrome.HttpsOnlyMode, "disallowed");
             this.AllowDeletingBrowserHistory ? this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "true") : this.addToPreferences(PreferencesChrome.AllowDeletingBrowserHistory, "false");
             this.SavingBrowserHistoryDisabled ? this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "true") : this.addToPreferences(PreferencesChrome.SavingBrowserHistoryDisabled, "false");
-            this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, this.DefaultCookiesSetting.toString());
+            this.DefaultCookiesSetting ? this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, parseInt(1)) : this.addToPreferences(PreferencesChrome.DefaultCookiesSetting, parseInt(2));
             this.addToPreferences(PreferencesChrome.ClearBrowsingDataOnExitList, this.ClearBrowsingDataOnExitList);
             if (this.browsingHistory) {
                 this.ClearBrowsingDataOnExitList.push("browsing_history")
@@ -147,25 +144,43 @@ export default {
         setPrivacyPreferences() {
             let prefList = this.selectedProfileData.preferencesChrome;
             prefList.forEach(element => {
-                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode && element.value == "automatic") {
-                    this.dontWantToBeTracked = element.value;
+                if (element.preferenceName == PreferencesChrome.DnsOverHttpsMode  && element.value == "automatic") {
+                    this.DnsOverHttpsMode = true;
                 }
                 if (element.preferenceName == PreferencesChrome.HttpsOnlyMode && element.value == "allowed") {
-                    this.dontWantToBeTracked = element.value;
+                    this.HttpsOnlyMode = true;
                 }
                 if (element.preferenceName == PreferencesChrome.AllowDeletingBrowserHistory && element.value == "true") {
                     this.AllowDeletingBrowserHistory = true;
                 }
-                if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == "2") {
-                    this.dontWantToBeTracked = element.value;
+                if (element.preferenceName == PreferencesChrome.DefaultCookiesSetting && element.value == 1) {
+                    this.DefaultCookiesSetting = true;
                 }
                 if (element.preferenceName == PreferencesChrome.SavingBrowserHistoryDisabled && element.value == "true") {
                     this.SavingBrowserHistoryDisabled = true;
                 }
-                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList){
-                    this.ClearBrowsingDataOnExitList = element.value;
+                if(element.preferenceName == PreferencesChrome.ClearBrowsingDataOnExitList){ 
+                    element.value.forEach(el => {
+                        if (el == "browsing_history") {
+                            this.browsingHistory = true;
+                        }
+                        if (el == "autofill") {
+                            this.autofill = true;
+                        }
+                        if (el == "download_history") {
+                            this.downloadHistory = true;
+                        }
+                        if (el == "cookies_and_other_site_data") {
+                            this.cookiesAndOtherSiteData = true;
+                        }
+                        if (el == "cached_images_and_files") {
+                            this.cachedImagesAndFiles = true;
+                        }
+                        if (el == "password_signin") {
+                            this.passwordSignin = true;
+                        }
+                    });
                 }
-                
             });
         }
     }
