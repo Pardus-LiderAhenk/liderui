@@ -245,6 +245,14 @@ export default {
                     }
                 );
             }
+            if (this.isExistPrivilege("ROLE_SERVER_SETTINGS") || this.isExistPrivilege("ROLE_ADMIN")) {
+                this.settingItems.push(
+                    {
+                        label: this.$t('menu.server_informations'),
+                        to: '/settings/server-informations'
+                    }
+                );
+            }
             if (this.isExistPrivilege("ROLE_CONKY_DEFINITION") || this.isExistPrivilege("ROLE_ADMIN")) {
                 this.settingItems.push(
                     {
