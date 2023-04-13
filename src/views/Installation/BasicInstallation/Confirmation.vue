@@ -2,7 +2,7 @@
     <div class="stepsdemo-content">
         <div class="p-field p-d-flex p-jc-between">
             <div>
-                <Button label="Back" @click="prevPage()" icon="pi pi-angle-left" />
+                <Button label="Back" @click="prevPage" icon="pi pi-angle-left" />
             </div>
             <div class="p-ml-2">
                 <Button label="Start Installation"
@@ -315,7 +315,7 @@ export default {
         },
 
         startProgress() {
-            this.startDisabled = true;
+            // this.startDisabled = true;
             this.loading = true;
             this.interval = setInterval(() => {
                 let newValue = this.value + Math.floor(Math.random() * 10) + 1;

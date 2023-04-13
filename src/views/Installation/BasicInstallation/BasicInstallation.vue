@@ -58,6 +58,7 @@ export default {
     },
     methods: {
         nextPage(event) {
+            console.log(event)
             for (let field in event.formData) {
                 this.formObject[field] = event.formData[field];
             }

@@ -2,10 +2,10 @@
     <div class="stepsdemo-content p-fluid">
         <div class="p-field p-d-flex p-jc-between">
             <div>
-                <Button label="Back" @click="prevPage()" icon="pi pi-angle-left" />
+                <Button label="Back" @click="prevPage" icon="pi pi-angle-left" />
             </div>
             <div class="p-ml-2">
-                <Button label="Next" @click="nextPage()" icon="pi pi-angle-right" iconPos="right" />
+                <Button label="Next" @click="nextPage" icon="pi pi-angle-right" iconPos="right" />
             </div>
         </div>
         <div class="p-grid p-field">

@@ -6,7 +6,7 @@
                     icon="pi pi-angle-right"
                     label="Next"
                     type="submit"
-                    @click="nextPage()"
+                    @click="nextPage"
                 />
             </div>
         </div>
@@ -159,7 +159,6 @@ export default {
     methods: {
         async nextPage(isFormValid) {
             let serverInfo = await this.$refs.serverConnection.getServerConnectionInfo();
-
             this.submitted = true;
             if (!isFormValid) {
                 return;
