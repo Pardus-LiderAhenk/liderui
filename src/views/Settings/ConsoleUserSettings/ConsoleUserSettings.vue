@@ -258,6 +258,7 @@ export default {
         UserGroupDialog,
         RoleDialog,
         AddConsoleUserDialog,
+        PasswordComponent,
     },
     data(){
         return {
@@ -335,10 +336,6 @@ export default {
     mounted() {
         this.getRoles();
         this.getConsoleUsers();
-    },
-
-    components: {
-        PasswordComponent
     },
 
     methods: {
