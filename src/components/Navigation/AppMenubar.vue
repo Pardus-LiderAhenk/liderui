@@ -241,15 +241,15 @@ export default {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.server_settings'),
-                        to: '/settings/server-settings'
+                        to: '/settings/server-settings',
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_SERVER_SETTINGS") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_SERVER_INFORMATION") || this.isExistPrivilege("ROLE_ADMIN")) {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.server_informations'),
-                        to: '/settings/server-informations'
+                        to: '/settings/server-informations',
                     }
                 );
             }

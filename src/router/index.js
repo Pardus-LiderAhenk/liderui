@@ -110,7 +110,7 @@ const routes = [
                 }
             },
             {
-                path: '/settings/server-settings',
+                path: '/settings/server-informations',
                 name: 'ServerInformations',
                 components: {default: ServerInformations},
                 meta: {
