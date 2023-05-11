@@ -1,21 +1,46 @@
 <template>
+<div class="dashboard p-fluid">
+    <div class="p-grid p-field">
 
-    <div class="card overview-box" :class="colorClass">
-        <div class="overview-info">
-          <h6>{{title}}</h6>
-          <h1 class="desClass">{{description}}</h1>
+        <div class="p-field p-col-12 p-md-6 p-lg-3">
+            <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
+                :description="totalSentTaskNumber" 
+                :icon="'pi pi-users'" 
+                colorClass="blue"
+                :descriptionFont="'bold'"
+            />
         </div>
-        <i :class="icon" ></i>
+        <div class="p-field p-col-12 p-md-6 p-lg-3">
+            <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
+                :description="totalSentTaskNumber" 
+                :icon="'pi pi-map'" 
+                colorClass="orange"
+                :descriptionFont="'bold'"
+            />
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-lg-3">
+            <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
+                :description="totalSentTaskNumber" 
+                :icon="'pi pi-directions'" 
+                colorClass="darkgray"
+                :descriptionFont="'bold'"
+            />
+        </div>
+    <div>
+        <Button
+            icon="fa fa-plus"
+            :class="selectedPluginTab == 'task-history' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+            @click="setSelectedPluginTab('task-history')"
+            :label="$t('Sunucu ekle')"
+        >
+        </Button>
+    </div>
+    <div class="p-chart" id="nasdaq-chart">
+        <canvas width="482" height="241" style="box-sizing: border-box; display: block; height: 241px; width: 482px;"/>
+    </div>
     </div>
 
-    <div class="p-field p-col-12 p-md-6 p-lg-3">
-        <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
-            :description="totalSentTaskNumber" 
-            :icon="'pi pi-send'" 
-            colorClass="orange"
-            :descriptionFont="'bold'"
-        />
-    </div>
+</div>
 </template>
 <script>
 /**
