@@ -38,9 +38,37 @@
     <div class="p-chart" id="nasdaq-chart">
         <canvas width="482" height="241" style="box-sizing: border-box; display: block; height: 241px; width: 482px;"/>
     </div>
+    <div class="col-12 md:col-6 xl:col-3">
+
+    </div>
+    <Card>
+        <template #title> Simple Card </template>
+        <template #content>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+                quas!
+            </p>
+        </template>
+    </Card>
+
+    <div class="p-col-12 p-d-flex p-jc-end ">
+        <Button :label="$t('yeni sunucu ekle')"  class="p-mr-2" 
+            @click="addServerModalVisible = true"
+        />
+        <!-- <Button :label="$t('settings.console_user_settings.delete_users_console_authority')" 
+            @click="showDeleteConsoleUserDialog = true"
+        /> -->
+    </div>
+    
     </div>
 
 </div>
+
+<add-server-dialog
+    @updateConsoleUsers="getConsoleUsers"
+    :modalVisibleValue="addServerModalVisible" 
+    @modalVisibleValue="addServerModalVisible = $event;"
+/>
 </template>
 <script>
 /**
@@ -50,14 +78,16 @@
 
 import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 import axios from "axios";
-import ChartDataLabels from 'chartjs-plugin-datalabels'
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import AddServerDialog from './Dialogs/AddServerDialog.vue';
 
 export default {
     setup() {
     const plugins = [ChartDataLabels]
       // expose to template and other options API hooks
       return {
-        plugins
+        plugins,
+        addServerModalVisible :false,
       }
     },
     data() {
@@ -68,11 +98,14 @@ export default {
     
     components: {
         Dashboardbox,
+        AddServerDialog,
      
     },
     
     mounted() {
         this.renderCharts();
+        this.getConsoleUsers();
+
     },
 
     methods: {
@@ -143,7 +176,32 @@ export default {
             let date = new Date();
             let month = date.toLocaleString(this.$i18n.locale, { month: 'long' });
             return date.getDate() +' '+month;
-        }
+        },
+
+        async getConsoleUsers(){
+            const { response, error } = await consoleUserSettingsService.getConsoleUsers();
+                if (error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                        summary: this.$t('settings.console_user_settings.error'),
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+                        this.records = response.data;
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_get_console_user'),
+                            summary: this.$t('settings.console_user_settings.error'),
+                            life: 3000
+                        });
+                    }
+                }               
+        },
     }
 
 }
