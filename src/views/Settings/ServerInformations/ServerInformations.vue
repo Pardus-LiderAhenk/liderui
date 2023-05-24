@@ -3,23 +3,23 @@
     <div class="p-grid p-field">
 
         <div class="p-field p-col-12 p-md-6 p-lg-3">
-            <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
+            <Dashboardbox :title="$t('Sunucu sayısı')" 
                 :description="totalSentTaskNumber" 
-                :icon="'pi pi-users'" 
+                :icon="'pi pi-map'" 
                 colorClass="blue"
                 :descriptionFont="'bold'"
             />
         </div>
         <div class="p-field p-col-12 p-md-6 p-lg-3">
-            <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
+            <Dashboardbox :title="$t('Kullanıcı sayısı')" 
                 :description="totalSentTaskNumber" 
-                :icon="'pi pi-map'" 
+                :icon="'pi pi-users'" 
                 colorClass="orange"
                 :descriptionFont="'bold'"
             />
         </div>
         <div class="p-field p-col-12 p-md-6 p-lg-3">
-            <Dashboardbox :title="$t('dashboard_screen.total_number_of_sent_task')" 
+            <Dashboardbox :title="$t('Çalışma süresi(uptime)')" 
                 :description="totalSentTaskNumber" 
                 :icon="'pi pi-directions'" 
                 colorClass="darkgray"
@@ -30,68 +30,49 @@
         <Button
             icon="fa fa-plus"
             :class="selectedPluginTab == 'task-history' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
-            @click="setSelectedPluginTab('task-history')"
+            @click="addServerModalVisible = true"
             :label="$t('Sunucu ekle')"
         >
         </Button>
     </div>
-    <div class="p-chart" id="nasdaq-chart">
+    <!-- <div class="p-chart" id="nasdaq-chart">
         <canvas width="482" height="241" style="box-sizing: border-box; display: block; height: 241px; width: 482px;"/>
-    </div>
-    <div class="col-12 md:col-6 xl:col-3">
+    </div> -->
 
+</div>
+<div class="p-col-12 p-md-3 p-lg-4">
+    <div class="card">
+        <Card>
+        <template #title> Kullanıcı işlemleri </template>
+            <ul data-v-b94db64c>
+                <li class="blue">
+                    <i class="pi pi-circle-on"></i>
+                </li>
+            </ul>
+            
+        </Card>
+      
     </div>
-    
-        <div>
-        <DataTable v-model:editingRows="editingRows" :value="products" editMode="row" dataKey="id"
-            @row-edit-save="onRowEditSave" tableClass="editable-cells-table" tableStyle="min-width: 70rem">
-            <Column field="id" header="Id" style="width: 20%">
-                <template #editor="{ data, field }">
-                    <InputText v-model="data[field]" />
-                </template>
-            </Column>
-            <Column field="hostaname" header="Hostname" style="width: 20%">
-                <template #editor="{ data, field }">
-                    <InputText v-model="data[field]" />
-                </template>
-            </Column>
-            <Column field="ip" header="Ip" style="width: 20%">
-                <template #editor="{ data, field }">
-                    <Dropdown v-model="data[field]" :options="statuses" optionLabel="label" optionValue="value" placeholder="Select a Status">
-                        <template #option="slotProps">
-                            <Tag :value="slotProps.option.value" :severity="getStatusLabel(slotProps.option.value)" />
-                        </template>
-                    </Dropdown>
-                </template>
-                <template #body="slotProps">
-                    <Tag :value="slotProps.data.inventoryStatus" :severity="getStatusLabel(slotProps.data.inventoryStatus)" />
-                </template>
-            </Column>
-            <Column field="user" header="Kullanıcı" style="width: 20%">
-                <template #body="{ data, field }">
-                    {{ formatCurrency(data[field]) }}
-                </template>
-                <template #editor="{ data, field }">
-                    <InputNumber v-model="data[field]" mode="currency" currency="USD" locale="en-US" />
-                </template>
-            </Column>
-            <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
+
+    <div class="datatable">
+
+        <DataTable :value="serverList" showGridlines tableStyle="min-width: 50rem">
+            <Column field="id" header="Id"></Column>
+            <Column field="ip" header="Ip"></Column>
+            <Column field="hostname" header="Hostname"></Column>
+            <Column field="users" header="Kullanıcı"></Column>
+            <Column field="password" header="Parola"></Column>
         </DataTable>
     </div>
 
-    <div>
-    </div>
+</div>
 
-    <div class="p-col-12 p-d-flex p-jc-end ">
+    <!-- <div class="p-col-12 p-d-flex p-jc-end ">
         <Button :label="$t('yeni sunucu ekle')"  class="p-mr-2" 
             @click="addServerModalVisible = true"
         />
-        <!-- <Button :label="$t('settings.console_user_settings.delete_users_console_authority')" 
-            @click="showDeleteConsoleUserDialog = true"
-        /> -->
-    </div>
+    </div> -->
     
-    </div>
 
 </div>
 
@@ -111,6 +92,8 @@ import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 import axios from "axios";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import AddServerDialog from './Dialogs/AddServerDialog.vue';
+import Card from "primevue/card";
+
 
 export default {
     setup() {
@@ -241,5 +224,12 @@ export default {
 .dashboard {
     background-color: #e7f2f8;
     min-height:93vh;
+}
+
+.card {
+    background: #ffffff;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0px 10px 40px rgba(41, 50, 65, 0.06);
 }
 </style>
