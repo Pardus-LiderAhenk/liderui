@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="card">
         <Card>
             <template #title>
-                <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('Ram bilgisi')}}</span>
+                <span style="margin: 0 0 1px; font-size:1rem">{{$t('Ram bilgisi')}}</span>
             </template>
             
         </Card>
@@ -15,3 +15,15 @@ export default{
     
 }
 </script>
+
+<style lang="scss" scoped>
+    
+.card {
+    background: #ffffff;
+    box-sizing: border-box;
+    width: 40em;
+    position:absolute;
+    box-shadow: 500px 500px 100px rgba(41, 50, 65, 0.06);
+}
+
+</style>

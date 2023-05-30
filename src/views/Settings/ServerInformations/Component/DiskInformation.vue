@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="card">
         <Card>
             <template #title>
-                <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('Disk bilgisi')}}</span>
+                <span>{{$t('Disk bilgisi')}}</span>
             </template>
             <template #content>
                 <div >
@@ -22,6 +22,7 @@
 
 <script>
 import ProgressBar from 'primevue/progressbar';
+import Card from 'primevue/card';
 
 export default{
      
@@ -53,11 +54,11 @@ export default{
 
 <style lang="scss" scoped>
     
-    .Card {
+    .card {
         background: #ffffff;
-        padding: 20px;
         box-sizing: border-box;
-        box-shadow: 0px 10px 40px rgba(41, 50, 65, 0.06);
+        width: 40em;
+        box-shadow: 500px 500px 100px rgba(41, 50, 65, 0.06);
     }
 
-    </style>
+</style>

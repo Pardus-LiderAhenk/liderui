@@ -16,35 +16,57 @@
     
         <div class="datatable">
     
+            <Button 
+                class="p-button-sm" 
+                icon="pi pi-plus" 
+                :label="$t('sunucu ekle')"
+                @click="addServerModalVisible =  true">
+            </Button>
+
             <DataTable :value="serverList" showGridlines tableStyle="min-width: 50rem">
-                <Column field="id" header="Id"></Column>
                 <Column field="ip" header="Ip"></Column>
                 <Column field="hostname" header="Hostname"></Column>
                 <Column field="users" header="Kullanıcı"></Column>
                 <Column field="password" header="Parola"></Column>
+                <Column header="Durum">
+                    <template>
+                        <Tag/>
+                        <!-- <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" /> -->
+                    </template>
+                </Column>
+                <Column field="inspect" header="İncele">
+                    <Button 
+                    class="p-button-sm" 
+                    icon="pi pi-plus" 
+                    :label="$t('sunucu ekle')"
+                    @click="addServerModalVisible =  true">
+                </Button>
+                </Column>
             </DataTable>
+            
         </div>
 
+    <div>
         <div class="p-field p-grid">
-            <div class="p-field p-col-12 p-md-6 p-lg-5">
+            <div class="">
                 <disk-information></disk-information>
             </div>
         </div>
-        <div class="p-field p-grid">
-            <div class="p-field p-col-6 p-md-6 p-lg-5">
+
+        <div class="p-field p-grid" >
+            <div class="">
                <ram-information></ram-information>
             </div>
         </div>
+
         <div class="p-field p-grid">
-            <div class="p-field p-col-12 p-md-3">
+            <div class="">
                <cpu-information></cpu-information>
             </div>
         </div>
+    </div>
     
     </div>
-
-    
-        
        
     <add-server-dialog v-if="addServerModalVisible"
         @updateConsoleUsers="getConsoleUsers"
