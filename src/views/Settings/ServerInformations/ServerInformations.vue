@@ -1,78 +1,69 @@
 <template>
-   
-    <div class="p-col-12 p-md-3 p-lg-4">
-        <div class="card">
-            <Card>
-            <template #title> Kullanıcı işlemleri </template>
-                <ul data-v-b94db64c>
-                    <li class="blue">
-                        <i class="pi pi-circle-on"></i>
-                    </li>
-                </ul>
-                
-            </Card>
-          
-        </div>
-    
-        <div class="datatable">
-    
-            <Button 
-                class="p-button-sm" 
-                icon="pi pi-plus" 
-                :label="$t('sunucu ekle')"
-                @click="addServerModalVisible =  true">
-            </Button>
-
-            <DataTable :value="serverList" showGridlines tableStyle="min-width: 50rem">
-                <Column field="ip" header="Ip"></Column>
-                <Column field="hostname" header="Hostname"></Column>
-                <Column field="users" header="Kullanıcı"></Column>
-                <Column field="password" header="Parola"></Column>
-                <Column header="Durum">
-                    <template>
-                        <Tag/>
-                        <!-- <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" /> -->
-                    </template>
-                </Column>
-                <Column field="inspect" header="İncele">
-                    <Button 
-                    class="p-button-sm" 
-                    icon="pi pi-plus" 
-                    :label="$t('sunucu ekle')"
-                    @click="addServerModalVisible =  true">
-                </Button>
-                </Column>
-            </DataTable>
-            
-        </div>
 
     <div>
-        <div class="p-field p-grid">
-            <div class="">
-                <disk-information></disk-information>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-6 p-field">
+                    <!-- <Card header="server list">
+                        <template #content>
+                        <DataTable :value="serverList" showGridlines tableStyle="min-width: 50rem">
+                            <template #header>
+                                <div class="p-d-flex p-jc-between">
+                                        <h5>server list</h5>
+                                    <Button 
+                                        class="p-button-sm" 
+                                        icon="pi pi-plus" 
+                                        :label="$t('sunucu ekle')"
+                                        @click="addServerModalVisible =  true">
+                                    </Button>
+                                </div>
+                            </template>
+                            <Column field="ip" header="Ip"></Column>
+                            <Column field="hostname" header="Hostname"></Column>
+                            <Column field="users" header="Kullanıcı"></Column>
+                            <Column field="password" header="Parola"></Column>
+                            <Column header="Durum">
+                                <template>
+                                    <Tag/>
+                                     <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" />
+                                </template>
+                            </Column>
+                            <Column field="inspect" header="İncele">
+                                <Button 
+                                class="p-button-sm" 
+                                icon="pi pi-plus" 
+                                :label="$t('sunucu ekle')"
+                                @click="addServerModalVisible =  true">
+                            </Button>
+                            </Column>
+                        </DataTable>
+                        </template>
+                    </Card> 
+                -->
+                <server-list></server-list>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <server-logs></server-logs>
+                </div>
             </div>
-        </div>
-
-        <div class="p-field p-grid" >
-            <div class="">
-               <ram-information></ram-information>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <disk-information></disk-information>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <ram-information></ram-information>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <cpu-information></cpu-information>
+                </div>
             </div>
-        </div>
-
-        <div class="p-field p-grid">
-            <div class="">
-               <cpu-information></cpu-information>
-            </div>
-        </div>
-    </div>
     
-    </div>
        
     <add-server-dialog v-if="addServerModalVisible"
         @updateConsoleUsers="getConsoleUsers"
         :modalVisibleValue="addServerModalVisible" 
         @modalVisibleValue="addServerModalVisible = $event;"
     />
+</div>
     </template>
     <script>
     /**
@@ -83,10 +74,11 @@
 
     import ChartDataLabels from 'chartjs-plugin-datalabels';
     import AddServerDialog from './Dialogs/AddServerDialog.vue';
-    import Card from "primevue/card";
     import DiskInformation from "./Component/DiskInformation.vue";
     import RamInformation from "./Component/RamInformation.vue";
     import CpuInformation from "./Component/CpuInformation.vue";
+    import ServerList from "./Component/ServerList.vue";
+    import ServerLogs from "./Component/ServerLogs.vue";
     
     
     
@@ -104,6 +96,8 @@
         },
         
         components: {
+            ServerList,
+            ServerLogs,
             AddServerDialog,
             DiskInformation,
             RamInformation,
