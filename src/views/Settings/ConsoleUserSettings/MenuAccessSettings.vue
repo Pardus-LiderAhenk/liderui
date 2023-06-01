@@ -29,25 +29,45 @@
                 <template #body="slotProps">
                     <div class="p-d-flex p-jc-end">
                         <Button class="p-button-sm p-button-rounded p-mr-2" 
+                            icon="pi pi-cog"
+                            v-tooltip.bottom="'Edit User Role'"
+                            @click.prevent="selectedUser = slotProps.data; menuRoleDialog = true"
+                        />
+                        <Button class="p-button-sm p-button-rounded p-mr-2" 
                             icon="pi pi-unlock"
                             v-tooltip.bottom="$t('settings.console_user_settings.change_password')"
-                            @click.prevent="selectedUser = slotProps.data; changePasswordDialog = true"/>
+                            @click.prevent="selectedUser = slotProps.data; changePasswordDialog = true"
+                        />
 
                         <Button class="p-button-danger p-button-sm p-button-rounded" 
                             icon="pi pi-trash"
                             v-tooltip.bottom="$t('settings.console_user_settings.delete')"
-                            @click.prevent="selectedUser = slotProps.data; showDeleteConsoleUserDialog = true"/>
+                            @click.prevent="selectedUser = slotProps.data; showDeleteConsoleUserDialog = true"
+                        />
                     </div>
                 </template>
             </Column>
         </DataTable>
+        <MenuRoleDialog v-if="menuRoleDialog"
+            :menuRoleDialog="menuRoleDialog"
+            :selectedUser="selectedUser"
+            :roles="roles"
+            @close-menu-role-dialog="menuRoleDialog=false"
+            @updated-user-role="updatedUserRole"
+        ></MenuRoleDialog>
     </div>
 </template>
 
 
 <script>
 import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService.js";
+import MenuRoleDialog from "./Dialogs/MenuRoleDialog.vue";
+
 export default {
+
+    components: {
+        MenuRoleDialog
+    },
 
     data() {
         return {
@@ -55,10 +75,16 @@ export default {
             records: [],
             addConsoleUserModalVisible: false,
             roles: [],
+            menuRoleDialog: false
         }
     },
 
     methods: {
+        updatedUserRole() {
+            this.menuRoleDialog = false;
+            this.getConsoleUsers();
+        },
+
         async getConsoleUsers(){
             const { response, error } = await consoleUserSettingsService.getConsoleUsers();
             if (error){
@@ -97,6 +123,7 @@ export default {
             else{
                 if(response.status == 200){
                     this.roles = response.data;
+                    console.log(this.roles)
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('settings.console_user_settings.user_roles_get_successfully'),
@@ -118,6 +145,7 @@ export default {
 
     mounted() {
         this.getConsoleUsers();
+        this.getRoles();
     },
     
 }
