@@ -2,7 +2,10 @@
     <div class="card">
         <Card>
             <template #title>
+                <div class="p-d-flex p-jc-between">
                 <span style="margin: 0 0 1px; font-size:1rem">{{$t('Cpu bilgisi')}}</span>
+                <Button label="İzle" severity="watch" raised />
+            </div>
             </template>
             <!-- <template>
                 <div class="flex justify-content-center">

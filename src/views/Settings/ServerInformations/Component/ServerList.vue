@@ -3,7 +3,7 @@
         <div class="card">
             <Card header="server list">
                 <template #content>
-                <DataTable :value="serverList" showGridlines tableStyle="min-width: 50rem">
+                <DataTable :value="serverList" showGridlines tableStyle="min-width: 60rem">
                     <template #header>
                         <div class="p-d-flex p-jc-between">
                                 <h5>server list</h5>

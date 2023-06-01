@@ -2,18 +2,22 @@
     <div class="card">
         <Card>
             <template #title>
-                <span>{{$t('Disk bilgisi')}}</span>
+                
+                <div class="p-d-flex p-jc-between">
+                    <span>{{$t('Disk bilgisi')}}</span>
+                    <Button label="İzle" severity="watch" raised />
+                </div>
+                
             </template>
             <template #content>
                 <div >
                     <ProgressBar :value="50"></ProgressBar>
                 </div>
+
                 <div >
                     <ProgressBar :value="50"></ProgressBar>
                 </div>
-                <div>
-                    <ProgressBar :value="50"></ProgressBar>
-                </div>
+
             </template>
         </Card>
     </div>
