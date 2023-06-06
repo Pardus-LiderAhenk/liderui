@@ -11,7 +11,7 @@
                                 class="p-button-sm" 
                                 icon="pi pi-plus" 
                                 :label="$t('sunucu ekle')"
-                                @click="addServerModalVisible =  true">
+                                @click="addServerModalVisible =  true;">
                             </Button>
                         </div>
                     </template>
@@ -25,14 +25,7 @@
                             <!-- <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" /> -->
                         </template>
                     </Column>
-                    <Column field="inspect" header="İncele">
-                        <Button 
-                        class="p-button-sm" 
-                        icon="pi pi-plus" 
-                        :label="$t('sunucu ekle')"
-                        @click="addServerModalVisible =  true">
-                    </Button>
-                    </Column>
+
                 </DataTable>
                 </template>
             </Card>
@@ -41,9 +34,9 @@
     
     
         <add-server-dialog v-if="addServerModalVisible"
-        @updateConsoleUsers="getConsoleUsers"
-        :modalVisibleValue="addServerModalVisible" 
-        @modalVisibleValue="addServerModalVisible = $event;"
+            @updateConsoleUsers="getConsoleUsers"
+            :modalVisibleValue="addServerModalVisible" 
+            @modalVisibleValue="addServerModalVisible = $event;"
         />
     </div>
         
@@ -52,7 +45,14 @@
 <script>
 import AddServerDialog from '../Dialogs/AddServerDialog.vue';
 export default{
-    
+    data() {
+        return {
+            
+            modals: {
+                AddServerDialog : false,
+            },
+        }
+    },
     components: {
             AddServerDialog,
         },

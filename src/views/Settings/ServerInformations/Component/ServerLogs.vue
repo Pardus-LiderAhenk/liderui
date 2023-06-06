@@ -28,9 +28,9 @@
 export default{
     props: {
         serverActivityData: {
-            type: "",
+            type: String,
             default: null,
-        }
+        },
     },
 
     computed: {
