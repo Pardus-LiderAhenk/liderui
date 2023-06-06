@@ -1,5 +1,12 @@
 <template>
     <div>
+
+        <add-server-dialog v-if="addServerModalVisible"
+            @updateConsoleUsers="getConsoleUsers"
+            :modalVisibleValue="addServerModalVisible" 
+            @modalVisibleValue="addServerModalVisible = $event;"
+        />
+
         <div class="card">
             <Card header="server list">
                 <template #content>
@@ -19,44 +26,44 @@
                     <Column field="hostname" header="Hostname"></Column>
                     <Column field="users" header="Kullanıcı"></Column>
                     <Column field="password" header="Parola"></Column>
-                    <Column header="Durum">
-                        <template>
-                            <Tag/>
-                            <!-- <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" /> -->
-                        </template>
-                    </Column>
+                    <Column field="status" header="Durum"></Column>
 
                 </DataTable>
                 </template>
             </Card>
         </div>
 
-    
-    
-        <add-server-dialog v-if="addServerModalVisible"
-            @updateConsoleUsers="getConsoleUsers"
-            :modalVisibleValue="addServerModalVisible" 
-            @modalVisibleValue="addServerModalVisible = $event;"
-        />
     </div>
         
 </template>
 
 <script>
 import AddServerDialog from '../Dialogs/AddServerDialog.vue';
+
 export default{
+
     data() {
+
         return {
+
             
-            modals: {
-                AddServerDialog : false,
-            },
+            AddServerDialog : false,
+            addServerModalVisible :false,
+            serverList:[
+                {hostname: "ebru0", users:"test0",password:"***",ip:"10.100.10.52", status:"bağlandı"},
+                {hostname: "ebru1", users:"test1",password:"***",ip:"10.100.10.100", status:"bağlandı"},
+                {hostname: "ebru2", users:"test2",password:"***",ip:"10.100.10.1", status:"bağlandı"},
+            ]
+
         }
     },
+
     components: {
-            AddServerDialog,
-        },
+
+        AddServerDialog,
+    }
 }
+
 </script>
 
 <style lang="scss" scoped>
