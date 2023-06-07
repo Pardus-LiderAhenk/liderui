@@ -8,12 +8,12 @@
         />
 
         <div class="card">
-            <Card header="server list">
+            <Card header="server-list">
                 <template #content>
-                <DataTable :value="serverList" showGridlines tableStyle="min-width: 60rem">
+                <DataTable :value="serverList"  tableStyle="min-width: 60rem" >
                     <template #header>
                         <div class="p-d-flex p-jc-between">
-                                <h5>server list</h5>
+                                <h5>Sunucu listesi</h5>
                             <Button 
                                 class="p-button-sm" 
                                 icon="pi pi-plus" 
@@ -27,8 +27,19 @@
                     <Column field="users" header="Kullanıcı"></Column>
                     <Column field="password" header="Parola"></Column>
                     <Column field="status" header="Durum"></Column>
-
+                    <Column field="detail" header="Detay">
+                        <template #body>
+                        <Button 
+                        class="p-mr-2 p-button-sm p-button-warning" 
+                        icon="pi pi-search"
+                        :title="$t('Detay')" 
+                        @click="addServerModalVisible =  true;"
+                            >
+                    </Button>
+                    </template>
+                    </Column>
                 </DataTable>
+                
                 </template>
             </Card>
         </div>
@@ -49,6 +60,7 @@ export default{
             
             AddServerDialog : false,
             addServerModalVisible :false,
+            serverDetailModalVisible : false,
             serverList:[
                 {hostname: "ebru0", users:"test0",password:"***",ip:"10.100.10.52", status:"bağlandı"},
                 {hostname: "ebru1", users:"test1",password:"***",ip:"10.100.10.100", status:"bağlandı"},

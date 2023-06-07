@@ -9,7 +9,7 @@
                     <ul data-v-4d2c924c="">
                         <li class="down" data-v-4d2c924c="">
                             <div class="stock-name" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">AMD</h6>
+                                <h6 data-v-4d2c924c="">ebru0</h6>
                             </div>
                             <img :src="img" alt="freya-layout" data-v-4d2c924c="">
                             <div class="stock-price" data-v-4d2c924c=""><i class="pi pi-arrow-down" data-v-4d2c924c=""></i>
@@ -22,7 +22,7 @@
                         </li>
                         <li data-v-4d2c924c="">
                             <div class="stock-name" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">MSFT</h6>
+                                <h6 data-v-4d2c924c="">ebru1</h6>
                             </div>
                             <img :src="img" alt="freya-layout" data-v-4d2c924c="">
                             <div class="stock-price" data-v-4d2c924c="">
@@ -35,7 +35,7 @@
                         </li>
                         <li data-v-4d2c924c="">
                             <div class="stock-name" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">AAPL</h6>
+                                <h6 data-v-4d2c924c="">ebru2</h6>
                             </div>
                             <img :src="img" alt="freya-layout" data-v-4d2c924c="">
                             <div class="stock-price" data-v-4d2c924c=""><i class="pi pi-arrow-down" data-v-4d2c924c=""></i>

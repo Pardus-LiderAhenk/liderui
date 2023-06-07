@@ -21,6 +21,30 @@
             </template>
         </Card>
     </div>
+    <div>
+        <Card>
+            <template #title>
+                <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('Sunucu LOgları')}}</span>
+            </template>
+            <template #subtitle>
+                <span style="margin: 0 0 2px; font-size:1rem">{{$t('sub title')}}</span>
+            </template>
+            <template #content>
+                <Timeline class="customized-timeline">
+                    <template #marker>
+                        <span class="custom-marker shadow-2">
+                            <i class="pi pi-send"></i>
+                        </span>
+                    </template>
+                    <template #content>
+                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{"testt"}}</h5>
+                        <small style="color: #29324180; ">{{"testt"}}</small>
+                        <p>{{"1111111111"}}</p>
+                    </template>
+                </Timeline>
+            </template>
+        </Card>
+    </div>
         
 </template>
 

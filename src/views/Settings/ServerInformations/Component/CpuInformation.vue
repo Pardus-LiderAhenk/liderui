@@ -11,8 +11,8 @@
                             <div class="flex align-items-center justify-content-start" data-v-017cc35f="">
                                 <img :src="img" alt="verona-layout" width="42" height="42" class="border-round" data-v-017cc35f="">
                                 <div class="ml-2" data-v-017cc35f="">
-                                    <span class="font-bold block" data-v-017cc35f="">Bamboo Watch</span>
-                                    <span class="subtext text-sm block" data-v-017cc35f="">Accessories</span>
+                                    <span class="font-bold block" data-v-017cc35f="">ebru0</span>
+                                    <span class="subtext text-sm block" data-v-017cc35f="">cpu bilgisi</span>
                                 </div>
                             </div>
                             <div class="pie-wrapper progress-75" data-v-017cc35f="">
@@ -27,8 +27,8 @@
                             <div class="flex align-items-center justify-content-start" data-v-017cc35f="">
                                 <img :src="img" alt="verona-layout" width="42" height="42" class="border-round" data-v-017cc35f="">
                                 <div class="ml-2" data-v-017cc35f="">
-                                    <span class="font-bold block" data-v-017cc35f="">Black Watch</span>
-                                    <span class="subtext text-sm block" data-v-017cc35f="">Accessories</span>
+                                    <span class="font-bold block" data-v-017cc35f="">ebru1</span>
+                                    <span class="subtext text-sm block" data-v-017cc35f="">cpu bilgisi</span>
                                 </div>
                             </div>
                             <div class="pie-wrapper progress-68" data-v-017cc35f="">
@@ -44,8 +44,8 @@
                             <div class="flex align-items-center justify-content-start" data-v-017cc35f="">
                                 <img :src="img" alt="verona-layout" width="42" height="42" class="border-round" data-v-017cc35f="">
                                 <div class="ml-2" data-v-017cc35f="">
-                                    <span class="font-bold block" data-v-017cc35f="">Bamboo Watch</span>
-                                    <span class="subtext text-sm block" data-v-017cc35f="">Accessories</span>
+                                    <span class="font-bold block" data-v-017cc35f="">ebru2</span>
+                                    <span class="subtext text-sm block" data-v-017cc35f="">cpu bilgisi</span>
                                 </div>
                             </div>
                             <div class="pie-wrapper progress-75" data-v-017cc35f="">
@@ -56,22 +56,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="flex align-items-center justify-content-between pt-2 pb-3" data-v-017cc35f="">
-                            <div class="flex align-items-center justify-content-start" data-v-017cc35f="">
-                                <img :src="img" alt="verona-layout" width="42" height="42" class="border-round" data-v-017cc35f="">
-                                <div class="ml-2" data-v-017cc35f="">
-                                    <span class="font-bold block" data-v-017cc35f="">Black Watch</span>
-                                    <span class="subtext text-sm block" data-v-017cc35f="">Accessories</span>
-                                </div>
-                            </div>
-                            <div class="pie-wrapper progress-68" data-v-017cc35f="">
-                                <span class="label font-bold text-sm absolute" data-v-017cc35f="">68%</span>
-                                <div class="pie" data-v-017cc35f="">
-                                    <div class="left-side half-circle" data-v-017cc35f=""></div>
-                                    <div class="right-side half-circle" data-v-017cc35f=""></div>
-                                </div>
-                            </div>
-                        </li>
+                        
                     </ul>
                 </div>
         </template>

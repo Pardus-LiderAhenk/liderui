@@ -8,21 +8,21 @@
                 <div class="widget-image-stats relative">
                     <img :src="img" alt="product" class="w-full my-4">
                     <div class="flex align-items-center justify-content-between mb-2">
-                        <span class="font-bold">Online Marketplaces</span>
+                        <span class="font-bold">ebru0</span>
                         <span>%40</span>
                     </div>
                     <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate orange-bar mb-4" aria-valuemin="0" aria-valuenow="40" aria-valuemax="100">
                         <div class="p-progressbar-value p-progressbar-value-animate" style="width: 40%; display: flex;"></div>
                     </div>
                     <div class="flex align-items-center justify-content-between mb-2">
-                        <span class="font-bold">Distributors</span>
+                        <span class="font-bold">ebru1</span>
                         <span>%89</span>
                     </div>
                     <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate green-bar mb-4" aria-valuemin="0" aria-valuenow="89" aria-valuemax="100">
                         <div class="p-progressbar-value p-progressbar-value-animate" style="width: 89%; display: flex;"></div>
                     </div>
                     <div class="flex align-items-center justify-content-between mb-2">
-                        <span class="font-bold">Affiliate</span>
+                        <span class="font-bold">ebru2</span>
                         <span>%82</span>
                     </div>
                     <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate green-bar" aria-valuemin="0" aria-valuenow="82" aria-valuemax="100">
