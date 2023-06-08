@@ -1,45 +1,47 @@
 <template>
     <div>
-        <Card header="timeLine">
-            <template #title>
-                <p>Kullanıcı Logları</p>
-            </template>
-
-            <template #content>
-                <Timeline :value="serverLogs" class="customized-timeline">
-                    <template #marker>
-                        <span class="custom-marker shadow-2">
-                            <i class="pi pi-send"></i>
-                        </span>
-                    </template>
-                    <template #content>
-                        <h5 style="margin: 0 0 2px; font-size:1.2rem">"h5Lohhh"</h5>
-                        <small style="color: #29324180; ">TestLoglarıı</small>
-                        
-                    </template>
-                </Timeline>
-            </template>
-        </Card>
-    </div>
-    <div>
         <Card>
             <template #title>
-                <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('Sunucu LOgları')}}</span>
+                <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('Kullanıcı Logları')}}</span>
             </template>
             <template #subtitle>
                 <span style="margin: 0 0 2px; font-size:1rem">{{$t('sub title')}}</span>
             </template>
             <template #content>
-                <Timeline class="customized-timeline">
+                <Timeline :value="dataLogList">
                     <template #marker>
                         <span class="custom-marker shadow-2">
                             <i class="pi pi-send"></i>
                         </span>
                     </template>
                     <template #content>
-                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{"testt"}}</h5>
-                        <small style="color: #29324180; ">{{"testt"}}</small>
-                        <p>{{"1111111111"}}</p>
+                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{"Kullanıcı logları"}}</h5> 
+                        <small style="color: #08255880; ">{{"test"}}</small>
+                        <p>{{"11111111111"}}</p>                      
+                    </template>
+                </Timeline>
+                <Timeline :value="dataLogList">
+                    <template #marker>
+                        <span class="custom-marker shadow-2">
+                            <i class="pi pi-send"></i>
+                        </span>
+                    </template>
+                    <template #content>
+                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{"Kullanıcı logları"}}</h5> 
+                        <small style="color: #08255880; ">{{"test"}}</small>
+                        <p>{{"11111111111"}}</p>                      
+                    </template>
+                </Timeline>
+                <Timeline :value="dataLogList">
+                    <template #marker>
+                        <span class="custom-marker shadow-2">
+                            <i class="pi pi-send"></i>
+                        </span>
+                    </template>
+                    <template #content>
+                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{"Kullanıcı logları"}}</h5> 
+                        <small style="color: #08255880; ">{{"test"}}</small>
+                        <p>{{"11111111111"}}</p>                      
                     </template>
                 </Timeline>
             </template>
@@ -55,6 +57,18 @@ export default{
             type: String,
             default: null,
         },
+    },
+
+    data() {
+
+    return {
+
+        dataLogList:[
+            "test logları1"
+            
+        ]
+
+        }
     },
 
     computed: {
@@ -82,10 +96,14 @@ export default{
     align-items: center;
     justify-content: center;
     color: #123a4d;
-    border-radius: 50%;
+    border-radius: 90%;
     background-color:#69b7ff;
-    z-index: 1;
+    z-index: 100;
 }
-
+::v-deep(.p-timeline-left) {
+    .p-timeline-event-opposite {
+        display: none;
+    }
+}
 
 </style>

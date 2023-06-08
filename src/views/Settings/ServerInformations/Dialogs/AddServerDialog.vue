@@ -22,12 +22,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="p-col-3">
-                        <password-component ref="password"></password-component>
-                    </div> -->
-                    <!-- <div class="p-col-9 p-d-flex p-jc-end">
-                        <Button icon="pi pi-save" :label="$t('Kaydet')" @click="addNewConsoleUser"></Button>
-                    </div> -->
                 </div>
         <template #footer>
 
@@ -39,9 +33,6 @@
 
 </template>
 <script>
-
-//import PasswordComponent from '@/components/Password/PasswordComponent.vue';
-
 
 export default {
     components:{

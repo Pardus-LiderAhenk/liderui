@@ -1,16 +1,9 @@
 <template>
     <div>
-
-        <add-server-dialog v-if="addServerModalVisible"
-            @updateConsoleUsers="getConsoleUsers"
-            :modalVisibleValue="addServerModalVisible" 
-            @modalVisibleValue="addServerModalVisible = $event;"
-        />
-
         <div class="card">
             <Card header="server-list">
                 <template #content>
-                <DataTable :value="serverList"  tableStyle="min-width: 60rem" >
+                <DataTable :value="serverList"  tableStyle="min-width: 62rem" class="p-datatable-sm" responsiveLayout="scroll">
                     <template #header>
                         <div class="p-d-flex p-jc-between">
                                 <h5>Sunucu listesi</h5>
@@ -22,6 +15,7 @@
                             </Button>
                         </div>
                     </template>
+                    <!-- <div > -->
                     <Column field="ip" header="Ip"></Column>
                     <Column field="hostname" header="Hostname"></Column>
                     <Column field="users" header="Kullanıcı"></Column>
@@ -29,20 +23,31 @@
                     <Column field="status" header="Durum"></Column>
                     <Column field="detail" header="Detay">
                         <template #body>
-                        <Button 
-                        class="p-mr-2 p-button-sm p-button-warning" 
-                        icon="pi pi-search"
-                        :title="$t('Detay')" 
-                        @click="addServerModalVisible =  true;"
-                            >
-                    </Button>
-                    </template>
+                            <Button 
+                                class="p-mr-2 p-button-sm p-button-warning" 
+                                icon="pi pi-search"
+                                :title="$t('Detay')" 
+                                @click="showServerDetailVisible =  true;">
+                            </Button>
+                        </template>
                     </Column>
+                    <!-- </div> -->
                 </DataTable>
                 
                 </template>
             </Card>
         </div>
+        <add-server-dialog v-if="addServerModalVisible"
+            @updateConsoleUsers="getConsoleUsers"
+            :modalVisibleValue="addServerModalVisible" 
+            @modalVisibleValue="addServerModalVisible = $event;"
+        />
+
+        <show-server-detail-dialog v-if="showServerDetailVisible"
+            @updateConsoleUsers="getConsoleUsers"
+            :modalVisibleValue="showServerDetailVisible" 
+            @modalVisibleValue="showServerDetailVisible = $event;"
+        />
 
     </div>
         
@@ -50,17 +55,18 @@
 
 <script>
 import AddServerDialog from '../Dialogs/AddServerDialog.vue';
+import ShowServerDetailDialog from '../Dialogs/ShowServerDetailDialog.vue';
 
 export default{
 
     data() {
 
         return {
-
-            
+    
             AddServerDialog : false,
-            addServerModalVisible :false,
-            serverDetailModalVisible : false,
+            ShowServerDetailDialog : false,
+            addServerModalVisible : false,
+            showServerDetailVisible : false,
             serverList:[
                 {hostname: "ebru0", users:"test0",password:"***",ip:"10.100.10.52", status:"bağlandı"},
                 {hostname: "ebru1", users:"test1",password:"***",ip:"10.100.10.100", status:"bağlandı"},
@@ -73,6 +79,8 @@ export default{
     components: {
 
         AddServerDialog,
+        ShowServerDetailDialog,
+        
     }
 }
 

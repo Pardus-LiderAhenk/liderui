@@ -2,43 +2,7 @@
 
     <div>
             <div class="p-grid">
-                <div class="p-col-12 p-md-6 p-lg-6 p-field">
-                    <!-- <Card header="server list">
-                        <template #content>
-                        <DataTable :value="serverList" showGridlines tableStyle="min-width: 50rem">
-                            <template #header>
-                                <div class="p-d-flex p-jc-between">
-                                        <h5>server list</h5>
-                                    <Button 
-                                        class="p-button-sm" 
-                                        icon="pi pi-plus" 
-                                        :label="$t('sunucu ekle')"
-                                        @click="addServerModalVisible =  true">
-                                    </Button>
-                                </div>
-                            </template>
-                            <Column field="ip" header="Ip"></Column>
-                            <Column field="hostname" header="Hostname"></Column>
-                            <Column field="users" header="Kullanıcı"></Column>
-                            <Column field="password" header="Parola"></Column>
-                            <Column header="Durum">
-                                <template>
-                                    <Tag/>
-                                     <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" />
-                                </template>
-                            </Column>
-                            <Column field="inspect" header="İncele">
-                                <Button 
-                                class="p-button-sm" 
-                                icon="pi pi-plus" 
-                                :label="$t('sunucu ekle')"
-                                @click="addServerModalVisible =  true">
-                            </Button>
-                            </Column>
-                        </DataTable>
-                        </template>
-                    </Card> 
-                -->
+                <div class="p-col-12 p-md-6 p-lg-6">
                 <server-list></server-list>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">
@@ -63,6 +27,12 @@
         :modalVisibleValue="addServerModalVisible" 
         @modalVisibleValue="addServerModalVisible = $event;"
     />
+
+    <show-server-detail-dialog v-if="showServerDetailVisible"
+        @updateConsoleUsers="getConsoleUsers"
+        :modalVisibleValue="showServerDetailVisible" 
+        @modalVisibleValue="showServerDetailVisible = $event;"
+    />
 </div>
     </template>
     <script>
@@ -79,6 +49,7 @@
     import CpuInformation from "./Component/CpuInformation.vue";
     import ServerList from "./Component/ServerList.vue";
     import ServerLogs from "./Component/ServerLogs.vue";
+    import ShowServerDetailDialog from './Dialogs/ShowServerDetailDialog.vue';
     
     
     
@@ -91,17 +62,22 @@
         },
         data() {
             return {
+
                 addServerModalVisible :false,
+                showServerDetailVisible : false,
+                
             }
         },
         
         components: {
+
             ServerList,
             ServerLogs,
             AddServerDialog,
             DiskInformation,
             RamInformation,
             CpuInformation,
+            ShowServerDetailDialog,
         },
         
         mounted() {
