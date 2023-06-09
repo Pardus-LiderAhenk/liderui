@@ -2,7 +2,16 @@
     <div>
         <Card>
             <template #title>
-                <span style="margin: 0 0 2px; font-size:1.2rem">Ram usage</span>
+                <div class="p-d-flex p-jc-between">
+                    <span style="margin: 0 0 2px; font-size:1.2rem">Ram usage</span> 
+
+                        <Button 
+                            class="p-button-sm" 
+                            :label="$t('Ram izle')"
+                            icon="pi pi-caret-right" 
+                            @click="addServerModalVisible =  true;">
+                        </Button>
+                </div>
             </template>
             <template #content>
                 <div class="servers" data-v-4d2c924c="">

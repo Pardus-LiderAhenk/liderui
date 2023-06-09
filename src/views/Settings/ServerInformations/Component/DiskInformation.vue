@@ -2,9 +2,20 @@
     <div>
         <Card>
             <template #title>
-                <span style="margin: 0 0 2px; font-size:1.2rem">Disk usage</span>
+                <div class="p-d-flex p-jc-between">
+                    <span style="margin: 0 0 2px; font-size:1.2rem">Disk usage</span> 
+
+                        <Button 
+                            class="p-button-sm" 
+                            :label="$t('Disk izle')"
+                            icon="pi pi-caret-right" 
+                            @click="addServerModalVisible =  true;">
+                        </Button>
+                </div>
             </template>
+
             <template #content>
+                                   
                 <div class="widget-image-stats relative">
                     <img :src="img" alt="product" class="w-full my-4">
                     <div class="flex align-items-center justify-content-between mb-2">
@@ -29,7 +40,8 @@
                         <div class="p-progressbar-value p-progressbar-value-animate" style="width: 82%; display: flex;"></div>
                     </div>
                 </div>
-        </template>
+
+            </template>
         </Card>
     </div>
 </template>
@@ -39,7 +51,7 @@ export default {
 
 data() {
     return {
-        img: require("@/assets/images/servers/black-watch.jpg"),
+        img: require("@/assets/images/servers/disk-11.png"),
     }
 },
     
@@ -104,11 +116,12 @@ data() {
 }
 
 .w-full {
-    width: 100%!important;
+    width: auto;
+    height: auto;
 }
 .my-4 {
-    margin-top: 1.5rem!important;
-    margin-bottom: 1.5rem!important;
+    margin-top: 1rem!important;
+    margin-bottom: 1rem!important;
 }
 * {
     box-sizing: border-box;
@@ -117,6 +130,12 @@ user agent stylesheet
 img {
     overflow-clip-margin: content-box;
     overflow: clip;
+}
+
+.p-button-sm{
+
+    padding-right: 0%;
+    
 }
 
 </style>

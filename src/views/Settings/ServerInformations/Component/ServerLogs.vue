@@ -11,7 +11,7 @@
                 <Timeline :value="dataLogList">
                     <template #marker>
                         <span class="custom-marker shadow-2">
-                            <i class="pi pi-send"></i>
+                            <i class="pi pi-star-fill"></i>
                         </span>
                     </template>
                     <template #content>
@@ -23,7 +23,7 @@
                 <Timeline :value="dataLogList">
                     <template #marker>
                         <span class="custom-marker shadow-2">
-                            <i class="pi pi-send"></i>
+                            <i class="pi pi-star-fill"></i>
                         </span>
                     </template>
                     <template #content>

@@ -2,7 +2,16 @@
     <div>
         <Card>
             <template #title>
-                <span style="margin: 0 0 2px; font-size:1.2rem">CPU usage</span>
+                <div class="p-d-flex p-jc-between">
+                    <span style="margin: 0 0 2px; font-size:1.2rem">Cpu usage</span> 
+
+                        <Button 
+                            class="p-button-sm" 
+                            :label="$t('Cpu izle')"
+                            icon="pi pi-caret-right" 
+                            @click="addServerModalVisible =  true;">
+                        </Button>
+                </div>
             </template>
             <template #content>
                 <div class="widget-list-type2" data-v-017cc35f="">
@@ -56,7 +65,7 @@
                                 </div>
                             </div>
                         </li>
-                        
+
                     </ul>
                 </div>
         </template>

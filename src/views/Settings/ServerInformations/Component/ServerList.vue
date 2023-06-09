@@ -16,11 +16,12 @@
                         </div>
                     </template>
                     <!-- <div > -->
-                    <Column field="ip" header="Ip"></Column>
+                    <Column field="id" header="Id"></Column>  
                     <Column field="hostname" header="Hostname"></Column>
-                    <Column field="users" header="Kullanıcı"></Column>
-                    <Column field="password" header="Parola"></Column>
-                    <Column field="status" header="Durum"></Column>
+                    <Column field="ip" header="Ip"></Column>
+                    <Column field="mac" header="Mac Adres"></Column>
+                    <Column field="os" header="İşletim sistemi"></Column>
+                    <Column field="os-version" header="İşletim sistemi versiyon"></Column>
                     <Column field="detail" header="Detay">
                         <template #body>
                             <Button 
