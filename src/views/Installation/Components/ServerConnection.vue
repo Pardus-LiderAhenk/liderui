@@ -8,7 +8,23 @@
                 <i class="p-ml-2  pi pi-link" style="fontSize: 1.5rem;color:#3296F3;"></i>
             </template>
             <form class="p-fluid">
-                <div class="p-fluid">
+                <div class="p-fluid"
+
+                    
+                        v-loading="loading"
+                        element-loading-text="Try to Connect Server please wait..."
+                        element-loading-background="rgba(0, 0, 0, 0.7)"
+                        :element-loading-spinner="svg"
+                    
+                    >
+
+                    <!-- <ProgressSpinner
+                        style="width: 20px; height: 20px"
+                        strokeWidth="8"
+                        fill="var(--surface-ground)"
+                        animationDuration=".5s"
+                        v-if="server.isReach"
+                    /> -->
                     <div class="p-field">
                         <label>Server Address</label>
                         <InputText
@@ -51,6 +67,7 @@
                     </div>
                     <div>
                         <Button
+                            :disabled="loading"
                             icon="pi pi-link"
                             label="Check Connection"
                             @click="checkServerConnection"
@@ -63,6 +80,8 @@
 </template>
 
 <script>
+import {basicInstallationService} from '../../../services/Installation/BasicInstallation/BasicInstallationService.js'
+
 
 export default {
     name:"ServerConnection",
@@ -70,12 +89,13 @@ export default {
     data() {
         return {
             server: {
-                address: "192.168.56.111",
-                username: "pardus",
-                password: "123456"
+                address: "192.168.56.136",
+                username: "test",
+                password: "1",
             },
             validationErrors: {},
-            status: null
+            status: null,
+            loading: false
         };
     },
     methods: {
@@ -97,12 +117,46 @@ export default {
             return !Object.keys(this.validationErrors).length;
         },
 
-        checkServerConnection() {
+        async checkServerConnection() {
             if (!this.validateForm()) {
                 return;
             }
+           
             this.status = true;
-            console.log(this.server)
+            this.loading = true;
+            console.log(this.server.address)
+            // let params = {
+            //     host : this.server.address
+            // }
+
+            let params = new FormData();
+            params.append('host', this.server.address);
+            params.append('username', this.server.username);
+            params.append('password', this.server.password);
+
+            const {data, error} = await basicInstallationService.checkConnection(params)
+            console.log(this.server.address)
+            console.log(this.server.username)
+            console.log(this.server.password)
+            if (data) {
+                this.$toast.add({
+                    severity:'success', 
+                    detail: "Sunucuya bağlantı başarılı bir şekilde gerçekleştirildi", 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                console.log(data)
+                this.denemeData = data
+            } else {
+                this.$toast.add({
+                    severity:'error', 
+                    detail: "Sunucuya bağlantı gerçekleştirilemedi", 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                console.log("errorr")
+            }
+            this.loading = false;
         }
     },
     watch: {

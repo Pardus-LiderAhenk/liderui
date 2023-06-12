@@ -15,6 +15,16 @@
                 </div>
             </Panel>
         </div>
+
+        <div>
+
+
+            {{ denemeData }}
+
+
+        </div>
+
+
         <br>
         <div class="p-field">
             <router-view v-slot="{Component}" 
@@ -32,6 +42,8 @@
 </template>
 
 <script>
+import {basicInstallationService} from '../../../services/Installation/BasicInstallation/BasicInstallationService.js'
+
 export default {
     data() {
         return {
@@ -53,10 +65,35 @@ export default {
                     to: '/basic/installation/confirmation'
                 }
             ],
-            formObject: {}
+            formObject: {},
+            denemeData : null
         }
     },
     methods: {
+
+        async startInstallation() {
+         
+         // this.$emit('complete');
+            const {data, error} = await basicInstallationService.denemeAnsible(null)
+            if (data) {
+                this.$toast.add({
+                    severity:'success', 
+                    detail: "Komut başarılı bir şekilde çalıştı", 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                this.denemeData = data
+            } else {
+                this.$toast.add({
+                    severity:'error', 
+                    detail: "Komut çalıştırılırken hata oluştu", 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+        },
+
+
         nextPage(event) {
             console.log(event)
             for (let field in event.formData) {
@@ -71,6 +108,7 @@ export default {
     },
 
     mounted() {
+        this.startInstallation()
         this.$router.push("/basic/installation/database").catch(err => console.log(err))
     },
 }
