@@ -1,25 +1,43 @@
 <template>
     <div>
-        <div class="p-field">
-            <h4>Menü Erişim Ayarları</h4>
-        </div>
-        <DataTable :value="records" responsiveLayout="scroll"
-            v-model:filters="filters"
-            v-model:selection="selectedUser"
-            selectionMode="single"
-            class="p-datatable-sm"
-        >
-        <template #header>
-            <div class="p-d-flex p-jc-between">
-                <h5>{{$t('settings.console_user_settings.existing_console_users')}}</h5>
+        <Toolbar class="p-field">
+            <template #start>
+                <h5>Menu Access Settings</h5>
+            </template>
+            <template #end>
                 <Button :label="$t('settings.console_user_settings.add_console_user')"  
                     class="p-button-sm" icon="pi pi-user-plus"
                     @click="addConsoleUserModalVisible = true"
                 />
-            </div>
-        </template>
+            </template>
+        </Toolbar>
+        <DataTable :value="records" responsiveLayout="scroll"
+            v-model:filters="filters"
+            class="p-datatable-sm p-field"
+            :loading="loading"
+            :paginator="true" :rows="10" ref="dt"
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+            :rowsPerPageOptions="[10,25,50,100]" style="margin-top: 2em"
+        >
+            <template #header>
+                <div class="p-d-flex p-jc-between">
+                    <h5>{{$t('settings.console_user_settings.existing_console_users')}}</h5>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"/>
+                        <InputText v-model="filters['global'].value" 
+                        class="p-inputtext-sm" 
+                        :placeholder="$t('settings.script_definition.search')" 
+                        />
+                    </span>
+                </div>
+            </template>
+            <template #empty>
+                <div class="p-d-flex p-jc-center">
+                    <span>Not found user</span>
+                </div>
+            </template>
             <Column header="#">
-                    <template #body="slotProps">
+                <template #body="slotProps">
                     <p>{{slotProps.index + 1}}</p>
                 </template>
             </Column>
@@ -28,12 +46,17 @@
             <Column>
                 <template #body="slotProps">
                     <div class="p-d-flex p-jc-end">
-                        <Button class="p-button-sm p-button-rounded p-mr-2" 
-                            icon="pi pi-cog"
-                            v-tooltip.bottom="'Edit User Role'"
-                            @click.prevent="selectedUser = slotProps.data; menuRoleDialog = true"
+                        <Button class="p-button-sm p-button-rounded p-button-secondary p-mr-2" 
+                            icon="pi pi-sitemap"
+                            v-tooltip.bottom="'Edit Directory Access Settings'"
+                            @click.prevent="selectedUser = slotProps.data; showUserDirectoryAccessSettingsDialog = true"
                         />
                         <Button class="p-button-sm p-button-rounded p-mr-2" 
+                            icon="pi pi-cog"
+                            v-tooltip.bottom="'Edit Menu Roles'"
+                            @click.prevent="selectedUser = slotProps.data; menuRoleDialog = true"
+                        />
+                        <Button class="p-button-sm p-button-rounded p-button-warning p-mr-2" 
                             icon="pi pi-unlock"
                             v-tooltip.bottom="$t('settings.console_user_settings.change_password')"
                             @click.prevent="selectedUser = slotProps.data; changePasswordDialog = true"
@@ -55,6 +78,53 @@
             @close-menu-role-dialog="menuRoleDialog=false"
             @updated-user-role="updatedUserRole"
         ></MenuRoleDialog>
+
+        <LiderConfirmDialog 
+            :showDialog="showDeleteConsoleUserDialog"
+            @showDialog="showDeleteConsoleUserDialog = $event;"
+            :header="$t('settings.console_user_settings.console_user_authorization_deletion')"
+            :message="$t('settings.console_user_settings.console_user_authorization_deletion_question')"
+            @accepted="deleteConsoleUser"
+        />
+
+        <!-- password change dialog -->
+        <Dialog 
+            :header="$t('settings.console_user_settings.change_password')" 
+            v-model:visible="changePasswordDialog"  
+            :modal="true" 
+            @hide="changePasswordDialog = false">
+            <div>
+                <password-component ref="password"></password-component>
+            </div>
+            <template #footer>
+            <Button 
+                :label="$t('settings.console_user_settings.cancel')" 
+                icon="pi pi-times" 
+                @click="changePasswordDialog = false" 
+                class="p-button-text p-button-sm"
+            />
+            <Button 
+                :label="$t('settings.console_user_settings.change_password')" 
+                icon="pi pi-unlock" 
+                @click="showUpdatePasswordDialog"
+                class="p-button-sm"
+            />
+            </template>
+        </Dialog>
+        <add-console-user-dialog v-if="addConsoleUserModalVisible"
+            @updateConsoleUsers="getConsoleUsers"
+            :modalVisibleValue="addConsoleUserModalVisible" 
+            @modalVisibleValue="addConsoleUserModalVisible = $event;"
+            @addedConsoleUsers="addedConsoleUser"
+        />
+
+        <user-directory-access-settings-dialog v-if="showUserDirectoryAccessSettingsDialog"
+            :showUserDirectoryAccessSettingsDialog="showUserDirectoryAccessSettingsDialog"
+            @closeUserDirectoryAccessSettingsDialog="showUserDirectoryAccessSettingsDialog=false"
+            :selectedUserNode="selectedUser"
+            @addedUserToGroup="addedUserToGroup"
+        >
+        </user-directory-access-settings-dialog>
     </div>
 </template>
 
@@ -62,30 +132,63 @@
 <script>
 import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService.js";
 import MenuRoleDialog from "./Dialogs/MenuRoleDialog.vue";
+import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import AddConsoleUserDialog from './Dialogs/AddConsoleUserDialog.vue';
+import UserDirectoryAccessSettingsDialog from "./Dialogs/UserDirectoryAccessSettingsDialog.vue";
+import {FilterMatchMode} from 'primevue/api';
+
 
 export default {
 
     components: {
-        MenuRoleDialog
+        MenuRoleDialog,
+        PasswordComponent,
+        AddConsoleUserDialog,
+        UserDirectoryAccessSettingsDialog
     },
 
     data() {
         return {
+            loading: false,
             selectedUser: null,
             records: [],
             addConsoleUserModalVisible: false,
             roles: [],
-            menuRoleDialog: false
+            menuRoleDialog: false,
+            showDeleteConsoleUserDialog:false,
+            changePasswordDialog: false,
+            showUserDirectoryAccessSettingsDialog: false,
+            filters: {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            },
         }
     },
 
     methods: {
+        addedUserToGroup() {
+            this.$toast.add({
+                severity:'success', 
+                detail: this.$t('settings.console_user_settings.user_add_to_group'), 
+                summary: this.$t('settings.console_user_settings.successful'), 
+                life: 3000
+            });
+            
+            this.getConsoleUsers();
+        },
+
         updatedUserRole() {
             this.menuRoleDialog = false;
             this.getConsoleUsers();
         },
 
+        addedConsoleUser() {
+            this.addConsoleUserModalVisible = false;
+            this.getConsoleUsers();
+        },
+
         async getConsoleUsers(){
+            this.loading = true;
+            this.showUserDirectoryAccessSettingsDialog = false;
             const { response, error } = await consoleUserSettingsService.getConsoleUsers();
             if (error){
                 this.$toast.add({
@@ -94,10 +197,10 @@ export default {
                     summary: this.$t('settings.console_user_settings.error'),
                     life: 3000
                 });
-            }
-            else{
+            } else {
                 if(response.status == 200){
                     this.records = response.data;
+                    this.loading = false;
                 }
                 else if(response.status == 417){
                     this.$toast.add({
@@ -107,7 +210,8 @@ export default {
                         life: 3000
                     });
                 }
-            }               
+            }      
+            this.loading = false;
         },
 
         async getRoles(){
@@ -123,13 +227,12 @@ export default {
             else{
                 if(response.status == 200){
                     this.roles = response.data;
-                    console.log(this.roles)
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.console_user_settings.user_roles_get_successfully'),
-                        summary: this.$t('settings.console_user_settings.successful'),
-                        life: 3000
-                    });
+                    // this.$toast.add({
+                    //     severity:'success', 
+                    //     detail: this.$t('settings.console_user_settings.user_roles_get_successfully'),
+                    //     summary: this.$t('settings.console_user_settings.successful'),
+                    //     life: 3000
+                    // });
                 }
                 else if(response.status == 417){
                     this.$toast.add({
@@ -141,6 +244,97 @@ export default {
                 }
             }
         },
+
+        async deleteConsoleUser() {
+            if (this.selectedUser) {
+                const { response,error } = await consoleUserSettingsService.deleteConsoleUsers(this.selectedUser.distinguishedName);
+                this.getConsoleUsers();
+                if(response.status == 200){
+                    this.$toast.add({
+                        severity:'success', 
+                        detail:  this.$t('settings.console_user_settings.user_roles_deleted_successfully'),  
+                        summary: this.$t('settings.console_user_settings.successful'), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if (response.status = 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_deleted_user'),
+                            summary: this.$t('settings.console_user_settings.error'), 
+                            life: 3000
+                            });
+                    }
+                    else if (error){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
+                            summary: this.$t('settings.console_user_settings.error'), 
+                            life: 3000
+                        });
+                    }
+                }                   
+            } 
+            else{
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
+                    summary: this.$t('settings.console_user_settings.error'), 
+                    life: 3000
+                });
+            }
+            this.showDeleteConsoleUserDialog = false;
+        }, 
+
+        async updatePassword(){
+            let params = new FormData();
+            params.append("distinguishedName", this.selectedUser.distinguishedName);
+            params.append("userPassword", this.userPassword);
+
+            if (this.selectedUser) {
+                const{response,error} = await userService.updatePasswd(params);
+                if(error){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.change_user_password_error')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                else{
+                    if(response.status == 200){
+                        this.$emit('updatedUser', response.data);
+                        this.changePasswordDialog = false;
+                        this.userPassword = null;
+                        this.$refs.password.setPasswordForm('', '');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('user_management.change_user_password_success'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                    else if(response.status == 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_change_password'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+            }
+            else{
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.console_user_settings.error_change_password'),
+                    summary: this.$t('computer.task.toast_summaryta'), 
+                    life: 3000
+                });
+            }
+            this.showChangePasswordConsoleUserDialog = false;
+        },
     },
 
     mounted() {
@@ -150,3 +344,16 @@ export default {
     
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep(.p-paginator) {
+    .p-paginator-current {
+        margin-left: auto;
+    }
+}
+::v-deep(.p-datatable.p-datatable-customers) {
+    .p-paginator {
+        padding: 1rem;
+    }
+}
+</style>

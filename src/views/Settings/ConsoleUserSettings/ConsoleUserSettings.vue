@@ -6,10 +6,10 @@
 
             <template #content>
                 <div class="p-grid">
-                    <div class="p-col-3 ">
+                    <div class="p-col-12 p-md-6 p-lg-2">
                         <PanelMenu class="sideMenu" :model="settingsMenu" />
                     </div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-md-6 p-lg-10">
                         <MenuAccessSettings  v-show="displayName === 1"/>
                         <DirectoryAccessSettings  v-show="displayName === 2"/>
 
@@ -46,20 +46,7 @@
         @modalVisibleValue="roleGroupModalVisible = $event;"
         @addOlcAccessRule="addOlcAccessRule"
      />
-     <add-console-user-dialog 
-        @updateConsoleUsers="getConsoleUsers"
-        :modalVisibleValue="addConsoleUserModalVisible" 
-        @modalVisibleValue="addConsoleUserModalVisible = $event;"
-     />
-    
-    
-    <LiderConfirmDialog 
-        :showDialog="showDeleteConsoleUserDialog"
-        @showDialog="showDeleteConsoleUserDialog = $event;"
-        :header="$t('settings.console_user_settings.console_user_authorization_deletion')"
-        :message="$t('settings.console_user_settings.console_user_authorization_deletion_question')"
-        @accepted="deleteConsoleUser"
-    />
+     
 
     <LiderConfirmDialog 
         :showDialog="showUpdateConsoleUserRolesDialog"
@@ -85,31 +72,6 @@
         @accepted="updatePassword"
     />
 
-    <!-- password change dialog -->
-    <Dialog 
-        :header="$t('settings.console_user_settings.change_password')" 
-        v-model:visible="changePasswordDialog"  
-        :modal="true" 
-        @hide="changePasswordDialog = false">
-        <div>
-            <password-component ref="password"></password-component>
-        </div>
-        <template #footer>
-        <Button 
-            :label="$t('settings.console_user_settings.cancel')" 
-            icon="pi pi-times" 
-            @click="changePasswordDialog = false" 
-            class="p-button-text p-button-sm"
-        />
-        <Button 
-            :label="$t('settings.console_user_settings.change_password')" 
-            icon="pi pi-unlock" 
-            @click="showUpdatePasswordDialog"
-            class="p-button-sm"
-        />
-        </template>
-    </Dialog>
-
 </template>
 
 <script>
@@ -120,10 +82,8 @@ import AgentGroupDialog from './Dialogs/AgentGroupsDialog.vue';
 import UserDialog from './Dialogs/UsersDialog.vue';
 import UserGroupDialog from './Dialogs/UserGroupsDialog.vue';
 import RoleDialog from './Dialogs/RoleGroupsDialog.vue';
-import AddConsoleUserDialog from './Dialogs/AddConsoleUserDialog.vue';
 import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService.js";
 import { userService } from '../../../services/Settings/UserService';
-import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import MenuAccessSettings from './MenuAccessSettings.vue';
 import DirectoryAccessSettings from './DirectoryAccessSettings.vue';
 
@@ -135,8 +95,6 @@ export default {
         UserDialog,
         UserGroupDialog,
         RoleDialog,
-        AddConsoleUserDialog,
-        PasswordComponent,
         MenuAccessSettings,
         DirectoryAccessSettings
     },
@@ -206,13 +164,10 @@ export default {
             userModalVisible:false,
             userGroupModalVisible:false,
             roleGroupModalVisible:false,
-            addConsoleUserModalVisible:false,
-            showDeleteConsoleUserDialog:false,
             showChangePasswordConsoleUserDialog:false,
             showUpdateConsoleUserRolesDialog: false,
             showAccessPermissionUserDeleteDialog:false,
             showAccessPermissionUserChangePasswordDialog:false,
-            changePasswordDialog: false,
             userPassword: null,
             selectedGroupNode:null,
             searchFields: [
@@ -228,217 +183,11 @@ export default {
             selectedOlcAccess: null
         }
     },  
-    mounted() {
-        this.getRoles();
-        this.getConsoleUsers();
-    },
-
     methods: {
         toggle(event) {
             this.$refs.menu.toggle(event);
         },
-
-        async getRoles(){
-            const {response,error} = await consoleUserSettingsService.getRoles();
-            if(error){
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
-                    summary: this.$t('settings.console_user_settings.user_not_select'),
-                    life: 3000
-                });
-            }
-            else{
-                if(response.status == 200){
-                    this.roles = response.data;
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.console_user_settings.user_roles_get_successfully'),
-                        summary: this.$t('settings.console_user_settings.successful'),
-                        life: 3000
-                    });
-                }
-                else if(response.status == 417){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.console_user_settings.error_417_get_user_roles'),
-                        summary: this.$t('settings.console_user_settings.user_not_select'),
-                        life: 3000
-                    });
-                }
-            }
         
-        },
-
-        async getConsoleUsers(){
-            const { response, error } = await consoleUserSettingsService.getConsoleUsers();
-                if (error){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
-                        summary: this.$t('settings.console_user_settings.error'),
-                        life: 3000
-                    });
-                }
-                else{
-                    if(response.status == 200){
-                        this.records = response.data;
-                    }
-                    else if(response.status == 417){
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('settings.console_user_settings.error_417_get_console_user'),
-                            summary: this.$t('settings.console_user_settings.error'),
-                            life: 3000
-                        });
-                    }
-                }               
-        },
-
-        async updateUserRoles() {
-            this.showUpdateConsoleUserRolesDialog = false;
-            if(this.selectedUser) {
-                var data = new FormData();
-                data.append('dn', this.selectedUser.distinguishedName);
-                data.append('roles[]', this.selectedUser.attributesMultiValues.liderPrivilege);
-                
-
-                const { response,error } = await consoleUserSettingsService.editUserRoles(data);
-                if(error) {
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.console_user_settings.please_select_the_user_you_want_to_be_authorized'),
-                        summary: this.$t('settings.console_user_settings.error'),
-                        life: 3000
-                    });
-                }
-                else {
-                    if(response.status == 200){
-                        this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.console_user_settings.users_role_successfully_update'), 
-                        summary: this.$t('settings.console_user_settings.successful'), 
-                        life: 3000
-                    });
-                    // FIXME 
-                    this.getConsoleUsers();
-
-                    }
-
-                    else if(response.status == 417){
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('settings.console_user_settings.error_417_edit_user_roles'),
-                            summary: this.$t('settings.console_user_settings.error'),
-                            life: 3000
-                        });
-                    }                      
-                }
-            }
-        },
-
-        roleSwitchChanged(data) {
-            if (this.selectedUser) {
-                if (this.selectedUser.attributesMultiValues.liderPrivilege.includes(data.value)) {
-                    this.selectedUser.attributesMultiValues.liderPrivilege = this.selectedUser.attributesMultiValues.liderPrivilege.filter(val => val != data.value);
-                } else {
-                    this.selectedUser.attributesMultiValues.liderPrivilege.push(data.value);
-                }
-            }
-        },
-        async deleteConsoleUser() {
-            if (this.selectedUser) {
-
-                const { response,error } = await consoleUserSettingsService.deleteConsoleUsers(this.selectedUser.distinguishedName);
-
-                this.getConsoleUsers();
-                if(response.status == 200){
-                    this.$toast.add({
-                        severity:'success', 
-                        detail:  this.$t('settings.console_user_settings.user_roles_deleted_successfully'),  
-                        summary: this.$t('settings.console_user_settings.successful'), 
-                        life: 3000
-                    });
-                }
-                else{
-                    if (response.status = 417){
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('settings.console_user_settings.error_417_deleted_user'),
-                            summary: this.$t('settings.console_user_settings.error'), 
-                            life: 3000
-                            });
-                    }
-                    else if (error){
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
-                            summary: this.$t('settings.console_user_settings.error'), 
-                            life: 3000
-                        });
-                    }
-                }                   
-            } 
-            else{
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.console_user_settings.please_select_the_user_whose_authorization_you_want_to_delete'),
-                    summary: this.$t('settings.console_user_settings.error'), 
-                    life: 3000
-                });
-            }
-            this.showDeleteConsoleUserDialog = false;
-        }, 
-
-        async updatePassword(){
-            let params = new FormData();
-            params.append("distinguishedName", this.selectedUser.distinguishedName);
-            params.append("userPassword", this.userPassword);
-
-            if (this.selectedUser) {
-                const{response,error} = await userService.updatePasswd(params);
-                if(error){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('user_management.change_user_password_error')+ " \n"+error, 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-                else{
-                    if(response.status == 200){
-                        this.$emit('updatedUser', response.data);
-                        this.changePasswordDialog = false;
-                        this.userPassword = null;
-                        this.$refs.password.setPasswordForm('', '');
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('user_management.change_user_password_success'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-                    else if(response.status == 417){
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('settings.console_user_settings.error_417_change_password'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-                }
-            }
-            else{
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.console_user_settings.error_change_password'),
-                    summary: this.$t('computer.task.toast_summaryta'), 
-                    life: 3000
-                });
-            }
-            this.showChangePasswordConsoleUserDialog = false;
-        },
-
         setSelectedGroupNode(node) {
             this.groupMembers = [];
             this.selectedGroupNode = node;

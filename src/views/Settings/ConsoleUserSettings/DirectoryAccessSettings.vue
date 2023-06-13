@@ -1,10 +1,12 @@
 <template>
     <div>
-        <div class="p-field">
-            <h4>Dizin Erişim Ayarları</h4>
-        </div>
+        <Toolbar class="p-field">
+            <template #start>
+                <h5>Directory Access Settings</h5>
+            </template>
+        </Toolbar>
         <div class="p-grid">
-            <div class="p-col-3">
+            <div class="p-col-12 p-md-6 p-lg-3">
                 <tree-component 
                     ref="groupstree"
                     loadNodeUrl="/api/lider/user-groups/groups"
@@ -13,60 +15,156 @@
                     :searchFields="searchFields"
                 />
             </div>
-            <div class="p-col-3">
-                <div class="p-col-12">
-                    <p>{{$t('settings.console_user_settings.group_member')}}</p>
-                </div>
-                <DataTable :value="groupMembers" responsiveLayout="scroll">
-                    <Column header="#">
-                        <template #body="slotProps">
-                            <p>{{slotProps.index + 1}}</p>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <Panel :header="$t('settings.console_user_settings.group_member')">
+                    <DataTable :value="groupMembers" 
+                        v-model:filters="filters"
+                        responsiveLayout="scroll"
+                        class="p-datatable-sm"
+                        :paginator="true" :rows="10" ref="dt"
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                        :rowsPerPageOptions="[10,25,50,100]" style="margin-top: 2em"
+                    >
+                        <template #header>
+                            <div class="p-d-flex p-jc-end">
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"/>
+                                    <InputText v-model="filters['global'].value" 
+                                        class="p-inputtext-sm" 
+                                        :placeholder="$t('settings.script_definition.search')" 
+                                    />
+                                </span>
+                            </div>
                         </template>
-                    </Column>
-                    <Column field="uid" :header="$t('settings.console_user_settings.member_dn')"></Column>
-                </DataTable>
-            </div>
-            <div class="p-col-6">
-                <div class="p-col-12 p-d-flex p-jc-end">
-                    <Button type="button" :label="$t('settings.console_user_settings.add_new_authority_group')" 
-                        icon="pi pi-angle-down" iconPos="right" @click="toggle" 
-                    />
-                    <Menu ref="menu" :model="privilegeActions" :popup="true" />
-                </div>
-                <DataTable :value="groupPrivilages" responsiveLayout="scroll">
-                    <Column header="#">
-                        <template #body="slotProps">
-                            <p>{{slotProps.index + 1}}</p>
+                        <template #empty>
+                            <div class="p-d-flex p-jc-center">
+                                <span>Not found member</span>
+                            </div>
                         </template>
-                    </Column>
-                    <Column field="accessDN" :header="$t('settings.console_user_settings.access_granted_dn')"></Column>
-                    <Column :header="$t('settings.console_user_settings.authorization')">
-                        <template #body="slotProps">
-                            {{
-                                slotProps.data != null && slotProps.data.accessType == "write" ? $t('settings.console_user_settings.read_and_write') : $t('settings.console_user_settings.read')
-                            }}
-                        </template>
-                    </Column>
-                    <Column :exportable="false" style="min-width:8rem">
-                        <template #body="slotProps">
-                            <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"  
-                                @click="showAccessPermissionUserDeleteDialog = true; selectedOlcAccess = slotProps.data"
-                            />
-                        </template>
+                        <Column header="#">
+                            <template #body="slotProps">
+                                <p>{{slotProps.index + 1}}</p>
+                            </template>
                         </Column>
-                </DataTable>
+                        <Column field="uid" :header="$t('settings.console_user_settings.member_dn')"></Column>
+                    </DataTable>
+                </Panel>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-5">
+                <Panel header="Access Authorized DN">
+                    <template #icons>
+                        <div class="p-d-flex p-jc-between">
+                            <Button type="button" class="p-button-sm"
+                                :label="$t('settings.console_user_settings.add_new_authority_group')" 
+                                icon="pi pi-angle-down" iconPos="right" @click="toggle" 
+                            />
+                            <Menu ref="menu" :model="privilegeActions" :popup="true" />
+                        </div>
+                    </template>
+                    <DataTable :value="groupPrivilages" responsiveLayout="scroll"
+                        v-model:filters="filters2"
+                        class="p-datatable-sm"
+                    >
+                        <template #header>
+                            <div class="p-d-flex p-jc-end">
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"/>
+                                    <InputText v-model="filters2['global'].value" 
+                                        class="p-inputtext-sm" 
+                                        :placeholder="$t('settings.script_definition.search')" 
+                                    />
+                                </span>
+                            </div>
+                        </template>
+                        <template #empty>
+                            <div class="p-d-flex p-jc-center">
+                                <span>Not found dn</span>
+                            </div>
+                        </template>
+                        <Column header="#">
+                            <template #body="slotProps">
+                                <p>{{slotProps.index + 1}}</p>
+                            </template>
+                        </Column>
+                        <Column field="accessDN" :header="$t('settings.console_user_settings.access_granted_dn')"></Column>
+                        <Column :header="$t('settings.console_user_settings.authorization')">
+                            <template #body="slotProps">
+                                {{
+                                    slotProps.data != null && slotProps.data.accessType == "write" ? $t('settings.console_user_settings.read_and_write') : $t('settings.console_user_settings.read')
+                                }}
+                            </template>
+                        </Column>
+                        <Column :exportable="false">
+                            <template #body="slotProps">
+                                <div class="p-d-flex p-jc-end">
+                                    <Button icon="pi pi-trash" 
+                                        class="p-button-rounded p-button-danger p-button-sm"  
+                                        v-tooltip.bottom="'Delete'"
+                                        @click="showAccessPermissionUserDeleteDialog = true;
+                                        selectedOlcAccess = slotProps.data"
+                                    />
+                                </div>
+                            </template>
+                            </Column>
+                    </DataTable>
+                </Panel>
             </div>
         </div>
+        <agents-dialog 
+            :modalVisibleValue="agentsModalVisible" 
+            @modalVisibleValue="agentsModalVisible = $event;"
+            @addOlcAccessRule="addOlcAccessRule"
+        />
+
+        <agent-group-dialog 
+            :modalVisibleValue="agentGroupModalVisible" 
+            @modalVisibleValue="agentGroupModalVisible = $event;"
+            @addOlcAccessRule="addOlcAccessRule"
+        />
+        <user-dialog 
+            :modalVisibleValue="userModalVisible" 
+            @modalVisibleValue="userModalVisible = $event;"
+            @addOlcAccessRule="addOlcAccessRule"
+        />
+        <user-group-dialog 
+            :modalVisibleValue="userGroupModalVisible" 
+            @modalVisibleValue="userGroupModalVisible = $event;"
+            @addOlcAccessRule="addOlcAccessRule"
+        />
+        <role-dialog 
+            :modalVisibleValue="roleGroupModalVisible" 
+            @modalVisibleValue="roleGroupModalVisible = $event;"
+            @addOlcAccessRule="addOlcAccessRule"
+        />
     </div>
 </template>
 
 <script>
 import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService.js";
+import AgentsDialog from './Dialogs/AgentsDialog.vue';
+import AgentGroupDialog from './Dialogs/AgentGroupsDialog.vue';
+import UserDialog from './Dialogs/UsersDialog.vue';
+import UserGroupDialog from './Dialogs/UserGroupsDialog.vue';
+import RoleDialog from './Dialogs/RoleGroupsDialog.vue';
+import {FilterMatchMode} from 'primevue/api';
 
 export default {
+    components: {
+        AgentsDialog,
+        AgentGroupDialog,
+        UserDialog,
+        UserGroupDialog,
+        RoleDialog,
+    },
 
     data() {
         return {
+            filters: {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            },
+            filters2: {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+            },
             groupPrivilages: [],
             groupMembers: [],
             showAccessPermissionUserDeleteDialog: false,
@@ -129,16 +227,22 @@ export default {
     },
 
     methods: {
+        toggle(event) {
+            this.$refs.menu.toggle(event);
+        },
+
         setSelectedGroupNode(node) {
             this.groupMembers = [];
             this.selectedGroupNode = node;
-            node.attributesMultiValues.member.forEach((mem,index) => {
-                this.groupMembers.push({
-                    id : index + 1,
-                    uid : mem
-                })
-            });
-            this.getOlcAccessRules();
+            if (node.type == "GROUP") {
+                node.attributesMultiValues.member.forEach((mem,index) => {
+                    this.groupMembers.push({
+                        id : index + 1,
+                        uid : mem
+                    })
+                });
+                this.getOlcAccessRules();
+            }
         },
 
         async getOlcAccessRules() {
@@ -148,15 +252,7 @@ export default {
 
                 const { response,error} = await consoleUserSettingsService.getOLCAccessRule(this.selectedGroupNode.distinguishedName);
                 if(response.status == 200){
-                    this.groupPrivilages = response.data
-                    
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.console_user_settings.olc_access_rule_get'),
-                        summary: this.$t('settings.console_user_settings.successful'),
-                        life: 3000
-                    });
-
+                    this.groupPrivilages = response.data;
                 } else{
                     this.$toast.add({
                         severity:'error', 
@@ -171,3 +267,16 @@ export default {
     
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep(.p-paginator) {
+    .p-paginator-current {
+        margin-left: auto;
+    }
+}
+::v-deep(.p-datatable.p-datatable-customers) {
+    .p-paginator {
+        padding: 1rem;
+    }
+}
+</style>

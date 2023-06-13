@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Dialog :header="$t('settings.console_user_settings.selected_users_roles')"
+        <Dialog header="Kullanıcı Rolleri"
             v-model:visible="showDialog" :modal="true" 
             :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
             :style="{ width: '50vw' }"
@@ -20,8 +20,11 @@
                             <p>{{slotProps.index + 1}}</p>
                         </template>
                     </Column>
-                    <Column field="name" :header="$t('settings.console_user_settings.role_name')"></Column>
-                    <Column :exportable="false" style="min-width:8rem">
+                    <Column field="name" :header="$t('settings.console_user_settings.role_name')"
+                        style=""
+                    >
+                    </Column>
+                    <Column :exportable="false">
                         <template #body="slotProps">
                             <div class="p-d-flex p-jc-end">
                                 <InputSwitch 
@@ -39,7 +42,7 @@
             </div>
             <template #footer>
                 <Button :label="$t('settings.console_user_settings.close')" 
-                    icon="pi pi-times" @click="modalVisible = false" class="p-button-sm p-button-text"
+                    icon="pi pi-times" @click="showDialog = false" class="p-button-sm p-button-text"
                 />
                 <Button :label="$t('settings.console_user_settings.save')" class="p-button-sm" icon="pi pi-save"
                     @click="showUpdateConsoleUserRolesDialog=true"
@@ -124,15 +127,13 @@ export default {
                 else {
                     if(response.status == 200){
                         this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.console_user_settings.users_role_successfully_update'), 
-                        summary: this.$t('settings.console_user_settings.successful'), 
-                        life: 3000
-                    });
+                            severity:'success', 
+                            detail: this.$t('settings.console_user_settings.users_role_successfully_update'), 
+                            summary: this.$t('settings.console_user_settings.successful'), 
+                            life: 3000
+                        });
                         this.$emit('updatedUserRole', true);
-                    }
-
-                    else if(response.status == 417){
+                    } else if(response.status == 417){
                         this.$toast.add({
                             severity:'error', 
                             detail: this.$t('settings.console_user_settings.error_417_edit_user_roles'),
@@ -141,6 +142,7 @@ export default {
                         });
                     }                      
                 }
+                
 
             }
         },
