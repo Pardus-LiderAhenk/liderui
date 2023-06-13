@@ -5,12 +5,12 @@
                 <div class="p-d-flex p-jc-between">
                     <span style="margin: 0 0 2px; font-size:1.2rem">Disk usage</span> 
 
-                        <Button 
+                        <!-- <Button 
                             class="p-button-sm" 
                             :label="$t('Disk izle')"
                             icon="pi pi-caret-right" 
                             @click="addServerModalVisible =  true;">
-                        </Button>
+                        </Button> -->
                 </div>
             </template>
 
