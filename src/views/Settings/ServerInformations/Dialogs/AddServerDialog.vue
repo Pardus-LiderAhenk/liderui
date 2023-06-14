@@ -35,7 +35,8 @@
 </template>
 <script>
 
-import { ServerInformationService } from '../../../../services/Settings/ServerInformationService';
+import { serverInformationService } from '../../../../services/Settings/ServerInformationService';
+
 
 export default {
     components:{
@@ -94,13 +95,24 @@ export default {
     methods: {
 
         async addNewServer(){
-            let params = new FormData();
+
+            // let params = {
+
+            //     hostname: this.serverForm.hostname,
+            //     ip: this.serverForm.ip,
+            //     user: this.serverForm.user,
+            //     password: this.serverForm.password
+            // }
+
+            const params = new FormData();
             params.append("hostname", this.serverForm.hostname);
             params.append("ip", this.serverForm.ip);
-            params.append("user",this.serverForm.user);
+            params.append("user", this.serverForm.user);
             params.append("password", this.serverForm.password);
 
-            const { response,error } = await ServerInformationService.addServer(params);
+
+
+            const { response,error } = await serverInformationService.addServer(params);
             if(error){
                     this.$toast.add({
                         severity:'error', 

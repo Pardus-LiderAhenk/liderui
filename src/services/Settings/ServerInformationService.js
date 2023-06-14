@@ -1,19 +1,21 @@
 import axios from "axios";
-const liderSettingsAddServerUrl = '';
+
+const liderSettingsAddServerUrl = '/api/server/add';
 
 class ServerInformationService{
-constructor(axios){
-    this.axios = axios;
-}
 
-async addServer(params) {
-    try {
-        const response = await axios.post(liderSettingsAddServerUrl, params);
-        return { response };
-    } catch (error) {
-        return { error: error }
+    constructor(axios){
+        this.axios = axios;
     }
-}
+
+    async addServer(params) {
+        try {
+            const response = await axios.post(liderSettingsAddServerUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
 
 
 }
