@@ -32,6 +32,22 @@
                             </Button>
                         </template>
                     </Column>
+                    <Column>
+                        <template #body>
+                        <div class="p-d-flex p-jc-end">
+                            <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
+                                icon="pi pi-pencil"
+                                :title="$t('policy_management.edit')" 
+                                >
+                            </Button>
+                            <Button class="p-button-danger p-button-sm p-button-rounded" 
+                                icon="pi pi-trash" 
+                                :title="$t('policy_management.delete')"
+                                >
+                            </Button>
+                        </div>
+                        </template>
+                    </Column>
                     <!-- </div> -->
                 </DataTable>
                 

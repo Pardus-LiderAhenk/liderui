@@ -25,6 +25,12 @@
                 </div>
         <template #footer>
 
+            <Button 
+            :label="$t('Bağlantıyı kontrol et')" 
+            :disabled="loading"
+            icon="pi pi-link"  
+            @click="checkConnection">
+            </Button>
             <Button :label="$t('Kapat')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
             <Button :label="$t('Kaydet')" icon="pi pi-save"  @click="addNewServer"></Button>
 
@@ -40,8 +46,8 @@ import { serverInformationService } from '../../../../services/Settings/ServerIn
 
 export default {
     components:{
-        //PasswordComponent
     },
+
     props: ['modalVisibleValue'],
     emits:['updateConsoleUsers'],
     data(){
@@ -142,8 +148,51 @@ export default {
                         });
                     }
                 }        
-            }
+            },
 
+            async checkConnection(){
+
+        
+            const params = new FormData();
+            params.append('hostname', this.serverForm.hostname);
+            params.append('username', this.serverForm.user);
+            params.append('password', this.serverForm.password);
+
+            const {response, error} = await serverInformationService.connectionServer(params);
+
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('404 hata')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    console.log(testt)
+                    if (response.data != null) {
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('Başarılı'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('417 hata'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+        
+        this.loading = false;
+    
+        }
     }
 }
 
