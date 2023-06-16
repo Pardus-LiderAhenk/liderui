@@ -20,7 +20,7 @@
                             <div class="stock-name" data-v-4d2c924c="">
                                 <h6 data-v-4d2c924c="">ebru0</h6>
                             </div>
-                            <img :src="img" alt="freya-layout" data-v-4d2c924c="">
+                            <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">
                             <div class="stock-price" data-v-4d2c924c=""><i class="pi pi-arrow-down" data-v-4d2c924c=""></i>
                                 <h6 data-v-4d2c924c="">54.20</h6>
                             </div>
@@ -33,7 +33,7 @@
                             <div class="stock-name" data-v-4d2c924c="">
                                 <h6 data-v-4d2c924c="">ebru1</h6>
                             </div>
-                            <img :src="img" alt="freya-layout" data-v-4d2c924c="">
+                            <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">
                             <div class="stock-price" data-v-4d2c924c="">
                                 <h6 data-v-4d2c924c="">%183.16</h6>
                             </div>
@@ -46,7 +46,7 @@
                             <div class="stock-name" data-v-4d2c924c="">
                                 <h6 data-v-4d2c924c="">ebru2</h6>
                             </div>
-                            <img :src="img" alt="freya-layout" data-v-4d2c924c="">
+                            <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">
                             <div class="stock-price" data-v-4d2c924c=""><i class="pi pi-arrow-down" data-v-4d2c924c=""></i>
                                 <h6 data-v-4d2c924c="">307.20</h6>
                             </div>
@@ -71,7 +71,7 @@ export default {
 
 data() {
     return {
-        img: require("@/assets/images/servers/mini-graph.svg"),
+        img: require("@/assets/images/servers/ram-icon.png"),
     }
 },
     

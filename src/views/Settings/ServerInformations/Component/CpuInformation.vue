@@ -78,7 +78,7 @@ export default {
 
 data() {
     return {
-        img: require("@/assets/images/servers/cpu.png"),
+        img: require("@/assets/images/servers/cpu-icon.png"),
     }
 },
     

@@ -102,14 +102,6 @@ export default {
 
         async addNewServer(){
 
-            // let params = {
-
-            //     hostname: this.serverForm.hostname,
-            //     ip: this.serverForm.ip,
-            //     user: this.serverForm.user,
-            //     password: this.serverForm.password
-            // }
-
             const params = new FormData();
             params.append("hostname", this.serverForm.hostname);
             params.append("ip", this.serverForm.ip);

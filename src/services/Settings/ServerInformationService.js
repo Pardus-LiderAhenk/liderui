@@ -2,6 +2,7 @@ import axios from "axios";
 
 const liderSettingsAddServerUrl = '/api/server/add';
 const liderSettingsConnectionServerUrl = '/api/server/check-connection';
+const liderSettingsDeleteServerUrl = '';
 
 
 class ServerInformationService{
@@ -22,6 +23,16 @@ class ServerInformationService{
     async connectionServer(params){
         try {
             const response = await axios.post(liderSettingsConnectionServerUrl, params);
+            console.log(response.data)
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async deleteServer(params){
+        try {
+            const response = await axios.post(liderSettingsDeleteServerUrl, params);
             console.log(response.data)
             return { response };
         } catch (error) {

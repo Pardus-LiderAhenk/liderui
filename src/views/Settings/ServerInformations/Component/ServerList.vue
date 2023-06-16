@@ -16,36 +16,35 @@
                         </div>
                     </template>
                     <!-- <div > -->
-                    <Column field="id" header="Id"></Column>  
+                    <Column field="id" header="#"></Column>  
                     <Column field="hostname" header="Hostname"></Column>
                     <Column field="ip" header="Ip"></Column>
                     <Column field="mac" header="Mac Adres"></Column>
                     <Column field="os" header="İşletim sistemi"></Column>
                     <Column field="os-version" header="İşletim sistemi versiyon"></Column>
-                    <Column field="detail" header="Detay">
-                        <template #body>
-                            <Button 
-                                class="p-mr-2 p-button-sm p-button-warning" 
-                                icon="pi pi-search"
-                                :title="$t('Detay')" 
-                                @click="showServerDetailVisible =  true;">
-                            </Button>
-                        </template>
-                    </Column>
                     <Column>
                         <template #body>
-                        <div class="p-d-flex p-jc-end">
-                            <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
-                                icon="pi pi-pencil"
-                                :title="$t('policy_management.edit')" 
-                                >
-                            </Button>
-                            <Button class="p-button-danger p-button-sm p-button-rounded" 
-                                icon="pi pi-trash" 
-                                :title="$t('policy_management.delete')"
-                                >
-                            </Button>
-                        </div>
+                            <div class="p-d-flex p-jc-end">
+
+                                <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
+                                    icon="pi pi-pencil"
+                                    :title="$t('Düzenle')" 
+                                    >
+                                </Button>
+
+                                <Button class="p-button-danger p-button-sm p-button-rounded" 
+                                    icon="pi pi-trash" 
+                                    :title="$t('Sil')"
+                                    @click="deleteServerDialog =  true;">
+                                </Button>
+
+                                <Button 
+                                    class="p-button-sm p-button-raised p-button-rounded"
+                                    icon="pi pi-list"
+                                    :title="$t('Detay')" 
+                                    @click="showServerDetailVisible =  true;">
+                                </Button>
+                            </div>
                         </template>
                     </Column>
                     <!-- </div> -->
@@ -66,6 +65,13 @@
             @modalVisibleValue="showServerDetailVisible = $event;"
         />
 
+        <delete-server-dialog 
+            :deleteServerDialog="deleteServerDialog"
+            :selectedServer="selectedServer"
+            @delete-server="deleteServer"
+            @close-server-dialog="deleteServerDialog = false"
+        />
+
     </div>
         
 </template>
@@ -73,6 +79,7 @@
 <script>
 import AddServerDialog from '../Dialogs/AddServerDialog.vue';
 import ShowServerDetailDialog from '../Dialogs/ShowServerDetailDialog.vue';
+import DeleteServerDialog from '../Dialogs/DeleteServerDialog.vue';
 
 export default{
 
@@ -84,6 +91,7 @@ export default{
             ShowServerDetailDialog : false,
             addServerModalVisible : false,
             showServerDetailVisible : false,
+            deleteServerDialog : false,
             serverList:[
                 {hostname: "ebru0", users:"test0",password:"***",ip:"10.100.10.52", status:"bağlandı"},
                 {hostname: "ebru1", users:"test1",password:"***",ip:"10.100.10.100", status:"bağlandı"},
@@ -97,6 +105,8 @@ export default{
 
         AddServerDialog,
         ShowServerDetailDialog,
+        DeleteServerDialog,
+        
         
     }
 }

@@ -33,6 +33,14 @@
         :modalVisibleValue="showServerDetailVisible" 
         @modalVisibleValue="showServerDetailVisible = $event;"
     />
+
+    <delete-server-dialog
+        :deleteServerDialog="deleteServerDialog"
+        :selectedServer="selectedServer"
+        @delete-server="deleteServer"
+        @close-server-dialog="deleteServerDialog = false"
+    />
+
 </div>
     </template>
     <script>
@@ -50,6 +58,7 @@
     import ServerList from "./Component/ServerList.vue";
     import ServerLogs from "./Component/ServerLogs.vue";
     import ShowServerDetailDialog from './Dialogs/ShowServerDetailDialog.vue';
+    import DeleteServerDialog from './Dialogs/DeleteServerDialog.vue';
     
     
     
@@ -78,6 +87,8 @@
             RamInformation,
             CpuInformation,
             ShowServerDetailDialog,
+            DeleteServerDialog,
+            
         },
         
         mounted() {

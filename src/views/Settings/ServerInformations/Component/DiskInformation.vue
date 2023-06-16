@@ -51,7 +51,7 @@ export default {
 
 data() {
     return {
-        img: require("@/assets/images/servers/disk-11.png"),
+        img: require("@/assets/images/servers/disk-icon.png"),
     }
 },
     
