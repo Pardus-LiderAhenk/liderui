@@ -5,20 +5,23 @@
                         <div class="p-fluid p-formgrid">
                             
                             <div class="p-field p-col-9">
-                                <label for="hostname">{{$t('Hostname')}}*</label>
+                                <label for="hostname">{{$t('Hostname')}}</label>
                                 <InputText id="hostname" type="text" v-model="serverForm.hostname"/>
                             </div>
                             <div class="p-field p-col-9">
-                                <label for="ip">{{$t('Ip')}}*</label>
+                                <label for="ip">{{$t('Ip')}}</label>
                                 <InputText id="ip" type="text" v-model="serverForm.ip"/>
                             </div>
                             <div class="p-field p-col-9">
-                                <label for="user">{{$t('Kullanıcı')}}*</label>
+                                <label for="user">{{$t('Kullanıcı')}}</label>
                                 <InputText id="user" type="text" v-model="serverForm.user"/>
                             </div>
                             <div class="p-field p-col-9">
-                                <label for="passwd">{{$t('Parola')}}*</label>
+                                <label for="passwd">{{$t('Parola')}}</label>
                                 <InputText id="passwd" type="text" v-model="serverForm.password"/>
+                                <Button icon="pi pi-link" 
+                                severity="success" 
+                                @click="checkConnection"/>
                             </div>
                         </div>
                     </div>
@@ -26,10 +29,10 @@
         <template #footer>
 
             <Button 
-            :label="$t('Bağlantıyı kontrol et')" 
+            :label="$t('Sunucu bilgilerini getir')" 
             :disabled="loading"
-            icon="pi pi-link"  
-            @click="checkConnection">
+            icon="pi pi-search"  
+            @click="getServerdata">
             </Button>
             <Button :label="$t('Kapat')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
             <Button :label="$t('Kaydet')" icon="pi pi-save"  @click="addNewServer"></Button>
@@ -184,6 +187,18 @@ export default {
         
         this.loading = false;
     
+        },
+
+        async getServerdata(){
+
+            const params = new FormData();
+            params.append('hostname', this.serverForm.hostname);
+            params.append('username', this.serverForm.user);
+            params.append('password', this.serverForm.password);
+
+            const {response, error} = await serverInformationService.getServerServer(params);
+            console.log(response);
+            
         }
     }
 }

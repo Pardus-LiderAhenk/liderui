@@ -3,6 +3,7 @@ import axios from "axios";
 const liderSettingsAddServerUrl = '/api/server/add';
 const liderSettingsConnectionServerUrl = '/api/server/check-connection';
 const liderSettingsDeleteServerUrl = '';
+const liderSettingsGetServerDataUrl = '/api/server-information/execute-command';
 
 
 class ServerInformationService{
@@ -33,6 +34,16 @@ class ServerInformationService{
     async deleteServer(params){
         try {
             const response = await axios.post(liderSettingsDeleteServerUrl, params);
+            console.log(response.data)
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async getServerServer(params){
+        try {
+            const response = await axios.post(liderSettingsGetServerDataUrl, params);
             console.log(response.data)
             return { response };
         } catch (error) {

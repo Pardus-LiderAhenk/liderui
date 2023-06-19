@@ -29,17 +29,18 @@
                                 <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
                                     icon="pi pi-pencil"
                                     :title="$t('Düzenle')" 
+                                    @click="editServerDialog = true;"
                                     >
                                 </Button>
 
-                                <Button class="p-button-danger p-button-sm p-button-rounded" 
+                                <Button class="p-mr-2 p-button-danger p-button-sm p-button-rounded" 
                                     icon="pi pi-trash" 
                                     :title="$t('Sil')"
                                     @click="deleteServerDialog =  true;">
                                 </Button>
 
                                 <Button 
-                                    class="p-button-sm p-button-raised p-button-rounded"
+                                    class="p-mr-2 p-button-sm p-button-raised p-button-rounded"
                                     icon="pi pi-list"
                                     :title="$t('Detay')" 
                                     @click="showServerDetailVisible =  true;">
@@ -72,6 +73,13 @@
             @close-server-dialog="deleteServerDialog = false"
         />
 
+        <edit-server-dialog 
+            :editServerDialog="editServerDialog"
+            :selectedServer="selectedServer"
+            @edit-server="editServer"
+            @close-server-dialog="editServerDialog = false"
+        />
+
     </div>
         
 </template>
@@ -80,6 +88,7 @@
 import AddServerDialog from '../Dialogs/AddServerDialog.vue';
 import ShowServerDetailDialog from '../Dialogs/ShowServerDetailDialog.vue';
 import DeleteServerDialog from '../Dialogs/DeleteServerDialog.vue';
+import EditServerDialog from '../Dialogs/EditServerDialog.vue';
 
 export default{
 
@@ -92,6 +101,7 @@ export default{
             addServerModalVisible : false,
             showServerDetailVisible : false,
             deleteServerDialog : false,
+            editServerDialog : false,
             serverList:[
                 {hostname: "ebru0", users:"test0",password:"***",ip:"10.100.10.52", status:"bağlandı"},
                 {hostname: "ebru1", users:"test1",password:"***",ip:"10.100.10.100", status:"bağlandı"},
@@ -106,6 +116,7 @@ export default{
         AddServerDialog,
         ShowServerDetailDialog,
         DeleteServerDialog,
+        EditServerDialog,
         
         
     }
