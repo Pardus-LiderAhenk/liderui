@@ -1,31 +1,33 @@
 <template>
-    <Dialog :header="$t('Sunucu ekle')" v-model:visible="modalVisible" style="width:30vw;">            
-                <div class="p-grid">
-                    <div class="p-col-9">
-                        <div class="p-fluid p-formgrid">
-                            
-                            <div class="p-field p-col-9">
-                                <label for="hostname">{{$t('Hostname')}}</label>
-                                <InputText id="hostname" type="text" v-model="serverForm.hostname"/>
-                            </div>
-                            <div class="p-field p-col-9">
-                                <label for="ip">{{$t('Ip')}}</label>
-                                <InputText id="ip" type="text" v-model="serverForm.ip"/>
-                            </div>
-                            <div class="p-field p-col-9">
-                                <label for="user">{{$t('Kullanıcı')}}</label>
-                                <InputText id="user" type="text" v-model="serverForm.user"/>
-                            </div>
-                            <div class="p-field p-col-9">
-                                <label for="passwd">{{$t('Parola')}}</label>
-                                <InputText id="passwd" type="text" v-model="serverForm.password"/>
-                                <Button icon="pi pi-link" 
-                                severity="success" 
-                                @click="checkConnection"/>
-                            </div>
-                        </div>
+    <Dialog :header="$t('Sunucu ekle')" 
+    v-model:visible="modalVisible" style="width:30vw;">            
+            
+            <div class="p-fluid">
+                
+                <div class="p-field">
+                    <label for="hostname">{{$t('Hostname')}}</label>
+                    <InputText id="hostname" type="text" v-model="serverForm.hostname"/>
+                </div>
+                <div class="p-field">
+                    <label for="ip">{{$t('Ip')}}</label>
+                    <InputText id="ip" type="text" v-model="serverForm.ip"/>
+                </div>
+                <div class="p-field">
+                    <label for="user">{{$t('Kullanıcı')}}</label>
+                    <InputText id="user" type="text" v-model="serverForm.user"/>
+                </div>
+                
+                <div class="p-field">
+                    <label for="passwd">{{$t('Parola')}}</label>
+                    <div class="p-inputgroup flex-1">
+                        <InputText id="passwd" type="text" v-model="serverForm.password"/>
+                        <Button icon="pi pi-link" 
+                        severity="success" 
+                        @click="checkConnection"/>
                     </div>
                 </div>
+            </div>
+
         <template #footer>
 
             <Button 
@@ -48,8 +50,6 @@ import { serverInformationService } from '../../../../services/Settings/ServerIn
 
 
 export default {
-    components:{
-    },
 
     props: ['modalVisibleValue'],
     emits:['updateConsoleUsers'],
@@ -145,7 +145,7 @@ export default {
                 }        
             },
 
-            async checkConnection(){
+        async checkConnection(){
 
         
             const params = new FormData();

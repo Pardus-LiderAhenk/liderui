@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- Delete Policy Dialog -->
+        
         <Dialog :header="$t('Sucunu sil')" v-model:visible="showDialog" 
             :style="{width: '20vw'}" :modal="true">
             <div class="p-fluid">
@@ -18,13 +18,12 @@
                 />
             </template>
         </Dialog>
-        <!-- Delete Policy Dialog End -->
+      
     </div>
 </template>
 
 <script>
 /**
- * Create user policy dialog
  * @see {@link http://www.liderahenk.org/}
  * emits these events
  * @event closeServerDialog

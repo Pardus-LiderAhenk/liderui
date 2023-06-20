@@ -23,7 +23,6 @@
     
        
     <add-server-dialog v-if="addServerModalVisible"
-        @updateConsoleUsers="getConsoleUsers"
         :modalVisibleValue="addServerModalVisible" 
         @modalVisibleValue="addServerModalVisible = $event;"
     />
@@ -39,6 +38,12 @@
         :selectedServer="selectedServer"
         @delete-server="deleteServer"
         @close-server-dialog="deleteServerDialog = false"
+    />
+
+    <edit-server-dialog v-if="editServerDialog"
+        :editServerDialog="editServerDialog"
+        :selectedServer="selectedServer"
+        @edit-server-dialog="savedServer"
     />
 
 </div>
@@ -59,6 +64,7 @@
     import ServerLogs from "./Component/ServerLogs.vue";
     import ShowServerDetailDialog from './Dialogs/ShowServerDetailDialog.vue';
     import DeleteServerDialog from './Dialogs/DeleteServerDialog.vue';
+    import EditServerDialog from './Dialogs/EditServerDialog.vue';
     
     
     
@@ -72,8 +78,11 @@
         data() {
             return {
 
-                addServerModalVisible :false,
+                addServerModalVisible : false,
                 showServerDetailVisible : false,
+                editServerModalVisible : false,
+                editServerDialog: false
+                
                 
             }
         },
@@ -96,7 +105,18 @@
         },
     
         methods: {
-                        
+
+            async getServerList(){
+                console.log("server info burda");
+
+            },
+                   
+            savedServer(data) {
+                this.resetPaginator();
+                this.getServerList();
+            },
+
+        
         }
     
     }

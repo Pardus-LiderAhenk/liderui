@@ -8,15 +8,7 @@
         <DataTable class="p-datatable-sm" :value="selectedNodeData" 
          v-model:filters="filters" responsiveLayout="scroll">
             <template #header>
-                <!-- <div class="p-d-flex p-jc-end">
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-search"/>
-                        <InputText v-model="filters['global'].value" 
-                        class="p-inputtext-sm" 
-                        :placeholder="$t('node_detail.search')" 
-                        />
-                    </span>
-                </div> -->
+                
             </template>
             <Column field="label" :header="$t('node_detail.attribute')"></Column>
             <Column field="value" :header="$t('node_detail.value')"></Column>

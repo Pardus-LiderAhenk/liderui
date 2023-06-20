@@ -15,7 +15,6 @@
                             </Button>
                         </div>
                     </template>
-                    <!-- <div > -->
                     <Column field="id" header="#"></Column>  
                     <Column field="hostname" header="Hostname"></Column>
                     <Column field="ip" header="Ip"></Column>
@@ -29,7 +28,7 @@
                                 <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
                                     icon="pi pi-pencil"
                                     :title="$t('Düzenle')" 
-                                    @click="editServerDialog = true;"
+                                    @click="editServerModalVisible = true;"
                                     >
                                 </Button>
 
@@ -48,7 +47,6 @@
                             </div>
                         </template>
                     </Column>
-                    <!-- </div> -->
                 </DataTable>
                 
                 </template>
@@ -72,12 +70,12 @@
             @delete-server="deleteServer"
             @close-server-dialog="deleteServerDialog = false"
         />
-
-        <edit-server-dialog 
-            :editServerDialog="editServerDialog"
+        
+        <edit-server-dialog v-if="editServerModalVisible"
+            :updateServerDialog="editServerModalVisible"
             :selectedServer="selectedServer"
-            @edit-server="editServer"
-            @close-server-dialog="editServerDialog = false"
+            @modalVisibleValue="editServerModalVisible = $event;"
+            @close-server-dialog="editServerModalVisible = false"
         />
 
     </div>
@@ -102,6 +100,7 @@ export default{
             showServerDetailVisible : false,
             deleteServerDialog : false,
             editServerDialog : false,
+            editServerModalVisible : false,
             serverList:[
                 {hostname: "ebru0", users:"test0",password:"***",ip:"10.100.10.52", status:"bağlandı"},
                 {hostname: "ebru1", users:"test1",password:"***",ip:"10.100.10.100", status:"bağlandı"},
@@ -112,14 +111,12 @@ export default{
     },
 
     components: {
-
         AddServerDialog,
         ShowServerDetailDialog,
         DeleteServerDialog,
         EditServerDialog,
         
-        
-    }
+    },
 }
 
 </script>
