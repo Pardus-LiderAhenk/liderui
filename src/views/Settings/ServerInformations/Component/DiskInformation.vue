@@ -17,7 +17,7 @@
             <template #content>
                                    
                 <div class="widget-image-stats relative">
-                    <img :src="img" alt="product" class="w-full my-4">
+                    <img :src="img" alt="product" class="w-full my-4" style="width: 600px; display: flex;">
                     <div class="flex align-items-center justify-content-between mb-2">
                         <span class="font-bold">ebru0</span>
                         <span>%40</span>
@@ -51,7 +51,7 @@ export default {
 
 data() {
     return {
-        img: require("@/assets/images/servers/disk-icon.png"),
+        img: require("@/assets/images/servers/disk-icon-1.png"),
     }
 },
     

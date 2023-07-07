@@ -30,12 +30,12 @@
 
         <template #footer>
 
-            <Button 
+            <!-- <Button 
             :label="$t('Sunucu bilgilerini getir')" 
             :disabled="loading"
             icon="pi pi-search"  
             @click="getServerdata">
-            </Button>
+            </Button> -->
             <Button :label="$t('Kapat')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
             <Button :label="$t('Kaydet')" icon="pi pi-save"  @click="addNewServer"></Button>
 
