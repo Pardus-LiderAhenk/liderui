@@ -1,11 +1,11 @@
 <template>
-    <Dialog :header="$t('settings.console_user_settings.adding_access_authorization')" v-model:visible="modalVisible" 
-    :modal="true" position="top"
+    <Dialog :header="$t('settings.console_user_settings.adding_access_authorization')" 
+        v-model:visible="modalVisible" 
+        :modal="true"
+        :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+        :style="{ width: '60vw' }"
     >
         <div class="p-grid">
-            <div class="p-col-12">
-                <p>{{$t('settings.console_user_settings.admin_group_info')}}</p>
-            </div>
             <div class="p-col-12">
                 <tree-component 
                     ref="agentsTree"
@@ -76,6 +76,15 @@ export default {
             this.selectedNode = node;
         },
         addAccessRule() {
+            if (!this.selectedNode) {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t("settings.console_user_settings.select_node_warn"),
+                    summary: this.$t("computer.task.toast_summary"),
+                    life: 3000
+                });
+                return;
+            }
             this.$emit('addOlcAccessRule', this.selectedNode.distinguishedName, this.userPermissionChoise);
             this.modalVisible = false;
         }

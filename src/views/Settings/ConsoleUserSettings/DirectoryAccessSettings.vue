@@ -136,6 +136,14 @@
             @modalVisibleValue="roleGroupModalVisible = $event;"
             @addOlcAccessRule="addOlcAccessRule"
         />
+
+        <LiderConfirmDialog 
+            :showDialog="showAccessPermissionUserDeleteDialog"
+            @showDialog="showAccessPermissionUserDeleteDialog = $event;"
+            :header="$t('settings.console_user_settings.console_user_change_password')"
+            :message="$t('settings.console_user_settings.console_user_permission_deletion_question')"
+            @accepted="deleteOlcAccessRule"
+        />
     </div>
 </template>
 
@@ -263,6 +271,76 @@ export default {
                 }                    
             }
         },
+
+        async deleteOlcAccessRule() {
+            this.showAccessPermissionUserDeleteDiolog = false;
+            this.selectedOlcAccess = this.groupPrivilages.filter(p => p.accessDN === this.selectedOlcAccess.accessDN);
+            if(this.selectedOlcAccess && this.selectedOlcAccess.length > 0) {
+                const { response,error } = await consoleUserSettingsService.deleteOLCAccessRule(this.selectedOlcAccess[0]);
+                if(response.status == 200) {
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.console_user_settings.olc_success_rule_deleted'),
+                        summary: this.$t('settings.console_user_settings.successful'),
+                        life: 3000
+                    });
+                    this.selectedOlcAccess = null;
+                    this.getOlcAccessRules();
+                }
+                else{
+                    if(error){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_olc_rule_deleted'),
+                            summary: this.$t('settings.console_user_settings.error'), 
+                            life: 3000
+                        });
+                    }
+                    else if(response.status = 417){
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.console_user_settings.error_417_olc_rule_deleted'),
+                            summary: this.$t('settings.console_user_settings.error'), 
+                            life: 3000
+                        });
+                    }
+                }
+            }
+        }, 
+
+        async addOlcAccessRule(olcAccessDn, accessType) {
+            let data = new FormData();
+            data.append('type', 'computers');
+            data.append('groupDN', this.selectedGroupNode.distinguishedName);
+            data.append('olcAccessDN', olcAccessDn, );
+            data.append('accessType',accessType);
+
+
+            const { response,error } = await consoleUserSettingsService.addOLCAccessRule(data);
+            if (response.status === 200) {
+                if(response.data) {
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.console_user_settings.access_authorization_added_successfully'),
+                        summary: this.$t('settings.console_user_settings.successful'),
+                        life: 3000
+                    });
+                    this.getOlcAccessRules();
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.console_user_settings.an_error_occurred_while_adding_access_authorization'),
+                        summary: this.$t('settings.console_user_settings.error'),
+                        life: 3000
+                    });
+                }
+            }
+        },
+
+
+
+
+
     },
     
 }

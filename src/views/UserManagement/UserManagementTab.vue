@@ -1,26 +1,26 @@
 <template>
     <div class="user-management">
         <div class="p-grid">
-            <div class="p-col-12 p-md-6 p-lg-12" v-if="domainType != 'ACTIVE_DIRECTORY'">
+            <div class="p-col-12 p-md-6 p-lg-12">
                 <Button
                     icon="pi pi-user"
                     :class="selectedTab == 'user-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedTab('user-management')"
-                    :label="$t('menu.user_management')"
+                    :label="'LDAP '+ $t('menu.user_management')"
                 >
                 </Button>
                 <Button
                     icon="pi pi-users"
                     :class="selectedTab == 'user-group-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedTab('user-group-management')"
-                    :label="$t('menu.user_group_management')"
+                    :label="'LDAP '+ $t('menu.user_group_management')"
                 >
                 </Button>
-                <Button
+                <Button v-if="domainType != 'ACTIVE_DIRECTORY'"
                     icon="pi pi-user-plus"
                     :class="selectedTab == 'user-permissions-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedTab('user-permissions-management')"
-                    :label="$t('menu.user_authorization')"
+                    :label="'LDAP '+ $t('menu.user_authorization')"
                 >
                 </Button>
                 <Button
