@@ -5,6 +5,7 @@ const liderSettingsConnectionServerUrl = '/api/server/check-connection';
 const liderSettingsDeleteServerUrl = '';
 const liderSettingsGetServerDataUrl = '/api/server-information/execute-command';
 const liderSettingsServerUpdateUrl = '';
+const liderSettingsServerListUrl = '';
 
 
 class ServerInformationService{
@@ -55,6 +56,16 @@ class ServerInformationService{
     async update(params){
         try {
             const response = await axios.post(liderSettingsServerUpdateUrl, params);
+            console.log(response.data)
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async list(params){
+        try {
+            const response = await axios.get(liderSettingsServerListUrl, params);
             console.log(response.data)
             return { response };
         } catch (error) {

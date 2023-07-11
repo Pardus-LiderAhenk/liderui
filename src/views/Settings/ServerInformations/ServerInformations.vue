@@ -101,6 +101,7 @@
         },
         
         mounted() {
+            this.serverListAll();
     
         },
     
@@ -116,7 +117,7 @@
                 this.getServerList();
             },
 
-        
+            
         }
     
     }

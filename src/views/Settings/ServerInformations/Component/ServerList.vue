@@ -87,6 +87,8 @@ import AddServerDialog from '../Dialogs/AddServerDialog.vue';
 import ShowServerDetailDialog from '../Dialogs/ShowServerDetailDialog.vue';
 import DeleteServerDialog from '../Dialogs/DeleteServerDialog.vue';
 import EditServerDialog from '../Dialogs/EditServerDialog.vue';
+import  { serverInformationService } from '../../../../services/Settings/ServerInformationService.js';
+
 
 export default{
 
@@ -101,11 +103,7 @@ export default{
             deleteServerDialog : false,
             editServerDialog : false,
             editServerModalVisible : false,
-            serverList:[
-                {hostname: "ebru0", users:"test0",password:"***",ip:"10.100.10.52", status:"bağlandı"},
-                {hostname: "ebru1", users:"test1",password:"***",ip:"10.100.10.100", status:"bağlandı"},
-                {hostname: "ebru2", users:"test2",password:"***",ip:"10.100.10.1", status:"bağlandı"},
-            ]
+            serverList:[hostname = ""]
 
         }
     },
@@ -117,6 +115,49 @@ export default{
         EditServerDialog,
         
     },
+
+    mounted() {
+        this.serverListAll();
+    
+    },
+
+
+    methods: {
+        async serverListAll(){
+
+            const { response, error } = await serverInformationService.list(this.serverList);
+            console.log(this.serverList);
+            if (error){
+                this.$toast.add({
+                severity:'error',
+                detail: this.$t('serverList'),
+                summary:this.$t("computer.task.toast_summary"),
+                life:3600
+            });
+            } 
+            else{
+              if (response.status == 200) {
+                this.brands = response.data.brands;
+                this.models = response.data.models;
+                this.processors = response.data.processors;
+                this.agentVersions = response.data.agentVersions;
+                this.osVersions = response.data.osVersions;
+                this.agents = response.data.agents.content;
+                this.totalElements = response.data.agents.totalElements;
+              } 
+              else if (response.status == 417) {
+                this.$toast.add({
+                  severity:'error',
+                  detail: this.$t('reports.task_report.error_417_agent_info_list'),
+                  summary:this.$t("computer.task.toast_summary"),
+                  life:3600
+                });
+              }
+            }
+
+            this.loading = false;
+            }
+    }
 }
 
 </script>
