@@ -5,7 +5,7 @@ const liderSettingsConnectionServerUrl = '/api/server/check-connection';
 const liderSettingsDeleteServerUrl = '';
 const liderSettingsGetServerDataUrl = '/api/server-information/execute-command';
 const liderSettingsServerUpdateUrl = '';
-const liderSettingsServerListUrl = '';
+const liderSettingsServerListUrl = '/api/server/list';
 
 
 class ServerInformationService{
@@ -26,7 +26,6 @@ class ServerInformationService{
     async connectionServer(params){
         try {
             const response = await axios.post(liderSettingsConnectionServerUrl, params);
-            console.log(response.data)
             return { response };
         } catch (error) {
             return { error: error }
@@ -36,7 +35,6 @@ class ServerInformationService{
     async deleteServer(params){
         try {
             const response = await axios.post(liderSettingsDeleteServerUrl, params);
-            console.log(response.data)
             return { response };
         } catch (error) {
             return { error: error }
@@ -46,7 +44,6 @@ class ServerInformationService{
     async getServerServer(params){
         try {
             const response = await axios.post(liderSettingsGetServerDataUrl, params);
-            console.log(response.data)
             return { response };
         } catch (error) {
             return { error: error }
@@ -56,7 +53,6 @@ class ServerInformationService{
     async update(params){
         try {
             const response = await axios.post(liderSettingsServerUpdateUrl, params);
-            console.log(response.data)
             return { response };
         } catch (error) {
             return { error: error }
@@ -66,7 +62,7 @@ class ServerInformationService{
     async list(params){
         try {
             const response = await axios.get(liderSettingsServerListUrl, params);
-            console.log(response.data)
+            
             return { response };
         } catch (error) {
             return { error: error }

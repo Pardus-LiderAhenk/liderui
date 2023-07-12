@@ -3,7 +3,7 @@
         <div class="card">
             <Card header="server-list">
                 <template #content>
-                <DataTable :value="serverList"  tableStyle="min-width: 62rem" class="p-datatable-sm" responsiveLayout="scroll">
+                <DataTable :value="servers"  tableStyle="min-width: 62rem" class="p-datatable-sm" responsiveLayout="scroll">
                     <template #header>
                         <div class="p-d-flex p-jc-between">
                                 <h5>Sunucu listesi</h5>
@@ -15,12 +15,32 @@
                             </Button>
                         </div>
                     </template>
-                    <Column field="id" header="#"></Column>  
-                    <Column field="hostname" header="Hostname"></Column>
-                    <Column field="ip" header="Ip"></Column>
-                    <Column field="mac" header="Mac Adres"></Column>
-                    <Column field="os" header="İşletim sistemi"></Column>
-                    <Column field="os-version" header="İşletim sistemi versiyon"></Column>
+                    <Column header="#">
+                        <template #body="{index}">
+                          <span>{{  index + 1 }}</span>
+                        </template>
+                      </Column>  
+                    <Column field="hostname" header="hostname">
+                        {{ hostname }}
+                    </Column>
+                    <Column field="ip" header="Ip">
+                        {{ ip }}
+                    </Column>
+                    <Column field="mac" header="Mac Adres">
+                        <template #body="{ data }">
+                            {{ getPropertyValue(data.properties, "mac_addr") }}
+                        </template>
+                    </Column>
+                    <Column field="os" header="İşletim sistemi">
+                        <template #body="{ data }">
+                            {{ getPropertyValue(data.properties, "os_name") }}
+                        </template>
+                    </Column>
+                    <Column field="os-version" header="İşletim sistemi versiyon">
+                        <template #body="{ data }">
+                            {{ getPropertyValue(data.properties, "os_version") }}
+                        </template>
+                    </Column>
                     <Column>
                         <template #body>
                             <div class="p-d-flex p-jc-end">
@@ -87,10 +107,15 @@ import AddServerDialog from '../Dialogs/AddServerDialog.vue';
 import ShowServerDetailDialog from '../Dialogs/ShowServerDetailDialog.vue';
 import DeleteServerDialog from '../Dialogs/DeleteServerDialog.vue';
 import EditServerDialog from '../Dialogs/EditServerDialog.vue';
-import  { serverInformationService } from '../../../../services/Settings/ServerInformationService.js';
 
 
 export default{
+    props: {
+        servers: {
+            type: Object,
+            description: "Server list",
+        },
+    },
 
     data() {
 
@@ -103,7 +128,6 @@ export default{
             deleteServerDialog : false,
             editServerDialog : false,
             editServerModalVisible : false,
-            serverList:[hostname = ""]
 
         }
     },
@@ -116,47 +140,25 @@ export default{
         
     },
 
-    mounted() {
-        this.serverListAll();
-    
-    },
-
 
     methods: {
-        async serverListAll(){
+        
+        getPropertyValue(properties, propertyName) {
+                var propertyValue = "";
+                const filteredProperties = properties.filter(
+                  (property) => property.propertyName === propertyName
+                );
+                if (filteredProperties != null && filteredProperties.length > 0) {
+                  propertyValue = filteredProperties[0].propertyValue;
+                
+                }
+                return propertyValue;
+            },
 
-            const { response, error } = await serverInformationService.list(this.serverList);
-            console.log(this.serverList);
-            if (error){
-                this.$toast.add({
-                severity:'error',
-                detail: this.$t('serverList'),
-                summary:this.$t("computer.task.toast_summary"),
-                life:3600
-            });
-            } 
-            else{
-              if (response.status == 200) {
-                this.brands = response.data.brands;
-                this.models = response.data.models;
-                this.processors = response.data.processors;
-                this.agentVersions = response.data.agentVersions;
-                this.osVersions = response.data.osVersions;
-                this.agents = response.data.agents.content;
-                this.totalElements = response.data.agents.totalElements;
-              } 
-              else if (response.status == 417) {
-                this.$toast.add({
-                  severity:'error',
-                  detail: this.$t('reports.task_report.error_417_agent_info_list'),
-                  summary:this.$t("computer.task.toast_summary"),
-                  life:3600
-                });
-              }
-            }
+    },
 
-            this.loading = false;
-            }
+    mounted() {
+        console.log(this.servers)
     }
 }
 

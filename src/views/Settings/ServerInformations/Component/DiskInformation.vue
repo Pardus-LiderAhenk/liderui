@@ -17,28 +17,29 @@
             <template #content>
                                    
                 <div class="widget-image-stats relative">
+
                     <img :src="img" alt="product" class="w-full my-4" style="width: 600px; display: flex;">
-                    <div class="flex align-items-center justify-content-between mb-2">
-                        <span class="font-bold">ebru0</span>
-                        <span>%40</span>
-                    </div>
-                    <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate orange-bar mb-4" aria-valuemin="0" aria-valuenow="40" aria-valuemax="100">
-                        <div class="p-progressbar-value p-progressbar-value-animate" style="width: 40%; display: flex;"></div>
-                    </div>
-                    <div class="flex align-items-center justify-content-between mb-2">
-                        <span class="font-bold">ebru1</span>
-                        <span>%89</span>
-                    </div>
-                    <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate green-bar mb-4" aria-valuemin="0" aria-valuenow="89" aria-valuemax="100">
-                        <div class="p-progressbar-value p-progressbar-value-animate" style="width: 89%; display: flex;"></div>
-                    </div>
-                    <div class="flex align-items-center justify-content-between mb-2">
-                        <span class="font-bold">ebru2</span>
-                        <span>%82</span>
-                    </div>
-                    <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate green-bar" aria-valuemin="0" aria-valuenow="82" aria-valuemax="100">
-                        <div class="p-progressbar-value p-progressbar-value-animate" style="width: 82%; display: flex;"></div>
-                    </div>
+                    <DataTable :value="servers">
+                        <div class="flex align-items-center justify-content-between mb-2">
+                            <span class="font-bold">
+                                
+                                    {{ hostname }}
+                               
+                            </span>
+                            <span>%40</span>
+                        </div>
+                        <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate orange-bar mb-4" aria-valuemin="0" aria-valuenow="40" aria-valuemax="100">
+                            <div class="p-progressbar-value p-progressbar-value-animate" style="width: 40%; display: flex;"></div>
+                        </div>
+                        <div class="flex align-items-center justify-content-between mb-2">
+                            <span class="font-bold">ebru1</span>
+                            <span>%89</span>
+                        </div>
+                        <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate green-bar mb-4" aria-valuemin="0" aria-valuenow="89" aria-valuemax="100">
+                            <div class="p-progressbar-value p-progressbar-value-animate" style="width: 89%; display: flex;"></div>
+                        </div>
+                    </DataTable>
+                    
                 </div>
 
             </template>
@@ -48,12 +49,38 @@
 
 <script>
 export default {
+    props: {
+        servers: {
+            type: Object,
+            description: "Server list",
+        },
+    },
 
-data() {
-    return {
-        img: require("@/assets/images/servers/disk-icon-1.png"),
+    data() {
+        return {
+            img: require("@/assets/images/servers/disk-icon-1.png"),
+        }
+    },
+
+    methods: {
+        
+        getPropertyValue(properties, propertyName) {
+                var propertyValue = "";
+                const filteredProperties = properties.filter(
+                  (property) => property.propertyName === propertyName
+                );
+                if (filteredProperties != null && filteredProperties.length > 0) {
+                  propertyValue = filteredProperties[0].propertyValue;
+                
+                }
+                return propertyValue;
+            },
+
+    },
+
+    mounted() {
+        console.log(this.servers)
     }
-},
     
 }
 </script>

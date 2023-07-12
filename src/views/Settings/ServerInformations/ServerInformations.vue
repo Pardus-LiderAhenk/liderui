@@ -3,7 +3,9 @@
     <div>
             <div class="p-grid">
                 <div class="p-col-12 p-md-6 p-lg-6">
-                <server-list></server-list>
+                <server-list
+                    :servers="servers"
+                ></server-list>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">
                     <server-logs></server-logs>
@@ -65,6 +67,7 @@
     import ShowServerDetailDialog from './Dialogs/ShowServerDetailDialog.vue';
     import DeleteServerDialog from './Dialogs/DeleteServerDialog.vue';
     import EditServerDialog from './Dialogs/EditServerDialog.vue';
+    import  { serverInformationService } from '../../../services/Settings/ServerInformationService.js';
     
     
     
@@ -81,7 +84,8 @@
                 addServerModalVisible : false,
                 showServerDetailVisible : false,
                 editServerModalVisible : false,
-                editServerDialog: false
+                editServerDialog: false,
+                servers: []
                 
                 
             }
@@ -100,21 +104,59 @@
             
         },
         
-        mounted() {
+        created() {
             this.serverListAll();
     
         },
     
         methods: {
 
-            async getServerList(){
-                console.log("server info burda");
+            async serverListAll(){
 
+
+                const { response, error } = await serverInformationService.list();
+                console.log(response.data);
+                if (error){
+                    this.$toast.add({
+                    severity:'error',
+                    detail: this.$t('serverList'),
+                    summary:this.$t("computer.task.toast_summary"),
+                    life:3600
+                });
+                } 
+                else{
+                if (response.status == 200) {
+                    this.servers = response.data;
+                    console.log(this.servers)
+                } 
+                else if (response.status == 417) {
+                    this.$toast.add({
+                    severity:'error',
+                    detail: this.$t('reports.task_report.error_417_agent_info_list'),
+                    summary:this.$t("computer.task.toast_summary"),
+                    life:3600
+                    });
+                }
+                }
+
+                this.loading = false;
             },
                    
             savedServer(data) {
                 this.resetPaginator();
                 this.getServerList();
+            },
+
+            getPropertyValue(properties, propertyName) {
+                var propertyValue = "";
+                const filteredProperties = properties.filter(
+                  (property) => property.propertyName === propertyName
+                );
+                if (filteredProperties != null && filteredProperties.length > 0) {
+                  propertyValue = filteredProperties[0].propertyValue;
+                
+                }
+                return propertyValue;
             },
 
             
