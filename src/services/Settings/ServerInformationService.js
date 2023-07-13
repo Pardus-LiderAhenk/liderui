@@ -2,7 +2,7 @@ import axios from "axios";
 
 const liderSettingsAddServerUrl = '/api/server/add';
 const liderSettingsConnectionServerUrl = '/api/server/check-connection';
-const liderSettingsDeleteServerUrl = '';
+const liderSettingsDeleteServerUrl = '/api/server/delete';
 const liderSettingsGetServerDataUrl = '/api/server-information/execute-command';
 const liderSettingsServerUpdateUrl = '';
 const liderSettingsServerListUrl = '/api/server/list';

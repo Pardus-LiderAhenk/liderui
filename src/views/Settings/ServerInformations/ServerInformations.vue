@@ -13,13 +13,19 @@
             </div>
             <div class="p-grid">
                 <div class="p-col-12 p-md-6 p-lg-4">
-                    <disk-information></disk-information>
+                    <disk-information
+                        :servers="servers"
+                    ></disk-information>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-4">
-                    <ram-information></ram-information>
+                    <ram-information
+                        :servers="servers"
+                    ></ram-information>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-4">
-                    <cpu-information></cpu-information>
+                    <cpu-information
+                        :servers="servers"
+                    ></cpu-information>
                 </div>
             </div>
     
@@ -115,7 +121,7 @@
 
 
                 const { response, error } = await serverInformationService.list();
-                console.log(response.data);
+                //console.log(response.data);
                 if (error){
                     this.$toast.add({
                     severity:'error',

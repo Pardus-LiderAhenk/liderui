@@ -5,22 +5,26 @@
                 <div class="p-d-flex p-jc-between">
                     <span style="margin: 0 0 2px; font-size:1.2rem">Cpu usage</span> 
 
-                        <Button 
+                        <!-- <Button 
                             class="p-button-sm" 
                             :label="$t('Cpu izle')"
                             icon="pi pi-caret-right" 
                             @click="addServerModalVisible =  true;">
-                        </Button>
+                        </Button> -->
                 </div>
             </template>
             <template #content>
                 <div class="widget-list-type2" data-v-017cc35f="">
+                    <div v-for="server in servers" v-bind:key="server">
+
                     <ul class="list-none p-0" data-v-017cc35f="">
                         <li class="flex align-items-center justify-content-between pt-2 pb-3" data-v-017cc35f="">
                             <div class="flex align-items-center justify-content-start" data-v-017cc35f="">
                                 <img :src="img" alt="verona-layout" width="42" height="42" class="border-round" data-v-017cc35f="">
                                 <div class="ml-2" data-v-017cc35f="">
-                                    <span class="font-bold block" data-v-017cc35f="">ebru0</span>
+                                    <span class="font-bold block" data-v-017cc35f="">
+                                        {{ server.hostname }}
+                                    </span>
                                     <span class="subtext text-sm block" data-v-017cc35f="">cpu bilgisi</span>
                                 </div>
                             </div>
@@ -32,7 +36,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="flex align-items-center justify-content-between pt-2 pb-3" data-v-017cc35f="">
+                        <!-- <li class="flex align-items-center justify-content-between pt-2 pb-3" data-v-017cc35f="">
                             <div class="flex align-items-center justify-content-start" data-v-017cc35f="">
                                 <img :src="img" alt="verona-layout" width="42" height="42" class="border-round" data-v-017cc35f="">
                                 <div class="ml-2" data-v-017cc35f="">
@@ -64,9 +68,10 @@
                                     <div class="right-side half-circle" data-v-017cc35f=""></div>
                                 </div>
                             </div>
-                        </li>
+                        </li> -->
 
                     </ul>
+                    </div>
                 </div>
         </template>
         </Card>
@@ -75,12 +80,35 @@
 
 <script>
 export default {
+    props: {
+        servers: {
+            type: Object,
+            description: "Server disk",
+        },
+    },
 
-data() {
-    return {
-        img: require("@/assets/images/servers/cpu-icon.png"),
-    }
-},
+    data() {
+        return {
+            img: require("@/assets/images/servers/cpu-icon.png"),
+        }
+    },
+
+    methods: {
+        
+        getPropertyValue(properties, propertyName) {
+                var propertyValue = "";
+                const filteredProperties = properties.filter(
+                  (property) => property.propertyName === propertyName
+                );
+                if (filteredProperties != null && filteredProperties.length > 0) {
+                  propertyValue = filteredProperties[0].propertyValue;
+                
+                }
+                return propertyValue;
+                
+            },
+
+    },
     
 }
 </script>

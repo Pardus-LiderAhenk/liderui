@@ -9,12 +9,15 @@
                     {{$t('Sunucu silinecek emin misiniz?') }}
                 </span>
             </div>
-            <template #footer>
+            <template #body="slotProps">
                 <Button :label="$t('İptal')" icon="pi pi-times" 
                     @click="showDialog = false" class="p-button-text p-button-sm"
                 />
-                <Button :label="$t('Evet')" icon="pi pi-check"
-                    @click="deleteServer" class="p-button-sm"
+                <Button class="p-button-sm"
+                    :label="$t('Evet')" 
+                    icon="pi pi-check"
+                    @click="deleteServer = true; selectedServer = slotProps.data"
+                    
                 />
             </template>
         </Dialog>
@@ -39,20 +42,21 @@ export default {
             type: Boolean,
             default: false,
         },
-        selectedServer: {
-            type: Object,
-            description: "selected server",
-        },
+        // selectedServer: {
+        //     type: Object,
+        //     description: "selected server",
+        // },
     },
 
     data(){
         return{
-            label:'',
-            description: '',
+            label:"",
+            description: "",
             active: false,
             validation: {
                 label: false,
             },
+            selectedServer: null,
         }
     },
 
@@ -73,10 +77,10 @@ export default {
     methods: {
        async deleteServer() {
             let params = {
-                "id": this.selectedServer.id,
+                "id": this.selectedServer,
             }
 
-            const{response,error} = await  serverInformationService.serverDelete(params);
+            const{response,error} = await  serverInformationService.deleteServer(params);
             if(error){
                 this.$toast.add({
                     severity:'error', 

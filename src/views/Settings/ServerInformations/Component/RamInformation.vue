@@ -5,62 +5,38 @@
                 <div class="p-d-flex p-jc-between">
                     <span style="margin: 0 0 2px; font-size:1.2rem">Ram usage</span> 
 
-                        <Button 
+                        <!-- <Button 
                             class="p-button-sm" 
                             :label="$t('Ram izle')"
                             icon="pi pi-caret-right" 
                             @click="addServerModalVisible =  true;">
-                        </Button>
+                        </Button> -->
                 </div>
             </template>
             <template #content>
+                
                 <div class="servers" data-v-4d2c924c="">
+                <div v-for="server in servers" v-bind:key="server">
+
                     <ul data-v-4d2c924c="">
                         <li class="down" data-v-4d2c924c="">
                             <div class="stock-name" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">ebru0</h6>
+                                <h6 data-v-4d2c924c="">
+                                    {{ server.hostname }}
+                                </h6>
                             </div>
                             <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">
                             <div class="stock-price" data-v-4d2c924c=""><i class="pi pi-arrow-down" data-v-4d2c924c=""></i>
                                 <h6 data-v-4d2c924c="">54.20</h6>
                             </div>
                             <div class="server-status" data-v-4d2c924c="">
-                                <span data-v-4d2c924c="">0.57%</span>
-                                <span data-v-4d2c924c="">4.01</span>
-                            </div>
-                        </li>
-                        <li data-v-4d2c924c="">
-                            <div class="stock-name" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">ebru1</h6>
-                            </div>
-                            <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">
-                            <div class="stock-price" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">%183.16</h6>
-                            </div>
-                            <div class="server-status" data-v-4d2c924c="">
-                                <span data-v-4d2c924c="">1.46%</span>
-                                <span data-v-4d2c924c="">4.01</span>
-                            </div>
-                        </li>
-                        <li data-v-4d2c924c="">
-                            <div class="stock-name" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">ebru2</h6>
-                            </div>
-                            <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">
-                            <div class="stock-price" data-v-4d2c924c=""><i class="pi pi-arrow-down" data-v-4d2c924c=""></i>
-                                <h6 data-v-4d2c924c="">307.20</h6>
-                            </div>
-                            <div class="server-status" data-v-4d2c924c="">
-                                <span data-v-4d2c924c="">0.59%</span>
+                                <span data-v-4d2c924c="">%183.16</span>
                                 <span data-v-4d2c924c="">4.01</span>
                             </div>
                         </li>
                     </ul>
-                        
-                         
-                        
-                        
-                    </div>
+                </div>
+            </div>
         </template>
         </Card>
     </div>
@@ -68,12 +44,39 @@
 
 <script>
 export default {
+    props: {
+        servers: {
+            type: Object,
+            description: "Server disk",
+        },
+    },
 
-data() {
-    return {
-        img: require("@/assets/images/servers/ram-icon.png"),
+    data() {
+        return {
+            img: require("@/assets/images/servers/ram-icon.png"),
+        }
+    },
+
+    methods: {
+        
+        getPropertyValue(properties, propertyName) {
+                var propertyValue = "";
+                const filteredProperties = properties.filter(
+                  (property) => property.propertyName === propertyName
+                );
+                if (filteredProperties != null && filteredProperties.length > 0) {
+                  propertyValue = filteredProperties[0].propertyValue;
+                
+                }
+                return propertyValue;
+                
+            },
+
+    },
+
+    mounted() {
+        console.log(this.servers);
     }
-},
     
 }
 </script>

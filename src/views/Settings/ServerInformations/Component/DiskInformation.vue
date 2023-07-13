@@ -18,30 +18,28 @@
                                    
                 <div class="widget-image-stats relative">
 
-                    <img :src="img" alt="product" class="w-full my-4" style="width: 600px; display: flex;">
-                    <DataTable :value="servers">
+                    <img :src="img" alt="product" class="responsive" style="width: 700px; display: flex;">
+
+                    <div>
+                    <div v-for="server in servers" v-bind:key="server">
                         <div class="flex align-items-center justify-content-between mb-2">
                             <span class="font-bold">
-                                
-                                    {{ hostname }}
-                               
+
+                                {{ server.hostname }}
                             </span>
-                            <span>%40</span>
+                            <span>
+
+                                {{ getPropertyValue(server.properties, "disk_total") }}
+
+                            </span>
                         </div>
                         <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate orange-bar mb-4" aria-valuemin="0" aria-valuenow="40" aria-valuemax="100">
-                            <div class="p-progressbar-value p-progressbar-value-animate" style="width: 40%; display: flex;"></div>
+                        <div class="p-progressbar-value p-progressbar-value-animate" style="width: 40%; display: flex;"></div>
+                        
                         </div>
-                        <div class="flex align-items-center justify-content-between mb-2">
-                            <span class="font-bold">ebru1</span>
-                            <span>%89</span>
-                        </div>
-                        <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate green-bar mb-4" aria-valuemin="0" aria-valuenow="89" aria-valuemax="100">
-                            <div class="p-progressbar-value p-progressbar-value-animate" style="width: 89%; display: flex;"></div>
-                        </div>
-                    </DataTable>
-                    
+                    </div>
                 </div>
-
+            </div>
             </template>
         </Card>
     </div>
@@ -52,7 +50,7 @@ export default {
     props: {
         servers: {
             type: Object,
-            description: "Server list",
+            description: "Server disk",
         },
     },
 
@@ -73,36 +71,20 @@ export default {
                   propertyValue = filteredProperties[0].propertyValue;
                 
                 }
-                return propertyValue;
+                // return propertyValue;
+                return "%55";
             },
 
     },
 
     mounted() {
-        console.log(this.servers)
+        this.servers
     }
     
 }
 </script>
 
 <style lang="scss" scoped>
-
-.card {
-    background: #ffffff;
-    padding: 1.5rem 1rem;
-    margin-bottom: 16px;
-    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.1), 0px 24px 36px rgba(0, 0, 0, 0.04);
-    border-radius: 14px;
-}
-
-.card .card-header {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-}
 
 .mb-2 {
     margin-bottom: 0.5rem!important;
@@ -142,10 +124,7 @@ export default {
     margin-bottom: 1.5rem!important;
 }
 
-.w-full {
-    width: auto;
-    height: auto;
-}
+
 .my-4 {
     margin-top: 1rem!important;
     margin-bottom: 1rem!important;
@@ -159,10 +138,11 @@ img {
     overflow: clip;
 }
 
-.p-button-sm{
 
-    padding-right: 0%;
-    
-}
+
+.responsive {
+    max-width: 100%;
+    height: auto;
+  }
 
 </style>
