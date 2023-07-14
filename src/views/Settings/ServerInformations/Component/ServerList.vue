@@ -20,22 +20,25 @@
                           <span>{{  index + 1 }}</span>
                         </template>
                       </Column>  
-                    <!-- <Column field="hostname" header="hostname">
-                        {{ hostname }}
-                    </Column> -->
+                    <Column field="machineName" header="Makine İsmi">
+                        {{ machineName }}
+                    </Column>
                     <Column field="ip" header="Ip Adres">
                         {{ ip }}
                     </Column>
 
+                    <!--
                     <Column field="user" header="Kullanıcı">
                         {{ user }}
                     </Column>
 
-                    <Column field="mac" header="Mac Adres">
+                     <Column field="mac" header="Mac Adres">
                         <template #body="{ data }">
                             {{ getPropertyValue(data.properties, "mac_addr") }}
                         </template>
-                    </Column>
+                    </Column> 
+                    -->
+                    
                     <Column field="os" header="İşletim sistemi">
                         <template #body="{ data }">
                             {{ getPropertyValue(data.properties, "os_name") }}

@@ -4,10 +4,10 @@
             
             <div class="p-fluid">
                 
-                <!-- <div class="p-field">
-                    <label for="hostname">{{$t('Hostname')}}</label>
-                    <InputText id="hostname" type="text" v-model="serverForm.hostname"/>
-                </div> -->
+                <div class="p-field">
+                    <label for="machineName">{{$t('Makine ismi')}}</label>
+                    <InputText id="machineName" type="text" v-model="serverForm.machineName"/>
+                </div>
                 <div class="p-field">
                     <label for="ip">{{$t('Ip Adres')}}</label>
                     <InputText id="ip" type="text" v-model="serverForm.ip"/>
@@ -57,30 +57,12 @@ import { serverInformationService } from '../../../../services/Settings/ServerIn
 export default {
 
     props: ['modalVisibleValue'],
-    emits:['updateConsoleUsers'],
     data(){
         return {
             selectedUserNode:null,
-            searchFields: [
-                {
-                    key: this.$t('tree.cn'),
-                    value: "cn"
-                },
-                {
-                    key: this.$t('tree.uid'),
-                    value: "uid"
-                },
-                {
-                    key: this.$t('tree.folder'),
-                    value: "ou"
-                },
-                {
-                    key: this.$t('tree.last_session'),
-                    value: "o"
-                }
-            ],
+           
             serverForm: {
-            //    hostname:'',
+                machineName:'',
                 ip:'',
                 user:'',
                 password:'',
@@ -97,7 +79,7 @@ export default {
             set(value) {
                 this.$emit('modalVisibleValue', false);
                 if(!value){
-                //    this.serverForm.hostname = "";
+                    this.serverForm.machineName = "";
                     this.serverForm.ip = "";
                     this.serverForm.user = "";
                     this.serverForm.password = "";
@@ -113,7 +95,7 @@ export default {
         async addNewServer(){
 
             const params = new FormData();
-            //params.append("hostname", this.serverForm.hostname);
+            params.append("machineName", this.serverForm.machineName);
             params.append("ip", this.serverForm.ip);
             params.append("user", this.serverForm.user);
             params.append("password", this.serverForm.password);
@@ -157,7 +139,7 @@ export default {
 
         
             const params = new FormData();
-            params.append('hostname', this.serverForm.hostname);
+            params.append('hostname', this.serverForm.ip);
             params.append('username', this.serverForm.user);
             params.append('password', this.serverForm.password);
 
@@ -200,7 +182,7 @@ export default {
         async getServerdata(){
 
             const params = new FormData();
-            params.append('hostname', this.serverForm.hostname);
+            params.append('hostname', this.serverForm.ip);
             params.append('username', this.serverForm.user);
             params.append('password', this.serverForm.password);
 
