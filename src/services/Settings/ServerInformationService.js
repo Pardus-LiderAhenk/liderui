@@ -32,9 +32,9 @@ class ServerInformationService{
         }
     }
 
-    async deleteServer(params){
+    async deleteServer(id){
         try {
-            const response = await axios.post(liderSettingsDeleteServerUrl, params);
+            const response = await axios.delete(liderSettingsDeleteServerUrl  + "/id/" + id);
             return { response };
         } catch (error) {
             return { error: error }

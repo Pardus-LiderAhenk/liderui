@@ -22,7 +22,7 @@
                         <li class="down" data-v-4d2c924c="">
                             <div class="stock-name" data-v-4d2c924c="">
                                 <h6 data-v-4d2c924c="">
-                                    {{ server.hostname }}
+                                    {{ server.ip }}
                                 </h6>
                             </div>
                             <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">

@@ -25,7 +25,8 @@
                         <div class="flex align-items-center justify-content-between mb-2">
                             <span class="font-bold">
 
-                                {{ server.hostname }}
+                                {{ server.ip }}
+
                             </span>
                             <span>
 

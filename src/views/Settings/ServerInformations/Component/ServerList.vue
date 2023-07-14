@@ -20,12 +20,17 @@
                           <span>{{  index + 1 }}</span>
                         </template>
                       </Column>  
-                    <Column field="hostname" header="hostname">
+                    <!-- <Column field="hostname" header="hostname">
                         {{ hostname }}
-                    </Column>
-                    <Column field="ip" header="Ip">
+                    </Column> -->
+                    <Column field="ip" header="Ip Adres">
                         {{ ip }}
                     </Column>
+
+                    <Column field="user" header="Kullanıcı">
+                        {{ user }}
+                    </Column>
+
                     <Column field="mac" header="Mac Adres">
                         <template #body="{ data }">
                             {{ getPropertyValue(data.properties, "mac_addr") }}
@@ -42,7 +47,7 @@
                         </template>
                     </Column>
                     <Column>
-                        <template #body>
+                        <template #body="slotProps">
                             <div class="p-d-flex p-jc-end">
 
                                 <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
@@ -55,7 +60,7 @@
                                 <Button class="p-mr-2 p-button-danger p-button-sm p-button-rounded" 
                                     icon="pi pi-trash" 
                                     :title="$t('Sil')"
-                                    @click="deleteServerDialog =  true;">
+                                    @click="deleteServerDialog =  true; selectedServer = slotProps.data">
                                 </Button>
 
                                 <Button 
@@ -84,12 +89,12 @@
             @modalVisibleValue="showServerDetailVisible = $event;"
         />
 
-        <delete-server-dialog 
+        <!-- <delete-server-dialog 
             :deleteServerDialog="deleteServerDialog"
             :selectedServer="selectedServer"
             @delete-server="deleteServer"
             @close-server-dialog="deleteServerDialog = false"
-        />
+        /> -->
         
         <edit-server-dialog v-if="editServerModalVisible"
             :updateServerDialog="editServerModalVisible"
@@ -98,15 +103,51 @@
             @close-server-dialog="editServerModalVisible = false"
         />
 
+        <Dialog :header="$t('Sucunu sil')" 
+            v-model:visible="deleteServerDialog" 
+            :style="{width: '20vw'}" 
+            :modal="true"
+            @hide="deleteServerDialog = false"
+        >
+            <div class="p-fluid">
+                <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+                <span>
+                    {{$t('Sunucu silinecek emin misiniz?') }}
+                </span>
+            </div>
+            <template #footer >
+                <Button 
+                :label="$t('İptal')" 
+                icon="pi pi-times" 
+                @click="deleteServerDialog = false" 
+                class="p-button-text p-button-sm"
+                />
+                <Button class="p-button-sm"
+                    :label="$t('Evet')" 
+                    icon="pi pi-check"
+                    @click="deleteServer"
+                    
+                />
+            </template>
+        </Dialog>
+
     </div>
         
 </template>
 
 <script>
+/**
+ * @see {@link http://www.liderahenk.org/}
+ * emits these events
+ * @event closeServerDialog
+ * @event deleteServer
+*/
+
 import AddServerDialog from '../Dialogs/AddServerDialog.vue';
 import ShowServerDetailDialog from '../Dialogs/ShowServerDetailDialog.vue';
-import DeleteServerDialog from '../Dialogs/DeleteServerDialog.vue';
 import EditServerDialog from '../Dialogs/EditServerDialog.vue';
+import { serverInformationService } from '../../../../services/Settings/ServerInformationService';
+
 
 
 export default{
@@ -128,6 +169,7 @@ export default{
             deleteServerDialog : false,
             editServerDialog : false,
             editServerModalVisible : false,
+            selectedServer : null,
 
         }
     },
@@ -135,7 +177,6 @@ export default{
     components: {
         AddServerDialog,
         ShowServerDetailDialog,
-        DeleteServerDialog,
         EditServerDialog,
         
     },
@@ -144,16 +185,53 @@ export default{
     methods: {
         
         getPropertyValue(properties, propertyName) {
-                var propertyValue = "";
-                const filteredProperties = properties.filter(
-                  (property) => property.propertyName === propertyName
-                );
-                if (filteredProperties != null && filteredProperties.length > 0) {
-                  propertyValue = filteredProperties[0].propertyValue;
-                
+            var propertyValue = "";
+            const filteredProperties = properties.filter(
+              (property) => property.propertyName === propertyName
+            );
+            if (filteredProperties != null && filteredProperties.length > 0) {
+              propertyValue = filteredProperties[0].propertyValue;
+            
+            }
+            return propertyValue;
+        },
+
+        async deleteServer() {
+            this.deleteServerDialog = false;
+
+            const{response,error} = await  serverInformationService.deleteServer(this.selectedServer.id);
+            console.log(response);
+            console.log(error);
+            
+            if(response.status == 200){
+                if (response.data) {
+                    
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('Sunucu başarıyla silinbdi(list)'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
-                return propertyValue;
-            },
+                else if(response.status == 417){                   
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('Sunucu silinirken hata oluştu 417'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            }
+            
+            else{
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('Sunucu silinirken hata oluştu(list)')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+        },
 
     },
 

@@ -84,7 +84,7 @@ export default {
             if(error){
                 this.$toast.add({
                     severity:'error', 
-                    detail: this.$t('policy_management.delete_policy_error')+ " \n"+error, 
+                    detail: this.$t('Sunucu silinirken hata oluştu')+ " \n"+error, 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
@@ -95,23 +95,24 @@ export default {
                         this.$emit('closeServerDialog');
                         this.$toast.add({
                             severity:'success', 
-                            detail: this.$t('policy_management.delete_policy_success'), 
+                            detail: this.$t('Sunucu başarıyla silindi'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
-                    } else {
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('policy_management.delete_policy_error'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
+                    // } else {
+                    //     this.$toast.add({
+                    //         severity:'error', 
+                    //         detail: this.$t('policy_management.delete_policy_error'), 
+                    //         summary:this.$t("computer.task.toast_summary"), 
+                    //         life: 3000
+                    //     });
+                    // 
                     }
                 }
                 else if(response.status == 417){                   
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('policy_management.error_417_delete_policy'), 
+                        detail: this.$t('Sunucu silinirken hata oluştu 417'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });

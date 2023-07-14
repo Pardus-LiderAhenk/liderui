@@ -4,12 +4,12 @@
             
             <div class="p-fluid">
                 
-                <div class="p-field">
+                <!-- <div class="p-field">
                     <label for="hostname">{{$t('Hostname')}}</label>
                     <InputText id="hostname" type="text" v-model="serverForm.hostname"/>
-                </div>
+                </div> -->
                 <div class="p-field">
-                    <label for="ip">{{$t('Ip')}}</label>
+                    <label for="ip">{{$t('Ip Adres')}}</label>
                     <InputText id="ip" type="text" v-model="serverForm.ip"/>
                 </div>
                 <div class="p-field">
@@ -25,6 +25,11 @@
                         severity="success" 
                         @click="checkConnection"/>
                     </div>
+                </div>
+
+                <div class="p-field">
+                    <label for="description">{{$t('Açıklama')}}</label>
+                    <InputText id="description" type="text" v-model="serverForm.description"/>
                 </div>
             </div>
 
@@ -75,10 +80,11 @@ export default {
                 }
             ],
             serverForm: {
-                hostname:'',
+            //    hostname:'',
                 ip:'',
                 user:'',
                 password:'',
+                description:'',
             },
 
         }
@@ -91,10 +97,11 @@ export default {
             set(value) {
                 this.$emit('modalVisibleValue', false);
                 if(!value){
-                    this.serverForm.hostname = "";
+                //    this.serverForm.hostname = "";
                     this.serverForm.ip = "";
                     this.serverForm.user = "";
                     this.serverForm.password = "";
+                    this.serverForm.description = "";
                 }
 
             }
@@ -106,14 +113,16 @@ export default {
         async addNewServer(){
 
             const params = new FormData();
-            params.append("hostname", this.serverForm.hostname);
+            //params.append("hostname", this.serverForm.hostname);
             params.append("ip", this.serverForm.ip);
             params.append("user", this.serverForm.user);
             params.append("password", this.serverForm.password);
+            params.append("description", this.serverForm.description);
 
 
 
             const { response,error } = await serverInformationService.addServer(params);
+            console.log(response);
             if(error){
                     this.$toast.add({
                         severity:'error', 
@@ -125,7 +134,6 @@ export default {
                 else{
                     if(response.status == 200){
                         if (response.data != null) {
-                            this.reset();
                             this.$toast.add({
                                 severity:'success', 
                                 detail: this.$t('Başarılı'), 
@@ -165,7 +173,7 @@ export default {
             }
             else{
                 if(response.status == 200){
-                    console.log(testt)
+
                     if (response.data != null) {
                         this.$toast.add({
                             severity:'success', 
