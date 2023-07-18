@@ -6,21 +6,21 @@
                 
                 <div class="p-field">
                     <label for="machineName">{{$t('Makine ismi')}}</label>
-                    <InputText id="machineName" type="text" v-model="serverForm.machineName"/>
+                    <InputText id="machineName" type="text" v-model="serverForm.machineName" placeholder="Makine ismi"/>
                 </div>
                 <div class="p-field">
                     <label for="ip">{{$t('Ip Adres')}}</label>
-                    <InputText id="ip" type="text" v-model="serverForm.ip"/>
+                    <InputText id="ip" type="text" v-model="serverForm.ip" placeholder="10.10.10.10"/>
                 </div>
                 <div class="p-field">
                     <label for="user">{{$t('Kullanıcı')}}</label>
-                    <InputText id="user" type="text" v-model="serverForm.user"/>
+                    <InputText id="user" type="text" v-model="serverForm.user" placeholder="Kullanıcı adı"/>
                 </div>
                 
                 <div class="p-field">
                     <label for="passwd">{{$t('Parola')}}</label>
                     <div class="p-inputgroup flex-1">
-                        <InputText id="passwd" type="text" v-model="serverForm.password"/>
+                        <InputText id="passwd" type="text" v-model="serverForm.password" placeholder="******"/>
                         <Button icon="pi pi-link" 
                         severity="success" 
                         @click="checkConnection"/>
@@ -29,7 +29,7 @@
 
                 <div class="p-field">
                     <label for="description">{{$t('Açıklama')}}</label>
-                    <InputText id="description" type="text" v-model="serverForm.description"/>
+                    <InputText id="description" type="text" v-model="serverForm.description" placeholder="Açıklama"/>
                 </div>
             </div>
 

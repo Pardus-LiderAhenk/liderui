@@ -114,6 +114,10 @@
         
         created() {
             this.serverListAll();
+            setInterval(() => {
+                this.serverListAll();
+                console.log("yüklendi");
+            }, 1000);
     
         },
     

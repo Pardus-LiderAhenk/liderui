@@ -38,7 +38,7 @@
                         </template>
                     </Column> 
                     -->
-                    
+
                     <Column field="os" header="İşletim sistemi">
                         <template #body="{ data }">
                             {{ getPropertyValue(data.properties, "os_name") }}
@@ -56,8 +56,7 @@
                                 <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
                                     icon="pi pi-pencil"
                                     :title="$t('Düzenle')" 
-                                    @click="editServerModalVisible = true;"
-                                    >
+                                    @click="editServerModalVisible = true; selectedServer = slotProps.data">
                                 </Button>
 
                                 <Button class="p-mr-2 p-button-danger p-button-sm p-button-rounded" 
@@ -203,15 +202,13 @@ export default{
             this.deleteServerDialog = false;
 
             const{response,error} = await  serverInformationService.deleteServer(this.selectedServer.id);
-            console.log(response);
-            console.log(error);
             
             if(response.status == 200){
                 if (response.data) {
                     
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('Sunucu başarıyla silinbdi(list)'), 
+                        detail: this.$t('Sunucu başarıyla silindi(list)'), 
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
