@@ -30,7 +30,7 @@
                             </span>
                             <span>
 
-                                {{ getPropertyValue(server.properties, "disk_total") }}
+                                {{ "%" + getPropertyValue(server.properties, "disk_total") }}
 
                             </span>
                         </div>
@@ -72,8 +72,8 @@ export default {
                   propertyValue = filteredProperties[0].propertyValue;
                 
                 }
-                // return propertyValue;
-                return "%55";
+                    return propertyValue;
+                //return "%55";
             },
 
     },

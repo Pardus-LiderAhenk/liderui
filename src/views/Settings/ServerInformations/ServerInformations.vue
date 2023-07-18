@@ -8,7 +8,9 @@
                 ></server-list>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">
-                    <server-logs></server-logs>
+                    <server-logs
+                        :servers="servers"
+                    ></server-logs>
                 </div>
             </div>
             <div class="p-grid">

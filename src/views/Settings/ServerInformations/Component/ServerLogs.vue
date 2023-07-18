@@ -4,58 +4,37 @@
             <template #title>
                 <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('Kullanıcı Logları')}}</span>
             </template>
-            <template #subtitle>
-                <span style="margin: 0 0 2px; font-size:1rem">{{$t('sub title')}}</span>
-            </template>
             <template #content>
-                <Timeline :value="dataLogList">
+                <Timeline :value="servers" class="customized-timeline">
                     <template #marker>
                         <span class="custom-marker shadow-2">
                             <i class="pi pi-star-fill"></i>
                         </span>
                     </template>
-                    <template #content>
-                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{"Kullanıcı logları"}}</h5> 
-                        <small style="color: #08255880; ">{{"test"}}</small>
-                        <p>{{"11111111111"}}</p>                      
-                    </template>
-                </Timeline>
-                <Timeline :value="dataLogList">
-                    <template #marker>
-                        <span class="custom-marker shadow-2">
-                            <i class="pi pi-star-fill"></i>
-                        </span>
-                    </template>
-                    <template #content>
-                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{"Kullanıcı logları"}}</h5> 
-                        <small style="color: #08255880; ">{{"test"}}</small>
-                        <p>{{"11111111111"}}</p>                      
-                    </template>
-                </Timeline>
-                <Timeline :value="dataLogList">
-                    <template #marker>
-                        <span class="custom-marker shadow-2">
-                            <i class="pi pi-send"></i>
-                        </span>
-                    </template>
-                    <template #content>
-                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{"Kullanıcı logları"}}</h5> 
-                        <small style="color: #08255880; ">{{"test"}}</small>
-                        <p>{{"11111111111"}}</p>                      
+                    <template #content="slotProps">
+                        <h5 style="margin: 0 0 2px; font-size:1.2rem">{{slotProps.item.machineName}}</h5> 
+                        <small style="color: #08255880; ">
+                            {{  "Gün: " + getPropertyValue(slotProps.item.properties,"uptime_days")
+                                +" Saat: " + getPropertyValue(slotProps.item.properties,"uptime_hours")
+                                +" Dakika: " + getPropertyValue(slotProps.item.properties,"uptime_minutes") }}
+                        </small>
+                        <p>{{ slotProps.item.description}}</p>                      
                     </template>
                 </Timeline>
             </template>
-        </Card>
+        </Card> 
+          
     </div>
         
 </template>
 
 <script>
 export default{
+
     props: {
-        serverActivityData: {
-            type: String,
-            default: null,
+        servers: {
+            type: Object,
+            description: "Server disk",
         },
     },
 
@@ -71,20 +50,27 @@ export default{
         }
     },
 
-    computed: {
-        serverLogs: {
-            get () {
-                let data = null;
-                if (this.serverActivityData) {
-                    data = this.serverActivityData.content;
+    methods: {
+        
+        getPropertyValue(properties, propertyName) {
+                var propertyValue = "";
+                const filteredProperties = properties.filter(
+                  (property) => property.propertyName === propertyName
+                );
+                if (filteredProperties != null && filteredProperties.length > 0) {
+                  propertyValue = filteredProperties[0].propertyValue;
+                
                 }
-                return data;
-            }
-        },
+                    return propertyValue;
+                //return "%55";
+            },
+
+    },
+
+    mounted() {
+        this.servers
     }
 
-
-    
 }
 </script>
 
