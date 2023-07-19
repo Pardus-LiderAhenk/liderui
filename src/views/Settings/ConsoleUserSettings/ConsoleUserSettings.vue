@@ -1,7 +1,7 @@
 <template>
     <div>
         <Card>
-            <template #title>Lider Arayüz Erişim Ayarları</template>
+            <template #title>{{ $t('settings.console_user_settings.lider_user_management') }}</template>
             <!-- <template #subtitle>Lider arayüz menü erişim ve dizin erişim ayarları</template> -->
 
             <template #content>
@@ -18,7 +18,7 @@
             </template>
         </Card>
     </div>
-
+    
 
     <agents-dialog 
         :modalVisibleValue="agentsModalVisible" 
@@ -103,13 +103,13 @@ export default {
             displayName: 1,
             settingsMenu: [
                 {
-    				label: "Menü Erişim Ayarları",
+    				label: this.$t('settings.console_user_settings.menu_access_settings'),
     				command: () => {
     					this.displayName = 1;
     				}
     			},
                 {
-    				label: "Dizin Erişim Ayarları",
+    				label: this.$t('settings.console_user_settings.directory_access_settings'),
     				command: () => {
     					this.displayName = 2;
     				}

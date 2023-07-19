@@ -2,7 +2,7 @@
     <div>
         <Toolbar class="p-field">
             <template #start>
-                <h5>Directory Access Settings</h5>
+                <h5>{{$t('settings.console_user_settings.directory_access_settings')}}</h5>
             </template>
         </Toolbar>
         <div class="p-grid">
@@ -51,7 +51,7 @@
                 </Panel>
             </div>
             <div class="p-col-12 p-md-6 p-lg-5">
-                <Panel header="Access Authorized DN">
+                <Panel :header="$t('settings.console_user_settings.access_granted_dn')">
                     <template #icons>
                         <div class="p-d-flex p-jc-between">
                             <Button type="button" class="p-button-sm"
@@ -99,7 +99,7 @@
                                 <div class="p-d-flex p-jc-end">
                                     <Button icon="pi pi-trash" 
                                         class="p-button-rounded p-button-danger p-button-sm"  
-                                        v-tooltip.bottom="'Delete'"
+                                        v-tooltip.bottom="$t('settings.console_user_settings.delete')"
                                         @click="showAccessPermissionUserDeleteDialog = true;
                                         selectedOlcAccess = slotProps.data"
                                     />

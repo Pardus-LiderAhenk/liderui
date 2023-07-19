@@ -14,7 +14,7 @@
                 <Button :label="$t('settings.console_user_settings.close')" 
                     icon="pi pi-times" @click="modalVisible = false" class="p-button-text"
                 />
-                <Button label="Arayüz Erişim Yetkisi Ver" 
+                <Button :label="$t('settings.console_user_settings.grant_user_lider_user_authorization')" 
                     icon="pi pi-check" @click="addConsoleUserConfirmDialog = true" autofocus 
                     :disabled="userPrivilege"
                 />
@@ -24,8 +24,8 @@
         <LiderConfirmDialog 
             :showDialog="addConsoleUserConfirmDialog"
             @showDialog="addConsoleUserConfirmDialog = $event;"
-            header="Arayüz Erişim Yetkisi"
-            message="Kullanıcıya arayüz erişim yetkisi verilecektir, emin misiniz?"
+            :header="$t('settings.console_user_settings.grant_user_lider_user_authorization')"
+            :message="$t('settings.console_user_settings.grant_access_interface_question')"
             @accepted="addAsConsoleUser"
         />
     </div>

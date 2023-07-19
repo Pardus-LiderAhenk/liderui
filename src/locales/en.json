@@ -685,7 +685,7 @@
     "settings": {
         "console_user_settings":{
             "lider_users_and_access_settings":"LIDER USERS AND ACCESS SETTINGS",
-            "lider_user_management":"Lider User Management",
+            "lider_user_management":"Lider Interface User Management",
             "existing_console_users":"Existing Console Users",
             "add_console_user":"Add Console User",
             "delete_users_console_authority":"Delete User's Console Authority",
@@ -696,7 +696,7 @@
             "role_name":"Role Name",
             "please_select_the_user_whose_privileges_you_want_to_edit":"Please select the user whose privileges you want to edit.",
             "lider_user_directory_access_settings":"Lider User Directory Access Settings",
-            "group_member":"Group Member",
+            "group_member":"Memeber of Group",
             "member_dn":"Member DN",
             "add_new_authority_group":"Add New Authority Group",
             "access_granted_dn":"Access Granted DN",
@@ -735,7 +735,7 @@
             "phone":"Phone",
             "address":"Address",
             "grant_access_to_existing_users":"Grant Access to Existing Users",
-            "grant_user_lider_user_authorization":"Grant User Lider User Authorization",
+            "grant_user_lider_user_authorization":"Grant Interface Access",
             "grant_directory_access":"Grant Directory Access",
             "group_members":"Group Members",
             "add_to_group":"Add to Group",
@@ -772,7 +772,17 @@
             "cancel":"Cancel",
             "delete":"Delete",
             "console_user_change_password":"Notification",
-            "console_user_change_password_question":"Console user password will be changed. Are you sure?"
+            "console_user_change_password_question":"Console user password will be changed. Are you sure?",
+            "select_node_warn": "Please select a node",
+            "menu_access_settings": "Menu Access Settings",
+            "directory_access_settings": "Directory Access Settings",
+            "edit_menu_settings": "Edit Menu Settings",
+            "edit_directory_settings": "Edit Directory Settings",
+            "search":"Search",
+            "grant_access_interface_question": "User will be granted interface access authorization, are you sure?",
+            "authority": "Authority",
+            "please_select_group":"Please select group"
+
         },
         "server_settings":{
             "directory_server_setting":"Directory Server Settings",

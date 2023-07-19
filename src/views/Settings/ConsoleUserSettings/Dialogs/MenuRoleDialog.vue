@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Dialog header="Kullanıcı Rolleri"
+        <Dialog :header="$t('settings.console_user_settings.role_users')"
             v-model:visible="showDialog" :modal="true" 
             :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
             :style="{ width: '50vw' }"

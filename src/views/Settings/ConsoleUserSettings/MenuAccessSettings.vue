@@ -2,7 +2,7 @@
     <div>
         <Toolbar class="p-field">
             <template #start>
-                <h5>Menu Access Settings</h5>
+                <h5>{{ $t('settings.console_user_settings.menu_access_settings') }}</h5>
             </template>
             <template #end>
                 <Button :label="$t('settings.console_user_settings.add_console_user')"  
@@ -26,7 +26,7 @@
                         <i class="pi pi-search"/>
                         <InputText v-model="filters['global'].value" 
                         class="p-inputtext-sm" 
-                        :placeholder="$t('settings.script_definition.search')" 
+                        :placeholder="$t('settings.console_user_settings.search')" 
                         />
                     </span>
                 </div>
@@ -48,18 +48,23 @@
                     <div class="p-d-flex p-jc-end">
                         <Button class="p-button-sm p-button-rounded p-button-secondary p-mr-2" 
                             icon="pi pi-sitemap"
-                            v-tooltip.bottom="'Edit Directory Access Settings'"
+                            v-tooltip.bottom="$t('settings.console_user_settings.edit_directory_settings')"
                             @click.prevent="selectedUser = slotProps.data; showUserDirectoryAccessSettingsDialog = true"
                         />
                         <Button class="p-button-sm p-button-rounded p-mr-2" 
                             icon="pi pi-cog"
-                            v-tooltip.bottom="'Edit Menu Roles'"
+                            v-tooltip.bottom="$t('settings.console_user_settings.edit_menu_settings')"
                             @click.prevent="selectedUser = slotProps.data; menuRoleDialog = true"
                         />
                         <Button class="p-button-sm p-button-rounded p-button-warning p-mr-2" 
                             icon="pi pi-unlock"
                             v-tooltip.bottom="$t('settings.console_user_settings.change_password')"
                             @click.prevent="selectedUser = slotProps.data; changePasswordDialog = true"
+                        />
+                        <Button class="p-button-sm p-button-rounded p-mr-2" 
+                            icon="pi pi-users"
+                            v-tooltip.bottom="$t('settings.console_user_settings.users_groups')"
+                            @click.prevent="selectedUser = slotProps.data; userGroupDialog = true"
                         />
 
                         <Button class="p-button-danger p-button-sm p-button-rounded" 
@@ -125,6 +130,13 @@
             @addedUserToGroup="addedUserToGroup"
         >
         </user-directory-access-settings-dialog>
+
+        <selected-user-groups v-if="userGroupDialog"
+            :userGroupDialog="userGroupDialog"
+            :selectedUser="selectedUser"
+            @closeUserGroupDialog="userGroupDialog = false"
+        >
+        </selected-user-groups>
     </div>
 </template>
 
@@ -136,6 +148,7 @@ import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import AddConsoleUserDialog from './Dialogs/AddConsoleUserDialog.vue';
 import UserDirectoryAccessSettingsDialog from "./Dialogs/UserDirectoryAccessSettingsDialog.vue";
 import {FilterMatchMode} from 'primevue/api';
+import SelectedUserGroups from "./Dialogs/SelectedUserGroups.vue";
 
 
 export default {
@@ -144,7 +157,8 @@ export default {
         MenuRoleDialog,
         PasswordComponent,
         AddConsoleUserDialog,
-        UserDirectoryAccessSettingsDialog
+        UserDirectoryAccessSettingsDialog,
+        SelectedUserGroups
     },
 
     data() {
@@ -161,6 +175,7 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
+            userGroupDialog: false
         }
     },
 
@@ -227,12 +242,6 @@ export default {
             else{
                 if(response.status == 200){
                     this.roles = response.data;
-                    // this.$toast.add({
-                    //     severity:'success', 
-                    //     detail: this.$t('settings.console_user_settings.user_roles_get_successfully'),
-                    //     summary: this.$t('settings.console_user_settings.successful'),
-                    //     life: 3000
-                    // });
                 }
                 else if(response.status == 417){
                     this.$toast.add({

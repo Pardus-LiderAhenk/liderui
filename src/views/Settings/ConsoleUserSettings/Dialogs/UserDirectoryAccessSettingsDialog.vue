@@ -14,7 +14,7 @@
                     />
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-4">
-                    <Panel header="Member Of Groups">
+                    <Panel :header="$t('settings.console_user_settings.group_members')">
                         <DataTable :value="groupMembers" class="p-datatable-sm"
                             :title="$t('settings.console_user_settings.group_members')"
                             v-model:filters="filters"
@@ -25,7 +25,7 @@
                                         <i class="pi pi-search"/>
                                         <InputText v-model="filters['global'].value" 
                                         class="p-inputtext-sm" 
-                                        :placeholder="$t('settings.script_definition.search')" 
+                                        :placeholder="$t('settings.console_user_settings.search')" 
                                         />
                                     </span>
                                 </div>
@@ -40,7 +40,7 @@
                     </Panel>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-5">
-                    <Panel header="Access Authorized DN">
+                    <Panel :header="$t('settings.console_user_settings.access_granted_dn')">
                     <DataTable :value="groupPrivilages" responsiveLayout="scroll"
                         class="p-datatable-sm" v-model:filters="filters2"
                         title="Erişim Yetkisi Verilen DN"
@@ -51,7 +51,7 @@
                                     <i class="pi pi-search"/>
                                     <InputText v-model="filters2['global'].value" 
                                     class="p-inputtext-sm" 
-                                    :placeholder="$t('settings.script_definition.search')" 
+                                    :placeholder="$t('settings.console_user_settings.search')" 
                                     />
                                 </span>
                             </div>
@@ -62,7 +62,7 @@
                             </template>
                         </Column>
                         <Column field="accessDN" header="DN"></Column>
-                        <Column header="Yetki">
+                        <Column :header="$t('settings.console_user_settings.authority')">
                             <template #body="slotProps">
                                 {{
                                     slotProps.data != null && slotProps.data.accessType == "write" ? "Okuma ve Yazma" : "Okuma"
@@ -196,7 +196,7 @@ export default {
             if (this.selectedGroupNode.type != "GROUP") {
                 this.$toast.add({
                     severity:'warn', 
-                    detail:  "Lütfen grup seçiniz", 
+                    detail:  this.$t('settings.console_user_settings.please_select_group'),
                     summary: this.$t('settings.console_user_settings.error'), 
                     life: 3000
                 });
