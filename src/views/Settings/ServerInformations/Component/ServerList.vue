@@ -4,15 +4,24 @@
             <Card header="server-list">
                 <template #content>
                 <DataTable :value="servers"  tableStyle="min-width: 62rem" class="p-datatable-sm" responsiveLayout="scroll">
-                    <template #header>
-                        <div class="p-d-flex p-jc-between">
+                    <template #header>                                               
+                            
+                        <div class="p-d-flex p-jc-between p-ai-center p-mb-3">
+
+                                <Button 
+                                    class="p-button-raised p-button-sm"
+                                    icon="pi pi-refresh" 
+                                    @click="updateAllServer"
+                                />
+
                                 <h5>Sunucu listesi</h5>
-                            <Button 
-                                class="p-button-sm" 
-                                icon="pi pi-plus" 
-                                :label="$t('sunucu ekle')"
-                                @click="addServerModalVisible =  true;">
-                            </Button>
+                                
+                                <Button 
+                                    class="p-button-sm" 
+                                    icon="pi pi-plus" 
+                                    :label="$t('sunucu ekle')"
+                                    @click="addServerModalVisible =  true;">
+                                </Button>
                         </div>
                     </template>
                     <Column header="#">
@@ -232,6 +241,14 @@ export default{
                 });
             }
         },
+
+        async updateAllServer(){
+            console.log("here to")
+
+            const{response, error} = await serverInformationService.updateAll();
+
+
+        }
 
     },
 

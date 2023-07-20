@@ -113,11 +113,8 @@
         },
         
         created() {
+
             this.serverListAll();
-            setInterval(() => {
-                this.serverListAll();
-                console.log("yüklendi");
-            }, 1000);
     
         },
     
@@ -127,7 +124,6 @@
 
 
                 const { response, error } = await serverInformationService.list();
-                //console.log(response.data);
                 if (error){
                     this.$toast.add({
                     severity:'error',
