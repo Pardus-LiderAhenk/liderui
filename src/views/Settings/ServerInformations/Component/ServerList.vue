@@ -78,7 +78,7 @@
                                     class="p-mr-2 p-button-sm p-button-raised p-button-rounded"
                                     icon="pi pi-list"
                                     :title="$t('Detay')" 
-                                    @click="showServerDetailVisible =  true;">
+                                    @click="ShowServerDetailDialog= true; selectedServer = slotProps.data">
                                 </Button>
                             </div>
                         </template>
@@ -95,7 +95,7 @@
         />
 
         <show-server-detail-dialog v-if="showServerDetailVisible"
-            @updateConsoleUsers="getConsoleUsers"
+            @updateConsoleUsers="getServerInfo"
             :modalVisibleValue="showServerDetailVisible" 
             @modalVisibleValue="showServerDetailVisible = $event;"
         />
@@ -242,18 +242,39 @@ export default{
             }
         },
 
-        async updateAllServer(){
-            console.log("here to")
+        
+        async getServerInfo() {
 
-            const{response, error} = await serverInformationService.updateAll();
-
-
+        let params = {
+            "id": this.selectedServerInfo,
         }
+        const { response,error } = await serverInformationService.getDetailServer(params);
+        if(response.status == 200){
+          if (response.data != "" && response.data != null) {
+              console.log(response)
+              this.selectedServerInfo = response.data;
+        
+        } else {
+            this.selectedServerInfo = null;
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t("computer.agent_info.error_message"), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+              });
+            }
+          }
+        else if(response.status == 417){
+          return "error";
+        }
+    }
 
     },
 
     mounted() {
         console.log(this.servers)
+        //this.getServerInfo()
+
     }
 }
 

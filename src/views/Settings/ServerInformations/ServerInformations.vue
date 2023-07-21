@@ -38,7 +38,6 @@
     />
 
     <show-server-detail-dialog v-if="showServerDetailVisible"
-        @updateConsoleUsers="getConsoleUsers"
         :modalVisibleValue="showServerDetailVisible" 
         @modalVisibleValue="showServerDetailVisible = $event;"
     />

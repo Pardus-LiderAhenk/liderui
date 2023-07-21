@@ -42,10 +42,6 @@ export default {
             type: Boolean,
             default: false,
         },
-        // selectedServer: {
-        //     type: Object,
-        //     description: "selected server",
-        // },
     },
 
     data(){
