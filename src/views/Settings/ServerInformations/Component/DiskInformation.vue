@@ -30,7 +30,8 @@
                             </span>
                             <span>
 
-                                {{ "%" + getPropertyValue(server.properties, "disk_total") }}
+                                <!-- {{ "%" + (getPropertyValue(server.properties, "disk_total")%1024) total_disk_empty}} -->
+                                {{ "%" + ((getPropertyValue(server.properties, "disk_total")-getPropertyValue(server.properties, "total_disk_empty"))/1024) }}
 
                             </span>
                         </div>

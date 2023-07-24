@@ -73,7 +73,7 @@ class ServerInformationService{
 
     async getServerDetails(id){
         try {
-            const response = await axios.get(liderSettingServerDetailUrl  + "/id/" + id);
+            const response = await axios.post(liderSettingServerDetailUrl  + "/id/" + id);
             
             return { response };
         } catch (error) {
@@ -90,14 +90,14 @@ class ServerInformationService{
         }
     }
     
-    async getDetailServer(params){
-        try{
-            const response =  await axios.post(liderSettingServerDetailUrl, params);
-            return { response };
-        }catch(error){
-            return { error: error }
-        }
-    }
+    // async getDetailServer(params){
+    //     try{
+    //         const response =  await axios.post(liderSettingServerDetailUrl, params);
+    //         return { response };
+    //     }catch(error){
+    //         return { error: error }
+    //     }
+    // }
 
 }
 

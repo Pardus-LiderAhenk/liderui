@@ -37,9 +37,10 @@
         @modalVisibleValue="addServerModalVisible = $event;"
     />
 
-    <show-server-detail-dialog v-if="showServerDetailVisible"
-        :modalVisibleValue="showServerDetailVisible" 
-        @modalVisibleValue="showServerDetailVisible = $event;"
+    <show-server-detail-dialog v-if="showServerDetailDialog"
+        :showServerDetailDialog="showServerDetailDialog" 
+        :servers="servers"
+        @modalVisibleValue="showServerDetailDialog = $event;"
     />
 
     <delete-server-dialog
@@ -90,6 +91,7 @@
 
                 addServerModalVisible : false,
                 showServerDetailVisible : false,
+                showServerDetailDialog :  false,
                 editServerModalVisible : false,
                 editServerDialog: false,
                 servers: []

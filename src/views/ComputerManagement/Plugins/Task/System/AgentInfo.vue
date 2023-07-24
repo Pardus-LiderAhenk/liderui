@@ -259,7 +259,7 @@
               }}
             </div>
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            <div class="p-col-4"><b>{{ $t("computer.agent_info.available_disk") }})</b></div>
+            <div class="p-col-4"><b>{{ $t("computer.agent_info.available_disk") }}</b></div>
             <div class="p-col-8">
               {{
                 ((getPropertyValue(selectedAgentInfo.properties, "hardware.disk.total") -

@@ -26,7 +26,9 @@
                     </template>
                     <Column header="#">
                         <template #body="{index}">
-                          <span>{{  index + 1 }}</span>
+                          <!-- <span>{{  index + 1 }}</span> -->
+                          <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+
                         </template>
                       </Column>  
                     <Column field="machineName" header="Makine İsmi">
@@ -78,7 +80,7 @@
                                     class="p-mr-2 p-button-sm p-button-raised p-button-rounded"
                                     icon="pi pi-list"
                                     :title="$t('Detay')" 
-                                    @click="ShowServerDetailDialog= true; selectedServer = slotProps.data">
+                                    @click="showServerDetailVisible= true; selectedServer = slotProps.data">
                                 </Button>
                             </div>
                         </template>
@@ -95,17 +97,10 @@
         />
 
         <show-server-detail-dialog v-if="showServerDetailVisible"
-            @updateConsoleUsers="getServerInfo"
-            :modalVisibleValue="showServerDetailVisible" 
-            @modalVisibleValue="showServerDetailVisible = $event;"
-        />
-
-        <!-- <delete-server-dialog 
-            :deleteServerDialog="deleteServerDialog"
             :selectedServer="selectedServer"
-            @delete-server="deleteServer"
-            @close-server-dialog="deleteServerDialog = false"
-        /> -->
+            :showServerDetailDialog="showServerDetailVisible"
+            @close-server-detail="showServerDetailVisible=false"
+        />
         
         <edit-server-dialog v-if="editServerModalVisible"
             :updateServerDialog="editServerModalVisible"
@@ -174,13 +169,15 @@ export default{
         return {
     
             AddServerDialog : false,
-            ShowServerDetailDialog : false,
+            showServerDetailDialog : false,
             addServerModalVisible : false,
             showServerDetailVisible : false,
             deleteServerDialog : false,
             editServerDialog : false,
             editServerModalVisible : false,
             selectedServer : null,
+            pageNumber: 1,
+            rowNumber: 10,
 
         }
     },
@@ -245,28 +242,30 @@ export default{
         
         async getServerInfo() {
 
-        let params = {
-            "id": this.selectedServerInfo,
-        }
-        const { response,error } = await serverInformationService.getDetailServer(params);
-        if(response.status == 200){
-          if (response.data != "" && response.data != null) {
-              console.log(response)
-              this.selectedServerInfo = response.data;
-        
-        } else {
-            this.selectedServerInfo = null;
-            this.$toast.add({
-              severity:'error', 
-              detail: this.$t("computer.agent_info.error_message"), 
-              summary:this.$t("computer.task.toast_summary"), 
-              life: 3000
-              });
+            this.showServerDetailDialog = false;
+
+            let params = {
+                "id": this.selectedServer.id,
             }
-          }
-        else if(response.status == 417){
-          return "error";
-        }
+            const { response,error } = await serverInformationService.getServerDetails(params);
+            if(response.status == 200){
+              if (response.data != "" && response.data != null) {
+                  console.log(response)
+                  this.selectedServerInfo = response.data;
+            
+            } else {
+                this.selectedServerInfo = null;
+                this.$toast.add({
+                  severity:'error', 
+                  detail: this.$t("computer.agent_info.error_message"), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: 3000
+                  });
+                }
+              }
+            else if(response.status == 417){
+              return "error";
+            }
     }
 
     },
