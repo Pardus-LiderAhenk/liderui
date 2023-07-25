@@ -26,12 +26,18 @@
                                 </h6>
                             </div>
                             <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">
-                            <div class="stock-price" data-v-4d2c924c=""><i class="pi pi-arrow-down" data-v-4d2c924c=""></i>
-                                <h6 data-v-4d2c924c="">54.20</h6>
+                            <div class="stock-price" data-v-4d2c924c="">
+                                <h6 data-v-4d2c924c="">
+                                {{
+                                    "~" + ((getPropertyValue(server.properties, "physical_memory"))/1073741824).toFixed(2) 
+                                }}
+                            </h6>
                             </div>
                             <div class="server-status" data-v-4d2c924c="">
-                                <span data-v-4d2c924c="">%183.16</span>
-                                <span data-v-4d2c924c="">4.01</span>
+                                <span data-v-4d2c924c="">
+                                    {{ "% "+ (((getPropertyValue(server.properties, "memory_free"))/1073741824)/((getPropertyValue(server.properties, "physical_memory"))/1073741824)).toFixed(2) }}
+                                </span>
+                                <!-- <span data-v-4d2c924c="">4.01</span> -->
                             </div>
                         </li>
                     </ul>

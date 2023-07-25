@@ -20,28 +20,40 @@
 
                     <img :src="img" alt="product" class="responsive" style="width: 700px; display: flex;">
 
-                    <div>
                     <div v-for="server in servers" v-bind:key="server">
+
                         <div class="flex align-items-center justify-content-between mb-2">
-                            <span class="font-bold">
+                            <span>
+                            
 
                                 {{ server.ip }}
 
+                           
                             </span>
                             <span>
+                            
+                                {{ "%" + (100*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824))).toFixed(2)) }}
+                            
+                            
+                            <ProgressBar class="p-progressbar-blue"
 
-                                <!-- {{ "%" + (getPropertyValue(server.properties, "disk_total")%1024) total_disk_empty}} -->
-                                {{ "%" + ((getPropertyValue(server.properties, "disk_total")-getPropertyValue(server.properties, "total_disk_empty"))/1024) }}
+                                :value="'%' + (100*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824))).toFixed(2))"
+                                v-if="Number(100*(getPropertyValue(server.properties, 'total_disk_empty')/(getPropertyValue(server.properties, 'disk_total'))).toFixed(2)) < 80.00">
+                            
+                            </ProgressBar>
+                            
+                            <ProgressBar class="p-progressbar-red"
 
-                            </span>
-                        </div>
-                        <div role="progressbar" class="p-progressbar p-component p-progressbar-determinate orange-bar mb-4" aria-valuemin="0" aria-valuenow="40" aria-valuemax="100">
-                        <div class="p-progressbar-value p-progressbar-value-animate" style="width: 40%; display: flex;"></div>
+                                :value="'%' + (100*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824))).toFixed(2))"
+                                v-if="Number(100*(getPropertyValue(server.properties, 'total_disk_empty')/(getPropertyValue(server.properties, 'disk_total'))).toFixed(2)) > 80.00">
+                            
+                            </ProgressBar> 
+                        </span>
                         
                         </div>
+
                     </div>
                 </div>
-            </div>
             </template>
         </Card>
     </div>
@@ -74,7 +86,6 @@ export default {
                 
                 }
                     return propertyValue;
-                //return "%55";
             },
 
     },
@@ -146,5 +157,25 @@ img {
     max-width: 100%;
     height: auto;
   }
+
+.p-progressbar-blue {
+    height: 1.25rem;
+    background-color: #419544;
+  
+    .p-progressbar-value {
+      background-color: #053964;
+    }
+    
+}
+
+.p-progressbar-red {
+    height: 1.25rem;
+    background-color: #419544;
+  
+    .p-progressbar-value {
+        background-color:#D32F2F;
+    }
+    
+}
 
 </style>

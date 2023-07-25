@@ -8,12 +8,6 @@
                             
                         <div class="p-d-flex p-jc-between p-ai-center p-mb-3">
 
-                                <Button 
-                                    class="p-button-raised p-button-sm"
-                                    icon="pi pi-refresh" 
-                                    @click="updateAllServer"
-                                />
-
                                 <h5>Sunucu listesi</h5>
                                 
                                 <Button 
