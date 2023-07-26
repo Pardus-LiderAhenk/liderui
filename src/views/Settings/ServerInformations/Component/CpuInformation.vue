@@ -17,29 +17,43 @@
                 <div class="widget-list-type2" data-v-017cc35f="">
                     <div v-for="server in servers" v-bind:key="server">
 
-                    <ul class="list-none p-0" data-v-017cc35f="">
-                        <li class="flex align-items-center justify-content-between pt-2 pb-3" data-v-017cc35f="">
-                            <div class="flex align-items-center justify-content-start" data-v-017cc35f="">
-                                <img :src="img" alt="verona-layout" width="42" height="42" class="border-round" data-v-017cc35f="">
-                                <div class="ml-2" data-v-017cc35f="">
-                                    <span class="font-bold block" data-v-017cc35f="">
+                    <ul class="list-none p-0">
+                        <!-- <li class="flex align-items-center justify-content-between pt-2 pb-3">
+                            <div class="flex align-items-center justify-content-start">
+                                <img :src="img" alt="verona-layout" width="42" height="42" class="border-round">
+                                <div class="ml-2">
+                                    <span class="font-bold block">
                                         {{ server.ip }}
                                     </span>
-                                    <span class="subtext text-sm block" data-v-017cc35f="">cpu bilgisi</span>
+                                    <span class="subtext text-sm block">cpu bilgisi</span>
                                 </div>
                             </div>
-                            <div class="pie-wrapper progress-75" data-v-017cc35f="">
-                                <span class="label font-bold text-sm absolute" data-v-017cc35f="">75%</span>
-                                <div class="pie" data-v-017cc35f="">
+                            <div class="pie-wrapper progress-75" >
+                                <span class="label font-bold text-sm absolute">75%</span>
+                                 <div class="pie" data-v-017cc35f="">
                                     <div class="left-side half-circle" data-v-017cc35f=""></div>
                                     <div class="right-side half-circle" data-v-017cc35f=""></div>
-                                </div>
+                                    
+                                </div> 
+                                
                             </div>
-                        </li>
+                            
+                        </li> -->
+                        <div class="card flex justify-content-center">
 
+                            <img :src="img" alt="verona-layout" width="42" height="42" class="border-round">
+                                <div class="ml-2">
+                                    <span class="font-bold block">
+                                        {{ server.ip }}
+                                    </span>
+                                    <span class="subtext text-sm block">cpu bilgisi</span>
+                                </div>
+                            <Chart type="doughnut" :data="chartData" :options="chartOptions" :style="chartStyle"/>
+                        </div>
                     </ul>
                     </div>
                 </div>
+                    
         </template>
         </Card>
     </div>
@@ -57,25 +71,52 @@ export default {
     data() {
         return {
             img: require("@/assets/images/servers/cpu-icon.png"),
+            chartData: null,
+            chartOptions: {
+                cutout: '50%'
+            },
+            chartStyle: { width: '30%', height: '300px' },
+
         }
+        
+    },
+    mounted() {
+        this.chartData = this.setChartData();
     },
 
     methods: {
         
         getPropertyValue(properties, propertyName) {
-                var propertyValue = "";
-                const filteredProperties = properties.filter(
-                  (property) => property.propertyName === propertyName
-                );
-                if (filteredProperties != null && filteredProperties.length > 0) {
-                  propertyValue = filteredProperties[0].propertyValue;
-                
-                }
-                return propertyValue;
-                
-            },
+            var propertyValue = "";
+            const filteredProperties = properties.filter(
+              (property) => property.propertyName === propertyName
+            );
+            if (filteredProperties != null && filteredProperties.length > 0) {
+              propertyValue = filteredProperties[0].propertyValue;
+            
+            }
+            return propertyValue;
+            
+        },
+
+        setChartData() {
+            const documentStyle = getComputedStyle(document.body);
+
+            return {
+                labels: ['A', 'B'],
+                datasets: [
+                    {
+                        data: [540, 325],
+                        backgroundColor: [documentStyle.getPropertyValue('--blue-500'), documentStyle.getPropertyValue('--yellow-500')],
+                        hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400')]
+                    }
+                ]
+            };
+        }
 
     },
+     
+    
     
 }
 </script>

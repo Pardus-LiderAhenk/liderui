@@ -29,13 +29,13 @@
                             <div class="stock-price" data-v-4d2c924c="">
                                 <h6 data-v-4d2c924c="">
                                 {{
-                                    "~" + ((getPropertyValue(server.properties, "physical_memory"))/1073741824).toFixed(2) 
+                                     ((getPropertyValue(server.properties, "physical_memory"))/1024000000).toFixed(2) +" GB"
                                 }}
                             </h6>
                             </div>
                             <div class="server-status" data-v-4d2c924c="">
                                 <span data-v-4d2c924c="">
-                                    {{ "% "+ (((getPropertyValue(server.properties, "memory_free"))/1073741824)/((getPropertyValue(server.properties, "physical_memory"))/1073741824)).toFixed(2) }}
+                                    {{ "% "+ (((getPropertyValue(server.properties, "memory_free"))/1024000000)/((getPropertyValue(server.properties, "physical_memory"))/1000000000)).toFixed(2) }}
                                 </span>
                                 <!-- <span data-v-4d2c924c="">4.01</span> -->
                             </div>
