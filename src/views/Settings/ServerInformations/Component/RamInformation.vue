@@ -38,7 +38,6 @@
                                    <b> {{ "% "+ (((getPropertyValue(server.properties, "memory_free"))/1024000000)/((getPropertyValue(server.properties, "physical_memory"))/1000000000)).toFixed(2) }}
                                    </b>
                                 </span>
-                                <!-- <span data-v-4d2c924c="">4.01</span> -->
                             </div>
                         </li>
                     </ul>

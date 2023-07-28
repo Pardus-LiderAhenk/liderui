@@ -33,7 +33,7 @@
                                 {{ "%" + (10*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824))).toFixed(2)) }}
                             
                             </div> -->
-                            <div>
+                            <div class="p-d-flex p-jc-between p-ai-center">
 
                             <ProgressBar class="p-progressbar-blue"
 

@@ -54,6 +54,9 @@
                             {{ getPropertyValue(data.properties, "os_version") }}
                         </template>
                     </Column>
+                    <Column field="status" header="Durumu">
+                        {{ status }}
+                    </Column>
                     <Column>
                         <template #body="slotProps">
                             <div class="p-d-flex p-jc-end">
