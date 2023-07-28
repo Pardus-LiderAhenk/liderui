@@ -39,7 +39,7 @@
 
                                 :value="((100*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824)))).toFixed(2))"
                                 v-if="Number(100*(getPropertyValue(server.properties, 'total_disk_empty')/(getPropertyValue(server.properties, 'disk_total'))).toFixed(2)) < 90.00"
-                                style="display: flex; width: 25rem; height: 1rem">
+                                style="display: contents; width: 40rem; height: 1rem;">
                             
                             </ProgressBar>
                             
@@ -47,7 +47,7 @@
 
                                 :value="((100*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824)))).toFixed(2))"
                                 v-if="Number(100*(getPropertyValue(server.properties, 'total_disk_empty')/(getPropertyValue(server.properties, 'disk_total'))).toFixed(2)) > 90.00"
-                                style="display: flex; width: 25rem; height: 1rem;">
+                                style="display: flex; width: 40rem; height: 1rem;">
                             
                             </ProgressBar> 
                         </div>

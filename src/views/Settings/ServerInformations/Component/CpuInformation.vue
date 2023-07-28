@@ -22,18 +22,26 @@
                         <div class="card flex justify-content-center">
 
                             <img :src="img" alt="verona-layout" width="42" height="42" class="border-round">
-                                <div class="ml-2">
+                                <div>
                                     <span class="font-bold block">
                                         {{ server.ip }}
                                     </span>
                                     <span class="subtext text-sm block">cpu bilgisi</span>
                                 </div>
-
-                                    <Chart class="doughnut" type="doughnut" 
+                                    <!-- <Chart type="doughnut" 
                                     :data="cpuInfodata" 
                                     :options="chartOptions" 
-                                    :style="chartStyle"/>
-
+                                    :style="chartStyle"
+                                    :show-value="false"/> -->
+                                
+                                <div class="chart-container">
+                                    <Chart type="doughnut" 
+                                    :data="cpuInfodata"  
+                                    :options="chartOptions"
+                                    :plugins="chartStyle">
+                                    </Chart>
+                                </div>
+                                
                         </div>
                     </ul>
                 </div>
@@ -44,7 +52,17 @@
 </template>
 
 <script>
+import ChartDataLabels from 'chartjs-plugin-datalabels'
+
 export default {
+    setup() {
+    const plugins = [ChartDataLabels]
+      // expose to template and other options API hooks
+      return {
+        plugins
+      }
+    },
+
     props: {
         servers: [],
     },
@@ -55,10 +73,13 @@ export default {
             cpuInfodata : null,
             chartData: null,
             chartOptions: {
-                cutout: '50%',
-                responsive: true
+                cutout: '60%',
+                responsive: true,
             },
-            chartStyle: { width: '20%', height: '5px' },
+            chartStyle: { 
+                width: '20%', 
+                height: '3px' 
+            },
 
         }
         
@@ -110,8 +131,9 @@ export default {
             var cpuFree = 50.0;
             //    cpuUsed = (100*((this.getPropertyValue(this.properties,"cpu_user")+this.getPropertyValue(this.servers,"cpu_system"))/(this.getPropertyValue(this.servers,"cpu_user")+this.getPropertyValue(this.servers,"cpu_system")+this.getPropertyValue(this.servers,"cpu_idle")))).toFixed(2);
             //    cpuFree = (100 - cpuUsed).toFixed(2);
-                
+               
                 this.cpuInfodata ={
+                //labels:["cpuUsed","cpuFree"],
                 datasets: [
                     {
                         data: [50, 75],
@@ -222,6 +244,11 @@ img {
     width: 3rem;
     left: 0;
     top: 0;
+}
+.chart-container {
+    width: 50%;
+    max-width: 75px; /* Adjust the size as needed */
+    margin: 0 auto;
 }
 
 </style>
