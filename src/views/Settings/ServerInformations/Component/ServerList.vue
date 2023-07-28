@@ -182,6 +182,7 @@ export default{
         EditServerDialog,
         
     },
+    
 
 
     methods: {
@@ -266,7 +267,7 @@ export default{
 
     mounted() {
         console.log(this.servers)
-        //this.getServerInfo()
+
 
     }
 }

@@ -94,7 +94,7 @@
                 showServerDetailDialog :  false,
                 editServerModalVisible : false,
                 editServerDialog: false,
-                servers: []
+                servers: [],
                 
                 
             }
@@ -118,6 +118,10 @@
             this.serverListAll();
     
         },
+
+        watch(){
+            this.serverListAll();
+        },
     
         methods: {
 
@@ -136,7 +140,7 @@
                 else{
                 if (response.status == 200) {
                     this.servers = response.data;
-                    console.log(this.servers)
+                    console.log('Servr alıyorum',this.servers)
                 } 
                 else if (response.status == 417) {
                     this.$toast.add({

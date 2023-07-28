@@ -62,13 +62,12 @@ export default{
                 
                 }
                     return propertyValue;
-                //return "%55";
             },
 
     },
 
     mounted() {
-        this.servers
+        //this.servers;
     }
 
 }

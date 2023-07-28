@@ -15,27 +15,28 @@
             </template>
             <template #content>
                 
-                <div class="servers" data-v-4d2c924c="">
+                <div class="servers">
                 <div v-for="server in servers" v-bind:key="server">
 
-                    <ul data-v-4d2c924c="">
-                        <li class="down" data-v-4d2c924c="">
-                            <div class="stock-name" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">
+                    <ul>
+                        <li class="down">
+                            <div class="stock-name" >
+                                <h6 >
                                     {{ server.ip }}
                                 </h6>
                             </div>
-                            <img :src="img" alt="freya-layout" data-v-4d2c924c="" width="42" height="42">
-                            <div class="stock-price" data-v-4d2c924c="">
-                                <h6 data-v-4d2c924c="">
+                            <img :src="img" alt="freya-layout"  width="42" height="42">
+                            <div class="stock-price" >
+                                <h6>
                                 {{
                                      ((getPropertyValue(server.properties, "physical_memory"))/1024000000).toFixed(2) +" GB"
                                 }}
                             </h6>
                             </div>
-                            <div class="server-status" data-v-4d2c924c="">
-                                <span data-v-4d2c924c="">
-                                    {{ "% "+ (((getPropertyValue(server.properties, "memory_free"))/1024000000)/((getPropertyValue(server.properties, "physical_memory"))/1000000000)).toFixed(2) }}
+                            <div class="server-status">
+                                <span >
+                                   <b> {{ "% "+ (((getPropertyValue(server.properties, "memory_free"))/1024000000)/((getPropertyValue(server.properties, "physical_memory"))/1000000000)).toFixed(2) }}
+                                   </b>
                                 </span>
                                 <!-- <span data-v-4d2c924c="">4.01</span> -->
                             </div>
@@ -136,15 +137,15 @@ li {
 }
 
 .servers ul > li .server-status span {
-    display: block;
-    font-weight: 600;
-    font-size: 10px;
+    display: inline-block;
+    font-weight: 800;
+    font-size: 15px;
     line-height: 12px;
-    color: rgba(41, 50, 65, 0.5);
+    color: rgba(10, 27, 56, 0.5);
 }
 .servers ul > li .server-status {
     margin-left: 4px;
-    padding: 0 20px;
+    padding: 0 10px;
 }
 
 .servers ul > li .stock-price h6 {
@@ -154,8 +155,8 @@ li {
 }
 
 .servers ul > li .stock-price {
-    padding: 0 10px;
-    color: #34B56F;
+    padding: 5 10px;
+    color: #2321b8;
     margin: 0 4px;
 }
 
