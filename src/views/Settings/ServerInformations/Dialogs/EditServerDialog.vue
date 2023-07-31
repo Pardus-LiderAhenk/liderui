@@ -1,25 +1,28 @@
 <template>
     <div>
-        <Dialog :header="$t('Sucunu güncelle')" v-model:visible="showDialog" :modal="true" style="width:30vw;" >
+        <Dialog :header="$t('Sucunu güncelle')" 
+        v-model:visible="showDialog" 
+        :modal="true" 
+        style="width:30vw;" >
             <div class="p-fluid">
                 
                 <div class="p-field">
-                    <label for="hostname">{{$t('Hostname')}}</label>
-                    <InputText id="hostname" type="text" v-model="serverForm.hostname"/>
+                    <label for="machineName">{{$t('Makine Adı')}}</label>
+                    <InputText id="machineName" type="text" v-model="machineName"/>
                 </div>
                 <div class="p-field">
                     <label for="ip">{{$t('Ip')}}</label>
-                    <InputText id="ip" type="text" v-model="serverForm.ip"/>
+                    <InputText id="ip" type="text" v-model="ip"/>
                 </div>
                 <div class="p-field">
                     <label for="user">{{$t('Kullanıcı')}}</label>
-                    <InputText id="user" type="text" v-model="serverForm.user"/>
+                    <InputText id="user" type="text" v-model="user"/>
                 </div>
                 
                 <div class="p-field">
                     <label for="passwd">{{$t('Parola')}}</label>
                     <div class="p-inputgroup flex-1">
-                        <InputText id="passwd" type="text" v-model="serverForm.password"/>
+                        <InputText id="passwd" type="text" v-model="password"/>
                         <Button icon="pi pi-link" 
                         severity="success" 
                         @click="checkConnection"/>
@@ -50,6 +53,12 @@ import { serverInformationService } from '../../../../services/Settings/ServerIn
 export default {
 
     props: {
+
+        servers: {
+            type: Object,
+            description: "Server list",
+        },
+    
         updateServerDialog: {
             type: Boolean,
             default: false
@@ -62,9 +71,13 @@ export default {
     }, 
     data(){
             return {
+                machineName:null,
+                ip:null,
+                user:null,
+                password:null,
 
                 serverForm: {
-                    hostname:'',
+                    machineName:'',
                     ip:'',
                     user:'',
                     password:'',
@@ -91,16 +104,16 @@ export default {
     methods:{
 
         setServerData() {
-            this.hostname = this.serverForm.hostname;
-            this.ip = this.serverForm.ip;
-            this.user = this.serverForm.user;
-            this.password = this.serverForm.password;
+            this.machineName = this.selectedServer.machineName;
+            this.ip = this.selectedServer.ip;
+            this.user = this.selectedServer.user;
+            this.password = this.selectedServer.password;
         },
 
         async updateServer(){
 
             const params = new FormData();
-            params.append("hostname", this.serverForm.hostname);
+            params.append("machineName", this.serverForm.machineName);
             params.append("ip", this.serverForm.ip);
             params.append("user", this.serverForm.user);
             params.append("password", this.serverForm.password);
@@ -114,7 +127,7 @@ export default {
 
         
             const params = new FormData();
-            params.append('hostname', this.serverForm.hostname);
+            params.append('hostname', this.serverForm.machineName);
             params.append('username', this.serverForm.user);
             params.append('password', this.serverForm.password);
 
@@ -153,7 +166,15 @@ export default {
         this.loading = false;
 
         },
-    }
+    },
+    watch:  {
+        servers: function(newVal, oldVal) {
+            this.machineName = newVal.machineName;
+            this.ip = newVal.ip;
+            this.user = newVal.user;
+            this.password = newVal.password;
+        }
+    },
 }
 
 </script>

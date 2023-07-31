@@ -54,9 +54,13 @@
                             {{ getPropertyValue(data.properties, "os_version") }}
                         </template>
                     </Column>
+                    
                     <Column field="status" header="Durumu">
-                        {{ status }}
+                    <template #body="{ data }">
+                        {{ getPropertyValue(data.properties, "status") == "true"  ?  $t("Bağlandı") : $t("Bağlandı") }}
+                    </template>    
                     </Column>
+                
                     <Column>
                         <template #body="slotProps">
                             <div class="p-d-flex p-jc-end">
