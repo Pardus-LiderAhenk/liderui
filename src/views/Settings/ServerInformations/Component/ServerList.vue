@@ -3,7 +3,13 @@
         <div class="card">
             <Card header="server-list">
                 <template #content>
-                <DataTable :value="servers"  tableStyle="min-width: 62rem" class="p-datatable-sm" responsiveLayout="scroll">
+                <DataTable :value="servers"  
+                tableStyle="min-width: 62rem" 
+                class="p-datatable-sm" 
+                responsiveLayout="scroll"
+                :paginator="true" :rows="10" ref="dt"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                :rowsPerPageOptions="[10,25,50,100]" style="margin-top: 2em">
                     <template #header>                                               
                             
                         <div class="p-d-flex p-jc-between p-ai-center p-mb-3">
@@ -33,10 +39,6 @@
                     </Column>
 
                     <!--
-                    <Column field="user" header="Kullanıcı">
-                        {{ user }}
-                    </Column>
-
                      <Column field="mac" header="Mac Adres">
                         <template #body="{ data }">
                             {{ getPropertyValue(data.properties, "mac_addr") }}
@@ -193,6 +195,13 @@ export default{
 
 
     methods: {
+
+        updateRowIndex() {
+            for (let index = 0; index < this.policies.length; index++) {
+                const element = this.policies[index];
+                element.index = index + 1;
+            }
+        },
         
         getPropertyValue(properties, propertyName) {
             var propertyValue = "";
@@ -220,6 +229,7 @@ export default{
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
+                    this.updateRowIndex();
                 }
                 else if(response.status == 417){                   
                 this.$toast.add({
@@ -254,6 +264,7 @@ export default{
               if (response.data != "" && response.data != null) {
                   console.log(response)
                   this.selectedServerInfo = response.data;
+                  //this.updateRowIndex();
             
             } else {
                 this.selectedServerInfo = null;
@@ -289,5 +300,9 @@ export default{
     box-sizing: border-box;
     box-shadow: 0px 10px 40px rgba(41, 50, 65, 0.06);
 }
-
+::v-deep(.p-paginator) {
+    .p-paginator-current {
+        margin-left: auto;
+    }
+}
 </style>

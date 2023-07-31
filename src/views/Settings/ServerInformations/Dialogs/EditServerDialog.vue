@@ -111,15 +111,35 @@ export default {
         },
 
         async updateServer(){
-
-            const params = new FormData();
-            params.append("machineName", this.serverForm.machineName);
-            params.append("ip", this.serverForm.ip);
-            params.append("user", this.serverForm.user);
-            params.append("password", this.serverForm.password);
+        
+            let params = {
+            "id": this.selectedServer.id,
+            "machineName": this.machineName,
+            "ip": this.ip,
+            "user": this.user,
+            "password": this.password,
+            }
 
             const {response,error} = await serverInformationService.update(params);
             console.log(response,"burdaa")
+            if(response.status == 200){
+            
+                    this.showDialog = false;
+                    this.$toast.add({
+                        severity:'success',
+                        detail: this.$t('başarılı'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+            }
+            else {
+            this.$toast.add({
+                severity:'error', 
+                detail: this.$t('server güncelleme başarısız'),
+                summary:this.$t("computer.task.toast_summary"), 
+                life: 3000
+                });
+            }
 
         },
 
