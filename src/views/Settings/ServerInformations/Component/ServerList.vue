@@ -1,7 +1,12 @@
 <template>
     <div>
         <div class="card">
-            <Card header="server-list">
+            <Card class="p-col-12 p-pb-0" v-loading="loading"
+                element-loading-text="Loading, please wait..."
+                element-loading-background="rgba(0, 0, 0, 0.6)"
+                :element-loading-spinner="svg" 
+                header="server-list">
+                
                 <template #content>
                 <DataTable :value="servers"  
                 tableStyle="min-width: 62rem" 
