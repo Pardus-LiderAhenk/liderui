@@ -20,7 +20,7 @@
                 <div class="p-field">
                     <label for="passwd">{{$t('Parola')}}</label>
                     <div class="p-inputgroup flex-1">
-                        <InputText id="passwd" type="text" v-model="serverForm.password" placeholder="******"/>
+                        <InputText id="passwd" type="password" v-model="serverForm.password" placeholder="******"/>
                         <Button icon="pi pi-link" 
                         severity="success" 
                         @click="checkConnection"/>

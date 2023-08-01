@@ -95,14 +95,6 @@ export default {
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
-                    // } else {
-                    //     this.$toast.add({
-                    //         severity:'error', 
-                    //         detail: this.$t('policy_management.delete_policy_error'), 
-                    //         summary:this.$t("computer.task.toast_summary"), 
-                    //         life: 3000
-                    //     });
-                    // 
                     }
                 }
                 else if(response.status == 417){                   

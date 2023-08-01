@@ -22,7 +22,7 @@
                 <div class="p-field">
                     <label for="passwd">{{$t('Parola')}}</label>
                     <div class="p-inputgroup flex-1">
-                        <InputText id="passwd" type="text" v-model="password"/>
+                        <InputText id="passwd" type="password" v-model="password"/>
                         <Button icon="pi pi-link" 
                         severity="success" 
                         @click="checkConnection"/>
@@ -75,6 +75,7 @@ export default {
                 ip:null,
                 user:null,
                 password:null,
+                id:null,
 
                 serverForm: {
                     machineName:'',
@@ -108,29 +109,30 @@ export default {
             this.ip = this.selectedServer.ip;
             this.user = this.selectedServer.user;
             this.password = this.selectedServer.password;
+            this.id = this.selectedServer.id;
         },
 
         async updateServer(){
         
-            let params = {
-            "id": this.selectedServer.id,
+            const params = {
             "machineName": this.machineName,
             "ip": this.ip,
             "user": this.user,
             "password": this.password,
-            }
+            "id":this.selectedServer.id
+            };
 
             const {response,error} = await serverInformationService.update(params);
             console.log(response,"burdaa")
             if(response.status == 200){
-            
-                    this.showDialog = false;
-                    this.$toast.add({
-                        severity:'success',
-                        detail: this.$t('başarılı'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+                console.log(response)
+                this.showDialog = false;
+                this.$toast.add({
+                    severity:'success',
+                    detail: this.$t('başarılı'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
             else {
             this.$toast.add({

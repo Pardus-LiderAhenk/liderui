@@ -1,25 +1,32 @@
 <template>
     <div>
-        <div class="card">
-            <Card class="p-col-12 p-pb-0" v-loading="loading"
-                element-loading-text="Loading, please wait..."
-                element-loading-background="rgba(0, 0, 0, 0.6)"
-                :element-loading-spinner="svg" 
-                header="server-list">
-                
+            <Card>
+                <template #title>
+                    <div class="p-d-flex p-jc-between">                
+                        <div>
+                            {{$t('Sunucu Bilgisi')}}
+                        </div>
+                        <Button 
+                            class="p-button-sm" 
+                            icon="pi pi-plus" 
+                            :label="$t('sunucu ekle')"
+                            @click="addServerModalVisible =  true;">
+                        </Button>
+                    
+                    </div>
+                </template>
                 <template #content>
                 <DataTable :value="servers"  
-                tableStyle="min-width: 62rem" 
-                class="p-datatable-sm" 
-                responsiveLayout="scroll"
-                :paginator="true" :rows="10" ref="dt"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-                :rowsPerPageOptions="[10,25,50,100]" style="margin-top: 2em">
-                    <template #header>                                               
+                    tableStyle="min-width: 64rem" 
+                    class="p-datatable-sm" 
+                    responsiveLayout="scroll"
+                    :paginator="true" :rows="10" ref="dt"
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                    :rowsPerPageOptions="[10,25,50,100]" style="margin-top: 1rem">
+                    <!-- <template #header>                                                -->
                             
-                        <div class="p-d-flex p-jc-between p-ai-center p-mb-3">
-
-                                <h5>Sunucu listesi</h5>
+                        
+                                <!-- <h5>Sunucu listesi</h5>
                                 
                                 <Button 
                                     class="p-button-sm" 
@@ -27,8 +34,8 @@
                                     :label="$t('sunucu ekle')"
                                     @click="addServerModalVisible =  true;">
                                 </Button>
-                        </div>
-                    </template>
+                        </div> -->
+                    <!-- </template> -->
                     <Column header="#">
                         <template #body="{index}">
                           <!-- <span>{{  index + 1 }}</span> -->
@@ -42,14 +49,6 @@
                     <Column field="ip" header="Ip Adres">
                         {{ ip }}
                     </Column>
-
-                    <!--
-                     <Column field="mac" header="Mac Adres">
-                        <template #body="{ data }">
-                            {{ getPropertyValue(data.properties, "mac_addr") }}
-                        </template>
-                    </Column> 
-                    -->
 
                     <Column field="os" header="İşletim sistemi">
                         <template #body="{ data }">
@@ -94,7 +93,6 @@
                         </template>
                     </Column>
                 </DataTable>
-                
                 </template>
             </Card>
         </div>
@@ -144,8 +142,6 @@
                 />
             </template>
         </Dialog>
-
-    </div>
         
 </template>
 
@@ -301,7 +297,7 @@ export default{
     
 .card {
     background: #ffffff;
-    padding: 20px;
+    padding: 0px;
     box-sizing: border-box;
     box-shadow: 0px 10px 40px rgba(41, 50, 65, 0.06);
 }

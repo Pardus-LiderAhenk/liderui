@@ -1,7 +1,7 @@
 <template>
-    <div class="p-col-12 p-pb-6" v-loading="loading"
+    <div class="p-col-12 p-pb-0" v-loading="loading"
             element-loading-text="Loading, please wait..."
-            element-loading-background="rgba(0, 0, 0, 0.4)"
+            element-loading-background="rgba(0, 0, 0, 0.6)"
             :element-loading-spinner="svg">
             <div class="p-grid">
                 <div class="p-col-12 p-md-6 p-lg-6">
