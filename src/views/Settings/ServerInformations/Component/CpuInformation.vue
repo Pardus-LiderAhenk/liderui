@@ -28,15 +28,10 @@
                                     </span>
                                     <span class="subtext text-sm block">cpu bilgisi</span>
                                 </div>
-                                    <!-- <Chart type="doughnut" 
-                                    :data="cpuInfodata" 
-                                    :options="chartOptions" 
-                                    :style="chartStyle"
-                                    :show-value="false"/> -->
                                 
                                 <div class="chart-container">
                                     <Chart type="doughnut" 
-                                    :data="cpuInfodata"  
+                                    :data="getCpuInfo(server)"  
                                     :options="chartOptions"
                                     :plugins="chartStyle">
                                     </Chart>
@@ -57,14 +52,17 @@ import ChartDataLabels from 'chartjs-plugin-datalabels'
 export default {
     setup() {
     const plugins = [ChartDataLabels]
-      // expose to template and other options API hooks
+
       return {
         plugins
       }
     },
 
     props: {
-        servers: [],
+        servers: {
+            type: Object,
+            description: "Server list",
+        },
     },
 
     data() {
@@ -85,12 +83,6 @@ export default {
         
     },
 
-    mounted() {
-
-        this.getCpuList();
-        console.log(this.getCpuList);
-    },
-
     methods: {
         
         getPropertyValue(properties, propertyName) {
@@ -109,39 +101,24 @@ export default {
             return propertyValue;
         },
 
-
-        // setChartData() {
-        //     const documentStyle = getComputedStyle(document.body);
-
-        //     return {
-        //         // labels: ['A', 'B'],
-        //         datasets: [
-        //             {
-        //                 data: [540, 325],
-        //                 backgroundColor: [documentStyle.getPropertyValue('--blue-500'), documentStyle.getPropertyValue('--yellow-500')],
-        //                 hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400')]
-        //             }
-        //         ]
-        //     };
-        // },
-
-        getCpuList() {
-            console.log(this.servers.properties);
+        getCpuInfo(server) {
+            console.log(server)
+            let cpuData = {};
             var cpuUsed = 50.0;
             var cpuFree = 50.0;
-            //    cpuUsed = (100*((this.getPropertyValue(this.properties,"cpu_user")+this.getPropertyValue(this.servers,"cpu_system"))/(this.getPropertyValue(this.servers,"cpu_user")+this.getPropertyValue(this.servers,"cpu_system")+this.getPropertyValue(this.servers,"cpu_idle")))).toFixed(2);
-            //    cpuFree = (100 - cpuUsed).toFixed(2);
-               
-                this.cpuInfodata ={
-                //labels:["cpuUsed","cpuFree"],
-                datasets: [
-                    {
-                        data: [50, 75],
-                        backgroundColor: ["#66BB6A","#D32F2F"],
-                        hoverBackgroundColor: ["#66BB6A","#D32F2F"],
-                    }
-                ]
-            }
+                cpuUsed = (((100*(this.getPropertyValue(server.properties,"cpu_user")+this.getPropertyValue(server.properties,"cpu_system"))/((this.getPropertyValue(server.properties,"cpu_user")+this.getPropertyValue(server.properties,"cpu_system")+this.getPropertyValue(server.properties,"cpu_idle")))).toString()).substring(0,8));
+                cpuFree = (100-cpuUsed);
+                cpuData = {
+                    //labels:["cpuUsed","cpuFree"],
+                    datasets: [
+                        {
+                            data: [cpuUsed,cpuFree],
+                            backgroundColor: ["#D32F2F","#66BB6A"],
+                            hoverBackgroundColor: ["#D32F2F","#66BB6A"],
+                        }
+                    ]
+                }
+                return cpuData;
         }
 
     },

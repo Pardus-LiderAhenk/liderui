@@ -92,7 +92,8 @@ class ServerInformationService{
     
     async update(params){
         try{
-            const response =  await axios.put(liderSettingsServerUpdateUrl, params);
+            const response =  await axios.post(liderSettingsServerUpdateUrl, params);
+            console.log(response);
             return { response };
         }catch(error){
             return { error: error }

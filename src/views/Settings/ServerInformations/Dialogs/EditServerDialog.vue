@@ -54,10 +54,10 @@ export default {
 
     props: {
 
-        servers: {
-            type: Object,
-            description: "Server list",
-        },
+        // servers: {
+        //     type: Object,
+        //     description: "Server list",
+        // },
     
         updateServerDialog: {
             type: Boolean,
@@ -71,11 +71,12 @@ export default {
     }, 
     data(){
             return {
-                machineName:null,
-                ip:null,
-                user:null,
-                password:null,
-                id:null,
+                machineName: null,
+                ip: null,
+                user: null,
+                password: null,
+                servers: [],
+                //showDialog: false,
 
                 serverForm: {
                     machineName:'',
@@ -113,26 +114,33 @@ export default {
         },
 
         async updateServer(){
-        
-            const params = {
-            "machineName": this.machineName,
-            "ip": this.ip,
-            "user": this.user,
-            "password": this.password,
-            "id":this.selectedServer.id
-            };
+            let params = new FormData();
+            params.append("machineName", this.machineName)
+            params.append("ip", this.ip)
+            params.append("user", this.user)
+            params.append("password", this.password)
+            params.append("id", this.selectedServer.id)
+            // let params = {
+            //     "machineName": this.machineName,
+            //     "ip": this.ip,
+            //     "user": this.user,
+            //     "password": this.password,
+            //     "id": this.selectedServer.id
+            // };
 
             const {response,error} = await serverInformationService.update(params);
             console.log(response,"burdaa")
             if(response.status == 200){
-                console.log(response)
-                this.showDialog = false;
-                this.$toast.add({
-                    severity:'success',
-                    detail: this.$t('başarılı'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
+                if(response.data){
+                    console.log(response)
+                    this.showDialog = false;
+                    this.$toast.add({
+                        severity:'success',
+                        detail: this.$t('başarılı'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
             }
             else {
             this.$toast.add({
