@@ -45,12 +45,12 @@
         @modalVisibleValue="showServerDetailDialog = $event;"
     />
 
-    <delete-server-dialog
+    <!-- <delete-server-dialog
         :deleteServerDialog="deleteServerDialog"
         :selectedServer="selectedServer"
         @delete-server="deleteServer"
         @close-server-dialog="deleteServerDialog = false"
-    />
+    /> -->
 
     <edit-server-dialog v-if="editServerDialog"
         :editServerDialog="editServerDialog"
@@ -59,8 +59,8 @@
     />
 
 </div>
-    </template>
-    <script>
+</template>
+<script>
     /**
      * Dashboard page
      * @see {@link http://www.liderahenk.org/}
@@ -74,10 +74,9 @@
     import CpuInformation from "./Component/CpuInformation.vue";
     import ServerList from "./Component/ServerList.vue";
     import ServerLogs from "./Component/ServerLogs.vue";
-    import ShowServerDetailDialog from './Dialogs/ShowServerDetailDialog.vue';
-    import DeleteServerDialog from './Dialogs/DeleteServerDialog.vue';
-    import EditServerDialog from './Dialogs/EditServerDialog.vue';
-    import  { serverInformationService } from '../../../services/Settings/ServerInformationService.js';
+    import ShowServerDetailDialog from "./Dialogs/ShowServerDetailDialog.vue";
+    import EditServerDialog from "./Dialogs/EditServerDialog.vue";
+    import  { serverInformationService } from "../../../services/Settings/ServerInformationService.js";
     
     
     
@@ -97,8 +96,7 @@
                 editServerModalVisible : false,
                 editServerDialog: false,
                 servers: [],
-                loading: true
-                
+                loading: true,
             }
         },
         
@@ -111,17 +109,11 @@
             RamInformation,
             CpuInformation,
             ShowServerDetailDialog,
-            DeleteServerDialog,
+           //DeleteServerDialog,
             
         },
         
-        created() {
-
-            this.serverListAll();
-    
-        },
-
-        watch(){
+        created(){
             this.serverListAll();
         },
     
@@ -137,21 +129,21 @@
                     detail: this.$t('serverList'),
                     summary:this.$t("computer.task.toast_summary"),
                     life:3600
-                });
+                    });
                 } 
                 else{
-                if (response.status == 200) {
-                    this.servers = response.data;
-                    console.log('Servr alıyorum',this.servers)
-                } 
-                else if (response.status == 417) {
-                    this.$toast.add({
-                    severity:'error',
-                    detail: this.$t('reports.task_report.error_417_agent_info_list'),
-                    summary:this.$t("computer.task.toast_summary"),
-                    life:3600
-                    });
-                }
+                    if (response.status == 200) {
+                        this.servers = response.data;
+                        console.log('Servr alıyorum',this.servers)
+                    } 
+                    else if (response.status == 417) {
+                        this.$toast.add({
+                        severity:'error',
+                        detail: this.$t('reports.task_report.error_417_agent_info_list'),
+                        summary:this.$t("computer.task.toast_summary"),
+                        life:3600
+                        });
+                    }
                 }
 
                 this.loading = false;
@@ -178,9 +170,9 @@
         }
     
     }
-    </script>
+</script>
     
-    <style lang="scss" scoped>
+<style lang="scss" scoped>
     
     .card {
         background: #ffffff;
@@ -189,4 +181,4 @@
         box-shadow: 0px 10px 40px rgba(41, 50, 65, 0.06);
     }
 
-    </style>
+</style>

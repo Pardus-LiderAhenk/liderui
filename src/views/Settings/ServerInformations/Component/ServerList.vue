@@ -220,9 +220,9 @@ export default{
             this.deleteServerDialog = false;
 
             const{response,error} = await  serverInformationService.deleteServer(this.selectedServer.id);
+            console.log(response);
             
             if(response.status == 200){
-                if (response.data) {
                     
                     this.$toast.add({
                         severity:'success', 
@@ -230,25 +230,16 @@ export default{
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                    this.updateRowIndex();
-                }
-                else if(response.status == 417){                   
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('Sunucu silinirken hata oluştu 417'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
             }
-            }
+                
             
-            else{
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('Sunucu silinirken hata oluştu(list)')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
+            else if(response.status == 417){                   
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('Sunucu silinirken hata oluştu 417'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
             }
         },
 
@@ -265,7 +256,6 @@ export default{
               if (response.data != "" && response.data != null) {
                   console.log(response)
                   this.selectedServerInfo = response.data;
-                  //this.updateRowIndex();
             
             } else {
                 this.selectedServerInfo = null;
@@ -283,12 +273,6 @@ export default{
     }
 
     },
-
-    mounted() {
-        console.log(this.servers)
-
-
-    }
 }
 
 </script>

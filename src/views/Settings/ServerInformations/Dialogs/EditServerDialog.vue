@@ -76,14 +76,6 @@ export default {
                 user: null,
                 password: null,
                 servers: [],
-                //showDialog: false,
-
-                serverForm: {
-                    machineName:'',
-                    ip:'',
-                    user:'',
-                    password:'',
-                },
 
             }
         },
@@ -120,13 +112,6 @@ export default {
             params.append("user", this.user)
             params.append("password", this.password)
             params.append("id", this.selectedServer.id)
-            // let params = {
-            //     "machineName": this.machineName,
-            //     "ip": this.ip,
-            //     "user": this.user,
-            //     "password": this.password,
-            //     "id": this.selectedServer.id
-            // };
 
             const {response,error} = await serverInformationService.update(params);
             console.log(response,"burdaa")
@@ -157,7 +142,7 @@ export default {
 
         
             const params = new FormData();
-            params.append('hostname', this.serverForm.machineName);
+            params.append('hostname', this.serverForm.ip);
             params.append('username', this.serverForm.user);
             params.append('password', this.serverForm.password);
 
