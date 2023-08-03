@@ -9,21 +9,21 @@
           @rename-selected-agent="renameSelectedAgent"
           @add-folder="addFolder">
         </agent-info>
-        <session-and-power-management v-if="sessionAndPowerState" 
-        class="plugin-card" 
-        :pluginTask="pluginTaskSessionPowerManagement">
+        <session-and-power-management v-if="sessionAndPowerState && isExistPrivilege('ROLE_SESSION_POWER')" 
+          class="plugin-card" 
+          :pluginTask="pluginTaskSessionPowerManagement">
         </session-and-power-management>
-        <manage-root v-if="manageRootState" class="plugin-card" :pluginTask="pluginTaskManageRoot"></manage-root>
+        <manage-root v-if="manageRootState && isExistPrivilege('ROLE_MANAGE_ROOT')" class="plugin-card" :pluginTask="pluginTaskManageRoot"></manage-root>
         <!-- <remote-access v-if="remoteAccessState" class="plugin-card" :pluginTask="pluginTaskRemoteAccess"></remote-access>-->
-        <local-user v-if="localUserState" class="plugin-card" :pluginTask="pluginTaskLocalUser"></local-user>
-        <ldap-login v-if="ldapLoginState" class="plugin-card" :pluginTask="pluginTaskLdapLogin"></ldap-login>
-        <xmessage v-if="xmessageState" class="plugin-card" :pluginTask="pluginTaskXmessage"></xmessage>
+        <local-user v-if="localUserState && isExistPrivilege('ROLE_LOCAL_USER')" class="plugin-card" :pluginTask="pluginTaskLocalUser"></local-user>
+        <ldap-login v-if="ldapLoginState && isExistPrivilege('ROLE_LOGIN_MANAGER')" class="plugin-card" :pluginTask="pluginTaskLdapLogin"></ldap-login>
+        <xmessage v-if="xmessageState && isExistPrivilege('ROLE_SEND_MESSAGE')" class="plugin-card" :pluginTask="pluginTaskXmessage"></xmessage>
       </div>
       <div class="p-col-12 p-md-6 p-lg-7">
-        <resource-usage v-if="resourceUsageState" class="plugin-card" :pluginTask="pluginTaskResourceUsage"></resource-usage>
-        <file-management v-if="fileManagementState" class="plugin-card" :pluginTask="pluginTaskFileManagement"></file-management>
-       <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>
-       <conky v-if="conkyState" class="plugin-card" :pluginTask="pluginTaskConky"></conky>
+        <resource-usage v-if="resourceUsageState && isExistPrivilege('ROLE_RESOURCE_USAGE')" class="plugin-card" :pluginTask="pluginTaskResourceUsage"></resource-usage>
+        <file-management v-if="fileManagementState && isExistPrivilege('ROLE_FILE_MANAGEMENT')" class="plugin-card" :pluginTask="pluginTaskFileManagement"></file-management>
+        <file-transfer v-if="fileTransferState && isExistPrivilege('ROLE_FILE_TRANSFER')" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>
+        <conky v-if="conkyState && isExistPrivilege('EXECUTE_CONKY')" class="plugin-card" :pluginTask="pluginTaskConky"></conky>
       </div>
     </div>
   </div>
@@ -47,8 +47,17 @@ import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.
 import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
 import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
 import { taskService } from '../../../../../services/Task/TaskService.js';
+import { mapGetters } from "vuex";
+import {roleManagement} from "../../../../../services/Roles/RoleManagement"
+
 
 export default {
+  props: {
+    priviliges: {
+      type: Array
+    }
+  },
+
   data() {
     return {
       pluginTaskResourceUsage: null,
@@ -95,7 +104,16 @@ export default {
     this.pluginTaskList();
   },
 
+
+  computed: {
+    ...mapGetters(["getUser"]),
+  },
+
   methods: {
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
+
     moveSelectedAgent(deletedNode, selectedNode, destinationDn) {
       this.$emit('moveSelectedAgent', deletedNode, selectedNode, destinationDn,);
     },

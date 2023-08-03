@@ -85,7 +85,8 @@
                     @delete-selected-agent="deleteSelectedAgent"
                     @rename-selected-agent="renameSelectedAgent"
                     @add-folder="addFolder"
-                    :is="selectedPluginTab">
+                    :is="selectedPluginTab"
+                >
                 </component>
             </keep-alive>
           </div>
@@ -103,9 +104,10 @@ import ServiceManagement from '@/views/ComputerManagement/Plugins/Task/Service/S
 import RemoteAccess from '@/views/ComputerManagement/Plugins/Task/RemoteAccess/RemoteAccessPage.vue';
 import SecurityManagement from '@/views/ComputerManagement/Plugins/Task/Security/SecurityManagementPage.vue';
 import TaskHistory from '@/views/ComputerManagement/Plugins/Task/TaskHistory/TaskHistory.vue'
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 import { computerManagementService } from '../../services/ComputerManagement/ComputerManagement.js';
+import { profileService } from '../../services/Profile/ProfileService';
 
 export default {
     components: {
@@ -149,9 +151,15 @@ export default {
                 total: 0,
                 online: 0,
                 offline: 0
-            }
+            },
+            priviliges: []
         };
     },
+
+    computed: {
+    ...mapGetters(["selectedLiderNode"]),
+  },
+
     created() {
         this.setSelectedLiderNode(null);
     },
@@ -168,6 +176,7 @@ export default {
         },
 
         treeNodeClick(node) {
+            // console.log(this.selectedLiderNode)
             this.setSelectedLiderNode(node);
             this.getAgentonlineOfflineCount(node);
         },
@@ -221,7 +230,7 @@ export default {
                 params.append("searchDn", "agents");
                 const {response,error } = await computerManagementService.computerAgentListSize(params);
                 if(error){
-                    this.$toaagentst.add({
+                    this.$toast.add({
                         severity:'error', 
                         detail: this.$t('computer.agent_info.error_agent_list_size'), 
                         summary:this.$t("computer.task.toast_summary"), 
@@ -263,8 +272,7 @@ export default {
 
         addFolder(folder, destinationDn){
             this.$refs.tree.append(folder, this.$refs.tree.getNode(destinationDn));
-        }
-   
+        },   
     },
 
 }

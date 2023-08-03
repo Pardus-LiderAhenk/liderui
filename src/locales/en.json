@@ -68,7 +68,8 @@
         "ad_synchronization": "AD Synchronization",
         "scheduled_task_report": "Scheduled Task Report",
         "view_profile": "View Profile",
-        "logout": "Logout"
+        "logout": "Logout",
+        "privilege_warning": "An error occurred while getting user privileges"
     },
     "tree":{
         "tree": "Tree",

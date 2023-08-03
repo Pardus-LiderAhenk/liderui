@@ -1,6 +1,9 @@
 <template>
   <div>
-    <service-management class="plugin-card" v-if="serviceManagementState" :pluginTask="pluginTaskServiceManagement"></service-management>
+    <service-management  class="plugin-card" 
+      v-if="serviceManagementState && isExistPrivilege('ROLE_SERVICE_MANAGEMENT')" 
+      :pluginTask="pluginTaskServiceManagement">
+  </service-management>
   </div>
 </template>
 
@@ -13,6 +16,7 @@
 
 import ServiceManagement from "@/views/ComputerManagement/Plugins/Task/Service/ServiceManagement.vue";
 import { taskService } from '../../../../../services/Task/TaskService.js'
+import {roleManagement} from "../../../../../services/Roles/RoleManagement"
 
 export default {
   data() {
@@ -30,6 +34,10 @@ export default {
   },
 
   methods: {
+
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
 
     async pluginTaskList(){
       const{response,error} = await taskService.pluginTaskList();

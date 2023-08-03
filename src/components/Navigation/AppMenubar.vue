@@ -42,6 +42,8 @@
 import { profileService } from '../../services/Profile/ProfileService';
 import { serverSettingService } from '../../services/Settings/ServerSettingsService';
 import AboutDialog from './Dialogs/About.vue'
+import {roleManagement} from "../../services/Roles/RoleManagement"
+
 
 export default {
     
@@ -150,51 +152,16 @@ export default {
 
     methods: {
 
-        async showMenuBar() {
-            await this.getPriviliges();
+        isExistPrivilege(role){
+            return roleManagement.isExistRole(role)
+        },
+
+        showMenuBar() {
             this.setMenuBar();
         },
 
-        async getPriviliges() {
-            const {response, error} = await profileService.getProfile();
-            if (error) {
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: "Lütfen dosya seçiniz", 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });                
-            } 
-            else {
-                if(response.status == 200)
-                {
-                    this.priviliges = response.data.priviliges;
-
-                }
-                else if (response.status == 417){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: "", 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            }
-        },
-
-        isExistPrivilege(value){
-            let isExist = false;
-            for (let index = 0; index < this.priviliges.length; index++) {
-                const element = this.priviliges[index];
-                if (element === value) {
-                    isExist = true;
-                }
-            }
-            return isExist;
-        },
-
         setMenuBar() {
-            if (this.isExistPrivilege("ROLE_COMPUTERS") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_COMPUTERS")) {
                 this.items.push(
                     {
                         label: this.$t('menu.computer_management'),
@@ -202,7 +169,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_USERS") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_USERS")) {
                 this.items.push(
                     {
                         label: this.$t('menu.user_management'),
@@ -210,7 +177,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_POLICY") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_POLICY")) {
                 this.items.push(
                     {
                         label: this.$t('menu.policy_management'),
@@ -218,7 +185,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_ADMIN") || this.isExistPrivilege("ROLE_AGENT_INFO") ||
+            if (this.isExistPrivilege("ROLE_AGENT_INFO") ||
                 this.isExistPrivilege("ROLE_COMPUTERS") || this.isExistPrivilege("ROLE_EXECUTED_TASK") || 
                 this.isExistPrivilege("ROLE_OPERATION_LOG")) {
                 this.items.push(
@@ -229,7 +196,7 @@ export default {
                 );
             }
 
-            if (this.isExistPrivilege("ROLE_CONSOLE_ACCESS_SETTINGS") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_CONSOLE_ACCESS_SETTINGS")) {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.console_user_settings'),
@@ -237,7 +204,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_SERVER_SETTINGS") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_SERVER_SETTINGS")) {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.server_settings'),
@@ -245,7 +212,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_CONKY_DEFINITION") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_CONKY_DEFINITION")) {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.system_monitoring_definitions'),
@@ -253,7 +220,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_SCRIPT_DEFINITION") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_SCRIPT_DEFINITION")) {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.script_definitions'),
@@ -261,7 +228,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_REGISTRATION_TEMPLATE") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_REGISTRATION_TEMPLATE")) {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.registration_templates'),
@@ -273,7 +240,7 @@ export default {
 
         getReportsMenuItem() {
             let reportsItems = [];
-            if (this.isExistPrivilege("ROLE_AGENT_INFO") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_AGENT_INFO")) {
                 reportsItems.push(
                     {
                         label: this.$t('menu.detailed_agent_report'),
@@ -281,7 +248,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_EXECUTED_TASK") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_EXECUTED_TASK")) {
                 reportsItems.push(
                     {
                         label: this.$t('menu.executed_task_report'),
@@ -289,7 +256,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_OPERATION_LOG") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_OPERATION_LOG")) {
                 reportsItems.push(
                     {
                         label: this.$t('menu.system_log_report'),
@@ -297,7 +264,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_COMPUTERS") || this.isExistPrivilege("ROLE_ADMIN")) {
+            if (this.isExistPrivilege("ROLE_COMPUTERS") || this.isExistPrivilege('ROLE_SCHEDULE_TASK')) {
                 reportsItems.push(
                     {
                         label: this.$t('menu.scheduled_task_report'),

@@ -1,6 +1,6 @@
 <template>
   <div class="plugin-card">
-    <Card>
+    <Card v-if="isExistPrivilege('ROLE_TASK_HISTORY')">
         <template #title>
             <div class="p-d-flex p-jc-between">
                 <div style="font-size:15px;">
@@ -161,6 +161,8 @@
 import { taskService } from "../../../../../services/Task/TaskService.js";
 import {FilterMatchMode} from 'primevue/api';
 import { mapGetters } from "vuex"
+import {roleManagement} from "../../../../../services/Roles/RoleManagement"
+
 /**
  * Get task history of selected agent
  * @see {@link http://www.liderahenk.org/}
@@ -190,6 +192,9 @@ export default {
   },
 
   methods: {
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
     initFilters() {
       this.filters = {
           'global': {value: null, matchMode: FilterMatchMode.CONTAINS}

@@ -68,7 +68,8 @@
         "ad_synchronization": "AD Senkronizasyonu",
         "scheduled_task_report": "Zamanlanmış Görev Raporu",
         "view_profile": "Profil Görüntüle",
-        "logout": "Çıkış"
+        "logout": "Çıkış",
+        "privilege_warning": "Kullanıcı yetkileri getiriliken hata oluştu"
     },
     "tree":{
         "tree": "Ağaç",

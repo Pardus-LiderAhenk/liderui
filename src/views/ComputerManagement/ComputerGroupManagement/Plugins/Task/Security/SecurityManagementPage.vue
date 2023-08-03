@@ -3,12 +3,14 @@
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-5">
         <usb-management 
-          v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement">
+          v-if="usbManagementState && isExistPrivilege('ROLE_DEVICE_MANAGEMENT')" 
+            class="plugin-card" :pluginTask="pluginTaskUsbManagement">
         </usb-management>
       </div>
       <div class="p-col-12 p-md-6 p-lg-7">
         <usb-rule-management 
-          v-if="usbRuleManagementState" class="plugin-card" :pluginTask="pluginTaskUsbRuleManagement"
+          v-if="usbRuleManagementState && isExistPrivilege('ROLE_USB_RULE')" 
+          class="plugin-card" :pluginTask="pluginTaskUsbRuleManagement"
           :isGroup="false">
         </usb-rule-management>
       </div>
@@ -26,6 +28,7 @@
 import UsbManagement from "@/views/ComputerManagement/Plugins/Task/Security/Usb/UsbManagement.vue";
 import UsbRuleManagement from "@/views/ComputerManagement/Plugins/Task/Security/Usb/UsbRuleManagement.vue";
 import { taskService } from '../../../../../../services/Task/TaskService.js'
+import {roleManagement} from "../../../../../../services/Roles/RoleManagement"
 
 
 export default {
@@ -51,6 +54,10 @@ export default {
   },
   
   methods: {
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
+
     async pluginTaskList(){
       const{response,error} = await taskService.pluginTaskList();
       if(error){
