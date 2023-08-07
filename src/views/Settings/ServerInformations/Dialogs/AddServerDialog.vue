@@ -59,7 +59,6 @@ export default {
     props: ['modalVisibleValue'],
     data(){
         return {
-            selectedUserNode:null,
            
             serverForm: {
                 machineName:'',

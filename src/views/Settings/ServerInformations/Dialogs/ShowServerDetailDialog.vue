@@ -20,39 +20,43 @@
 
                 <h5>{{ $t('Disk Bilgisi') }}</h5>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>İşletim sistemi:</b></div>
+                <div class="p-col-4"><b>İşletim sistemi : </b></div>
                 <div class="p-col-8">{{ getPropertyValue(selectedServer.properties, "os_name") }}</div>
-                <div class="p-col-4"><b>Versiyon:</b></div>
+                <div class="p-col-4"><b>Versiyon : </b></div>
                 <div class="p-col-8">{{ getPropertyValue(selectedServer.properties, "os_version") }}</div>
-                <div class="p-col-4"><b>Mac Adres:</b></div>
+                <div class="p-col-4"><b>Mac Adres : </b></div>
                 <div class="p-col-8">{{ getPropertyValue(selectedServer.properties, "mac_addr") }}</div>
-                <div class="p-col-4"><b>Toplam disk alanı≈</b></div>
+                <div class="p-col-4"><b>Toplam disk alanı : </b></div>
                 <div class="p-col-8">{{
                     ((getPropertyValue(selectedServer.properties, "disk_total")/1073741824 )*4096)
                     .toFixed(2) }}
                 </div>
-                <div class="p-col-4"><b>Boş disk alanı≈</b></div>
+                <div class="p-col-4"><b>Boş disk alanı : </b></div>
                 <div class="p-col-8">{{
                    ((getPropertyValue(selectedServer.properties, "total_disk_empty")/1073741824 )*4096)
                     .toFixed(2) }}
                 </div>
 
-                <div class="p-col-4"><b>Toplam ram≈</b></div>
+                <div class="p-col-4"><b>Toplam ram : </b></div>
                 <div class="p-col-8">{{
                   ((getPropertyValue(selectedServer.properties, "physical_memory"))/1073741824)
-                   .toFixed(2) }}</div>
-                </div>
-                <div class="p-col-4"><b>Zaman:</b></div>
-                <div class="p-col-8">{{ 
-                    getPropertyValue(selectedServer.properties,"uptime_days")+"Gün "+getPropertyValue(selectedServer.properties,"uptime_hours")+"s "+getPropertyValue(selectedServer.properties, "uptime_minutes")+"dk"
+                   .toFixed(2) 
                 }}</div>
 
+                <div class="p-col-4"><b>Zaman : </b></div>
+                <div class="p-col-8">{{ 
+                    getPropertyValue(selectedServer.properties,"uptime_days")+"Gün "+
+                    getPropertyValue(selectedServer.properties,"uptime_hours")+"s "+
+                    getPropertyValue(selectedServer.properties, "uptime_minutes")+"dk " }}</div>
+            </div>
             <template #footer>
 
                 <Button :label="$t('Kapat')" icon="pi pi-times" @click="showServerDetailDialog = false" class="p-button-text"/>
 
             </template>
+
         </Dialog>
+
     </div>
 </template>
 <script>
@@ -60,13 +64,16 @@
 export default {
 
     props: {
+        
         selectedServer: {
             type: Object,
             description: "Server detail",
         },
+
         showServerDetailDialog: {
-            type: Boolean
-        },
+            type: Boolean,
+            default: false
+        }
     },
 
     data(){
@@ -98,12 +105,9 @@ export default {
             }
                 return propertyValue;
             
-        },
-    },
-    mounted() {
-        console.log(this.selectedServer)
+        }
     }
     
-}
+};
 
 </script>

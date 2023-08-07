@@ -140,14 +140,15 @@ export default {
 
         async checkConnection(){
 
-        
-            const params = new FormData();
-            params.append('hostname', this.serverForm.ip);
-            params.append('username', this.serverForm.user);
-            params.append('password', this.serverForm.password);
+            let params = {
+
+                "hostname": this.ip,
+                "username": this.user,
+                "password": this.password,
+            }
 
             const {response, error} = await serverInformationService.connectionServer(params);
-
+            console.log(response)
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -158,7 +159,7 @@ export default {
             }
             else{
                 if(response.status == 200){
-                    console.log(testt)
+
                     if (response.data != null) {
                         this.$toast.add({
                             severity:'success', 
