@@ -64,10 +64,6 @@ export default{
                     return propertyValue;
             },
 
-    },
-
-    mounted() {
-        //this.servers;
     }
 
 }

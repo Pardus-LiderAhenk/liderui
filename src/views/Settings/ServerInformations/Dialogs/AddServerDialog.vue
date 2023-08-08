@@ -59,7 +59,7 @@ export default {
     props: ['modalVisibleValue'],
     data(){
         return {
-           
+                       
             serverForm: {
                 machineName:'',
                 ip:'',

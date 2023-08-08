@@ -116,6 +116,9 @@
         created(){
             this.serverListAll();
         },
+        mounted(){
+            this.serverListAll()
+        },
     
         methods: {
 
@@ -126,7 +129,7 @@
                 if (error){
                     this.$toast.add({
                     severity:'error',
-                    detail: this.$t('serverList'),
+                    detail: "test",
                     summary:this.$t("computer.task.toast_summary"),
                     life:3600
                     });

@@ -62,8 +62,15 @@
                     </Column>
                     
                     <Column field="status" header="Durumu">
-                    <template #body="{ data }">
-                        {{ getPropertyValue(data.properties, "status") == "true"  ?  $t("Bağlandı") : $t("Bağlandı") }}
+                    <template>
+                        <Badge v-if="status == true" 
+                            :value="$t('Bağlandı')" 
+                            severity="success">
+                        </Badge>
+                        <Badge v-else
+                            :value="$t('Bağlanamadı')" 
+                            severity="danger">
+                        </Badge>
                     </template>    
                     </Column>
                 
@@ -180,6 +187,7 @@ export default{
             editServerDialog : false,
             editServerModalVisible : false,
             selectedServer : null,
+            serversData: [],
             pageNumber: 1,
             rowNumber: 10,
 
@@ -192,7 +200,10 @@ export default{
         EditServerDialog,
         
     },
-    
+
+     mounted(){
+        this.serverListAll();
+     },
 
 
     methods: {
@@ -270,6 +281,33 @@ export default{
             else if(response.status == 417){
               return "error";
             }
+    },
+    async serverListAll(){
+
+
+        const { response, error } = await serverInformationService.list();
+        if (error){
+           this.$toast.add({
+           severity:'error',
+           detail: "test",
+           summary:this.$t("computer.task.toast_summary"),
+           life:3600
+           });
+        }
+        else{
+           if (response.status == 200) {
+               this.serversData = response.data;
+               console.log('Servr alıyorum',this.serversData)
+           } 
+           else if (response.status == 417) {
+               this.$toast.add({
+               severity:'error',
+               detail: this.$t('reports.task_report.error_417_agent_info_list'),
+               summary:this.$t("computer.task.toast_summary"),
+               life:3600
+               });
+           }
+        }
     }
 
     },
