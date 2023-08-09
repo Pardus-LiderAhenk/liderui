@@ -36,18 +36,14 @@ export default{
             type: Object,
             description: "Server disk",
         },
+        serversData:{
+            type: Object,
+            description: "Server data db",
+        },
     },
 
     data() {
-
-    return {
-
-        dataLogList:[
-            "test logları1"
-            
-        ]
-
-        }
+        
     },
 
     methods: {

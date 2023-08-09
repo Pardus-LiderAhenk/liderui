@@ -10,21 +10,33 @@
                 </div>
                 <div class="p-field">
                     <label for="ip">{{$t('Ip Adres')}}</label>
-                    <InputText id="ip" type="text" v-model="serverForm.ip" placeholder="10.10.10.10"/>
+                    <InputText :class="validationForm.ip ? 'p-invalid': ''" 
+                    id="ip" type="text" v-model="serverForm.ip" placeholder="10.10.10.10"/>
+                    <small v-if="validationForm.ip" class="p-error">
+                        {{ $t('ip yazılması gerekiyor')}}
+                    </small>
                 </div>
                 <div class="p-field">
                     <label for="user">{{$t('Kullanıcı')}}</label>
-                    <InputText id="user" type="text" v-model="serverForm.user" placeholder="Kullanıcı adı"/>
+                    <InputText  
+                    id="user" type="text" v-model="serverForm.user" placeholder="Kullanıcı adı"/>
+                    <small v-if="validationForm.user" class="p-error">
+                        {{ $t('User yazılması gerekiyor')}}
+                    </small>
                 </div>
                 
                 <div class="p-field">
                     <label for="passwd">{{$t('Parola')}}</label>
                     <div class="p-inputgroup flex-1">
-                        <InputText id="passwd" type="password" v-model="serverForm.password" placeholder="******"/>
+                        <InputText 
+                            id="passwd" type="password" v-model="serverForm.password" placeholder="******"/>
                         <Button icon="pi pi-link" 
-                        severity="success" 
-                        @click="checkConnection"/>
+                            severity="success" 
+                            @click="checkConnection"/>
                     </div>
+                    <small v-if="validationForm.password" class="p-error">
+                        {{ $t('Password yazılması gerekiyor')}}
+                    </small>
                 </div>
 
                 <div class="p-field">
@@ -32,15 +44,16 @@
                     <InputText id="description" type="text" v-model="serverForm.description" placeholder="Açıklama"/>
                 </div>
             </div>
+            <div v-if="loading" class="p-text-center">
+                <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+                <a class="primary">
+                  {{$t('Makine ekleniyor bekleyiniz')}}
+                </a>
+            </div>
 
         <template #footer>
 
-            <!-- <Button 
-            :label="$t('Sunucu bilgilerini getir')" 
-            :disabled="loading"
-            icon="pi pi-search"  
-            @click="getServerdata">
-            </Button> -->
+            
             <Button :label="$t('Kapat')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
             <Button :label="$t('Kaydet')" icon="pi pi-save"  @click="addNewServer"></Button>
 
@@ -56,7 +69,7 @@ import { serverInformationService } from '../../../../services/Settings/ServerIn
 
 export default {
 
-    props: ['modalVisibleValue'],
+    props: ['addServerDialog'],
     data(){
         return {
 
@@ -67,16 +80,18 @@ export default {
                 password:'',
                 description:'',
             },
+            validationForm: {},
+            loading: false,
 
         }
     },
     computed: {
         modalVisible: {
             get() {
-                return this.modalVisibleValue;
+                return this.addServerDialog;
             },
             set(value) {
-                this.$emit('modalVisibleValue', false);
+                this.$emit('closeAddServerDialog', false);
                 if(!value){
                     this.serverForm.machineName = "";
                     this.serverForm.ip = "";
@@ -92,7 +107,11 @@ export default {
     methods: {
 
         async addNewServer(){
+            if(this.validateForm() == false){
+                return;
+            }
 
+            this.loading = true;
             const params = new FormData();
             params.append("machineName", this.serverForm.machineName);
             params.append("ip", this.serverForm.ip);
@@ -114,8 +133,7 @@ export default {
                 }
                 else{
                     if(response.status == 200){
-                        this.$emit("savedServer",response.data);
-                        this.modalVisible = false;
+                        this.$emit("savedServer");
                         if (response.data != null) {
                             this.$toast.add({
                                 severity:'success', 
@@ -133,7 +151,8 @@ export default {
                             life: 3000
                         });
                     }
-                }        
+                } 
+                this.loading = false;       
         },
 
         async checkConnection(){
@@ -187,11 +206,42 @@ export default {
             params.append('username', this.serverForm.user);
             params.append('password', this.serverForm.password);
 
-            const {response, error} = await serverInformationService.getServerServer(params);
+            const {response, error} = await serverInformationService.getServer(params);
             console.log(response);
             
-        }
+        },
+
+        validateForm() {
+            if (!this.serverForm.ip.trim()){
+                this.validationForm['ip'] = true;
+            } else{
+                delete this.validationForm['ip'];
+            }
+            if (!this.serverForm.user.trim()){
+                this.validationForm['user'] = true;
+            } else{
+                delete this.validationForm['user'];
+            }
+            if (!this.serverForm.password.trim()){
+                this.validationForm['password'] = true;
+            } else{
+                delete this.validationForm['password'];
+            }
+            return !Object.keys(this.validationForm).length;
+        },
+
+    },
+
+    watch:{
+
+        serverForm: {
+            handler(){
+                this.validateForm();
+            },
+            deep: true,
+        },
     }
+
 }
 
 </script>

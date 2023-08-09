@@ -1,17 +1,22 @@
 <template>
-    <div class="p-col-12 p-pb-0" v-loading="loading"
+    <div class="p-col-12 p-pb-0" 
+            v-loading="loading"
             element-loading-text="Loading, please wait..."
             element-loading-background="rgba(0, 0, 0, 0.6)"
-            :element-loading-spinner="svg">
+            :element-loading-spinner="svg"
+            >
             <div class="p-grid">
                 <div class="p-col-12 p-md-6 p-lg-6">
                 <server-list
                     :servers="servers"
+                    @deletedServer="getServerData"
+                    @savedServer="savedServer"
                 ></server-list>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">
                     <server-logs
                         :servers="servers"
+                        :serversData="serversData"
                     ></server-logs>
                 </div>
             </div>
@@ -19,6 +24,7 @@
                 <div class="p-col-12 p-md-6 p-lg-4">
                     <disk-information
                         :servers="servers"
+                        :serversData="serversData"
                     ></disk-information>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-4">
@@ -32,26 +38,12 @@
                     ></cpu-information>
                 </div>
             </div>
-    
-
-    <add-server-dialog v-if="addServerModalVisible"
-            :modalVisibleValue="addServerModalVisible" 
-            @modalVisibleValue="addServerModalVisible = $event;"
-            @saved-server="savedServer"
-        />
 
     <show-server-detail-dialog v-if="showServerDetailDialog"
         :showServerDetailDialog="showServerDetailDialog" 
         :servers="servers"
         @modalVisibleValue="showServerDetailDialog = $event;"
     />
-
-    <!-- <delete-server-dialog
-        :deleteServerDialog="deleteServerDialog"
-        :selectedServer="selectedServer"
-        @delete-server="deleteServer"
-        @close-server-dialog="deleteServerDialog = false"
-    /> -->
 
     <edit-server-dialog v-if="editServerDialog"
         :editServerDialog="editServerDialog"
@@ -69,7 +61,6 @@
     
 
     import ChartDataLabels from 'chartjs-plugin-datalabels';
-    import AddServerDialog from './Dialogs/AddServerDialog.vue';
     import DiskInformation from "./Component/DiskInformation.vue";
     import RamInformation from "./Component/RamInformation.vue";
     import CpuInformation from "./Component/CpuInformation.vue";
@@ -97,7 +88,8 @@
                 editServerModalVisible : false,
                 editServerDialog: false,
                 servers: [],
-                loading: true,
+                serversData:[],
+                loading: false,
             }
         },
         
@@ -105,7 +97,6 @@
 
             ServerList,
             ServerLogs,
-            AddServerDialog,
             DiskInformation,
             RamInformation,
             CpuInformation,
@@ -117,15 +108,15 @@
         created(){
             this.serverListAll();
         },
+
         mounted(){
-            this.serverListAll()
+            this.serverListAll();
         },
     
         methods: {
 
             async serverListAll(){
-
-
+                this.loading = true;
                 const { response, error } = await serverInformationService.list();
                 if (error){
                     this.$toast.add({
@@ -149,12 +140,40 @@
                         });
                     }
                 }
-
                 this.loading = false;
             },
                    
-            savedServer(data) {
-                this.serverListAll();
+            savedServer() {
+                this.getServerData();
+            },
+
+            async getServerData(){
+                this.loading = true;
+                const{response,error} = await  serverInformationService.getData();
+                console.log(response);
+                if (error){
+                    this.$toast.add({
+                        severity:'error',
+                        detail: "server db error",
+                        summary:this.$t("computer.task.toast_summary"),
+                        life:3600
+                    });
+                } 
+                else{
+                    if (response.status == 200) {
+                        console.log(response.data)
+                        this.servers = response.data;
+                    } 
+                    else if (response.status == 417) {
+                        this.$toast.add({
+                            severity:'error',
+                            detail: this.$t('server db data'),
+                            summary:this.$t("computer.task.toast_summary"),
+                            life:3600
+                        });
+                    }
+                }
+                this.loading = false;
             },
 
             getPropertyValue(properties, propertyName) {
@@ -170,6 +189,11 @@
             },
 
             
+        },
+        watch : {
+            getServer(){
+                this.getServerData();
+            },
         }
     
     }

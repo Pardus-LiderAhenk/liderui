@@ -16,7 +16,7 @@
                     </div>
                 </template>
                 <template #content>
-                <DataTable :value="serversData"  
+                <DataTable :value="servers"  
                     tableStyle="min-width: 64rem" 
                     class="p-datatable-sm" 
                     responsiveLayout="scroll"
@@ -87,8 +87,8 @@
             </Card>
         </div>
         <add-server-dialog v-if="addServerModalVisible"
-            :modalVisibleValue="addServerModalVisible" 
-            @modalVisibleValue="addServerModalVisible = $event;"
+            :addServerDialog="addServerModalVisible" 
+            @closeAddServerDialog="addServerModalVisible = $event;"
             @saved-server="savedServer"
         />
 
@@ -103,8 +103,7 @@
             :selectedServer="selectedServer"
             @modalVisibleValue="editServerModalVisible = $event;"
             @close-server-dialog="editServerModalVisible = false"
-            @edit-server-dialog="savedServer"
-            
+            @edit-server-dialog="savedServer"  
         />
 
         <Dialog :header="$t('Sucunu sil')" 
@@ -158,12 +157,12 @@ export default{
     //         description: "Server list",
     //     },
     // },
+    props: ["servers"],
 
     data() {
 
         return {
     
-            AddServerDialog : false,
             showServerDetailDialog : false,
             addServerModalVisible : false,
             showServerDetailVisible : false,
@@ -186,19 +185,12 @@ export default{
         
     },
 
-     mounted(){
-        this.serverListAll();
-     },
-
-
     methods: {
 
-        // updateRowIndex() {
-        //     for (let index = 0; index < this.policies.length; index++) {
-        //         const element = this.policies[index];
-        //         element.index = index + 1;
-        //     }
-        // },
+        savedServer() {
+            this.addServerModalVisible = false;
+            this.$emit("savedServer");
+        },
         
         getPropertyValue(properties, propertyName) {
             var propertyValue = "";
@@ -226,7 +218,8 @@ export default{
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
-                this.serversData = this.serversData.filter(template => template.id != this.selectedServer.id);
+                this.$emit('deletedServer');
+                // this.serversData = this.serversData.filter(template => template.id != this.selectedServer.id);
                 this.selectedServer = null;
                 this.deleteServerDialog = false;
             }
@@ -269,37 +262,6 @@ export default{
             else if(response.status == 417){
               return "error";
             }
-    },
-    async serverListAll(){
-
-
-        const { response, error } = await serverInformationService.list();
-        if (error){
-           this.$toast.add({
-           severity:'error',
-           detail: "test",
-           summary:this.$t("computer.task.toast_summary"),
-           life:3600
-           });
-        }
-        else{
-           if (response.status == 200) {
-               this.serversData = response.data;
-               console.log('Server list alıyorum',this.serversData)
-           } 
-           else if (response.status == 417) {
-               this.$toast.add({
-               severity:'error',
-               detail: this.$t('reports.task_report.error_417_agent_info_list'),
-               summary:this.$t("computer.task.toast_summary"),
-               life:3600
-               });
-           }
-        }
-    },
-
-    savedServer(data) {
-        this.serverListAll();
     },
 
     editTemplate(data) {
