@@ -117,7 +117,7 @@ export default {
             console.log(response,"burdaa")
             if(response.status == 200){
                 if(response.data){
-                    console.log(response)
+                    this.$emit("updatedServer",response.data);
                     this.showDialog = false;
                     this.$toast.add({
                         severity:'success',

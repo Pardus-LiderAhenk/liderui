@@ -33,11 +33,12 @@
                 </div>
             </div>
     
-       
+
     <add-server-dialog v-if="addServerModalVisible"
-        :modalVisibleValue="addServerModalVisible" 
-        @modalVisibleValue="addServerModalVisible = $event;"
-    />
+            :modalVisibleValue="addServerModalVisible" 
+            @modalVisibleValue="addServerModalVisible = $event;"
+            @saved-server="savedServer"
+        />
 
     <show-server-detail-dialog v-if="showServerDetailDialog"
         :showServerDetailDialog="showServerDetailDialog" 
@@ -109,7 +110,7 @@
             RamInformation,
             CpuInformation,
             ShowServerDetailDialog,
-           //DeleteServerDialog,
+            EditServerDialog,
             
         },
         
@@ -137,7 +138,7 @@
                 else{
                     if (response.status == 200) {
                         this.servers = response.data;
-                        console.log('Servr alıyorum',this.servers)
+                        console.log('Servr alıyorum server vue dann',this.servers)
                     } 
                     else if (response.status == 417) {
                         this.$toast.add({
@@ -153,8 +154,7 @@
             },
                    
             savedServer(data) {
-                this.resetPaginator();
-                this.getServerList();
+                this.serverListAll();
             },
 
             getPropertyValue(properties, propertyName) {

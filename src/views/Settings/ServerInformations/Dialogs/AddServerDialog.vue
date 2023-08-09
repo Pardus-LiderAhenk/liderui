@@ -59,7 +59,7 @@ export default {
     props: ['modalVisibleValue'],
     data(){
         return {
-                       
+
             serverForm: {
                 machineName:'',
                 ip:'',
@@ -114,6 +114,8 @@ export default {
                 }
                 else{
                     if(response.status == 200){
+                        this.$emit("savedServer",response.data);
+                        this.modalVisible = false;
                         if (response.data != null) {
                             this.$toast.add({
                                 severity:'success', 
@@ -132,7 +134,7 @@ export default {
                         });
                     }
                 }        
-            },
+        },
 
         async checkConnection(){
 

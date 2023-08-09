@@ -16,29 +16,16 @@
                     </div>
                 </template>
                 <template #content>
-                <DataTable :value="servers"  
+                <DataTable :value="serversData"  
                     tableStyle="min-width: 64rem" 
                     class="p-datatable-sm" 
                     responsiveLayout="scroll"
                     :paginator="true" :rows="10" ref="dt"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
                     :rowsPerPageOptions="[10,25,50,100]" style="margin-top: 1rem">
-                    <!-- <template #header>                                                -->
-                            
-                        
-                                <!-- <h5>Sunucu listesi</h5>
-                                
-                                <Button 
-                                    class="p-button-sm" 
-                                    icon="pi pi-plus" 
-                                    :label="$t('sunucu ekle')"
-                                    @click="addServerModalVisible =  true;">
-                                </Button>
-                        </div> -->
-                    <!-- </template> -->
+
                     <Column header="#">
                         <template #body="{index}">
-                          <!-- <span>{{  index + 1 }}</span> -->
                           <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
 
                         </template>
@@ -62,14 +49,10 @@
                     </Column>
                     
                     <Column field="status" header="Durumu">
-                    <template>
-                        <Badge v-if="status == true" 
-                            :value="$t('Bağlandı')" 
-                            severity="success">
-                        </Badge>
-                        <Badge v-else
-                            :value="$t('Bağlanamadı')" 
-                            severity="danger">
+                    <template #body="slotProps">
+                        <Badge  
+                            :value="slotProps.data.status ? $t('Bağlandı'): $t('Bağlanamadı')" 
+                            :severity="slotProps.data.status ? 'success': 'danger'">
                         </Badge>
                     </template>    
                     </Column>
@@ -104,9 +87,9 @@
             </Card>
         </div>
         <add-server-dialog v-if="addServerModalVisible"
-            @updateConsoleUsers="getConsoleUsers"
             :modalVisibleValue="addServerModalVisible" 
             @modalVisibleValue="addServerModalVisible = $event;"
+            @saved-server="savedServer"
         />
 
         <show-server-detail-dialog v-if="showServerDetailVisible"
@@ -120,6 +103,8 @@
             :selectedServer="selectedServer"
             @modalVisibleValue="editServerModalVisible = $event;"
             @close-server-dialog="editServerModalVisible = false"
+            @edit-server-dialog="savedServer"
+            
         />
 
         <Dialog :header="$t('Sucunu sil')" 
@@ -144,8 +129,7 @@
                 <Button class="p-button-sm"
                     :label="$t('Evet')" 
                     icon="pi pi-check"
-                    @click="deleteServer"
-                    
+                    @click="deleteServer"                    
                 />
             </template>
         </Dialog>
@@ -168,12 +152,12 @@ import { serverInformationService } from '../../../../services/Settings/ServerIn
 
 
 export default{
-    props: {
-        servers: {
-            type: Object,
-            description: "Server list",
-        },
-    },
+    // props: {
+    //     servers: {
+    //         type: Object,
+    //         description: "Server list",
+    //     },
+    // },
 
     data() {
 
@@ -190,6 +174,7 @@ export default{
             serversData: [],
             pageNumber: 1,
             rowNumber: 10,
+            rows: 10
 
         }
     },
@@ -208,12 +193,12 @@ export default{
 
     methods: {
 
-        updateRowIndex() {
-            for (let index = 0; index < this.policies.length; index++) {
-                const element = this.policies[index];
-                element.index = index + 1;
-            }
-        },
+        // updateRowIndex() {
+        //     for (let index = 0; index < this.policies.length; index++) {
+        //         const element = this.policies[index];
+        //         element.index = index + 1;
+        //     }
+        // },
         
         getPropertyValue(properties, propertyName) {
             var propertyValue = "";
@@ -235,12 +220,15 @@ export default{
             
             if(response.status == 200){
                     
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('Sunucu başarıyla silindi(list)'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
+                this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('Sunucu başarıyla silindi(list)'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                this.serversData = this.serversData.filter(template => template.id != this.selectedServer.id);
+                this.selectedServer = null;
+                this.deleteServerDialog = false;
             }
                 
             
@@ -297,7 +285,7 @@ export default{
         else{
            if (response.status == 200) {
                this.serversData = response.data;
-               console.log('Servr alıyorum',this.serversData)
+               console.log('Server list alıyorum',this.serversData)
            } 
            else if (response.status == 417) {
                this.$toast.add({
@@ -308,7 +296,23 @@ export default{
                });
            }
         }
-    }
+    },
+
+    savedServer(data) {
+        this.serverListAll();
+    },
+
+    editTemplate(data) {
+        this.selectedServer = data;
+        this.updateServerDialog = true;
+    },
+
+    resetPaginator() {
+        this.pageNumber = 1;
+        this.rowNumber = this.rows;
+        this.first = 0;
+        this.serverListAll();
+    },
 
     },
 }
