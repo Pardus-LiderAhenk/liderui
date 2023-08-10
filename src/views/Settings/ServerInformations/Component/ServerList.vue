@@ -101,9 +101,8 @@
         <edit-server-dialog v-if="editServerModalVisible"
             :updateServerDialog="editServerModalVisible"
             :selectedServer="selectedServer"
-            @modalVisibleValue="editServerModalVisible = $event;"
-            @close-server-dialog="editServerModalVisible = false"
-            @edit-server-dialog="savedServer"  
+            @closeEditServerDialog="editServerModalVisible = $event;"
+            @edit-server="editServer"  
         />
 
         <Dialog :header="$t('Sucunu sil')" 
@@ -151,12 +150,7 @@ import { serverInformationService } from '../../../../services/Settings/ServerIn
 
 
 export default{
-    // props: {
-    //     servers: {
-    //         type: Object,
-    //         description: "Server list",
-    //     },
-    // },
+
     props: ["servers"],
 
     data() {
@@ -190,6 +184,11 @@ export default{
         savedServer() {
             this.addServerModalVisible = false;
             this.$emit("savedServer");
+        },
+
+        editServer() {
+            this.showServerDetailVisible = false;
+            this.$emit("editServer");
         },
         
         getPropertyValue(properties, propertyName) {
@@ -262,11 +261,6 @@ export default{
             else if(response.status == 417){
               return "error";
             }
-    },
-
-    editTemplate(data) {
-        this.selectedServer = data;
-        this.updateServerDialog = true;
     },
 
     resetPaginator() {

@@ -1,9 +1,7 @@
 <template>
     <div>
         <Dialog :header="$t('Sucunu güncelle')" 
-        v-model:visible="showDialog" 
-        :modal="true" 
-        style="width:30vw;" >
+        v-model:visible="showDialog" style="width:30vw;" >
             <div class="p-fluid">
                 
                 <div class="p-field">
@@ -28,6 +26,12 @@
                         @click="checkConnection"/>
                     </div>
                 </div>
+            </div>
+            <div v-if="loading" class="p-text-center">
+                <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+                <a class="primary">
+                  {{$t('Makine güncelleniyor bekleyiniz')}}
+                </a>
             </div>
 
             <template #footer>
@@ -82,15 +86,15 @@ export default {
 
     computed: {
         showDialog: {
-            get () {
+            get() {
                 this.setServerData();
                 return this.updateServerDialog;
             },
 
-            set (value) {
-                if (!value) {
-                    this.$emit('closeServerDialog');
-                }
+            set() {
+                
+                this.$emit('closeEditServerDialog',false);
+                
             }
         },
     },
@@ -106,6 +110,8 @@ export default {
         },
 
         async updateServer(){
+
+            this.loading = true;
             let params = new FormData();
             params.append("machineName", this.machineName)
             params.append("ip", this.ip)
@@ -116,8 +122,8 @@ export default {
             const {response,error} = await serverInformationService.update(params);
             console.log(response,"burdaa")
             if(response.status == 200){
-                if(response.data){
-                    this.$emit("updatedServer",response.data);
+                this.$emit("editServer");
+                if(response.data != null){
                     this.showDialog = false;
                     this.$toast.add({
                         severity:'success',
@@ -135,18 +141,17 @@ export default {
                 life: 3000
                 });
             }
+            this.loading = false;
 
         },
 
         async checkConnection(){
 
-            let params = {
-
-                "hostname": this.ip,
-                "username": this.user,
-                "password": this.password,
-            }
-
+            const params = new FormData();
+            params.append('hostname', this.ip);
+            params.append('username', this.user);
+            params.append('password', this.password);
+           
             const {response, error} = await serverInformationService.connectionServer(params);
             console.log(response)
             if(error){

@@ -11,6 +11,7 @@
                     :servers="servers"
                     @deletedServer="getServerData"
                     @savedServer="savedServer"
+                    @editServer="editServer"
                 ></server-list>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-6">
@@ -45,12 +46,6 @@
         @modalVisibleValue="showServerDetailDialog = $event;"
     />
 
-    <edit-server-dialog v-if="editServerDialog"
-        :editServerDialog="editServerDialog"
-        :selectedServer="selectedServer"
-        @edit-server-dialog="savedServer"
-    />
-
 </div>
 </template>
 <script>
@@ -67,7 +62,6 @@
     import ServerList from "./Component/ServerList.vue";
     import ServerLogs from "./Component/ServerLogs.vue";
     import ShowServerDetailDialog from "./Dialogs/ShowServerDetailDialog.vue";
-    import EditServerDialog from "./Dialogs/EditServerDialog.vue";
     import  { serverInformationService } from "../../../services/Settings/ServerInformationService.js";
     
     
@@ -101,7 +95,6 @@
             RamInformation,
             CpuInformation,
             ShowServerDetailDialog,
-            EditServerDialog,
             
         },
         
@@ -144,6 +137,10 @@
             },
                    
             savedServer() {
+                this.getServerData();
+            },
+
+            editServer(){
                 this.getServerData();
             },
 

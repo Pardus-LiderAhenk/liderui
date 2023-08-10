@@ -206,9 +206,7 @@ export default {
             params.append('username', this.serverForm.user);
             params.append('password', this.serverForm.password);
 
-            const {response, error} = await serverInformationService.getServer(params);
-            console.log(response);
-            
+            const {response, error} = await serverInformationService.getServer(params);            
         },
 
         validateForm() {
