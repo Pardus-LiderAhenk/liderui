@@ -16,7 +16,12 @@
                 <div class="p-col-4"><b>Kullanıcı:</b></div>
                 <div class="p-col-8">{{ selectedServer.user }}</div>
                 <div class="p-col-4"><b>Makinenin durumu:</b></div>
-                <div class="p-col-8">{{ selectedServer.status }}</div>
+                <div class="p-col-8">
+                <Badge 
+                    :value="selectedServer.status ? 'Bağlandı': 'Bağlanamadı'" 
+                    :severity="selectedServer.status ? 'success': 'danger'">
+                </Badge>
+            </div>
 
                 <h5>{{ $t('Disk Bilgisi') }}</h5>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />

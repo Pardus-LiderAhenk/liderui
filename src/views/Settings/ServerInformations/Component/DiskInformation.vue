@@ -25,7 +25,7 @@
                         <div>
                             <div>
 
-                                {{ server.ip }}
+                                {{ server.machineName }}
                              
                             </div>
                             <!-- <div>

@@ -14,49 +14,41 @@
                 </div>
             </template>
             <template #content>
-                <div class="widget-list-type2">
+                <div class="servers">
                     <div v-for="server in servers" v-bind:key="server">
-
-                    <ul class="list-none p-0">
-                       
-                        <div class="card flex justify-content-center">
-
-                            <img :src="img" alt="verona-layout" width="42" height="42" class="border-round">
-                                <div>
-                                    <span class="font-bold block">
-                                        {{ server.ip }}
+                        <ul>
+                            <li class="down">
+                                <div class="stock-name" >
+                                    <h6 >
+                                        {{ server.machineName}}
+                                    </h6>
+                                </div>
+                                <img :src="img" alt="freya-layout"  width="42" height="42">
+                                <div class="stock-price" >
+                                    <h6>
+                                    {{
+                                         (getPropertyValue(server.properties, "cpu_core")) +" Core"
+                                    }}
+                                </h6>
+                                </div>
+                                <div class="server-status">
+                                    <span >
+                                       <b> 
+                                        {{ "% "+ ((1000*((getPropertyValue(server.properties, 'cpu_user'))+(getPropertyValue(server.properties, 'cpu_system')))/((getPropertyValue(server.properties, 'cpu_idle'))+(getPropertyValue(server.properties, 'cpu_user'))+(getPropertyValue(server.properties, 'cpu_system')))).toFixed(4)) }}
+                                       </b>
                                     </span>
-                                    <span class="subtext text-sm block">cpu bilgisi</span>
                                 </div>
-                                
-                                <div class="chart-container">
-                                    <Chart type="doughnut" 
-                                    :data="getCpuInfo(server)"  
-                                    :options="chartOptions"
-                                    :plugins="chartStyle">
-                                    </Chart>
-                                </div>
-                                
-                        </div>
-                    </ul>
-                </div>
-            </div>            
-        </template>
+                            </li>
+                        </ul>
+                    </div>
+                </div>            
+            </template>
         </Card>
     </div>
 </template>
 
 <script>
-import ChartDataLabels from 'chartjs-plugin-datalabels'
-
 export default {
-    setup() {
-    const plugins = [ChartDataLabels]
-
-      return {
-        plugins
-      }
-    },
 
     props: {
         servers: {
@@ -229,5 +221,114 @@ img {
     max-width: 75px; /* Adjust the size as needed */
     margin: 0 auto;
 }
+.p-progressbar {
+    position: relative;
+    overflow: hidden;
+}
+.p-progressbar {
+    border: 0 none;
+    height: 1.5rem;
+    background: #dfe7ef;
+    border-radius: 6px;
+}
+::v-deep(.p-progressbar-blue) {
+    height: 10rem;
+    background-color: #1769aa;
+
+    .p-progressbar-value {
+        background-color: #419544;
+        
+    }
+    
+  }
+  ::v-deep(.p-progressbar-red) {
+    height: 10rem;
+    background-color: #419544;
+  }
+    .p-progressbar-value {
+        background-color:#1769aa;
+    }
+
+    .servers ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    ul {
+        display: block;
+        list-style-type: disc;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        padding-inline-start: 40px;
+    }
+    
+    .servers ul > li {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        background-color: #F7FAFF;
+        padding: 0;
+        margin: 0 0 12px;
+        -moz-border-radius: 6px;
+        -webkit-border-radius: 6px;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    
+    li {
+        text-align: -webkit-match-parent;
+    }
+    
+    .servers ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .servers ul > li .server-status span {
+        display: inline-block;
+        font-weight: 800;
+        font-size: 15px;
+        line-height: 12px;
+        color: rgba(10, 27, 56, 0.5);
+    }
+    .servers ul > li .server-status {
+        margin-left: 4px;
+        padding: 0 10px;
+    }
+    
+    .servers ul > li .stock-price h6 {
+        line-height: 17px;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .servers ul > li .stock-price {
+        padding: 5 10px;
+        color: #2321b8;
+        margin: 0 4px;
+    }
+    
+    h6 {
+        font-size: 1rem;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        margin: 1.5rem 0 1rem 0;
+        font-family: inherit;
+        font-weight: 600;
+        line-height: 1.2;
+        color: inherit;
+    }
 
 </style>
