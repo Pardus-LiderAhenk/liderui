@@ -27,14 +27,15 @@
                                 <div class="stock-price" >
                                     <h6>
                                     {{
-                                         (getPropertyValue(server.properties, "cpu_core")) +" Core"
-                                    }}
-                                </h6>
+                                        (getPropertyValue(server.properties, "cpu_core")) +" Core"
+                                 
+                                    }}                                 
+                                    </h6>
                                 </div>
                                 <div class="server-status">
                                     <span >
                                        <b> 
-                                        {{ "% "+ ((1000*((getPropertyValue(server.properties, 'cpu_user'))+(getPropertyValue(server.properties, 'cpu_system')))/((getPropertyValue(server.properties, 'cpu_idle'))+(getPropertyValue(server.properties, 'cpu_user'))+(getPropertyValue(server.properties, 'cpu_system')))).toFixed(4)) }}
+                                        {{ "% "+ ((1000*((getPropertyValue(server.properties, "cpu_user"))+(getPropertyValue(server.properties, "cpu_system")))/((getPropertyValue(server.properties, "cpu_idle"))+(getPropertyValue(server.properties, "cpu_user"))+(getPropertyValue(server.properties, "cpu_system")))).toFixed(4)) }}
                                        </b>
                                     </span>
                                 </div>

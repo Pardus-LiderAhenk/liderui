@@ -6,7 +6,10 @@
                 
                 <div class="p-field">
                     <label for="machineName">{{$t('Makine ismi')}}</label>
-                    <InputText id="machineName" type="text" v-model="serverForm.machineName" placeholder="Makine ismi"/>
+                    <InputText :class="validationForm.machineName ? 'p-invalid': ''"  id="machineName" type="text" v-model="serverForm.machineName" placeholder="Makine ismi"/>
+                    <small v-if="validationForm.ip" class="p-error">
+                        {{ $t('Makine ismi yazılması gerekiyor')}}
+                    </small>
                 </div>
                 <div class="p-field">
                     <label for="ip">{{$t('Ip Adres')}}</label>
@@ -123,36 +126,39 @@ export default {
 
             const { response,error } = await serverInformationService.addServer(params);
             console.log(response);
-            if(error){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('404 hata')+ " \n"+error, 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-                else{
-                    if(response.status == 200){
-                        this.$emit("savedServer");
-                        if (response.data != null) {
-                            this.$toast.add({
-                                severity:'success', 
-                                detail: this.$t('Başarılı'), 
-                                summary:this.$t("computer.task.toast_summary"), 
-                                life: 3000
-                            });
-                        }
-                    }
-                    else if(response.status == 417){
+            if(response.data != null){
+                if(response.status == 200){
+                    this.$emit("savedServer");
+                    if (response.data != null) {
                         this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('417 hata'), 
+                            severity:'success', 
+                            detail: this.$t('Başarılı'), 
                             summary:this.$t("computer.task.toast_summary"), 
                             life: 3000
                         });
                     }
-                } 
-                this.loading = false;       
+                }
+                else if(response.status == 417){
+                    console.log(response)
+                    this.getServerData();
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('not connection but saved server'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+                 
+            }
+            else {
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('404 hata')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            } 
+            this.loading = false;       
         },
 
         async checkConnection(){
@@ -165,25 +171,14 @@ export default {
 
             const {response, error} = await serverInformationService.connectionServer(params);
 
-            if(error){
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('404 hata')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            }
-            else{
+            if(response.data != null){
                 if(response.status == 200){
-
-                    if (response.data != null) {
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('Başarılı'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('Başarılı'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
                 }
                 else if(response.status == 417){
                     this.$toast.add({
@@ -193,21 +188,49 @@ export default {
                         life: 3000
                     });
                 }
+                    
+            }
+            else{
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('404 hata')+ " \n"+error, 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
             }
         
         this.loading = false;
     
         },
 
-        async getServerdata(){
-
-            const params = new FormData();
-            params.append('hostname', this.serverForm.ip);
-            params.append('username', this.serverForm.user);
-            params.append('password', this.serverForm.password);
-
-            const {response, error} = await serverInformationService.getServer(params);            
-        },
+        async getServerData(){
+                this.loading = true;
+                const{response,error} = await  serverInformationService.getData();
+                console.log(response);
+                if (error){
+                    this.$toast.add({
+                        severity:'error',
+                        detail: "server db error",
+                        summary:this.$t("computer.task.toast_summary"),
+                        life:3600
+                    });
+                } 
+                else{
+                    if (response.status == 200) {
+                        console.log(response.data)
+                        this.servers = response.data;
+                    } 
+                    else if (response.status == 417) {
+                        this.$toast.add({
+                            severity:'error',
+                            detail: this.$t('server db data'),
+                            summary:this.$t("computer.task.toast_summary"),
+                            life:3600
+                        });
+                    }
+                }
+                this.loading = false;
+            },
 
         validateForm() {
             if (!this.serverForm.ip.trim()){
