@@ -125,7 +125,6 @@ export default {
 
 
             const { response,error } = await serverInformationService.addServer(params);
-            console.log(response);
             if(response.data != null){
                 if(response.status == 200){
                     this.$emit("savedServer");
@@ -139,8 +138,6 @@ export default {
                     }
                 }
                 else if(response.status == 417){
-                    console.log(response)
-                    this.getServerData();
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('not connection but saved server'), 
@@ -202,35 +199,6 @@ export default {
         this.loading = false;
     
         },
-
-        async getServerData(){
-                this.loading = true;
-                const{response,error} = await  serverInformationService.getData();
-                console.log(response);
-                if (error){
-                    this.$toast.add({
-                        severity:'error',
-                        detail: "server db error",
-                        summary:this.$t("computer.task.toast_summary"),
-                        life:3600
-                    });
-                } 
-                else{
-                    if (response.status == 200) {
-                        console.log(response.data)
-                        this.servers = response.data;
-                    } 
-                    else if (response.status == 417) {
-                        this.$toast.add({
-                            severity:'error',
-                            detail: this.$t('server db data'),
-                            summary:this.$t("computer.task.toast_summary"),
-                            life:3600
-                        });
-                    }
-                }
-                this.loading = false;
-            },
 
         validateForm() {
             if (!this.serverForm.ip.trim()){

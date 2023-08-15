@@ -122,7 +122,6 @@
                 else{
                     if (response.status == 200) {
                         this.servers = response.data;
-                        console.log('Servr alıyorum server vue dann',this.servers)
                     } 
                     else if (response.status == 417) {
                         this.$toast.add({
@@ -147,7 +146,6 @@
             async getServerData(){
                 this.loading = true;
                 const{response,error} = await  serverInformationService.getData();
-                console.log(response);
                 if (error){
                     this.$toast.add({
                         severity:'error',
@@ -158,7 +156,6 @@
                 } 
                 else{
                     if (response.status == 200) {
-                        console.log(response.data)
                         this.servers = response.data;
                     } 
                     else if (response.status == 417) {

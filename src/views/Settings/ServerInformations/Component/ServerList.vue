@@ -207,7 +207,6 @@ export default{
             this.deleteServerDialog = false;
 
             const{response,error} = await  serverInformationService.deleteServer(this.selectedServer.id);
-            console.log(response);
             
             if(response.status == 200){
                     
@@ -245,7 +244,6 @@ export default{
             const { response,error } = await serverInformationService.getServerDetails(params);
             if(response.status == 200){
               if (response.data != "" && response.data != null) {
-                  console.log(response)
                   this.selectedServerInfo = response.data;
             
             } else {

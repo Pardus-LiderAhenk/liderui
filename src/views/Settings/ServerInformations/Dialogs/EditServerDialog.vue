@@ -120,7 +120,6 @@ export default {
             params.append("id", this.selectedServer.id)
 
             const {response,error} = await serverInformationService.update(params);
-            console.log(response,"burdaa")
             if(response.status == 200){
                 this.$emit("editServer");
                 if(response.data != null){
@@ -153,7 +152,6 @@ export default {
             params.append('password', this.password);
            
             const {response, error} = await serverInformationService.connectionServer(params);
-            console.log(response)
             if(error){
                 this.$toast.add({
                     severity:'error', 

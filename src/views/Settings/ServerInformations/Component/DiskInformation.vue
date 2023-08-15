@@ -50,6 +50,12 @@
                                 style="display: flex; width: 40rem; height: 1rem;">
                             
                             </ProgressBar> 
+
+                            <ProgressBar v-else class="p-progressbar-gray" 
+
+                                style="display: flex; width: 40rem; height: 1rem;">
+                            
+                            </ProgressBar> 
                         </div>
 
                         </div>
@@ -90,10 +96,6 @@ export default {
                     return propertyValue;
             },
 
-    },
-
-    mounted() {
-        console.log(this.servers)
     }
     
 }
@@ -175,6 +177,16 @@ img {
   
     .p-progressbar-value {
         background-color:#1769aa;
+    }
+    
+  }
+
+::v-deep(.p-progressbar-gray) {
+    height: 10rem;
+    background-color: #485048;
+  
+    .p-progressbar-value {
+        background-color:#485048;
     }
     
   }

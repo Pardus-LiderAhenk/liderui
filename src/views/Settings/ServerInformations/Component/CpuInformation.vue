@@ -101,8 +101,6 @@ export default {
             var cpuFree = 50.0;
                 cpuUsed = (((100*((this.getPropertyValue(server.properties,"cpu_user")+this.getPropertyValue(server.properties,"cpu_system"))/((this.getPropertyValue(server.properties,"cpu_user")+this.getPropertyValue(server.properties,"cpu_system")+this.getPropertyValue(server.properties,"cpu_idle"))))).toString()).substring(0,8));
                 cpuFree = ((100-cpuUsed).toString()).substring(0,8);
-                //console.log(cpuUsed,cpuFree)
-
                 cpuData = {
                     //labels:["cpuUsed","cpuFree"],
                     datasets: [
