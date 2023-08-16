@@ -4,12 +4,12 @@
                 <template #title>
                     <div class="p-d-flex p-jc-between">                
                         <div>
-                            {{$t('Sunucu Bilgisi')}}
+                            {{$t('settings.server_information.server_list')}}
                         </div>
                         <Button 
                             class="p-button-sm" 
                             icon="pi pi-plus" 
-                            :label="$t('sunucu ekle')"
+                            :label="$t('settings.server_information.add_server')"
                             @click="addServerModalVisible =  true;">
                         </Button>
                     
@@ -30,28 +30,28 @@
 
                         </template>
                       </Column>  
-                    <Column field="machineName" header="Makine İsmi">
+                    <Column field="machineName" :header="$t('settings.server_information.machine_name')">
                         {{ machineName }}
                     </Column>
-                    <Column field="ip" header="Ip Adres">
+                    <Column field="ip" :header="$t('settings.server_information.ip_addr')">
                         {{ ip }}
                     </Column>
 
-                    <Column field="os" header="İşletim sistemi">
+                    <Column field="os" :header="$t('settings.server_information.os_system')">
                         <template #body="{ data }">
                             {{ getPropertyValue(data.properties, "os_name") }}
                         </template>
                     </Column>
-                    <Column field="os-version" header="İşletim sistemi versiyon">
+                    <Column field="os-version" :header="$t('settings.server_information.os_version')">
                         <template #body="{ data }">
                             {{ getPropertyValue(data.properties, "os_version") }}
                         </template>
                     </Column>
                     
-                    <Column field="status" header="Durumu">
+                    <Column field="status" :header="$t('settings.server_information.status')">
                     <template #body="slotProps">
                         <Badge  
-                            :value="slotProps.data.status ? $t('Bağlandı'): $t('Bağlanamadı')" 
+                            :value="slotProps.data.status ? $t('settings.server_information.connect'): $t('settings.server_information.disconnect')" 
                             :severity="slotProps.data.status ? 'success': 'danger'">
                         </Badge>
                     </template>    
@@ -63,20 +63,20 @@
 
                                 <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
                                     icon="pi pi-pencil"
-                                    :title="$t('Düzenle')" 
+                                    :title="$t('settings.server_information.edit')" 
                                     @click="editServerModalVisible = true; selectedServer = slotProps.data">
                                 </Button>
 
                                 <Button class="p-mr-2 p-button-danger p-button-sm p-button-rounded" 
                                     icon="pi pi-trash" 
-                                    :title="$t('Sil')"
+                                    :title="$t('settings.server_information.delete')"
                                     @click="deleteServerDialog =  true; selectedServer = slotProps.data">
                                 </Button>
 
                                 <Button 
                                     class="p-mr-2 p-button-sm p-button-raised p-button-rounded"
                                     icon="pi pi-list"
-                                    :title="$t('Detay')" 
+                                    :title="$t('settings.server_information.detail')" 
                                     @click="showServerDetailVisible= true; selectedServer = slotProps.data">
                                 </Button>
                             </div>
@@ -105,7 +105,7 @@
             @edit-server="editServer"  
         />
 
-        <Dialog :header="$t('Sucunu sil')" 
+        <Dialog :header="$t('settings.server_information.delete_server')" 
             v-model:visible="deleteServerDialog" 
             :style="{width: '20vw'}" 
             :modal="true"
@@ -114,18 +114,18 @@
             <div class="p-fluid">
                 <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
                 <span>
-                    {{$t('Sunucu silinecek emin misiniz?') }}
+                    {{$t('settings.server_information.delete_server_confirm_message') }}
                 </span>
             </div>
             <template #footer >
                 <Button 
-                :label="$t('İptal')" 
+                :label="$t('settings.server_information.cancel')" 
                 icon="pi pi-times" 
                 @click="deleteServerDialog = false" 
                 class="p-button-text p-button-sm"
                 />
                 <Button class="p-button-sm"
-                    :label="$t('Evet')" 
+                    :label="$t('settings.server_information.yes')" 
                     icon="pi pi-check"
                     @click="deleteServer"                    
                 />
@@ -212,8 +212,8 @@ export default{
                     
                 this.$toast.add({
                     severity:'success', 
-                    detail: this.$t('Sunucu başarıyla silindi(list)'), 
-                    summary:this.$t("computer.task.toast_summary"), 
+                    detail: this.$t('settings.server_information.deleted_success'), 
+                    summary:this.$t("settings.server_information.toast_summary"), 
                     life: 3000
                 });
                 this.$emit('deletedServer');
@@ -226,8 +226,8 @@ export default{
             else if(response.status == 417){                   
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('Sunucu silinirken hata oluştu 417'), 
-                        summary:this.$t("computer.task.toast_summary"), 
+                        detail: this.$t('settings.server_information.417_error_delete_server'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
                         life: 3000
                     });
             }
@@ -250,14 +250,19 @@ export default{
                 this.selectedServerInfo = null;
                 this.$toast.add({
                   severity:'error', 
-                  detail: this.$t("computer.agent_info.error_message"), 
-                  summary:this.$t("computer.task.toast_summary"), 
+                  detail: this.$t("settings.server_information.error_detail_message"), 
+                  summary:this.$t("settings.server_information.toast_summary"), 
                   life: 3000
                   });
                 }
               }
             else if(response.status == 417){
-              return "error";
+                this.$toast.add({
+                  severity:'error', 
+                  detail: this.$t("settings.server_information.417_error_detail_server"), 
+                  summary:this.$t("settings.server_information.toast_summary"), 
+                  life: 3000
+                  });
             }
     },
 

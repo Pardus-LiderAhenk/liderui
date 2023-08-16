@@ -114,8 +114,8 @@
                 if (error){
                     this.$toast.add({
                     severity:'error',
-                    detail: "test",
-                    summary:this.$t("computer.task.toast_summary"),
+                    detail: this.$t('settings.server_information.error_get_server_list'),
+                    summary:this.$t("settings.server_information.toast_summary"),
                     life:3600
                     });
                 } 
@@ -126,8 +126,8 @@
                     else if (response.status == 417) {
                         this.$toast.add({
                         severity:'error',
-                        detail: this.$t('reports.task_report.error_417_agent_info_list'),
-                        summary:this.$t("computer.task.toast_summary"),
+                        detail: this.$t('settings.server_information.417_error_get_server_list'),
+                        summary:this.$t("settings.server_information.toast_summary"),
                         life:3600
                         });
                     }
@@ -149,8 +149,8 @@
                 if (error){
                     this.$toast.add({
                         severity:'error',
-                        detail: "server db error",
-                        summary:this.$t("computer.task.toast_summary"),
+                        detail: this.$t('settings.server_information.error_get_server_information'),
+                        summary:this.$t("settings.server_information.toast_summary"),
                         life:3600
                     });
                 } 
@@ -161,8 +161,8 @@
                     else if (response.status == 417) {
                         this.$toast.add({
                             severity:'error',
-                            detail: this.$t('server db data'),
-                            summary:this.$t("computer.task.toast_summary"),
+                            detail: this.$t('settings.server_information.417_error_get_server_information'),
+                            summary:this.$t("settings.server_information.toast_summary"),
                             life:3600
                         });
                     }

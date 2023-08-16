@@ -1,7 +1,7 @@
 <template>
     <div>
         <Dialog
-            :header="$t('Sunucu Bilgileri')" 
+            :header="$t('settings.server_information.server_information')" 
             :modal="true"
             :style="{ width: '40vw'}"
             v-model:visible="showDialog">
@@ -9,53 +9,54 @@
             <h5>{{ $t('Genel bilgiler') }}</h5>
             <div class="p-grid">
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>Makine ismi:</b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_machine_name')}}</b></div>
                 <div class="p-col-8">{{ selectedServer.machineName }}</div>
-                <div class="p-col-4"><b>İp adresi:</b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_ip_addr')}}</b></div>
                 <div class="p-col-8">{{ selectedServer.ip }}</div>
-                <div class="p-col-4"><b>Kullanıcı:</b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_user')}}</b></div>
                 <div class="p-col-8">{{ selectedServer.user }}</div>
-                <div class="p-col-4"><b>Makinenin durumu:</b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_status')}}</b></div>
                 <div class="p-col-8">
                 <Badge 
-                    :value="selectedServer.status ? 'Bağlandı': 'Bağlanamadı'" 
+                    :value="selectedServer.status ? $t('settings.server_information.connect'): $t('settings.server_information.disconnect')" 
                     :severity="selectedServer.status ? 'success': 'danger'">
                 </Badge>
             </div>
 
-                <h5>{{ $t('Disk Bilgisi') }}</h5>
+                <h5>{{ $t('settings.server_information.disk_information') }}</h5>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>İşletim sistemi : </b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_os_system')}}</b></div>
                 <div class="p-col-8">{{ getPropertyValue(selectedServer.properties, "os_name") }}</div>
-                <div class="p-col-4"><b>Versiyon : </b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_version')}}</b></div>
                 <div class="p-col-8">{{ getPropertyValue(selectedServer.properties, "os_version") }}</div>
-                <div class="p-col-4"><b>Mac Adres : </b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_mac_addr')}}</b></div>
                 <div class="p-col-8">{{ getPropertyValue(selectedServer.properties, "mac_addr") }}</div>
-                <div class="p-col-4"><b>Toplam disk alanı : </b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_total_disk')}} </b></div>
                 <div class="p-col-8">{{
                     ((getPropertyValue(selectedServer.properties, "disk_total")/1073741824 )*4096)
                     .toFixed(2) }}
                 </div>
-                <div class="p-col-4"><b>Boş disk alanı : </b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_empty_disk')}}</b></div>
                 <div class="p-col-8">{{
                    ((getPropertyValue(selectedServer.properties, "total_disk_empty")/1073741824 )*4096)
                     .toFixed(2) }}
                 </div>
 
-                <div class="p-col-4"><b>Toplam ram : </b></div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.detail_total_ram')}}</b></div>
                 <div class="p-col-8">{{
                   ((getPropertyValue(selectedServer.properties, "physical_memory"))/1073741824)
                    .toFixed(2) 
                 }}</div>
 
                 <div class="p-col-4"><b>Zaman : </b></div>
-                <div class="p-col-8">{{ 
-                    getPropertyValue(selectedServer.properties,"uptime_days")+"Gün "+
-                    getPropertyValue(selectedServer.properties,"uptime_hours")+"s "+
-                    getPropertyValue(selectedServer.properties, "uptime_minutes")+"dk " }}</div>
+                <div class="p-col-8">{{  
+                    getPropertyValue(selectedServer.properties,"uptime_days") + $t('settings.server_information.day') +
+                    getPropertyValue(selectedServer.properties,"uptime_hours") + $t('settings.server_information.hour') +
+                    getPropertyValue(selectedServer.properties,"uptime_minutes") + $t('settings.server_information.minute') 
+                }}</div>
             </div>
             <template #footer>
-                <Button :label="$t('Kapat')" icon="pi pi-times" @click="showDialog = false" class="p-button-text"/>
+                <Button :label="$t('settings.server_information.close')" icon="pi pi-times" @click="showDialog = false" class="p-button-text"/>
             </template>
         </Dialog>
     </div>

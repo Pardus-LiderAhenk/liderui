@@ -3,7 +3,7 @@
         <Card>
             <template #title>
                 <div class="p-d-flex p-jc-between">
-                    <span style="margin: 0 0 2px; font-size:1.2rem">Cpu usage</span> 
+                    <span style="margin: 0 0 2px; font-size:1.2rem">{{ $t("settings.server_information.cpu_usage")}}</span> 
 
                         <!-- <Button 
                             class="p-button-sm" 

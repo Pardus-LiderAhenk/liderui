@@ -1,24 +1,24 @@
 <template>
     <div>
-        <Dialog :header="$t('Sucunu güncelle')" 
+        <Dialog :header="$t('settings.server_information.update_server')" 
         v-model:visible="showDialog" style="width:30vw;" >
             <div class="p-fluid">
                 
                 <div class="p-field">
-                    <label for="machineName">{{$t('Makine Adı')}}</label>
+                    <label for="machineName">{{$t('settings.server_information.machine_name')}}</label>
                     <InputText id="machineName" type="text" v-model="machineName"/>
                 </div>
                 <div class="p-field">
-                    <label for="ip">{{$t('Ip')}}</label>
+                    <label for="ip">{{$t('settings.server_information.ip_addr')}}</label>
                     <InputText id="ip" type="text" v-model="ip"/>
                 </div>
                 <div class="p-field">
-                    <label for="user">{{$t('Kullanıcı')}}</label>
+                    <label for="user">{{$t('settings.server_information.user')}}</label>
                     <InputText id="user" type="text" v-model="user"/>
                 </div>
                 
                 <div class="p-field">
-                    <label for="passwd">{{$t('Parola')}}</label>
+                    <label for="passwd">{{$t('settings.server_information.passwd')}}</label>
                     <div class="p-inputgroup flex-1">
                         <InputText id="passwd" type="password" v-model="password"/>
                         <Button icon="pi pi-link" 
@@ -30,19 +30,19 @@
             <div v-if="loading" class="p-text-center">
                 <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
                 <a class="primary">
-                  {{$t('Makine güncelleniyor bekleyiniz')}}
+                  {{$t('settings.server_information.waiting_update_server')}}
                 </a>
             </div>
 
             <template #footer>
                 <Button 
-                    :label="$t('Kapat')" 
+                    :label="$t('settings.server_information.close')" 
                     icon="pi pi-times"
                     @click="showDialog = false" 
                     class="p-button-text p-button-sm">
                 </Button>
                 <Button class="p-button-sm" 
-                    :label="$t('Güncelle')" 
+                    :label="$t('settings.server_information.update')" 
                     icon="pi pi-refresh"
                     @click="updateServer"    
                 />
@@ -126,8 +126,8 @@ export default {
                     this.showDialog = false;
                     this.$toast.add({
                         severity:'success',
-                        detail: this.$t('başarılı'), 
-                        summary:this.$t("computer.task.toast_summary"), 
+                        detail: this.$t('settings.server_information.successful_update'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
                         life: 3000
                     });
                 }
@@ -135,8 +135,8 @@ export default {
             else {
             this.$toast.add({
                 severity:'error', 
-                detail: this.$t('server güncelleme başarısız'),
-                summary:this.$t("computer.task.toast_summary"), 
+                detail: this.$t('settings.server_information.error_update'),
+                summary:this.$t("settings.server_information.toast_summary"), 
                 life: 3000
                 });
             }
@@ -155,8 +155,8 @@ export default {
             if(error){
                 this.$toast.add({
                     severity:'error', 
-                    detail: this.$t('404 hata')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
+                    detail: this.$t('settings.server_information.error_disconnect'), 
+                    summary:this.$t("settings.server_information.toast_summary"), 
                     life: 3000
                 });
             }
@@ -166,8 +166,8 @@ export default {
                     if (response.data != null) {
                         this.$toast.add({
                             severity:'success', 
-                            detail: this.$t('Başarılı'), 
-                            summary:this.$t("computer.task.toast_summary"), 
+                            detail: this.$t('settings.server_information.successfully_connection'), 
+                            summary:this.$t("settings.server_information.toast_summary"), 
                             life: 3000
                         });
                     }
@@ -175,8 +175,8 @@ export default {
                 else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('417 hata'), 
-                        summary:this.$t("computer.task.toast_summary"), 
+                        detail: this.$t('settings.server_information.417_error_disconnect'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
                         life: 3000
                     });
                 }

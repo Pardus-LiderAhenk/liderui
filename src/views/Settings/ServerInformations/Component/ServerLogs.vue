@@ -2,7 +2,7 @@
     <div>
         <Card>
             <template #title>
-                <span style="margin: 0 0 2px; font-size:1.2rem">{{$t('Kullanıcı Logları')}}</span>
+                <span style="margin: 0 0 2px; font-size:1.2rem">{{ $t('settings.server_information.user_logs') }}</span>
             </template>
             <template #content>
                 <Timeline :value="servers" class="customized-timeline">
@@ -14,9 +14,9 @@
                     <template #content="slotProps">
                         <h5 style="margin: 0 0 2px; font-size:1.2rem">{{slotProps.item.machineName}}</h5> 
                         <small style="color: #08255880; ">
-                            {{  "Gün: " + getPropertyValue(slotProps.item.properties,"uptime_days")
-                                +" Saat: " + getPropertyValue(slotProps.item.properties,"uptime_hours")
-                                +" Dakika: " + getPropertyValue(slotProps.item.properties,"uptime_minutes") }}
+                            {{  getPropertyValue(slotProps.item.properties,"uptime_days") + $t('settings.server_information.day') +
+                                getPropertyValue(slotProps.item.properties,"uptime_hours") + $t('settings.server_information.hour') +
+                                getPropertyValue(slotProps.item.properties,"uptime_minutes") + $t('settings.server_information.minute') }}
                         </small>
                         <p>{{ slotProps.item.description}}</p>                      
                     </template>

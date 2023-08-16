@@ -5,31 +5,31 @@
             <div class="p-fluid">
                 
                 <div class="p-field">
-                    <label for="machineName">{{$t('Makine ismi')}}</label>
+                    <label for="machineName">{{$t('settings.server_information.machine_name')}}</label>
                     <InputText :class="validationForm.machineName ? 'p-invalid': ''"  id="machineName" type="text" v-model="serverForm.machineName" placeholder="Makine ismi"/>
                     <small v-if="validationForm.ip" class="p-error">
-                        {{ $t('Makine ismi yazılması gerekiyor')}}
+                        {{ $t('settings.server_information.required_machine_name')}}
                     </small>
                 </div>
                 <div class="p-field">
-                    <label for="ip">{{$t('Ip Adres')}}</label>
+                    <label for="ip">{{$t('settings.server_information.ip_addr')}}</label>
                     <InputText :class="validationForm.ip ? 'p-invalid': ''" 
                     id="ip" type="text" v-model="serverForm.ip" placeholder="10.10.10.10"/>
                     <small v-if="validationForm.ip" class="p-error">
-                        {{ $t('ip yazılması gerekiyor')}}
+                        {{ $t('settings.server_information.required_ip')}}
                     </small>
                 </div>
                 <div class="p-field">
-                    <label for="user">{{$t('Kullanıcı')}}</label>
+                    <label for="user">{{$t('settings.server_information.user')}}</label>
                     <InputText  
                     id="user" type="text" v-model="serverForm.user" placeholder="Kullanıcı adı"/>
                     <small v-if="validationForm.user" class="p-error">
-                        {{ $t('User yazılması gerekiyor')}}
+                        {{ $t('settings.server_information.required_user')}}
                     </small>
                 </div>
                 
                 <div class="p-field">
-                    <label for="passwd">{{$t('Parola')}}</label>
+                    <label for="passwd">{{$t('settings.server_information.passwd')}}</label>
                     <div class="p-inputgroup flex-1">
                         <InputText 
                             id="passwd" type="password" v-model="serverForm.password" placeholder="******"/>
@@ -38,27 +38,27 @@
                             @click="checkConnection"/>
                     </div>
                     <small v-if="validationForm.password" class="p-error">
-                        {{ $t('Password yazılması gerekiyor')}}
+                        {{ $t('settings.server_information.required_passwd')}}
                     </small>
                 </div>
 
                 <div class="p-field">
-                    <label for="description">{{$t('Açıklama')}}</label>
+                    <label for="description">{{$t('settings.server_information.description')}}</label>
                     <InputText id="description" type="text" v-model="serverForm.description" placeholder="Açıklama"/>
                 </div>
             </div>
             <div v-if="loading" class="p-text-center">
                 <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
                 <a class="primary">
-                  {{$t('Makine ekleniyor bekleyiniz')}}
+                  {{$t('settings.server_information.waiting_add_machine')}}
                 </a>
             </div>
 
         <template #footer>
 
             
-            <Button :label="$t('Kapat')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
-            <Button :label="$t('Kaydet')" icon="pi pi-save"  @click="addNewServer"></Button>
+            <Button :label="$t('settings.server_information.close')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
+            <Button :label="$t('settings.server_information.save')" icon="pi pi-save"  @click="addNewServer"></Button>
 
             
         </template>
@@ -131,8 +131,8 @@ export default {
                     if (response.data != null) {
                         this.$toast.add({
                             severity:'success', 
-                            detail: this.$t('Başarılı'), 
-                            summary:this.$t("computer.task.toast_summary"), 
+                            detail: this.$t('settings.server_information.success_add_server'), 
+                            summary:this.$t("settings.server_information.toast_summary"), 
                             life: 3000
                         });
                     }
@@ -140,18 +140,18 @@ export default {
                 else if(response.status == 417){
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('not connection but saved server'), 
-                        summary:this.$t("computer.task.toast_summary"), 
+                        detail: this.$t('settings.server_information.417_error_add_server'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
                         life: 3000
                     });
                 }
                  
-            }
+            } 
             else {
                 this.$toast.add({
                     severity:'error', 
-                    detail: this.$t('404 hata')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
+                    detail: this.$t('settings.server_information.error_add_server'), 
+                    summary:this.$t("settings.server_information.toast_summary"), 
                     life: 3000
                 });
             } 
@@ -172,16 +172,16 @@ export default {
                 if(response.status == 200){
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('Başarılı'), 
-                        summary:this.$t("computer.task.toast_summary"), 
+                        detail: this.$t('settings.server_information.successfully_connection'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
                         life: 3000
                     });
                 }
                 else if(response.status == 417){
                     this.$toast.add({
                         severity:'error', 
-                        detail: this.$t('417 hata'), 
-                        summary:this.$t("computer.task.toast_summary"), 
+                        detail: this.$t('settings.server_information.417_error_disconnect'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
                         life: 3000
                     });
                 }
@@ -190,8 +190,8 @@ export default {
             else{
                 this.$toast.add({
                     severity:'error', 
-                    detail: this.$t('404 hata')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
+                    detail: this.$t('settings.server_information.error_disconnect'), 
+                    summary:this.$t("settings.server_information.toast_summary"), 
                     life: 3000
                 });
             }
