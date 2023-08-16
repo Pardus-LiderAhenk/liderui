@@ -13,7 +13,6 @@ import ScheduledTaskReport from '@/views/Reports/ScheduledTaskReport.vue';
 
 //SETTINGS
 import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
-import ServerInformations from '@/views/Settings/ServerInformations/ServerInformations.vue';
 import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefinitions/SystemMonitoringDefinitions.vue';
 import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
 import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
@@ -110,14 +109,6 @@ const routes = [
                 }
             },
             {
-                path: '/settings/server-informations',
-                name: 'ServerInformations',
-                components: {default: ServerInformations},
-                meta: {
-                    requiresAuth: true
-                }
-            },
-            {
                 path: '/settings/system-monitoring-definitions',
                 name: 'SystemMonitoringDefinitions',
                 components: {default: SystemMonitoringDefinitions},
@@ -203,7 +194,6 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
-    //history: createWebHashHistory(),
     linkActiveClass: "active",
     routes,
 });
