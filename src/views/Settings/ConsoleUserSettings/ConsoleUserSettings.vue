@@ -76,27 +76,22 @@
 
 <script>
 
-import TreeComponent from '@/components/Tree/TreeComponent.vue';
 import AgentsDialog from './Dialogs/AgentsDialog.vue';
 import AgentGroupDialog from './Dialogs/AgentGroupsDialog.vue';
 import UserDialog from './Dialogs/UsersDialog.vue';
 import UserGroupDialog from './Dialogs/UserGroupsDialog.vue';
 import RoleDialog from './Dialogs/RoleGroupsDialog.vue';
 import { consoleUserSettingsService } from "../../../services/Settings/ConsoleUserSettingsService.js";
-import { userService } from '../../../services/Settings/UserService';
 import MenuAccessSettings from './MenuAccessSettings.vue';
 import DirectoryAccessSettings from './DirectoryAccessSettings.vue';
 
 export default {
     components: {
-        // TreeComponent,
         AgentsDialog,
         AgentGroupDialog,
         UserDialog,
         UserGroupDialog,
         RoleDialog,
-        AddConsoleUserDialog,
-        PasswordComponent,
         MenuAccessSettings,
         DirectoryAccessSettings
     },
@@ -185,10 +180,6 @@ export default {
             selectedOlcAccess: null
         }
     },  
-    mounted() {
-        this.getRoles();
-        this.getConsoleUsers();
-    },
 
     methods: {
         toggle(event) {

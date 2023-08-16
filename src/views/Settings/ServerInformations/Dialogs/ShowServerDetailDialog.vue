@@ -55,13 +55,9 @@
                     getPropertyValue(selectedServer.properties, "uptime_minutes")+"dk " }}</div>
             </div>
             <template #footer>
-
-                <Button :label="$t('Kapat')" icon="pi pi-times" @click="showServerDetailDialog = false" class="p-button-text"/>
-
+                <Button :label="$t('Kapat')" icon="pi pi-times" @click="showDialog = false" class="p-button-text"/>
             </template>
-
         </Dialog>
-
     </div>
 </template>
 <script>
