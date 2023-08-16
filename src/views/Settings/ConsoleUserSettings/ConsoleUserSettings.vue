@@ -95,6 +95,8 @@ export default {
         UserDialog,
         UserGroupDialog,
         RoleDialog,
+        AddConsoleUserDialog,
+        PasswordComponent,
         MenuAccessSettings,
         DirectoryAccessSettings
     },
@@ -183,6 +185,11 @@ export default {
             selectedOlcAccess: null
         }
     },  
+    mounted() {
+        this.getRoles();
+        this.getConsoleUsers();
+    },
+
     methods: {
         toggle(event) {
             this.$refs.menu.toggle(event);

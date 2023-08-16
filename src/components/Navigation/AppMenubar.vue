@@ -208,7 +208,7 @@ export default {
                 this.settingItems.push(
                     {
                         label: this.$t('menu.server_settings'),
-                        to: '/settings/server-settings'
+                        to: '/settings/server-settings',
                     }
                 );
             }

@@ -1,0 +1,289 @@
+<template>
+    <div>
+            <Card>
+                <template #title>
+                    <div class="p-d-flex p-jc-between">                
+                        <div>
+                            {{$t('Sunucu Bilgisi')}}
+                        </div>
+                        <Button 
+                            class="p-button-sm" 
+                            icon="pi pi-plus" 
+                            :label="$t('sunucu ekle')"
+                            @click="addServerModalVisible =  true;">
+                        </Button>
+                    
+                    </div>
+                </template>
+                <template #content>
+                <DataTable :value="servers"  
+                    tableStyle="min-width: 64rem" 
+                    class="p-datatable-sm" 
+                    responsiveLayout="scroll"
+                    :paginator="true" :rows="10" ref="dt"
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+                    :rowsPerPageOptions="[10,25,50,100]" style="margin-top: 1rem">
+
+                    <Column header="#">
+                        <template #body="{index}">
+                          <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+
+                        </template>
+                      </Column>  
+                    <Column field="machineName" header="Makine İsmi">
+                        {{ machineName }}
+                    </Column>
+                    <Column field="ip" header="Ip Adres">
+                        {{ ip }}
+                    </Column>
+
+                    <Column field="os" header="İşletim sistemi">
+                        <template #body="{ data }">
+                            {{ getPropertyValue(data.properties, "os_name") }}
+                        </template>
+                    </Column>
+                    <Column field="os-version" header="İşletim sistemi versiyon">
+                        <template #body="{ data }">
+                            {{ getPropertyValue(data.properties, "os_version") }}
+                        </template>
+                    </Column>
+                    
+                    <Column field="status" header="Durumu">
+                    <template #body="slotProps">
+                        <Badge  
+                            :value="slotProps.data.status ? $t('Bağlandı'): $t('Bağlanamadı')" 
+                            :severity="slotProps.data.status ? 'success': 'danger'">
+                        </Badge>
+                    </template>    
+                    </Column>
+                
+                    <Column>
+                        <template #body="slotProps">
+                            <div class="p-d-flex p-jc-end">
+
+                                <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
+                                    icon="pi pi-pencil"
+                                    :title="$t('Düzenle')" 
+                                    @click="editServerModalVisible = true; selectedServer = slotProps.data">
+                                </Button>
+
+                                <Button class="p-mr-2 p-button-danger p-button-sm p-button-rounded" 
+                                    icon="pi pi-trash" 
+                                    :title="$t('Sil')"
+                                    @click="deleteServerDialog =  true; selectedServer = slotProps.data">
+                                </Button>
+
+                                <Button 
+                                    class="p-mr-2 p-button-sm p-button-raised p-button-rounded"
+                                    icon="pi pi-list"
+                                    :title="$t('Detay')" 
+                                    @click="showServerDetailVisible= true; selectedServer = slotProps.data">
+                                </Button>
+                            </div>
+                        </template>
+                    </Column>
+                </DataTable>
+                </template>
+            </Card>
+        </div>
+        <add-server-dialog v-if="addServerModalVisible"
+            :addServerDialog="addServerModalVisible" 
+            @closeAddServerDialog="addServerModalVisible = $event;"
+            @saved-server="savedServer"
+        />
+
+        <show-server-detail-dialog v-if="showServerDetailVisible"
+            :selectedServer="selectedServer"
+            :showServerDetailDialog="showServerDetailVisible"
+            @close-server-detail="showServerDetailVisible=false"
+        />
+        
+        <edit-server-dialog v-if="editServerModalVisible"
+            :updateServerDialog="editServerModalVisible"
+            :selectedServer="selectedServer"
+            @closeEditServerDialog="editServerModalVisible = $event;"
+            @edit-server="editServer"  
+        />
+
+        <Dialog :header="$t('Sucunu sil')" 
+            v-model:visible="deleteServerDialog" 
+            :style="{width: '20vw'}" 
+            :modal="true"
+            @hide="deleteServerDialog = false"
+        >
+            <div class="p-fluid">
+                <i class="pi pi-info-circle p-mr-3" style="font-size: 1.5rem" />
+                <span>
+                    {{$t('Sunucu silinecek emin misiniz?') }}
+                </span>
+            </div>
+            <template #footer >
+                <Button 
+                :label="$t('İptal')" 
+                icon="pi pi-times" 
+                @click="deleteServerDialog = false" 
+                class="p-button-text p-button-sm"
+                />
+                <Button class="p-button-sm"
+                    :label="$t('Evet')" 
+                    icon="pi pi-check"
+                    @click="deleteServer"                    
+                />
+            </template>
+        </Dialog>
+        
+</template>
+
+<script>
+/**
+ * @see {@link http://www.liderahenk.org/}
+ * emits these events
+ * @event closeServerDialog
+ * @event deleteServer
+*/
+
+import AddServerDialog from '../Dialogs/AddServerDialog.vue';
+import ShowServerDetailDialog from '../Dialogs/ShowServerDetailDialog.vue';
+import EditServerDialog from '../Dialogs/EditServerDialog.vue';
+import { serverInformationService } from '../../../../services/Settings/ServerInformationService';
+
+
+
+export default{
+
+    props: ["servers"],
+
+    data() {
+
+        return {
+    
+            showServerDetailDialog : false,
+            addServerModalVisible : false,
+            showServerDetailVisible : false,
+            deleteServerDialog : false,
+            editServerDialog : false,
+            editServerModalVisible : false,
+            selectedServer : null,
+            serversData: [],
+            pageNumber: 1,
+            rowNumber: 10,
+            rows: 10
+
+        }
+    },
+
+    components: {
+        AddServerDialog,
+        ShowServerDetailDialog,
+        EditServerDialog,
+        
+    },
+
+    methods: {
+
+        savedServer() {
+            this.addServerModalVisible = false;
+            this.$emit("savedServer");
+        },
+
+        editServer() {
+            this.showServerDetailVisible = false;
+            this.$emit("editServer");
+        },
+        
+        getPropertyValue(properties, propertyName) {
+            var propertyValue = "";
+            const filteredProperties = properties.filter(
+              (property) => property.propertyName === propertyName
+            );
+            if (filteredProperties != null && filteredProperties.length > 0) {
+              propertyValue = filteredProperties[0].propertyValue;
+            
+            }
+            return propertyValue;
+        },
+
+        async deleteServer() {
+            this.deleteServerDialog = false;
+
+            const{response,error} = await  serverInformationService.deleteServer(this.selectedServer.id);
+            
+            if(response.status == 200){
+                    
+                this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('Sunucu başarıyla silindi(list)'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+                this.$emit('deletedServer');
+                // this.serversData = this.serversData.filter(template => template.id != this.selectedServer.id);
+                this.selectedServer = null;
+                this.deleteServerDialog = false;
+            }
+                
+            
+            else if(response.status == 417){                   
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('Sunucu silinirken hata oluştu 417'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+            }
+        },
+
+        
+        async getServerInfo() {
+
+            this.showServerDetailDialog = false;
+
+            let params = {
+                "id": this.selectedServer.id,
+            }
+            const { response,error } = await serverInformationService.getServerDetails(params);
+            if(response.status == 200){
+              if (response.data != "" && response.data != null) {
+                  this.selectedServerInfo = response.data;
+            
+            } else {
+                this.selectedServerInfo = null;
+                this.$toast.add({
+                  severity:'error', 
+                  detail: this.$t("computer.agent_info.error_message"), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: 3000
+                  });
+                }
+              }
+            else if(response.status == 417){
+              return "error";
+            }
+    },
+
+    resetPaginator() {
+        this.pageNumber = 1;
+        this.rowNumber = this.rows;
+        this.first = 0;
+        this.serverListAll();
+    },
+
+    },
+}
+
+</script>
+
+<style lang="scss" scoped>
+    
+.card {
+    background: #ffffff;
+    padding: 0px;
+    box-sizing: border-box;
+    box-shadow: 0px 10px 40px rgba(41, 50, 65, 0.06);
+}
+::v-deep(.p-paginator) {
+    .p-paginator-current {
+        margin-left: auto;
+    }
+}
+</style>

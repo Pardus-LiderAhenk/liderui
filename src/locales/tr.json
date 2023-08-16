@@ -64,6 +64,7 @@
         "script_definitions": "Betik Tanımları",
         "system_monitoring_definitions": "Sistem Gözlemcisi Tanımları",
         "server_settings": "Sunucu Ayarları",
+        "server_informations": "Sunucu Bilgileri",
         "console_user_settings": "Arayüz Kullanıcı Ayarları",
         "ad_synchronization": "AD Senkronizasyonu",
         "scheduled_task_report": "Zamanlanmış Görev Raporu",
