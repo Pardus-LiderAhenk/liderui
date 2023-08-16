@@ -14,6 +14,7 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import BasePlugin from '@/views/ComputerManagement/Plugins/BasePlugin/BasePlugin.vue';
 import BaseScheduled from '@/views/ComputerManagement/Plugins/Scheduled/BaseScheduled.vue';
 import TreeComponent from '@/components/Tree/TreeComponent.vue';
+import { decryptData} from "./store/modules/encryption"
 
 router.beforeEach(function(to, from, next) {
     window.scrollTo(0, 0);
@@ -34,7 +35,13 @@ app.use(i18n);
 
 
 axios.defaults.baseURL = process.env.VUE_APP_URL;
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('auth_token');
+let authToken = localStorage.getItem('auth_token');
+
+if (authToken) {
+    console.log(authToken)
+   authToken = decryptData(localStorage.getItem('auth_token'));
+}
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + authToken;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 axios.interceptors.request.use(function(config) {

@@ -11,7 +11,8 @@
                             :label="$t('menu.computer_management')"
                         >
                         </Button>
-                        <Button
+                        <Button 
+                            v-if="isExistPrivilege('ROLE_COMPUTER_GROUPS')"
                             icon="fa fa-cubes"
                             :class="selectedTab == 'computer-group-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                             @click="setSelectedTab('computer-group-management')"
@@ -30,6 +31,7 @@
 import ComputerManagement from "@/views/ComputerManagement/ComputerManagement.vue";
 import ComputerGroupManagement from "@/views/ComputerManagement/ComputerGroupManagement/ComputerGroupManagement.vue";
 import { mapActions } from "vuex"
+import {roleManagement} from "../../services/Roles/RoleManagement"
 
 export default {
     components: {
@@ -44,6 +46,10 @@ export default {
     },
     
     methods: {
+        isExistPrivilege(role){
+            return roleManagement.isExistRole(role)
+        },
+
         ...mapActions(["setSelectedNodeType", "setSelectedComputerGroupNode", "setSelectedLiderNode"]),
         
         setSelectedTab(tab) {

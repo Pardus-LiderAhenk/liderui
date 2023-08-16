@@ -1,8 +1,11 @@
 <template>
   <div>
-    <packages class="plugin-card" v-if="packagesState" :pluginTask="pluginTaskPackages"></packages>
+    <packages class="plugin-card" 
+      v-if="packagesState && isExistPrivilege('ROLE_PACKAGE_INSTALL_REMOVE')" 
+      :pluginTask="pluginTaskPackages">
+    </packages>
     <check-package class="plugin-card" 
-      v-if="checkPackageState" 
+      v-if="checkPackageState && isExistPrivilege('ROLE_PACKAGE_CONTROL')" 
       :pluginTask="pluginTaskCheckPackage">
     </check-package>
   </div>
@@ -18,6 +21,7 @@
 import Packages from "@/views/ComputerManagement/Plugins/Task/Package/Packages.vue";
 import CheckPackage from "@/views/ComputerManagement/Plugins/Task/Package/CheckPackage.vue";
 import { taskService } from '../../../../../../services/Task/TaskService.js';
+import {roleManagement} from "../../../../../../services/Roles/RoleManagement"
 
 export default {
   data() {
@@ -39,6 +43,9 @@ export default {
   },
 
   methods: {
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
 
     async pluginTaskList(){
       const{response,error} = await taskService.pluginTaskList();
