@@ -69,7 +69,8 @@
         "ad_synchronization": "AD Senkronizasyonu",
         "scheduled_task_report": "Zamanlanmış Görev Raporu",
         "view_profile": "Profil Görüntüle",
-        "logout": "Çıkış"
+        "logout": "Çıkış",
+        "privilege_warning": "Kullanıcı yetkileri getiriliken hata oluştu"
     },
     "tree":{
         "tree": "Ağaç",
@@ -685,7 +686,7 @@
     "settings": {
         "console_user_settings":{
             "lider_users_and_access_settings":"ARAYÜZ KULLANICILARI VE ERİŞİM AYARLARI",
-            "lider_user_management":"Arayüz Kullanıcı Yönetimi",
+            "lider_user_management":"Lider Arayüz Kullanıcı Yönetimi",
             "existing_console_users":"Mevcut Konsol Kullanıcıları",
             "add_console_user":"Konsol Kullanıcısı Ekle",
             "delete_users_console_authority":"Kullanıcının Konsol Yetkisini Sil",
@@ -735,7 +736,7 @@
             "phone":"Telefon",
             "address":"Adres",
             "grant_access_to_existing_users":"Mevcut Kullanıcılara Erişim Yetkisi Ver",
-            "grant_user_lider_user_authorization":"Kullanıcıya Arayüz Kullanıcısı Yetkisi Ver",
+            "grant_user_lider_user_authorization":"Arayüz Erişim Yetkisi Ver",
             "grant_directory_access":"Dizin Erişim Yetkisi Ver",
             "group_members":"Grup Üyeleri",
             "add_to_group":"Gruba Ekle",
@@ -772,8 +773,16 @@
             "cancel":"İptal",
             "delete":"Sil",
             "console_user_change_password":"Bildirim",
-            "console_user_change_password_question":"Konsol kullanıcısı parola değiştirilecektir. Emin misiniz?"
-
+            "console_user_change_password_question":"Konsol kullanıcısı parola değiştirilecektir. Emin misiniz?",
+            "select_node_warn": "Lütfen kayıt seçiniz",
+            "menu_access_settings": "Menü Erişim Ayarları",
+            "directory_access_settings": "Dizin Erişim Ayarları",
+            "edit_menu_settings": "Menü Ayarlarını Düzenle",
+            "edit_directory_settings": "Dizin Ayarlarını Düzenle",
+            "search":"Ara",
+            "grant_access_interface_question": "Kullanıcıya arayüz erişim yetkisi verilecektir, emin misiniz?",
+            "authority": "Yetki",
+            "please_select_group":"Lütfen grup seçiniz"
         },
 
         "server_settings":{
