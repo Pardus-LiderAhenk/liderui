@@ -57,8 +57,8 @@
         <template #footer>
 
             
-            <Button :label="$t('settings.server_information.close')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text"/>
-            <Button :label="$t('settings.server_information.save')" icon="pi pi-save"  @click="addNewServer"></Button>
+            <Button :label="$t('settings.server_information.close')" icon="pi pi-times" @click="modalVisible = false" class="p-button-text p-button-sm"/>
+            <Button :label="$t('settings.server_information.save')" icon="pi pi-save"  @click="addNewServer" class="p-button-sm"></Button>
 
             
         </template>
@@ -160,7 +160,9 @@ export default {
 
         async checkConnection(){
 
-        
+            if(this.validateForm() == false){
+                return;
+            }
             const params = new FormData();
             params.append('hostname', this.serverForm.ip);
             params.append('username', this.serverForm.user);

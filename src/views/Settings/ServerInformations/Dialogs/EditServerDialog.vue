@@ -7,14 +7,23 @@
                 <div class="p-field">
                     <label for="machineName">{{$t('settings.server_information.machine_name')}}</label>
                     <InputText id="machineName" type="text" v-model="machineName"/>
+                    <small v-if="validationForm.ip" class="p-error">
+                        {{ $t('settings.server_information.required_machine_name')}}
+                    </small>
                 </div>
                 <div class="p-field">
                     <label for="ip">{{$t('settings.server_information.ip_addr')}}</label>
                     <InputText id="ip" type="text" v-model="ip"/>
+                    <small v-if="validationForm.ip" class="p-error">
+                        {{ $t('settings.server_information.required_ip')}}
+                    </small>
                 </div>
                 <div class="p-field">
                     <label for="user">{{$t('settings.server_information.user')}}</label>
                     <InputText id="user" type="text" v-model="user"/>
+                    <small v-if="validationForm.user" class="p-error">
+                        {{ $t('settings.server_information.required_user')}}
+                    </small>
                 </div>
                 
                 <div class="p-field">
@@ -25,6 +34,9 @@
                         severity="success" 
                         @click="checkConnection"/>
                     </div>
+                    <small v-if="validationForm.password" class="p-error">
+                        {{ $t('settings.server_information.required_passwd')}}
+                    </small>
                 </div>
             </div>
             <div v-if="loading" class="p-text-center">
@@ -80,6 +92,7 @@ export default {
                 user: null,
                 password: null,
                 servers: [],
+                validationForm: {},
 
             }
         },
@@ -145,6 +158,9 @@ export default {
         },
 
         async checkConnection(){
+            if(this.validateForm() == false){
+                return;
+            }
 
             const params = new FormData();
             params.append('hostname', this.ip);
@@ -185,6 +201,25 @@ export default {
         this.loading = false;
 
         },
+
+        validateForm() {
+            if (!this.ip.trim()){
+                this.validationForm['ip'] = true;
+            } else{
+                delete this.validationForm['ip'];
+            }
+            if (!this.user.trim()){
+                this.validationForm['user'] = true;
+            } else{
+                delete this.validationForm['user'];
+            }
+            if (!this.password.trim()){
+                this.validationForm['password'] = true;
+            } else{
+                delete this.validationForm['password'];
+            }
+            return !Object.keys(this.validationForm).length;
+        },
     },
     watch:  {
         servers: function(newVal, oldVal) {
@@ -194,6 +229,7 @@ export default {
             this.password = newVal.password;
         }
     },
+    
 }
 
 </script>

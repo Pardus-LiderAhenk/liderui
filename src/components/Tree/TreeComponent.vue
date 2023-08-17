@@ -146,7 +146,7 @@
           &nbsp;&nbsp;{{ $t('tree.search_result') }}
         </span>
       </template>
-      <div class="p-fluid">
+      <div class="p-fluid" >
         <div class="p-field">
             <span class="p-input-icon-left">
               <i class="pi pi-filter-slash" />
@@ -183,15 +183,20 @@
       </div>
     </TabPanel>
     <!-- Online client tree -->
-    <TabPanel v-if="isAgentTree" style="max-height:500px;overflow:auto"
-      >
+    <TabPanel v-if="isAgentTree" style="max-height:500px;overflow:auto">
       <template #header>
           <i class="pi pi-globe"></i>
           <span>
               &nbsp;&nbsp;{{ $t('tree.online_clients') }}
           </span>
       </template>
-      <div class="p-fluid">
+        <div class="p-fluid"
+          v-loading="loading"
+          :element-loading-text="$t('tree.online_loading')"
+          element-loading-background="rgba(0, 0, 0, 0.6)"
+          :element-loading-spinner="svg"
+        
+        >
         <div class="p-field">
             <span class="p-input-icon-left">
               <i class="pi pi-filter-slash" />
@@ -218,7 +223,8 @@
               @node-click="handleTreeClick"
               :render-content="renderSearchContent"
               :empty-text="$t('tree.not_found_record')"
-              node-key="distinguishedName">
+              node-key="distinguishedName"
+              >
             </el-tree>
           </div>
         </ScrollPanel>
@@ -399,7 +405,8 @@ export default {
       filterOnlineText: '',
       rootNode: null,
       searchValidation: {},
-      searchLoading: false
+      searchLoading: false,
+      loading: false
     };
   },
 
@@ -571,6 +578,7 @@ export default {
     },
 
     async getOnlineAgents() {
+      this.loading = true;
       if (this.tabIndex === 2) {
         let searchDn = null;
         let params = new FormData();
@@ -593,6 +601,7 @@ export default {
           if(response.status == 200){
             this.tabIndex = 2;
             this.onlineAgentResults = response.data;
+            
           }
           else if(response.status == 404){
             this.$toast.add({
@@ -603,6 +612,7 @@ export default {
           })
           }
         }
+        this.loading = false;
       }
     },
 

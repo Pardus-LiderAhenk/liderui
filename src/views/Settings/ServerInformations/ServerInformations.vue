@@ -1,7 +1,7 @@
 <template>
     <div class="p-col-12 p-pb-0" 
             v-loading="loading"
-            element-loading-text="Loading, please wait..."
+            :element-loading-text="$t('settings.server_information.getting_server_list')"
             element-loading-background="rgba(0, 0, 0, 0.6)"
             :element-loading-spinner="svg"
             >

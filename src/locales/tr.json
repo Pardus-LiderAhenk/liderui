@@ -98,7 +98,8 @@
         "not_found_record": "Kayıt bulunamadı",
         "online_clients": "Çevrimiçi İstemciler",
         "search_dn": "Arama yapmak için seçilen kayıt",
-        "searching": "Arama yapılıyor, lütfen bekleyiniz..."
+        "searching": "Arama yapılıyor, lütfen bekleyiniz...",
+        "online_loading":"Çevrimiçi istemciler yükleniyor. Lütfen bekleyiniz..."
 
     },
     "node_detail": {
@@ -849,7 +850,9 @@
             "417_error_get_server_information":"Sunucu bilgileri getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
             "cpu_usage":"Cpu Kullanımı",
             "disk_usage":"Disk Kullanımı",
-            "ram_usage":"Ram Kullanımı"
+            "ram_usage":"Ram Kullanımı",
+            "getting_server_list":"Sunucu listesi yükleniyor. Lütfen bekleyiniz..."
+
 
         },
 

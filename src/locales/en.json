@@ -98,7 +98,9 @@
         "not_found_record": "Not found record",
         "online_clients": "Online Clients",
         "search_dn": "Selected node to search",
-        "searching": "Searching, please wait..."
+        "searching": "Searching, please wait...",
+        "online_loading":"Online clients are loading. Please wait..."
+
     },
     "node_detail": {
         "selected_node_title": "Node Information",
@@ -851,7 +853,8 @@
             "417_error_get_server_information":"An unexpected error occurred while fetching server information. Error code : 417",
             "cpu_usage":"CPU Usage",
             "disk_usage":"Disk Usage",
-            "ram_usage":"Ram Usage"
+            "ram_usage":"Ram Usage",
+            "getting_server_list":"The server list is loading. Please wait..."
 
         },
         "server_settings":{
