@@ -854,7 +854,8 @@
             "cpu_usage":"CPU Usage",
             "disk_usage":"Disk Usage",
             "ram_usage":"Ram Usage",
-            "getting_server_list":"The server list is loading. Please wait..."
+            "getting_server_list":"The server list is loading. Please wait...",
+            "general_information":"General Information"
 
         },
         "server_settings":{

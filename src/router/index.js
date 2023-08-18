@@ -203,6 +203,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
+    //history: createWebHashHistory(),
     linkActiveClass: "active",
     routes,
 });

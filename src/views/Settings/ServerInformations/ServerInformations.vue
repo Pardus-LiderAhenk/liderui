@@ -98,9 +98,9 @@
             
         },
         
-        created(){
-            this.serverListAll();
-        },
+        // created(){
+        //     this.serverListAll();
+        // },
 
         mounted(){
             this.serverListAll();
@@ -111,6 +111,7 @@
             async serverListAll(){
                 this.loading = true;
                 const { response, error } = await serverInformationService.list();
+                console.log(error)
                 if (error){
                     this.$toast.add({
                     severity:'error',

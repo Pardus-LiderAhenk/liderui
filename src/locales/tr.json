@@ -851,8 +851,8 @@
             "cpu_usage":"Cpu Kullanımı",
             "disk_usage":"Disk Kullanımı",
             "ram_usage":"Ram Kullanımı",
-            "getting_server_list":"Sunucu listesi yükleniyor. Lütfen bekleyiniz..."
-
+            "getting_server_list":"Sunucu listesi yükleniyor. Lütfen bekleyiniz...",
+            "general_information":"Genel Bilgiler"
 
         },
 

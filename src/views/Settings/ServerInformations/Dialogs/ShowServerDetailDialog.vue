@@ -6,7 +6,7 @@
             :style="{ width: '40vw'}"
             v-model:visible="showDialog">
 
-            <h5>{{ $t('Genel bilgiler') }}</h5>
+            <h5>{{ $t('settings.server_information.general_information') }}</h5>
             <div class="p-grid">
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
                 <div class="p-col-4"><b>{{$t('settings.server_information.detail_machine_name')}}</b></div>

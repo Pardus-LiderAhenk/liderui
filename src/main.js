@@ -38,7 +38,6 @@ axios.defaults.baseURL = process.env.VUE_APP_URL;
 let authToken = localStorage.getItem('auth_token');
 
 if (authToken) {
-    console.log(authToken)
    authToken = decryptData(localStorage.getItem('auth_token'));
 }
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + authToken;

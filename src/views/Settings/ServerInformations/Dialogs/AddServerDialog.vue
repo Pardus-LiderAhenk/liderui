@@ -1,5 +1,5 @@
 <template>
-    <Dialog :header="$t('Sunucu ekle')" 
+    <Dialog :header="$t('settings.server_information.add_server')" 
     v-model:visible="modalVisible" style="width:30vw;">            
             
             <div class="p-fluid">
