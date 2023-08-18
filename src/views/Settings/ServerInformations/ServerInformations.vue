@@ -1,4 +1,27 @@
 <template>
+    <div v-if="servers.length<1" class="p-col-12 p-md-6 p-lg-12" style="min-height:90vh; margin-top:3px">
+        <Panel :header="$t('settings.server_information.server_information')">
+            <template #icons>
+                    <Button 
+                        class="p-button-sm" 
+                        :label="$t('settings.server_information.add_server')"
+                        @click="addServerModalVisible =  true;"
+                    />
+            </template>
+                <div class="p-grid p-flex-column">
+                    <Message v-if="servers.length == 0 && !loading" :closable="false" severity="info">
+                        {{$t('settings.server_information.not_registered_found')}}
+                    </Message>
+                    <Message v-if="loading" :closable="false" :life="3000" severity="info">
+                        <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp; 
+                        {{$t('settings.server_information.server_control_waiting')}}
+                    </Message>
+                    
+                    
+                </div>
+        </Panel>
+    </div>
+    <div v-if="servers.length>0">
     <div class="p-col-12 p-pb-0" 
             v-loading="loading"
             :element-loading-text="$t('settings.server_information.getting_server_list')"
@@ -45,8 +68,16 @@
         :servers="servers"
         @modalVisibleValue="showServerDetailDialog = $event;"
     />
-
+    
+    </div>
 </div>
+    <add-server-dialog v-if="addServerModalVisible"
+        :addServerDialog="addServerModalVisible" 
+        @closeAddServerDialog="addServerModalVisible = $event;"
+        @saved-server="savedServer"
+    
+    />
+
 </template>
 <script>
     /**
@@ -63,6 +94,8 @@
     import ServerLogs from "./Component/ServerLogs.vue";
     import ShowServerDetailDialog from "./Dialogs/ShowServerDetailDialog.vue";
     import  { serverInformationService } from "../../../services/Settings/ServerInformationService.js";
+    import AddServerDialog from './Dialogs/AddServerDialog.vue';
+
     
     
     
@@ -95,6 +128,7 @@
             RamInformation,
             CpuInformation,
             ShowServerDetailDialog,
+            AddServerDialog,
             
         },
         
@@ -182,7 +216,6 @@
                 }
                 return propertyValue;
             },
-
             
         },
         watch : {

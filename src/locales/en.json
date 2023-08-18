@@ -855,7 +855,9 @@
             "disk_usage":"Disk Usage",
             "ram_usage":"Ram Usage",
             "getting_server_list":"The server list is loading. Please wait...",
-            "general_information":"General Information"
+            "general_information":"General Information",
+            "server_control_waiting":"Your servers are being checked. Please waiting..",
+            "not_registered_found":"No registered servers found..."
 
         },
         "server_settings":{

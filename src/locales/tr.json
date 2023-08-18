@@ -852,7 +852,9 @@
             "disk_usage":"Disk Kullanımı",
             "ram_usage":"Ram Kullanımı",
             "getting_server_list":"Sunucu listesi yükleniyor. Lütfen bekleyiniz...",
-            "general_information":"Genel Bilgiler"
+            "general_information":"Genel Bilgiler",
+            "server_control_waiting":"Sunucularınız kontrol ediliyor. Lütfen bekleyiniz..",
+            "not_registered_found":"Kayıtlı sunucu bulunamamıştır.."
 
         },
 
