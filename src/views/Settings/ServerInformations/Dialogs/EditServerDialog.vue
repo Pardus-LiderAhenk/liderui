@@ -93,6 +93,7 @@ export default {
                 password: null,
                 servers: [],
                 validationForm: {},
+                loading: false,
 
             }
         },
@@ -123,6 +124,9 @@ export default {
         },
 
         async updateServer(){
+            if(this.validateForm() == false){
+                return;
+            }
 
             this.loading = true;
             let params = new FormData();
