@@ -36,10 +36,17 @@
                         <Button icon="pi pi-link" 
                             severity="success" 
                             @click="checkConnection"/>
+
                     </div>
                     <small v-if="validationForm.password" class="p-error">
                         {{ $t('settings.server_information.required_passwd')}}
                     </small>
+                    <div v-if="checkLoading" class="p-text-center">
+                        <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+                        <a class="primary">
+                          {{$t('check connection')}}
+                        </a>
+                    </div>
                 </div>
 
                 <div class="p-field">
@@ -85,6 +92,7 @@ export default {
             },
             validationForm: {},
             loading: false,
+            checkLoading: false,
 
         }
     },
@@ -163,33 +171,16 @@ export default {
             if(this.validateForm() == false){
                 return;
             }
-            const params = new FormData();
+            let params = new FormData();
             params.append('hostname', this.serverForm.ip);
-            params.append('username', this.serverForm.user);
             params.append('password', this.serverForm.password);
+            params.append('username', this.serverForm.user);
+            
 
             const {response, error} = await serverInformationService.connectionServer(params);
 
-            if(response.data != null){
-                if(response.status == 200){
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.server_information.successfully_connection'), 
-                        summary:this.$t("settings.server_information.toast_summary"), 
-                        life: 3000
-                    });
-                }
-                else if(response.status == 417){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.server_information.417_error_disconnect'), 
-                        summary:this.$t("settings.server_information.toast_summary"), 
-                        life: 3000
-                    });
-                }
-                    
-            }
-            else{
+            console.log(response);
+            if(error){
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('settings.server_information.error_disconnect'), 
@@ -197,8 +188,27 @@ export default {
                     life: 3000
                 });
             }
-        
-        this.loading = false;
+            else{
+                if(response.status == 200 && response.data == true){
+
+
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_information.successfully_connection'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
+                        life: 3000
+                    });
+                    
+                }
+                else if(response.status == 400){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.server_information.417_error_disconnect'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
     
         },
 

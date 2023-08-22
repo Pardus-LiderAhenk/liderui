@@ -166,12 +166,14 @@ export default {
                 return;
             }
 
-            const params = new FormData();
+            let params = new FormData();
             params.append('hostname', this.ip);
-            params.append('username', this.user);
             params.append('password', this.password);
+            params.append('username', this.user);
+            
            
             const {response, error} = await serverInformationService.connectionServer(params);
+            console.log(response);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -183,14 +185,13 @@ export default {
             else{
                 if(response.status == 200){
 
-                    if (response.data != null) {
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('settings.server_information.successfully_connection'), 
-                            summary:this.$t("settings.server_information.toast_summary"), 
-                            life: 3000
-                        });
-                    }
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_information.successfully_connection'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
+                        life: 3000
+                    });
+                    
                 }
                 else if(response.status == 417){
                     this.$toast.add({
@@ -201,8 +202,6 @@ export default {
                     });
                 }
             }
-
-        this.loading = false;
 
         },
 

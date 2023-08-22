@@ -18,7 +18,7 @@
                                    
                 <div class="widget-image-stats relative">
 
-                    <img :src="img" alt="product" class="responsive" style="width: 700px; display: flex;">
+                    <img :src="img" alt="product" class="responsive" style="width: 700px; ">
 
                     <div v-for="server in servers" v-bind:key="server">
                         <br/>
@@ -28,32 +28,27 @@
                                 {{ server.machineName }}
                              
                             </div>
-                            <!-- <div>
-                                
-                                {{ "%" + (10*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824))).toFixed(2)) }}
                             
-                            </div> -->
-                            <div class="p-d-flex p-jc-between p-ai-center">
+                            <div class="progressbar" style="min-width: 10rem;  height: 1rem;  border-radius: 6px;">
 
                             <ProgressBar class="p-progressbar-blue"
-
                                 :value="((100*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824)))).toFixed(2))"
-                                v-if="Number(100*(getPropertyValue(server.properties, 'total_disk_empty')/(getPropertyValue(server.properties, 'disk_total'))).toFixed(2)) < 90.00"
-                                style="display: contents; width: 40rem; height: 1rem;">
+                                v-if="Number(100*(getPropertyValue(server.properties, 'total_disk_empty')/(getPropertyValue(server.properties, 'disk_total'))).toFixed(2)) > 50.00"
+                                >
                             
                             </ProgressBar>
                             
                             <ProgressBar class="p-progressbar-red"
 
                                 :value="((100*((((getPropertyValue(server.properties, 'total_disk_empty')*4096)/1073741824)/((getPropertyValue(server.properties, 'disk_total')*4096)/1073741824)))).toFixed(2))"
-                                v-if="Number(100*(getPropertyValue(server.properties, 'total_disk_empty')/(getPropertyValue(server.properties, 'disk_total'))).toFixed(2)) > 90.00"
-                                style="display: flex; width: 40rem; height: 1rem;">
+                                v-else-if="Number(100*(getPropertyValue(server.properties, 'total_disk_empty')/(getPropertyValue(server.properties, 'disk_total'))).toFixed(2)) < 50.00"
+                                >
                             
                             </ProgressBar> 
 
                             <ProgressBar v-else class="p-progressbar-gray" 
 
-                                style="display: flex; width: 40rem; height: 1rem;">
+                                >
                             
                             </ProgressBar> 
                         </div>
@@ -107,20 +102,6 @@ export default {
     margin-bottom: 0.5rem!important;
 }
 
-.widget-image-stats .p-progressbar {
-    height: 0.5rem;
-}
-
-.p-progressbar {
-    position: relative;
-    overflow: hidden;
-}
-.p-progressbar {
-    border: 0 none;
-    height: 1.5rem;
-    background: #dfe7ef;
-    border-radius: 6px;
-}
 .align-items-center {
     -webkit-box-align: center!important;
     -ms-flex-align: center!important;
@@ -162,30 +143,34 @@ img {
     height: auto;
   }
 
-::v-deep(.p-progressbar-blue) {
-    height: 10rem;
+  ::v-deep(.p-progressbar-blue) {
+    height: 1.25rem;
     background-color: #419544;
-
+  
     .p-progressbar-value {
-        background-color: #1769aa;
+      height: 1.25rem;
+      background-color: #1769aa;
     }
     
   }
   ::v-deep(.p-progressbar-red) {
-    height: 10rem;
+    height: 1.25rem;
     background-color: #419544;
   
     .p-progressbar-value {
-        background-color:#1769aa;
+        height: 1.25rem;
+        background-color:#D32F2F;
     }
     
   }
 
 ::v-deep(.p-progressbar-gray) {
-    height: 10rem;
+    height: 1.25rem;
     background-color: #485048;
   
     .p-progressbar-value {
+        height: 1.25rem;
+
         background-color:#485048;
     }
     

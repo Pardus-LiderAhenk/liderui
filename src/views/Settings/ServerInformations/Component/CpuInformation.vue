@@ -242,12 +242,12 @@ img {
   }
   ::v-deep(.p-progressbar-red) {
     height: 10rem;
-    background-color: #419544;
-  }
-    .p-progressbar-value {
-        background-color:#1769aa;
-    }
+  background-color: #419544;
 
+  .p-progressbar-value {
+      background-color:#D32F2F;
+  }
+  }
     .servers ul {
         list-style: none;
         padding: 0;
