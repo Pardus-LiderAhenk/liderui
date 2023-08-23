@@ -91,6 +91,13 @@
             :message="$t('settings.console_user_settings.console_user_authorization_deletion_question')"
             @accepted="deleteConsoleUser"
         />
+        <LiderConfirmDialog 
+            :showDialog="showChangePasswordConsoleUserDialog"
+            @showDialog="showChangePasswordConsoleUserDialog = $event;"
+            :header="$t('settings.console_user_settings.console_user_change_password')"
+            :message="$t('settings.console_user_settings.console_user_change_password_question')"
+            @accepted="updatePassword"
+    />
 
         <!-- password change dialog -->
         <Dialog 
@@ -172,6 +179,7 @@ export default {
             showDeleteConsoleUserDialog:false,
             changePasswordDialog: false,
             showUserDirectoryAccessSettingsDialog: false,
+            showChangePasswordConsoleUserDialog:false,
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
@@ -302,7 +310,7 @@ export default {
             params.append("userPassword", this.userPassword);
 
             if (this.selectedUser) {
-                const{response,error} = await userService.updatePasswd(params);
+                const{response,error} = await consoleUserSettingsService.updatePasswd(params);
                 if(error){
                     this.$toast.add({
                         severity:'error', 
@@ -343,6 +351,21 @@ export default {
                 });
             }
             this.showChangePasswordConsoleUserDialog = false;
+        },
+        showUpdatePasswordDialog() {
+            if (this.selectedUser && this.selectedUser.type === "USER") {
+                this.userPassword = this.$refs.password.getPassword();
+                if (this.userPassword) {
+                    this.showChangePasswordConsoleUserDialog = true;
+                }
+            } else {
+                this.$toast.add({
+                    severity:'warn', 
+                    detail: this.$t('user_management.select_user_warn'), 
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
         },
     },
 
