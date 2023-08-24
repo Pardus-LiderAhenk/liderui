@@ -116,6 +116,7 @@ ul {
     -webkit-border-radius: 6px;
     border-radius: 6px;
     overflow: hidden;
+    
 }
 * {
     box-sizing: border-box;
@@ -157,8 +158,6 @@ li {
 
 h6 {
     font-size: 1rem;
-}
-h1, h2, h3, h4, h5, h6 {
     margin: 1.5rem 0 1rem 0;
     font-family: inherit;
     font-weight: 600;
