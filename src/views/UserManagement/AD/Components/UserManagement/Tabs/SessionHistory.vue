@@ -105,7 +105,7 @@ export default {
             this.loading = true;
             let params = new FormData();
             params.append("uid", this.selectedUser.attributes.sAMAccountName);
-            const{response,error} = await userService.userSession(params);
+            const{response,error} = await userService.userSession(this.selectedUser.attributes.sAMAccountName);
             if(error){
                 this.$toast.add({
                     severity:'error', 
