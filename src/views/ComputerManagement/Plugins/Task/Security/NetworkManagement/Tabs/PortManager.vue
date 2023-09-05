@@ -155,20 +155,18 @@ export default {
             this.$emit("sendPortTask", parameterMap, commandId);
         },
 
-        changeStatusPort(data) {
+        changeStatusPort(data, commandId) {
             for (let index = 0; index < this.portList.length; index++) {
                 const element = this.portList[index];
                 if (element.port == data.port && element.protocol == data.protocol) {
-                    let input = "Blocked";
-                    if (data.input == "Blocked") {
-                        input = "Allowed"
+                    let status = "Blocked";
+                    if (commandId == "BLOCK_PORT") {
+                        status = "Blocked"
+                    } else {
+                        status = "Allowed"
                     }
-                    let output = "Blocked";
-                    if (data.output == "Blocked") {
-                        output = "Allowed";
-                    }
-                    element.input = input;
-                    element.output = output;
+                    element.input = status;
+                    element.output = status;
                 }
             }
         }
@@ -180,7 +178,7 @@ export default {
                 if (this.message.commandClsId == "BLOCK_PORT" || this.message.commandClsId == "ALLOW_PORT") {
                     for (let index = 0; index < this.selectedPorts.length; index++) {
                         const element = this.selectedPorts[index];
-                        this.changeStatusPort(element);
+                        this.changeStatusPort(element, this.message.commandClsId);
                     }
                     this.selectedPorts = [];
                 } else if (this.message.commandClsId == "GET_NETWORK_INFORMATION") {
