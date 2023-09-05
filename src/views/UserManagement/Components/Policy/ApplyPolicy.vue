@@ -78,8 +78,8 @@
                     <Column field="description" :header="$t('policy_management.description')" style="width:25%"></Column>
                     <Column :exportable="false">
                         <template #body="slotProps">
-                            <div class="p-d-flex p-jc-end">
-                                <Button class="p-button-sm p-button-rounded" 
+                            <div class="p-d-flex p-jc-end" >
+                                <Button  class="p-button-sm p-button-rounded"  v-show="domainType=='LDAP'"
                                     icon="pi pi-play"
                                     :title="$t('group_management.apply_policy')" 
                                     @click.prevent="applyPolicyConfirmDialog= true; selectedPolicy = slotProps.data">
@@ -117,6 +117,7 @@
 import {FilterMatchMode} from 'primevue/api';
 import { policyService } from "../../../../services/PolicyManagement/PolicyService.js";
 import AddPolicyExceptionDialog from "./AddPolicyExceptionDialog.vue"
+import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js"
 
 export default {
     components: {
@@ -142,7 +143,8 @@ export default {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
             addPolicyExceptionDialog: false,
-            policyExceptionData: null
+            policyExceptionData: null,
+            domainType: 'LDAP',
         }
     },
 
@@ -162,6 +164,7 @@ export default {
 
     mounted() {
         this.activePolicy();
+        this.created();
     },
 
     methods:{
@@ -199,6 +202,37 @@ export default {
             }
         },
 
+        async created() {
+            const{ response,error } =  await adManagementService.configuration();
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('user_management.ad.error_configuraton'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    if (response.data) {
+
+                        this.domainType = response.data.domainType;
+                        if (this.domainType == "ACTIVE_DIRECTORY") {
+                            this.selectedTab = "ad-management";
+                        }
+                    }
+                }else if(response.status == 417){
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('user_management.ad.error_417_configuration'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+
+        },
+
         async applyPolicy() {
             let dnList = [];
             dnList.push(this.selectedNode.distinguishedName);
@@ -223,6 +257,7 @@ export default {
 
             const {response,error} = await policyService.policyExecute(params);
             if(error) {
+                console.log("burda")
                 this.$toast.add({
                     severity:'error', 
                     detail: this.$t('group_management.apply_policy_error')+ " \n"+error, 
@@ -255,7 +290,7 @@ export default {
             
             this.applyPolicyConfirmDialog = false;
         }
-    }
+    },
     
 }
 </script>
