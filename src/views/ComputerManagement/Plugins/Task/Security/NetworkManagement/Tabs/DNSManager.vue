@@ -66,7 +66,7 @@
                 </Button>
             </div>
             <div class="p-field">
-                <DataTable 
+                <DataTable :scrollable="false" scrollHeight="400px" responsiveLayout="scroll"
                     :value="dnsData" 
                     class="p-datatable-sm"
                     v-model:filters="filters">

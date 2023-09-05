@@ -69,7 +69,7 @@
                 </Button>
             </div>  
             <div class="p-field">
-                <DataTable 
+                <DataTable  :scrollable="false" scrollHeight="400px" responsiveLayout="scroll"
                     :value="hostData" 
                     class="p-datatable-sm"
                     v-model:filters="filters">
@@ -288,5 +288,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 
 </style>
