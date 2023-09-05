@@ -41,10 +41,10 @@
                     <small v-if="validationForm.password" class="p-error">
                         {{ $t('settings.server_information.required_passwd')}}
                     </small>
-                    <div v-if="checkLoading" class="p-text-center">
+                    <div v-if="loadingSsh" class="p-text-center">
                         <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
                         <a class="primary">
-                          {{$t('check connection')}}
+                          {{$t('settings.server_information.ssh_loading_message')}}
                         </a>
                     </div>
                 </div>
@@ -92,7 +92,7 @@ export default {
             },
             validationForm: {},
             loading: false,
-            checkLoading: false,
+            loadingSsh: false,
 
         }
     },
@@ -171,15 +171,14 @@ export default {
             if(this.validateForm() == false){
                 return;
             }
+            this.loadingSsh = true;
             let params = new FormData();
             params.append('hostname', this.serverForm.ip);
             params.append('password', this.serverForm.password);
             params.append('username', this.serverForm.user);
             
-
             const {response, error} = await serverInformationService.connectionServer(params);
 
-            console.log(response);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -209,6 +208,7 @@ export default {
                     });
                 }
             }
+            this.loadingSsh = false;
     
         },
 

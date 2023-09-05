@@ -857,7 +857,8 @@
             "getting_server_list":"The server list is loading. Please wait...",
             "general_information":"General Information",
             "server_control_waiting":"Your servers are being checked. Please waiting..",
-            "not_registered_found":"No registered servers found..."
+            "not_registered_found":"No registered servers found...",
+            "ssh_loading_message":"Checking ssh connection. Please wait.."
 
         },
         "server_settings":{

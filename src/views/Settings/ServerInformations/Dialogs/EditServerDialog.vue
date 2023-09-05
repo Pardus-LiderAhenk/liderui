@@ -38,6 +38,12 @@
                         {{ $t('settings.server_information.required_passwd')}}
                     </small>
                 </div>
+                <div v-if="loadingSsh" class="p-text-center">
+                    <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
+                    <a class="primary">
+                      {{$t('settings.server_information.ssh_loading_message')}}
+                    </a>
+                </div>
             </div>
             <div v-if="loading" class="p-text-center">
                 <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
@@ -94,6 +100,7 @@ export default {
                 servers: [],
                 validationForm: {},
                 loading: false,
+                loadingSsh: false,
 
             }
         },
@@ -165,6 +172,7 @@ export default {
             if(this.validateForm() == false){
                 return;
             }
+            this.loadingSsh = true;
 
             let params = new FormData();
             params.append('hostname', this.ip);
@@ -173,7 +181,6 @@ export default {
             
            
             const {response, error} = await serverInformationService.connectionServer(params);
-            console.log(response);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -202,6 +209,7 @@ export default {
                     });
                 }
             }
+            this.loadingSsh = false;
 
         },
 

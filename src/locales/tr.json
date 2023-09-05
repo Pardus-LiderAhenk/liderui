@@ -854,7 +854,8 @@
             "getting_server_list":"Sunucu listesi yükleniyor. Lütfen bekleyiniz...",
             "general_information":"Genel Bilgiler",
             "server_control_waiting":"Sunucularınız kontrol ediliyor. Lütfen bekleyiniz..",
-            "not_registered_found":"Kayıtlı sunucu bulunamamıştır.."
+            "not_registered_found":"Kayıtlı sunucu bulunamamıştır..",
+            "ssh_loading_message":"Ssh bağlantısı kontrol ediliyor. Lütfen bekleyiniz.."
 
         },
 
