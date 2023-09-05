@@ -20,7 +20,7 @@
                     :value="portList" 
                     class="p-datatable-sm"
                     v-model:filters="filters"
-                    v-model:selection="selectedPorts"
+                    v-model:selection="selectedPorts" :scrollable="false" scrollHeight="400px" responsiveLayout="scroll" 
                     @rowSelect="onRowSelect" @rowUnselect="onRowUnselect">
                     <template #header>
                         <div class="p-d-flex p-jc-end">
