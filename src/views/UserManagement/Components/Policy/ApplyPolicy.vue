@@ -79,7 +79,7 @@
                     <Column :exportable="false">
                         <template #body="slotProps">
                             <div class="p-d-flex p-jc-end" >
-                                <Button  class="p-button-sm p-button-rounded"  v-show="domainType=='LDAP'"
+                                <Button  class="p-button-sm p-button-rounded"  v-if="domainType=='LDAP'"
                                     icon="pi pi-play"
                                     :title="$t('group_management.apply_policy')" 
                                     @click.prevent="applyPolicyConfirmDialog= true; selectedPolicy = slotProps.data">
