@@ -334,6 +334,8 @@ export default {
                     this.getMemberOfSelectedGroup(this.selectedLiderNode);
                 }
                 this.getSelectedNodeAttribute();
+            } else {
+                this.selectedNodeSummaryData = [];
             }
         }
     },

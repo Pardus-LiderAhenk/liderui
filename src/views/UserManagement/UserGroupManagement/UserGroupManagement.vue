@@ -832,7 +832,8 @@ export default {
             else{
                 if (response.status == 200) {
                     this.$refs.tree.remove(this.selectedNode);
-                    this.setSelectedLiderNode(response.data);
+                    this.setSelectedLiderNode(null);
+                    this.selectedNode = null;
                     this.$toast.add({
                         severity:'success', 
                         detail: this.$t('group_management.delete_node_success'), 
