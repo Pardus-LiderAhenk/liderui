@@ -130,31 +130,42 @@ export default {
             params.append("password", this.serverForm.password);
             params.append("description", this.serverForm.description);
 
-
-
             const { response,error } = await serverInformationService.addServer(params);
-            if(response.data != null){
-                if(response.status == 200){
-                    this.$emit("savedServer");
-                    if (response.data != null) {
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('settings.server_information.success_add_server'), 
-                            summary:this.$t("settings.server_information.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-                }
-                else if(response.status == 417){
+            
+            if(response.status == 200  && response.data.properties.length != 0){
+                this.$emit("savedServer");
+                if (response.data != null) {
                     this.$toast.add({
                         severity:'success', 
-                        detail: this.$t('settings.server_information.417_error_add_server'), 
+                        detail: this.$t('settings.server_information.success_add_server'), 
                         summary:this.$t("settings.server_information.toast_summary"), 
                         life: 3000
                     });
                 }
+            }
+
+            else if(response.status == 200  && response.data.properties.length == 0){
+                this.$emit("savedServer");
+                if (response.data != null) {
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_information.osquery_info'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+
+            else if(response.status == 417){
+                this.$toast.add({
+                    severity:'success', 
+                    detail: this.$t('settings.server_information.417_error_add_server'), 
+                    summary:this.$t("settings.server_information.toast_summary"), 
+                    life: 3000
+                });
+            }
                  
-            } 
+             
             else {
                 this.$toast.add({
                     severity:'error', 
