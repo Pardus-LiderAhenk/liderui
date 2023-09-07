@@ -18,7 +18,7 @@
                                    
                 <div class="widget-image-stats relative">
 
-                    <img :src="img" alt="product" class="responsive" style="width: 700px; ">
+                    <img :src="img" alt="disk-image" class="responsive" style="width: 700px; ">
 
                     <div v-for="server in servers" v-bind:key="server">
                         <br/>

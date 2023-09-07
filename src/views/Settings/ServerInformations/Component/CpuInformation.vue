@@ -18,16 +18,16 @@
                     <div v-for="server in servers" v-bind:key="server">
                         <ul>
                             <li class="down">
-                                <div class="stock-name" >
+                                <div class="machine-name" >
                                     <h6 >
                                         {{ server.machineName}}
                                     </h6>
                                 </div>
                                 <div class="icon">
-                                    <img  :src="img" alt="freya-layout"  width="42" height="42" flex-direction: column>
+                                    <img  :src="img" alt="cpu-image"  width="42" height="42" flex-direction: column>
                                 </div>
                                 
-                                <div class="stock-price" >
+                                <div class="machine-properties" >
                                     <h6>
                                     {{
                                         (getPropertyValue(server.properties, "cpu_core")) +" Core"
@@ -250,7 +250,7 @@ li {
     }
 
     
-    .servers ul > li .stock-price {
+    .servers ul > li .machine-properties {
         padding: 5 10px;
         color: #2321b8;
         margin: 0 4px;

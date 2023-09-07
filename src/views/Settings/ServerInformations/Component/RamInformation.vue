@@ -20,13 +20,13 @@
 
                     <ul>
                         <li class="down">
-                            <div class="stock-name" >
+                            <div class="machine-name" >
                                 <h6 >
                                     {{ server.machineName}}
                                 </h6>
                             </div>
-                            <img :src="img" alt="freya-layout"  width="42" height="42">
-                            <div class="stock-price" >
+                            <img :src="img" alt="ram-image"  width="42" height="42">
+                            <div class="server-properties" >
                                 <h6>
                                 {{
                                      ((getPropertyValue(server.properties, "physical_memory"))/1024000000).toFixed(2) +" GB"
@@ -144,13 +144,13 @@ li {
     padding: 0 10px;
 }
 
-.servers ul > li .stock-price h6 {
+.servers ul > li .server-properties h6 {
     line-height: 17px;
     font-weight: 600;
     display: inline-block;
 }
 
-.servers ul > li .stock-price {
+.servers ul > li .server-properties {
     padding: 5 10px;
     color: #2321b8;
     margin: 0 4px;
