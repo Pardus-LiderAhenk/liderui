@@ -470,9 +470,11 @@ export default {
             let params = new FormData();
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveUserNode.distinguishedName);
+            params.append("uid",this.selectedNode.uid);
             this.modals.moveUser = false;
 
             const{response,error} = await userService.moveEntry(params);
+            console.log(response);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -485,7 +487,8 @@ export default {
                 if(response.status == 200){
                     if (response.data) {
                         this.$refs.tree.remove(this.selectedNode);
-                        this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
+                        //this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
+                        this.$refs.tree.append(response.data, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
                         this.setSelectedLiderNode(null);
                         this.$toast.add({
                             severity:'success', 

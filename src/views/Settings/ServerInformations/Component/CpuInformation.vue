@@ -23,8 +23,8 @@
                                         {{ server.machineName}}
                                     </h6>
                                 </div>
-                                <div class="icon">
-                                    <img  :src="img" alt="cpu-image"  width="42" height="42" flex-direction: column>
+                                <div class="p-d-flex p-jc-end">
+                                    <img class="p-mr-2" :src="img" alt="cpu-image"  width="42" height="42" flex-direction: column>
                                 </div>
                                 
                                 <div class="machine-properties" >
@@ -272,6 +272,13 @@ li {
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    
+    .cpu-image{
+        position: relative;
+        right: 10px;
+        
     }
 
 </style>
