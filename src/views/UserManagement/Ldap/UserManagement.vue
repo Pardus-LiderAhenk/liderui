@@ -368,7 +368,6 @@ export default {
         ...mapActions(["setSelectedLiderNode"]),
 
         treeNodeClick(node) {
-            console.log(node)
 
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
@@ -474,7 +473,6 @@ export default {
             this.modals.moveUser = false;
 
             const{response,error} = await userService.moveEntry(params);
-            console.log(response);
             if(error){
                 this.$toast.add({
                     severity:'error', 
