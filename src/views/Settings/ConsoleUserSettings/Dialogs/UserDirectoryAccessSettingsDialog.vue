@@ -149,12 +149,14 @@ export default {
         async setSelectedGroupNode(node) {
             this.groupMembers = [];
             this.selectedGroupNode = node;
-            node.attributesMultiValues.member.forEach((mem,index) => {
-                this.groupMembers.push({
-                    id : index + 1,
-                    uid : mem
-                })
-            });
+            if (node.type === "GROUP"){
+                node.attributesMultiValues.member.forEach((mem,index) => {
+                    this.groupMembers.push({
+                        id : index + 1,
+                        uid : mem
+                    })
+                });
+            }
 
             let data = new FormData();
             data.append('dn',node.distinguishedName);

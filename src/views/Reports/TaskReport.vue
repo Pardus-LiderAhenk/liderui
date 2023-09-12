@@ -351,8 +351,6 @@
           (executionResult) => executionResult.id === id
         )[0];
         this.taskExecutionsResultDialog = true;
-        console.log(this.selectedTaskExecutionResult)
-        console.log(this.selectedTask)
       },
 
       async getTasks() {

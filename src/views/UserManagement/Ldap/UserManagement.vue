@@ -485,7 +485,6 @@ export default {
                 if(response.status == 200){
                     if (response.data) {
                         this.$refs.tree.remove(this.selectedNode);
-                        //this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
                         this.$refs.tree.append(response.data, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
                         this.setSelectedLiderNode(null);
                         this.$toast.add({
@@ -507,8 +506,6 @@ export default {
         },
 
         async userEnableDisable(){
-            // let params = {
-            // "dn": this.selectedNode.distinguishedName,};
             let disableUrl = "/api/lider/user/user-enable-disable";
             let params = new FormData();
             params.append("dn", this.selectedNode.distinguishedName);
@@ -516,7 +513,6 @@ export default {
             
             await axios.post(disableUrl, params).then(response => {
                 this.modals.disable = false;
-                console.log(response.data)
                 if (response.data) {
                     this.setSelectedLiderNode(response.data);
                     this.selectedNode = response.data;
