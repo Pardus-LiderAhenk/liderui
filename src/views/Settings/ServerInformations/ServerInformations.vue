@@ -132,9 +132,9 @@
             
         },
         
-        created(){
-            this.serverListAll();
-        },
+        // created(){
+        //     this.serverListAll();
+        // },
 
         mounted(){
             this.serverListAll();
