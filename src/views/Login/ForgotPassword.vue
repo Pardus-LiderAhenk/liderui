@@ -13,11 +13,11 @@
                      {{inlineMessage}}
                 </InlineMessage>
             </div>
-            <div class="card">
+            <div class="card" style="background: #e7f2f8;">
                 <div class="p-fluid">
                     <span class="p-field p-input-icon-left">
                         <i class="pi pi-user" />
-                        <InputText type="text" 
+                        <InputText type="text" style="background: #e3e6e9;"
                             v-model="username" 
                             :class="validation.username ? 'p-invalid ':''" 
                             :placeholder="$t('login.username')" 
@@ -108,10 +108,11 @@ export default {
 
 <style scoped lang="scss">
     .login-form-container {
-        background: #fff;
+        background: #e7f2f8;
         padding: 50px;
         border-radius: 25px;
         max-width: 450px;
+        max-height: 450px;
 
         .login-form-header {
             text-align: center;

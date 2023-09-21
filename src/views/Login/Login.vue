@@ -6,18 +6,14 @@
                 src="@/assets/images/liderahenk_login.png"
                 style="width: 50%;"
             />
-            
         </div>
-        <!-- <div class="p-col-12 p-text-center">
-            <span>{{ $t("login.title") }}</span>
-        </div> -->
         <div class="p-col-12">
-             <form @submit.prevent="login()" class="p-fluid">
-                <div class="card">
+             <form @submit.prevent="login()" class="p-fluid" >
+                <div class="card" style="background: #e7f2f8;">
                     <div class="p-fluid">
                         <span class="p-field p-input-icon-left">
                             <i class="pi pi-user" />
-                            <InputText type="text" 
+                            <InputText type="text" style="background: #e3e6e9;"
                                 v-model="username" 
                                 :class="validation.username ? 'p-invalid ':''" 
                                 :placeholder="$t('login.username')" 
@@ -28,7 +24,7 @@
                         </span>
                         <span class="p-field p-input-icon-left">
                             <i class="pi pi-lock" />
-                            <InputText type="password" 
+                            <InputText type="password" style="background: #e3e6e9;"
                                 :class="validation.password ? 'p-invalid ':''" 
                                 v-model="password" 
                                 :placeholder="$t('login.password')" 
@@ -117,7 +113,7 @@ export default {
 
 <style scoped lang="scss">
     .login-form-container {
-        background: #fff;
+        background: #e7f2f8;
         padding: 50px;
         border-radius: 25px;
         max-width: 450px;
