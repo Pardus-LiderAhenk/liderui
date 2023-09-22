@@ -18,16 +18,16 @@
                     <div v-for="server in servers" v-bind:key="server">
                         <ul>
                             <li class="down">
-                                <div class="machine-name" >
+                                <div class="machine-name p-d-flex p-jc-start p-col" >
                                     <h6 >
                                         {{ server.machineName}}
                                     </h6>
                                 </div>
-                                <div class="p-d-flex p-jc-end">
+                                <div class="p-d-flex p-jc-end p-col">
                                     <img class="p-mr-2" :src="img" alt="cpu-image"  width="42" height="42" flex-direction: column>
                                 </div>
                                 
-                                <div class="machine-properties" >
+                                <div class="machine-properties p-col" >
                                     <h6>
                                     {{
                                         (getPropertyValue(server.properties, "cpu_core")) +" Core"
@@ -35,7 +35,7 @@
                                     }}                                 
                                     </h6>
                                 </div>
-                                <div class="server-status">
+                                <div class="server-status p-col">
                                     <span >
                                        <b> 
                                         {{ "% "+ ((1000*((getPropertyValue(server.properties, "cpu_user"))+(getPropertyValue(server.properties, "cpu_system")))/((getPropertyValue(server.properties, "cpu_idle"))+(getPropertyValue(server.properties, "cpu_user"))+(getPropertyValue(server.properties, "cpu_system")))).toFixed(4)) }}
@@ -98,7 +98,6 @@ export default {
         },
 
         getCpuInfo(server) {
-            console.log(server)
             let cpuData = {};
             var cpuUsed = 50.0;
             var cpuFree = 50.0;
@@ -106,15 +105,15 @@ export default {
                 cpuFree = ((100-cpuUsed).toString()).substring(0,8);
                 cpuData = {
                     //labels:["cpuUsed","cpuFree"],
-                    datasets: [
-                        {
-                            data: [cpuUsed,cpuFree],
-                            backgroundColor: ["#D32F2F","#66BB6A"],
-                            hoverBackgroundColor: ["#D32F2F","#66BB6A"],
-                        }
-                    ]
-                }
-                return cpuData;
+                datasets: [
+                    {
+                        data: [cpuUsed,cpuFree],
+                        backgroundColor: ["#D32F2F","#66BB6A"],
+                        hoverBackgroundColor: ["#D32F2F","#66BB6A"],
+                    }
+                ]
+            }
+            return cpuData;
         }
 
     },

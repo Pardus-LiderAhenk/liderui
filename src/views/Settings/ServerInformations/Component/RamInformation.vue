@@ -20,20 +20,22 @@
 
                     <ul>
                         <li class="down">
-                            <div class="machine-name" >
+                            <div class="machine-name p-d-flex p-jc-start p-col" >
                                 <h6 >
                                     {{ server.machineName}}
                                 </h6>
                             </div>
-                            <img :src="img" alt="ram-image"  width="42" height="42">
-                            <div class="server-properties" >
+                            <div class="p-d-flex p-jc-end p-col">
+                                <img :src="img" class="p-mr-2" alt="ram-image"  width="42" height="42" flex-direction: column>
+                            </div>
+                            <div class="server-properties p-col" >
                                 <h6>
                                 {{
                                      ((getPropertyValue(server.properties, "physical_memory"))/1024000000).toFixed(2) +" GB"
                                 }}
                             </h6>
                             </div>
-                            <div class="server-status">
+                            <div class="server-status p-col">
                                 <span >
                                    <b> {{ "% "+ (((getPropertyValue(server.properties, "memory_free"))/1024000000)/((getPropertyValue(server.properties, "physical_memory"))/1000000000)).toFixed(2) }}
                                    </b>
@@ -66,17 +68,15 @@ export default {
     methods: {
         
         getPropertyValue(properties, propertyName) {
-                var propertyValue = "";
-                const filteredProperties = properties.filter(
-                  (property) => property.propertyName === propertyName
-                );
-                if (filteredProperties != null && filteredProperties.length > 0) {
-                  propertyValue = filteredProperties[0].propertyValue;
-                
-                }
-                return propertyValue;
-                
-            },
+            var propertyValue = "";
+            const filteredProperties = properties.filter(
+                (property) => property.propertyName === propertyName
+            );
+            if (filteredProperties != null && filteredProperties.length > 0) {
+                propertyValue = filteredProperties[0].propertyValue;
+            }
+            return propertyValue;
+        },
 
     }
     
@@ -154,6 +154,9 @@ li {
     padding: 5 10px;
     color: #2321b8;
     margin: 0 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
 }
 
 h6 {
@@ -163,6 +166,12 @@ h6 {
     font-weight: 600;
     line-height: 1.2;
     color: inherit;
+}
+
+.ram-image{
+    position: relative;
+    right: 10px;
+    
 }
 
 </style>
