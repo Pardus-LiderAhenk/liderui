@@ -1,6 +1,9 @@
 <template>
   <div>
-    <remote-access class="plugin-card" v-if="remoteAccessState" :pluginTask="pluginTaskRemoteAccess"></remote-access>
+    <remote-access class="plugin-card" 
+      v-if="remoteAccessState && isExistPrivilege('ROLE_REMOTE_ACCESS')" 
+      :pluginTask="pluginTaskRemoteAccess">
+    </remote-access>
   </div>
 </template>
 
@@ -13,6 +16,7 @@
 
 import RemoteAccess from "@/views/ComputerManagement/Plugins/Task/RemoteAccess/RemoteAccess.vue";
 import { taskService } from '../../../../../services/Task/TaskService.js'
+import {roleManagement} from "../../../../../services/Roles/RoleManagement"
 
 export default {
   data() {
@@ -30,6 +34,10 @@ export default {
   },
 
   methods: {
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
+
     async pluginTaskList(){
       const{response,error} = await taskService.pluginTaskList();
       if(error){

@@ -16,9 +16,9 @@
                 </InlineMessage>
             </div>
              <form class="p-field" v-if="!isPasswordReset">
-                <div class="card">
+                <div class="card" style="background: #e7f2f8;">
                     <div class="p-fluid">
-                        <password-component class="password" 
+                        <password-component class="password" style="background: #e3e6e9;"
                             :showTitle="false" 
                             :generate="true" 
                             ref="resetConsolePassword">
@@ -103,7 +103,7 @@ export default {
 
 <style scoped lang="scss">
     .password-reset-form-container {
-        background: #fff;
+        background: #e7f2f8;
         padding: 50px;
         border-radius: 25px;
         max-width: 450px;

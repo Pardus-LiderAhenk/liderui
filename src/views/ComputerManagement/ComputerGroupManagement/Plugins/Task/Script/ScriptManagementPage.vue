@@ -1,6 +1,9 @@
 <template>
   <div>
-    <execute-script class="plugin-card" v-if="executeScriptState" :pluginTask="pluginTaskExecuteScript"></execute-script>
+    <execute-script class="plugin-card" 
+      v-if="executeScriptState && isExistPrivilege('ROLE_SCRIPT')" 
+      :pluginTask="pluginTaskExecuteScript">
+    </execute-script>
   </div>
 </template>
 
@@ -13,6 +16,7 @@
 
 import ExecuteScript from "@/views/ComputerManagement/Plugins/Task/Script/ExecuteScript.vue";
 import { taskService } from '../../../../../../services/Task/TaskService.js';
+import {roleManagement} from "../../../../../../services/Roles/RoleManagement"
 
 export default {
   data() {
@@ -30,6 +34,10 @@ export default {
   },
 
   methods: {
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
+
     async pluginTaskList(){
       const{response,error} = await  taskService.pluginTaskList();
       if(error){

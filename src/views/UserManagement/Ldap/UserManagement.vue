@@ -368,7 +368,6 @@ export default {
         ...mapActions(["setSelectedLiderNode"]),
 
         treeNodeClick(node) {
-            console.log(node)
 
             this.selectedNode = node;
             this.setSelectedLiderNode(node);
@@ -470,6 +469,7 @@ export default {
             let params = new FormData();
             params.append("sourceDN", this.selectedNode.distinguishedName);
             params.append("destinationDN", this.moveUserNode.distinguishedName);
+            params.append("uid",this.selectedNode.uid);
             this.modals.moveUser = false;
 
             const{response,error} = await userService.moveEntry(params);
@@ -485,7 +485,7 @@ export default {
                 if(response.status == 200){
                     if (response.data) {
                         this.$refs.tree.remove(this.selectedNode);
-                        this.$refs.tree.append(this.selectedNode, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
+                        this.$refs.tree.append(response.data, this.$refs.tree.getNode(this.moveUserNode.distinguishedName));
                         this.setSelectedLiderNode(null);
                         this.$toast.add({
                             severity:'success', 
@@ -506,8 +506,6 @@ export default {
         },
 
         async userEnableDisable(){
-            // let params = {
-            // "dn": this.selectedNode.distinguishedName,};
             let disableUrl = "/api/lider/user/user-enable-disable";
             let params = new FormData();
             params.append("dn", this.selectedNode.distinguishedName);
@@ -515,7 +513,6 @@ export default {
             
             await axios.post(disableUrl, params).then(response => {
                 this.modals.disable = false;
-                console.log(response.data)
                 if (response.data) {
                     this.setSelectedLiderNode(response.data);
                     this.selectedNode = response.data;

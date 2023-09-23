@@ -1,18 +1,20 @@
 <template>
   <div>
     <usb-rule-management 
-      v-if="usbRuleManagementState" class="plugin-card" :pluginTask="pluginTaskUsbRuleManagement">
+      v-if="usbRuleManagementState && isExistPrivilege('ROLE_USB_RULE')" class="plugin-card" 
+      :pluginTask="pluginTaskUsbRuleManagement">
     </usb-rule-management>
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-6">
         <network-management 
-          v-if="networkManagementState" class="plugin-card" 
+          v-if="networkManagementState && isExistPrivilege('ROLE_NETWORK_MANAGER')" class="plugin-card" 
           :pluginTask="pluginTaskNetworkManagement">
         </network-management>
       </div>
       <div class="p-col-12 p-md-6 p-lg-6">
         <usb-management 
-          v-if="usbManagementState" class="plugin-card" :pluginTask="pluginTaskUsbManagement">
+          v-if="usbManagementState && isExistPrivilege('ROLE_DEVICE_MANAGEMENT')" class="plugin-card" 
+          :pluginTask="pluginTaskUsbManagement">
         </usb-management>
       </div>
     </div>
@@ -30,6 +32,7 @@ import NetworkManagement from './NetworkManagement/NetworkManagement.vue';
 import UsbManagement from './Usb/UsbManagement.vue';
 import UsbRuleManagement from './Usb/UsbRuleManagement.vue';
 import { taskService } from '../../../../../services/Task/TaskService.js'
+import {roleManagement} from "../../../../../services/Roles/RoleManagement"
 
 
 export default {
@@ -52,11 +55,14 @@ export default {
   },
 
   created() {
-
     this.pluginTaskList();
   },
   
   methods: {
+
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
 
   async pluginTaskList(){
     const{response,error} = await taskService.pluginTaskList();

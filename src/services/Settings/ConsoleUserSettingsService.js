@@ -12,6 +12,7 @@ import axios from 'axios';
  const settingsConfigurationsUrl = "/api/lider/settings/configurations";
  const settingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
  const settingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
+ const userPasswdUpdateUrl = '/api/lider/user/update-user-password';
 
 class ConsoleUserSettingsService {
 
@@ -121,6 +122,14 @@ class ConsoleUserSettingsService {
     async updateOtherSettings(params) {
         try {
             const response = await axios.post(settingsUpdateOtherSettingsUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+    async updatePasswd(params) {
+        try {
+            const response = await axios.post(userPasswdUpdateUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

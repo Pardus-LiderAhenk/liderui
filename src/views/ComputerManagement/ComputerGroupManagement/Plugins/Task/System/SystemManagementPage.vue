@@ -3,17 +3,28 @@
     <div class="p-grid">
       <div class="p-col-12 p-md-6 p-lg-5">
         <member-of-agent-group class="plugin-card"></member-of-agent-group>
-        <session-and-power-management v-if="sessionAndPowerState" 
+        <session-and-power-management v-if="sessionAndPowerState && isExistPrivilege('ROLE_SESSION_POWER')" 
           class="plugin-card" 
           :pluginTask="pluginTaskSessionPowerManagement">
         </session-and-power-management>
-        <manage-root v-if="manageRootState" class="plugin-card" :pluginTask="pluginTaskManageRoot"></manage-root>
-        <ldap-login v-if="ldapLoginState" class="plugin-card" :pluginTask="pluginTaskLdapLogin"></ldap-login>
+        <manage-root v-if="manageRootState && isExistPrivilege('ROLE_MANAGE_ROOT')" 
+          class="plugin-card" :pluginTask="pluginTaskManageRoot">
+        </manage-root>
+        <ldap-login v-if="ldapLoginState && isExistPrivilege('ROLE_LOGIN_MANAGER')" 
+          class="plugin-card" :pluginTask="pluginTaskLdapLogin">
+        </ldap-login>
       </div>
       <div class="p-col-12 p-md-6 p-lg-7">
-        <file-transfer v-if="fileTransferState" class="plugin-card" :pluginTask="pluginTaskFileTransfer"></file-transfer>
-        <conky v-if="conkyState" class="plugin-card" :pluginTask="pluginTaskConky"></conky>
-        <xmessage v-if="xmessageState" class="plugin-card" :pluginTask="pluginTaskXmessage"></xmessage>
+        <file-transfer v-if="fileTransferState && isExistPrivilege('ROLE_FILE_MANAGEMENT')" 
+          class="plugin-card" :pluginTask="pluginTaskFileTransfer">
+        </file-transfer>
+        <conky v-if="conkyState && isExistPrivilege('ROLE_CONKY')" 
+          class="plugin-card" 
+          :pluginTask="pluginTaskConky">
+        </conky>
+        <xmessage v-if="xmessageState && isExistPrivilege('ROLE_SEND_MESSAGE')"
+          class="plugin-card" :pluginTask="pluginTaskXmessage">
+        </xmessage>
       </div>
     </div>
   </div>
@@ -34,6 +45,8 @@ import FileTransfer from "@/views/ComputerManagement/Plugins/Task/System/FileTra
 import LdapLogin from "@/views/ComputerManagement/Plugins/Task/System/LdapLogin.vue";
 import Conky from "@/views/ComputerManagement/Plugins/Task/System/Conky.vue";
 import Xmessage from "@/views/ComputerManagement/Plugins/Task/System/Xmessage.vue";
+import {roleManagement} from "../../../../../../services/Roles/RoleManagement"
+
 
 export default {
   data() {
@@ -98,6 +111,12 @@ export default {
           }
         }
       });
+  },
+
+  methods: {
+    isExistPrivilege(role){
+      return roleManagement.isExistRole(role)
+    },
   },
 };
 </script>

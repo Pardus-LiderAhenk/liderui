@@ -17,6 +17,7 @@ import SystemMonitoringDefinitions from '@/views/Settings/SystemMonitoringDefini
 import ScriptDefinitions from '@/views/Settings/ScriptDefinitions/ScriptDefinitions.vue';
 import RegistrationTemplates from '@/views/Settings/RegistrationTemplates/RegistrationTemplates.vue';
 import ConsoleUserSettings from '@/views/Settings/ConsoleUserSettings/ConsoleUserSettings.vue';
+import ServerInformations from '@/views/Settings/ServerInformations/ServerInformations.vue';
 
 //USER
 import UserManagementTab from '@/views/UserManagement/UserManagementTab.vue';
@@ -141,6 +142,14 @@ const routes = [
                 }
             },
             {
+                path: '/settings/server-informations',
+                name: 'ServerInformations',
+                components: {default: ServerInformations},
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
                 path: '/user-profile',
                 name: 'User Profile',
                 components: {default: UserProfile},
@@ -194,6 +203,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
+    //history: createWebHashHistory(),
     linkActiveClass: "active",
     routes,
 });
