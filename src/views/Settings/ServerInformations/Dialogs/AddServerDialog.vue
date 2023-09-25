@@ -131,6 +131,19 @@ export default {
             params.append("description", this.serverForm.description);
 
             const { response,error } = await serverInformationService.addServer(params);
+
+            if (error) {
+                console.log(error)
+                if (error.response.status === 404) {
+                    this.$emit("savedServer");
+                    this.$toast.add({
+                        severity:'warn', 
+                        detail: this.$t('settings.server_information.error_disconnect'), 
+                        summary:this.$t("settings.server_information.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
             
             if(response.status == 200  && response.data.properties.length != 0){
                 this.$emit("savedServer");
