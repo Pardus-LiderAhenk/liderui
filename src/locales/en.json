@@ -859,7 +859,10 @@
             "server_control_waiting":"Your servers are being checked. Please waiting..",
             "not_registered_found":"No registered servers found...",
             "ssh_loading_message":"Checking ssh connection. Please wait..",
-            "osquery_info":"Osquery is not installed on the server. The machine has been successfully registered."
+            "osquery_info":"Osquery is not installed on the server. The machine has been successfully registered.",
+            "create_date":"Create Date",
+            "update_date":"Update Date",
+            "server_properties":"Server Properties"
 
 
         },

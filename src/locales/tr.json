@@ -856,7 +856,10 @@
             "server_control_waiting":"Sunucularınız kontrol ediliyor. Lütfen bekleyiniz..",
             "not_registered_found":"Kayıtlı sunucu bulunamamıştır..",
             "ssh_loading_message":"Ssh bağlantısı kontrol ediliyor. Lütfen bekleyiniz..",
-            "osquery_info":"Sunucu üzerinde Osquery kurulu değil. Makine başarıyla kaydedildi."
+            "osquery_info":"Sunucu üzerinde Osquery kurulu değil. Makine başarıyla kaydedildi.",
+            "create_date":"Oluşturulma Tarihi",
+            "update_date":"Güncelleme Tarihi",
+            "server_properties":"Sunucu Özellikleri"
         },
 
         "server_settings":{

@@ -9,6 +9,8 @@
             <h5>{{ $t('settings.server_information.general_information') }}</h5>
             <div class="p-grid">
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('settings.server_information.create_date')}}</b></div>
+                <div class="p-col-8">{{ selectedServer.createDate }}</div>
                 <div class="p-col-4"><b>{{$t('settings.server_information.detail_machine_name')}}</b></div>
                 <div class="p-col-8">{{ selectedServer.machineName }}</div>
                 <div class="p-col-4"><b>{{$t('settings.server_information.detail_ip_addr')}}</b></div>
@@ -23,8 +25,10 @@
                 </Badge>
             </div>
 
-                <h5>{{ $t('settings.server_information.disk_information') }}</h5>
+                <h5>{{ $t('settings.server_information.server_properties') }}</h5>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('settings.server_information.update_date')}}</b></div>
+                <div class="p-col-8">{{ selectedServer.modifyDate }}</div>
                 <div class="p-col-4"><b>{{$t('settings.server_information.detail_os_system')}}</b></div>
                 <div class="p-col-8">{{ getPropertyValue(selectedServer.properties, "os_name") }}</div>
                 <div class="p-col-4"><b>{{$t('settings.server_information.detail_version')}}</b></div>
