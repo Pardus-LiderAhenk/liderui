@@ -6,6 +6,7 @@
                         class="p-button-sm" 
                         :label="$t('settings.server_information.add_server')"
                         @click="addServerModalVisible =  true;"
+                        icon="pi pi-plus"
                     />
             </template>
                 <div class="p-grid p-flex-column">
@@ -16,52 +17,50 @@
                         <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp; 
                         {{$t('settings.server_information.server_control_waiting')}}
                     </Message>
-                    
-                    
                 </div>
         </Panel>
     </div>
     <div v-if="servers.length>0">
     <div class="p-col-12 p-pb-0" 
-            v-loading="loading"
-            :element-loading-text="$t('settings.server_information.getting_server_list')"
-            element-loading-background="rgba(0, 0, 0, 0.6)"
-            :element-loading-spinner="svg"
-            >
-            <div class="p-grid">
-                <div class="p-col-12 p-md-6 p-lg-6">
-                <server-list
+        v-loading="loading"
+        :element-loading-text="$t('settings.server_information.getting_server_list')"
+        element-loading-background="rgba(0, 0, 0, 0.6)"
+        :element-loading-spinner="svg"
+    >
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-6">
+            <server-list
+                :servers="servers"
+                @deletedServer="getServerData"
+                @savedServer="savedServer"
+                @editServer="editServer"
+            ></server-list>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <server-logs
                     :servers="servers"
-                    @deletedServer="getServerData"
-                    @savedServer="savedServer"
-                    @editServer="editServer"
-                ></server-list>
-                </div>
-                <div class="p-col-12 p-md-6 p-lg-6">
-                    <server-logs
-                        :servers="servers"
-                        :serversData="serversData"
-                    ></server-logs>
-                </div>
+                    :serversData="serversData"
+                ></server-logs>
             </div>
-            <div class="p-grid">
-                <div class="p-col-12 p-md-6 p-lg-4">
-                    <disk-information
-                        :servers="servers"
-                        :serversData="serversData"
-                    ></disk-information>
-                </div>
-                <div class="p-col-12 p-md-6 p-lg-4">
-                    <ram-information
-                        :servers="servers"
-                    ></ram-information>
-                </div>
-                <div class="p-col-12 p-md-6 p-lg-4">
-                    <cpu-information
-                        :servers="servers"
-                    ></cpu-information>
-                </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <disk-information
+                    :servers="servers"
+                    :serversData="serversData"
+                ></disk-information>
             </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <ram-information
+                    :servers="servers"
+                ></ram-information>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <cpu-information
+                    :servers="servers"
+                ></cpu-information>
+            </div>
+        </div>
 
     <show-server-detail-dialog v-if="showServerDetailDialog"
         :showServerDetailDialog="showServerDetailDialog" 
