@@ -267,10 +267,18 @@
       <template v-for="(parameterKey, index) in Object.keys(selectedTask.task.parameterMap)" :key="index + 'param' " >
         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
         <div class="p-col-4"><b>{{ parameterKey }}</b></div>
-        <div class="p-col-8">
-          {{ selectedTask.task.parameterMap[parameterKey] }}
-        </div>
+        <div v-if="parameterKey == 'password' || parameterKey == 'RootPassword' || parameterKey == 'admin-password' || parameterKey == 'admin_password'" 
+            class="p-col-8">******</div>
+        <div v-else class="p-col-8">{{ value }}</div>
       </template>
+    </div>
+
+    <div class="p-grid" v-for="(value, key) in selectedParam" :key="key">
+      <div class="p-col-4"><b>{{ key }}</b></div>
+      <div v-if="key == 'password' || key == 'RootPassword' || key == 'admin-password' || key == 'admin_password'" 
+          class="p-col-8">******</div>
+      <div v-else class="p-col-8">{{ value }}</div>
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
     </div>
 
 
