@@ -38,6 +38,15 @@
                         {{ $t('settings.server_information.required_passwd')}}
                     </small>
                 </div>
+
+                <div class="p-field">
+                    <label for="description">{{$t('Açıklama')}}</label>
+                    <div class="p-inputgroup flex-1">
+                        <InputText id="description" type="description" v-model="description"/>
+                    </div>
+                    
+                </div>
+
                 <div v-if="loadingSsh" class="p-text-center">
                     <i style="font-size: 1.5rem" class="el el-icon-loading"></i>&nbsp;
                     <a class="primary">
@@ -71,6 +80,7 @@
 
 <script>
 
+import { getTransitionRawChildren } from 'vue';
 import { serverInformationService } from '../../../../services/Settings/ServerInformationService';
 export default {
 
@@ -97,6 +107,7 @@ export default {
                 ip: null,
                 user: null,
                 password: null,
+                description: null,
                 servers: [],
                 validationForm: {},
                 loading: false,
@@ -128,6 +139,7 @@ export default {
             this.user = this.selectedServer.user;
             this.password = this.selectedServer.password;
             this.id = this.selectedServer.id;
+            this.description = this.selectedServer.description;
         },
 
         async updateServer(){
@@ -142,6 +154,7 @@ export default {
             params.append("user", this.user)
             params.append("password", this.password)
             params.append("id", this.selectedServer.id)
+            params.append("description", this.description)
 
             const {response,error} = await serverInformationService.update(params);
             if(response.status == 200){
@@ -157,12 +170,12 @@ export default {
                 }
             }
             else {
-            this.$toast.add({
-                severity:'error', 
-                detail: this.$t('settings.server_information.error_update'),
-                summary:this.$t("settings.server_information.toast_summary"), 
-                life: 3000
-                });
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_information.error_update'),
+                    summary:this.$t("settings.server_information.toast_summary"), 
+                    life: 3000
+                    });
             }
             this.loading = false;
 
@@ -238,6 +251,7 @@ export default {
             this.ip = newVal.ip;
             this.user = newVal.user;
             this.password = newVal.password;
+            this.description = newVal.description;
         }
     },
     

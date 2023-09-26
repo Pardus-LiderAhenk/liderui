@@ -14,9 +14,10 @@
                     <template #content="slotProps">
                         <h5 style="margin: 0 0 2px; font-size:1.2rem">{{slotProps.item.machineName}}</h5> 
                         <small style="color: #08255880; ">
-                            {{  getPropertyValue(slotProps.item.properties,"uptime_days") + $t('settings.server_information.day') +
-                                getPropertyValue(slotProps.item.properties,"uptime_hours") + $t('settings.server_information.hour') +
-                                getPropertyValue(slotProps.item.properties,"uptime_minutes") + $t('settings.server_information.minute') }}
+                            {{  $t('settings.server_information.uptime') + ":  " + 
+                                getPropertyValue(slotProps.item.properties,"uptime_days")+ " " + $t('settings.server_information.day') + " " +
+                                getPropertyValue(slotProps.item.properties,"uptime_hours") + $t('settings.server_information.hour') + " " +
+                                getPropertyValue(slotProps.item.properties,"uptime_minutes") + " " + $t('settings.server_information.minute') }}
                         </small>
                         <p>{{ slotProps.item.description}}</p>                      
                     </template>
