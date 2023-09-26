@@ -23,6 +23,8 @@
                         :severity="selectedServer.status ? 'success': 'danger'">
                     </Badge>
                 </div>
+                <div class="p-col-4"><b>{{$t('settings.server_information.description')}}</b></div>
+                <div class="p-col-8">{{ selectedServer.description }}</div>
                 <div class="p-col-4"><b>{{$t('settings.server_information.create_date')}}</b></div>
                 <div class="p-col-8">{{ selectedServer.createDate }}</div>
 
