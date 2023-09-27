@@ -1,7 +1,8 @@
 // encryption.js
 import CryptoJS from 'crypto-js';
 
-let secretKey = process.env.VUE_APP_STORE_KEY;
+// let secretKey = process.env.VUE_APP_STORE_KEY;
+let secretKey = "";
 export function encryptData(data) {
   const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
   return encryptedData;

@@ -1,8 +1,6 @@
 import axios from 'axios';
 import strophe from '@/services/strophe.js';
 import router from '../../router';
-import {encryptData, decryptData} from "./encryption"
-
 
 
 const state = {
@@ -17,10 +15,10 @@ const state = {
 
 
 const getters = {
-    selectedLiderNode: state => decryptData(state.selectedLiderNode),
-    selectedComputerGroupNode: state => decryptData(state.selectedComputerGroupNode),
-    selectedNodeType: state => decryptData(state.selectedNodeType),
-    getUser: state => decryptData(state.user)
+    selectedLiderNode: state => state.selectedLiderNode,
+    selectedComputerGroupNode: state => state.selectedComputerGroupNode,
+    selectedNodeType: state => state.selectedNodeType,
+    getUser: state => state.user
 }
 
 const actions = {
@@ -34,13 +32,14 @@ const actions = {
         commit("setSelectedNodeType", node);
     },
     logout({ commit },user) {
-        //logout yapıp yönlendireceğiz aşağıdaki gibi olacak
         return new Promise((resolve, reject) => {
             axios.post(process.env.VUE_APP_URL + "/api/auth/logout", user).then(
                 (response) => {
                     if(response){
                         commit('/api/auth/logout')
+                        localStorage.removeItem('vuex')
                         localStorage.removeItem('auth_token')
+                        localStorage.removeItem('_secure__ls__metadata')
                         delete axios.defaults.headers.common['Authorization']
                         strophe.getInstance().disconnect();
                         router.push('/login')
@@ -61,7 +60,7 @@ const actions = {
             axios.post(process.env.VUE_APP_URL + "/api/auth/signin", user).then(
                 (response) => {
                     if (response) {
-                        let token = encryptData(response.data.token)
+                        let token = response.data.token;
                         localStorage.setItem("auth_token", token);
                         axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
                         axios.post("/api/lider-console/profile", {}).then((userresponse) => {
@@ -87,16 +86,16 @@ const actions = {
 }
 
 const mutations = {
-    setSelectedLiderNode: (state, node) => (state.selectedLiderNode = encryptData(node)),
-    setSelectedComputerGroupNode: (state, node) => (state.selectedComputerGroupNode = encryptData(node)),
-    setSelectedNodeType: (state, node) => (state.selectedNodeType = encryptData(node)),
+    setSelectedLiderNode: (state, node) => (state.selectedLiderNode = node),
+    setSelectedComputerGroupNode: (state, node) => (state.selectedComputerGroupNode = node),
+    setSelectedNodeType: (state, node) => (state.selectedNodeType = node),
     auth_request(state) {
         state.status = 'loading'
     },
     auth_success(state, {token, user}) {
         state.status = 'success';
         state.token = token;
-        state.user = encryptData(user);
+        state.user = user;
     },
     auth_error(state) {
         state.status = 'error'
