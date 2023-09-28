@@ -6,21 +6,27 @@
                 
                 <div class="p-field">
                     <label for="machineName">{{$t('settings.server_information.machine_name')}}</label>
-                    <InputText id="machineName" type="text" v-model="machineName"/>
+                    <InputText id="machineName" type="text" v-model="machineName"
+                        :class="validationForm.machineName ? 'p-invalid': ''"  
+                    />
                     <small v-if="validationForm.ip" class="p-error">
                         {{ $t('settings.server_information.required_machine_name')}}
                     </small>
                 </div>
                 <div class="p-field">
                     <label for="ip">{{$t('settings.server_information.ip_addr')}}</label>
-                    <InputText id="ip" type="text" v-model="ip"/>
+                    <InputText id="ip" type="text" v-model="ip"
+                        :class="validationForm.ip ? 'p-invalid': ''"  
+                    />
                     <small v-if="validationForm.ip" class="p-error">
                         {{ $t('settings.server_information.required_ip')}}
                     </small>
                 </div>
                 <div class="p-field">
                     <label for="user">{{$t('settings.server_information.user')}}</label>
-                    <InputText id="user" type="text" v-model="user"/>
+                    <InputText id="user" type="text" v-model="user"
+                        :class="validationForm.user ? 'p-invalid': ''"  
+                    />
                     <small v-if="validationForm.user" class="p-error">
                         {{ $t('settings.server_information.required_user')}}
                     </small>
@@ -29,7 +35,9 @@
                 <div class="p-field">
                     <label for="passwd">{{$t('settings.server_information.passwd')}}</label>
                     <div class="p-inputgroup flex-1">
-                        <InputText id="passwd" type="password" v-model="password"/>
+                        <InputText id="passwd" type="password" v-model="password"
+                            :class="validationForm.password ? 'p-invalid': ''"  
+                        />
                         <Button icon="pi pi-link" 
                         severity="success" 
                         @click="checkConnection"/>
@@ -40,7 +48,7 @@
                 </div>
 
                 <div class="p-field">
-                    <label for="description">{{$t('Açıklama')}}</label>
+                    <label for="description">{{$t('settings.server_information.description')}}</label>
                     <div class="p-inputgroup flex-1">
                         <InputText id="description" type="description" v-model="description"/>
                     </div>
@@ -80,17 +88,10 @@
 
 <script>
 
-import { getTransitionRawChildren } from 'vue';
 import { serverInformationService } from '../../../../services/Settings/ServerInformationService';
 export default {
 
     props: {
-
-        // servers: {
-        //     type: Object,
-        //     description: "Server list",
-        // },
-    
         updateServerDialog: {
             type: Boolean,
             default: false
@@ -124,9 +125,7 @@ export default {
             },
 
             set() {
-                
                 this.$emit('closeEditServerDialog',false);
-                
             }
         },
     },
@@ -178,7 +177,6 @@ export default {
                     });
             }
             this.loading = false;
-
         },
 
         async checkConnection(){
@@ -191,7 +189,6 @@ export default {
             params.append('hostname', this.ip);
             params.append('password', this.password);
             params.append('username', this.user);
-            
            
             const {response, error} = await serverInformationService.connectionServer(params);
             if(error){
@@ -237,7 +234,7 @@ export default {
             } else{
                 delete this.validationForm['user'];
             }
-            if (!this.password.trim()){
+            if (this.password == null){
                 this.validationForm['password'] = true;
             } else{
                 delete this.validationForm['password'];

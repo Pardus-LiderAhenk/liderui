@@ -6,8 +6,10 @@
                 
                 <div class="p-field">
                     <label for="machineName">{{$t('settings.server_information.machine_name')}}</label>
-                    <InputText :class="validationForm.machineName ? 'p-invalid': ''"  id="machineName" type="text" v-model="serverForm.machineName" placeholder="Makine ismi"/>
-                    <small v-if="validationForm.ip" class="p-error">
+                    <InputText :class="validationForm.machineName ? 'p-invalid': ''"  
+                        id="machineName" type="text" v-model="serverForm.machineName" placeholder="Makine ismi"
+                    />
+                    <small v-if="validationForm.machineName" class="p-error">
                         {{ $t('settings.server_information.required_machine_name')}}
                     </small>
                 </div>
@@ -21,7 +23,7 @@
                 </div>
                 <div class="p-field">
                     <label for="user">{{$t('settings.server_information.user')}}</label>
-                    <InputText  
+                    <InputText  :class="validationForm.user ? 'p-invalid': ''" 
                     id="user" type="text" v-model="serverForm.user" placeholder="Kullanıcı adı"/>
                     <small v-if="validationForm.user" class="p-error">
                         {{ $t('settings.server_information.required_user')}}
@@ -31,7 +33,7 @@
                 <div class="p-field">
                     <label for="passwd">{{$t('settings.server_information.passwd')}}</label>
                     <div class="p-inputgroup flex-1">
-                        <InputText 
+                        <InputText :class="validationForm.password ? 'p-invalid': ''" 
                             id="passwd" type="password" v-model="serverForm.password" placeholder="******"/>
                         <Button icon="pi pi-link" 
                             severity="success" 
@@ -237,6 +239,11 @@ export default {
         },
 
         validateForm() {
+            if (!this.serverForm.machineName.trim()){
+                this.validationForm['machineName'] = true;
+            } else{
+                delete this.validationForm['machineName'];
+            }
             if (!this.serverForm.ip.trim()){
                 this.validationForm['ip'] = true;
             } else{
