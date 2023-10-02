@@ -40,7 +40,6 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + authToken;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 axios.interceptors.request.use(function(config) {
-
     if (config.url == '/api/auth/signin') {
         config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     }
@@ -52,6 +51,11 @@ axios.interceptors.request.use(function(config) {
 
 axios.interceptors.response.use(
     (response) => {
+        if (typeof response.data === 'string' || response.data instanceof String) {
+            if (response.data.startsWith("<!DOCTYPE html>" || response.data == "logout")) {
+                store.dispatch("logout").then(() => this.$router.push("/login") ).catch(err => console.log(err))
+            }
+        }
         if(response.status === 401) {
             store.dispatch("logout").then(() => this.$router.push("/login") ).catch(err => console.log(err))
         }
@@ -60,8 +64,7 @@ axios.interceptors.response.use(
     (error) => {
         if (error.response.status === 400) {
             store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-          }
-       
+        }
         return Promise.reject(error);
     }
  );
