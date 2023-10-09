@@ -68,6 +68,7 @@
         "console_user_settings": "Arayüz Kullanıcı Ayarları",
         "ad_synchronization": "AD Senkronizasyonu",
         "scheduled_task_report": "Zamanlanmış Görev Raporu",
+        "system_session_report":"Oturum Raporu",
         "view_profile": "Profil Görüntüle",
         "logout": "Çıkış",
         "privilege_warning": "Kullanıcı yetkileri getiriliken hata oluştu"

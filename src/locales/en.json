@@ -68,6 +68,7 @@
         "console_user_settings": "Console User Settings",
         "ad_synchronization": "AD Synchronization",
         "scheduled_task_report": "Scheduled Task Report",
+        "system_session_report":"Session Report",
         "view_profile": "View Profile",
         "logout": "Logout",
         "privilege_warning": "An error occurred while getting user privileges"
