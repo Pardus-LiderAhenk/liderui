@@ -17,7 +17,10 @@
                         &nbsp;{{$t('Kullanıcı oturumları')}}
                     </span>
                 </template>
-                <user-session></user-session>
+                <user-session
+                :selectedUser="user"
+                :selectedNode="selectedNode"
+                ></user-session>
             </TabPanel>
         </TabView>
     </div>
@@ -25,15 +28,62 @@
   </template>
   
   <script>
-  import AgentSession from "./Tabs/AgentSession.vue"
-  import UserSession from "./Tabs/UserSession.vue"
+  import AgentSession from "./Tabs/AgentSession.vue";
+  import UserSession from "./Tabs/UserSession.vue";
+  import { mapActions, mapGetters } from "vuex";
+  import {ref} from 'vue';
   
   export default {
   
-      components: {
-          AgentSession,
-          UserSession
-      }
+    setup(){
+        const selectedNode = ref(null);
+        const tree = ref(null);
+        return { selectedNode, tree };
+    },
+
+    data() {
+        return {
+            user: null,
+        }
+    },
+
+    components: {
+        AgentSession,
+        UserSession    
+    },
+
+    methods: {
+        ...mapActions(["setSelectedLiderNode"]),
+
+        treeNodeClick(node) {
+
+            this.selectedNode = node;
+            this.setSelectedLiderNode(node);
+            this.getUserStatus();
+        },
+
+        getUserStatus(){
+            let disabled = false;
+            if (this.selectedNode && this.selectedNode.type == 'USER') {
+                if (this.selectedNode.attributes.pwdAccountLockedTime) {
+                    disabled = true;
+                }
+            }
+            return disabled;
+        }
+    },
+
+    watch: {
+        selectedUser() {
+            this.user = this.selectedUser;
+        },
+        selectedLiderNode(){
+            if (this.selectedLiderNode && this.selectedLiderNode.type == 'USER'){
+                this.selectedNode = this.selectedLiderNode;
+                this.getUserStatus();
+            }
+        },
+    }
       
   }
   </script>

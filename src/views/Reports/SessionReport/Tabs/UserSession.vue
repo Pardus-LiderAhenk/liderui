@@ -6,7 +6,7 @@
       <div class="p-fluid p-formgrid p-grid">
         
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-          <label for="inputRegistrationDate">{{$t('reports.system_log_report.logs_date')}}</label>
+          <label for="inputRegistrationDate">{{$t('Oturum Tarihi')}}</label>
           <Calendar
             v-model="filter.logCreateDate"
             selectionMode="range"
@@ -19,7 +19,7 @@
           />
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-          <label for="inputStatus">{{$t('reports.system_log_report.logs_type')}}</label>
+          <label for="inputStatus">{{$t('Oturum Tipi')}}</label>
           <Dropdown
             v-model="filter.operationType"
             :options="operationTypes"
@@ -31,17 +31,6 @@
           />
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-          <label for="inputDN">{{$t('reports.system_log_report.filter_area')}}</label>
-          <Dropdown  
-            v-model="filter.field" 
-            :options="filterTextType" 
-            optionLabel="text" 
-            :showClear="true" 
-            optionValue="value"
-            :placeholder="$t('reports.system_log_report.select')"
-          ></Dropdown>
-        </div>
-          <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
               <label for="inputDN">{{
                   filter.field !== 'requestIp' ? $t('reports.system_log_report.username') : $t('reports.system_log_report.ip_address')
                 }}</label>
@@ -61,9 +50,9 @@
             </div>
             <div class="p-ml-2">
               <Button 
-              :label="$t('reports.system_log_report.search')"
+              :label="$t('Ara1')"
               icon="fas fa-search" 
-              @click="filterAgents" />
+              @click="getSessionHistory" />
             </div>
           </div>
         </div>
@@ -95,29 +84,12 @@
               <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
             </template>
           </Column>
-          <Column :header="$t('reports.system_log_report.logs_type')">
-            <template #body="{ data }">
-                {{ getOpetarionType(data.crudType)}}
-            </template>
-          </Column>
-          <Column field="createDate" :header="$t('reports.system_log_report.create_date')"></Column>
-          <Column field="logMessage" :header="$t('reports.system_log_report.message')"></Column>
-          <Column field="userId" :header="$t('reports.system_log_report.username')"></Column>
-          <Column field="requestIp" :header="$t('reports.system_log_report.ip_address')"></Column>
-          <Column>
-            <template #body="{ data }">
-              <div class="p-d-flex p-jc-end">
-                <div>
-                  <Button
-                    class="p-button-sm p-button-raised p-button-rounded"
-                    icon="pi pi-list"
-                    v-tooltip.left="$t('reports.system_log_report.log_details')"
-                    @click="showLogDetailDialog(data.id)"
-                  />
-                </div>
-              </div>
-            </template>
-          </Column>
+          <Column :header="$t('Kullanıcı adı')"></Column>
+          <Column field="machineName" :header="$t('Makine Adı')"></Column>
+          <Column field="createDate" :header="$t('Giriş Tarihi')"></Column>
+          <Column field="sessionType" :header="$t('Oturum tipi')"></Column>
+          <Column field="requestIp" :header="$t('IP Adresi')"></Column>
+          
         </DataTable>
         <Paginator
           :rows="10"
@@ -142,12 +114,12 @@
   
       <div class="p-grid">
         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b> {{$t('reports.system_log_report.log_id')}}</b></div>
+        <div class="p-col-4"><b> {{$t('Kullanıcı Adı')}}</b></div>
         <div class="p-col-8">
           {{ selectedLog.id }}
         </div>
         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b> {{$t('reports.system_log_report.logs_type')}}</b></div>
+        <div class="p-col-4"><b> {{$t('Makine Adı')}}</b></div>
         <div class="p-col-8">
           {{ getOpetarionType(selectedLog.crudType) }}
         </div>
@@ -174,24 +146,33 @@
         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       </div>
   
-       <template #footer>
-        <Button
-          :label="$t('reports.system_log_report.close')"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="logDetailDialog = false"
-        />
-      </template>
-  
     </Dialog>
   
     <Dialog :header="$t('reports.system_log_report.select_user_group')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
-          <tree-component 
-              ref="usertree"
-              loadNodeUrl="/api/lider/user/users"
-              loadNodeOuUrl="/api/lider/user/ou-details"
-              :treeNodeClick="treeNodeClick"
-          />
+      <tree-component
+          ref="tree"
+          loadNodeUrl="/api/lider/user/users"
+          loadNodeOuUrl="/api/lider/user/ou-details"
+          :treeNodeClick="treeNodeClick"
+          @handleContextMenu="handleContenxtMenu"
+          :searchFields="searchFields"
+      >
+          <template #contextmenu>
+              <div
+                  ref="treecontextmenu"
+                  class="el-overlay mycontextmenu"
+                  v-show="showContextMenu"
+                  @click="showContextMenu = false"
+                  >
+                  <div ref="rightMenu">
+                      <Menu :model="contextMenuItems"/>
+                  </div>
+              </div>
+          </template>
+      </tree-component>
+          <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
+            
+        </div>
           <template #footer>
               <Button label="Kapat" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
               <Button label="Oluştur" icon="pi pi-check" @click="selectsearchText" autofocus />
@@ -201,9 +182,30 @@
   
   <script>
   import moment from "moment";
-  import { systemTaskReportService } from "../../../../services/Reports/SystemLogReportService.js";
+  import TreeComponent from '@/components/Tree/TreeComponent.vue';
+  import { sessionReportService } from "../../../../services/Reports/SessionReportService.js";
+  import { mapActions, mapGetters } from "vuex";
+  import {ref} from 'vue';
+
+
+
   
   export default {
+    setup(){
+        const selectedNode = ref(null);
+        const tree = ref(null);
+        return { selectedNode, tree };
+    },
+    // props: {
+    //   // selectedUser: {
+    //   //     type: Object,
+    //   //     description: "Selected tree node",
+    //   // },
+    //   selectedNode: {
+    //         type: Object,
+    //         description: "Selected tree node",
+    //     },
+    // },
     data() {
       return {
         logs: [],
@@ -212,12 +214,9 @@
         currentPage: 1,
         offset: 1,
         loading: true,
-        getFilterData: true,
         logDetailDialog: false,
-        selectedLog: null,
         searchTextDialog:false,
-        operationTypesResponse:[],
-        operationTypes:[],
+        sessions: null,
         filterTextType: [
               {value: 'userId', text:this.$t('reports.system_log_report.username')},
               {value: 'requestIp', text:this.$t('reports.system_log_report.ip_address')}
@@ -230,107 +229,116 @@
             searchText:null,
             field:null,
         },
-        selectedNode: null,
         pageNumber: 1,
         rowNumber: 10,
       };
     },
-    mounted() {
-      this.getLogs();
-      this.getOperationTypes();
+    components:{
+      TreeComponent
     },
+
+    // created() {
+
+    //   this.configuration();
+    // },
+
+    mounted() {
+        if (this.selectedNode && this.selectedNode.type === "USER") {
+            this.getSessionHistory();
+        } else {
+            this.sessions = null;
+        }
+        
+    },
+
+    computed:{
+        ...mapGetters(["selectedLiderNode"]),
+        isUserDisabled: {
+            get() {
+                return this.getUserStatus();
+            },
+            set() {
+              return true;  
+            },
+        }
+    },
+
     methods: {
-      treeNodeClick(node){
-        this.selectedNode = node;
+      ...mapActions(["setSelectedLiderNode"]),
+
+      treeNodeClick(node) {
+
+          this.selectedNode = node;
+          this.setSelectedLiderNode(node);
+          this.getUserStatus();
       },
+
+      getUserStatus(){
+          let disabled = false;
+          if (this.selectedNode && this.selectedNode.type == 'USER') {
+              if (this.selectedNode.attributes.pwdAccountLockedTime) {
+                  disabled = true;
+              }
+          }
+          return disabled;
+      },
+      
+      async getSessionHistory() {
+          
+          const{response,error} = await sessionReportService.userSessionList(this.selectedNode.uid);
+          if(error){
+              this.$toast.add({
+                  severity:'error', 
+                  detail: this.$t('user_management.session_history_error')+ " \n"+error, 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: 3000
+              });
+          }
+          else{
+              if(response.status == 200){
+                  if (response.data) {
+                      this.sessions = response.data;
+                  }
+              }
+              else if(response.status == 417){
+                  this.$toast.add({
+                      severity:'error', 
+                      detail: this.$t('user_management.error_417_session_history'), 
+                      summary:this.$t("computer.task.toast_summary"), 
+                      life: 3000
+                  });
+              }
+          }              
+      },
+      // treeNodeClick(node) {
+      //       this.selectedNode = node;
+      //       this.setSelectedLiderNode(node);
+      //   },
+
+      async configuration(){
+         const{response,error} = await userService.userConfigurations();
+         if(error){
+             return "error";
+         }
+         else{
+             if(response.status == 200){
+                 if (response.data != null) {
+                     this.userLdapBaseDn = response.data;
+                 }
+             }
+         }
+         this.setSelectedLiderNode(null);
+
+      },
+
       selectsearchText() {
         if(this.selectedNode) {
           this.filter.searchText = this.selectedNode.distinguishedName;
           this.searchTextDialog = false;
-          this.selectedNode = null;
+          //this.selectedNode = null;
         }
       },
-      showLogDetailDialog(logId) {
-        this.selectedLog = this.logs.filter(
-          (log) => log.id === logId
-        )[0];
-        this.logDetailDialog = true;
-      },
-      async getLogs() {
-        this.currentPage = this.pageNumber;
-        var data = new FormData();
-        data.append("pageNumber", this.pageNumber);
-        data.append("pageSize", this.rowNumber);
-        data.append('operationType',this.filter.operationType);
-        if(this.filter.searchText != null) {
-          data.append("searchText", this.filter.searchText);
-        }
-         if(this.filter.field != null) {
-          data.append("field", this.filter.field);
-        }
-        if (this.pageNumber == 1) {
-          data.append("getFilterData", true);
-        }
-        if (this.filter.logCreateStartDate[0] != null) {
-          data.append(
-            "startDate",
-            moment(this.filter.logCreateStartDate[0])
-              .set("hour", 0)
-              .set("minute", 0)
-              .set("second", 0)
-              .format("DD/MM/YYYY HH:mm:ss")
-          );
-        }
-        
-        if (this.filter.logCreateEndDate[1] != null) {
-          data.append(
-            "endDate",
-            moment(this.filter.logCreateEndDate[1])
-              .set("hour", 0)
-              .set("minute", 0)
-              .set("second", 0)
-              .format("DD/MM/YYYY HH:mm:ss")
-          );
-        }
-        
-        const { response, error } = await systemTaskReportService.operationLogsList(data)
-        if(error){
-            this.$toast.add({
-              severity:'error',
-              detail:this.$t('reports.task_report.error_get_operation_log_list'),
-              summary:this.$t("computer.task.toast_summary"),
-              life:3600
-            });
-        }else{
-          if( response.status == 200){
-          this.logs = response.data.content;
-          this.totalElements = response.data.totalElements;
-          this.loading = false;
-          }
-          else if(response.status == 417){
-            this.$toast.add({
-              severity:'error',
-              detail:this.$t('reports.task_report.error_417_operation_log'),
-              summary:this.$t("computer.task.toast_summary"),
-              life:3600
-            });
-          }
-        }
-        
-      },
-      currentPageChange(newCurrentPage) {
-        this.loading = true;
-        this.getLogs(newCurrentPage);
-      },
-      onPage(event) {
-        this.loading = true;
-        this.pageNumber = event.page + 1;
-        this.rowNumber = event.rows;
-        this.getLogs();
-      },
-      filterAgents() {
-        this.getLogs(this.currentPage, this.showedTotalElementCount);
-      },
+
       async exportToExcel() {
         this.loading = true;
         var data = new FormData();
@@ -363,33 +371,7 @@
               .format("DD/MM/YYYY HH:mm:ss")
           );
         }
-        const { response, error } = await systemTaskReportService.operationExport(data)
-        if(error){
-              this.$toast.add({
-              severity:'error',
-              detail:this.$t('reports.task_report.error_operation_log_export'),
-              summary:this.$t("computer.toast_summary"),
-              life:3600
-            });
-        }else{
-          if( response.status == 200){
-            let blob = new Blob([response.data]);
-            let link = document.createElement("a");
-            link.href = window.URL.createObjectURL(blob);
-            link.download = "Logs_Report.xlsx";
-            this.loading = false;
-            link.click();
-          }
-          else if(response.status == 400){
-            this.$toast.add({
-              severity:'error',
-              detail:this.$t('reports.task_report.error_400_operation_export_report'),
-              summary:this.$t("computer.task.toast_summary"),
-              life:3600
-            });
-            console.log("Could not create operation log report.")
-          }
-        }            
+                
       },
   
       clearFilterFields() {
@@ -397,65 +379,30 @@
             logCreateDate: '',
             logCreateStartDate:'',
             logCreateEndDate:'',
-            operationType:'ALL',
             field:null,
             searchText:null
         };
       },
   
-      async getOperationTypes(){
   
-        const { response, error } = await systemTaskReportService.operationTypes()
-        if(error){
-              this.$toast.add({
-              severity:'error',
-              detail:this.$t('reports.task_report.error_operation_log_types'),
-              summary:this.$t("computer.toast_summary"),
-              life:3600
-            });
-        }else{
-            this.operationTypesResponse = response.data;
-            this.operationTypes = this.operationTypesResponse.map((otype, index) => {
-                return {
-                  text: this.getOpetarionType(otype),
-                  value: index + 1
-                }
-              });
-        }                      
-      },
-  
-      getOpetarionType(type) {
-        var typeText = type;
-        if (type == "CREATE") {
-          typeText = this.$t('reports.system_log_report.create');
-        } else if (type == "READ") {
-          typeText = this.$t('reports.system_log_report.read');
-        } else if (type == "UPDATE") {
-          typeText = this.$t('reports.system_log_report.update');
-        } else if (type == "DELETE") {
-          typeText = this.$t('reports.system_log_report.delete');
-        } else if (type == "LOGIN") {
-          typeText = this.$t('reports.system_log_report.login');
-        } else if (type == "LOGOUT") {
-          typeText = this.$t('reports.system_log_report.logout');
-        } else if (type == "EXECUTE_TASK") {
-          typeText = this.$t('reports.system_log_report.execute_task');
-        } else if (type == "EXECUTE_POLICY") {
-          typeText = this.$t('reports.system_log_report.execute_policy');
-        } else if (type == "CHANGE_PASSWORD") {
-          typeText = this.$t('reports.system_log_report.change_password');
-        } else if (type == "MOVE") {
-          typeText =this.$t('reports.system_log_report.move');
-        } else if (type == "UNASSIGMENT_POLICY") {
-          typeText = this.$t('reports.system_log_report.cancel_policy');
-        }else if (type == "CANCEL_SCHEDULED_TASK") {
-          typeText = this.$t('reports.system_log_report.scheduled_task_cancel');
-        }else if (type == "UPDATE_SCHEDULED_TASK") {
-          typeText = this.$t('reports.system_log_report.scheduled_task_update');
-        }
-        return typeText;
-      },
     },
+
+    watch: {
+        user: {
+            handler(){
+                this.userFormValidation();
+            },
+            deep: true,
+        },
+        selectedNode() {
+            if (this.selectedNode && this.selectedNode.type === "USER") {
+               this.getSessionHistory();
+            } else {
+                this.sessions = null;
+            }
+        }
+    }
+
   };
   </script>
   
