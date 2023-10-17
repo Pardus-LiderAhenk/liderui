@@ -21,22 +21,21 @@
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
           <label for="inputStatus">{{$t('Oturum Tipi')}}</label>
           <Dropdown
-            v-model="filter.operationType"
-            :options="operationTypes"
-            optionLabel="text"
+            v-model="filter.status"
+            :options="statuses"
+            optionLabel="name"
             optionValue="value"
-            :filter="true" 
-            :showClear="true" 
-            :placeholder="$t('reports.system_log_report.select')"
+            :showClear="true"
           />
+
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
               <label for="inputDN">{{
                   filter.field !== 'requestIp' ? $t('reports.system_log_report.username') : $t('reports.system_log_report.ip_address')
                 }}</label>
               <div class="p-inputgroup">
-                  <InputText :placeholder="filter.field !== 'requestIp' ? $t('reports.system_log_report.username'): $t('reports.system_log_report.ip_address') " v-model="filter.searchText" />
-                  <Button v-show="filter.field !== 'requestIp' "  icon="pi pi-sitemap" class="p-button-primary" @click="searchTextDialog = true"/>
+                  <InputText  v-model="filter.searchText" />
+                  <Button icon="pi pi-sitemap" class="p-button-primary" @click="searchTextDialog = true"/>
               </div>
           </div>
         <div class="p-field p-col-12 p-text-right">
@@ -61,10 +60,10 @@
     <Card class="p-m-3 p-mb-7">
       <template #title>
         <div class="p-d-flex p-jc-between">
-          <div>{{$t('reports.system_log_report.results')}}</div>
+          <div>{{$t('Sonuçlar')}}</div>
           <div>
             <Button
-              :label="$t('reports.system_log_report.export')"
+              :label="$t('Dışa Aktar')"
               icon="fas fa-file-excel"
               @click="exportToExcel()"
             />
@@ -72,7 +71,7 @@
         </div>
       </template>
       <template #content>
-        <DataTable :value="logs" responsiveLayout="scroll" dataKey="id" :loading="loading">
+        <DataTable :value="sessions" responsiveLayout="scroll" >
           <template #empty>
             {{$t('reports.system_log_report.task_cant_find')}}...
           </template>
@@ -84,11 +83,25 @@
               <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
             </template>
           </Column>
-          <Column :header="$t('Kullanıcı adı')"></Column>
-          <Column field="machineName" :header="$t('Makine Adı')"></Column>
-          <Column field="createDate" :header="$t('Giriş Tarihi')"></Column>
-          <Column field="sessionType" :header="$t('Oturum tipi')"></Column>
-          <Column field="requestIp" :header="$t('IP Adresi')"></Column>
+          <Column field="username" :header="$t('Kullanıcı adı')"></Column>
+          <Column :header="$t('Makine Adı')">
+            <template #body="{ data }">
+                {{ data.agent.jid }}
+            </template>
+          </Column>
+          <Column field="sessionEvent" :header="$t('Oturum tipi')"></Column>
+          <Column field="ipAddresses" :header="$t('IP Adresi')">
+          <template #body="{ data }">
+              {{ data.agent.ipAddresses.replace(/'/g, "") }}
+          </template>
+          </Column>
+          <Column field="macAddresses" :header="$t('MAC Adresi')">
+            <template #body="{ data }">
+                {{ data.agent.macAddresses.replace(/'/g, "") }}
+            </template>
+          </Column>
+          <Column field="createDate" :header="$t('Oluşturulma Tarihi')"></Column>
+
           
         </DataTable>
         <Paginator
@@ -101,52 +114,6 @@
         </Paginator>
       </template>
     </Card>
-   
-  
-    <Dialog
-      v-model:visible="logDetailDialog"
-      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-      :style="{ width: '50vw' }"
-    >
-      <template #header>
-        <h3> {{$t('reports.system_log_report.selected_system_log_detail')}}</h3>
-      </template>
-  
-      <div class="p-grid">
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b> {{$t('Kullanıcı Adı')}}</b></div>
-        <div class="p-col-8">
-          {{ selectedLog.id }}
-        </div>
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b> {{$t('Makine Adı')}}</b></div>
-        <div class="p-col-8">
-          {{ getOpetarionType(selectedLog.crudType) }}
-        </div>
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b> {{$t('reports.system_log_report.create_date')}}</b></div>
-        <div class="p-col-8">
-          {{ selectedLog.createDate }}
-        </div>
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b> {{$t('reports.system_log_report.message')}}</b></div>
-        <div class="p-col-8">
-          {{ selectedLog.logMessage }}
-        </div>
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b> {{$t('reports.system_log_report.username')}}</b></div>
-        <div class="p-col-8">
-          {{ selectedLog.userId }}
-        </div>
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-        <div class="p-col-4"><b> {{$t('reports.system_log_report.ip_address')}}</b></div>
-        <div class="p-col-8">
-          {{ selectedLog.requestIp }}
-        </div>
-        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-      </div>
-  
-    </Dialog>
   
     <Dialog :header="$t('reports.system_log_report.select_user_group')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
       <tree-component
@@ -187,9 +154,6 @@
   import { mapActions, mapGetters } from "vuex";
   import {ref} from 'vue';
 
-
-
-  
   export default {
     setup(){
         const selectedNode = ref(null);
@@ -214,23 +178,37 @@
         currentPage: 1,
         offset: 1,
         loading: true,
-        logDetailDialog: false,
         searchTextDialog:false,
         sessions: null,
+
         filterTextType: [
               {value: 'userId', text:this.$t('reports.system_log_report.username')},
               {value: 'requestIp', text:this.$t('reports.system_log_report.ip_address')}
         ],
         filter: {
-            logCreateDate: '',
-            logCreateStartDate:'',
-            logCreateEndDate:'',
-            operationType:'ALL',
+            userCreateDate: '',
+            userCreateStartDate:'',
+            userCreateEndDate:'',
+            sessionType:'ALL',
             searchText:null,
             field:null,
         },
         pageNumber: 1,
         rowNumber: 10,
+        statuses: [
+        {
+          name: this.$t('Hepsi'),
+          value: "ALL",
+        },
+        {
+          name: this.$t('Çevrimiçi'),
+          value: "ONLINE",
+        },
+        {
+          name: this.$t('Çevrimdışı'),
+          value: "OFFLINE",
+        },
+      ],
       };
     },
     components:{
@@ -284,7 +262,7 @@
       },
       
       async getSessionHistory() {
-          
+
           const{response,error} = await sessionReportService.userSessionList(this.selectedNode.uid);
           if(error){
               this.$toast.add({
@@ -383,6 +361,16 @@
             searchText:null
         };
       },
+
+      userFormValidation() {
+            if (!this.user.uid.trim()) {
+                this.userValidation["uid"] = true;
+            } else {
+                delete this.userValidation['uid'];
+            }
+            
+            return !Object.keys(this.userValidation).length;
+        },
   
   
     },

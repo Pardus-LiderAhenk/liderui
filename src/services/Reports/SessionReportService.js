@@ -9,7 +9,8 @@ class SessionReportService{
 
     async userSessionList(uid) {
         try {
-            const response = await axios.post(userSessionList  + "/uid/" + uid);
+            const response = await axios.get(userSessionList  + "/uid/" + uid);
+            console.log(response);
             return { response };
         } catch (error) {
             return { error: error }
