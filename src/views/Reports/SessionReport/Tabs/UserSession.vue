@@ -114,7 +114,7 @@
         </Paginator>
       </template>
     </Card>
-  
+
     <Dialog :header="$t('reports.system_log_report.select_user_group')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
       <tree-component
           ref="tree"
@@ -137,14 +137,84 @@
               </div>
           </template>
       </tree-component>
-          <div class="p-col-12 p-md-6 p-lg-3" style="min-height:90vh; background-color:#fff;padding-left:20px;margin-top:10px;">
-            
+
+        <div class="p-col-12 p-md-6 p-lg-3">
+          
         </div>
           <template #footer>
               <Button label="Kapat" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
               <Button label="Oluştur" icon="pi pi-check" @click="selectsearchText" autofocus />
           </template>
       </Dialog>
+
+      <!-- <Dialog :header="$t('Makine adı ')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
+        <template #header>
+          <i class="fas fa-sitemap"></i>
+          <span>
+              &nbsp;&nbsp;{{ $t('tree.tree') }}
+          </span>
+        </template>
+        <div>
+          <div class="p-fluid">
+            <div class="p-field">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-filter-slash" />
+                  <InputText v-model="filterText" 
+                    type="text" class="p-inputtext-sm" 
+                    :placeholder="$t('tree.filters_records')">
+                  </InputText>
+              </span>
+            </div>
+            <ScrollPanel :style="{ 'height': scrollHeight + 'vh' }">
+              <div class="p-field">
+                <el-tree
+                  class="filter-tree"
+                  :props="treeProps"
+                  :empty-text="$t('tree.not_found_record')"
+                  :render-content="renderContent"
+                  :load="loadNode"
+                  lazy
+                  @node-click="handleTreeClick"
+                  @node-contextmenu="nodeContextMenu"
+                  highlight-current=true
+                  accordion="true"
+                  ref="tree"
+                  :filter-node-method="filterNode"
+                  :show-checkbox="showCheckbox"
+                  @getCheckedNodes="getCheckedNodes"
+                  @check="nodeCheckClicked('mainTree')"
+                  node-key="distinguishedName"
+                  :getHalfCheckedNodes="getHalfCheckedNodes"
+                >
+                  <template #default="{ node, data }">
+                    <span class="custom-tree-node">
+                      <span>{{ node.label }}</span>
+                      <span>
+                        <a
+                          @click="append(data)">
+                          Append
+                        </a>
+                        <a
+                          @click="remove(node, data)">
+                          Delete
+                        </a>
+                      </span>
+                    </span>
+                  </template>
+                </el-tree>
+              </div>
+            </ScrollPanel>
+          </div>
+        </div>
+  
+          <div class="p-col-12 p-md-6 p-lg-3">
+            
+          </div>
+            <template #footer>
+                <Button label="Kapat" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
+                <Button label="Oluştur" icon="pi pi-check" @click="selectsearchText" autofocus />
+            </template>
+        </Dialog> -->
   </template>
   
   <script>
@@ -153,6 +223,9 @@
   import { sessionReportService } from "../../../../services/Reports/SessionReportService.js";
   import { mapActions, mapGetters } from "vuex";
   import {ref} from 'vue';
+  import axios from "axios";
+  import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
+
 
   export default {
     setup(){
@@ -160,7 +233,7 @@
         const tree = ref(null);
         return { selectedNode, tree };
     },
-    // props: {
+    props: {
     //   // selectedUser: {
     //   //     type: Object,
     //   //     description: "Selected tree node",
@@ -169,7 +242,58 @@
     //         type: Object,
     //         description: "Selected tree node",
     //     },
+    // treeProps: {
+    //   type: Object,
+    //   default: () => {
+    //     return {
+    //       children: "childEntries",
+    //       label: "name",
+    //       isLeaf: function (data, node) {
+    //         if (data.type === "ORGANIZATIONAL_UNIT" || data.type === null || data.type == "CONTAINER") {
+    //           return false;
+    //         } else {
+    //           return true;
+    //         }
+    //       },
+    //     }
+    //   },
     // },
+    // loadNodeUrl: {
+    //   type: String,
+    //   required: true,
+    // },
+
+    // scrollHeight: {
+    //   description: "scroll bar height",
+    //   type: Number,
+    //   default: 60
+    // },
+    // loadNodeOuUrl: {
+    //   type: String,
+    //   required: true,
+    // },
+    // showCheckbox: {
+    //   type: Boolean,
+    //   default: false
+    // },
+    // getCheckedNodes: {
+    //   type:Function,
+    //   default : () => {}
+    // },
+    // getHalfCheckedNodes: {
+    //   type:Function,
+    //   default : () => {}
+    // },
+    // showContextMenu: {
+    //   type: Boolean,
+    //   default : false
+    // },
+    // searchNodeUrl: {
+    //   type: String,
+    //   default: "/api/lider/ldap/search-entry",
+    //   description: "url for search entry"
+    // },
+    },
     data() {
       return {
         logs: [],
@@ -178,6 +302,8 @@
         currentPage: 1,
         offset: 1,
         loading: true,
+        filterText:'',
+        filterSearchText: '',
         searchTextDialog:false,
         sessions: null,
 
@@ -320,37 +446,67 @@
       async exportToExcel() {
         this.loading = true;
         var data = new FormData();
-        data.append('operationType',this.filter.operationType);
-        if(this.filter.searchText != null) {
-          data.append("searchText", this.filter.searchText);
+        data.append("hostname", "ebru");
+        // data.append("dn", this.filter.dn);
+        // data.append("hostname", this.filter.hostname);
+        // data.append("ipAddress", this.filter.ipAddress);
+        // data.append("macAddress", this.filter.macAddress);
+        // data.append("registrationStartDate", this.filter.registrationStartDate);
+        // data.append("registrationEndDate", this.filter.registrationEndDate);
+        // data.append("brand", this.filter.brand);
+        // data.append("model", this.filter.model);
+        // data.append("processor", this.filter.processor);
+        // data.append("osVersion", this.filter.osVersion);
+        // data.append("diskType",this.filter.diskType);
+        // data.append("agentVersion", this.filter.agentVersion);
+        // data.append("sessionReportType", this.filter.sessionReportType);
+        // if (this.filter.registrationDate[0] != null) {
+        //   data.append(
+        //     "registrationStartDate",
+        //     moment(this.filter.registrationDate[0])
+        //       .set("hour", 0)
+        //       .set("minute", 0)
+        //       .set("second", 0)
+        //       .format("DD/MM/YYYY HH:mm:ss")
+        //   );
+        // }
+        // if (this.filter.registrationDate[1] != null) {
+        //   data.append(
+        //     "registrationEndDate",
+        //     moment(this.filter.registrationDate[1])
+        //       .set("hour", 0)
+        //       .set("minute", 0)
+        //       .set("second", 0)
+        //       .format("DD/MM/YYYY HH:mm:ss")
+        //   );
+        // }
+        const { response, error } = await agentSessionReportService.agentSessionInfoExport(data)
+        if (error){
+              this.$toast.add({
+              severity:'error',
+              detail:this.$t('reports.task_report.agent_info_report_export_error'),
+              summary:this.$t("computer.toast_summary"),
+              life:3600
+            });
+          
+        }else{
+          if(response.status == 200){
+            let blob = new Blob([response.data])
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "Agent Report.xlsx";
+            this.loading = false;
+            link.click();
+          }
+          else if(response.status == 400)
+          this.$toast.add({
+              severity:'error',
+              detail:this.$t('reports.task_report.error_400_agent_info_report'),
+              summary:this.$t("computer.toast_summary"),
+              life:3600
+            });      
         }
-         if(this.filter.field != null) {
-          data.append("field", this.filter.field);
-        }
-       
-        if (this.filter.logCreateStartDate[0] != null) {
-          data.append(
-            "startDate",
-            moment(this.filter.logCreateStartDate[0])
-              .set("hour", 0)
-              .set("minute", 0)
-              .set("second", 0)
-              .format("DD/MM/YYYY HH:mm:ss")
-          );
-        }
-        
-        if (this.filter.logCreateEndDate[1] != null) {
-          data.append(
-            "endDate",
-            moment(this.filter.logCreateEndDate[1])
-              .set("hour", 0)
-              .set("minute", 0)
-              .set("second", 0)
-              .format("DD/MM/YYYY HH:mm:ss")
-          );
-        }
-                
-      },
+    },
   
       clearFilterFields() {
         this.filter = {
@@ -371,6 +527,88 @@
             
             return !Object.keys(this.userValidation).length;
         },
+
+      nodeContextMenu(event,node,treenode,tree) {
+        this.$emit('handleContextMenu', event,node,treenode,tree);
+      },
+
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.name.indexOf(value) !== -1;
+      },
+
+      renderContent(h, { node, data, store }) {
+        let containerIcon = require("@/assets/images/icons/entry_container.gif");
+        let lastSession = null;
+        let isOnline = false;
+        if (data.type === "AHENK") {
+          isOnline = data.online;
+          if (data.attributes.hasOwnProperty("o") && data.attributes["o"]) {
+            lastSession = data.attributes["o"];
+          }
+        }
+        return (
+          <span class="custom-tree-node">
+            {data.type === "ORGANIZATIONAL_UNIT" || data.type === null ? (
+              <i class="fa fa-folder-open" style="color:#F2C85B;"></i>
+            ) : data.type === "AHENK" && data.attributes.hasOwnProperty("liderDeviceOSType") && data.attributes['liderDeviceOSType'] == 'Linux'? (
+              <i class="fab fa-linux" style="color:#000000;"></i>
+            ) : data.type === "AHENK" && data.attributes.hasOwnProperty("liderDeviceOSType") && data.attributes['liderDeviceOSType'] == 'Windows'? (
+              <i class="fab fa-windows"></i>
+            ) : data.type === "AHENK" ? (
+              <i class="fab fa-linux" style="color:#000000;"></i>
+            ) : data.type === "USER" ? (
+              <i class="fa fa-user"></i>
+            ) : data.type === "GROUP" ? (
+              <i class="fas fa-users"></i>
+            ) : data.type === "CONTAINER" ? (
+              <img src={containerIcon}/>
+            ) : data.type === "ROLE" ? (
+              <i class="fas fa-user-tag"></i>
+            ) : data.type === "WIND0WS_AHENK" ? (
+             <i class="fab fa-windows"></i>
+            ) : ""
+            }
+            <span style="margin-left:5px;">{data.type === "AHENK" && <i class="pi pi-circle-on" style={isOnline?'font-size: 50%; color:#689F38':'font-size: 50%; color:#D32F2F'}></i>} 
+            &nbsp;{this.isAgentTree && data.type === "AHENK" && lastSession? 
+              node.data.name +" ("+lastSession+")":node.data.name}
+            </span>
+          </span>
+      );
+    },
+
+    loadNode(node, resolve) {
+      if (node.level === 0) {
+        axios.post(this.loadNodeUrl, {}).then((response) => {
+          if(response.data) {
+            Promise.all(response.data.map(this.getAgentsByNode)).then(
+            (result) => {
+              this.$emit('directoryConnection', true);
+              this.treeData = result;
+              resolve(result);
+            });
+          } else {
+             this.$emit('directoryConnection', false);
+          }
+        });
+      }
+      if (node.level >= 1) {
+        var data = new FormData();
+        data.append("uid", node.data.distinguishedName);
+        axios.post(this.loadNodeOuUrl, data).then((response) => {
+          this.isMove ? 
+          resolve(response.data.filter(node => node.type=="ORGANIZATIONAL_UNIT")):
+          resolve(response.data);
+        });
+      }
+    },
+
+
+    handleTreeClick(node) {
+      this.selectedNode = node;
+      this.treeNodeClick(node);
+      this.search.dn = node.distinguishedName;
+    },
   
   
     },
@@ -399,6 +637,26 @@
       .p-component {
           margin-left: auto;
       }
+  }
+
+  ::v-deep .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
+    background-color:#2196f3;
+    color:white
+  }
+  ::v-deep(.custom-scrolltop) {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+
+    &:hover {
+		background-color: var(--primary-color);
+	}
+
+    .p-scrolltop-icon {
+        font-size: 1rem;
+        color: var(--primary-color-text);
+    }
   }
   </style>
   

@@ -1,9 +1,4 @@
 <template>
-    <add-to-exist-group-dialog v-if="addExistGroupDialog"
-    :filter="filter"
-    :addExistGroupDialog="addExistGroupDialog" 
-    @close-group-dialog="addExistGroupDialog=false;">
-  </add-to-exist-group-dialog>
   <agent-detail-dialog v-if="agentDetailDialog"
     :agentDetailDialog="agentDetailDialog"
     :selectedAgent="selectedAgent"
@@ -297,7 +292,6 @@
  * Detailed Agent Report.
  * @see {@link http://www.liderahenk.org/}
  */
-import AddToExistGroupDialog from '../../SessionReport/Dialogs/AddToExistGroupDialog.vue';
 import AgentDetailDialog from '../../SessionReport/Dialogs/AddDetailDialog.vue';
 import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
 
@@ -409,7 +403,6 @@ export default {
   },
 
   components: {
-    AddToExistGroupDialog,
     AgentDetailDialog
   },
 

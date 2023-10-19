@@ -127,11 +127,6 @@ export default {
                 }
             }
         },
-        disks: {
-            get() {
-                return this.getDiskList();
-            }
-        }
 
     },
 
@@ -153,56 +148,35 @@ export default {
             return propertyValue;
         },
 
-        getDiskList() {
-            let disksList = [];
-            let hddList = this.getPropertyValue(this.selectedAgent.properties,"hardware.disk.hdd.info") || [];
-            hddList = eval(hddList);
-            let ssdList = this.getPropertyValue(this.selectedAgent.properties,"hardware.disk.ssd.info") || [];
-            ssdList = eval(ssdList);
-            
-            disksList = disksList.concat(hddList);
-            disksList = disksList.concat(ssdList);
-
-            return disksList;
-        },
         async exportToExcel() {
 
             this.loading = true;
             var data = new FormData();
-            data.append("status", this.filter.status);
-            data.append("dn", this.filter.dn);
-            data.append("hostname", this.filter.hostname);
-            data.append("ipAddress", this.filter.ipAddress);
-            data.append("macAddress", this.filter.macAddress);
-            data.append("registrationStartDate", this.filter.registrationStartDate);
-            data.append("registrationEndDate", this.filter.registrationEndDate);
-            data.append("brand", this.filter.brand);
-            data.append("model", this.filter.model);
-            data.append("processor", this.filter.processor);
-            data.append("osVersion", this.filter.osVersion);
-            data.append("diskType",this.filter.diskType);
-            data.append("agentVersion", this.filter.agentVersion);
-            data.append("sessionReportType", this.filter.sessionReportType);
-            if (this.filter.registrationDate[0] != null) {
-              data.append(
-                "registrationStartDate",
-                moment(this.filter.registrationDate[0])
-                  .set("hour", 0)
-                  .set("minute", 0)
-                  .set("second", 0)
-                  .format("DD/MM/YYYY HH:mm:ss")
-              );
-            }
-            if (this.filter.registrationDate[1] != null) {
-              data.append(
-                "registrationEndDate",
-                moment(this.filter.registrationDate[1])
-                  .set("hour", 0)
-                  .set("minute", 0)
-                  .set("second", 0)
-                  .format("DD/MM/YYYY HH:mm:ss")
-              );
-            }
+            data.append("hostname", "ebru");
+            // data.append("ipAddress", selectedAgent.ipAddress);
+            // data.append("macAddress", selectedAgent.macAddress);
+            // data.append("registrationStartDate", selectedAgent.registrationStartDate);
+            // data.append("registrationEndDate", selectedAgent.registrationEndDate);
+            // if (selectedAgent.registrationDate[0] != null) {
+            //   data.append(
+            //     "registrationStartDate",
+            //     moment(selectedAgent.registrationDate[0])
+            //       .set("hour", 0)
+            //       .set("minute", 0)
+            //       .set("second", 0)
+            //       .format("DD/MM/YYYY HH:mm:ss")
+            //   );
+            // }
+            // if (selectedAgent.registrationDate[1] != null) {
+            //   data.append(
+            //     "registrationEndDate",
+            //     moment(this.filter.registrationDate[1])
+            //       .set("hour", 0)
+            //       .set("minute", 0)
+            //       .set("second", 0)
+            //       .format("DD/MM/YYYY HH:mm:ss")
+            //   );
+            // }
             const { response, error } = await agentSessionReportService.agentSessionInfoExport(data)
             console.log(data);
             if (error){

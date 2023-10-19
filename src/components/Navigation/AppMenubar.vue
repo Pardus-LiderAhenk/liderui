@@ -280,7 +280,7 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_COMPUTERS") || this.isExistPrivilege("ROLE_AGENT_INFO")) {
+            if (this.isExistPrivilege("ROLE_USER_SESSION_REPORT")) {
                 reportsItems.push(
                     {
                         label: this.$t('menu.system_session_report'),
