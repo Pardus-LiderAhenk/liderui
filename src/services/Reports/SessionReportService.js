@@ -1,5 +1,5 @@
 import axios from 'axios';
-const userSessionList = "/api/lider/user/user-session"
+const userSessionList = "/api/lider/user-session/list"
 
 class SessionReportService{
 
@@ -7,9 +7,9 @@ class SessionReportService{
         this.axios = axios
     }
 
-    async userSessionList(uid) {
+    async userSessionList(params) {
         try {
-            const response = await axios.get(userSessionList  + "/uid/" + uid);
+            const response = await axios.post(userSessionList , params);
             console.log(response);
             return { response };
         } catch (error) {

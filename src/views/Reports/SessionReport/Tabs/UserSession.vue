@@ -31,10 +31,10 @@
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
               <label for="inputDN">{{
-                  filter.field !== 'requestIp' ? $t('reports.system_log_report.username') : $t('reports.system_log_report.ip_address')
+                  filter.field !== 'username' ? $t('reports.system_log_report.username') : $t('reports.system_log_report.ip_address')
                 }}</label>
               <div class="p-inputgroup">
-                  <InputText  v-model="filter.searchText" />
+                  <InputText  v-model="filter.username" />
                   <Button icon="pi pi-sitemap" class="p-button-primary" @click="searchTextDialog = true"/>
               </div>
           </div>
@@ -115,9 +115,9 @@
       </template>
     </Card>
 
-    <Dialog :header="$t('reports.system_log_report.select_user_group')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
+    <Dialog :header="$t('Kullanıcı Adıp')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
       <tree-component
-          ref="tree"
+          ref="usertree"
           loadNodeUrl="/api/lider/user/users"
           loadNodeOuUrl="/api/lider/user/ou-details"
           :treeNodeClick="treeNodeClick"
@@ -218,7 +218,6 @@
   </template>
   
   <script>
-  import moment from "moment";
   import TreeComponent from '@/components/Tree/TreeComponent.vue';
   import { sessionReportService } from "../../../../services/Reports/SessionReportService.js";
   import { mapActions, mapGetters } from "vuex";
@@ -307,15 +306,13 @@
         searchTextDialog:false,
         sessions: null,
 
-        filterTextType: [
-              {value: 'userId', text:this.$t('reports.system_log_report.username')},
-              {value: 'requestIp', text:this.$t('reports.system_log_report.ip_address')}
-        ],
         filter: {
             userCreateDate: '',
             userCreateStartDate:'',
             userCreateEndDate:'',
             sessionType:'ALL',
+            status:'ALL',
+            username: "",
             searchText:null,
             field:null,
         },
@@ -373,8 +370,8 @@
       treeNodeClick(node) {
 
           this.selectedNode = node;
-          this.setSelectedLiderNode(node);
-          this.getUserStatus();
+          //this.setSelectedLiderNode(node);
+          //this.getUserStatus();
       },
 
       getUserStatus(){
@@ -389,7 +386,15 @@
       
       async getSessionHistory() {
 
-          const{response,error} = await sessionReportService.userSessionList(this.selectedNode.uid);
+          let params = new FormData();
+          params.append("pageNumber", this.pageNumber);
+          params.append("pageSize", this.rowNumber);
+          params.append("createDate", this.filter.userCreateDate);
+          params.append("sessionType", this.filter.status);
+          params.append("username", this.filter.username);
+
+          const{response,error} = await sessionReportService.userSessionList(params);
+          console.log(response);
           if(error){
               this.$toast.add({
                   severity:'error', 
@@ -449,17 +454,6 @@
         data.append("hostname", "ebru");
         // data.append("dn", this.filter.dn);
         // data.append("hostname", this.filter.hostname);
-        // data.append("ipAddress", this.filter.ipAddress);
-        // data.append("macAddress", this.filter.macAddress);
-        // data.append("registrationStartDate", this.filter.registrationStartDate);
-        // data.append("registrationEndDate", this.filter.registrationEndDate);
-        // data.append("brand", this.filter.brand);
-        // data.append("model", this.filter.model);
-        // data.append("processor", this.filter.processor);
-        // data.append("osVersion", this.filter.osVersion);
-        // data.append("diskType",this.filter.diskType);
-        // data.append("agentVersion", this.filter.agentVersion);
-        // data.append("sessionReportType", this.filter.sessionReportType);
         // if (this.filter.registrationDate[0] != null) {
         //   data.append(
         //     "registrationStartDate",
