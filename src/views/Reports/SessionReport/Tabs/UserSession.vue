@@ -6,9 +6,9 @@
       <div class="p-fluid p-formgrid p-grid">
         
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-          <label for="inputRegistrationDate">{{$t('Oturum Tarihi')}}</label>
+          <label for="inputUserDate">{{$t('Oturum Tarihi')}}</label>
           <Calendar
-            v-model="filter.logCreateDate"
+            v-model="filter.userCreateDate"
             selectionMode="range"
             :showButtonBar="true"
             :numberOfMonths="2"
@@ -30,14 +30,27 @@
 
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-              <label for="inputDN">{{
-                  filter.field !== 'username' ? $t('reports.system_log_report.username') : $t('reports.system_log_report.ip_address')
-                }}</label>
+              <label for="inputDN">{{ $t('Kullanıcı Adı')  }}</label>
               <div class="p-inputgroup">
-                  <InputText  v-model="filter.username" />
-                  <Button icon="pi pi-sitemap" class="p-button-primary" @click="searchTextDialog = true"/>
+                  <InputText  v-model="filter.searchText" />
+                  <Button 
+                    icon="pi pi-sitemap" 
+                    class="p-button-primary" 
+                    @click="searchTextDialog = true"/>
               </div>
+        </div>
+
+        <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+          <label for="dn">{{ $t('İstemci ismi')  }}</label>
+          <div class="p-inputgroup">
+              <InputText  v-model="filter.searchClient" />
+              <Button 
+                icon="pi pi-sitemap" 
+                class="p-button-primary" 
+                @click="searchClientDialog = true"/>
           </div>
+      </div>
+
         <div class="p-field p-col-12 p-text-right">
           <div class="p-d-flex p-jc-end">
             <div>
@@ -51,7 +64,7 @@
               <Button 
               :label="$t('Ara1')"
               icon="fas fa-search" 
-              @click="getSessionHistory" />
+              @click="filterUsers" />
             </div>
           </div>
         </div>
@@ -85,20 +98,20 @@
           </Column>
           <Column field="username" :header="$t('Kullanıcı adı')"></Column>
           <Column :header="$t('Makine Adı')">
-            <template #body="{ data }">
-                {{ data.agent.jid }}
-            </template>
+          <template #body="{ data }">
+              {{ data.username }}
+          </template>
           </Column>
           <Column field="sessionEvent" :header="$t('Oturum tipi')"></Column>
           <Column field="ipAddresses" :header="$t('IP Adresi')">
           <template #body="{ data }">
-              {{ data.agent.ipAddresses.replace(/'/g, "") }}
+              {{ data.ipAddresses }}
           </template>
           </Column>
           <Column field="macAddresses" :header="$t('MAC Adresi')">
-            <template #body="{ data }">
-                {{ data.agent.macAddresses.replace(/'/g, "") }}
-            </template>
+          <template #body="{ data }">
+                {{ data.macAddresses }}
+          </template>
           </Column>
           <Column field="createDate" :header="$t('Oluşturulma Tarihi')"></Column>
 
@@ -115,196 +128,75 @@
       </template>
     </Card>
 
-    <Dialog :header="$t('Kullanıcı Adıp')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
-      <tree-component
-          ref="usertree"
-          loadNodeUrl="/api/lider/user/users"
-          loadNodeOuUrl="/api/lider/user/ou-details"
-          :treeNodeClick="treeNodeClick"
-          @handleContextMenu="handleContenxtMenu"
-          :searchFields="searchFields"
-      >
-          <template #contextmenu>
-              <div
-                  ref="treecontextmenu"
-                  class="el-overlay mycontextmenu"
-                  v-show="showContextMenu"
-                  @click="showContextMenu = false"
-                  >
-                  <div ref="rightMenu">
-                      <Menu :model="contextMenuItems"/>
-                  </div>
-              </div>
-          </template>
+    <Dialog :header="$t('Client')" 
+    v-model:visible="searchClientDialog" 
+    :style="{width: '50vw'}" :modal="true">
+      <div class="p-field">
+        <tree-component ref="tree"
+          loadNodeUrl="/api/lider/computer/computers"
+          loadNodeOuUrl="/api/lider/computer/ou-details"
+          :treeNodeClick="treeClientNodeClick"
+           isAgentTree="true"
+          :searchFields="searchFields">
       </tree-component>
+      </div>
 
         <div class="p-col-12 p-md-6 p-lg-3">
           
         </div>
           <template #footer>
-              <Button label="Kapat" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
-              <Button label="Oluştur" icon="pi pi-check" @click="selectsearchText" autofocus />
+              <Button label="Kapat" icon="pi pi-times" @click="searchClientDialog = false" class="p-button-text"/>
+              <Button label="Seç" icon="pi pi-check" @click="selectClientsearchText"  autofocus/>
           </template>
       </Dialog>
 
-      <!-- <Dialog :header="$t('Makine adı ')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
-        <template #header>
-          <i class="fas fa-sitemap"></i>
-          <span>
-              &nbsp;&nbsp;{{ $t('tree.tree') }}
-          </span>
-        </template>
-        <div>
-          <div class="p-fluid">
-            <div class="p-field">
-                <span class="p-input-icon-left">
-                  <i class="pi pi-filter-slash" />
-                  <InputText v-model="filterText" 
-                    type="text" class="p-inputtext-sm" 
-                    :placeholder="$t('tree.filters_records')">
-                  </InputText>
-              </span>
-            </div>
-            <ScrollPanel :style="{ 'height': scrollHeight + 'vh' }">
-              <div class="p-field">
-                <el-tree
-                  class="filter-tree"
-                  :props="treeProps"
-                  :empty-text="$t('tree.not_found_record')"
-                  :render-content="renderContent"
-                  :load="loadNode"
-                  lazy
-                  @node-click="handleTreeClick"
-                  @node-contextmenu="nodeContextMenu"
-                  highlight-current=true
-                  accordion="true"
-                  ref="tree"
-                  :filter-node-method="filterNode"
-                  :show-checkbox="showCheckbox"
-                  @getCheckedNodes="getCheckedNodes"
-                  @check="nodeCheckClicked('mainTree')"
-                  node-key="distinguishedName"
-                  :getHalfCheckedNodes="getHalfCheckedNodes"
-                >
-                  <template #default="{ node, data }">
-                    <span class="custom-tree-node">
-                      <span>{{ node.label }}</span>
-                      <span>
-                        <a
-                          @click="append(data)">
-                          Append
-                        </a>
-                        <a
-                          @click="remove(node, data)">
-                          Delete
-                        </a>
-                      </span>
-                    </span>
-                  </template>
-                </el-tree>
-              </div>
-            </ScrollPanel>
-          </div>
-        </div>
+      <Dialog :header="$t('Kullanıcı Dialog')" 
+      v-model:visible="searchTextDialog" 
+      :style="{width: '50vw'}" :modal="true">
+        <tree-component
+            ref="usertree"
+            loadNodeUrl="/api/lider/user/users"
+            loadNodeOuUrl="/api/lider/user/ou-details"
+            :treeNodeClick="treeNodeClick"
+            :searchFields="searchFields"
+            :scrollHeight="40"
+            >
+        </tree-component>
   
           <div class="p-col-12 p-md-6 p-lg-3">
             
           </div>
             <template #footer>
                 <Button label="Kapat" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
-                <Button label="Oluştur" icon="pi pi-check" @click="selectsearchText" autofocus />
+                <Button label="Seç1" icon="pi pi-check" @click="selectsearchText" autofocus />
             </template>
-        </Dialog> -->
+        </Dialog>
+
   </template>
   
   <script>
   import TreeComponent from '@/components/Tree/TreeComponent.vue';
   import { sessionReportService } from "../../../../services/Reports/SessionReportService.js";
   import { mapActions, mapGetters } from "vuex";
-  import {ref} from 'vue';
-  import axios from "axios";
   import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
 
 
   export default {
-    setup(){
-        const selectedNode = ref(null);
-        const tree = ref(null);
-        return { selectedNode, tree };
-    },
-    props: {
-    //   // selectedUser: {
-    //   //     type: Object,
-    //   //     description: "Selected tree node",
-    //   // },
-    //   selectedNode: {
-    //         type: Object,
-    //         description: "Selected tree node",
-    //     },
-    // treeProps: {
-    //   type: Object,
-    //   default: () => {
-    //     return {
-    //       children: "childEntries",
-    //       label: "name",
-    //       isLeaf: function (data, node) {
-    //         if (data.type === "ORGANIZATIONAL_UNIT" || data.type === null || data.type == "CONTAINER") {
-    //           return false;
-    //         } else {
-    //           return true;
-    //         }
-    //       },
-    //     }
-    //   },
-    // },
-    // loadNodeUrl: {
-    //   type: String,
-    //   required: true,
-    // },
-
-    // scrollHeight: {
-    //   description: "scroll bar height",
-    //   type: Number,
-    //   default: 60
-    // },
-    // loadNodeOuUrl: {
-    //   type: String,
-    //   required: true,
-    // },
-    // showCheckbox: {
-    //   type: Boolean,
-    //   default: false
-    // },
-    // getCheckedNodes: {
-    //   type:Function,
-    //   default : () => {}
-    // },
-    // getHalfCheckedNodes: {
-    //   type:Function,
-    //   default : () => {}
-    // },
-    // showContextMenu: {
-    //   type: Boolean,
-    //   default : false
-    // },
-    // searchNodeUrl: {
-    //   type: String,
-    //   default: "/api/lider/ldap/search-entry",
-    //   description: "url for search entry"
-    // },
-    },
     data() {
       return {
-        logs: [],
+        selectedUserUid:null,
+        selectedAgent:null,
         totalElements: 0,
-        showedTotalElementCount: 10,
-        currentPage: 1,
         offset: 1,
         loading: true,
         filterText:'',
         filterSearchText: '',
         searchTextDialog:false,
-        sessions: null,
+        searchClientDialog:false,
+        sessions: [],
+        username:'',
+        showedTotalElementCount: 10,
+        currentPage: 1,
 
         filter: {
             userCreateDate: '',
@@ -313,8 +205,8 @@
             sessionType:'ALL',
             status:'ALL',
             username: "",
-            searchText:null,
-            field:null,
+            searchText:"",
+            searchClient:"",
         },
         pageNumber: 1,
         rowNumber: 10,
@@ -324,24 +216,20 @@
           value: "ALL",
         },
         {
-          name: this.$t('Çevrimiçi'),
-          value: "ONLINE",
+          name: this.$t('Oturum Açıldı'),
+          value: "LOGIN",
         },
         {
-          name: this.$t('Çevrimdışı'),
-          value: "OFFLINE",
+          name: this.$t('Oturum Kapatıldı'),
+          value: "LOGOUT",
         },
       ],
+
       };
     },
     components:{
-      TreeComponent
+        TreeComponent
     },
-
-    // created() {
-
-    //   this.configuration();
-    // },
 
     mounted() {
         if (this.selectedNode && this.selectedNode.type === "USER") {
@@ -367,12 +255,22 @@
     methods: {
       ...mapActions(["setSelectedLiderNode"]),
 
+      setSelectedNode(node) {
+            this.selectedNode = node;
+      },
+
+      treeClientNodeClick(node){
+          this.selectedNode = node;
+          this.setSelectedLiderNode(node);
+      },
+
       treeNodeClick(node) {
 
           this.selectedNode = node;
-          //this.setSelectedLiderNode(node);
+          this.setSelectedLiderNode(node);
           //this.getUserStatus();
       },
+
 
       getUserStatus(){
           let disabled = false;
@@ -389,12 +287,12 @@
           let params = new FormData();
           params.append("pageNumber", this.pageNumber);
           params.append("pageSize", this.rowNumber);
-          params.append("createDate", this.filter.userCreateDate);
           params.append("sessionType", this.filter.status);
-          params.append("username", this.filter.username);
+          params.append("username", this.filter.searchText);
+          params.append("createDate", this.filter.userCreateDate);
+          params.append("client", this.filter.searchClient);
 
           const{response,error} = await sessionReportService.userSessionList(params);
-          console.log(response);
           if(error){
               this.$toast.add({
                   severity:'error', 
@@ -407,6 +305,7 @@
               if(response.status == 200){
                   if (response.data) {
                       this.sessions = response.data;
+                      console.log(this.sessions);
                   }
               }
               else if(response.status == 417){
@@ -419,25 +318,9 @@
               }
           }              
       },
-      // treeNodeClick(node) {
-      //       this.selectedNode = node;
-      //       this.setSelectedLiderNode(node);
-      //   },
 
-      async configuration(){
-         const{response,error} = await userService.userConfigurations();
-         if(error){
-             return "error";
-         }
-         else{
-             if(response.status == 200){
-                 if (response.data != null) {
-                     this.userLdapBaseDn = response.data;
-                 }
-             }
-         }
-         this.setSelectedLiderNode(null);
-
+      filterUsers(){
+        this.getSessionHistory(this.currentPage,this.showedTotalElementCount);
       },
 
       selectsearchText() {
@@ -448,32 +331,18 @@
         }
       },
 
+      selectClientsearchText() {
+        if(this.selectedNode) {
+          this.filter.searchClient = this.selectedNode.distinguishedName;
+          this.searchClientDialog = false;
+        }
+      },
+
       async exportToExcel() {
         this.loading = true;
         var data = new FormData();
         data.append("hostname", "ebru");
-        // data.append("dn", this.filter.dn);
-        // data.append("hostname", this.filter.hostname);
-        // if (this.filter.registrationDate[0] != null) {
-        //   data.append(
-        //     "registrationStartDate",
-        //     moment(this.filter.registrationDate[0])
-        //       .set("hour", 0)
-        //       .set("minute", 0)
-        //       .set("second", 0)
-        //       .format("DD/MM/YYYY HH:mm:ss")
-        //   );
-        // }
-        // if (this.filter.registrationDate[1] != null) {
-        //   data.append(
-        //     "registrationEndDate",
-        //     moment(this.filter.registrationDate[1])
-        //       .set("hour", 0)
-        //       .set("minute", 0)
-        //       .set("second", 0)
-        //       .format("DD/MM/YYYY HH:mm:ss")
-        //   );
-        // }
+
         const { response, error } = await agentSessionReportService.agentSessionInfoExport(data)
         if (error){
               this.$toast.add({
@@ -504,116 +373,21 @@
   
       clearFilterFields() {
         this.filter = {
-            logCreateDate: '',
-            logCreateStartDate:'',
-            logCreateEndDate:'',
-            field:null,
-            searchText:null
+          userCreateDate: '',
+          userCreateStartDate:'',
+          userCreateEndDate:'',
+          sessionType:'ALL',
+          status:'ALL',
+          username: "",
+          searchText:"",
+          searchClient:"",
         };
       },
-
-      userFormValidation() {
-            if (!this.user.uid.trim()) {
-                this.userValidation["uid"] = true;
-            } else {
-                delete this.userValidation['uid'];
-            }
-            
-            return !Object.keys(this.userValidation).length;
-        },
-
-      nodeContextMenu(event,node,treenode,tree) {
-        this.$emit('handleContextMenu', event,node,treenode,tree);
-      },
-
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.name.indexOf(value) !== -1;
-      },
-
-      renderContent(h, { node, data, store }) {
-        let containerIcon = require("@/assets/images/icons/entry_container.gif");
-        let lastSession = null;
-        let isOnline = false;
-        if (data.type === "AHENK") {
-          isOnline = data.online;
-          if (data.attributes.hasOwnProperty("o") && data.attributes["o"]) {
-            lastSession = data.attributes["o"];
-          }
-        }
-        return (
-          <span class="custom-tree-node">
-            {data.type === "ORGANIZATIONAL_UNIT" || data.type === null ? (
-              <i class="fa fa-folder-open" style="color:#F2C85B;"></i>
-            ) : data.type === "AHENK" && data.attributes.hasOwnProperty("liderDeviceOSType") && data.attributes['liderDeviceOSType'] == 'Linux'? (
-              <i class="fab fa-linux" style="color:#000000;"></i>
-            ) : data.type === "AHENK" && data.attributes.hasOwnProperty("liderDeviceOSType") && data.attributes['liderDeviceOSType'] == 'Windows'? (
-              <i class="fab fa-windows"></i>
-            ) : data.type === "AHENK" ? (
-              <i class="fab fa-linux" style="color:#000000;"></i>
-            ) : data.type === "USER" ? (
-              <i class="fa fa-user"></i>
-            ) : data.type === "GROUP" ? (
-              <i class="fas fa-users"></i>
-            ) : data.type === "CONTAINER" ? (
-              <img src={containerIcon}/>
-            ) : data.type === "ROLE" ? (
-              <i class="fas fa-user-tag"></i>
-            ) : data.type === "WIND0WS_AHENK" ? (
-             <i class="fab fa-windows"></i>
-            ) : ""
-            }
-            <span style="margin-left:5px;">{data.type === "AHENK" && <i class="pi pi-circle-on" style={isOnline?'font-size: 50%; color:#689F38':'font-size: 50%; color:#D32F2F'}></i>} 
-            &nbsp;{this.isAgentTree && data.type === "AHENK" && lastSession? 
-              node.data.name +" ("+lastSession+")":node.data.name}
-            </span>
-          </span>
-      );
-    },
-
-    loadNode(node, resolve) {
-      if (node.level === 0) {
-        axios.post(this.loadNodeUrl, {}).then((response) => {
-          if(response.data) {
-            Promise.all(response.data.map(this.getAgentsByNode)).then(
-            (result) => {
-              this.$emit('directoryConnection', true);
-              this.treeData = result;
-              resolve(result);
-            });
-          } else {
-             this.$emit('directoryConnection', false);
-          }
-        });
-      }
-      if (node.level >= 1) {
-        var data = new FormData();
-        data.append("uid", node.data.distinguishedName);
-        axios.post(this.loadNodeOuUrl, data).then((response) => {
-          this.isMove ? 
-          resolve(response.data.filter(node => node.type=="ORGANIZATIONAL_UNIT")):
-          resolve(response.data);
-        });
-      }
-    },
-
-
-    handleTreeClick(node) {
-      this.selectedNode = node;
-      this.treeNodeClick(node);
-      this.search.dn = node.distinguishedName;
-    },
-  
-  
+    
     },
 
     watch: {
-        user: {
-            handler(){
-                this.userFormValidation();
-            },
-            deep: true,
-        },
+
         selectedNode() {
             if (this.selectedNode && this.selectedNode.type === "USER") {
                this.getSessionHistory();

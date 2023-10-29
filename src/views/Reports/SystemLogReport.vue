@@ -294,6 +294,7 @@ export default {
       }
       
       const { response, error } = await systemTaskReportService.operationLogsList(data)
+      console.log(data);
       if(error){
           this.$toast.add({
             severity:'error',
