@@ -5,7 +5,7 @@
                 <template #header>
                     <i class="pi pi-desktop"></i>
                     <span>
-                        &nbsp;{{ $t('İstemci Oturumları')}}
+                        &nbsp;{{ $t('reports.session_report.agent_sessions')}}
                     </span>
                 </template>
                 <agent-session></agent-session>
@@ -14,7 +14,7 @@
                 <template #header>
                     <i class="pi pi-users"></i>
                     <span>
-                        &nbsp;{{$t('Kullanıcı oturumları')}}
+                        &nbsp;{{$t('reports.session_report.user_sessions')}}
                     </span>
                 </template>
                 <user-session

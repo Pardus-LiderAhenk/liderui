@@ -1,12 +1,12 @@
 <template>
     <Panel :toggleable="true" class="p-m-3">
       <template #header>
-        <h4 class="p-pt-2">{{$t('Kullanıcı Oturum Raporu')}}</h4>
+        <h4 class="p-pt-2">{{$t('reports.session_report.user_session_reports')}}</h4>
       </template>
       <div class="p-fluid p-formgrid p-grid">
         
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-          <label for="inputUserDate">{{$t('Oturum Tarihi')}}</label>
+          <label for="inputUserDate">{{$t('reports.session_report.session_date')}}</label>
           <Calendar
             v-model="filter.userCreateDate"
             selectionMode="range"
@@ -19,7 +19,7 @@
           />
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-          <label for="inputStatus">{{$t('Oturum Tipi')}}</label>
+          <label for="inputStatus">{{$t('reports.session_report.session_type')}}</label>
           <Dropdown
             v-model="filter.status"
             :options="statuses"
@@ -30,7 +30,7 @@
 
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-              <label for="inputDN">{{ $t('Kullanıcı Adı')  }}</label>
+              <label for="inputDN">{{ $t('reports.session_report.username')  }}</label>
               <div class="p-inputgroup">
                   <InputText  v-model="filter.searchText" />
                   <Button 
@@ -41,7 +41,7 @@
         </div>
 
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-          <label for="dn">{{ $t('İstemci ismi')  }}</label>
+          <label for="dn">{{ $t('reports.session_report.client_name')  }}</label>
           <div class="p-inputgroup">
               <InputText  v-model="filter.searchClient" />
               <Button 
@@ -55,14 +55,14 @@
           <div class="p-d-flex p-jc-end">
             <div>
               <Button
-              :label="$t('reports.system_log_report.clear')"
+              :label="$t('reports.session_report.clear')"
                 icon="fas fa-backspace"
                 @click="clearFilterFields"
               />
             </div>
             <div class="p-ml-2">
               <Button 
-              :label="$t('Ara1')"
+              :label="$t('reports.session_report.select')"
               icon="fas fa-search" 
               @click="filterUsers" />
             </div>
@@ -73,10 +73,10 @@
     <Card class="p-m-3 p-mb-7">
       <template #title>
         <div class="p-d-flex p-jc-between">
-          <div>{{$t('Sonuçlar')}}</div>
+          <div>{{$t('reports.session_report.results')}}</div>
           <div>
             <Button
-              :label="$t('Dışa Aktar')"
+              :label="$t('reports.session_report.export')"
               icon="fas fa-file-excel"
               @click="exportToExcel()"
             />
@@ -96,24 +96,24 @@
               <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
             </template>
           </Column>
-          <Column field="username" :header="$t('Kullanıcı adı')"></Column>
+          <Column field="username" :header="$t('reports.session_report.username')"></Column>
           <Column :header="$t('Makine Adı')">
           <template #body="{ data }">
               {{ data.username }}
           </template>
           </Column>
-          <Column field="sessionEvent" :header="$t('Oturum tipi')"></Column>
-          <Column field="ipAddresses" :header="$t('IP Adresi')">
+          <Column field="sessionEvent" :header="$t('reports.session_report.session_type')"></Column>
+          <Column field="ipAddresses" :header="$t('reports.session_report.ip_address')">
           <template #body="{ data }">
               {{ data.ipAddresses }}
           </template>
           </Column>
-          <Column field="macAddresses" :header="$t('MAC Adresi')">
+          <Column field="macAddresses" :header="$t('reports.session_report.mac_address')">
           <template #body="{ data }">
                 {{ data.macAddresses }}
           </template>
           </Column>
-          <Column field="createDate" :header="$t('Oluşturulma Tarihi')"></Column>
+          <Column field="createDate" :header="$t('reports.session_report.create_date')"></Column>
 
           
         </DataTable>
@@ -123,12 +123,12 @@
           :rowsPerPageOptions="[10, 25, 50, 100]"
           @page="onPage($event)"
         >
-          <template> {{$t('reports.system_log_report.total_result')}} : {{ totalElements }} </template>
+          <template> {{$t('reports.session_report.total_result')}} : {{ totalElements }} </template>
         </Paginator>
       </template>
     </Card>
 
-    <Dialog :header="$t('Client')" 
+    <Dialog :header="$t('reports.session_report.client')" 
     v-model:visible="searchClientDialog" 
     :style="{width: '50vw'}" :modal="true">
       <div class="p-field">
@@ -145,12 +145,12 @@
           
         </div>
           <template #footer>
-              <Button label="Kapat" icon="pi pi-times" @click="searchClientDialog = false" class="p-button-text"/>
-              <Button label="Seç" icon="pi pi-check" @click="selectClientsearchText"  autofocus/>
+              <Button label="reports.session_report.cancel" icon="pi pi-times" @click="searchClientDialog = false" class="p-button-text"/>
+              <Button label="reports.session_report.select" icon="pi pi-check" @click="selectClientsearchText"  autofocus/>
           </template>
       </Dialog>
 
-      <Dialog :header="$t('Kullanıcı Dialog')" 
+      <Dialog :header="$t('reports.session_report.user_select')" 
       v-model:visible="searchTextDialog" 
       :style="{width: '50vw'}" :modal="true">
         <tree-component
@@ -167,8 +167,8 @@
             
           </div>
             <template #footer>
-                <Button label="Kapat" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
-                <Button label="Seç1" icon="pi pi-check" @click="selectsearchText" autofocus />
+                <Button label="reports.session_report.cancel" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
+                <Button label="reports.session_report.select" icon="pi pi-check" @click="selectsearchText" autofocus />
             </template>
         </Dialog>
 
@@ -296,7 +296,7 @@
           if(error){
               this.$toast.add({
                   severity:'error', 
-                  detail: this.$t('user_management.session_history_error')+ " \n"+error, 
+                  detail: this.$t('reports.session_report.error_session_list')+ " \n"+error, 
                   summary:this.$t("computer.task.toast_summary"), 
                   life: 3000
               });
@@ -311,7 +311,7 @@
               else if(response.status == 417){
                   this.$toast.add({
                       severity:'error', 
-                      detail: this.$t('user_management.error_417_session_history'), 
+                      detail: this.$t('reports.session_report.error_417_session_list'), 
                       summary:this.$t("computer.task.toast_summary"), 
                       life: 3000
                   });
