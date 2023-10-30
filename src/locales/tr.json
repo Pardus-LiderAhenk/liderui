@@ -1922,8 +1922,6 @@
             "error_scheduled_update":"Zamanlanmış görev kimliği bulunamadı!",
             "success_scheduled_cancel":"Zamanlanmış görev başarıyla iptal edildi",
             "error_scheduled_cancel":"Zamanlanmış görev iptal edilirken hata oluştu!"
-
-
         },
         "session_report":{
             "agent_sessions":"İstemci Oturumları",
@@ -1952,6 +1950,8 @@
             "create_date":"Oluşturma Tarihi",
             "session":"Oturum",
             "disk_type":"Disk Tipi",
+            "login":"Oturum Açıldı",
+            "logout":"Oturum Kapatıldı",
             "agent_not_found":"İstemciler Bulunamıyor",
             "loading":"Yükleniyor",
             "online":"Çevrimiçi",
@@ -1979,11 +1979,10 @@
             "username":"Kullanıcı Adı",
             "client_name":"İstemci Adı",
             "total_result":"Toplam Sonuç",
-            "client":"İstemci",
+            "client_select":"İstemci Seç",
             "user_select":"Kullanıcı Seç",
             "error_session_list":"Kullanıcı oturum listesi getirilirken hata oluştu.",
             "error_417_session_list":"Kullanıcı oturum listesi getirilirken hata oluştu. Hata Kodu:417"
-        
         }
     },
     "profile":{

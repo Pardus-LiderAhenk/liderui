@@ -62,7 +62,7 @@
             </div>
             <div class="p-ml-2">
               <Button 
-              :label="$t('reports.session_report.select')"
+              :label="$t('reports.session_report.search')"
               icon="fas fa-search" 
               @click="filterUsers" />
             </div>
@@ -128,7 +128,7 @@
       </template>
     </Card>
 
-    <Dialog :header="$t('reports.session_report.client')" 
+    <Dialog :header="$t('reports.session_report.client_select')" 
     v-model:visible="searchClientDialog" 
     :style="{width: '50vw'}" :modal="true">
       <div class="p-field">
@@ -145,8 +145,8 @@
           
         </div>
           <template #footer>
-              <Button label="reports.session_report.cancel" icon="pi pi-times" @click="searchClientDialog = false" class="p-button-text"/>
-              <Button label="reports.session_report.select" icon="pi pi-check" @click="selectClientsearchText"  autofocus/>
+              <Button :label="$t('reports.session_report.cancel')" icon="pi pi-times" @click="searchClientDialog = false" class="p-button-text"/>
+              <Button :label="$t('reports.session_report.select')" icon="pi pi-check" @click="selectClientsearchText"  autofocus/>
           </template>
       </Dialog>
 
@@ -167,8 +167,8 @@
             
           </div>
             <template #footer>
-                <Button label="reports.session_report.cancel" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
-                <Button label="reports.session_report.select" icon="pi pi-check" @click="selectsearchText" autofocus />
+                <Button :label="$t('reports.session_report.cancel')" icon="pi pi-times" @click="searchTextDialog = false" class="p-button-text"/>
+                <Button :label="$t('reports.session_report.select')" icon="pi pi-check" @click="selectsearchText" autofocus />
             </template>
         </Dialog>
 
@@ -178,8 +178,6 @@
   import TreeComponent from '@/components/Tree/TreeComponent.vue';
   import { sessionReportService } from "../../../../services/Reports/SessionReportService.js";
   import { mapActions, mapGetters } from "vuex";
-  import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
-
 
   export default {
     data() {
@@ -212,15 +210,15 @@
         rowNumber: 10,
         statuses: [
         {
-          name: this.$t('Hepsi'),
+          name: this.$t('reports.session_report.all'),
           value: "ALL",
         },
         {
-          name: this.$t('Oturum Açıldı'),
+          name: this.$t('reports.session_report.login'),
           value: "LOGIN",
         },
         {
-          name: this.$t('Oturum Kapatıldı'),
+          name: this.$t('reports.session_report.logout'),
           value: "LOGOUT",
         },
       ],
@@ -290,7 +288,7 @@
           params.append("sessionType", this.filter.status);
           params.append("username", this.filter.searchText);
           params.append("createDate", this.filter.userCreateDate);
-          params.append("client", this.filter.searchClient);
+          params.append("clientName", this.filter.searchClient);
 
           const{response,error} = await sessionReportService.userSessionList(params);
           if(error){
@@ -343,11 +341,11 @@
         var data = new FormData();
         data.append("hostname", "ebru");
 
-        const { response, error } = await agentSessionReportService.agentSessionInfoExport(data)
+        const { response, error } = await sessionReportService.agentSessionInfoExport(data)
         if (error){
               this.$toast.add({
               severity:'error',
-              detail:this.$t('reports.task_report.agent_info_report_export_error'),
+              detail:this.$t('Kullanıcı Oturum raporu getirilirken hata oluştu.'),
               summary:this.$t("computer.toast_summary"),
               life:3600
             });
@@ -357,14 +355,14 @@
             let blob = new Blob([response.data])
             let link = document.createElement("a");
             link.href = window.URL.createObjectURL(blob);
-            link.download = "Agent Report.xlsx";
+            link.download = "User Session Report.xlsx";
             this.loading = false;
             link.click();
           }
           else if(response.status == 400)
           this.$toast.add({
               severity:'error',
-              detail:this.$t('reports.task_report.error_400_agent_info_report'),
+              detail:this.$t('Kullanıcı Oturum raporu getirilirken hata oluştu. Hata Kodu:400'),
               summary:this.$t("computer.toast_summary"),
               life:3600
             });      

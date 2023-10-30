@@ -1,5 +1,7 @@
 import axios from 'axios';
-const userSessionList = "/api/lider/user-session/list"
+const userSessionListUrl = "/api/lider/user-session/list";
+const userSessionReportUrl = "/api/lider/user-session/export"
+
 
 class SessionReportService{
 
@@ -9,7 +11,17 @@ class SessionReportService{
 
     async userSessionList(params) {
         try {
-            const response = await axios.post(userSessionList , params);
+            const response = await axios.post(userSessionListUrl , params);
+            console.log(response);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async userSessionReportExport(params) {
+        try {
+            const response = await axios.post(userSessionReportUrl , params);
             console.log(response);
             return { response };
         } catch (error) {
