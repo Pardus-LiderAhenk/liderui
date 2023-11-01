@@ -92,9 +92,9 @@
              {{$t('reports.system_log_report.loading')}}...
           </template>
           <Column header="#">
-            <template #body="{index}">
-              <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
-            </template>
+          <template #body="{index}">
+            <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+          </template>
           </Column>
           <Column field="username" :header="$t('reports.session_report.username')"></Column>
           <Column :header="$t('Makine Adı')">
@@ -178,6 +178,8 @@
   import TreeComponent from '@/components/Tree/TreeComponent.vue';
   import { sessionReportService } from "../../../../services/Reports/SessionReportService.js";
   import { mapActions, mapGetters } from "vuex";
+  import moment from "moment";
+
 
   export default {
     data() {
@@ -197,9 +199,9 @@
         currentPage: 1,
 
         filter: {
-            userCreateDate: '',
-            userCreateStartDate:'',
-            userCreateEndDate:'',
+            userCreateDate: "",
+            startDate:"",
+            endDate:"",
             sessionType:'ALL',
             status:'ALL',
             username: "",
@@ -232,9 +234,7 @@
     mounted() {
         if (this.selectedNode && this.selectedNode.type === "USER") {
             this.getSessionHistory();
-        } else {
-            this.sessions = null;
-        }
+        } 
         
     },
 
@@ -287,8 +287,28 @@
           params.append("pageSize", this.rowNumber);
           params.append("sessionType", this.filter.status);
           params.append("username", this.filter.searchText);
-          params.append("createDate", this.filter.userCreateDate);
-          params.append("clientName", this.filter.searchClient);
+          params.append("dn", this.filter.searchClient);
+
+          if (this.filter.userCreateDate[0] != null) {
+            params.append(
+              "startDate",
+              moment(this.filter.userCreateDate[0])
+                .set("hour", 0)
+                .set("minute", 0)
+                .set("second", 0)
+                .format("DD/MM/YYYY HH:mm:ss")
+            );
+          }
+         if (this.filter.userCreateDate[1] != null) {
+          params.append(
+            "endDate",
+            moment(this.filter.userCreateDate[1])
+                .set("hour", 0)
+                .set("minute", 0)
+                .set("second", 0)
+                .format("DD/MM/YYYY HH:mm:ss")
+           );
+        }
 
           const{response,error} = await sessionReportService.userSessionList(params);
           if(error){
@@ -302,7 +322,7 @@
           else{
               if(response.status == 200){
                   if (response.data) {
-                      this.sessions = response.data;
+                      this.sessions = response.data.content;
                       console.log(this.sessions);
                   }
               }
@@ -339,9 +359,15 @@
       async exportToExcel() {
         this.loading = true;
         var data = new FormData();
-        data.append("hostname", "ebru");
+        data.append("pageNumber", this.pageNumber);
+        data.append("pageSize", this.rowNumber);
+        data.append("sessionType", this.filter.status);
+        data.append("username", this.filter.searchText);
+        data.append("dn", this.filter.searchClient);
+        data.append("startDate", this.filter.startDate);
+        data.append("endDate", this.filter.endDate);
 
-        const { response, error } = await sessionReportService.agentSessionInfoExport(data)
+        const { response, error } = await sessionReportService.userSessionReportExport(data);
         if (error){
               this.$toast.add({
               severity:'error',

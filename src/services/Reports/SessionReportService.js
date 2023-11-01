@@ -21,7 +21,7 @@ class SessionReportService{
 
     async userSessionReportExport(params) {
         try {
-            const response = await axios.post(userSessionReportUrl , params);
+            const response = await axios.post(userSessionReportUrl, params, {responseType: 'blob'});
             console.log(response);
             return { response };
         } catch (error) {
