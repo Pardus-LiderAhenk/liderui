@@ -5,8 +5,17 @@
             :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
             :style="{ width: '50vw' }" :modal="true"
             :header="$t('reports.session_report.agent_detail')">
+            <div class="p-d-flex p-jc-between">
+                <div style="text-align: left">
+                    <Button
+                        :label="$t('reports.session_report.export')"
+                        icon="fas fa-file-excel"
+                        @click="exportToExcel()"/>
+                </div>
+            </div>
             <h4>{{$t('reports.session_report.general_information')}}</h4>
-            <div class="p-grid">
+
+                <div class="p-grid">
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
                 <div class="p-col-4"><b>{{$t('reports.session_report.computer_name')}}</b></div>
                 <div class="p-col-8">{{ selectedAgent.hostname }}</div>
@@ -39,18 +48,10 @@
                 <div class="p-col-4"><b>{{$t('reports.session_report.create_date')}}</b></div>
                 <div class="p-col-8">{{ selectedAgent.createDate }}</div>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>{{$t('reports.session_report.update_date')}}</b></div>
-                <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             </div>            
 
             <template #footer>
 
-            <Button
-                :label="$t('reports.session_report.export')"
-                icon="fas fa-file-excel"
-                @click="exportToExcel()"
-            />
             <Button
                 :label="this.$t('reports.session_report.close')"
                 icon="pi pi-times"
@@ -188,7 +189,7 @@ export default {
               );
             }
             const { response, error } = await agentSessionReportService.agentSessionInfoExport(data)
-            console.log(data);
+            console.log(response);
             if (error){
                   this.$toast.add({
                   severity:'error',

@@ -32,7 +32,7 @@
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
               <label for="inputDN">{{ $t('reports.session_report.username')  }}</label>
               <div class="p-inputgroup">
-                  <InputText  v-model="filter.searchText" />
+                  <InputText  v-model="filter.username" />
                   <Button 
                     icon="pi pi-sitemap" 
                     class="p-button-primary" 
@@ -84,7 +84,7 @@
         </div>
       </template>
       <template #content>
-        <DataTable :value="sessions" responsiveLayout="scroll" >
+        <DataTable :value="sessions"  responsiveLayout="scroll" >
           <template #empty>
             {{$t('reports.system_log_report.task_cant_find')}}...
           </template>
@@ -96,27 +96,40 @@
             <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
           </template>
           </Column>
-          <Column field="username" :header="$t('reports.session_report.username')"></Column>
-          <Column :header="$t('Makine Adı')">
-          <template #body="{ data }">
+           <Column  :header="$t('reports.session_report.username')">
+            <template #body="{ data }">
               {{ data.username }}
           </template>
           </Column>
-          <Column field="sessionEvent" :header="$t('reports.session_report.session_type')"></Column>
-          <Column field="ipAddresses" :header="$t('reports.session_report.ip_address')">
+          <Column :header="$t('reports.session_report.computer_name')">
           <template #body="{ data }">
-              {{ data.ipAddresses }}
+              {{ data.hostname }}
+          </template>
+          </Column>
+          <Column field="sessionEvent" :header="$t('reports.session_report.session_type')">
+            <template #body="{ data }">
+              {{ data.sessionEvent }}
+          </template>
+          </Column>
+          <Column field="ipAddresses" :header="$t('reports.session_report.ip_address')">
+            <template #body="{ data }">
+              {{ data.ipAddresses.replace(/'/g, "")  }}
           </template>
           </Column>
           <Column field="macAddresses" :header="$t('reports.session_report.mac_address')">
           <template #body="{ data }">
-                {{ data.macAddresses }}
+              {{ data.macAddresses.replace(/'/g, "")  }}
           </template>
           </Column>
-          <Column field="createDate" :header="$t('reports.session_report.create_date')"></Column>
+         <Column field="createDate" :header="$t('reports.session_report.session_date')">
+          <template #body="{ data }">
+            {{ data.createDate }}
+        </template>
+        </Column>
 
           
         </DataTable>
+      
         <Paginator
           :rows="10"
           :totalRecords="totalElements"
@@ -177,7 +190,6 @@
   <script>
   import TreeComponent from '@/components/Tree/TreeComponent.vue';
   import { sessionReportService } from "../../../../services/Reports/SessionReportService.js";
-  import { mapActions, mapGetters } from "vuex";
   import moment from "moment";
 
 
@@ -205,7 +217,6 @@
             sessionType:'ALL',
             status:'ALL',
             username: "",
-            searchText:"",
             searchClient:"",
         },
         pageNumber: 1,
@@ -232,14 +243,11 @@
     },
 
     mounted() {
-        if (this.selectedNode && this.selectedNode.type === "USER") {
-            this.getSessionHistory();
-        } 
-        
+
+          this.getSessionHistory();
     },
 
     computed:{
-        ...mapGetters(["selectedLiderNode"]),
         isUserDisabled: {
             get() {
                 return this.getUserStatus();
@@ -251,22 +259,15 @@
     },
 
     methods: {
-      ...mapActions(["setSelectedLiderNode"]),
-
-      setSelectedNode(node) {
-            this.selectedNode = node;
-      },
 
       treeClientNodeClick(node){
           this.selectedNode = node;
-          this.setSelectedLiderNode(node);
+          this.filter.searchClient = node.uid;
       },
 
       treeNodeClick(node) {
-
-          this.selectedNode = node;
-          this.setSelectedLiderNode(node);
-          //this.getUserStatus();
+        this.selectedNode = node;
+        this.filter.username = node.uid;
       },
 
 
@@ -286,7 +287,7 @@
           params.append("pageNumber", this.pageNumber);
           params.append("pageSize", this.rowNumber);
           params.append("sessionType", this.filter.status);
-          params.append("username", this.filter.searchText);
+          params.append("username", this.filter.username);
           params.append("dn", this.filter.searchClient);
 
           if (this.filter.userCreateDate[0] != null) {
@@ -343,7 +344,7 @@
 
       selectsearchText() {
         if(this.selectedNode) {
-          this.filter.searchText = this.selectedNode.distinguishedName;
+          this.filter.username = this.selectedNode.uid;
           this.searchTextDialog = false;
           //this.selectedNode = null;
         }
@@ -351,7 +352,7 @@
 
       selectClientsearchText() {
         if(this.selectedNode) {
-          this.filter.searchClient = this.selectedNode.distinguishedName;
+          this.filter.searchClient = this.selectedNode.uid;
           this.searchClientDialog = false;
         }
       },
@@ -364,8 +365,28 @@
         data.append("sessionType", this.filter.status);
         data.append("username", this.filter.searchText);
         data.append("dn", this.filter.searchClient);
-        data.append("startDate", this.filter.startDate);
-        data.append("endDate", this.filter.endDate);
+
+        if (this.filter.userCreateDate[0] != null) {
+            data.append(
+              "startDate",
+              moment(this.filter.userCreateDate[0])
+                .set("hour", 0)
+                .set("minute", 0)
+                .set("second", 0)
+                .format("DD/MM/YYYY HH:mm:ss")
+            );
+          }
+         if (this.filter.userCreateDate[1] != null) {
+          data.append(
+            "endDate",
+            moment(this.filter.userCreateDate[1])
+                .set("hour", 0)
+                .set("minute", 0)
+                .set("second", 0)
+                .format("DD/MM/YYYY HH:mm:ss")
+           );
+        }
+
 
         const { response, error } = await sessionReportService.userSessionReportExport(data);
         if (error){
@@ -409,18 +430,6 @@
       },
     
     },
-
-    watch: {
-
-        selectedNode() {
-            if (this.selectedNode && this.selectedNode.type === "USER") {
-               this.getSessionHistory();
-            } else {
-                this.sessions = null;
-            }
-        }
-    }
-
   };
   </script>
   
