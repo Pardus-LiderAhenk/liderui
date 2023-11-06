@@ -4,52 +4,40 @@
             v-model:visible="showDialog"
             :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
             :style="{ width: '50vw' }" :modal="true"
-            :header="$t('reports.session_report.agent_detail')">
-            <div class="p-d-flex p-jc-between">
+            :header="$t('İstemci Oturum Bilgileri')">
+            <!-- <div class="p-d-flex p-jc-between">
                 <div style="text-align: left">
                     <Button
                         :label="$t('reports.session_report.export')"
                         icon="fas fa-file-excel"
                         @click="exportToExcel()"/>
                 </div>
-            </div>
-            <h4>{{$t('reports.session_report.general_information')}}</h4>
+            </div> -->
+                <template #title>
+                  <div class="p-d-flex p-jc-between">
+                    <div>{{$t('reports.session_report.results')}}</div>
+                    <div>
+                      <Button
+                        :label="$t('reports.session_report.export')"
+                        icon="fas fa-file-excel"
+                        @click="exportToExcel()"
+                      />
+                    </div>
+                  </div>
+                </template>
+                  <h5>
+                    {{ selectedAgent.hostname }}
+                  </h5>
+                
 
-                <div class="p-grid">
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>{{$t('reports.session_report.computer_name')}}</b></div>
-                <div class="p-col-8">{{ selectedAgent.hostname }}</div>
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>{{$t('reports.session_report.mac_address')}}</b></div>
-                <div class="p-col-8">
-                    {{ selectedAgent.macAddresses.replace(/'/g, "") }}
-                </div>
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>JID</b></div>
-                <div class="p-col-8">{{ selectedAgent.jid }}</div>
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>{{$t('reports.session_report.ip_address')}}</b></div>
-                <div class="p-col-8">
-                    {{ selectedAgent.ipAddresses.replace(/'/g, "") }}
-                </div>
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>{{$t('reports.session_report.operating_system_version')}}</b></div>
-                <div class="p-col-8">
-                    {{
-                    getPropertyValue(selectedAgent.properties, "os.version")
-                    }}
-                </div>
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>{{$t('reports.session_report.ahenk_version')}}</b></div>
-                <div class="p-col-8">
-                    {{ getPropertyValue(selectedAgent.properties, "agentVersion") }}
-                </div>
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-                <div class="p-col-4"><b>{{$t('reports.session_report.create_date')}}</b></div>
-                <div class="p-col-8">{{ selectedAgent.createDate }}</div>
-                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
-            </div>            
-
+                <Paginator
+                  :rows="10"
+                  :totalRecords="totalElements"
+                  :rowsPerPageOptions="[10, 25, 50, 100]"
+                  @page="onPage($event)">
+                  <template> {{$t('reports.session_report.total_result')}} : {{ totalElements }} </template>
+                </Paginator>
+                
             <template #footer>
 
             <Button
@@ -141,6 +129,22 @@ export default {
 
             }
 
+
+            return propertyValue;
+        },
+
+        getSessionsValue(sessions, username) {
+            var propertyValue = "";
+
+            const filteredSessions = sessions.filter(
+                (property) => property.username === username
+            );
+            
+            if (filteredSessions != null && filteredSessions.length > 0) {
+                propertyValue = filteredSessions[0].propertyValue;
+
+            }
+            console.log(propertyValue);
 
             return propertyValue;
         },

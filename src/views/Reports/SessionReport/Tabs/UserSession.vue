@@ -101,19 +101,24 @@
               {{ data.username }}
           </template>
           </Column>
+          <Column field="sessionEvent" :header="$t('reports.session_report.session_type')">
+            <template #body="{ data}">
+              <span v-if="data.sessionEvent == 1">
+                {{ $t('reports.session_report.login') }}
+              </span>
+              <span v-if="data.sessionEvent == 2">
+                {{ $t('reports.session_report.logout') }}
+              </span>
+          </template>
+          </Column>
+          <Column field="createDate" :header="$t('reports.session_report.session_date')">
+            <template #body="{ data }">
+              {{ formatDate(data.createDate) }}
+            </template>
+          </Column>
           <Column :header="$t('reports.session_report.computer_name')">
           <template #body="{ data }">
               {{ data.hostname }}
-          </template>
-          </Column>
-          <Column field="sessionEvent" :header="$t('reports.session_report.session_type')">
-            <template #body="{ data }">
-              {{ data.sessionEvent }}
-          </template>
-          </Column>
-          <Column field="ipAddresses" :header="$t('reports.session_report.ip_address')">
-            <template #body="{ data }">
-              {{ data.ipAddresses.replace(/'/g, "")  }}
           </template>
           </Column>
           <Column field="macAddresses" :header="$t('reports.session_report.mac_address')">
@@ -121,21 +126,18 @@
               {{ data.macAddresses.replace(/'/g, "")  }}
           </template>
           </Column>
-         <Column field="createDate" :header="$t('reports.session_report.session_date')">
-          <template #body="{ data }">
-            {{ data.createDate }}
-        </template>
-        </Column>
-
-          
+          <Column field="ipAddresses" :header="$t('reports.session_report.ip_address')">
+            <template #body="{ data }">
+              {{ data.ipAddresses.replace(/'/g, "")  }}
+          </template>
+          </Column>
         </DataTable>
       
         <Paginator
           :rows="10"
           :totalRecords="totalElements"
           :rowsPerPageOptions="[10, 25, 50, 100]"
-          @page="onPage($event)"
-        >
+          @page="onPage($event)">
           <template> {{$t('reports.session_report.total_result')}} : {{ totalElements }} </template>
         </Paginator>
       </template>
@@ -415,19 +417,24 @@
             });      
         }
     },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit',hour12: false};
+      const formattedDate = new Date(dateString).toLocaleString(undefined, options);
+      return formattedDate;
+    },
   
-      clearFilterFields() {
-        this.filter = {
-          userCreateDate: '',
-          userCreateStartDate:'',
-          userCreateEndDate:'',
-          sessionType:'ALL',
-          status:'ALL',
-          username: "",
-          searchText:"",
-          searchClient:"",
-        };
-      },
+    clearFilterFields() {
+      this.filter = {
+        userCreateDate: '',
+        userCreateStartDate:'',
+        userCreateEndDate:'',
+        sessionType:'ALL',
+        status:'ALL',
+        username: "",
+        searchText:"",
+        searchClient:"",
+      };
+    },
     
     },
   };

@@ -292,7 +292,7 @@
  * Detailed Agent Report.
  * @see {@link http://www.liderahenk.org/}
  */
-import AgentDetailDialog from '../../SessionReport/Dialogs/AddDetailDialog.vue';
+import AgentDetailDialog from '../Dialogs/AgentDetailDialog.vue';
 import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
 
 export default {
@@ -485,6 +485,7 @@ export default {
       }
 
       const { response, error } = await agentSessionReportService.agentSessionInfoList(data);
+      console.log(response);
       if (error){
             this.$toast.add({
             severity:'error',
