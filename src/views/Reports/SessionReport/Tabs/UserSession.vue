@@ -84,12 +84,12 @@
         </div>
       </template>
       <template #content>
-        <DataTable :value="sessions"  responsiveLayout="scroll" >
+        <DataTable :value="sessions"  responsiveLayout="scroll" :loading="loading" >
           <template #empty>
-            {{$t('reports.system_log_report.task_cant_find')}}...
+            {{$t('Bulunamadı')}}...
           </template>
           <template #loading>
-             {{$t('reports.system_log_report.loading')}}...
+             {{$t('Yükleniyor')}}...
           </template>
           <Column header="#">
           <template #body="{index}">
@@ -202,7 +202,7 @@
         selectedAgent:null,
         totalElements: 0,
         offset: 1,
-        loading: true,
+        loading: false,
         filterText:'',
         filterSearchText: '',
         searchTextDialog:false,
@@ -326,7 +326,6 @@
               if(response.status == 200){
                   if (response.data) {
                       this.sessions = response.data.content;
-                      console.log(this.sessions);
                   }
               }
               else if(response.status == 417){
@@ -345,18 +344,21 @@
       },
 
       selectsearchText() {
+
         if(this.selectedNode) {
           this.filter.username = this.selectedNode.uid;
           this.searchTextDialog = false;
-          //this.selectedNode = null;
+
         }
       },
 
       selectClientsearchText() {
+
         if(this.selectedNode) {
           this.filter.searchClient = this.selectedNode.uid;
           this.searchClientDialog = false;
         }
+
       },
 
       async exportToExcel() {

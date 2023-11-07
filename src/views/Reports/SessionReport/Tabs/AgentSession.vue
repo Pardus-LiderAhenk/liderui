@@ -1,32 +1,10 @@
 <template>
-  <agent-detail-dialog v-if="agentDetailDialog"
-    :agentDetailDialog="agentDetailDialog"
-    :selectedAgent="selectedAgent"
-    @close-agent-detail-dialog="agentDetailDialog=false;">
-  </agent-detail-dialog>
-  <Dialog :header="$t('reports.session_report.client_session_report')"
-    v-model:visible="agentOuDialog" 
-    :style="{width: '30vw'}" :modal="true"
-  >
-    <tree-component 
-      ref="agentTree"
-      loadNodeUrl="/api/lider/computer/computers"
-      loadNodeOuUrl="/api/lider/computer/ou-details"
-      :treeNodeClick="node => filter.dn = node.distinguishedName"
-      :searchFields="[{key: this.$t('tree.folder'), value: 'ou'}]"
-      :isMove="true"
-      :scrollHeight="40"
-    />
-    <template #footer>
-      <Button :label="$t('reports.session_report.cancel')"
-        icon="pi pi-times" @click="agentOuDialog = false"
-        class="p-button-text p-button-sm"
-      />
-      <Button :label="$t('reports.session_report.select')" icon="pi pi-check" 
-          @click="selectAgentOuDn" class="p-button-sm"
-      />
-    </template>
-  </Dialog>
+  <div>
+  <user-session-dialog v-if="userSessisonDialog"
+    :userSessionDialog="userSessisonDialog"
+    :selectedAgentId="selectedAgentId"
+    @close-user-session-dialog="userSessisonDialog=false;">
+  </user-session-dialog>
   <!-- Dialogs End -->
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
@@ -268,7 +246,7 @@
                   class="p-button-sm p-button-raised p-button-rounded"
                   icon="pi pi-list"
                   v-tooltip.left="$t('reports.session_report.agent_detail')"
-                  @click="showAgentDetailDialog(data.id)"
+                  @click.prevent="showUserSessionDialog(data)"
                 />
               </div>
             </div>
@@ -285,6 +263,7 @@
       </Paginator>
     </template>
   </Card>
+</div>
 </template>
 
 <script>
@@ -292,13 +271,17 @@
  * Detailed Agent Report.
  * @see {@link http://www.liderahenk.org/}
  */
-import AgentDetailDialog from '../Dialogs/AgentDetailDialog.vue';
+import UserSessionDialog from '../Dialogs/UserSessionDialog.vue';
 import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
 
 export default {
+  components: {
+    UserSessionDialog
+  },
   data() {
     return {
       agents: [],
+      agentDetailList: [],
       totalElements: 0,
       showedTotalElementCount: 10,
       currentPage: 1,
@@ -354,7 +337,7 @@ export default {
         },
       ],
       getFilterData: true,
-      selectedAgent: null,
+      selectedAgentId: null,
       statuses: [
         {
           name: this.$t('reports.session_report.all'),
@@ -396,21 +379,24 @@ export default {
         },
       ],
       addExistGroupDialog: false,
-      agentDetailDialog: false,
+      userSessisonDialog: false,
       filterData: null,
       agentOuDialog: false,
     };
   },
 
-  components: {
-    AgentDetailDialog
-  },
+  
 
   mounted() {
     this.getAgents();
   },
 
   methods: {
+    showUserSessionDialog(data) {
+      this.selectedAgentId = data.id;
+      this.userSessisonDialog = true;
+    },
+
     selectAgentOuDn() {
       if (!this.filter.dn.trim()) {
         this.$toast.add({
@@ -424,12 +410,6 @@ export default {
       this.agentOuDialog = false;
     },
 
-    showAgentDetailDialog(agentID) {
-      this.selectedAgent = this.agents.filter(
-        (agent) => agent.id === agentID
-      )[0];
-      this.agentDetailDialog = true;
-    },
     getPropertyValue(properties, propertyName) {
       var propertyValue = "";
       const filteredProperties = properties.filter(
@@ -485,7 +465,6 @@ export default {
       }
 
       const { response, error } = await agentSessionReportService.agentSessionInfoList(data);
-      console.log(response);
       if (error){
             this.$toast.add({
             severity:'error',
@@ -516,6 +495,7 @@ export default {
       
     },
 
+    
 
     clearEvent(event, name){
       if (!event.value) {
@@ -553,70 +533,6 @@ export default {
           .format("DD/MM/YYYY HH:mm:ss");
       }
       this.getAgents(this.currentPage, this.showedTotalElementCount);
-    },
-    async exportToExcel() {
-      this.loading = true;
-      var data = new FormData();
-      data.append("status", this.filter.status);
-      data.append("dn", this.filter.dn);
-      data.append("hostname", this.filter.hostname);
-      data.append("ipAddress", this.filter.ipAddress);
-      data.append("macAddress", this.filter.macAddress);
-      data.append("registrationStartDate", this.filter.registrationStartDate);
-      data.append("registrationEndDate", this.filter.registrationEndDate);
-      data.append("brand", this.filter.brand);
-      data.append("model", this.filter.model);
-      data.append("processor", this.filter.processor);
-      data.append("osVersion", this.filter.osVersion);
-      data.append("diskType",this.filter.diskType);
-      data.append("agentVersion", this.filter.agentVersion);
-      data.append("sessionReportType", this.filter.sessionReportType);
-      if (this.filter.registrationDate[0] != null) {
-        data.append(
-          "registrationStartDate",
-          moment(this.filter.registrationDate[0])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
-            .format("DD/MM/YYYY HH:mm:ss")
-        );
-      }
-      if (this.filter.registrationDate[1] != null) {
-        data.append(
-          "registrationEndDate",
-          moment(this.filter.registrationDate[1])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
-            .format("DD/MM/YYYY HH:mm:ss")
-        );
-      }
-      const { response, error } = await agentSessionReportService.agentSessionInfoExport(data)
-      if (error){
-            this.$toast.add({
-            severity:'error',
-            detail:this.$t('reports.session_report.agent_info_report_export_error'),
-            summary:this.$t("computer.toast_summary"),
-            life:3600
-          });
-
-      }else{
-        if(response.status == 200){
-          let blob = new Blob([response.data])
-          let link = document.createElement("a");
-          link.href = window.URL.createObjectURL(blob);
-          link.download = "Agent Report.xlsx";
-          this.loading = false;
-          link.click();
-        }
-        else if(response.status == 400)
-        this.$toast.add({
-            severity:'error',
-            detail:this.$t('reports.session_report.error_400_agent_info_report'),
-            summary:this.$t("computer.toast_summary"),
-            life:3600
-          });      
-        }
     },
 
     clearFilterFields() {
