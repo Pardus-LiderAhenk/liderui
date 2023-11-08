@@ -24,9 +24,7 @@
             v-model="filter.status"
             :options="statuses"
             optionLabel="name"
-            optionValue="value"
-            :showClear="true"
-          />
+            optionValue="value"/>
 
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -41,7 +39,7 @@
         </div>
 
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-          <label for="dn">{{ $t('reports.session_report.client_name')  }}</label>
+          <label for="dn">{{ $t('reports.session_report.computer_name')  }}</label>
           <div class="p-inputgroup">
               <InputText  v-model="filter.searchClient" />
               <Button 
@@ -86,10 +84,12 @@
       <template #content>
         <DataTable :value="sessions"  responsiveLayout="scroll" :loading="loading" >
           <template #empty>
-            {{$t('Bulunamadı')}}...
+            <div class="p-d-flex p-jc-center">
+            {{$t('reports.session_report.session_cant_find')}}
+          </div>
           </template>
           <template #loading>
-             {{$t('Yükleniyor')}}...
+             {{$t('reports.session_report.loading')}}
           </template>
           <Column header="#">
           <template #body="{index}">
@@ -284,7 +284,7 @@
       },
       
       async getSessionHistory() {
-
+          this.loading = true;
           let params = new FormData();
           params.append("pageNumber", this.pageNumber);
           params.append("pageSize", this.rowNumber);
@@ -326,6 +326,7 @@
               if(response.status == 200){
                   if (response.data) {
                       this.sessions = response.data.content;
+                      this.loading = false;
                   }
               }
               else if(response.status == 417){
@@ -396,7 +397,7 @@
         if (error){
               this.$toast.add({
               severity:'error',
-              detail:this.$t('Kullanıcı Oturum raporu getirilirken hata oluştu.'),
+              detail:this.$t('reports.session_report.error_user_session_report'),
               summary:this.$t("computer.toast_summary"),
               life:3600
             });
@@ -413,7 +414,7 @@
           else if(response.status == 400)
           this.$toast.add({
               severity:'error',
-              detail:this.$t('Kullanıcı Oturum raporu getirilirken hata oluştu. Hata Kodu:400'),
+              detail:this.$t('reports.session_report.error_417_user_session_report'),
               summary:this.$t("computer.toast_summary"),
               life:3600
             });      
@@ -436,6 +437,12 @@
         searchText:"",
         searchClient:"",
       };
+    },
+    onPage(event) {
+      this.loading = true;
+      this.pageNumber = event.page + 1;
+      this.rowNumber = event.rows;
+      this.getSessionHistory();
     },
     
     },
@@ -466,6 +473,12 @@
     .p-scrolltop-icon {
         font-size: 1rem;
         color: var(--primary-color-text);
+    }
+  
+  }
+  ::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
     }
   }
   </style>

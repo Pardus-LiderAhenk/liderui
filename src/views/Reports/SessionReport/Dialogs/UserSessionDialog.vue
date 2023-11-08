@@ -4,25 +4,23 @@
         v-model:visible="showDialog"
         :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
         :style="{ width: '50vw' }" :modal="true"
-        :header="$t('İstemci Oturum Bilgileri')">
+        :header="$t('reports.session_report.agent_session_information')">
         <div>
             <DataTable :value="sessions" responsiveLayout="scroll" :loading="loading"
-                style="margin-top: 2em"  class="p-datatable-sm" v-model:filters="filters"
-                :paginator="true" :rows="10"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-                :rowsPerPageOptions="[10,25,50]">
+                style="margin-top: 2em"  class="p-datatable-sm" v-model:filters="filters">
                 <template #header>
                   <div class="p-d-flex p-jc-between">
                       <div style="text-align: left">
-                        <Button :label="$t('reports.session_report.export')"
+                        <Button class="p-button-sm" 
+                        :label="$t('reports.session_report.export')"
                         icon="fas fa-file-excel"
                         @click="exportToExcel()"/>
                       </div>
                       <div class="p-d-flex p-jc-end">
                         <Dropdown v-model="sessionFilter.status" style="min-width: 100%;" 
                           :options="statuses"
-                          optionLabel="name" optionValue="value"
-                          :showClear="true"
+                          optionLabel="name" 
+                          optionValue="value"
                           @change="getSessions"
                         />
                       </div>
@@ -30,10 +28,12 @@
                 </template>
 
                 <template #empty>
-                  {{$t('reports.system_log_report.task_cant_find')}}...
+                  <div class="p-d-flex p-jc-center">
+                    {{$t('reports.session_report.session_cant_find')}}
+                  </div>
                 </template>
                 <template #loading>
-                   {{$t('Yükleniyor')}}...
+                    {{$t('reports.session_report.loding')}}
                 </template>
                 <Column header="#">
                 <template #body="{index}">
@@ -74,6 +74,13 @@
                 </template>
                 </Column>
             </DataTable>
+            <Paginator
+              :rows="10"
+              :totalRecords="totalElements"
+              :rowsPerPageOptions="[10, 25, 50, 100]"
+              @page="onPage($event)">
+              <template> {{$t('reports.session_report.total_result')}} : {{ totalElements }} </template>
+            </Paginator>
         </div>                
         <template #footer>
           <Button
@@ -183,6 +190,7 @@ export default {
       },
 
       async getUserSessions(){
+        this.loading = true;
         if (this.selectedAgentId) {
         var data = new FormData();
 
@@ -194,7 +202,7 @@ export default {
         if(error){
           this.$toast.add({
             severity:'error', 
-            detail: this.$t('Agent bilgisi getirilemedi')+ " \n"+error, 
+            detail: this.$t('reports.session_report.error_get_not_agent_session_report')+ " \n"+error, 
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
           });
@@ -203,18 +211,20 @@ export default {
           if(response.status == 200){
             this.totalElements = response.data.totalElements;
             this.sessions = response.data.content;
+            this.loading = false;
+
           }
           else{
               this.$toast.add({
                   severity:'error',
-                  detail:this.$t('settings.console_user_settings.an_unexpected_problem_was_encountered'),
+                  detail:this.$t('reports.session_report.error_417_get_not_agent_session_report'),
                   summary:this.$t('settings.console_user_settings.error'),
                   life:3600
                   });     
               }
             }
           }
-        },
+      },
 
       async exportToExcel() {
         this.loading = true;
@@ -260,7 +270,7 @@ export default {
           if(error){
               this.$toast.add({
                   severity:'error', 
-                  detail: this.$t('İstemci Oturum listesi getirilemedi'), 
+                  detail: this.$t('reports.session_report.error_get_not_agent_session_report'), 
                   summary:this.$t("computer.task.toast_summary"), 
                   life: 3000
               });
@@ -272,7 +282,7 @@ export default {
               else if(response.status == 417){
                   this.$toast.add({
                       severity:'error', 
-                      detail: this.$t('İstemci Oturum listesi getirilemedi'), 
+                      detail: this.$t('reports.session_report.error_417_get_not_agent_session_report'), 
                       summary:this.$t("computer.task.toast_summary"), 
                       life: 3000
                   });                
@@ -289,22 +299,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep(.p-progressbar-blue) {
-    height: 1.25rem;
-    background-color: #419544;
-
-    .p-progressbar-value {
-        background-color: #1769aa;
-    }
-    
+::v-deep(.p-paginator) {
+  .p-component {
+      margin-left: auto;
   }
-  ::v-deep(.p-progressbar-red) {
-    height: 1.25rem;
-    background-color: #419544;
-  
-    .p-progressbar-value {
-        background-color:#D32F2F;
-    }
-    
-  }
+}
 </style>

@@ -5,7 +5,7 @@
     :selectedAgentId="selectedAgentId"
     @close-user-session-dialog="userSessisonDialog=false;">
   </user-session-dialog>
-  <!-- Dialogs End -->
+
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
       <h4 class="p-pt-2">{{$t('reports.session_report.client_session_report')}}</h4>
@@ -166,14 +166,6 @@
     <template #title>
       <div class="p-d-flex p-jc-between">
         <div>{{$t('reports.session_report.results')}}</div>
-        <div  v-if="agents.length > 0">
-          
-          <!-- <Button
-            :label="$t('reports.detailed_agent_report.export')"
-            icon="fas fa-file-excel"
-            @click="exportToExcel()"
-          /> -->
-        </div>
       </div>
     </template>
     <template #content>
@@ -244,8 +236,8 @@
               <div>
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
-                  icon="pi pi-list"
-                  v-tooltip.left="$t('reports.session_report.agent_detail')"
+                  icon="pi pi-users"
+                  v-tooltip.left="$t('Kullanıcı Listesi')"
                   @click.prevent="showUserSessionDialog(data)"
                 />
               </div>
@@ -259,7 +251,7 @@
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template> Toplam Sonuç: {{ totalElements }} </template>
+        <template> {{$t('reports.session_report.total_result')}} : {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>

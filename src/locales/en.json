@@ -68,7 +68,7 @@
         "console_user_settings": "Console User Settings",
         "ad_synchronization": "AD Synchronization",
         "scheduled_task_report": "Scheduled Task Report",
-        "system_session_report":"Session Report",
+        "system_session_report":"User Session Report",
         "view_profile": "View Profile",
         "logout": "Logout",
         "privilege_warning": "An error occurred while getting user privileges"
@@ -1950,7 +1950,7 @@
             "export":"Export",
             "version":"Version",
             "create_date":"Create Date",
-            "session_date":"Session Date",
+            "session_date":"Date",
             "session":"Session",
             "disk_type":"Disk Type",
             "login":"Login",
@@ -1959,7 +1959,9 @@
             "loading":"Loading",
             "online":"Online",
             "offline":"Offline",
+            "session_cant_find":"Session Can't Find",
             "close":"Close",
+            "agent_session_information":"Agent Session Information",
             "agent_detail":"Agent Detail",
             "hdd_title":"HDD (Hard Disk Drive)",
             "ssd_title":"SSD (Solid-State Drive)",
@@ -1984,7 +1986,10 @@
             "client_select":"Select Client",
             "user_select":"User Select",
             "error_session_list":"Could not retrieve user session list.",
-            "error_417_session_list":"Could not retrieve user session list. Error Code: 417"
+            "error_417_session_list":"Could not retrieve user session list. Error Code: 417",
+            "error_user_session_report":"An error occurred while generating the User Session report.",
+            "error_417_user_session_report":"An error occurred while generating the User Session report. Error Code: 400"
+
         }
     },
     "profile":{
