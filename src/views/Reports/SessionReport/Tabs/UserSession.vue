@@ -200,6 +200,8 @@
       return {
         selectedUserUid:null,
         selectedAgent:null,
+        pageNumber: 1,
+        rowNumber: 10,
         totalElements: 0,
         offset: 1,
         loading: false,
@@ -221,8 +223,7 @@
             username: "",
             searchClient:"",
         },
-        pageNumber: 1,
-        rowNumber: 10,
+        
         statuses: [
         {
           name: this.$t('reports.session_report.all'),
@@ -284,6 +285,7 @@
       },
       
       async getSessionHistory() {
+          this.currentPage = this.pageNumber;
           this.loading = true;
           let params = new FormData();
           params.append("pageNumber", this.pageNumber);
@@ -326,6 +328,7 @@
               if(response.status == 200){
                   if (response.data) {
                       this.sessions = response.data.content;
+                      this.totalElements = response.data.totalElements;
                       this.loading = false;
                   }
               }

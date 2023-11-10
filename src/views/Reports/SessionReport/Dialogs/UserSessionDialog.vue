@@ -33,7 +33,7 @@
                   </div>
                 </template>
                 <template #loading>
-                    {{$t('reports.session_report.loding')}}
+                    {{$t('reports.session_report.loading')}}
                 </template>
                 <Column header="#">
                 <template #body="{index}">
@@ -190,6 +190,7 @@ export default {
       },
 
       async getUserSessions(){
+        this.currentPage = this.pageNumber;
         this.loading = true;
         if (this.selectedAgentId) {
         var data = new FormData();
@@ -260,6 +261,7 @@ export default {
         }
       },  
       async getSessions(){
+        this.currentPage = this.pageNumber;
         var data = new FormData();
         data.append("pageNumber", this.pageNumber);
         data.append("pageSize", this.rowNumber);
@@ -277,7 +279,9 @@ export default {
           }
           else{
               if(response.status == 200){
+                this.totalElements = response.data.totalElements;
                 this.sessions = response.data.content;
+                this.loading = false;
               }
               else if(response.status == 417){
                   this.$toast.add({
@@ -288,7 +292,18 @@ export default {
                   });                
               }
           }
-        }
+        },
+      currentPageChange(newCurrentPage) {
+        this.loading = true;
+        this.getUserSessions(newCurrentPage);
+    },
+      
+      onPage(event) {
+        this.loading = true;
+        this.pageNumber = event.page + 1;
+        this.rowNumber = event.rows;
+        this.getUserSessions();
+      },
     },
     
     mounted() {
