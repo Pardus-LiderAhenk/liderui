@@ -123,7 +123,7 @@
           </Column>
           <Column field="macAddresses" :header="$t('reports.session_report.mac_address')">
           <template #body="{ data }">
-              {{ data.macAddresses.replace(/'/g, "")  }}
+              {{ data.macAddresses.replace(/'/g, " ")  }}
           </template>
           </Column>
           <Column field="ipAddresses" :header="$t('reports.session_report.ip_address')">
@@ -371,7 +371,7 @@
         data.append("pageNumber", this.pageNumber);
         data.append("pageSize", this.rowNumber);
         data.append("sessionType", this.filter.status);
-        data.append("username", this.filter.searchText);
+        data.append("username", this.filter.username);
         data.append("dn", this.filter.searchClient);
 
         if (this.filter.userCreateDate[0] != null) {
@@ -425,7 +425,7 @@
     },
     formatDate(dateString) {
       const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit',hour12: false};
-      const formattedDate = new Date(dateString).toLocaleString(undefined, options);
+      const formattedDate = new Date(dateString).toLocaleString('tr-TR', options);
       return formattedDate;
     },
   

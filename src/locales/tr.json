@@ -1931,7 +1931,7 @@
             "select":"Seç",
             "computer_name":"Bilgisayar Adı",
             "ip_address":"IP Adresi",
-            "mac_address":"Mac Adresi",
+            "mac_address":"MAC Adresi",
             "dn":"DN",
             "registiration_date":"Kayıt Tarihi",
             "status":"Durum",

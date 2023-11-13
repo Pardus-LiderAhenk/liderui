@@ -3,7 +3,7 @@
     <Dialog
         v-model:visible="showDialog"
         :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-        :style="{ width: '50vw' }" :modal="true"
+        :style="{ width: '70vw' }" :modal="true"
         :header="$t('reports.session_report.agent_session_information')">
         <div>
             <DataTable :value="sessions" responsiveLayout="scroll" :loading="loading"
@@ -21,7 +21,7 @@
                           :options="statuses"
                           optionLabel="name" 
                           optionValue="value"
-                          @change="getSessions"
+                          @change="onChange"
                         />
                       </div>
                   </div>
@@ -65,7 +65,7 @@
                 </Column>
                 <Column field="macAddresses" :header="$t('reports.session_report.mac_address')">
                 <template #body="{ data }">
-                    {{ data.macAddresses.replace(/'/g, "")  }}
+                    {{ data.macAddresses.replace(/'/g, " ")  }}
                 </template>
                 </Column>
                 <Column field="ipAddresses" :header="$t('reports.session_report.ip_address')">
@@ -114,23 +114,6 @@ export default {
             rowNumber: 10,
             totalElements: 0,
             loading: false,
-            filter: {
-                dn: "",
-                hostname: "",
-                ipAddress: "",
-                macAddress: "",
-                registrationDate: "",
-                registrationStartDate: "",
-                registrationEndDate: "",
-                status: "ALL",
-                brand: "",
-                model: "",
-                processor: "",
-                osVersion: "",
-                agentVersion: "",
-                diskType:"ALL",
-                sessionReportType: "",
-            },
             sessionFilter: {
               status:"ALL",
             },
@@ -185,7 +168,7 @@ export default {
 
       formatDate(dateString) {
         const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit',hour12: false};
-        const formattedDate = new Date(dateString).toLocaleString(undefined, options);
+        const formattedDate = new Date(dateString).toLocaleString('tr-TR', options);
       return formattedDate;
       },
 
@@ -194,7 +177,6 @@ export default {
         this.loading = true;
         if (this.selectedAgentId) {
         var data = new FormData();
-
         data.append("pageNumber", this.pageNumber);
         data.append("pageSize", this.rowNumber);
         data.append("agentID", this.selectedAgentId);
@@ -261,10 +243,10 @@ export default {
         }
       },  
       async getSessions(){
-        this.currentPage = this.pageNumber;
+        this.loading = true;
         var data = new FormData();
-        data.append("pageNumber", this.pageNumber);
-        data.append("pageSize", this.rowNumber);
+        data.append("pageNumber", 1);
+        data.append("pageSize", 10);
         data.append("agentID", this.selectedAgentId);
         data.append("sessionType", this.sessionFilter.status);
 
@@ -279,9 +261,9 @@ export default {
           }
           else{
               if(response.status == 200){
-                this.totalElements = response.data.totalElements;
+                // this.totalElements = response.data.totalElements;
                 this.sessions = response.data.content;
-                this.loading = false;
+                
               }
               else if(response.status == 417){
                   this.$toast.add({
@@ -291,15 +273,14 @@ export default {
                       life: 3000
                   });                
               }
+              this.loading = false;
           }
         },
-      currentPageChange(newCurrentPage) {
-        this.loading = true;
-        this.getUserSessions(newCurrentPage);
-    },
-      
+      onChange() {
+        this.getSessions();
+      },
+
       onPage(event) {
-        this.loading = true;
         this.pageNumber = event.page + 1;
         this.rowNumber = event.rows;
         this.getUserSessions();

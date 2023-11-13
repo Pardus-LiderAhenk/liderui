@@ -1933,7 +1933,7 @@
             "select":"Select",
             "computer_name":"Computer Name",
             "ip_address":"IP Address",
-            "mac_address":"Mac Address",
+            "mac_address":"MAC Address",
             "dn":"DN",
             "registiration_date":"Registiration Date",
             "status":"Status",
