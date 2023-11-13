@@ -343,7 +343,7 @@
                     &nbsp;{{ $t('computer.agent_info.session_history') }}
                 </span>
             </template>
-            <DataTable :value="selectedAgentInfo.sessions"
+            <DataTable
               style="margin-top: 2em"  ref="dt" class="p-datatable-sm" 
               v-model:filters="filters"
               responsiveLayout="stack"
@@ -353,10 +353,10 @@
               <template #header>
                 <div class="p-d-flex p-jc-between">
                     <div style="text-align: left">
-                        <Button v-if="selectedAgentInfo.sessions.length > 0"
+                        <Button
                             class="p-button-sm" icon="pi pi-download"
                             :label="$t('computer.agent_info.export')"
-                            @click="exportSessionsHistoryCSV($event)">
+                            >
                         </Button>
                     </div>
                     <div class="p-d-flex p-jc-end">
@@ -371,7 +371,7 @@
                     </div>
                 </div>
               </template>
-              <template #empty>
+              <!-- <template #empty>
                 <div class="p-d-flex p-jc-center">
                   <span>{{$t('computer.agent_info.sessions_table_empty_message')}}</span>
                 </div>
@@ -386,9 +386,9 @@
                     $t('computer.agent_info.logout')" 
                     :severity="slotProps.data.sessionEvent == 'LOGIN'? 'success': 'danger'">
                   </Badge>
-                </template>
-              </Column>
-            </DataTable>
+                </template> -->
+              
+            </DataTable> 
           </TabPanel>
       </TabView>
       <template #footer>

@@ -10,6 +10,7 @@ import AgentReport from '@/views/Reports/AgentReport/AgentReport.vue';
 import TaskReport from '@/views/Reports/TaskReport.vue';
 import LogReport from '@/views/Reports/SystemLogReport.vue';
 import ScheduledTaskReport from '@/views/Reports/ScheduledTaskReport.vue';
+import SessionReport from '@/views/Reports/SessionReport/SessionReport.vue';
 
 //SETTINGS
 import ServerSettings from '@/views/Settings/ServerSettings/ServerSettings.vue';
@@ -97,6 +98,14 @@ const routes = [
                 path: "/reports/scheduled",
                 name: "ScheduledReport",
                 components: { default: ScheduledTaskReport },
+                meta: {
+                    requiresAuth: true,
+                }
+            },
+            {
+                path: "/reports/session",
+                name: "SessionReport",
+                components: { default: SessionReport },
                 meta: {
                     requiresAuth: true,
                 }

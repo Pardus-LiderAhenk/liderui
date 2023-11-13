@@ -280,6 +280,14 @@ export default {
                     }
                 );
             }
+            if (this.isExistPrivilege("ROLE_USER_SESSION_REPORT")) {
+                reportsItems.push(
+                    {
+                        label: this.$t('menu.system_session_report'),
+                        to: '/reports/session'
+                    }
+                );
+            }
             return reportsItems;
         },
         
