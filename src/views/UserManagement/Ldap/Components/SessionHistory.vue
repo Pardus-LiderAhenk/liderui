@@ -173,9 +173,9 @@ export default {
     }
 }
 
-::v-deep(.p-datatable.p-datatable-customers) {
-    .p-paginator {
-        padding: 1rem;
+::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
     }
 }
 </style>
