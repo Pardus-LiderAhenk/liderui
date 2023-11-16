@@ -36,9 +36,10 @@ class UserService {
         }
     }
 
-    async userSession(uid) {
+    async userSession(uid, pageNumber, pageSize) {
+        // /user-session/uid/{uid}/page-number/{pageNumber}/page-size/{pageSize}
         try {
-            const response = await axios.get(userSessionUrl + "/uid/" + uid );
+            const response = await axios.get(userSessionUrl + "/page-number/" + pageNumber + "/page-size/" + pageSize + "/uid/" + uid);
             return { response };
         } catch (error) {
             return { error: error }
