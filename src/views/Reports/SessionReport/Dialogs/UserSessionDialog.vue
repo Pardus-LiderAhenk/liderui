@@ -75,12 +75,15 @@
                 </Column>
             </DataTable>
             <Paginator
+              ref="paging"
+              :first="offset"
               :rows="10"
               :totalRecords="totalElements"
               :rowsPerPageOptions="[10, 25, 50, 100]"
               @page="onPage($event)">
-              <template> {{$t('reports.session_report.total_result')}} : {{ totalElements }} </template>
+              
             </Paginator>
+            <template> {{$t('reports.session_report.total_result')}} : {{ totalElements }} </template>
         </div>                
         <template #footer>
           <Button
@@ -108,7 +111,6 @@ export default {
         return{
             agentSessionList : [],
             sessions: [],
-            currentPage: 1,
             offset: 1,
             pageNumber: 1,
             rowNumber: 10,
@@ -137,7 +139,6 @@ export default {
     },
 
     props: {
-
         selectedAgentId: {
             type: Number,
             description: "Selected agent ID",
@@ -169,43 +170,42 @@ export default {
       formatDate(dateString) {
         const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit',hour12: false};
         const formattedDate = new Date(dateString).toLocaleString('tr-TR', options);
-      return formattedDate;
+        return formattedDate;
       },
 
       async getUserSessions(){
-        this.currentPage = this.pageNumber;
         this.loading = true;
         if (this.selectedAgentId) {
-        var data = new FormData();
-        data.append("pageNumber", this.pageNumber);
-        data.append("pageSize", this.rowNumber);
-        data.append("agentID", this.selectedAgentId);
-        const{response,error} = await agentSessionReportService.agentSessionDetailList(data);
+          var data = new FormData();
+          data.append("pageNumber", this.pageNumber);
+          data.append("pageSize", this.rowNumber);
+          data.append("agentID", this.selectedAgentId);
+          data.append("sessionType", this.sessionFilter.status);
+          const{response,error} = await agentSessionReportService.agentSessionDetailList(data);
 
-        if(error){
-          this.$toast.add({
-            severity:'error', 
-            detail: this.$t('reports.session_report.error_get_not_agent_session_report')+ " \n"+error, 
-            summary:this.$t("computer.task.toast_summary"), 
-            life: 3000
-          });
-        }
-        else{
-          if(response.status == 200){
-            this.totalElements = response.data.totalElements;
-            this.sessions = response.data.content;
-            this.loading = false;
-
+          if(error){
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t('reports.session_report.error_get_not_agent_session_report')+ " \n"+error, 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
           }
           else{
+            if(response.status == 200){
+              this.totalElements = response.data.totalElements;
+              this.sessions = response.data.content;
+            }
+            else{
               this.$toast.add({
-                  severity:'error',
-                  detail:this.$t('reports.session_report.error_417_get_not_agent_session_report'),
-                  summary:this.$t('settings.console_user_settings.error'),
-                  life:3600
-                  });     
+                severity:'error',
+                detail:this.$t('reports.session_report.error_417_get_not_agent_session_report'),
+                summary:this.$t('settings.console_user_settings.error'),
+                life:3600
+                });     
               }
             }
+            this.loading = false;
           }
       },
 
@@ -252,12 +252,12 @@ export default {
 
         const{response,error} = await agentSessionReportService.agentSessionGetSessionInfo(data);
           if(error){
-              this.$toast.add({
-                  severity:'error', 
-                  detail: this.$t('reports.session_report.error_get_not_agent_session_report'), 
-                  summary:this.$t("computer.task.toast_summary"), 
-                  life: 3000
-              });
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t('reports.session_report.error_get_not_agent_session_report'), 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
           }
           else{
               if(response.status == 200){
@@ -266,19 +266,25 @@ export default {
                 
               }
               else if(response.status == 417){
-                  this.$toast.add({
-                      severity:'error', 
-                      detail: this.$t('reports.session_report.error_417_get_not_agent_session_report'), 
-                      summary:this.$t("computer.task.toast_summary"), 
-                      life: 3000
-                  });                
+                this.$toast.add({
+                  severity:'error', 
+                  detail: this.$t('reports.session_report.error_417_get_not_agent_session_report'), 
+                  summary:this.$t("computer.task.toast_summary"), 
+                  life: 3000
+                });                
               }
               this.loading = false;
           }
         },
       onChange() {
-        this.getSessions();
-      },
+        this.offset = 0;
+        this.$refs.paging.$emit('page', {
+          page: 0,
+          rows: 10,
+          first: 0,
+        });
+          this.getUserSessions();
+        },
 
       onPage(event) {
         this.pageNumber = event.page + 1;

@@ -51,6 +51,7 @@
           :showIcon="true"
           :hideOnDateTimeSelect="true"
           :manualInput="false"
+          @clear-click="clearCalendar"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -260,10 +261,11 @@
 
 <script>
 /**
- * Detailed Agent Report.
+ * Detailed user sessions report by agent.
  * @see {@link http://www.liderahenk.org/}
  */
 import UserSessionDialog from '../Dialogs/UserSessionDialog.vue';
+import moment from "moment";
 import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
 
 export default {
@@ -280,7 +282,7 @@ export default {
       offset: 1,
       pageNumber: 1,
       rowNumber: 10,
-      loading: true,
+      loading: false,
       brands: [],
       models: [],
       processors: [],
@@ -413,7 +415,16 @@ export default {
       }
       return propertyValue;
     },
+
+    clearCalendar() {
+      this.filter.registrationStartDate = "";
+      this.filter.registrationEndDate = "";
+      this.filter.registrationDate = "";
+    },
+
     async getAgents() {
+      
+      this.loading = true;
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
@@ -423,8 +434,8 @@ export default {
       data.append("hostname", this.filter.hostname);
       data.append("ipAddress", this.filter.ipAddress);
       data.append("macAddress", this.filter.macAddress);
-      data.append("registrationStartDate", this.filter.registrationStartDate);
-      data.append("registrationEndDate", this.filter.registrationEndDate);
+      // data.append("registrationStartDate", this.filter.registrationStartDate);
+      // data.append("registrationEndDate", this.filter.registrationEndDate);
       data.append("brand", this.filter.brand);
       data.append("model", this.filter.model);
       data.append("processor", this.filter.processor);
@@ -435,7 +446,7 @@ export default {
       if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
-      if (this.filter.registrationDate[0] != null) {
+      if (this.filter.registrationDate && this.filter.registrationDate[0] != null) {
         data.append(
           "registrationStartDate",
           moment(this.filter.registrationDate[0])
@@ -445,7 +456,7 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-      if (this.filter.registrationDate[1] != null) {
+      if (this.filter.registrationDate && this.filter.registrationDate[1] != null) {
         data.append(
           "registrationEndDate",
           moment(this.filter.registrationDate[1])
@@ -466,13 +477,15 @@ export default {
           });
       } else{
         if (response.status == 200) {
-          this.brands = response.data.brands;
-          this.models = response.data.models;
-          this.processors = response.data.processors;
-          this.agentVersions = response.data.agentVersions;
-          this.osVersions = response.data.osVersions;
+          if (this.pageNumber == 1) {
+            this.brands = response.data.brands;
+            this.models = response.data.models;
+            this.processors = response.data.processors;
+            this.agentVersions = response.data.agentVersions;
+            this.osVersions = response.data.osVersions;
+            this.totalElements = response.data.agents.totalElements;
+          }
           this.agents = response.data.agents.content;
-          this.totalElements = response.data.agents.totalElements;
         } else if (response.status == 417) {
           this.$toast.add({
             severity:'error',
@@ -487,8 +500,7 @@ export default {
       
     },
 
-    
-
+  
     clearEvent(event, name){
       if (!event.value) {
         this.filter[name] = "";
@@ -506,7 +518,7 @@ export default {
       this.getAgents();
     },
     filterAgents() {
-      if (this.filter.registrationDate[0] != null) {
+      if (this.filter.registrationDate && this.filter.registrationDate[0] != null) {
         this.filter.registrationStartDate = moment(
           this.filter.registrationDate[0]
         )
@@ -515,7 +527,7 @@ export default {
           .set("second", 0)
           .format("DD/MM/YYYY HH:mm:ss");
       }
-      if (this.filter.registrationDate[1] != null) {
+      if (this.filter.registrationDate && this.filter.registrationDate[1] != null) {
         this.filter.registrationEndDate = moment(
           this.filter.registrationDate[1]
         )

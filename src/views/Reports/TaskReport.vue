@@ -145,6 +145,8 @@
         </Column>
       </DataTable>
       <Paginator
+        ref="paging"
+        :first="offset"
         :rows="10"
         :totalRecords="totalElements"
         :rowsPerPageOptions="[10, 25, 50, 100]"
@@ -325,7 +327,7 @@
         showedTotalElementCount: 10,
         currentPage: 1,
         offset: 1,
-        loading: true,
+        loading: false,
         getFilterData: true,
         taskDetailDialog: false,
         taskExecutionsResultDialog: false,
@@ -362,6 +364,7 @@
       },
 
       async getTasks() {
+        this.loading = true;
         this.currentPage = this.pageNumber;
         var data = new FormData();
         data.append("pageNumber", this.pageNumber);
@@ -469,6 +472,12 @@
             .set("second", 59)
             .format("DD/MM/YYYY HH:mm:ss");
         }
+        this.offset = 0;
+        this.$refs.paging.$emit('page', {
+          page: 0,
+          rows: 10,
+          first: 0,
+        });
         this.getTasks(this.currentPage, this.showedTotalElementCount);
       },
      

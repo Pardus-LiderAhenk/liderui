@@ -16,6 +16,7 @@
           :showIcon="true"
           :hideOnDateTimeSelect="true"
           :manualInput="false"
+          @clear-click="clearCalendar"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -120,6 +121,8 @@
         </Column>
       </DataTable>
       <Paginator
+        ref="paging"
+        :first="offset"
         :rows="10"
         :totalRecords="totalElements"
         :rowsPerPageOptions="[10, 25, 50, 100]"
@@ -211,7 +214,7 @@ export default {
       showedTotalElementCount: 10,
       currentPage: 1,
       offset: 1,
-      loading: true,
+      loading: false,
       getFilterData: true,
       logDetailDialog: false,
       selectedLog: null,
@@ -257,6 +260,7 @@ export default {
       this.logDetailDialog = true;
     },
     async getLogs() {
+      this.loading = true;
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
@@ -271,10 +275,10 @@ export default {
       if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
-      if (this.filter.logCreateStartDate[0] != null) {
+      if (this.filter.logCreateDate && this.filter.logCreateDate[0] != null) {
         data.append(
           "startDate",
-          moment(this.filter.logCreateStartDate[0])
+          moment(this.filter.logCreateDate[0])
             .set("hour", 0)
             .set("minute", 0)
             .set("second", 0)
@@ -282,10 +286,10 @@ export default {
         );
       }
       
-      if (this.filter.logCreateEndDate[1] != null) {
+      if (this.filter.logCreateDate && this.filter.logCreateDate[1] != null) {
         data.append(
           "endDate",
-          moment(this.filter.logCreateEndDate[1])
+          moment(this.filter.logCreateDate[1])
             .set("hour", 0)
             .set("minute", 0)
             .set("second", 0)
@@ -329,6 +333,12 @@ export default {
       this.getLogs();
     },
     filterAgents() {
+      this.offset = 0;
+      this.$refs.paging.$emit('page', {
+        page: 0,
+        rows: 10,
+        first: 0,
+      });
       this.getLogs(this.currentPage, this.showedTotalElementCount);
     },
     async exportToExcel() {
@@ -342,10 +352,10 @@ export default {
         data.append("field", this.filter.field);
       }
      
-      if (this.filter.logCreateStartDate[0] != null) {
+      if (this.filter.logCreateDate && this.filter.logCreateDate[0] != null) {
         data.append(
           "startDate",
-          moment(this.filter.logCreateStartDate[0])
+          moment(this.filter.logCreateDate[0])
             .set("hour", 0)
             .set("minute", 0)
             .set("second", 0)
@@ -353,10 +363,10 @@ export default {
         );
       }
       
-      if (this.filter.logCreateEndDate[1] != null) {
+      if (this.filter.logCreateDate && this.filter.logCreateDate[1] != null) {
         data.append(
           "endDate",
-          moment(this.filter.logCreateEndDate[1])
+          moment(this.filter.logCreateDate[1])
             .set("hour", 0)
             .set("minute", 0)
             .set("second", 0)
@@ -390,6 +400,12 @@ export default {
           console.log("Could not create operation log report.")
         }
       }            
+    },
+
+    clearCalendar() {
+      this.filter.logCreateDate = "";
+      this.filter.logCreateStartDate = "";
+      this.filter.logCreateEndDate = "";
     },
 
     clearFilterFields() {

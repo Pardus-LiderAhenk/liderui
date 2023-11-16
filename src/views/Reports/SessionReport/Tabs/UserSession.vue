@@ -16,6 +16,7 @@
             :showIcon="true"
             :hideOnDateTimeSelect="true"
             :manualInput="false"
+            @clear-click="clearCalendar"
           />
         </div>
         <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -246,7 +247,6 @@
     },
 
     mounted() {
-
           this.getSessionHistory();
     },
 
@@ -294,7 +294,7 @@
           params.append("username", this.filter.username);
           params.append("dn", this.filter.searchClient);
 
-          if (this.filter.userCreateDate[0] != null) {
+          if (this.filter.userCreateDate && this.filter.userCreateDate[0] != null) {
             params.append(
               "startDate",
               moment(this.filter.userCreateDate[0])
@@ -304,7 +304,7 @@
                 .format("DD/MM/YYYY HH:mm:ss")
             );
           }
-         if (this.filter.userCreateDate[1] != null) {
+         if (this.filter.userCreateDate && this.filter.userCreateDate[1] != null) {
           params.append(
             "endDate",
             moment(this.filter.userCreateDate[1])
@@ -317,38 +317,41 @@
 
           const{response,error} = await sessionReportService.userSessionList(params);
           if(error){
+            this.$toast.add({
+              severity:'error', 
+              detail: this.$t('reports.session_report.error_session_list')+ " \n"+error, 
+              summary:this.$t("computer.task.toast_summary"), 
+              life: 3000
+            });
+          }
+          else{
+            if(response.status == 200){
+              if (response.data) {
+                this.sessions = response.data.content;
+                this.totalElements = response.data.totalElements;
+              }
+            }
+            else if(response.status == 417){
               this.$toast.add({
                   severity:'error', 
-                  detail: this.$t('reports.session_report.error_session_list')+ " \n"+error, 
+                  detail: this.$t('reports.session_report.error_417_session_list'), 
                   summary:this.$t("computer.task.toast_summary"), 
                   life: 3000
               });
-          }
-          else{
-              if(response.status == 200){
-                  if (response.data) {
-                      this.sessions = response.data.content;
-                      this.totalElements = response.data.totalElements;
-                      this.loading = false;
-                  }
-              }
-              else if(response.status == 417){
-                  this.$toast.add({
-                      severity:'error', 
-                      detail: this.$t('reports.session_report.error_417_session_list'), 
-                      summary:this.$t("computer.task.toast_summary"), 
-                      life: 3000
-                  });
-              }
-          }              
+            }
+          }         
+          this.loading = false;     
       },
 
       filterUsers(){
         this.getSessionHistory(this.currentPage,this.showedTotalElementCount);
       },
 
-      selectsearchText() {
+      clearCalendar() {
+        this.filter.userCreateDate = "";
+      },
 
+      selectsearchText() {
         if(this.selectedNode) {
           this.filter.username = this.selectedNode.uid;
           this.searchTextDialog = false;
@@ -362,7 +365,6 @@
           this.filter.searchClient = this.selectedNode.uid;
           this.searchClientDialog = false;
         }
-
       },
 
       async exportToExcel() {
@@ -374,7 +376,7 @@
         data.append("username", this.filter.username);
         data.append("dn", this.filter.searchClient);
 
-        if (this.filter.userCreateDate[0] != null) {
+        if (this.filter.userCreateDate && this.filter.userCreateDate[0] != null) {
             data.append(
               "startDate",
               moment(this.filter.userCreateDate[0])
@@ -384,7 +386,7 @@
                 .format("DD/MM/YYYY HH:mm:ss")
             );
           }
-         if (this.filter.userCreateDate[1] != null) {
+         if (this.filter.userCreateDate && this.filter.userCreateDate[1] != null) {
           data.append(
             "endDate",
             moment(this.filter.userCreateDate[1])

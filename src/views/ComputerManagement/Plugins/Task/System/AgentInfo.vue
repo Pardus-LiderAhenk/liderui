@@ -336,60 +336,6 @@
             <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
           </div>
           </TabPanel>
-          <TabPanel v-if="selectedLiderNode.type == 'AHENK'">
-            <template #header>
-                <i class="pi pi-users"></i>
-                <span>
-                    &nbsp;{{ $t('computer.agent_info.session_history') }}
-                </span>
-            </template>
-            <DataTable
-              style="margin-top: 2em"  ref="dt" class="p-datatable-sm" 
-              v-model:filters="filters"
-              responsiveLayout="stack"
-              :paginator="true" :rows="10"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-              :rowsPerPageOptions="[10,25,50]">
-              <template #header>
-                <div class="p-d-flex p-jc-between">
-                    <div style="text-align: left">
-                        <Button
-                            class="p-button-sm" icon="pi pi-download"
-                            :label="$t('computer.agent_info.export')"
-                            >
-                        </Button>
-                    </div>
-                    <div class="p-d-flex p-jc-end">
-                        <span class="p-input-icon-left">
-                          <i class="pi pi-search" />
-                          <InputText 
-                            v-model="filters['global'].value" 
-                            class="p-inputtext-sm" 
-                            :placeholder="$t('computer.agent_info.search')" 
-                          />
-                        </span>
-                    </div>
-                </div>
-              </template>
-              <!-- <template #empty>
-                <div class="p-d-flex p-jc-center">
-                  <span>{{$t('computer.agent_info.sessions_table_empty_message')}}</span>
-                </div>
-              </template>
-              <Column field="username" :header="$t('computer.agent_info.username')"></Column>
-              <Column field="createDate" :header="$t('computer.agent_info.created_date')"></Column>
-              <Column field="sessionEvent" :header="$t('computer.agent_info.status')">
-                <template #body="slotProps">
-                  <Badge
-                    :value="slotProps.data.sessionEvent == 'LOGIN'? 
-                    $t('computer.agent_info.login'): 
-                    $t('computer.agent_info.logout')" 
-                    :severity="slotProps.data.sessionEvent == 'LOGIN'? 'success': 'danger'">
-                  </Badge>
-                </template> -->
-              
-            </DataTable> 
-          </TabPanel>
       </TabView>
       <template #footer>
           <Button 
@@ -850,10 +796,6 @@ export default {
       }
       this.selectedNodeData = nodeData;
       this.selectedNodeSummaryData = nodeSummaryData;
-    },
-
-    exportSessionsHistoryCSV() {
-        this.$refs.dt.exportCSV();
     },
 
     moveTreeNodeClick(node) {

@@ -17,8 +17,7 @@
                         &nbsp;{{$t('reports.session_report.user_sessions')}}
                     </span>
                 </template>
-                <user-session
-                ></user-session>
+                <user-session></user-session>
             </TabPanel>
         </TabView>
     </div>

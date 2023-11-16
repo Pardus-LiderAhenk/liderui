@@ -21,6 +21,7 @@
           :showIcon="true"
           :hideOnDateTimeSelect="true"
           :manualInput="false"
+          @clear-click="clearCalendar"
         />
       </div>
       <div class="p-field p-col-12 p-lg-4 p-md-6 p-sm-12">
@@ -147,6 +148,8 @@
         </Column>
       </DataTable>
       <Paginator
+        ref="paging"
+        :first="offset"
         :rows="10"
         :totalRecords="totalElements"
         :rowsPerPageOptions="[10, 25, 50, 100]"
@@ -264,7 +267,7 @@ export default {
       showedTotalElementCount: 10,
       currentPage: 1,
       offset: 1,
-      loading: true,
+      loading: false,
       getFilterData: true,
       taskDetailDialog: false,
       scheduledTaskDetailDialog: false,
@@ -297,19 +300,20 @@ export default {
     },
 
     async getTasks() {
+      this.loading = true;
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
       data.append("pageSize", this.rowNumber);
-      data.append("startDate", this.filter.taskSendStartDate);
-      data.append("endDate", this.filter.taskSendEndDate);
+      // data.append("startDate", this.filter.taskSendStartDate);
+      // data.append("endDate", this.filter.taskSendEndDate);
       if(this.filter.task != null) {
         data.append("taskCommand", this.filter.task);
       }
       if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
-      if (this.filter.taskSendDate[0] != null) {
+      if (this.filter.taskSendDate && this.filter.taskSendDate[0] != null) {
         data.append(
           "startDate",
           moment(this.filter.taskSendDate[0])
@@ -320,7 +324,7 @@ export default {
         );
       }
       
-      if (this.filter.taskSendDate[1] != null) {
+      if (this.filter.taskSendDate && this.filter.taskSendDate[1] != null) {
         data.append(
           "endDate",
           moment(this.filter.taskSendDate[1])
@@ -385,7 +389,7 @@ export default {
       this.getTasks();
     },
     filterAgents() {
-      if (this.filter.taskSendDate[0] != null) {
+      if (this.filter.taskSendDate && this.filter.taskSendDate[0] != null) {
         this.filter.taskSendStartDate = moment(
           this.filter.taskSendDate[0]
         )
@@ -394,7 +398,7 @@ export default {
           .set("second", 0)
           .format("DD/MM/YYYY HH:mm:ss");
       }
-      if (this.filter.taskSendDate[1] != null) {
+      if (this.filter.taskSendDate && this.filter.taskSendDate[1] != null) {
         this.filter.taskSendEndDate = moment(
           this.filter.taskSendDate[1]
         )
@@ -403,6 +407,12 @@ export default {
           .set("second", 59)
           .format("DD/MM/YYYY HH:mm:ss");
       }
+      this.offset = 0;
+      this.$refs.paging.$emit('page', {
+        page: 0,
+        rows: 10,
+        first: 0,
+      });
       this.getTasks(this.currentPage, this.showedTotalElementCount);
     },
     async exportToExcel() {
@@ -461,6 +471,11 @@ export default {
           });
           }
       }        
+    },
+    clearCalendar() {
+      this.filter.taskSendDate = "";
+      this.filter.taskSendStartDate = "";
+      this.filter.taskSendEndDate = "";
     },
 
     clearFilterFields() {
