@@ -1,7 +1,7 @@
 <template>
     <div>
          <h3>{{$t('profile.login_logout_history.login_logout_history')}}</h3>
-        <DataTable :value="records" responsiveLayout="scroll" class="p-datatable-sm">
+        <DataTable :loading="loading" :value="records" responsiveLayout="scroll" class="p-datatable-sm">
             <template #header>
                 <div class="p-d-flex p-ac-end p-grid" style="justify-content:flex-end;">
                     <div class="p-flex p-ac-end p-col-12" style="justify-conten:flex-end; text-align:right;">
@@ -80,12 +80,12 @@ export default {
             this.getLogs();
         },
         onPage(event) {
-            this.loading = true;
             this.pageNumber = event.page + 1;
             this.rowNumber = event.rows;
             this.getLogs();
         },
         async getLogs() {
+            this.loading = true;
             var data = new FormData();
             data.append("pageNumber", this.pageNumber);
             data.append("pageSize", this.rowNumber);
@@ -114,6 +114,7 @@ export default {
                         life: 3000
                     });                
                 }
+                this.loading = false;
             }
         },
     }
