@@ -71,6 +71,20 @@
                     />
                 </div>
             </Fieldset>
+            <Fieldset class="p-field" :legend="$t('Aktif/Pasif makineleri göster')" >
+                <div class="p-field-checkbox p-col-12 p-md-12">
+                    <InputSwitch v-model="machineEventStatus" />
+                    <label>{{$t('Makinelerin Aktif/Pasif olma durumunu etkinleştir')}}</label>
+                </div>
+                <div class="p-field p-col-12" v-if="machineEventStatus == true">
+                    <label for="machineEventDay">{{$t('İstemcilenizi kaç gün sonra pasif duruma çekmek istediğinizi giriniz')}}</label>
+                    <InputText
+                        id="machineEventDay"
+                        type="text"
+                        v-model="machineEventDay"
+                    />
+                </div>
+            </Fieldset>
             <div class="p-field p-col-12 p-text-right">
                 <div class="p-d-flex p-jc-end">
                     <div>
@@ -113,7 +127,9 @@ export default {
             ahenkRepoAddress:'',
             ahenkRepoKeyAddress:'',
             showDialog: false,
-            selectedRegistrationType: 'DEFAULT'
+            selectedRegistrationType: 'DEFAULT',
+            machineEventStatus: false,
+            machineEventDay:''
         }
     },
     watch: { 
@@ -126,7 +142,9 @@ export default {
             this.ahenkRepoKeyAddress = newVal.ahenkRepoKeyAddress;
             this.emailUsername = newVal.emailUsername;
             this.emailPassword = newVal.emailPassword;
-            this.selectedRegistrationType = newVal.selectedRegistrationType
+            this.selectedRegistrationType = newVal.selectedRegistrationType;
+            this.machineEventStatus = newVal.machineEventStatus;
+            this.machineEventDay = newVal.machineEventDay;
           }
         }
     },
@@ -140,6 +158,8 @@ export default {
             data.append("ahenkRepoAddress",this.ahenkRepoAddress);
             data.append("ahenkRepoKeyAddress",this.ahenkRepoKeyAddress);
             data.append("selectedRegistrationType", this.selectedRegistrationType);
+            data.append("machineEventStatus", this.machineEventStatus);
+            data.append("machineEventDay", this.machineEventDay);
 
             const { response,error } = await serverSettingService.updateOtherSettings(data);
             if(error){
