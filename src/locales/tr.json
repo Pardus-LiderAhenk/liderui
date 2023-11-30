@@ -1790,7 +1790,10 @@
             "logged_three_mounth":"Son 3 Ay Oturum Açan",
             "error_417_adding_computer_to_group":"İstemciler gruba eklenirken beklenmeyen bir hata oluştu. Hata kodu : 417",
             "ssd":"SSD",
-            "hdd":"HDD"
+            "hdd":"HDD",
+            "client_status":"İstemci Durumu",
+            "active":"Aktif",
+            "passive":"Pasif"
 
 
         },
@@ -1988,7 +1991,9 @@
             "error_get_not_agent_session_report":",İstemci oturum bilgisi getirilemedi",
             "error_417_get_not_agent_session_report":",İstemci oturum bilgisi getirilemedi. Hata Kodu :417",
             "error_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu.",
-            "error_417_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu. Hata Kodu : 400"
+            "error_417_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu. Hata Kodu : 400",
+            "active":"Aktif",
+            "passive":"Pasif"
 
 
         }

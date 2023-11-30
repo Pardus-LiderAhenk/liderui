@@ -357,15 +357,15 @@ export default {
       ],
       agentStatuses: [
         {
-          name: this.$t('HEPSİ'),
+          name: this.$t('reports.session_report.all'),
           value:"",
         },
         {
-          name: this.$t('AKTİF'),
+          name: this.$t('reports.session_report.active'),
           value: 1,
         },
         {
-          name: this.$t('Pasif'),
+          name: this.$t('reports.session_report.passive'),
           value: 0,
         },
       ],

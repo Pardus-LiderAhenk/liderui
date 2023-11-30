@@ -177,12 +177,14 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="">{{$t('İstemci Durumu')}}</label>
+        <label for="">{{$t('reports.detailed_agent_report.client_status')}}</label>
         <Dropdown
           v-model="filter.agentStatus"
           :options="agentStatuses"
           optionLabel="name"
           optionValue="value"
+          :placeholder="$t('reports.detailed_agent_report.all')"
+
         />
       </div>
       <div class="p-field p-col-12 p-text-right">
@@ -400,15 +402,15 @@ export default {
       ],
       agentStatuses: [
         {
-          name: this.$t('HEPSİ'),
+          name: this.$t('reports.detailed_agent_report.all'),
           value:"",
         },
         {
-          name: this.$t('AKTİF'),
+          name: this.$t('reports.detailed_agent_report.active'),
           value: 1,
         },
         {
-          name: this.$t('Pasif'),
+          name: this.$t('reports.detailed_agent_report.passive'),
           value: 0,
         },
       ],
