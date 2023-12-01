@@ -991,7 +991,10 @@
                 "default": "Default(Clients are saved under the Agents folder as default)",
                 "ip_address": "IP Address(It is registered according to the entered IP address rule)",
                 "hostname": "Hostname(It is registered according to the entered hostname rule)",
-                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu"
+                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu",
+                "show_machine_status":"Show status of Active/Passive machines",
+                "enabled_machine_status":"Enable Active/Inactive feature of machines",
+                "machine_status_days":"Enter the number of days after which you want to deactivate your clients"
 
             }
         },

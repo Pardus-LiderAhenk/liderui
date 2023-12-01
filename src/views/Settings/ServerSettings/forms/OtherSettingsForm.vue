@@ -71,13 +71,13 @@
                     />
                 </div>
             </Fieldset>
-            <Fieldset class="p-field" :legend="$t('Aktif/Pasif makineleri göster')" >
+            <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.show_machine_status')" >
                 <div class="p-field-checkbox p-col-12 p-md-12">
                     <InputSwitch v-model="machineEventStatus" />
-                    <label>{{$t('Makinelerin Aktif/Pasif olma durumunu etkinleştir')}}</label>
+                    <label>{{$t('settings.server_settings.other_settings.enabled_machine_status')}}</label>
                 </div>
                 <div class="p-field p-col-12" v-if="machineEventStatus == true">
-                    <label for="machineEventDay">{{$t('İstemcilenizi kaç gün sonra pasif duruma çekmek istediğinizi giriniz')}}</label>
+                    <label for="machineEventDay">{{$t('settings.server_settings.other_settings.machine_status_days')}}</label>
                     <InputText
                         id="machineEventDay"
                         type="text"

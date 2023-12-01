@@ -984,7 +984,11 @@
                 "default": "Varsayılan(İstemciler, varsayılan olarak Agents klasörü altına kaydedilir)",
                 "ip_address": "IP Adresi(Girilen IP adresi kuralına göre kaydedilir)",
                 "hostname": "Bilgisayar Adı(Girilen bilgisayar adı kuralına göre kaydedilir)",
-                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu"
+                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu",
+                "show_machine_status":"Aktif/Pasif makinelerin durumunu göster",
+                "enabled_machine_status":"Makinelerin Aktif/Pasif olma özelliğini etkinleştir",
+                "machine_status_days":"İstemcilerinizin kaç gün sonra pasif duruma çekmek istediğinizi giriniz"
+
             }
         },
         "registiration_template":{
