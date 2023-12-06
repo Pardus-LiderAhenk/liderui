@@ -162,6 +162,7 @@
             </template>
         </Dialog>
         <Dialog 
+            :style="{ width: '20vw' }"
             :header="$t('computer.task.toast_summary')" 
             v-model:visible="deleteScriptConfirmDialog"  
             :modal="true" 
