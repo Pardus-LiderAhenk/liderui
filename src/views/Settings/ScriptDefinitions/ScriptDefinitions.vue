@@ -62,18 +62,18 @@
                                     <Button class="p-mr-2 p-button-sm p-button-rounded p-button-warning" 
                                         icon="pi pi-pencil"  
                                         :label="$t('settings.script_definition.edit')" 
-                                        @click.prevent="editScript(slotProps.data)">
+                                        @click.prevent="editScript(slotProps.data), false">
                                     </Button>
                                     <Button class="p-button-danger p-mr-2 p-button-sm p-button-rounded" 
                                         icon="pi pi-trash" 
                                         :label="$t('settings.script_definition.delete')"
                                         @click.prevent="deleteScriptConfirmDialog = true; selectedScript = slotProps.data;">
                                     </Button>
-                                    <Button v-if="executeScriptButton"
+                                    <Button v-if="isExecuteScript"
                                         class="p-button-sm p-button-rounded" 
                                         icon="pi pi-caret-right"
                                         :label="$t('computer.plugins.button.run')"
-                                        @click.prevent="$emit('executeScript', slotProps.data)"
+                                        @click.prevent="editScript(slotProps.data, true)"
                                     >
                                     </Button>
                                 </div>
@@ -123,13 +123,17 @@
                      @change="changeScriptType"
                     />
                 </div>
+                <div class="p-field p-col-12" v-if="isExecuteScriptDialog">
+                    <label for="scriptParams">{{$t('computer.plugins.execute_script.define_parameter')}}</label>
+                    <InputText type="text" v-model="scriptParams"/>
+                    </div>
                 <div class="p-field p-col-12">
                     <label>{{$t('settings.script_definition.script_content')}}</label>
                     <Textarea 
-                    :autoResize="false" 
-                    style="width:100%; height: 500px;"  
-                    v-model="contents" 
-                    :class="validationErrors.contents? 'p-invalid':''"
+                        :autoResize="false" 
+                        style="width:100%; height: 500px;"  
+                        v-model="contents" 
+                        :class="validationErrors.contents? 'p-invalid':''"
                     />
                     <small v-if="validationErrors.contents"
                       class="p-error">{{ $t('settings.script_definition.script_content_warn') }}
@@ -138,16 +142,22 @@
             </div>
             <template #footer>
                 <Button 
-                 :label="$t('settings.script_definition.cancel')" 
-                 icon="pi pi-times"
-                 @click="showTemplateDialog = false; selectedScript = null;" 
-                 class="p-button-text p-button-sm"
+                    :label="$t('settings.script_definition.cancel')" 
+                    icon="pi pi-times"
+                    @click="showTemplateDialog = false; selectedScript = null;" 
+                    class="p-button-text p-button-sm"
                 />
-                <Button 
-                :label="selectedScript ? $t('settings.script_definition.update'): $t('settings.script_definition.save')" 
-                :icon="selectedScript ?'pi pi-refresh': 'pi pi-save'"  
-                class="p-button-sm"
-                @click="scriptOperation(selectedScript ? 'update':'add')"
+                <Button v-if="isExecuteScriptDialog"
+                    icon="pi pi-caret-right"
+                    :label="$t('computer.plugins.button.run')"
+                    @click="executeScript" 
+                    class="p-button-sm"
+                />
+                <Button v-else
+                    :label="selectedScript ? $t('settings.script_definition.update'): $t('settings.script_definition.save')" 
+                    :icon="selectedScript ?'pi pi-refresh': 'pi pi-save'"  
+                    class="p-button-sm"
+                    @click="scriptOperation(selectedScript ? 'update':'add')"
                 />
             </template>
         </Dialog>
@@ -197,7 +207,7 @@ export default {
             type: Boolean,
             default: true,
         },
-        executeScriptButton: {
+        isExecuteScript: {
             type: Boolean,
             default: false,
             description: "Display Execute script button"
@@ -239,6 +249,9 @@ export default {
             rowNumber: 10,
             totalElements:0,
             first : 0,
+            scriptParams: "",
+            isExecuteScriptDialog: false,
+
         }
     },
 
@@ -247,6 +260,11 @@ export default {
     },
 
     methods: {
+
+        executeScript() {
+            this.selectedScript.scriptParams = this.scriptParams;
+            this.$emit('executeScript', this.selectedScript)
+        },
 
         async getScripts(){
             var data = new FormData();
@@ -286,7 +304,8 @@ export default {
             this.getScripts();
         },
 
-        editScript(data){
+        setScript(data) {
+            this.scriptParams = "";
             var type = null;
             if (data.scriptType === "BASH") {
             type = 0;
@@ -304,7 +323,13 @@ export default {
             this.contents = data.contents;
         },
 
+        editScript(data, isExecute){
+            this.isExecuteScriptDialog = isExecute;
+            this.setScript(data);
+        },
+
         addNewScript(){
+            this.isExecuteScriptDialog = false;
             this.scriptType = 0,
             this.label = "",
             this.contents = "#!/bin/bash\nset -e"
