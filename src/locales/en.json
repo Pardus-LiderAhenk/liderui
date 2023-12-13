@@ -991,7 +991,10 @@
                 "default": "Default(Clients are saved under the Agents folder as default)",
                 "ip_address": "IP Address(It is registered according to the entered IP address rule)",
                 "hostname": "Hostname(It is registered according to the entered hostname rule)",
-                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu"
+                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu",
+                "show_machine_status":"Show status of Active/Passive machines",
+                "enabled_machine_status":"Enable Active/Inactive feature of machines",
+                "machine_status_days":"Enter the number of days after which you want to deactivate your clients"
 
             }
         },
@@ -1792,7 +1795,12 @@
             "logged_one_mounth":"Logged In Last 1 Month",
             "logged_two_mounth":"Logged In Last 2 Months",
             "logged_three_mounth":"Logged In Last 3 Months",
-            "error_417_adding_computer_to_group":"An unexpected error occurred while adding clients to the group. Error code : 417"
+            "error_417_adding_computer_to_group":"An unexpected error occurred while adding clients to the group. Error code : 417",
+            "ssd":"SSD",
+            "hdd":"HDD",
+            "client_status":"Client Status",
+            "active":"Active",
+            "passive":"Passive"
 
         },
         "task_report":{
@@ -1988,7 +1996,9 @@
             "error_session_list":"Could not retrieve user session list.",
             "error_417_session_list":"Could not retrieve user session list. Error Code: 417",
             "error_user_session_report":"An error occurred while generating the User Session report.",
-            "error_417_user_session_report":"An error occurred while generating the User Session report. Error Code: 400"
+            "error_417_user_session_report":"An error occurred while generating the User Session report. Error Code: 400",
+            "active":"Active",
+            "passive":"Passive"
 
         }
     },

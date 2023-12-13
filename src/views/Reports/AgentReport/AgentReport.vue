@@ -151,7 +151,7 @@
           @change="clearEvent($event, 'agentVersion')"
         />
       </div>
-      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+      <!-- <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="selectSessionVersion">{{$t('reports.detailed_agent_report.session')}}</label>
         <Dropdown
           id="selectSessionVersion"
@@ -163,7 +163,7 @@
           showClear="true"
           @change="clearEvent($event, 'sessionReportType')"
         />
-      </div>
+      </div> -->
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="">{{$t('reports.detailed_agent_report.disk_type')}}</label>
         <Dropdown
@@ -174,6 +174,17 @@
           :placeholder="$t('reports.detailed_agent_report.all')"
           showClear="true"
           @change="clearEvent($event, 'diskType')"
+        />
+      </div>
+      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+        <label for="">{{$t('reports.detailed_agent_report.client_status')}}</label>
+        <Dropdown
+          v-model="filter.agentStatus"
+          :options="agentStatuses"
+          optionLabel="name"
+          optionValue="value"
+          :placeholder="$t('reports.detailed_agent_report.all')"
+
         />
       </div>
       <div class="p-field p-col-12 p-text-right">
@@ -389,6 +400,20 @@ export default {
           value: "OFFLINE",
         },
       ],
+      agentStatuses: [
+        {
+          name: this.$t('reports.detailed_agent_report.all'),
+          value:"",
+        },
+        {
+          name: this.$t('reports.detailed_agent_report.active'),
+          value: 1,
+        },
+        {
+          name: this.$t('reports.detailed_agent_report.passive'),
+          value: 0,
+        },
+      ],
       filter: {
         dn: "",
         hostname: "",
@@ -405,6 +430,7 @@ export default {
         agentVersion: "",
         diskType:"ALL",
         sessionReportType: "",
+        agentStatus: "",
       },
       items: [
         {
@@ -484,6 +510,7 @@ export default {
       data.append("diskType",this.filter.diskType);
       data.append("agentVersion", this.filter.agentVersion);
       data.append("sessionReportType", this.filter.sessionReportType);
+      data.append("agentStatus",this.filter.agentStatus);
       if (this.pageNumber == 1) {
         data.append("getFilterData", true);
       }
@@ -608,6 +635,7 @@ export default {
       data.append("diskType",this.filter.diskType);
       data.append("agentVersion", this.filter.agentVersion);
       data.append("sessionReportType", this.filter.sessionReportType);
+      data.append("agentStatus",this.filter.agentStatus);
       if (this.filter.registrationDate && this.filter.registrationDate[0] != null) {
         data.append(
           "registrationStartDate",
@@ -673,6 +701,7 @@ export default {
         agentVersion: "",
         diskType:"ALL",
         sessionReportType: "",
+        agentStatus:""
       };
     },
   },

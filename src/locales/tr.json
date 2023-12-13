@@ -984,7 +984,11 @@
                 "default": "Varsayılan(İstemciler, varsayılan olarak Agents klasörü altına kaydedilir)",
                 "ip_address": "IP Adresi(Girilen IP adresi kuralına göre kaydedilir)",
                 "hostname": "Bilgisayar Adı(Girilen bilgisayar adı kuralına göre kaydedilir)",
-                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu"
+                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu",
+                "show_machine_status":"Aktif/Pasif makinelerin durumunu göster",
+                "enabled_machine_status":"Makinelerin Aktif/Pasif olma özelliğini etkinleştir",
+                "machine_status_days":"İstemcilerinizin kaç gün sonra pasif duruma çekmek istediğinizi giriniz"
+
             }
         },
         "registiration_template":{
@@ -1790,7 +1794,10 @@
             "logged_three_mounth":"Son 3 Ay Oturum Açan",
             "error_417_adding_computer_to_group":"İstemciler gruba eklenirken beklenmeyen bir hata oluştu. Hata kodu : 417",
             "ssd":"SSD",
-            "hdd":"HDD"
+            "hdd":"HDD",
+            "client_status":"İstemci Durumu",
+            "active":"Aktif",
+            "passive":"Pasif"
 
 
         },
@@ -1988,7 +1995,9 @@
             "error_get_not_agent_session_report":",İstemci oturum bilgisi getirilemedi",
             "error_417_get_not_agent_session_report":",İstemci oturum bilgisi getirilemedi. Hata Kodu :417",
             "error_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu.",
-            "error_417_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu. Hata Kodu : 400"
+            "error_417_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu. Hata Kodu : 400",
+            "active":"Aktif",
+            "passive":"Pasif"
 
 
         }
