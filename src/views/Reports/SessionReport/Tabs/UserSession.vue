@@ -292,7 +292,7 @@
           params.append("pageSize", this.rowNumber);
           params.append("sessionType", this.filter.status);
           params.append("username", this.filter.username);
-          params.append("dn", this.filter.searchClient);
+          params.append("hostname", this.filter.searchClient);
 
           if (this.filter.userCreateDate && this.filter.userCreateDate[0] != null) {
             params.append(
@@ -374,7 +374,7 @@
         data.append("pageSize", this.rowNumber);
         data.append("sessionType", this.filter.status);
         data.append("username", this.filter.username);
-        data.append("dn", this.filter.searchClient);
+        data.append("hostname", this.filter.searchClient);
 
         if (this.filter.userCreateDate && this.filter.userCreateDate[0] != null) {
             data.append(
