@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const agentSessionUrl="/api/lider/agent-session/list";
 const agentSessionDetailUrl="/api/lider/agent-session/detail";
-const agentSessionGetSessionslUrl="/api/lider/agent-session/sessions";
 const agentSessionInfoExportUrl="/api/lider/agent-session/export";
 
 
@@ -24,15 +23,6 @@ class AgentSessionReportService {
     async agentSessionDetailList(params) {
         try {
             const response = await axios.post(agentSessionDetailUrl ,params);
-            return { response };
-        } catch (error) {
-            return { error: error }
-        }
-    }
-
-    async agentSessionGetSessionInfo(params) {
-        try {
-            const response = await axios.post(agentSessionGetSessionslUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

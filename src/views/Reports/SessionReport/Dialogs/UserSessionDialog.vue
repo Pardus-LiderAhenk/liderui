@@ -242,40 +242,6 @@ export default {
             });      
         }
       },  
-      async getSessions(){
-        this.loading = true;
-        var data = new FormData();
-        data.append("pageNumber", 1);
-        data.append("pageSize", 10);
-        data.append("agentID", this.selectedAgentId);
-        data.append("sessionType", this.sessionFilter.status);
-
-        const{response,error} = await agentSessionReportService.agentSessionGetSessionInfo(data);
-          if(error){
-            this.$toast.add({
-              severity:'error', 
-              detail: this.$t('reports.session_report.error_get_not_agent_session_report'), 
-              summary:this.$t("computer.task.toast_summary"), 
-              life: 3000
-            });
-          }
-          else{
-              if(response.status == 200){
-                // this.totalElements = response.data.totalElements;
-                this.sessions = response.data.content;
-                
-              }
-              else if(response.status == 417){
-                this.$toast.add({
-                  severity:'error', 
-                  detail: this.$t('reports.session_report.error_417_get_not_agent_session_report'), 
-                  summary:this.$t("computer.task.toast_summary"), 
-                  life: 3000
-                });                
-              }
-              this.loading = false;
-          }
-        },
       onChange() {
         this.offset = 0;
         this.$refs.paging.$emit('page', {
