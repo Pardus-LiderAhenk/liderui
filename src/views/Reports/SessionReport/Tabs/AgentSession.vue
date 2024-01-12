@@ -581,6 +581,7 @@ export default {
         agentVersion: "",
         diskType:"ALL",
         sessionReportType: "",
+        agentStatus: "",
       };
     },
   },
