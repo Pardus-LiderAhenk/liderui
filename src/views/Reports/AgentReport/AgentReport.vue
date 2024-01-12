@@ -626,8 +626,8 @@ export default {
       data.append("hostname", this.filter.hostname);
       data.append("ipAddress", this.filter.ipAddress);
       data.append("macAddress", this.filter.macAddress);
-      data.append("registrationStartDate", this.filter.registrationStartDate);
-      data.append("registrationEndDate", this.filter.registrationEndDate);
+      ///data.append("registrationStartDate", this.filter.registrationStartDate);
+      //data.append("registrationEndDate", this.filter.registrationEndDate);
       data.append("brand", this.filter.brand);
       data.append("model", this.filter.model);
       data.append("processor", this.filter.processor);
@@ -701,7 +701,8 @@ export default {
         agentVersion: "",
         diskType:"ALL",
         sessionReportType: "",
-        agentStatus:""
+        agentStatus:"",
+        
       };
     },
   },
