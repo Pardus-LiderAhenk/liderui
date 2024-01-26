@@ -124,8 +124,8 @@ export default {
             data.append("hostname", this.filter.hostname);
             data.append("ipAddress", this.filter.ipAddress);
             data.append("macAddress", this.filter.macAddress);
-            data.append("registrationStartDate", this.filter.registrationStartDate);
-            data.append("registrationEndDate", this.filter.registrationEndDate);
+            // data.append("registrationStartDate", this.filter.registrationStartDate);
+            // data.append("registrationEndDate", this.filter.registrationEndDate);
             data.append("brand", this.filter.brand);
             data.append("model", this.filter.model);
             data.append("processor", this.filter.processor);
@@ -133,7 +133,7 @@ export default {
             data.append("diskType",this.filter.diskType);
             data.append("agentVersion", this.filter.agentVersion);
             data.append("getFilterData", false);
-            
+            data.append("agentStatus",this.filter.agentStatus);
             if (this.filter.registrationDate[0] != null) {
                 data.append(
                 "registrationStartDate",

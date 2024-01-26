@@ -1797,7 +1797,8 @@
             "hdd":"HDD",
             "client_status":"İstemci Durumu",
             "active":"Aktif",
-            "passive":"Pasif"
+            "passive":"Pasif",
+            "an_error_occurred_while_creating_the_computer_group": "Grup oluşturulurken hata oluştu"
 
 
         },
