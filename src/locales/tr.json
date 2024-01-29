@@ -1819,10 +1819,12 @@
             "error_417_adding_computer_to_group":"İstemciler gruba eklenirken beklenmeyen bir hata oluştu. Hata kodu : 417",
             "ssd":"SSD",
             "hdd":"HDD",
-            "client_status":"İstemci Durumu",
+            "client_status":"Aktif/Pasif",
             "active":"Aktif",
             "passive":"Pasif",
-            "an_error_occurred_while_creating_the_computer_group": "Grup oluşturulurken hata oluştu"
+            "an_error_occurred_while_creating_the_computer_group": "Grup oluşturulurken hata oluştu",
+            "dn_information":"DN",
+            "active_or_passive":"Aktif/Pasif"            
 
 
         },
@@ -2022,7 +2024,8 @@
             "error_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu.",
             "error_417_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu. Hata Kodu : 400",
             "active":"Aktif",
-            "passive":"Pasif"
+            "passive":"Pasif",
+            "user_list":"Kullanıcı Listesi"
 
 
         }

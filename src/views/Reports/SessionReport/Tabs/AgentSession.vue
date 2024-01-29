@@ -247,7 +247,7 @@
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
                   icon="pi pi-users"
-                  v-tooltip.left="$t('Kullanıcı Listesi')"
+                  v-tooltip.left="$t('reports.session_report.user_list')"
                   @click.prevent="showUserSessionDialog(data)"
                 />
               </div>

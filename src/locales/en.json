@@ -1822,9 +1822,11 @@
             "error_417_adding_computer_to_group":"An unexpected error occurred while adding clients to the group. Error code : 417",
             "ssd":"SSD",
             "hdd":"HDD",
-            "client_status":"Client Status",
+            "client_status":"Active/Passive",
             "active":"Active",
-            "passive":"Passive"
+            "passive":"Passive",
+            "dn_information":"DN",
+            "active_or_passive":"Active/Passive" 
 
         },
         "task_report":{
@@ -2022,7 +2024,9 @@
             "error_user_session_report":"An error occurred while generating the User Session report.",
             "error_417_user_session_report":"An error occurred while generating the User Session report. Error Code: 400",
             "active":"Active",
-            "passive":"Passive"
+            "passive":"Passive",
+            "user_list":"User List"
+
 
         }
     },
