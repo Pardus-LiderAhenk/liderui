@@ -22,6 +22,15 @@
         {{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}
       </span>
     </div>
+
+    <!-- <div class="confirm-group-management" v-if="selectedComputerGroupNode"> -->
+    <div class="p-field-checkbox" v-if="selectedComputerGroupNode">
+      <Checkbox id="taskparts" v-model="taskparts" :binary="true" @change="selectParts" style="font-size: 1.5rem"/>&nbsp;&nbsp;
+        <label for="taskparts">{{$t("Görevi parçalı olarak gönder")}}</label>
+    </div>
+    
+    <!-- </div> -->
+    
     <template #footer>
       <Button 
         :label="$t('computer.plugins.base_plugin.no')" 
@@ -161,7 +170,7 @@ export default {
       toastLife: 5000,
       loading: false,
       selectedNode: null,
-      
+      taskparts: false,
     }
   },
 
