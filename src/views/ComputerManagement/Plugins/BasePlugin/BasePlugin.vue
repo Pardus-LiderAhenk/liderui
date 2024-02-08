@@ -25,8 +25,8 @@
 
     <!-- <div class="confirm-group-management" v-if="selectedComputerGroupNode"> -->
     <div class="p-field-checkbox" v-if="selectedComputerGroupNode">
-      <Checkbox id="taskparts" v-model="taskparts" :binary="true" @change="selectParts" style="font-size: 1.5rem"/>&nbsp;&nbsp;
-        <label for="taskparts">{{$t("Görevi parçalı olarak gönder")}}</label>
+      <Checkbox id="taskParts" v-model="taskParts" :binary="true" @change="selectParts" style="font-size: 1.5rem"/>&nbsp;&nbsp;
+        <label for="taskParts">{{$t("Görevi parçalı olarak gönder")}}</label>
     </div>
     
     <!-- </div> -->
@@ -170,7 +170,7 @@ export default {
       toastLife: 5000,
       loading: false,
       selectedNode: null,
-      taskparts: false,
+      taskParts: false,
     }
   },
 
@@ -291,6 +291,7 @@ export default {
       task.entryList = entryList;
       task.cronExpression = this.scheduledParam;
       task.dnType = this.selectedNode.type;
+      task.taskParts = this.taskParts;
       
       axios.post(this.executeTaskUrl,task).then((response) => {
         if (response.data.status == 'OK') {
