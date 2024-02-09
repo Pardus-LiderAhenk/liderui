@@ -3,7 +3,7 @@
     <div class="p-grid justify-content-center p-2 lg:p-0" style="width: 100vw; width: 100vw;">
         <div class="p-col-12 p-md-6 p-lg-8">
             <div class="auth-image-container">
-                <img src="../assets/images/la_ay_yildiz.jpeg" class="auth-image"/>
+                <img src="../assets/images/la_ay_yildiz.png" class="auth-image"/>
             </div>
         </div>
          <div class="p-col-12 p-md-6 p-lg-4 auth-form-container">
