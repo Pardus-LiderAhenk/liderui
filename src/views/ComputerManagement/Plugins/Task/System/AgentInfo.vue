@@ -375,7 +375,7 @@
                 </Badge> -->
                 <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo"
                   :value="selectedLiderNode.online ? $t('computer.agent_info.online'): (selectedLiderNode.agentStatus == 'Active' ? $t('computer.agent_info.offline') : $t('computer.agent_info.passive'))"
-                  :severity="selectedLiderNode.online ? 'success' : (selectedLiderNode.agentStatus == 'Active' ? 'danger' : 'secondary')">
+                  :severity="selectedLiderNode.online ? 'success' : (selectedLiderNode.agentStatus == 'Active' ? 'danger' : 'warning')">
                 </Badge>
               </div>
               <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
