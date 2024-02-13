@@ -2,24 +2,24 @@
   <div>
     <!-- Delete Selected Folder Dialog -->
     <Dialog :style="{width: '30vw'}"
-      :header="$t('computer.agent_info.delete_folder')" 
-      v-model:visible="deleteFolderDialog"  
-      :modal="true" 
+      :header="$t('computer.agent_info.delete_folder')"
+      v-model:visible="deleteFolderDialog"
+      :modal="true"
       @hide="deleteFolderDialog = false">
       <div class="confirmation-content">
           <i class="pi pi-info-circle p-mr-3" style="font-size: 2rem" />
           <span>{{ $t('computer.agent_info.delete_folder_warn')}}</span>
       </div>
       <template #footer>
-      <Button 
-          :label="$t('computer.agent_info.cancel')" 
-          icon="pi pi-times" 
-          @click="deleteFolderDialog = false" 
+      <Button
+          :label="$t('computer.agent_info.cancel')"
+          icon="pi pi-times"
+          @click="deleteFolderDialog = false"
           class="p-button-text p-button-sm"
       />
-      <Button 
+      <Button
           :label="$t('computer.agent_info.yes')"
-          icon="pi pi-check" 
+          icon="pi pi-check"
           @click="deleteFolder"
           class="p-button-sm"
       />
@@ -27,7 +27,7 @@
     </Dialog>
     <!-- Delete Selected Folder Dialog End -->
     <!-- Add Folder Dialog -->
-    <Dialog :header="$t('computer.agent_info.add_folder')" v-model:visible="addFolderDialog" 
+    <Dialog :header="$t('computer.agent_info.add_folder')" v-model:visible="addFolderDialog"
         :style="{width: '30vw'}" :modal="true">
         <div class="p-fluid">
             <div class="p-field">
@@ -39,7 +39,7 @@
             </div>
         </div>
         <template #footer>
-            <Button :label="$t('computer.agent_info.cancel')" icon="pi pi-times" 
+            <Button :label="$t('computer.agent_info.cancel')" icon="pi pi-times"
                 @click="addFolderDialog = false" class="p-button-text p-button-sm"
             />
             <Button :label="$t('computer.agent_info.add')" icon="pi pi-plus"
@@ -50,9 +50,9 @@
     <!-- Add Folder Dialog End-->
     <!-- Update Agent Dialog -->
     <Dialog :style="{width: '20vw'}"
-        :header="$t('computer.agent_info.update_client')" 
-        v-model:visible="updateAgentConfirm"  
-        :modal="true" 
+        :header="$t('computer.agent_info.update_client')"
+        v-model:visible="updateAgentConfirm"
+        :modal="true"
       >
       <div class="confirmation-content">
         <span>
@@ -61,15 +61,15 @@
         </span>
       </div>
       <template #footer>
-        <Button 
-          :label="$t('computer.agent_info.cancel')" 
+        <Button
+          :label="$t('computer.agent_info.cancel')"
           icon="pi pi-times"
-          @click="updateAgentConfirm = false" 
+          @click="updateAgentConfirm = false"
           class="p-button-text p-button-sm"
         />
-        <Button 
+        <Button
           :label="$t('computer.agent_info.yes')"
-          icon="pi pi-check" 
+          icon="pi pi-check"
           @click="updateAgentInfo"
           class="p-button-sm"
         />
@@ -77,9 +77,9 @@
     </Dialog>
     <!-- Delete Agent Dialog -->
     <Dialog :style="{width: '20vw'}"
-      :header="$t('computer.agent_info.delete_client')" 
-      v-model:visible="deleteAgentConfirm"  
-      :modal="true" 
+      :header="$t('computer.agent_info.delete_client')"
+      v-model:visible="deleteAgentConfirm"
+      :modal="true"
     >
       <div class="confirmation-content">
         <span v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedLiderNode.online">
@@ -92,15 +92,15 @@
         </span>
       </div>
       <template #footer>
-        <Button 
-          :label="$t('computer.agent_info.cancel')" 
+        <Button
+          :label="$t('computer.agent_info.cancel')"
           icon="pi pi-times"
-          @click="deleteAgentConfirm = false" 
+          @click="deleteAgentConfirm = false"
           class="p-button-text p-button-sm"
         />
-        <Button 
+        <Button
           :label="$t('computer.agent_info.yes')"
-          icon="pi pi-check" 
+          icon="pi pi-check"
           @click="deleteAgent"
           class="p-button-sm"
         />
@@ -108,15 +108,15 @@
     </Dialog>
     <!-- Rename Agent Dialog -->
     <Dialog :style="{width: '20vw'}"
-        :header="$t('computer.agent_info.rename')" 
-        v-model:visible="renameAgentDialog"  
-        :modal="true" 
+        :header="$t('computer.agent_info.rename')"
+        v-model:visible="renameAgentDialog"
+        :modal="true"
       >
       <div class="p-fluid">
         <div class="p-field">
           <label>{{$t('computer.agent_info.hostname')}}</label>
-          <InputText :class="validationRenameAgent ? 'p-inputtext-sm p-invalid': 'p-inputtext-sm'"  
-            placeholder="pardus" v-model="newHostname" type="text" 
+          <InputText :class="validationRenameAgent ? 'p-inputtext-sm p-invalid': 'p-inputtext-sm'"
+            placeholder="pardus" v-model="newHostname" type="text"
           />
           <small v-if="validationRenameAgent" class="p-error">
             {{$t('computer.agent_info.hostname_input_warn')}}
@@ -128,28 +128,28 @@
         </div>
       </div>
       <template #footer>
-        <Button 
-          :label="$t('computer.agent_info.cancel')" 
+        <Button
+          :label="$t('computer.agent_info.cancel')"
           icon="pi pi-times"
-          @click="renameAgentDialog = false" 
+          @click="renameAgentDialog = false"
           class="p-button-text p-button-sm"
         />
-        <Button 
+        <Button
           :label="$t('computer.agent_info.update')"
-          icon="pi pi-refresh" 
+          icon="pi pi-refresh"
           @click="renameAgent"
           class="p-button-sm"
         />
       </template>
     </Dialog>
     <!-- Move Agent Dialog -->
-    <Dialog :header="$t('computer.agent_info.move_agent')" 
-      v-model:visible="moveAgentDialog" 
+    <Dialog :header="$t('computer.agent_info.move_agent')"
+      v-model:visible="moveAgentDialog"
       :style="{width: '40vw'}" :modal="true"
     >
       <div class="p-grid p-flex-column">
         <div class="p-col">
-          <tree-component 
+          <tree-component
             ref="movetree"
             loadNodeUrl="/api/lider/computer/computers"
             loadNodeOuUrl="/api/lider/computer/ou-details"
@@ -164,23 +164,23 @@
         </div>
       </div>
       <template #footer>
-        <Button 
-          :label="$t('computer.agent_info.cancel')" 
+        <Button
+          :label="$t('computer.agent_info.cancel')"
           icon="pi pi-times"
-          @click="moveAgentDialog = false" 
+          @click="moveAgentDialog = false"
           class="p-button-text p-button-sm">
         </Button>
         <Button class="p-button-sm"
           :label="$t('computer.agent_info.move')"
-          icon="el-icon-rank" 
-          @click="moveAgent" 
+          icon="el-icon-rank"
+          @click="moveAgent"
         >
         </Button>
       </template>
     </Dialog>
     <!-- Node Detail Dialog -->
     <Dialog
-      :header="$t('computer.agent_info.node_detail')" 
+      :header="$t('computer.agent_info.node_detail')"
       :modal="true"
       :style="{ width: '50vw'}"
       v-model:visible="showAgentInfoDialog">
@@ -192,7 +192,7 @@
                     &nbsp;{{ $t('computer.agent_info.node_detail') }}
                 </span>
             </template>
-            <DataTable class="p-datatable-sm" 
+            <DataTable class="p-datatable-sm"
               :value="selectedNodeData" responsiveLayout="scroll"
             >
               <Column field="label" :header="$t('group_management.attribute')"></Column>
@@ -275,28 +275,28 @@
             <div class="p-col-4"><b>{{ $t("computer.agent_info.disk_properties") }}</b></div>
             <div class="p-col-8">
             <DataTable v-if="diskDataList.length>0" :value="diskDataList" responsiveLayout="scroll" class="p-datatable-sm" :metaKeySelection="false">
-                <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column> 
+                <Column field="type" :header="$t('computer.agent_info.disk_type')"></Column>
                 <Column field="total" :header="$t('computer.agent_info.total') + ' (GB)'">
                     <template #body="{ data }">
-                        {{ ((data.total)/1000).toFixed(2) }}                
+                        {{ ((data.total)/1000).toFixed(2) }}
                     </template>
                 </Column>
                     <Column field="used" :header="$t('computer.agent_info.used')+ ' (GB)'">
                     <template #body="{ data }" >
-                        {{ ((data.used)/1000).toFixed(2) }}     
-                        {{ "(%" + ((100*(data.used/data.total)).toFixed(2)) + ")" }}           
+                        {{ ((data.used)/1000).toFixed(2) }}
+                        {{ "(%" + ((100*(data.used/data.total)).toFixed(2)) + ")" }}
                     </template>
                 </Column>
                 <Column field="avaible" :header="$t('computer.agent_info.available')+ ' (GB)'">
                     <template #body="{ data }">
-                        {{ ((data.total-data.used)/1000).toFixed(2) }}                
+                        {{ ((data.total-data.used)/1000).toFixed(2) }}
                     </template>
                 </Column>
 
                 <Column field="progresBar" :header="$t('computer.agent_info.disk_status')" :showFilterMatchModes="false" style="min-width: 20rem">
                   <template #body="{ data }">
                       <ProgressBar class="p-progressbar-blue" :value="((100*(data.used/data.total)).toFixed(2))" :showValue="false"  v-if="Number((100*(data.used/data.total)).toFixed(2)) < 80.00">
-                    </ProgressBar>    
+                    </ProgressBar>
 
                       <ProgressBar class="p-progressbar-red" :value="((100*(data.used/data.total)).toFixed(2))" :showValue="false" v-else-if="Number((100*(data.used/data.total)).toFixed(2)) > 80.00">
                     </ProgressBar>
@@ -338,10 +338,10 @@
           </TabPanel>
       </TabView>
       <template #footer>
-          <Button 
-              :label="$t('group_management.close')" 
+          <Button
+              :label="$t('group_management.close')"
               icon="pi pi-times"
-              @click="showAgentInfoDialog = false" 
+              @click="showAgentInfoDialog = false"
               class="p-button-text p-button-sm">
           </Button>
       </template>
@@ -359,7 +359,7 @@
         </template>
         <template #pluginTitleButton>
           <div>
-            <SplitButton class="p-button-sm" :title="$t('computer.agent_info.node_detail')" 
+            <SplitButton class="p-button-sm" :title="$t('computer.agent_info.node_detail')"
               @click="showNodeDetail" :model="selectedLiderNode && selectedLiderNode.type == 'AHENK'? items: folderItems"
               icon="pi pi-list">
             </SplitButton>
@@ -369,9 +369,13 @@
             <div class="p-grid">
               <div class="p-col-4"><b><i class="el el-icon-turn-off"></i> {{ $t("computer.agent_info.status") }}</b></div>
               <div class="p-col-8">
-                <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo" 
-                  :value="selectedLiderNode.online ? $t('computer.agent_info.online'):$t('computer.agent_info.offline')" 
+                <!-- <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo"
+                  :value="selectedLiderNode.online ? $t('computer.agent_info.online'):$t('computer.agent_info.offline')"
                   :severity="selectedLiderNode.online ?'success':'danger'">
+                </Badge> -->
+                <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo"
+                  :value="selectedLiderNode.online ? $t('computer.agent_info.online'): (selectedLiderNode.agentStatus == 'Active' ? $t('computer.agent_info.offline') : $t('computer.agent_info.passive'))"
+                  :severity="selectedLiderNode.online ? 'success' : (selectedLiderNode.agentStatus == 'Active' ? 'danger' : 'secondary')">
                 </Badge>
               </div>
               <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
@@ -447,7 +451,7 @@
 /**
  * Agent info task. update, delete, move agent.
  * @see {@link http://www.liderahenk.org/}
- * 
+ *
  */
 
 import { mapGetters } from "vuex";
@@ -458,7 +462,7 @@ import { taskService } from '../../../../../services/Task/TaskService.js';
 import { userService } from "../../../../../services/Settings/UserService";
 
 export default {
-  
+
   props : {
     pluginTask: {
       type: Object,
@@ -497,9 +501,9 @@ export default {
           command: () => {
             if(!this.selectedLiderNode){
               this.$toast.add({
-                severity:'warn', 
-                detail: this.$t("computer.agent_info.select_node_warn"), 
-                summary:this.$t("computer.task.toast_summary"), 
+                severity:'warn',
+                detail: this.$t("computer.agent_info.select_node_warn"),
+                summary:this.$t("computer.task.toast_summary"),
                 life: 3000
               });
             }
@@ -514,9 +518,9 @@ export default {
           command: () => {
             if(!this.selectedLiderNode){
               this.$toast.add({
-                severity:'warn', 
-                detail: this.$t("computer.agent_info.select_node_warn"), 
-                summary:this.$t("computer.task.toast_summary"), 
+                severity:'warn',
+                detail: this.$t("computer.agent_info.select_node_warn"),
+                summary:this.$t("computer.task.toast_summary"),
                 life: 3000
               });
             }
@@ -543,9 +547,9 @@ export default {
             if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
               if (!this.selectedLiderNode.online) {
                 this.$toast.add({
-                  severity:'warn', 
-                  detail: this.$t("computer.agent_info.rename_warn"), 
-                  summary:this.$t("computer.task.toast_summary"), 
+                  severity:'warn',
+                  detail: this.$t("computer.agent_info.rename_warn"),
+                  summary:this.$t("computer.task.toast_summary"),
                   life: 3000
                 });
                 return;
@@ -562,7 +566,7 @@ export default {
           command: () => {
             if (this.selectedLiderNode && this.selectedLiderNode.type == "AHENK") {
               this.moveAgentDialog = true;
-            } 
+            }
           }
         },
         {
@@ -599,7 +603,7 @@ export default {
 
   computed:{
       ...mapGetters(["selectedLiderNode"]),
-    
+
     diskDataList: {
 
       get(){
@@ -648,13 +652,13 @@ export default {
         if(response.status == 200){
           if (response.data != "" && response.data != null) {
             this.selectedAgentInfo = response.data;
-
+            console.log(this.selectedAgentInfo);
         } else {
             this.selectedAgentInfo = null;
             this.$toast.add({
-              severity:'error', 
-              detail: this.$t("computer.agent_info.error_message"), 
-              summary:this.$t("computer.task.toast_summary"), 
+              severity:'error',
+              detail: this.$t("computer.agent_info.error_message"),
+              summary:this.$t("computer.task.toast_summary"),
               life: 3000
               });
             }
@@ -706,9 +710,9 @@ export default {
         this.showAgentInfoDialog = true;
       } else {
         this.$toast.add({
-          severity:'warn', 
-          detail: this.$t("computer.agent_info.select_node_warn"), 
-          summary:this.$t("computer.task.toast_summary"), 
+          severity:'warn',
+          detail: this.$t("computer.agent_info.select_node_warn"),
+          summary:this.$t("computer.task.toast_summary"),
           life: 3000
         });
       }
@@ -755,7 +759,7 @@ export default {
       nodeData.push({
         'label': this.$t('computer.agent_info.name'),
         'value': this.selectedLiderNode.name,
-        }, 
+        },
         {
           'label': this.$t('computer.agent_info.node_dn'),
           'value': this.selectedLiderNode.distinguishedName,
@@ -827,9 +831,9 @@ export default {
         const{response,error} = await computerManagementService.moveEntry(params);
         if(error){
           this.$toast.add({
-            severity:'error', 
-            detail: this.$t("computer.agent_info.move_client_error")+"\n"+error, 
-            summary:this.$t("computer.task.toast_summary"), 
+            severity:'error',
+            detail: this.$t("computer.agent_info.move_client_error")+"\n"+error,
+            summary:this.$t("computer.task.toast_summary"),
             life: 3000
           });
         }
@@ -837,25 +841,25 @@ export default {
             if(response.status == 200){
               if (response.data) {
                 // TO DO --> computer tree will be updated
-                this.moveAgentDialog = false;                
+                this.moveAgentDialog = false;
                 this.$emit('moveSelectedAgent', this.selectedLiderNode, response.data, this.moveFolderNode.distinguishedName);
               }
             }
             else if(response.status == 417){
               this.$toast.add({
-                severity:'error', 
-                detail: this.$t("computer.agent_info.error_417_move_agent"), 
-                summary:this.$t("computer.task.toast_summary"), 
+                severity:'error',
+                detail: this.$t("computer.agent_info.error_417_move_agent"),
+                summary:this.$t("computer.task.toast_summary"),
                 life: 3000
             });
           }
       }
-      } 
+      }
       else {
         this.$toast.add({
-          severity:'warn', 
-          detail: this.$t("computer.agent_info.select_folder_warn"), 
-          summary:this.$t("computer.task.toast_summary"), 
+          severity:'warn',
+          detail: this.$t("computer.agent_info.select_folder_warn"),
+          summary:this.$t("computer.task.toast_summary"),
           life: 3000
         });
       }
@@ -871,9 +875,9 @@ export default {
       if(response.status == 200){
         if (!response.data) {
           this.$toast.add({
-            severity:'error', 
-            detail: this.$t("computer.agent_info.delete_client_error"), 
-            summary:this.$t("computer.task.toast_summary"), 
+            severity:'error',
+            detail: this.$t("computer.agent_info.delete_client_error"),
+            summary:this.$t("computer.task.toast_summary"),
             life: 3000
           });
         }
@@ -881,7 +885,7 @@ export default {
       else{
         console.log("Could not get agent")
       }
-  
+
     },
 
     async deleteAgent() {
@@ -893,9 +897,9 @@ export default {
       const{response,error} = await computerManagementService.deleteAgent(params);
       if(error){
         this.$toast.add({
-          severity:'error', 
-          detail: this.$t("computer.agent_info.delete_client_error")+"\n"+error, 
-          summary:this.$t("computer.task.toast_summary"), 
+          severity:'error',
+          detail: this.$t("computer.agent_info.delete_client_error")+"\n"+error,
+          summary:this.$t("computer.task.toast_summary"),
           life: 3000
         });
       }
@@ -904,9 +908,9 @@ export default {
           this.$emit('deleteSelectedAgent', this.selectedLiderNode);
         } else {
           this.$toast.add({
-            severity:'error', 
-            detail: this.$t("computer.agent_info.delete_client_error"), 
-            summary:this.$t("computer.task.toast_summary"), 
+            severity:'error',
+            detail: this.$t("computer.agent_info.delete_client_error"),
+            summary:this.$t("computer.task.toast_summary"),
             life: 3000
           });
         }
@@ -927,9 +931,9 @@ export default {
       const{response,error} = await computerManagementService.renameAgent(params);
       if(error){
         this.$toast.add({
-          severity:'error', 
-          detail: this.$t("computer.agent_info.rename_error")+"\n"+error, 
-          summary:this.$t("computer.task.toast_summary"), 
+          severity:'error',
+          detail: this.$t("computer.agent_info.rename_error")+"\n"+error,
+          summary:this.$t("computer.task.toast_summary"),
           life: 3000
         });
       }
@@ -946,26 +950,26 @@ export default {
             this.selectedLiderNode.attributes.entryDN = newDn;
             this.$emit('renameSelectedAgent', this.selectedLiderNode);
               this.$toast.add({
-                severity:'success', 
-                detail: this.$t("computer.agent_info.rename_success"), 
-                summary:this.$t("computer.task.toast_summary"), 
+                severity:'success',
+                detail: this.$t("computer.agent_info.rename_success"),
+                summary:this.$t("computer.task.toast_summary"),
                 life: 5000
               });
-        } 
+        }
           else {
             this.$toast.add({
-              severity:'error', 
-              detail: this.$t("computer.agent_info.delete_client_error"), 
-              summary:this.$t("computer.task.toast_summary"), 
+              severity:'error',
+              detail: this.$t("computer.agent_info.delete_client_error"),
+              summary:this.$t("computer.task.toast_summary"),
               life: 3000
             });
           }
         }
         else if (error.response.status == 409) {
           this.$toast.add({
-            severity:'error', 
-            detail: this.$t("computer.agent_info.rename_same_hostname_error"), 
-            summary:this.$t("computer.task.toast_summary"), 
+            severity:'error',
+            detail: this.$t("computer.agent_info.rename_same_hostname_error"),
+            summary:this.$t("computer.task.toast_summary"),
             life: 5000
             });
           }
@@ -998,9 +1002,9 @@ export default {
           const{response,error} = await computerManagementService.updateAgentInfo(params);
           if(error){
             this.$toast.add({
-                severity:'error', 
-                detail: this.$t("computer.agent_info.delete_client_error"), 
-                summary:this.$t("computer.task.toast_summary"), 
+                severity:'error',
+                detail: this.$t("computer.agent_info.delete_client_error"),
+                summary:this.$t("computer.task.toast_summary"),
                 life: 3000
               });
           }
@@ -1009,13 +1013,13 @@ export default {
               if (response.data) {
               // TO DO --> computer tree will be updated
                 this.selectedAgentInfo = response.data
-              } 
+              }
             }
             else if(response.status == 417){
               this.$toast.add({
-                severity:'error', 
-                detail: this.$t("computer.agent_info.error_417_update_agent_info"), 
-                summary:this.$t("computer.task.toast_summary"), 
+                severity:'error',
+                detail: this.$t("computer.agent_info.error_417_update_agent_info"),
+                summary:this.$t("computer.task.toast_summary"),
                 life: 3000
               });
             }
@@ -1038,9 +1042,9 @@ export default {
       const{ response,error } = await userService.addOu(params);
       if(error){
         this.$toast.add({
-          severity:'error', 
-          detail: this.$t('user_management.add_folder_error'), 
-          summary:this.$t("computer.task.toast_summary"), 
+          severity:'error',
+          detail: this.$t('user_management.add_folder_error'),
+          summary:this.$t("computer.task.toast_summary"),
           life: 3000
       });
       }
@@ -1048,30 +1052,30 @@ export default {
         if(response.status == 200){
           this.$emit('addFolder', response.data, this.selectedLiderNode.distinguishedName);
           this.$toast.add({
-              severity:'success', 
-              detail: this.$t('computer.agent_info.add_folder_success'), 
-              summary:this.$t("computer.task.toast_summary"), 
+              severity:'success',
+              detail: this.$t('computer.agent_info.add_folder_success'),
+              summary:this.$t("computer.task.toast_summary"),
               life: 3000
           });
         }
         else if(response.status == 417){
           this.$toast.add({
-            severity:'error', 
-            detail: this.$t('user_management.add_folder_error'), 
-            summary:this.$t("computer.task.toast_summary"), 
+            severity:'error',
+            detail: this.$t('user_management.add_folder_error'),
+            summary:this.$t("computer.task.toast_summary"),
             life: 3000
           });
         }
         else if(response.status == 226){
           this.$toast.add({
-            severity:'error', 
-            detail: this.$t('user_management.add_folder_error_226'), 
-            summary:this.$t("computer.task.toast_summary"), 
+            severity:'error',
+            detail: this.$t('user_management.add_folder_error_226'),
+            summary:this.$t("computer.task.toast_summary"),
             life: 3000
           });
         }
       }
-        
+
       this.folderName = '';
       this.addFolderDialog = false;
     },
@@ -1088,9 +1092,9 @@ export default {
       const{response,error} = await computerManagementService.deleteComputerOu(ldapEntry);
       if(error){
         this.$toast.add({
-              severity:'warn', 
-              detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
-              summary:this.$t("computer.task.toast_summary"), 
+              severity:'warn',
+              detail: this.$t('computer.agent_info.no_delete_folder_warn'),
+              summary:this.$t("computer.task.toast_summary"),
               life: 3000
           });
       }
@@ -1099,26 +1103,26 @@ export default {
           if (response.data) {
             this.$emit('deleteSelectedAgent', this.selectedLiderNode);
             this.$toast.add({
-                severity:'success', 
-                detail: this.$t('computer.agent_info.delete_folder_success'), 
-                summary:this.$t("computer.task.toast_summary"), 
+                severity:'success',
+                detail: this.$t('computer.agent_info.delete_folder_success'),
+                summary:this.$t("computer.task.toast_summary"),
                 life: 3000
             });
-          }   
+          }
           else {
             this.$toast.add({
-                severity:'warn', 
-                detail: this.$t('computer.agent_info.no_delete_folder_warn'), 
-                summary:this.$t("computer.task.toast_summary"), 
+                severity:'warn',
+                detail: this.$t('computer.agent_info.no_delete_folder_warn'),
+                summary:this.$t("computer.task.toast_summary"),
                 life: 3000
             });
           }
         }
         else if(response.status == 417){
           this.$toast.add({
-              severity:'error', 
-              detail: this.$t('computer.agent_info.error_417_delete_computer_ou'), 
-              summary:this.$t("computer.task.toast_summary"), 
+              severity:'error',
+              detail: this.$t('computer.agent_info.error_417_delete_computer_ou'),
+              summary:this.$t("computer.task.toast_summary"),
               life: 3000
           });
         }
@@ -1139,7 +1143,7 @@ export default {
 .p-splitbutton {
     /* height: 2rem; */
     height: 33px;
-  
+
 }
 ::v-deep(.p-paginator) {
     .p-paginator-current {
@@ -1158,7 +1162,7 @@ export default {
   .p-progressbar-value {
     background-color: #1769aa;
   }
-  
+
 }
 ::v-deep(.p-progressbar-red) {
   height: 1.25rem;
@@ -1167,6 +1171,6 @@ export default {
   .p-progressbar-value {
       background-color:#D32F2F;
   }
-  
+
 }
 </style>

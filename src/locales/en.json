@@ -565,6 +565,7 @@
             "error_message": "Not found client information.",
             "online": "Online",
             "offline": "Offline",
+            "passive": "Passive",
             "attributes": "Attributes",
             "node_detail":"Node Detail",
             "client_detail": "Client Detail",

@@ -563,6 +563,7 @@
             "error_message": "İstemci bilgileri bulunamadı.",
             "online": "Çevrimiçi",
             "offline": "Çevrimdışı",
+            "passive": "Pasif",
             "attributes": "Öznitelikler",
             "node_detail":"Kayıt Detayı",
             "client_detail": "İstemci Detayı",
