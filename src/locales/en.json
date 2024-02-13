@@ -177,7 +177,9 @@
                 "scheduled_task_confirm_question": "The scheduled task will be sent, are you sure?",
                 "warning": "Warning",
                 "yes": "Yes",
-                "no": "No"
+                "no": "No",
+                "send_part_task":"Submit task in parts"
+
             },
             "resource_usage": {
                 "header": "Resource Usage",
@@ -1019,7 +1021,9 @@
                 "error_update_other_settings":"Ayarlar güncellenirken hata oluştu",
                 "show_machine_status":"Show status of Active/Passive machines",
                 "enabled_machine_status":"Enable Active/Inactive feature of machines",
-                "machine_status_days":"Enter the number of days after which you want to deactivate your clients"
+                "machine_status_days":"Enter the number of days after which you want to deactivate your clients",
+                "task_part_client_size":"Enter the number of client groups to which the tasks will be sent",
+                "send_task_parts":"Sending a Partial Task"
 
             }
         },

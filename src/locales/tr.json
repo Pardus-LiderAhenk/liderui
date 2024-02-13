@@ -176,7 +176,8 @@
                 "scheduled_task_confirm_question": "Zamanlanmış görev gönderilecek, emin misiniz?",
                 "warning": "Uyarı",
                 "yes": "Evet",
-                "no": "Hayır"
+                "no": "Hayır",
+                "send_part_task":"Görevi parçalı olarak gönder"
             },
             "resource_usage": {
                 "header": "Kaynak Kullanımı",
@@ -1012,7 +1013,9 @@
                 "error_update_other_settings":"Ayarlar güncellenirken hata oluştu",
                 "show_machine_status":"Aktif/Pasif makinelerin durumunu göster",
                 "enabled_machine_status":"Makinelerin Aktif/Pasif olma özelliğini etkinleştir",
-                "machine_status_days":"İstemcilerinizin kaç gün sonra pasif duruma çekmek istediğinizi giriniz"
+                "machine_status_days":"İstemcilerinizin kaç gün sonra pasif duruma çekmek istediğinizi giriniz",
+                "task_part_client_size":"Görevlerin gönderileceği istemci grubunun sayısını yazınız",
+                "send_task_parts":"Parçalı Görev Gönderme"
 
             }
         },

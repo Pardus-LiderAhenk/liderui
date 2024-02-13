@@ -22,6 +22,12 @@
         {{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}
       </span>
     </div>
+
+    <div class="p-fluid" v-if="selectedNodeType == 'computerGroup'">
+      <Checkbox id="taskParts" v-model="taskParts" :binary="true" style="font-size: 1.5rem"/>&nbsp;&nbsp;
+        <label for="taskParts">{{$t("computer.plugins.base_plugin.send_part_task")}}</label>
+    </div>
+        
     <template #footer>
       <Button 
         :label="$t('computer.plugins.base_plugin.no')" 
@@ -161,7 +167,7 @@ export default {
       toastLife: 5000,
       loading: false,
       selectedNode: null,
-      
+      taskParts: false,
     }
   },
 
@@ -282,6 +288,7 @@ export default {
       task.entryList = entryList;
       task.cronExpression = this.scheduledParam;
       task.dnType = this.selectedNode.type;
+      task.taskParts = this.taskParts;
       
       axios.post(this.executeTaskUrl,task).then((response) => {
         if (response.data.status == 'OK') {
