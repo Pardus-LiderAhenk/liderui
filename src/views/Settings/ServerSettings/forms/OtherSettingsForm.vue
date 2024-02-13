@@ -85,6 +85,15 @@
                     />
                 </div>
             </Fieldset>
+            <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.send_task_parts')" >
+                <div class="p-field p-col-12">
+                    <label for="clientSize">{{$t('settings.server_settings.other_settings.task_part_client_size')}}</label>
+                    <InputNumber :min="1"
+                        id="clientSize"
+                        v-model="clientSize"
+                    />
+                </div>
+            </Fieldset>
             <div class="p-field p-col-12 p-text-right">
                 <div class="p-d-flex p-jc-end">
                     <div>
@@ -129,7 +138,8 @@ export default {
             showDialog: false,
             selectedRegistrationType: 'DEFAULT',
             machineEventStatus: false,
-            machineEventDay:''
+            machineEventDay:'',
+            clientSize:''
         }
     },
     watch: { 
@@ -145,6 +155,7 @@ export default {
             this.selectedRegistrationType = newVal.selectedRegistrationType;
             this.machineEventStatus = newVal.machineEventStatus;
             this.machineEventDay = newVal.machineEventDay;
+            this.clientSize = newVal.clientSize;
           }
         }
     },
@@ -160,6 +171,7 @@ export default {
             data.append("selectedRegistrationType", this.selectedRegistrationType);
             data.append("machineEventStatus", this.machineEventStatus);
             data.append("machineEventDay", this.machineEventDay);
+            data.append("clientSize", this.clientSize);
 
             const { response,error } = await serverSettingService.updateOtherSettings(data);
             if(error){

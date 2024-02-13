@@ -23,14 +23,11 @@
       </span>
     </div>
 
-    <!-- <div class="confirm-group-management" v-if="selectedComputerGroupNode"> -->
-    <div class="p-field-checkbox" v-if="selectedComputerGroupNode">
-      <Checkbox id="taskParts" v-model="taskParts" :binary="true" @change="selectParts" style="font-size: 1.5rem"/>&nbsp;&nbsp;
-        <label for="taskParts">{{$t("Görevi parçalı olarak gönder")}}</label>
+    <div class="p-fluid" v-if="selectedNodeType == 'computerGroup'">
+      <Checkbox id="taskParts" v-model="taskParts" :binary="true" style="font-size: 1.5rem"/>&nbsp;&nbsp;
+        <label for="taskParts">{{$t("computer.plugins.base_plugin.send_part_task")}}</label>
     </div>
-    
-    <!-- </div> -->
-    
+        
     <template #footer>
       <Button 
         :label="$t('computer.plugins.base_plugin.no')" 
