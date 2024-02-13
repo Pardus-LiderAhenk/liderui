@@ -652,7 +652,6 @@ export default {
         if(response.status == 200){
           if (response.data != "" && response.data != null) {
             this.selectedAgentInfo = response.data;
-            console.log(this.selectedAgentInfo);
         } else {
             this.selectedAgentInfo = null;
             this.$toast.add({
