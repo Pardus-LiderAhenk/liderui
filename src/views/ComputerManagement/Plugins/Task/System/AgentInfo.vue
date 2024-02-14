@@ -369,10 +369,6 @@
             <div class="p-grid">
               <div class="p-col-4"><b><i class="el el-icon-turn-off"></i> {{ $t("computer.agent_info.status") }}</b></div>
               <div class="p-col-8">
-                <!-- <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo"
-                  :value="selectedLiderNode.online ? $t('computer.agent_info.online'):$t('computer.agent_info.offline')"
-                  :severity="selectedLiderNode.online ?'success':'danger'">
-                </Badge> -->
                 <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo"
                   :value="selectedLiderNode.online ? $t('computer.agent_info.online'): (selectedLiderNode.agentStatus == 'Active' ? $t('computer.agent_info.offline') : $t('computer.agent_info.passive'))"
                   :severity="selectedLiderNode.online ? 'success' : (selectedLiderNode.agentStatus == 'Active' ? 'danger' : 'warning')">
