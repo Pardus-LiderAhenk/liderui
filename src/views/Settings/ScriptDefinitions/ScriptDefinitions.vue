@@ -126,7 +126,7 @@
                 <div class="p-field p-col-12" v-if="isExecuteScriptDialog">
                     <label for="scriptParams">{{$t('computer.plugins.execute_script.define_parameter')}}</label>
                     <InputText type="text" v-model="scriptParams"/>
-                    </div>
+                </div>
                 <div class="p-field p-col-12">
                     <label>{{$t('settings.script_definition.script_content')}}</label>
                     <Textarea 
@@ -252,7 +252,6 @@ export default {
             first : 0,
             scriptParams: "",
             isExecuteScriptDialog: false,
-
         }
     },
 
@@ -263,8 +262,13 @@ export default {
     methods: {
 
         executeScript() {
-            this.selectedScript.scriptParams = this.scriptParams;
-            this.$emit('executeScript', this.selectedScript)
+            let params = {
+                scriptParams: this.scriptParams,
+                scriptType: this.scriptType,
+                contents: this.contents,
+                id: this.selectedScript.id
+            }
+            this.$emit('executeScript', params)
         },
 
         async getScripts(){
