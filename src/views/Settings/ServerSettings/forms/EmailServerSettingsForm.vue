@@ -4,28 +4,28 @@
             <h3>{{$t('settings.server_settings.mail_server_settings.mail_server_settings')}}</h3>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailHost">{{$t('settings.server_settings.mail_server_settings.mail_host_address')}}</label>
-            <InputText id="emailHost" type="text" v-model="emailHost" placeholder="smtp.gmail.com"/>
+            <label for="mailHost">{{$t('settings.server_settings.mail_server_settings.mail_host_address')}}</label>
+            <InputText id="mailHost" type="text" v-model="mailHost" placeholder="smtp.gmail.com"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailPort">{{$t('settings.server_settings.mail_server_settings.port')}}</label>
-            <InputText id="emailPort" type="text" v-model="emailPort" placeholder="587"/>
+            <label for="mailPort">{{$t('settings.server_settings.mail_server_settings.port')}}</label>
+            <InputText id="mailPort" type="text" v-model="mailPort" placeholder="587"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailUsername">{{$t('settings.server_settings.mail_server_settings.mail_username')}}</label>
-            <InputText id="emailUsername" type="text" v-model="emailUsername" placeholder="lider@liderahenk.org"/>
+            <label for="mailUsername">{{$t('settings.server_settings.mail_server_settings.mail_username')}}</label>
+            <InputText id="mailUsername" type="text" v-model="mailUsername" placeholder="lider@liderahenk.org"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="emailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
-            <InputText id="emailPassword" type="password" v-model="emailPassword"/>
+            <label for="mailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
+            <InputText id="mailPassword" type="password" v-model="mailPassword"/>
         </div>
          <div class="p-field p-col-12 p-md-4">
             <label for="zip">{{$t('settings.server_settings.mail_server_settings.smtp_verification')}}</label>
-            <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="smtpAuth"></Dropdown>
+            <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="mailSmtpAuth"></Dropdown>
         </div>
          <div class="p-field p-col-12 p-md-4">
             <label for="zip">{{$t('settings.server_settings.mail_server_settings.tls_activation')}}</label>
-            <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="tlsEnabled"></Dropdown>
+            <Dropdown :options="yesNoChoise" optionLabel="label" optionValue="value" v-model="mailTlsEnabled"></Dropdown>
         </div>
         <div class="p-field p-col-12 p-text-right">
             <div class="p-d-flex p-jc-end">
@@ -65,12 +65,12 @@ export default {
                 {label:this.$t('settings.server_settings.mail_server_settings.yes'), value:true},
                 {label:this.$t('settings.server_settings.mail_server_settings.no'), value:false},
             ],
-            smtpAuth:true,
-            tlsEnabled:true,
-            emailHost:'',
-            emailPort:'',
-            emailUsername:'',
-            emailPassword:'',
+            mailSmtpAuth:true,
+            mailTlsEnabled:true,
+            mailHost:'',
+            mailPort:'',
+            mailUsername:'',
+            mailPassword:'',
             showDialog: false
         }
         
@@ -78,24 +78,24 @@ export default {
     watch: { 
       	serverSettings: function(newVal) { 
           if(newVal) {
-            this.smtpAuth = newVal.mailSmtpAuth;
-            this.tlsEnabled = newVal.mailSmtpStartTlsEnable;
-            this.emailHost = newVal.mailHost;
-            this.emailPort = newVal.mailSmtpPort;
-            this.emailUsername = newVal.mailAddress;
-            this.emailPassword = newVal.mailPassword;
+            this.mailSmtpAuth = newVal.mailSmtpAuth;
+            this.mailTlsEnabled = newVal.mailTlsEnabled;
+            this.mailHost = newVal.mailHost;
+            this.mailPort = newVal.mailPort;
+            this.mailUsername = newVal.mailAddress;
+            this.mailPassword = newVal.mailPassword;
           }
         }
     },
     methods: {
         async submitForm() {
             var data = new FormData();
-            data.append("smtpAuth",this.smtpAuth);
-            data.append("tlsEnabled",this.tlsEnabled);
-            data.append("emailHost",this.emailHost);
-            data.append("emailPort",this.emailPort);
-            data.append("emailUsername",this.emailUsername);
-            data.append("emailPassword",this.emailPassword);
+            data.append("mailSmtpAuth",this.mailSmtpAuth);
+            data.append("mailTlsEnabled",this.mailTlsEnabled);
+            data.append("mailHost",this.mailHost);
+            data.append("mailPort",this.mailPort);
+            data.append("mailAddress",this.mailUsername);
+            data.append("mailPassword",this.mailPassword);
 
             const { response,error} = await  serverSettingService.updateEmail(data);
             if(error){

@@ -370,8 +370,8 @@
               <div class="p-col-4"><b><i class="el el-icon-turn-off"></i> {{ $t("computer.agent_info.status") }}</b></div>
               <div class="p-col-8">
                 <Badge v-if="selectedLiderNode && selectedLiderNode.type == 'AHENK' && selectedAgentInfo"
-                  :value="selectedLiderNode.online ? $t('computer.agent_info.online'): (selectedLiderNode.agentStatus == 'Active' ? $t('computer.agent_info.offline') : $t('computer.agent_info.passive'))"
-                  :severity="selectedLiderNode.online ? 'success' : (selectedLiderNode.agentStatus == 'Active' ? 'danger' : 'warning')">
+                  :value="selectedLiderNode.online ? $t('computer.agent_info.online'):(selectedAgentInfo.agentStatus == 'Active' ? $t('computer.agent_info.offline') : $t('computer.agent_info.passive'))"
+                  :severity="selectedLiderNode.online ? 'success' : (selectedAgentInfo.agentStatus == 'Active' ? 'danger' : 'warning')">
                 </Badge>
               </div>
               <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
@@ -985,6 +985,7 @@ export default {
             processor = arrg.processor;
           }
           const params = new FormData();
+          params.append("agentStatus", arrg.agentStatus);
           params.append("ipAddresses", arrg.ipAddresses);
           params.append("hostname", arrg.hostname);
           params.append("agentVersion", arrg.agentVersion);
