@@ -548,7 +548,8 @@
                 "save":"Save",
                 "update":"Update",
                 "error_fetching_the_saved_clients":"An error occurred while fetching the saved clients",
-                "error_adding_the_client":"An error occurred while adding the client"
+                "error_adding_the_client":"An error occurred while adding the client",
+                "yes": "Yes"
             }
         },
         "agent_info": {

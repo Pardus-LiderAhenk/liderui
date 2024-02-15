@@ -8,12 +8,12 @@
             :closeOnEscape="true"
         >
             <template #header>
-                <h3>
+                <h4>
                     {{
                         form?.id == null ? $t('computer.plugins.remote_access.add_new_client') :
                         $t('computer.plugins.remote_access.edit_client')
                     }}
-                </h3>
+                </h4>
             </template>
 
             <div class="p-col-12 p-pb-0" v-loading="loading" element-loading-text="loading"
@@ -57,14 +57,13 @@
             <template #footer>
                 <Button :label="$t('computer.plugins.remote_access.cancel')" 
                     icon="pi pi-times" 
-                    size="small"
-                    class="p-button-text" 
+                    class="p-button-text p-button-sm" 
                     @click="modalVisible = false" 
                 />
                 <Button
                     :label="form?.id ? $t('computer.plugins.remote_access.update') : $t('computer.plugins.remote_access.save')"
                     :icon="form?.id ? 'pi pi-sync' : 'pi pi-save'" 
-                    size="small" 
+                    class="p-button-sm"
                     @click="saveRdpClient" 
                 />
             </template>

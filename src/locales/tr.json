@@ -545,7 +545,8 @@
                 "save":"Kaydet",
                 "update":"Güncelle",
                 "error_fetching_the_saved_clients":"Kayıtlı istemciler getirilirken hata oluştu",
-                "error_adding_the_client":"İstemci eklenirken hata oluştu"
+                "error_adding_the_client":"İstemci eklenirken hata oluştu",
+                "yes": "Evet"
             }
         },
         "agent_info": {

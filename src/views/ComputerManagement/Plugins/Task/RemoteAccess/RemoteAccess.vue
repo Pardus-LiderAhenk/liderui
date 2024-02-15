@@ -31,8 +31,6 @@
     </template>
   </Dialog>
 
-
-
   <div>
     <Card>
       <template #title>
@@ -50,8 +48,6 @@
         </div>
         <hr style="margin-bottom:-5px">
       </template>
-
-
 
       <template #content>
         <div class="p-fluid">
@@ -328,12 +324,12 @@
       <span>{{ $t('computer.plugins.remote_access.registered_client_will_be_deleted_are_you_sure') }}</span>
     </div>
     <template #footer>
-      <Button label="İptal" 
+      <Button :label="$t('computer.plugins.remote_access.cancel')" 
         icon="pi pi-times" 
         @click="deleteRdpClientConfirmDialog = false"
         class="p-button-text p-button-sm" 
       />
-      <Button label="Evet" 
+      <Button :label="$t('computer.plugins.remote_access.yes')" 
         icon="pi pi-check" 
         @click="deleteSavedRdpClient(selectedRdpClient)" 
         class="p-button-sm" 
@@ -353,6 +349,7 @@
 import { taskService } from '../../../../../services/Task/TaskService.js';
 import { remoteAccessService } from "../../../../../services/ComputerManagement/RemoteAccess.js"
 import AddNewRdpClientDialog from "./AddNewRdpClientDialog.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -394,6 +391,7 @@ export default {
       loading: false,
     };
   },
+
 
   methods: {
     showRemoteAccessConfirmDialog() {
@@ -441,14 +439,11 @@ export default {
     async getSavedRdpClient(nextPage) {
       this.currentPage = nextPage
       this.loading = true;
-
       let params = {
         page: nextPage,
         size: this.rowNumber
       }
-
-      const { response, error } = await remoteAccessService.listClients(params)
-
+      const { response, error } = await remoteAccessService.listClients(params);
       if (error) {
         this.$toast.add({
           severity: 'error',
@@ -461,7 +456,6 @@ export default {
         this.savedRdpClientList = response.data.content;
         this.resultCount = response.data.totalElements
       }
-
       this.loading = false;
     },
 
@@ -528,14 +522,11 @@ export default {
           this.getSavedRdpClient(this.currentPage);
         }
       }
-
       this.showAddNewRdpClientDialog = false;
     },
 
     async deleteSavedRdpClient(data) {
-
       let deleteSavedClientResponse = null
-
       const { response, error } = await remoteAccessService.deleteClient(data.id)
 
       if (error) {
@@ -547,8 +538,6 @@ export default {
         });
       }
       else {
-        deleteSavedClientResponse = response;
-
         this.deleteRdpClientConfirmDialog = false;
         this.getSavedRdpClient(this.currentPage);
 
@@ -674,7 +663,6 @@ export default {
           });
         }
       }
-
     },
 
     toggle(event) {
@@ -693,7 +681,9 @@ export default {
     paginatorTemplate() {
       return `{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}`;
     },
+    ...mapGetters(["selectedLiderNode"]),
   },
+
   mounted() {
     this.getSavedRdpClient(1);
   },
@@ -733,4 +723,10 @@ export default {
 
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
+    }
+}
+</style>
