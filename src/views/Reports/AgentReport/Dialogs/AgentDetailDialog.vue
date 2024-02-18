@@ -47,7 +47,7 @@
                 <div class="p-col-8">{{ selectedAgent.createDate }}</div>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
                 <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.update_date')}}</b></div>
-                <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
+                <div class="p-col-8">{{ selectedAgent.eventDate }}</div>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             </div>
 
