@@ -235,7 +235,7 @@
               <div class="p-col-8">{{ selectedAgentInfo.createDate }}</div>
               <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
               <div class="p-col-4"><b>{{ $t("computer.agent_info.modified_date") }}</b></div>
-              <div class="p-col-8">{{ selectedAgentInfo.eventDate }}</div>
+              <div class="p-col-8">{{ selectedAgentInfo.modifyDate }}</div>
               <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             </div>
           <h4>{{ $t("computer.agent_info.disk_and_memory_info") }}</h4>

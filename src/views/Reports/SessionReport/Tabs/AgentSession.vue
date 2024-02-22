@@ -79,7 +79,7 @@
         <Dropdown
           id="selectModel"
           v-model="filter.model"
-          :options="brands"
+          :options="models"
           :placeholder="$t('reports.session_report.select')"
           showClear="true"
           @change="clearEvent($event, 'model')"

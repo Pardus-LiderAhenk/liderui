@@ -112,7 +112,7 @@
         <Dropdown
           id="selectModel"
           v-model="filter.model"
-          :options="brands"
+          :options="models"
           :placeholder="$t('reports.detailed_agent_report.select')"
           showClear="true"
           @change="clearEvent($event, 'model')"
