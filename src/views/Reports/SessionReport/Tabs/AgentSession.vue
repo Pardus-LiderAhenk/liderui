@@ -144,7 +144,7 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="">{{$t('İstemci Durumu')}}</label>
+        <label for="">{{$t('İstemci reports.session_report.client_status')}}</label>
         <Dropdown
           v-model="filter.agentStatus"
           :options="agentStatuses"

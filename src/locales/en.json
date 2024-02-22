@@ -2031,8 +2031,8 @@
             "error_417_user_session_report":"An error occurred while generating the User Session report. Error Code: 400",
             "active":"Active",
             "passive":"Passive",
-            "user_list":"User List"
-
+            "user_list":"User List",
+            "client_status": "Active/Passive"
 
         }
     },

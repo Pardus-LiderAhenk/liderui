@@ -2030,9 +2030,8 @@
             "error_417_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu. Hata Kodu : 400",
             "active":"Aktif",
             "passive":"Pasif",
-            "user_list":"Kullanıcı Listesi"
-
-
+            "user_list":"Kullanıcı Listesi",
+            "client_status": "Aktif/Pasif"
         }
     },
     "profile":{
