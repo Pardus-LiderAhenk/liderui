@@ -531,6 +531,7 @@
                 "add_new_client":"Yeni İstemci Ekle",
                 "edit_client":"İstemciyi Düzenle",
                 "hostname":"Bilgisayar Adı",
+                "hostname_cannot_be_null":"Bilgisayar adı boş bırakılamaz",
                 "edit":"Düzenle",
                 "delete":"Sil",
                 "delete_registered_client":"Kayıtlı İstemciyi Sil",
@@ -546,7 +547,9 @@
                 "update":"Güncelle",
                 "error_fetching_the_saved_clients":"Kayıtlı istemciler getirilirken hata oluştu",
                 "error_adding_the_client":"İstemci eklenirken hata oluştu",
-                "yes": "Evet"
+                "yes": "Evet",
+                "find_client":"İstemci Bul",
+                "client_already_exists":"Bu istemci zaten kayıtlı"
             }
         },
         "agent_info": {
