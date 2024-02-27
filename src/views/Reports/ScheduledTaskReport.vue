@@ -124,7 +124,7 @@
           <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
               <div>
-                <Button :disabled="data.task.deleted"
+                <!-- <Button :disabled="data.task.deleted"
                   class="p-button-sm p-button-warning p-button-rounded p-mr-2 "
                   icon="pi pi-pencil"
                   v-tooltip.bottom="$t('reports.scheduled_task_report.edit')"
@@ -135,7 +135,7 @@
                   icon="pi pi-times"
                   v-tooltip.bottom="$t('reports.scheduled_task_report.cancel')"
                   @click="showTaskDetailDialog(data.id); cancelScheduledTaskDialog = true;"
-                />
+                /> -->
                 <Button
                   class="p-button-sm p-button-rounded"
                   icon="pi pi-list"

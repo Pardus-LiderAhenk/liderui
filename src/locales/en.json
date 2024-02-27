@@ -71,7 +71,8 @@
         "system_session_report":"User Session Report",
         "view_profile": "View Profile",
         "logout": "Logout",
-        "privilege_warning": "An error occurred while getting user privileges"
+        "privilege_warning": "An error occurred while getting user privileges",
+        "scheduled_tasks": "Scheduled Tasks"
     },
     "tree":{
         "tree": "Tree",

@@ -71,7 +71,8 @@
         "system_session_report":"Kullanıcı Oturum Raporu",
         "view_profile": "Profil Görüntüle",
         "logout": "Çıkış",
-        "privilege_warning": "Kullanıcı yetkileri getiriliken hata oluştu"
+        "privilege_warning": "Kullanıcı yetkileri getiriliken hata oluştu",
+        "scheduled_tasks": "Zamanlanmış Görevler"
     },
     "tree":{
         "tree": "Ağaç",

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const scheduleTaskReportListUrl = "/api/lider/scheduled-task-report/list";
+const scheduleTaskReportActiveListUrl = "/api/lider/scheduled-task-report/active-list";
 const scheduleTaskReportPluginsUrl = "/api/lider/scheduled-task-report/plugins";
 const scheduleTaskReportExportUrl = "/api/lider/scheduled-task-report/export";
 const scheduleTaskReportUpdateUrl = "/api/lider/scheduled-task/update";
@@ -22,7 +23,14 @@ class ScheduledTaskREportService{
             return { error: error }
         }
     }
-
+    async scheduledActiveTaskList(params) {
+        try {
+            const response = await axios.post(scheduleTaskReportActiveListUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
     async scheduledTaskPlugins() {
         try {
             const response = await axios.get(scheduleTaskReportPluginsUrl);
