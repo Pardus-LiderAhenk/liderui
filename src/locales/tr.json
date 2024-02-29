@@ -986,7 +986,15 @@
                 "no":"Hayır",
                 "cancel":"İptal",
                 "update_settings":"Ayarları Güncelle",
-                "error_updating_mail_settings" : "E-mail ayarları güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417"
+                "error_updating_mail_settings" : "E-mail ayarları güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
+                "update_password":"Parola Güncelle",
+                "change_password":"Parola Değiştir",
+                "old_password":"Eski Parola",
+                "write_old_password":"Eski Parolanızı Girin",
+                "error_changed_mail_password":"Mail parolanız güncellenirken hata oluştu",
+                "error_400_changed_mail_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
+                "mail_password_successfully_update":"Eski parolanız başarıyla güncellendi"
+
             },
             "other_settings":{
                 "other_settings":"Diğer Ayarlar",

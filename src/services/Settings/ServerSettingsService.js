@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const liderSettingsUpdateEmailUrl = '/api/lider/settings/update/email-settings';
+const liderSettingsUpdateEmailPasswordUrl = '/api/lider/settings/update/email-password'
 const liderSettingsUpdateFileServerUrl = '/api/lider/settings/update/file-server';
 const liderSettingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
 const liderSettingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
@@ -18,6 +19,16 @@ class ServerSettingsService{
     async updateEmail(data){
         try{
             const response =  await axios.post(liderSettingsUpdateEmailUrl,data);
+            return { response };
+        }
+        catch(error){
+            return { error: error };
+        }
+    }
+
+    async updateEmailPassword(data){
+        try{
+            const response =  await axios.post(liderSettingsUpdateEmailPasswordUrl,data);
             return { response };
         }
         catch(error){

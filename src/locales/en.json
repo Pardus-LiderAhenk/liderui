@@ -993,7 +993,15 @@
                 "no":"No",
                 "update_settings":"Update Settings",
                 "cancel":"Cancel",
-                "error_updating_mail_settings" : "An unexpected error occurred while updating the e-mail settings. Error code : 417"
+                "error_updating_mail_settings" : "An unexpected error occurred while updating the e-mail settings. Error code : 417",
+                "update_password":"Update Password",
+                "change_password":"Change Password",
+                "old_password":"Old Password",
+                "write_old_password":"Enter Your Old Password",
+                "error_changed_mail_password":"An error occurred while updating your mail password",
+                "error_400_changed_mail_password":"Your password could not be changed because your old password was incorrect",
+                "mail_password_successfully_update":"E-Mail password have been successfully updated."
+
 
             },
             "other_settings":{
