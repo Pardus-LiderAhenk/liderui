@@ -13,15 +13,20 @@
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="fileServerPort">{{$t('settings.server_settings.file_server_settings.port')}}</label>
-            <InputText id="fileServerPort" type="text" v-model="fileServerPort"/>
+            <InputText id="fileServerPort" type="number" v-model="fileServerPort"/>
         </div>
-        <div class="p-field p-col-12 p-md-6">
+        <div class="p-field p-col-12 p-md-4">
             <label for="fileServerUsername">{{$t('settings.server_settings.file_server_settings.username')}}</label>
             <InputText id="fileServerUsername" type="text" v-model="fileServerUsername"/>
         </div>
-         <div class="p-field p-col-12 p-md-6">
+         <div class="p-field p-col-12 p-md-2">
             <label for="fileServerPassword">{{$t('settings.server_settings.file_server_settings.password')}}</label>
-            <InputText id="fileServerPassword" type="password" v-model="fileServerPassword"/>
+            <Button 
+                icon="pi pi-unlock"
+                class="p-button-sm"
+                type="button"
+                @click="changePasswordDialog = true"
+                :label="$t('settings.server_settings.file_server_settings.update_password')" />
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="fileServerAgentFilePath">{{$t('settings.server_settings.file_server_settings.agent_file_directory')}}</label>
@@ -38,6 +43,42 @@
             </div>
         </div>
     </div>
+    <Dialog 
+        :header="$t('settings.server_settings.file_server_settings.update_password')" 
+        v-model:visible="changePasswordDialog"  
+        :modal="true" 
+        @hide="changePasswordDialog = false">
+        <div>
+            <div class="p-field p-col-12">
+                <label for="fileServerPassword">{{$t('settings.server_settings.file_server_settings.old_password')}}</label>
+                <div class="p-inputgroup">
+                    <Password 
+                        :placeholder="$t('settings.server_settings.file_server_settings.write_old_password')"
+                        toggleMask v-model="oldPassword" :feedback="false"
+                        :class="validationOldPassword ? 'p-invalid': ''"
+                    />
+                </div>
+                <small v-if="validationOldPassword" class="p-error">
+                    {{ oldPasswordMessage}}
+                </small>
+                <password-component ref="password"></password-component>
+            </div>
+        </div>
+        <template #footer>
+        <Button 
+            :label="$t('settings.server_settings.file_server_settings.cancel')" 
+            icon="pi pi-times" 
+            @click="changePasswordDialog = false" 
+            class="p-button-text p-button-sm"
+        />
+        <Button 
+            :label="$t('settings.server_settings.file_server_settings.change_password')" 
+            icon="pi pi-unlock" 
+            @click="changeFileServerPassword"
+            class="p-button-sm"
+        />
+        </template>
+    </Dialog>
     <Dialog :header="$t('settings.server_settings.file_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
@@ -60,6 +101,8 @@
 
 <script>
 import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
+import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+
 export default {
     props:['serverSettings'],
     data() {
@@ -75,8 +118,15 @@ export default {
             fileServerUsername:'',
             fileServerPassword:'',
             fileServerAgentFilePath:'',
-            showDialog: false
+            showDialog: false,
+            changePasswordDialog: false,
+            oldPassword:'',
+            newPassword:'',
+            validationOldPassword: false,
         }
+    },
+    components: {
+        PasswordComponent
     },
     watch: { 
       	serverSettings: function(newVal) { 
@@ -85,9 +135,14 @@ export default {
             this.fileServerHost = newVal.fileServerHost;
             this.fileServerPort = newVal.fileServerPort;
             this.fileServerUsername = newVal.fileServerUsername;
-            this.fileServerPassword = newVal.fileServerPassword;
+            //this.fileServerPassword = newVal.fileServerPassword;
             this.fileServerAgentFilePath = newVal.fileServerAgentFilePath;
           }
+        },
+        oldPassword() {
+            if (this.oldPassword) {
+                this.validationOldPassword = false;
+            }
         }
     },
     methods: {
@@ -97,7 +152,7 @@ export default {
             data.append("fileServerAddress",this.fileServerHost);
             data.append("fileServerPort",this.fileServerPort);
             data.append("fileServerUsername",this.fileServerUsername);
-            data.append("fileServerPassword",this.fileServerPassword);
+            //data.append("fileServerPassword",this.fileServerPassword);
             data.append("fileServerAgentFilePath",this.fileServerAgentFilePath);
 
             const { response,error } = await serverSettingService.updateFileServer(data) ;
@@ -125,6 +180,46 @@ export default {
                 }
             }
             this.showDialog = false;
+        },
+        async changeFileServerPassword() {
+            this.newPassword = this.$refs.password.getPassword();
+            let data = new FormData();
+            data.append("fileServerPassword", this.oldPassword);
+            data.append("newFileServerPassword", this.newPassword);
+
+            const{response,error} = await serverSettingService.updateFileServerPassword(data);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.file_server_settings.error_changed_file_password'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    this.oldPassword = null;
+                    this.newPassword = null;
+                    this.$refs.password.setPasswordForm('', '');
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_settings.file_server_settings.file_server_password_successfully_update'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    setTimeout(() => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                    }, 3000);
+                }
+                else if(response.status == 400 ){
+                    this.$toast.add({
+                        severity:'warn', 
+                        detail: this.$t('settings.server_settings.file_server_settings.error_400_changed_file_password'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
         }
     },
 }

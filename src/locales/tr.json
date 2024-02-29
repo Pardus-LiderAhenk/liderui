@@ -964,7 +964,7 @@
                 "file_server_address":"Dosya Sunucu Adresi",
                 "port":"Port",
                 "username":"Kullanıcı Adı",
-                "password":"Kullanıcı Şifresi",
+                "password":"Kullanıcı Parolası",
                 "agent_file_directory":"Ajan Dosya Dizini",
                 "save":"Değişiklikleri Kaydet",
                 "yes":"Evet",
@@ -973,7 +973,15 @@
                 "update_settings":"Ayarları Güncelle",
                 "file_server_notify":"Dosya sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "file_server_settings_successfully_update":"Dosya sunucu ayarları başarıyla güncellendi",
-                "error_417_update_file_server_settings": "Dosya sunucu ayarları güncellenirken hata oluştu"
+                "error_417_update_file_server_settings": "Dosya sunucu ayarları güncellenirken hata oluştu",
+                "update_password":"Parola Güncelle",
+                "change_password":"Parola Değiştir",
+                "old_password":"Eski Parola",
+                "write_old_password":"Eski Parolanızı Girin",
+                "error_changed_file_password":"Dosya sunucu parolanız güncellenirken hata oluştu",
+                "error_400_changed_file_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
+                "file_server_password_successfully_update":"Dosya sunucu parolanız başarıyla güncellendi"
+
             },
             "mail_server_settings":{
                 "mail_notify":"Email ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
@@ -982,7 +990,7 @@
                 "mail_host_address":"Email Host Adresi",
                 "port":"Email Port",
                 "mail_username":"Email Kullanıcı Adresi",
-                "mail_password":"Email Şifresi",
+                "mail_password":"Email Parolası",
                 "smtp_verification":"SMTP Doğrulama",
                 "tls_activation":"TLS Aktif",
                 "save":"Değişiklikleri Kaydet",

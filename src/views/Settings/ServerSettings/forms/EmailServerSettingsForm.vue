@@ -16,7 +16,7 @@
             <InputText id="mailUsername" type="text" v-model="mailUsername" placeholder="lider@liderahenk.org"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
-            <label for="mailPassword">{{$t('settings.server_settings.mail_server_settings.update_password')}}</label>
+            <label for="mailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
             <Button 
                 icon="pi pi-unlock"
                 class="p-button-sm"
@@ -41,41 +41,41 @@
     </div>
 
     <Dialog 
-            :header="$t('settings.server_settings.mail_server_settings.change_password')" 
-            v-model:visible="changePasswordDialog"  
-            :modal="true" 
-            @hide="changePasswordDialog = false">
-            <div>
-                <div class="p-field p-col-12">
-                    <label for="city">{{$t('settings.server_settings.mail_server_settings.write_old_password')}}</label>
-                    <div class="p-inputgroup">
-                        <Password 
-                            :placeholder="$t('settings.server_settings.mail_server_settings.write_old_password')"
-                            toggleMask v-model="oldPassword" :feedback="false"
-                            :class="validationOldPassword ? 'p-invalid': ''"
-                        />
-                    </div>
-                    <small v-if="validationOldPassword" class="p-error">
-                        {{ oldPasswordMessage}}
-                    </small>
-                    <password-component ref="password"></password-component>
+        :header="$t('settings.server_settings.mail_server_settings.change_password')" 
+        v-model:visible="changePasswordDialog"  
+        :modal="true" 
+        @hide="changePasswordDialog = false">
+        <div>
+            <div class="p-field p-col-12">
+                <label for="city">{{$t('settings.server_settings.mail_server_settings.write_old_password')}}</label>
+                <div class="p-inputgroup">
+                    <Password 
+                        :placeholder="$t('settings.server_settings.mail_server_settings.write_old_password')"
+                        toggleMask v-model="oldPassword" :feedback="false"
+                        :class="validationOldPassword ? 'p-invalid': ''"
+                    />
                 </div>
+                <small v-if="validationOldPassword" class="p-error">
+                    {{ oldPasswordMessage}}
+                </small>
+                <password-component ref="password"></password-component>
             </div>
-            <template #footer>
-            <Button 
-                :label="$t('settings.server_settings.mail_server_settings.cancel')" 
-                icon="pi pi-times" 
-                @click="changePasswordDialog = false" 
-                class="p-button-text p-button-sm"
-            />
-            <Button 
-                :label="$t('settings.server_settings.mail_server_settings.change_password')" 
-                icon="pi pi-unlock" 
-                @click="changeMailPassword"
-                class="p-button-sm"
-            />
-            </template>
-        </Dialog>
+        </div>
+        <template #footer>
+        <Button 
+            :label="$t('settings.server_settings.mail_server_settings.cancel')" 
+            icon="pi pi-times" 
+            @click="changePasswordDialog = false" 
+            class="p-button-text p-button-sm"
+        />
+        <Button 
+            :label="$t('settings.server_settings.mail_server_settings.change_password')" 
+            icon="pi pi-unlock" 
+            @click="changeMailPassword"
+            class="p-button-sm"
+        />
+        </template>
+    </Dialog>
 
     <Dialog :header="$t('settings.server_settings.mail_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
