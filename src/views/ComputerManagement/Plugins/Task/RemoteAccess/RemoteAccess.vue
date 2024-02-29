@@ -148,10 +148,20 @@
                       <div class="p-inputgroup">
                         <Dropdown 
                           :options="savedRdpClientList" 
-                          optionLabel="host" 
+                          optionLabel="hostandhostname" 
                           v-model="savedRdpClient"
-                          :placeholder="$t('computer.plugins.remote_access.select_registered_connection')" 
-                        />
+                          :filter="true" 
+                          :filterPlaceholder="$t('computer.plugins.remote_access.find_client')"
+                          :placeholder="$t('computer.plugins.remote_access.select_registered_connection')"
+                        >
+                          <template #option="{ option }">
+                            <div class="p-d-flex p-ai-center">
+                                <i class="pi pi-desktop p-mr-2"></i>
+                                <div>{{ option.host }} - {{ option.hostname }}</div>
+                            </div>
+                          </template>
+                        </Dropdown>
+
                         <Button 
                           :label="$t('computer.plugins.remote_access.clear')" 
                           icon="fas fa-backspace"
@@ -461,12 +471,6 @@ export default {
 
     async saveRdpClient(event, data) {
       if (event == "added") {
-        this.$toast.add({
-          severity: 'success',
-          summary: this.$t("computer.task.toast_summary"),
-          detail: this.$t("computer.plugins.remote_access.client_added_successfully"),
-          life: 3000
-        });
 
         let saveRdpClientResponse = null
         let params = {
@@ -478,25 +482,36 @@ export default {
 
         const { response, error } = await remoteAccessService.saveClient(params)
         if (error) {
-          this.$toast.add({
-            severity: 'error',
-            detail: this.$t('computer.plugins.remote_access.error_adding_the_client'),
-            summary: this.$t("computer.task.toast_summary"),
-            life: 3000
-          });
+          if (error.response.status == "409") {
+            this.$toast.add({
+              severity: 'warn',
+              detail: this.$t('computer.plugins.remote_access.client_already_exists'),
+              summary: this.$t("computer.task.toast_summary"),
+              life: 3000
+            });
+          }
+          else {
+            this.$toast.add({
+              severity: 'error',
+              detail: this.$t('computer.plugins.remote_access.error_adding_the_client'),
+              summary: this.$t("computer.task.toast_summary"),
+              life: 3000
+            });
+          }
         }
         else {
+          this.$toast.add({
+          severity: 'success',
+          summary: this.$t("computer.task.toast_summary"),
+          detail: this.$t("computer.plugins.remote_access.client_added_successfully"),
+          life: 3000
+        });
+
           saveRdpClientResponse = response;
           this.getSavedRdpClient(this.currentPage);
         }
 
       } else {
-        this.$toast.add({
-          severity: 'success',
-          summary: this.$t("computer.task.toast_summary"),
-          detail: this.$t("computer.plugins.remote_access.client_updated_successfully"),
-          life: 3000
-        });
 
         let updateRdpClientResponse = null
         let params = {
@@ -510,14 +525,31 @@ export default {
         const { response, error } = await remoteAccessService.updateClient(params)
 
         if (error) {
-          this.$toast.add({
-            severity: 'error',
-            detail: this.$t('computer.plugins.remote_access.error_updating_the_client'),
-            summary: this.$t("computer.task.toast_summary"),
-            life: 3000
-          });
+          if (error.response.status == "409") {
+            this.$toast.add({
+              severity: 'warn',
+              detail: this.$t('computer.plugins.remote_access.client_already_exists'),
+              summary: this.$t("computer.task.toast_summary"),
+              life: 3000
+            });
+          }
+          else {
+            this.$toast.add({
+              severity: 'error',
+              detail: this.$t('computer.plugins.remote_access.error_updating_the_client'),
+              summary: this.$t("computer.task.toast_summary"),
+              life: 3000
+            });
+          }
         }
         else {
+          this.$toast.add({
+          severity: 'success',
+          summary: this.$t("computer.task.toast_summary"),
+          detail: this.$t("computer.plugins.remote_access.client_updated_successfully"),
+          life: 3000
+        });
+
           updateRdpClientResponse = response;
           this.getSavedRdpClient(this.currentPage);
         }
@@ -526,7 +558,6 @@ export default {
     },
 
     async deleteSavedRdpClient(data) {
-      let deleteSavedClientResponse = null
       const { response, error } = await remoteAccessService.deleteClient(data.id)
 
       if (error) {
@@ -675,6 +706,15 @@ export default {
         this.getSavedRdpClient(nextPage);
       }
     },
+
+    addHostAndHostnameToRdpClientList() {
+      if (this.savedRdpClientList != null) {
+        for (let index = 0; index < this.savedRdpClientList.length; index++) {
+          const element = this.savedRdpClientList[index];
+          element.hostandhostname = element.host + " - " + element.hostname;
+        }
+      }
+    }
   },
 
   computed: {
@@ -684,8 +724,9 @@ export default {
     ...mapGetters(["selectedLiderNode"]),
   },
 
-  mounted() {
-    this.getSavedRdpClient(1);
+  async mounted() {
+    await this.getSavedRdpClient(1);
+    this.addHostAndHostnameToRdpClientList();
   },
 
   watch: {
@@ -717,6 +758,10 @@ export default {
       if (this.savedRdpClient != null) {
         this.selectSavedRdpClient(this.savedRdpClient);
       }
+    },
+
+    savedRdpClientList() {
+      this.addHostAndHostnameToRdpClientList();
     }
   },
 }

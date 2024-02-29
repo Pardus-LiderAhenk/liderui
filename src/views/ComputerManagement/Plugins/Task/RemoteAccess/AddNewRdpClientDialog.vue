@@ -45,6 +45,9 @@
                 <div class="p-inputgroup  p-mt-1">
                     <InputText id="hostname" v-model="form.hostname" />
                 </div>
+                <small v-show="validationErrors.hostname" class="p-error"> {{
+                    $t('computer.plugins.remote_access.hostname_cannot_be_null') }}
+                </small>
 
                 <div class="p-inputgroup p-mt-2">
                     <label for="description">{{ $t('computer.plugins.remote_access.description_field') }}</label>
@@ -153,6 +156,12 @@ export default {
             } 
             else {
                 delete this.validationErrors['username'];
+            }
+            if (this.form.hostname == "" || this.form.hostname == null) {
+                this.validationErrors['hostname'] = true;
+            } 
+            else {
+                delete this.validationErrors['hostname'];
             }
 
             return !Object.keys(this.validationErrors).length;

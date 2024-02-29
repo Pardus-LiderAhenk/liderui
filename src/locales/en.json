@@ -71,7 +71,8 @@
         "system_session_report":"User Session Report",
         "view_profile": "View Profile",
         "logout": "Logout",
-        "privilege_warning": "An error occurred while getting user privileges"
+        "privilege_warning": "An error occurred while getting user privileges",
+        "scheduled_tasks": "Scheduled Tasks"
     },
     "tree":{
         "tree": "Tree",
@@ -534,6 +535,7 @@
                 "add_new_client":"Add New Client",
                 "edit_client":"Edit Client",
                 "hostname":"Hostname",
+                "hostname_cannot_be_null":"Hostname cannot be null",
                 "edit":"Edit",
                 "delete":"Delete",
                 "delete_registered_client":"Delete Registered Client",
@@ -549,7 +551,9 @@
                 "update":"Update",
                 "error_fetching_the_saved_clients":"An error occurred while fetching the saved clients",
                 "error_adding_the_client":"An error occurred while adding the client",
-                "yes": "Yes"
+                "yes": "Yes",
+                "find_client":"Find Client",
+                "client_already_exists":"This client already exists"
             }
         },
         "agent_info": {
