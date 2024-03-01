@@ -969,7 +969,8 @@
                 "write_old_password":"Enter Your Old Password",
                 "error_changed_xmpp_password":"An error occurred while updating your xmpp server password",
                 "error_400_changed_xmpp_password":"Your password could not be changed because your old password was incorrect",
-                "xmpp_server_password_successfully_update":"Xmpp server password have been successfully updated."
+                "xmpp_server_password_successfully_update":"Xmpp server password have been successfully updated.",
+                "password_validation":"Please enter your password correctly"
 
             },
             "file_server_settings":{
@@ -994,7 +995,8 @@
                 "write_old_password":"Enter Your Old Password",
                 "error_changed_file_password":"An error occurred while updating your file server password",
                 "error_400_changed_file_password":"Your password could not be changed because your old password was incorrect",
-                "file_server_password_successfully_update":"File server password have been successfully updated"
+                "file_server_password_successfully_update":"File server password have been successfully updated",
+                "password_validation":"Please enter your password correctly"
 
             },
             "mail_server_settings":{
@@ -1019,8 +1021,8 @@
                 "write_old_password":"Enter Your Old Password",
                 "error_changed_mail_password":"An error occurred while updating your mail password",
                 "error_400_changed_mail_password":"Your password could not be changed because your old password was incorrect",
-                "mail_password_successfully_update":"E-Mail password have been successfully updated."
-
+                "mail_password_successfully_update":"E-Mail password have been successfully updated.",
+                "password_validation":"Please enter your password correctly"
 
             },
             "other_settings":{

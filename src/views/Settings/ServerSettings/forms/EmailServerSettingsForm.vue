@@ -183,40 +183,58 @@ export default {
             data.append("mailPassword", this.oldPassword);
             data.append("newMailPassword", this.newPassword);
 
-            const{response,error} = await serverSettingService.updateEmailPassword(data);
-            if(error){
+            if(this.validationPasswordForm(this.newPassword)){
+                const{response,error} = await serverSettingService.updateEmailPassword(data);
+                if(error){
+                    if (error.response.status == 403 ){
+                        this.$toast.add({
+                            severity:'warn', 
+                            detail: this.$t('settings.server_settings.mail_server_settings.error_400_changed_mail_password'), 
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                    else{
+                        this.$toast.add({
+                            severity:'error', 
+                            detail: this.$t('settings.server_settings.mail_server_settings.error_changed_mail_password'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                    }
+                }
+                else{
+                    if(response.status == 200){
+                        this.oldPassword = null;
+                        this.newPassword = null;
+                        this.$refs.password.setPasswordForm('', '');
+                        this.$toast.add({
+                            severity:'success', 
+                            detail: this.$t('settings.server_settings.mail_server_settings.mail_password_successfully_update'),
+                            summary:this.$t("computer.task.toast_summary"), 
+                            life: 3000
+                        });
+                        setTimeout(() => {
+                            this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                        }, 3000);
+                    }
+
+                }
+            }
+            else{
                 this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.server_settings.mail_server_settings.error_changed_mail_password'),
+                    severity:'warn', 
+                    detail: this.$t('settings.server_settings.mail_server_settings.password_validation'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
                 });
             }
-            else{
-                if(response.status == 200){
-                    this.oldPassword = null;
-                    this.newPassword = null;
-                    this.$refs.password.setPasswordForm('', '');
-                    this.$toast.add({
-                        severity:'success', 
-                        detail: this.$t('settings.server_settings.mail_server_settings.mail_password_successfully_update'),
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                    setTimeout(() => {
-                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                    }, 3000);
-                }
-                else if(response.status == 400 ){
-                    this.$toast.add({
-                        severity:'warn', 
-                        detail: this.$t('settings.server_settings.mail_server_settings.error_400_changed_mail_password'), 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
-                    });
-                }
-            }
+        },
+        validationPasswordForm(password) {
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+            return regex.test(password);
         }
+        
     }
 }
 

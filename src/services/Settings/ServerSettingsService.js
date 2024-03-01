@@ -22,8 +22,7 @@ class ServerSettingsService{
         try{
             const response =  await axios.post(liderSettingsUpdateEmailUrl,data);
             return { response };
-        }
-        catch(error){
+        } catch(error){
             return { error: error };
         }
     }
@@ -32,8 +31,7 @@ class ServerSettingsService{
         try{
             const response =  await axios.post(liderSettingsUpdateEmailPasswordUrl,data);
             return { response };
-        }
-        catch(error){
+        } catch(error){
             return { error: error };
         }
     }

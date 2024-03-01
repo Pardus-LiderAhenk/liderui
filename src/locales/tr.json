@@ -963,7 +963,8 @@
                 "write_old_password":"Eski Parolanızı Girin",
                 "error_changed_xmpp_password":"Dosya sunucu parolanız güncellenirken hata oluştu",
                 "error_400_changed_xmpp_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
-                "xmpp_server_password_successfully_update":"Dosya sunucu parolanız başarıyla güncellendi"
+                "xmpp_server_password_successfully_update":"Dosya sunucu parolanız başarıyla güncellendi",
+                "password_validation":"Lütfen parolanızı kuralına uygun bir şekilde girin"
 
             },
             "file_server_settings":{
@@ -988,7 +989,8 @@
                 "write_old_password":"Eski Parolanızı Girin",
                 "error_changed_file_password":"Dosya sunucu parolanız güncellenirken hata oluştu",
                 "error_400_changed_file_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
-                "file_server_password_successfully_update":"Dosya sunucu parolanız başarıyla güncellendi"
+                "file_server_password_successfully_update":"Dosya sunucu parolanız başarıyla güncellendi",
+                "password_validation":"Lütfen parolanızı kuralına uygun bir şekilde girin"
 
             },
             "mail_server_settings":{
@@ -1013,7 +1015,8 @@
                 "write_old_password":"Eski Parolanızı Girin",
                 "error_changed_mail_password":"Mail parolanız güncellenirken hata oluştu",
                 "error_400_changed_mail_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
-                "mail_password_successfully_update":"Eski parolanız başarıyla güncellendi"
+                "mail_password_successfully_update":"Eski parolanız başarıyla güncellendi",
+                "password_validation":"Lütfen parolanızı kuralına uygun bir şekilde girin"
 
             },
             "other_settings":{
