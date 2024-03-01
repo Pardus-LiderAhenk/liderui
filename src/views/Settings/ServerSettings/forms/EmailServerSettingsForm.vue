@@ -216,10 +216,6 @@ export default {
                     });
                 }
             }
-        },
-
-        showUpdatePasswordDialog() {
-            this.changePasswordDialog = true;
         }
     }
 }

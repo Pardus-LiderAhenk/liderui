@@ -17,7 +17,11 @@
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="xmppPassword">{{$t('settings.server_settings.messaging_server_settings.xmpp_password')}}</label>
-            <InputText id="xmppPassword" type="password" v-model="xmppPassword"/>
+            <Button 
+                icon="pi pi-unlock"
+                class="p-button-sm"
+                type="button" @click="changePasswordDialog = true" 
+                :label="$t('settings.server_settings.messaging_server_settings.change_password')" />
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="xmppResource">{{$t('settings.server_settings.messaging_server_settings.xmpp_source_name')}}</label>
@@ -47,6 +51,42 @@
             </div>
         </div>
     </div>
+    <Dialog 
+        :header="$t('settings.server_settings.messaging_server_settings.change_password')" 
+        v-model:visible="changePasswordDialog"  
+        :modal="true" 
+        @hide="changePasswordDialog = false">
+        <div>
+            <div class="p-field p-col-12">
+                <label for="xmppServer">{{$t('settings.server_settings.messaging_server_settings.write_old_password')}}</label>
+                <div class="p-inputgroup">
+                    <Password 
+                        :placeholder="$t('settings.server_settings.messaging_server_settings.write_old_password')"
+                        toggleMask v-model="oldPassword" :feedback="false"
+                        :class="validationOldPassword ? 'p-invalid': ''"
+                    />
+                </div>
+                <small v-if="validationOldPassword" class="p-error">
+                    {{ oldPasswordMessage}}
+                </small>
+                <password-component ref="password"></password-component>
+            </div>
+        </div>
+        <template #footer>
+        <Button 
+            :label="$t('settings.server_settings.messaging_server_settings.cancel')" 
+            icon="pi pi-times" 
+            @click="changePasswordDialog = false" 
+            class="p-button-text p-button-sm"
+        />
+        <Button 
+            :label="$t('settings.server_settings.messaging_server_settings.change_password')" 
+            icon="pi pi-unlock" 
+            @click="changeXmppPassword"
+            class="p-button-sm"
+        />
+        </template>
+    </Dialog>
     <Dialog :header="$t('settings.server_settings.messaging_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
@@ -68,6 +108,7 @@
 
 <script>
 import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
+import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 
 export default {
     props:['serverSettings'],
@@ -82,7 +123,11 @@ export default {
             xmppMaxRetryConnectionCount:'',
             xmppPacketReplayTimeout:'',
             xmppPingTimeout:'',
-            showDialog: false
+            showDialog: false,
+            oldPassword:'',
+            newPassword:'',
+            validationOldPassword: false,
+            changePasswordDialog: false
         }
     },
     watch: { 
@@ -91,14 +136,22 @@ export default {
             this.xmppHost = newVal.xmppHost;
             this.xmppPort = newVal.xmppPort;
             this.xmppUsername = newVal.xmppUsername;
-            this.xmppPassword = newVal.xmppPassword;
+            //this.xmppPassword = newVal.xmppPassword;
             this.xmppResource = newVal.xmppResource;
             this.xmppServiceName = newVal.xmppServiceName;
             this.xmppMaxRetryConnectionCount = newVal.xmppMaxRetryConnectionCount;
             this.xmppPacketReplayTimeout = newVal.xmppPacketReplayTimeout;
             this.xmppPingTimeout = newVal.xmppPingTimeout;
           }
+        },
+        oldPassword() {
+            if (this.oldPassword) {
+                this.validationOldPassword = false;
+            }
         }
+    },
+    components:{
+        PasswordComponent
     },
     methods: {
         async submitForm() {
@@ -135,7 +188,47 @@ export default {
 
             }
             this.showDialog = false;
-        }   
+        },
+        async changeXmppPassword(){
+            this.newPassword = this.$refs.password.getPassword();
+            let data = new FormData();
+            data.append("xmppServerPassword", this.oldPassword);
+            data.append("newXmppServerPassword", this.newPassword);
+
+            const{response,error} = await serverSettingService.updateXmppPassword(data);
+            if(error){
+                this.$toast.add({
+                    severity:'error', 
+                    detail: this.$t('settings.server_settings.messaging_server_settings.error_changed_xmpp_password'),
+                    summary:this.$t("computer.task.toast_summary"), 
+                    life: 3000
+                });
+            }
+            else{
+                if(response.status == 200){
+                    this.oldPassword = null;
+                    this.newPassword = null;
+                    this.$refs.password.setPasswordForm('', '');
+                    this.$toast.add({
+                        severity:'success', 
+                        detail: this.$t('settings.server_settings.messaging_server_settings.xmpp_server_password_successfully_update'),
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                    setTimeout(() => {
+                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                    }, 3000);
+                }
+                else if(response.status == 400 ){
+                    this.$toast.add({
+                        severity:'warn', 
+                        detail: this.$t('settings.server_settings.messaging_server_settings.error_400_changed_xmpp_password'), 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
+            }
+        }
     },
 }
 

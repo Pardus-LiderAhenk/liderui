@@ -943,7 +943,7 @@
                 "xmpp_server_address":"XMPP Sunucu Adresi",
                 "port":"Port",
                 "xmpp_username":"XMPP Kullanıcı Adı",
-                "xmpp_password":"XMPP Kullanıcı Şifresi",
+                "xmpp_password":"XMPP Kullanıcı Parolası",
                 "xmpp_source_name":"XMPP Kaynak Adı",
                 "xmpp_service_name":"XMPP Servis Adı",
                 "xmpp_retry_connection_count":"XMPP Retry Connection Count",
@@ -956,7 +956,15 @@
                 "update_settings":"Ayarları Güncelle",
                 "messaging_server_notify":"XMPP sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "messaging_server_settings_successfully_update":"XMPP sunucu ayarları başarıyla güncellendi",
-                "error_update_messaging_server_settings": "XMPP sunucu ayarları güncellenirken hata oluştu"
+                "error_update_messaging_server_settings": "XMPP sunucu ayarları güncellenirken hata oluştu",
+                "update_password":"Parola Güncelle",
+                "change_password":"Parola Değiştir",
+                "old_password":"Eski Parola",
+                "write_old_password":"Eski Parolanızı Girin",
+                "error_changed_xmpp_password":"Dosya sunucu parolanız güncellenirken hata oluştu",
+                "error_400_changed_xmpp_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
+                "xmpp_server_password_successfully_update":"Dosya sunucu parolanız başarıyla güncellendi"
+
             },
             "file_server_settings":{
                 "file_server_information":"Dosya Sunucusu Bilgileri",
