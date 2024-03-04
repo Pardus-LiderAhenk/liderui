@@ -41,7 +41,7 @@
     </div>
 
     <Dialog 
-        :header="$t('settings.server_settings.mail_server_settings.change_password')" 
+        :header="$t('settings.server_settings.mail_server_settings.update_password')" 
         v-model:visible="changePasswordDialog"  
         :modal="true" 
         @hide="changePasswordDialog = false">

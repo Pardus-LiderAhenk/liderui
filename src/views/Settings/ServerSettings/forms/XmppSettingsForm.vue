@@ -9,7 +9,7 @@
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="xmppPort">{{$t('settings.server_settings.messaging_server_settings.port')}}</label>
-            <InputText id="xmppPort" type="text" v-model="xmppPort"/>
+            <InputText id="xmppPort" type="number" v-model="xmppPort"/>
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="xmppUsername">{{$t('settings.server_settings.messaging_server_settings.xmpp_username')}}</label>
@@ -52,7 +52,7 @@
         </div>
     </div>
     <Dialog 
-        :header="$t('settings.server_settings.messaging_server_settings.change_password')" 
+        :header="$t('settings.server_settings.messaging_server_settings.update_password')" 
         v-model:visible="changePasswordDialog"  
         :modal="true" 
         @hide="changePasswordDialog = false">

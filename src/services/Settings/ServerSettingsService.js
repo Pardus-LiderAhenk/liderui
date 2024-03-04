@@ -5,6 +5,7 @@ const liderSettingsUpdateEmailPasswordUrl = '/api/lider/settings/update/email-pa
 const liderSettingsUpdateFileServerUrl = '/api/lider/settings/update/file-server';
 const liderSettingsUpdateFileServerPasswordUrl = '/api/lider/settings/update/file-password';
 const liderSettingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
+const liderSettingsUpdateLdapPasswordUrl = "/api/lider/settings/update/ldap-password";
 const liderSettingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
 const liderSettingsUpdateXmppUrl = '/api/lider/settings/update/xmpp';
 const liderSettingsUpdateXmppPasswordUrl = '/api/lider/settings/update/xmpp-password';
@@ -56,6 +57,15 @@ class ServerSettingsService{
     async updateLdap(params){
         try {
             const response = await axios.post(liderSettingsUpdateLdapUrl, params);
+            return { response };
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    async updateLdapPassword(params){
+        try {
+            const response = await axios.post(liderSettingsUpdateLdapPasswordUrl, params);
             return { response };
         } catch (error) {
             return { error: error }

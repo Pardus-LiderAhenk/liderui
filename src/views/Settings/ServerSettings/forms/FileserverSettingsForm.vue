@@ -26,7 +26,7 @@
                 class="p-button-sm"
                 type="button"
                 @click="changePasswordDialog = true"
-                :label="$t('settings.server_settings.file_server_settings.update_password')" />
+                :label="$t('settings.server_settings.file_server_settings.change_password')" />
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="fileServerAgentFilePath">{{$t('settings.server_settings.file_server_settings.agent_file_directory')}}</label>

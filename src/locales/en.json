@@ -941,7 +941,15 @@
                 "cancel":"Cancel",
                 "directory_server_notify":"Directory server settings will be updated and you will be redirected to login page, are you sure?",
                 "directory_server_settings_successfully_update":"Directory server settings updated successfully",
-                "error_417_update_directory_server_settings":"An error occurred while updating the directory server settings"
+                "error_417_update_directory_server_settings":"An error occurred while updating the directory server settings",
+                "update_password":"Update Password",
+                "change_password":"Change Password",
+                "old_password":"Old Password",
+                "write_old_password":"Enter Your Old Password",
+                "error_changed_ldap_password":"An error occurred while updating your ldap password",
+                "error_400_changed_ldap_password":"Your password could not be changed because your old password was incorrect",
+                "ldap_server_password_successfully_update":"Ldap password have been successfully updated",
+                "password_validation":"Please enter your password correctly"
 
             },
             "messaging_server_settings":{
@@ -969,7 +977,7 @@
                 "write_old_password":"Enter Your Old Password",
                 "error_changed_xmpp_password":"An error occurred while updating your xmpp server password",
                 "error_400_changed_xmpp_password":"Your password could not be changed because your old password was incorrect",
-                "xmpp_server_password_successfully_update":"Xmpp server password have been successfully updated.",
+                "xmpp_server_password_successfully_update":"Xmpp server password have been successfully updated",
                 "password_validation":"Please enter your password correctly"
 
             },

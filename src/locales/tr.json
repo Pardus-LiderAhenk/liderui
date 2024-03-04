@@ -910,7 +910,7 @@
                 "port":"Port",
                 "domain_name":"Domain Adı",
                 "ldap_user_dn":"LDAP Kullanıcı DN",
-                "ldap_user_password":"LDAP Kullanıcı Şifresi",
+                "ldap_user_password":"LDAP Kullanıcı Parolası",
                 "ahenk_folder":"Ahenk Klasörü",
                 "user_folder":"Kullanıcı Klasörü",
                 "group_folder":"Grup Klasörü",
@@ -936,7 +936,15 @@
                 "cancel":"İptal",
                 "directory_server_notify":"Dizin sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "directory_server_settings_successfully_update":"Dizin sunucu ayarları başarıyla güncellendi",
-                "error_417_update_directory_server_settings":"Dizin sunucusu ayarları güncellenirken hata oluştu"
+                "error_417_update_directory_server_settings":"Dizin sunucusu ayarları güncellenirken hata oluştu",
+                "update_password":"Parola Güncelle",
+                "change_password":"Parola Değiştir",
+                "old_password":"Eski Parola",
+                "write_old_password":"Eski Parolanızı Girin",
+                "error_changed_ldap_password":"Ldap parolanız güncellenirken hata oluştu",
+                "error_400_changed_ldap_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
+                "ldap_server_password_successfully_update":"Ldap parolanız başarıyla güncellendi",
+                "password_validation":"Lütfen parolanızı kuralına uygun bir şekilde girin"
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Sunucusu Bilgileri",
