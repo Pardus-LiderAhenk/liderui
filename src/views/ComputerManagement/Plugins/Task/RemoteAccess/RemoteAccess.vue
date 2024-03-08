@@ -399,6 +399,7 @@ export default {
         { label: this.$t('computer.plugins.remote_access.registered_clients'), icon: "fa fa-desktop", command: () => { this.setSelectedTab('saved-rdp-connections') } },
       ],
       loading: false,
+      lideruser: ""
     };
   },
 
@@ -616,6 +617,7 @@ export default {
         "username": this.selectedProtocol === 'ssh' ? this.username : this.selectedProtocol === 'rdp' ? this.username : null,
         "password": this.selectedProtocol === 'ssh' ? this.password : this.selectedProtocol === 'rdp' ? this.password : null,
         "host": this.selectedProtocol == 'ssh' ? this.host : null,
+        "lideruser": this.lideruser,
       }
 
       // if selected protocol is vnc added remote connection info to vuex
@@ -637,7 +639,8 @@ export default {
             username: this.username,
             password: this.password,
             host: this.host,
-            protocol: this.selectedProtocol
+            protocol: this.selectedProtocol,
+            lideruser: this.lideruser
           }
         });
         window.open(routeData.href, '_blank');
@@ -648,7 +651,8 @@ export default {
             username: this.username,
             password: this.password,
             host: this.host,
-            protocol: this.selectedProtocol
+            protocol: this.selectedProtocol,
+            lideruser: this.lideruser
           }
         });
         window.open(routeData.href, '_blank');
@@ -727,6 +731,7 @@ export default {
   async mounted() {
     await this.getSavedRdpClient(1);
     this.addHostAndHostnameToRdpClientList();
+    this.lideruser = this.$store.getters.getUser.uid;
   },
 
   watch: {

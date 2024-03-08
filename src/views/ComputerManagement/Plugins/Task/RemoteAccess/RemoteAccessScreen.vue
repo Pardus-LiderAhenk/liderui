@@ -171,6 +171,7 @@ export default {
         data.append("port", this.defaultSshPort);
         data.append("password", this.connectionData.password);
         data.append("username", this.connectionData.username);
+        data.append("lideruser", this.connectionData.lideruser);
 
       } else if (this.connectionData && this.connectionData.protocol == 'rdp') {
         this.selectedIpAddress = this.connection_info.host;
@@ -178,6 +179,7 @@ export default {
         data.append("port", this.defaultRdpPort);
         data.append("password", this.connectionData.password);
         data.append("username", this.connectionData.username);
+        data.append("lideruser", this.connectionData.lideruser);
 
       } else {
         if (!this.selectedIpAddress) {
@@ -189,6 +191,7 @@ export default {
         data.append("port", this.connection_info.port);
         data.append("password", this.connection_info.password);
         data.append("username", '');
+        data.append("lideruser", this.connectionData.lideruser);
       }
 
       let checkhostFormdata = new FormData();
