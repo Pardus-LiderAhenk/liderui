@@ -148,6 +148,15 @@
         "confirm_password_input_message": "Lütfen parolayı tekrar giriniz"
         
     },
+    "settings_password": {
+        "update_password":"Parola Güncelle",
+        "old_password":"Eski Parola",
+        "change_password":"Parola Değiştir",
+        "cancel":"İptal",
+        "error_403_changed_settings_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
+        "error_changed_settings_password":"Parolanız güncellenirken hata oluştu",
+        "settings_password_successfully_update":"Parolanız başarıyla güncellendi"
+    },
     "computer": {
         "total": "Toplam",
         "online":"Çevrimiçi",
@@ -937,14 +946,8 @@
                 "directory_server_notify":"Dizin sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "directory_server_settings_successfully_update":"Dizin sunucu ayarları başarıyla güncellendi",
                 "error_417_update_directory_server_settings":"Dizin sunucusu ayarları güncellenirken hata oluştu",
-                "update_password":"Parola Güncelle",
-                "change_password":"Parola Değiştir",
-                "old_password":"Eski Parola",
-                "write_old_password":"Eski Parolanızı Girin",
-                "error_changed_ldap_password":"Ldap parolanız güncellenirken hata oluştu",
-                "error_400_changed_ldap_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
-                "ldap_server_password_successfully_update":"Ldap parolanız başarıyla güncellendi",
-                "password_validation":"Lütfen parolanızı kuralına uygun bir şekilde girin"
+                "change_password":"Parola Değiştir"
+
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Sunucusu Bilgileri",
@@ -965,14 +968,7 @@
                 "messaging_server_notify":"XMPP sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "messaging_server_settings_successfully_update":"XMPP sunucu ayarları başarıyla güncellendi",
                 "error_update_messaging_server_settings": "XMPP sunucu ayarları güncellenirken hata oluştu",
-                "update_password":"Parola Güncelle",
-                "change_password":"Parola Değiştir",
-                "old_password":"Eski Parola",
-                "write_old_password":"Eski Parolanızı Girin",
-                "error_changed_xmpp_password":"Dosya sunucu parolanız güncellenirken hata oluştu",
-                "error_400_changed_xmpp_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
-                "xmpp_server_password_successfully_update":"Dosya sunucu parolanız başarıyla güncellendi",
-                "password_validation":"Lütfen parolanızı kuralına uygun bir şekilde girin"
+                "change_password":"Parola Değiştir"
 
             },
             "file_server_settings":{
@@ -991,14 +987,8 @@
                 "file_server_notify":"Dosya sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "file_server_settings_successfully_update":"Dosya sunucu ayarları başarıyla güncellendi",
                 "error_417_update_file_server_settings": "Dosya sunucu ayarları güncellenirken hata oluştu",
-                "update_password":"Parola Güncelle",
-                "change_password":"Parola Değiştir",
-                "old_password":"Eski Parola",
-                "write_old_password":"Eski Parolanızı Girin",
-                "error_changed_file_password":"Dosya sunucu parolanız güncellenirken hata oluştu",
-                "error_400_changed_file_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
-                "file_server_password_successfully_update":"Dosya sunucu parolanız başarıyla güncellendi",
-                "password_validation":"Lütfen parolanızı kuralına uygun bir şekilde girin"
+                "change_password":"Parola Değiştir"
+
 
             },
             "mail_server_settings":{
@@ -1017,15 +1007,8 @@
                 "cancel":"İptal",
                 "update_settings":"Ayarları Güncelle",
                 "error_updating_mail_settings" : "E-mail ayarları güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
-                "update_password":"Parola Güncelle",
-                "change_password":"Parola Değiştir",
-                "old_password":"Eski Parola",
-                "write_old_password":"Eski Parolanızı Girin",
-                "error_changed_mail_password":"Mail parolanız güncellenirken hata oluştu",
-                "error_400_changed_mail_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
-                "mail_password_successfully_update":"Eski parolanız başarıyla güncellendi",
-                "password_validation":"Lütfen parolanızı kuralına uygun bir şekilde girin"
-
+                "change_password":"Parola Değiştir"
+                
             },
             "other_settings":{
                 "other_settings":"Diğer Ayarlar",

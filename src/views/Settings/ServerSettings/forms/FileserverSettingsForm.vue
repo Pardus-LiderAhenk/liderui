@@ -43,42 +43,13 @@
             </div>
         </div>
     </div>
-    <Dialog 
-        :header="$t('settings.server_settings.file_server_settings.update_password')" 
-        v-model:visible="changePasswordDialog"  
-        :modal="true" 
-        @hide="changePasswordDialog = false">
-        <div>
-            <div class="p-field p-col-12">
-                <label for="fileServerPassword">{{$t('settings.server_settings.file_server_settings.old_password')}}</label>
-                <div class="p-inputgroup">
-                    <Password 
-                        :placeholder="$t('settings.server_settings.file_server_settings.write_old_password')"
-                        toggleMask v-model="oldPassword" :feedback="false"
-                        :class="validationOldPassword ? 'p-invalid': ''"
-                    />
-                </div>
-                <small v-if="validationOldPassword" class="p-error">
-                    {{ oldPasswordMessage}}
-                </small>
-                <password-component ref="password"></password-component>
-            </div>
-        </div>
-        <template #footer>
-        <Button 
-            :label="$t('settings.server_settings.file_server_settings.cancel')" 
-            icon="pi pi-times" 
-            @click="changePasswordDialog = false" 
-            class="p-button-text p-button-sm"
-        />
-        <Button 
-            :label="$t('settings.server_settings.file_server_settings.change_password')" 
-            icon="pi pi-unlock" 
-            @click="changeFileServerPassword"
-            class="p-button-sm"
-        />
-        </template>
-    </Dialog>
+
+    <SettingsPasswordComponet v-if="changePasswordDialog"
+        :visible="changePasswordDialog"
+        :type="'fileServerPassword'"
+        @updatedPassword="updatedPassword"
+        @update:visible="changePasswordDialog = false"/>
+
     <Dialog :header="$t('settings.server_settings.file_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
@@ -101,7 +72,7 @@
 
 <script>
 import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
-import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import SettingsPasswordComponet from '../../../../components/Password/SettingsPasswordComponent.vue';
 
 export default {
     props:['serverSettings'],
@@ -119,14 +90,11 @@ export default {
             fileServerPassword:'',
             fileServerAgentFilePath:'',
             showDialog: false,
-            changePasswordDialog: false,
-            oldPassword:'',
-            newPassword:'',
-            validationOldPassword: false,
+            changePasswordDialog: false
         }
     },
     components: {
-        PasswordComponent
+        SettingsPasswordComponet
     },
     watch: { 
       	serverSettings: function(newVal) { 
@@ -135,14 +103,8 @@ export default {
             this.fileServerHost = newVal.fileServerHost;
             this.fileServerPort = newVal.fileServerPort;
             this.fileServerUsername = newVal.fileServerUsername;
-            //this.fileServerPassword = newVal.fileServerPassword;
             this.fileServerAgentFilePath = newVal.fileServerAgentFilePath;
           }
-        },
-        oldPassword() {
-            if (this.oldPassword) {
-                this.validationOldPassword = false;
-            }
         }
     },
     methods: {
@@ -152,9 +114,7 @@ export default {
             data.append("fileServerAddress",this.fileServerHost);
             data.append("fileServerPort",this.fileServerPort);
             data.append("fileServerUsername",this.fileServerUsername);
-            //data.append("fileServerPassword",this.fileServerPassword);
             data.append("fileServerAgentFilePath",this.fileServerAgentFilePath);
-
             const { response,error } = await serverSettingService.updateFileServer(data) ;
             if(error){
                 
@@ -181,63 +141,8 @@ export default {
             }
             this.showDialog = false;
         },
-        async changeFileServerPassword() {
-            this.newPassword = this.$refs.password.getPassword();
-            let data = new FormData();
-            data.append("fileServerPassword", this.oldPassword);
-            data.append("newFileServerPassword", this.newPassword);
-
-            if(this.validationPasswordForm(this.newPassword)){
-                const{response,error} = await serverSettingService.updateFileServerPassword(data);
-                if(error){
-                    if(error.response.status == 403 ){
-                        this.$toast.add({
-                            severity:'warn', 
-                            detail: this.$t('settings.server_settings.file_server_settings.error_400_changed_file_password'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-                    else{
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('settings.server_settings.file_server_settings.error_changed_file_password'),
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-
-                }
-                else{
-                    if(response.status == 200){
-                        this.oldPassword = null;
-                        this.newPassword = null;
-                        this.$refs.password.setPasswordForm('', '');
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('settings.server_settings.file_server_settings.file_server_password_successfully_update'),
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                        setTimeout(() => {
-                            this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                        }, 3000);
-                    }
-
-                }
-            }
-            else{
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('settings.server_settings.file_server_settings.password_validation'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            }
-        },
-        validationPasswordForm(password) {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-            return regex.test(password);
+        updatedPassword() {
+            this.changePasswordDialog = false;
         }
     },
 }

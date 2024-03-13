@@ -149,6 +149,15 @@
         "password_input_message": "Please enter a new password",
         "confirm_password_input_message": "Please enter a password again"
     },
+    "settings_password": {
+        "update_password":"Update Password",
+        "old_password":"Old Password",
+        "change_password":"Change Password",
+        "cancel":"Cancel",
+        "error_403_changed_settings_password":"Setting password could not be changed because your old password was incorrect.",
+        "error_changed_settings_password":"An error occurred while updating setting password",
+        "settings_password_successfully_update":"Setting password has been successfully updated"
+    },
     "computer": {
         "total": "Total",
         "online":"Online",
@@ -943,14 +952,7 @@
                 "directory_server_settings_successfully_update":"Directory server settings updated successfully",
                 "error_417_update_directory_server_settings":"An error occurred while updating the directory server settings",
                 "update_password":"Update Password",
-                "change_password":"Change Password",
-                "old_password":"Old Password",
-                "write_old_password":"Enter Your Old Password",
-                "error_changed_ldap_password":"An error occurred while updating your ldap password",
-                "error_400_changed_ldap_password":"Your password could not be changed because your old password was incorrect",
-                "ldap_server_password_successfully_update":"Ldap password have been successfully updated",
-                "password_validation":"Please enter your password correctly"
-
+                "change_password":"Change Password"
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Server Information",
@@ -972,13 +974,7 @@
                 "messaging_server_settings_successfully_update":"XMPP server settings updated successfully",
                 "error_update_messaging_server_settings": "An error occurred while updating the XMPP server settings",
                 "update_password":"Update Password",
-                "change_password":"Change Password",
-                "old_password":"Old Password",
-                "write_old_password":"Enter Your Old Password",
-                "error_changed_xmpp_password":"An error occurred while updating your xmpp server password",
-                "error_400_changed_xmpp_password":"Your password could not be changed because your old password was incorrect",
-                "xmpp_server_password_successfully_update":"Xmpp server password have been successfully updated",
-                "password_validation":"Please enter your password correctly"
+                "change_password":"Change Password"
 
             },
             "file_server_settings":{
@@ -998,13 +994,7 @@
                 "file_server_settings_successfully_update":"File server settings updated successfully",
                 "error_417_update_file_server_settings": "Error updating file server settings",
                 "update_password":"Update Password",
-                "change_password":"Change Password",
-                "old_password":"Old Password",
-                "write_old_password":"Enter Your Old Password",
-                "error_changed_file_password":"An error occurred while updating your file server password",
-                "error_400_changed_file_password":"Your password could not be changed because your old password was incorrect",
-                "file_server_password_successfully_update":"File server password have been successfully updated",
-                "password_validation":"Please enter your password correctly"
+                "change_password":"Change Password"
 
             },
             "mail_server_settings":{
@@ -1024,13 +1014,7 @@
                 "cancel":"Cancel",
                 "error_updating_mail_settings" : "An unexpected error occurred while updating the e-mail settings. Error code : 417",
                 "update_password":"Update Password",
-                "change_password":"Change Password",
-                "old_password":"Old Password",
-                "write_old_password":"Enter Your Old Password",
-                "error_changed_mail_password":"An error occurred while updating your mail password",
-                "error_400_changed_mail_password":"Your password could not be changed because your old password was incorrect",
-                "mail_password_successfully_update":"E-Mail password have been successfully updated.",
-                "password_validation":"Please enter your password correctly"
+                "change_password":"Change Password"
 
             },
             "other_settings":{

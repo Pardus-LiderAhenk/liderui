@@ -40,42 +40,11 @@
         </div>
     </div>
 
-    <Dialog 
-        :header="$t('settings.server_settings.mail_server_settings.update_password')" 
-        v-model:visible="changePasswordDialog"  
-        :modal="true" 
-        @hide="changePasswordDialog = false">
-        <div>
-            <div class="p-field p-col-12">
-                <label for="city">{{$t('settings.server_settings.mail_server_settings.write_old_password')}}</label>
-                <div class="p-inputgroup">
-                    <Password 
-                        :placeholder="$t('settings.server_settings.mail_server_settings.write_old_password')"
-                        toggleMask v-model="oldPassword" :feedback="false"
-                        :class="validationOldPassword ? 'p-invalid': ''"
-                    />
-                </div>
-                <small v-if="validationOldPassword" class="p-error">
-                    {{ oldPasswordMessage}}
-                </small>
-                <password-component ref="password"></password-component>
-            </div>
-        </div>
-        <template #footer>
-        <Button 
-            :label="$t('settings.server_settings.mail_server_settings.cancel')" 
-            icon="pi pi-times" 
-            @click="changePasswordDialog = false" 
-            class="p-button-text p-button-sm"
-        />
-        <Button 
-            :label="$t('settings.server_settings.mail_server_settings.change_password')" 
-            icon="pi pi-unlock" 
-            @click="changeMailPassword"
-            class="p-button-sm"
-        />
-        </template>
-    </Dialog>
+    <SettingsPasswordComponet v-if="changePasswordDialog"
+        :visible="changePasswordDialog"
+        :type="'emailServerPassword'"
+        @updatedPassword="updatedPassword"
+        @update:visible="changePasswordDialog = false"/>
 
     <Dialog :header="$t('settings.server_settings.mail_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
@@ -99,7 +68,7 @@
 
 <script>
 import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
-import PasswordComponent from '@/components/Password/PasswordComponent.vue';
+import SettingsPasswordComponet from '../../../../components/Password/SettingsPasswordComponent.vue';
 
 export default {
     props:['serverSettings'],
@@ -114,9 +83,6 @@ export default {
             mailHost:'',
             mailPort: '',
             mailUsername:'',
-            //mailPassword:'',
-            oldPassword:'',
-            newPassword:'',
             validationOldPassword: false,
             showDialog: false,
             changePasswordDialog: false
@@ -124,7 +90,7 @@ export default {
         
     },
     components: {
-        PasswordComponent
+        SettingsPasswordComponet
     },
     watch: { 
       	serverSettings: function(newVal) { 
@@ -134,13 +100,7 @@ export default {
             this.mailHost = newVal.mailHost;
             this.mailPort = newVal.mailPort;
             this.mailUsername = newVal.mailAddress;
-            //this.mailPassword = newVal.mailPassword;
           }
-        },
-        oldPassword() {
-            if (this.oldPassword) {
-                this.validationOldPassword = false;
-            }
         }
     },
     methods: {
@@ -151,8 +111,6 @@ export default {
             data.append("mailHost",this.mailHost);
             data.append("mailPort",this.mailPort);
             data.append("mailAddress",this.mailUsername);
-            //data.append("mailPassword",this.mailPassword);
-
             const { response,error} = await  serverSettingService.updateEmail(data);
             if(error){
                 this.$toast.add({
@@ -177,62 +135,8 @@ export default {
             }
             this.showDialog = false;
         },
-        async changeMailPassword(){
-            this.newPassword = this.$refs.password.getPassword();
-            let data = new FormData();
-            data.append("mailPassword", this.oldPassword);
-            data.append("newMailPassword", this.newPassword);
-
-            if(this.validationPasswordForm(this.newPassword)){
-                const{response,error} = await serverSettingService.updateEmailPassword(data);
-                if(error){
-                    if (error.response.status == 403 ){
-                        this.$toast.add({
-                            severity:'warn', 
-                            detail: this.$t('settings.server_settings.mail_server_settings.error_400_changed_mail_password'), 
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-                    else{
-                        this.$toast.add({
-                            severity:'error', 
-                            detail: this.$t('settings.server_settings.mail_server_settings.error_changed_mail_password'),
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                    }
-                }
-                else{
-                    if(response.status == 200){
-                        this.oldPassword = null;
-                        this.newPassword = null;
-                        this.$refs.password.setPasswordForm('', '');
-                        this.$toast.add({
-                            severity:'success', 
-                            detail: this.$t('settings.server_settings.mail_server_settings.mail_password_successfully_update'),
-                            summary:this.$t("computer.task.toast_summary"), 
-                            life: 3000
-                        });
-                        setTimeout(() => {
-                            this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                        }, 3000);
-                    }
-
-                }
-            }
-            else{
-                this.$toast.add({
-                    severity:'warn', 
-                    detail: this.$t('settings.server_settings.mail_server_settings.password_validation'), 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
-            }
-        },
-        validationPasswordForm(password) {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-            return regex.test(password);
+        updatedPassword() {
+            this.changePasswordDialog = false;
         }
         
     }

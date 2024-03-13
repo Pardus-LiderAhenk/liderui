@@ -1,14 +1,11 @@
 import axios from 'axios';
 
 const liderSettingsUpdateEmailUrl = '/api/lider/settings/update/email-settings';
-const liderSettingsUpdateEmailPasswordUrl = '/api/lider/settings/update/email-password'
+const liderSettingsUpdateSettingsPasswordUrl = '/api/lider/settings/update/settings-password'
 const liderSettingsUpdateFileServerUrl = '/api/lider/settings/update/file-server';
-const liderSettingsUpdateFileServerPasswordUrl = '/api/lider/settings/update/file-password';
 const liderSettingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
-const liderSettingsUpdateLdapPasswordUrl = "/api/lider/settings/update/ldap-password";
 const liderSettingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
 const liderSettingsUpdateXmppUrl = '/api/lider/settings/update/xmpp';
-const liderSettingsUpdateXmppPasswordUrl = '/api/lider/settings/update/xmpp-password';
 const liderSettingsConfigurationsUrl = "/api/lider/settings/configurations";
 const liderSettingsChangeLanguageUrl = "/api/lider/change-language";
 
@@ -28,9 +25,9 @@ class ServerSettingsService{
         }
     }
 
-    async updateEmailPassword(data){
+    async changePassword(data){
         try{
-            const response =  await axios.post(liderSettingsUpdateEmailPasswordUrl,data);
+            const response =  await axios.post(liderSettingsUpdateSettingsPasswordUrl,data);
             return { response };
         } catch(error){
             return { error: error };
@@ -45,27 +42,10 @@ class ServerSettingsService{
             return { error: error }
         }
     }
-    async updateFileServerPassword(params) {
-        try {
-            const response = await axios.post(liderSettingsUpdateFileServerPasswordUrl, params);
-            return { response };
-        } catch (error) {
-            return { error: error }
-        }
-    }
 
     async updateLdap(params){
         try {
             const response = await axios.post(liderSettingsUpdateLdapUrl, params);
-            return { response };
-        } catch (error) {
-            return { error: error }
-        }
-    }
-
-    async updateLdapPassword(params){
-        try {
-            const response = await axios.post(liderSettingsUpdateLdapPasswordUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
@@ -84,15 +64,6 @@ class ServerSettingsService{
     async updateXmpp(params) {
         try {
             const response = await axios.post(liderSettingsUpdateXmppUrl, params);
-            return { response };
-        } catch (error) {
-            return { error: error }
-        }
-    }
-
-    async updateXmppPassword(params) {
-        try {
-            const response = await axios.post(liderSettingsUpdateXmppPasswordUrl, params);
             return { response };
         } catch (error) {
             return { error: error }
