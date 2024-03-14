@@ -40,18 +40,26 @@ export default {
 
   data() {
     return {
-      oldPassword: '',
-      validationErrors: {},
-      passwordErrorMessage: '',
-      confirmPasswordErrorMessage: ''
+
+      oldPassword: ''
+      
     };
   },
 
   methods: {
 
     async updatePassword() {
-      let password = this.$refs.password.getPassword();
-      var params = new FormData();
+      if(!this.oldPassword.trim()){
+        this.$toast.add({
+            severity:'warn', 
+            detail: this.$t('settings_password.password_input_message'), 
+            summary:this.$t("computer.task.toast_summary"), 
+            life: 3000
+        });
+      }
+      else{
+        let password = this.$refs.password.getPassword();
+        var params = new FormData();
         params.append("type",this.type);
         params.append("oldPassword",this.oldPassword);
         params.append("newPassword",password);
@@ -88,6 +96,7 @@ export default {
             }
 
         }
+      }
     }
   },
 

@@ -155,7 +155,8 @@
         "cancel":"İptal",
         "error_403_changed_settings_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
         "error_changed_settings_password":"Parolanız güncellenirken hata oluştu",
-        "settings_password_successfully_update":"Parolanız başarıyla güncellendi"
+        "settings_password_successfully_update":"Parolanız başarıyla güncellendi",
+        "password_input_message":"Lütfen eski parolanızı giriniz"
     },
     "computer": {
         "total": "Toplam",

@@ -156,7 +156,9 @@
         "cancel":"Cancel",
         "error_403_changed_settings_password":"Setting password could not be changed because your old password was incorrect.",
         "error_changed_settings_password":"An error occurred while updating setting password",
-        "settings_password_successfully_update":"Setting password has been successfully updated"
+        "settings_password_successfully_update":"Setting password has been successfully updated",
+        "password_input_message":"Please enter your old password"
+
     },
     "computer": {
         "total": "Total",
