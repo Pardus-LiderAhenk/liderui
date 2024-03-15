@@ -19,16 +19,21 @@
             <label for="fileServerUsername">{{$t('settings.server_settings.file_server_settings.username')}}</label>
             <InputText id="fileServerUsername" type="text" v-model="fileServerUsername"/>
         </div>
-         <div class="p-field p-col-12 p-md-2">
+         <div class="p-field p-col-12 p-md-4">
             <label for="fileServerPassword">{{$t('settings.server_settings.file_server_settings.password')}}</label>
-            <Button 
-                icon="pi pi-unlock"
-                class="p-button-sm"
-                type="button"
-                @click="changePasswordDialog = true"
-                :label="$t('settings.server_settings.file_server_settings.change_password')" />
+            <div class="p-inputgroup">
+                <InputText type="password"  
+                    value="******************" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-unlock"
+                    class="p-button-sm"
+                    type="button"
+                    @click="changePasswordDialog = true"
+                    :label="$t('settings.server_settings.file_server_settings.change_password')" />
+            </div>
         </div>
-         <div class="p-field p-col-12 p-md-6">
+         <div class="p-field p-col-12 p-md-4">
             <label for="fileServerAgentFilePath">{{$t('settings.server_settings.file_server_settings.agent_file_directory')}}</label>
             <InputText id="fileServerAgentFilePath" type="text" v-model="fileServerAgentFilePath"/>
         </div>

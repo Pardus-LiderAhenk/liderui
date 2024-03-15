@@ -17,11 +17,16 @@
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="mailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
-            <Button 
-                icon="pi pi-unlock"
-                class="p-button-sm"
-                type="button" @click="changePasswordDialog = true" 
-                :label="$t('settings.server_settings.mail_server_settings.change_password')" />
+            <div class="p-inputgroup">
+                <InputText type="password"  
+                    value="******************" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-unlock"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings.server_settings.mail_server_settings.change_password')" />
+            </div>
         </div>
          <div class="p-field p-col-12 p-md-4">
             <label for="zip">{{$t('settings.server_settings.mail_server_settings.smtp_verification')}}</label>

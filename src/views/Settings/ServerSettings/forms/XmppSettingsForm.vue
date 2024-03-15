@@ -17,11 +17,16 @@
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="xmppPassword">{{$t('settings.server_settings.messaging_server_settings.xmpp_password')}}</label>
-            <Button 
-                icon="pi pi-unlock"
-                class="p-button-sm"
-                type="button" @click="changePasswordDialog = true" 
-                :label="$t('settings.server_settings.messaging_server_settings.change_password')" />
+            <div class="p-inputgroup">
+                <InputText type="password"  
+                    value="******************" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-unlock"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings.server_settings.messaging_server_settings.change_password')" />
+            </div>
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="xmppResource">{{$t('settings.server_settings.messaging_server_settings.xmpp_source_name')}}</label>

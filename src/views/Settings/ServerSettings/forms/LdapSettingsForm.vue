@@ -21,11 +21,16 @@
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="ldapPassword">{{$t('settings.server_settings.directory_server_settings.ldap_user_password')}}</label>
-            <Button 
-                icon="pi pi-unlock"
-                class="p-button-sm"
-                type="button" @click="changePasswordDialog = true" 
-                :label="$t('settings.server_settings.directory_server_settings.change_password')" />        
+            <div class="p-inputgroup">
+                <InputText type="password"  
+                    value="******************" 
+                    readonly/>
+                <Button
+                    icon="pi pi-unlock"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings.server_settings.directory_server_settings.change_password')" />
+            </div>    
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="agentLdapBaseDn">{{$t('settings.server_settings.directory_server_settings.ahenk_folder')}}</label>
@@ -81,11 +86,16 @@
             </div>
             <div class="p-field p-col-12 p-md-6">
                 <label for="adAdminPassword">{{$t('settings.server_settings.directory_server_settings.active_directory_admin_password')}}</label>
-                <Button 
-                    icon="pi pi-unlock"
-                    class="p-button-sm"
-                    type="button" @click="changeAdPasswordDialog = true" 
-                    :label="$t('settings.server_settings.directory_server_settings.change_password')" /> 
+                <div class="p-inputgroup">
+                    <InputText type="password"  
+                        value="******************" 
+                        readonly/>
+                    <Button 
+                        icon="pi pi-unlock"
+                        class="p-button-sm"
+                        type="button" @click="changeAdPasswordDialog = true" 
+                        :label="$t('settings.server_settings.directory_server_settings.change_password')" />
+                </div>
             </div>
             <div class="p-field p-col-12 p-md-6">
                 <label for="adHostName">{{$t('settings.server_settings.directory_server_settings.active_directory_hostname')}}</label>
