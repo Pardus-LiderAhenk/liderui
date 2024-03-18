@@ -355,10 +355,6 @@
           (task) => task.id === taskId
         )[0];
         this.taskDetailDialog = true;
-        console.log("DOKTOR")
-        console.log(this.selectedTask)
-        console.log("Konfeti")
-        console.log(this.selectedTask.commandExecutions)
       },
 
       showTaskExecutionsResultDialog(id){

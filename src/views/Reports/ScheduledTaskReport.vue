@@ -245,7 +245,6 @@
     <template #header>
       <h3>{{$t('reports.task_report.task_sent_ahenk_list')}}</h3>
     </template>
-    
     <DataTable :value="selectedCommand.commandExecutions" responsiveLayout="scroll" dataKey="id" :loading="loading" class="p-datatable-sm"
        :paginator="true" :rows="10" ref="dt"
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
@@ -336,9 +335,7 @@
       <template #header>
         <h3>{{$t('reports.task_report.selected_task_detail')}}</h3>
       </template>
-  
       <h4>{{$t('reports.task_report.detail')}}</h4>
-  
       <div class="p-grid">
         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
         <div class="p-col-4"><b>{{$t('reports.task_report.task_name')}}</b></div>
@@ -366,10 +363,7 @@
         </div>
         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       </div>
-  
-  
       <h4>{{$t('reports.task_report.sended_task_parameter')}}</h4>
-  
       <div class="p-grid">
         <template v-for="(parameterKey, index) in Object.keys(selectedCommand.task.parameterMap)" :key="index + 'param' " >
           <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
@@ -379,7 +373,6 @@
           <div v-else class="p-col-8">{{ value }}</div>
         </template>
       </div>
-  
       <div class="p-grid" v-for="(value, key) in selectedParam" :key="key">
         <div class="p-col-4"><b>{{ key }}</b></div>
         <div v-if="key == 'password' || key == 'RootPassword' || key == 'admin-password' || key == 'admin_password'" 
@@ -387,11 +380,8 @@
         <div v-else class="p-col-8">{{ value }}</div>
         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       </div>
-  
-  
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <h4>{{$t('reports.task_report.data_saved_as_a_result_of_task_execution')}}</h4>
-  
       <div class="p-grid" v-if="selectedTaskExecutionResult.commandExecutionResults && selectedTaskExecutionResult.commandExecutionResults.length > 0">
         <template v-if="selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr != 'null' ">
            <template v-for="(parameterKey, index) in Object.keys(JSON.parse(selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr))" :key="index + 'param' " >
@@ -417,9 +407,7 @@
           @click="taskExecutionsResultDialog = false"
         />
         </template>
-  
       </Dialog>
-
 
   <Dialog :header="$t('reports.scheduled_task_report.cancel_scheduled_task')" 
     v-model:visible="cancelScheduledTaskDialog" 
@@ -490,7 +478,7 @@ export default {
         taskSendStartDate:'',
         taskSendEndDate:'',
         task:null,
-        agentStatus:"",
+        agentStatus:null,
       },
       filters: {
           'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
@@ -498,11 +486,11 @@ export default {
       agentStatuses: [
         {
           name: this.$t('reports.detailed_agent_report.active'),
-          value: true,
+          value: false,
         },
         {
           name: this.$t('reports.detailed_agent_report.passive'),
-          value: false,
+          value: true,
         },
       ],
       pageNumber: 1,
@@ -535,11 +523,8 @@ export default {
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
       data.append("pageSize", this.rowNumber);
-      // data.append("agentStatus",this.filter.agentStatus);
-      // data.append("startDate", this.filter.taskSendStartDate);
-      // data.append("endDate", this.filter.taskSendEndDate);
       if(this.filter.agentStatus != null) {
-        data.append("agentStatus", this.agentStatus);
+        data.append("status", this.filter.agentStatus);
       }
       if(this.filter.task != null) {
         data.append("taskCommand", this.filter.task);
@@ -578,11 +563,8 @@ export default {
             });
       } else {
         if(response.status == 200){
-          console.log("AGAH")
-          
           this.tasks = response.data.content;
           this.totalElements = response.data.totalElements;
-          console.log(response.data)
           this.loading = false;
           let successfullTaskCount = 0;
           let failedTaskCount = 0;
