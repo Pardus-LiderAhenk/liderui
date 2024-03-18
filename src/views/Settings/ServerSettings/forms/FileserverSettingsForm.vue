@@ -93,8 +93,8 @@ export default {
     methods: {
         async submitForm() {
             var data = new FormData();
-            data.append("fileTransferType",this.fileServerProtocol);
-            data.append("fileServerAddress",this.fileServerHost);
+            data.append("fileServerProtocol",this.fileServerProtocol);
+            data.append("fileServerHost",this.fileServerHost);
             data.append("fileServerPort",this.fileServerPort);
             data.append("fileServerUsername",this.fileServerUsername);
             data.append("fileServerPassword",this.fileServerPassword);
