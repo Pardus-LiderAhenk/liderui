@@ -13,17 +13,27 @@
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="fileServerPort">{{$t('settings.server_settings.file_server_settings.port')}}</label>
-            <InputText id="fileServerPort" type="text" v-model="fileServerPort"/>
+            <InputText id="fileServerPort" type="number" v-model="fileServerPort"/>
         </div>
-        <div class="p-field p-col-12 p-md-6">
+        <div class="p-field p-col-12 p-md-4">
             <label for="fileServerUsername">{{$t('settings.server_settings.file_server_settings.username')}}</label>
             <InputText id="fileServerUsername" type="text" v-model="fileServerUsername"/>
         </div>
-         <div class="p-field p-col-12 p-md-6">
+         <div class="p-field p-col-12 p-md-4">
             <label for="fileServerPassword">{{$t('settings.server_settings.file_server_settings.password')}}</label>
-            <InputText id="fileServerPassword" type="password" v-model="fileServerPassword"/>
+            <div class="p-inputgroup">
+                <InputText type="password"  
+                    value="******************" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-unlock"
+                    class="p-button-sm"
+                    type="button"
+                    @click="changePasswordDialog = true"
+                    :label="$t('settings.server_settings.file_server_settings.change_password')" />
+            </div>
         </div>
-         <div class="p-field p-col-12 p-md-6">
+         <div class="p-field p-col-12 p-md-4">
             <label for="fileServerAgentFilePath">{{$t('settings.server_settings.file_server_settings.agent_file_directory')}}</label>
             <InputText id="fileServerAgentFilePath" type="text" v-model="fileServerAgentFilePath"/>
         </div>
@@ -38,6 +48,13 @@
             </div>
         </div>
     </div>
+
+    <SettingsPasswordComponet v-if="changePasswordDialog"
+        :visible="changePasswordDialog"
+        :type="'fileServerPassword'"
+        @updatedPassword="updatedPassword"
+        @update:visible="changePasswordDialog = false"/>
+
     <Dialog :header="$t('settings.server_settings.file_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
@@ -60,6 +77,8 @@
 
 <script>
 import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
+import SettingsPasswordComponet from '../../../../components/Password/SettingsPasswordComponent.vue';
+
 export default {
     props:['serverSettings'],
     data() {
@@ -75,8 +94,12 @@ export default {
             fileServerUsername:'',
             fileServerPassword:'',
             fileServerAgentFilePath:'',
-            showDialog: false
+            showDialog: false,
+            changePasswordDialog: false
         }
+    },
+    components: {
+        SettingsPasswordComponet
     },
     watch: { 
       	serverSettings: function(newVal) { 
@@ -85,7 +108,6 @@ export default {
             this.fileServerHost = newVal.fileServerHost;
             this.fileServerPort = newVal.fileServerPort;
             this.fileServerUsername = newVal.fileServerUsername;
-            this.fileServerPassword = newVal.fileServerPassword;
             this.fileServerAgentFilePath = newVal.fileServerAgentFilePath;
           }
         }
@@ -97,9 +119,7 @@ export default {
             data.append("fileServerHost",this.fileServerHost);
             data.append("fileServerPort",this.fileServerPort);
             data.append("fileServerUsername",this.fileServerUsername);
-            data.append("fileServerPassword",this.fileServerPassword);
             data.append("fileServerAgentFilePath",this.fileServerAgentFilePath);
-
             const { response,error } = await serverSettingService.updateFileServer(data) ;
             if(error){
                 
@@ -125,6 +145,9 @@ export default {
                 }
             }
             this.showDialog = false;
+        },
+        updatedPassword() {
+            this.changePasswordDialog = false;
         }
     },
 }

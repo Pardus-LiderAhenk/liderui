@@ -9,7 +9,7 @@
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="xmppPort">{{$t('settings.server_settings.messaging_server_settings.port')}}</label>
-            <InputText id="xmppPort" type="text" v-model="xmppPort"/>
+            <InputText id="xmppPort" type="number" v-model="xmppPort"/>
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="xmppUsername">{{$t('settings.server_settings.messaging_server_settings.xmpp_username')}}</label>
@@ -17,7 +17,16 @@
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="xmppPassword">{{$t('settings.server_settings.messaging_server_settings.xmpp_password')}}</label>
-            <InputText id="xmppPassword" type="password" v-model="xmppPassword"/>
+            <div class="p-inputgroup">
+                <InputText type="password"  
+                    value="******************" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-unlock"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings.server_settings.messaging_server_settings.change_password')" />
+            </div>
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="xmppResource">{{$t('settings.server_settings.messaging_server_settings.xmpp_source_name')}}</label>
@@ -47,6 +56,13 @@
             </div>
         </div>
     </div>
+
+    <SettingsPasswordComponet v-if="changePasswordDialog"
+        :visible="changePasswordDialog"
+        :type="'xmppPassword'"
+        @updatedPassword="updatedPassword"
+        @update:visible="changePasswordDialog = false"/>
+
     <Dialog :header="$t('settings.server_settings.messaging_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
@@ -68,6 +84,7 @@
 
 <script>
 import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
+import SettingsPasswordComponet from '../../../../components/Password/SettingsPasswordComponent.vue';
 
 export default {
     props:['serverSettings'],
@@ -76,13 +93,13 @@ export default {
             xmppHost:'',
             xmppPort:'',
             xmppUsername:'',
-            xmppPassword:'',
             xmppResource:'',
             xmppServiceName:'',
             xmppMaxRetryConnectionCount:'',
             xmppPacketReplayTimeout:'',
             xmppPingTimeout:'',
-            showDialog: false
+            showDialog: false,
+            changePasswordDialog: false
         }
     },
     watch: { 
@@ -91,14 +108,21 @@ export default {
             this.xmppHost = newVal.xmppHost;
             this.xmppPort = newVal.xmppPort;
             this.xmppUsername = newVal.xmppUsername;
-            this.xmppPassword = newVal.xmppPassword;
             this.xmppResource = newVal.xmppResource;
             this.xmppServiceName = newVal.xmppServiceName;
             this.xmppMaxRetryConnectionCount = newVal.xmppMaxRetryConnectionCount;
             this.xmppPacketReplayTimeout = newVal.xmppPacketReplayTimeout;
             this.xmppPingTimeout = newVal.xmppPingTimeout;
           }
+        },
+        oldPassword() {
+            if (this.oldPassword) {
+                this.validationOldPassword = false;
+            }
         }
+    },
+    components: {
+        SettingsPasswordComponet
     },
     methods: {
         async submitForm() {
@@ -106,7 +130,6 @@ export default {
             data.append("xmppHost",this.xmppHost);
             data.append("xmppPort",this.xmppPort);
             data.append("xmppUsername",this.xmppUsername);
-            data.append("xmppPassword",this.xmppPassword);
             data.append("xmppMaxRetryConnectionCount",this.xmppMaxRetryConnectionCount);
             data.append("xmppPacketReplayTimeout",this.xmppPacketReplayTimeout);
             data.append("xmppPingTimeout",this.xmppPingTimeout);
@@ -135,8 +158,12 @@ export default {
 
             }
             this.showDialog = false;
-        }   
-    },
+        },
+        updatedPassword() {
+            this.changePasswordDialog = false;
+        }
+    }
+
 }
 
 </script>

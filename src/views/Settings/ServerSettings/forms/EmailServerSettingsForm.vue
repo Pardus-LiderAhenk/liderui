@@ -9,7 +9,7 @@
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="mailPort">{{$t('settings.server_settings.mail_server_settings.port')}}</label>
-            <InputText id="mailPort" type="text" v-model="mailPort" placeholder="587"/>
+            <InputText id="mailPort" type="number" v-model="mailPort" placeholder="587"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="mailUsername">{{$t('settings.server_settings.mail_server_settings.mail_username')}}</label>
@@ -17,7 +17,16 @@
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="mailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
-            <InputText id="mailPassword" type="password" v-model="mailPassword"/>
+            <div class="p-inputgroup">
+                <InputText type="password"  
+                    value="******************" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-unlock"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings.server_settings.mail_server_settings.change_password')" />
+            </div>
         </div>
          <div class="p-field p-col-12 p-md-4">
             <label for="zip">{{$t('settings.server_settings.mail_server_settings.smtp_verification')}}</label>
@@ -35,6 +44,13 @@
             </div>
         </div>
     </div>
+
+    <SettingsPasswordComponet v-if="changePasswordDialog"
+        :visible="changePasswordDialog"
+        :type="'emailServerPassword'"
+        @updatedPassword="updatedPassword"
+        @update:visible="changePasswordDialog = false"/>
+
     <Dialog :header="$t('settings.server_settings.mail_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
@@ -47,7 +63,7 @@
             <Button :label="$t('settings.server_settings.mail_server_settings.cancel')" icon="pi pi-times" 
                 @click="showDialog = false" class="p-button-text p-button-sm"
             />
-            <Button :label="$t('settings.server_settings.mail_server_settings.yes')" icon="pi pi-check"
+            <Button :label="$t('settings.server_settings.mail_server_settings.yes')" 
                 @click="submitForm" class="p-button-sm"
             />
         </template>
@@ -57,6 +73,8 @@
 
 <script>
 import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
+import SettingsPasswordComponet from '../../../../components/Password/SettingsPasswordComponent.vue';
+
 export default {
     props:['serverSettings'],
     data() {
@@ -68,12 +86,16 @@ export default {
             mailSmtpAuth:true,
             mailTlsEnabled:true,
             mailHost:'',
-            mailPort:'',
+            mailPort: '',
             mailUsername:'',
-            mailPassword:'',
-            showDialog: false
+            validationOldPassword: false,
+            showDialog: false,
+            changePasswordDialog: false
         }
         
+    },
+    components: {
+        SettingsPasswordComponet
     },
     watch: { 
       	serverSettings: function(newVal) { 
@@ -83,7 +105,6 @@ export default {
             this.mailHost = newVal.mailHost;
             this.mailPort = newVal.mailPort;
             this.mailUsername = newVal.mailAddress;
-            this.mailPassword = newVal.mailPassword;
           }
         }
     },
@@ -95,12 +116,10 @@ export default {
             data.append("mailHost",this.mailHost);
             data.append("mailPort",this.mailPort);
             data.append("mailAddress",this.mailUsername);
-            data.append("mailPassword",this.mailPassword);
-
             const { response,error} = await  serverSettingService.updateEmail(data);
             if(error){
                 this.$toast.add({
-                    severity:'success', 
+                    severity:'error', 
                     detail: this.$t('settings.server_settings.mail_server_settings.error_updating_mail_settings'), 
                     summary:this.$t("computer.task.toast_summary"), 
                     life: 3000
@@ -120,8 +139,12 @@ export default {
                 }
             }
             this.showDialog = false;
+        },
+        updatedPassword() {
+            this.changePasswordDialog = false;
         }
-    },
+        
+    }
 }
 
 </script>

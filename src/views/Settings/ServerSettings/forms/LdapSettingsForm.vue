@@ -9,7 +9,7 @@
         </div>
         <div class="p-field p-col-12 p-md-2">
             <label for="ldapPort">{{$t('settings.server_settings.directory_server_settings.port')}}</label>
-            <InputText id="ldapPort" type="text" v-model="ldapPort"/>
+            <InputText id="ldapPort" type="number" v-model="ldapPort"/>
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="ldapRootDn">{{$t('settings.server_settings.directory_server_settings.domain_name')}}</label>
@@ -19,9 +19,18 @@
             <label for="ldapUsername">{{$t('settings.server_settings.directory_server_settings.ldap_user_dn')}}</label>
             <InputText id="ldapUsername" type="text" v-model="ldapUsername"/>
         </div>
-         <div class="p-field p-col-12 p-md-6">
+        <div class="p-field p-col-12 p-md-6">
             <label for="ldapPassword">{{$t('settings.server_settings.directory_server_settings.ldap_user_password')}}</label>
-            <InputText id="ldapPassword" type="password" v-model="ldapPassword" disabled/>
+            <div class="p-inputgroup">
+                <InputText type="password"  
+                    value="******************" 
+                    readonly/>
+                <Button
+                    icon="pi pi-unlock"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings.server_settings.directory_server_settings.change_password')" />
+            </div>    
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="agentLdapBaseDn">{{$t('settings.server_settings.directory_server_settings.ahenk_folder')}}</label>
@@ -77,7 +86,16 @@
             </div>
             <div class="p-field p-col-12 p-md-6">
                 <label for="adAdminPassword">{{$t('settings.server_settings.directory_server_settings.active_directory_admin_password')}}</label>
-                <InputText id="adAdminPassword" type="password" v-model="adAdminPassword"/>
+                <div class="p-inputgroup">
+                    <InputText type="password"  
+                        value="******************" 
+                        readonly/>
+                    <Button 
+                        icon="pi pi-unlock"
+                        class="p-button-sm"
+                        type="button" @click="changeAdPasswordDialog = true" 
+                        :label="$t('settings.server_settings.directory_server_settings.change_password')" />
+                </div>
             </div>
             <div class="p-field p-col-12 p-md-6">
                 <label for="adHostName">{{$t('settings.server_settings.directory_server_settings.active_directory_hostname')}}</label>
@@ -107,6 +125,18 @@
             </div>
         </div>
     </div>
+    <SettingsPasswordComponet v-if="changePasswordDialog"
+        :visible="changePasswordDialog"
+        :type="'ldapPassword'"
+        @updatedPassword="updatedPassword"
+        @update:visible="changePasswordDialog = false"/>
+
+    <SettingsPasswordComponet v-if="changeAdPasswordDialog"
+        :visible="changeAdPasswordDialog"
+        :type="'AdAdminPassword'"
+        @updatedPassword="changeAdPasswordDialog"
+        @update:visible="changeAdPasswordDialog = false"/>
+
     <Dialog :header="$t('settings.server_settings.directory_server_settings.update_settings')" v-model:visible="showDialog" 
         :style="{width: '20vw'}" :modal="true">
         <div class="p-fluid">
@@ -129,6 +159,7 @@
 
 <script>
 import { serverSettingService } from '../../../../services/Settings/ServerSettingsService.js';
+import SettingsPasswordComponet from '../../../../components/Password/SettingsPasswordComponent.vue';
 
 export default {
     props:['serverSettings'],
@@ -142,7 +173,6 @@ export default {
             ldapPort:'',
             ldapRootDn:'',
             ldapUsername:'',
-            ldapPassword:'',
             agentLdapBaseDn:'',
             userLdapBaseDn:'',
             groupLdapBaseDn:'',
@@ -160,8 +190,13 @@ export default {
             adDomainName:'',
             adAdminUserName:'',
             adAdminUserFullDN:'',
-            showDialog: false
+            showDialog: false,
+            changePasswordDialog: false,
+            changeAdPasswordDialog: false
         }
+    },
+    components: {
+        SettingsPasswordComponet
     },
     watch: { 
       	serverSettings: function(newVal) { 
@@ -170,7 +205,6 @@ export default {
               this.ldapPort = newVal.ldapPort;
               this.ldapRootDn = newVal.ldapRootDn;
               this.ldapUsername = newVal.ldapUsername;
-              this.ldapPassword = newVal.ldapPassword;
               this.agentLdapBaseDn = newVal.agentLdapBaseDn;
               this.userLdapBaseDn = newVal.userLdapBaseDn;
               this.groupLdapBaseDn = newVal.groupLdapBaseDn;
@@ -197,7 +231,6 @@ export default {
             data.append("ldapServer",this.ldapServer);
             data.append("ldapPort",this.ldapPort);
             data.append("ldapUsername",this.ldapUsername);
-            data.append("ldapPassword",this.ldapPassword);
             data.append("adIpAddress",this.adIpAddress);
             data.append("adPort",this.adPort);
             data.append("adDomainName",this.adDomainName);
@@ -233,6 +266,10 @@ export default {
                 
             }
             this.showDialog = false;
+        },
+        updatedPassword() {
+            this.changePasswordDialog = false;
+            this.changeAdPasswordDialog = false;
         }
     },
 }
