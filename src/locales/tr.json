@@ -1943,7 +1943,9 @@
             "log_details":"Log Detayları"
         },
         "scheduled_task_report":{
+            "agents":"İstemciler",
             "scheduled_task_report":"Zamanlanmış Görev Raporu",
+            "scheduled_active_task":"Aktif Zamanlanmış Görevler",
             "task":"Görev",
             "posted_date":"Gönderilme Tarihi",
             "results":"Sonuçlar",

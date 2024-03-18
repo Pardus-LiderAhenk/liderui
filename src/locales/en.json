@@ -1946,7 +1946,9 @@
 
         },
         "scheduled_task_report":{
+            "agents":"Agents",
             "scheduled_task_report":"Scheduled Task Report",
+            "scheduled_active_task":"Active Scheduled Tasks",
             "task":"Task",
             "posted_date":"Posted Date",
             "results":"Results",

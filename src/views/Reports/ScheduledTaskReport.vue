@@ -35,6 +35,18 @@
           showClear="true"
         />
       </div>
+      <div class="p-field p-col-12 p-lg-4 p-md-6 p-sm-12">
+        <label for="inputStatus">{{$t('reports.scheduled_task_report.status')}}</label>
+        <Dropdown
+          id="selectBrand"
+          v-model="filter.agentStatus"
+          :options="agentStatuses"
+          optionLabel="name"
+          optionValue="value"
+          :placeholder="$t('reports.detailed_agent_report.select')"
+          showClear="true"
+        />
+      </div>
       <div class="p-field p-col-12 p-text-right">
         <div class="p-d-flex p-jc-end">
           <div>
@@ -124,7 +136,7 @@
           <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
               <div>
-                <!-- <Button :disabled="data.task.deleted"
+                <Button :disabled="data.task.deleted"
                   class="p-button-sm p-button-warning p-button-rounded p-mr-2 "
                   icon="pi pi-pencil"
                   v-tooltip.bottom="$t('reports.scheduled_task_report.edit')"
@@ -135,7 +147,7 @@
                   icon="pi pi-times"
                   v-tooltip.bottom="$t('reports.scheduled_task_report.cancel')"
                   @click="showTaskDetailDialog(data.id); cancelScheduledTaskDialog = true;"
-                /> -->
+                />
                 <Button
                   class="p-button-sm p-button-rounded"
                   icon="pi pi-list"
@@ -214,8 +226,201 @@
         class="p-button-sm p-button-text"
         @click="scheduledTaskDetailDialog = false"
       />
+      <Button
+          :label="$t('reports.scheduled_task_report.agents')"
+          class="p-button-sm p-mr-2"
+          icon="pi pi-desktop"
+          @click="this.agentListDialog = true;"
+        /> 
     </template>
   </Dialog>
+
+
+  <!-- Agent List Dialog -->
+  <Dialog
+  v-model:visible="agentListDialog"
+  :breakpoints="{ '900px': '75vw', '600px': '100vw' }"
+  :style="{ width: '50vw' }"
+  >
+    <template #header>
+      <h3>{{$t('reports.task_report.task_sent_ahenk_list')}}</h3>
+    </template>
+    
+    <DataTable :value="selectedCommand.commandExecutions" responsiveLayout="scroll" dataKey="id" :loading="loading" class="p-datatable-sm"
+       :paginator="true" :rows="10" ref="dt"
+      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
+      :rowsPerPageOptions="[10,25,50,100,500,1000]"  style="margin-top: 2em"
+      v-model:filters="filters">
+      <template #header>
+        <div class="p-d-flex p-jc-end">
+          <span class="p-input-icon-left">
+          <i class="pi pi-search" />
+          <InputText 
+              v-model="filters['global'].value" 
+              class="p-inputtext-sm" 
+              :placeholder="$t('computer.task_history.search')" 
+          />
+          </span>
+        </div>
+      </template>
+        <Column field="uid" :header="$t('reports.task_report.computer_name')">
+          <template #body="{ data }">
+            {{ data.uid }}
+          </template>
+        </Column>
+        <Column field="createDate" :header="$t('reports.task_report.posted_date')">
+          <template #body="{ data }">
+            {{ data.createDate }}
+          </template>
+        </Column>
+        <Column :header="$t('reports.task_report.execution_date')">
+          <template #body="{data}">
+                {{
+                    data.commandExecutionResults.length > 0 ? 
+                    data.commandExecutionResults[0].createDate : ''
+                }}
+            </template>
+        </Column>
+        <Column :header="$t('reports.task_report.results')">
+          <template #body="{data}">
+            <Button
+              v-if="data.commandExecutionResults.length > 0 && data.commandExecutionResults[0].responseCode == 'TASK_PROCESSED'"
+              :label="$t('reports.task_report.successful')" class="p-button-success p-button-sm p-button-rounded"
+            ></Button>
+            <Button
+              v-else-if="data.commandExecutionResults.length > 0 && data.commandExecutionResults[0].responseCode != 'TASK_PROCESSED'"
+              :label="$t('reports.task_report.error')" class="p-button-danger p-button-sm p-button-rounded"
+            ></Button>
+            <Button
+              v-else
+              :label="$t('reports.task_report.waiting')" class="p-button-warning p-button-sm p-button-rounded"
+            ></Button>
+                <!-- {{
+                    data.commandExecutionResults.length > 0 ? 
+                    (data.commandExecutionResults[0].responseCode == "TASK_PROCESSED" ? $t('reports.task_report.successful') : $t('reports.task_report.error'))   : ''
+                }} -->
+            </template>
+        </Column>
+        <Column :header="$t('reports.task_report.answer')">
+          <template #body="{ data }">
+            <div class="p-d-flex p-jc-end">
+              <div>
+                <Button
+                  class="p-button-sm p-button-raised p-button-rounded"
+                  icon="pi pi-list"
+                  v-tooltip.left="$t('reports.task_report.selected_task_detail')"
+                  @click="showTaskExecutionsResultDialog(data.id)"
+                />
+              </div>
+            </div>
+          </template>
+        </Column>
+    </DataTable>
+    
+    <template #footer>
+      <Button
+        :label="$t('reports.task_report.close')"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="agentListDialog = false"
+      />
+    </template>
+  </Dialog >
+
+      <!-- Task Detail Dialog -->
+      <Dialog
+      v-model:visible="taskExecutionsResultDialog"
+      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+      :style="{ width: '50vw' }"
+      >
+      <template #header>
+        <h3>{{$t('reports.task_report.selected_task_detail')}}</h3>
+      </template>
+  
+      <h4>{{$t('reports.task_report.detail')}}</h4>
+  
+      <div class="p-grid">
+        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+        <div class="p-col-4"><b>{{$t('reports.task_report.task_name')}}</b></div>
+        <div class="p-col-8">
+          {{ selectedCommand.task.plugin.description }}
+        </div>
+        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+        <div class="p-col-4"><b>{{$t('reports.task_report.execution_result')}}</b></div>
+        <div class="p-col-8" v-if="selectedTaskExecutionResult.commandExecutionResults.length == 0">
+            {{$t('reports.task_report.waiting')}}
+        </div>
+        <div class="p-col-8" v-else> 
+          {{ selectedTaskExecutionResult.commandExecutionResults.length > 0 && 
+            selectedTaskExecutionResult.commandExecutionResults[0].responseCode == "TASK_PROCESSED" ? $t('reports.task_report.successful') : $t('reports.task_report.error') }}
+        </div>
+        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+        <div class="p-col-4"><b>{{$t('reports.task_report.create_date')}}</b></div>
+        <div class="p-col-8">
+          {{ selectedCommand.createDate }}
+        </div>
+        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+        <div class="p-col-4"><b>{{$t('reports.task_report.execution_date')}}</b></div>
+        <div class="p-col-8">
+          {{ selectedTaskExecutionResult.createDate }}
+        </div>
+        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      </div>
+  
+  
+      <h4>{{$t('reports.task_report.sended_task_parameter')}}</h4>
+  
+      <div class="p-grid">
+        <template v-for="(parameterKey, index) in Object.keys(selectedCommand.task.parameterMap)" :key="index + 'param' " >
+          <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+          <div class="p-col-4"><b>{{ parameterKey }}</b></div>
+          <div v-if="parameterKey == 'password' || parameterKey == 'RootPassword' || parameterKey == 'admin-password' || parameterKey == 'admin_password'" 
+              class="p-col-8">******</div>
+          <div v-else class="p-col-8">{{ value }}</div>
+        </template>
+      </div>
+  
+      <div class="p-grid" v-for="(value, key) in selectedParam" :key="key">
+        <div class="p-col-4"><b>{{ key }}</b></div>
+        <div v-if="key == 'password' || key == 'RootPassword' || key == 'admin-password' || key == 'admin_password'" 
+            class="p-col-8">******</div>
+        <div v-else class="p-col-8">{{ value }}</div>
+        <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      </div>
+  
+  
+      <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+      <h4>{{$t('reports.task_report.data_saved_as_a_result_of_task_execution')}}</h4>
+  
+      <div class="p-grid" v-if="selectedTaskExecutionResult.commandExecutionResults && selectedTaskExecutionResult.commandExecutionResults.length > 0">
+        <template v-if="selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr != 'null' ">
+           <template v-for="(parameterKey, index) in Object.keys(JSON.parse(selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr))" :key="index + 'param' " >
+              <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+              <div class="p-col-4"><b>{{ parameterKey }}</b></div>
+              <div class="p-col-8" >
+                {{ JSON.parse(selectedTaskExecutionResult.commandExecutionResults[0].responseDataStr)[parameterKey] }}
+              </div>
+          </template>
+        </template>
+         <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+          <div class="p-col-4"><b>{{$t('reports.task_report.message_from_ahenk')}}</b></div>
+          <div class="p-col-8">
+            {{ selectedTaskExecutionResult.commandExecutionResults[0].responseMessage }}
+          </div>
+          <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+       </div>
+       <template #footer>
+        <Button
+          :label="$t('reports.task_report.close')"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="taskExecutionsResultDialog = false"
+        />
+        </template>
+  
+      </Dialog>
+
+
   <Dialog :header="$t('reports.scheduled_task_report.cancel_scheduled_task')" 
     v-model:visible="cancelScheduledTaskDialog" 
     :style="{width: '20vw'}" :modal="true">
@@ -256,6 +461,7 @@
  * @see {@link http://www.liderahenk.org/}
  */
 
+import {FilterMatchMode} from 'primevue/api';
 import moment from "moment";
 import { scheduledTaskReportService } from "../../services/Reports/ScheduledTaskReportService.js";
 
@@ -270,18 +476,35 @@ export default {
       loading: false,
       getFilterData: true,
       taskDetailDialog: false,
+      agentListDialog: false,
       scheduledTaskDetailDialog: false,
       selectedCommand: null,
       plugins:[],
       showScheduled: false,
+      taskExecutionsResultDialog: false,
+      selectedTaskExecutionResult: null,
       cancelScheduledTaskDialog: false,
       cancelScheduledTaskLoading:false,
       filter: {
         taskSendDate: '',
         taskSendStartDate:'',
         taskSendEndDate:'',
-        task:null
+        task:null,
+        agentStatus:"",
       },
+      filters: {
+          'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+      },
+      agentStatuses: [
+        {
+          name: this.$t('reports.detailed_agent_report.active'),
+          value: true,
+        },
+        {
+          name: this.$t('reports.detailed_agent_report.passive'),
+          value: false,
+        },
+      ],
       pageNumber: 1,
       rowNumber: 10,
     };
@@ -299,14 +522,25 @@ export default {
       )[0];
     },
 
+    showTaskExecutionsResultDialog(id){
+      this.selectedTaskExecutionResult = this.selectedCommand.commandExecutions.filter(
+        (executionResult) => executionResult.id === id
+      )[0];
+      this.taskExecutionsResultDialog = true;
+    },
+
     async getTasks() {
       this.loading = true;
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
       data.append("pageSize", this.rowNumber);
+      // data.append("agentStatus",this.filter.agentStatus);
       // data.append("startDate", this.filter.taskSendStartDate);
       // data.append("endDate", this.filter.taskSendEndDate);
+      if(this.filter.agentStatus != null) {
+        data.append("agentStatus", this.agentStatus);
+      }
       if(this.filter.task != null) {
         data.append("taskCommand", this.filter.task);
       }
@@ -334,7 +568,6 @@ export default {
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
-
       const {response, error} = await scheduledTaskReportService.scheduledTaskList(data)
       if (error) { 
             this.$toast.add({
@@ -345,8 +578,11 @@ export default {
             });
       } else {
         if(response.status == 200){
+          console.log("AGAH")
+          
           this.tasks = response.data.content;
           this.totalElements = response.data.totalElements;
+          console.log(response.data)
           this.loading = false;
           let successfullTaskCount = 0;
           let failedTaskCount = 0;
@@ -530,8 +766,8 @@ export default {
       const { response, error} = await  scheduledTaskReportService.scheduledTaskUpdate(params);
       if (response.status == 200 ){
         if(response.data != null) {
-          this.tasks = this.tasks.filter(command => command.id != response.data.id);
-          this.tasks.push(response.data);
+          this.tasks = this.tasks.filter(command => command.id != response.data.body.id);
+          this.tasks.push(response.data.body);
           this.$toast.add({
             severity:'success', 
             detail: this.$t('reports.scheduled_task_report.success_scheduled_update'),
