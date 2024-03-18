@@ -509,6 +509,7 @@
         var data = new FormData();
         data.append("pageNumber", this.pageNumber);
         data.append("pageSize", this.rowNumber);
+        data.append("status", false);
         // data.append("startDate", this.filter.taskSendStartDate);
         // data.append("endDate", this.filter.taskSendEndDate);
         if(this.filter.task != null) {
@@ -539,7 +540,7 @@
           );
         }
   
-        const {response, error} = await scheduledTaskReportService.scheduledActiveTaskList(data)
+        const {response, error} = await scheduledTaskReportService.scheduledTaskList(data)
         if (error) { 
               this.$toast.add({
                 severity:'error',
