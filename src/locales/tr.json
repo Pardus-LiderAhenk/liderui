@@ -156,7 +156,10 @@
         "error_403_changed_settings_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
         "error_changed_settings_password":"Parolanız güncellenirken hata oluştu",
         "settings_password_successfully_update":"Parolanız başarıyla güncellendi",
-        "password_input_message":"Lütfen eski parolanızı giriniz"
+        "password_input_message":"Lütfen eski parolanızı giriniz",
+        "create_password":"Parola Oluştur",
+        "settings_password_error_save":"Parolanız oluşturulamadı. Hata kodu: 500"
+
     },
     "computer": {
         "total": "Toplam",

@@ -17,15 +17,26 @@
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="mailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
-            <div class="p-inputgroup">
+            <div class="p-inputgroup" v-if="mailUsernameDefine">
                 <InputText type="password"  
                     value="******************" 
                     readonly/>
-                <Button 
+                <Button
                     icon="pi pi-unlock"
                     class="p-button-sm"
                     type="button" @click="changePasswordDialog = true" 
                     :label="$t('settings.server_settings.mail_server_settings.change_password')" />
+                
+            </div>
+            <div class="p-inputgroup" v-else>
+                <InputText type="password"  
+                    value="" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-save"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings_password.create_password')" />
             </div>
         </div>
          <div class="p-field p-col-12 p-md-4">
@@ -48,6 +59,7 @@
     <SettingsPasswordComponet v-if="changePasswordDialog"
         :visible="changePasswordDialog"
         :type="'emailServerPassword'"
+        :settingsOldPassword="mailUsernameDefine"
         @updatedPassword="updatedPassword"
         @update:visible="changePasswordDialog = false"/>
 
@@ -86,11 +98,12 @@ export default {
             mailSmtpAuth:true,
             mailTlsEnabled:true,
             mailHost:'',
-            mailPort: '',
+            mailPort:'',
             mailUsername:'',
             validationOldPassword: false,
             showDialog: false,
-            changePasswordDialog: false
+            changePasswordDialog: false,
+            mailUsernameDefine: false
         }
         
     },
@@ -105,6 +118,9 @@ export default {
             this.mailHost = newVal.mailHost;
             this.mailPort = newVal.mailPort;
             this.mailUsername = newVal.mailAddress;
+          }
+          if(this.serverSettings && this.serverSettings.mailHost){
+                this.mailUsernameDefine = true
           }
         }
     },

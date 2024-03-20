@@ -17,7 +17,7 @@
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="xmppPassword">{{$t('settings.server_settings.messaging_server_settings.xmpp_password')}}</label>
-            <div class="p-inputgroup">
+            <div class="p-inputgroup" v-if="xmppUsernameDefine">
                 <InputText type="password"  
                     value="******************" 
                     readonly/>
@@ -26,6 +26,16 @@
                     class="p-button-sm"
                     type="button" @click="changePasswordDialog = true" 
                     :label="$t('settings.server_settings.messaging_server_settings.change_password')" />
+            </div>
+            <div class="p-inputgroup" v-else>
+                <InputText type="password"  
+                    value="" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-save"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings_password.create_password')" />
             </div>
         </div>
          <div class="p-field p-col-12 p-md-6">
@@ -60,6 +70,7 @@
     <SettingsPasswordComponet v-if="changePasswordDialog"
         :visible="changePasswordDialog"
         :type="'xmppPassword'"
+        :settingsOldPassword="xmppUsernameDefine"
         @updatedPassword="updatedPassword"
         @update:visible="changePasswordDialog = false"/>
 
@@ -99,7 +110,8 @@ export default {
             xmppPacketReplayTimeout:'',
             xmppPingTimeout:'',
             showDialog: false,
-            changePasswordDialog: false
+            changePasswordDialog: false,
+            xmppUsernameDefine:false
         }
     },
     watch: { 
@@ -114,11 +126,9 @@ export default {
             this.xmppPacketReplayTimeout = newVal.xmppPacketReplayTimeout;
             this.xmppPingTimeout = newVal.xmppPingTimeout;
           }
-        },
-        oldPassword() {
-            if (this.oldPassword) {
-                this.validationOldPassword = false;
-            }
+          if(this.serverSettings && this.serverSettings.xmppUsername){
+            this.xmppUsernameDefine = true
+          }
         }
     },
     components: {

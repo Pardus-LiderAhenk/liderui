@@ -21,7 +21,7 @@
         </div>
          <div class="p-field p-col-12 p-md-4">
             <label for="fileServerPassword">{{$t('settings.server_settings.file_server_settings.password')}}</label>
-            <div class="p-inputgroup">
+            <div class="p-inputgroup" v-if="fileUsernameDefine">
                 <InputText type="password"  
                     value="******************" 
                     readonly/>
@@ -31,6 +31,16 @@
                     type="button"
                     @click="changePasswordDialog = true"
                     :label="$t('settings.server_settings.file_server_settings.change_password')" />
+            </div>
+            <div class="p-inputgroup" v-else>
+                <InputText type="password"  
+                    value="" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-save"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings_password.create_password')" />
             </div>
         </div>
          <div class="p-field p-col-12 p-md-4">
@@ -52,6 +62,7 @@
     <SettingsPasswordComponet v-if="changePasswordDialog"
         :visible="changePasswordDialog"
         :type="'fileServerPassword'"
+        :settingsOldPassword="fileUsernameDefine"
         @updatedPassword="updatedPassword"
         @update:visible="changePasswordDialog = false"/>
 
@@ -95,7 +106,8 @@ export default {
             fileServerPassword:'',
             fileServerAgentFilePath:'',
             showDialog: false,
-            changePasswordDialog: false
+            changePasswordDialog: false,
+            fileUsernameDefine: false
         }
     },
     components: {
@@ -109,6 +121,9 @@ export default {
             this.fileServerPort = newVal.fileServerPort;
             this.fileServerUsername = newVal.fileServerUsername;
             this.fileServerAgentFilePath = newVal.fileServerAgentFilePath;
+          }
+          if(this.serverSettings && this.serverSettings.fileServerUsername){
+                this.fileUsernameDefine = true
           }
         }
     },

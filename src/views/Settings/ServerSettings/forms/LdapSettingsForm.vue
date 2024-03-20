@@ -21,7 +21,7 @@
         </div>
         <div class="p-field p-col-12 p-md-6">
             <label for="ldapPassword">{{$t('settings.server_settings.directory_server_settings.ldap_user_password')}}</label>
-            <div class="p-inputgroup">
+            <div class="p-inputgroup" v-if="ldapUsernameDefine">
                 <InputText type="password"  
                     value="******************" 
                     readonly/>
@@ -30,7 +30,17 @@
                     class="p-button-sm"
                     type="button" @click="changePasswordDialog = true" 
                     :label="$t('settings.server_settings.directory_server_settings.change_password')" />
-            </div>    
+            </div> 
+            <div class="p-inputgroup" v-else>
+                <InputText type="password"  
+                    value="" 
+                    readonly/>
+                <Button 
+                    icon="pi pi-save"
+                    class="p-button-sm"
+                    type="button" @click="changePasswordDialog = true" 
+                    :label="$t('settings_password.create_password')" />
+            </div>   
         </div>
          <div class="p-field p-col-12 p-md-6">
             <label for="agentLdapBaseDn">{{$t('settings.server_settings.directory_server_settings.ahenk_folder')}}</label>
@@ -86,7 +96,7 @@
             </div>
             <div class="p-field p-col-12 p-md-6">
                 <label for="adAdminPassword">{{$t('settings.server_settings.directory_server_settings.active_directory_admin_password')}}</label>
-                <div class="p-inputgroup">
+                <div class="p-inputgroup" v-if="adUsernameDefine">
                     <InputText type="password"  
                         value="******************" 
                         readonly/>
@@ -95,6 +105,16 @@
                         class="p-button-sm"
                         type="button" @click="changeAdPasswordDialog = true" 
                         :label="$t('settings.server_settings.directory_server_settings.change_password')" />
+                </div>
+                <div class="p-inputgroup" v-else>
+                    <InputText type="password"  
+                        value="" 
+                        readonly/>
+                    <Button 
+                        icon="pi pi-save"
+                        class="p-button-sm"
+                        type="button" @click="changeAdPasswordDialog = true" 
+                        :label="$t('settings_password.create_password')" />
                 </div>
             </div>
             <div class="p-field p-col-12 p-md-6">
@@ -128,13 +148,15 @@
     <SettingsPasswordComponet v-if="changePasswordDialog"
         :visible="changePasswordDialog"
         :type="'ldapPassword'"
-        @updatedPassword="updatedPassword"
+        :settingsOldPassword="ldapUsernameDefine"
+        @updatedPassword="updatedLdapPassword"
         @update:visible="changePasswordDialog = false"/>
 
     <SettingsPasswordComponet v-if="changeAdPasswordDialog"
         :visible="changeAdPasswordDialog"
         :type="'AdAdminPassword'"
-        @updatedPassword="changeAdPasswordDialog"
+        :settingsOldPassword="adUsernameDefine"
+        @updatedPassword="updatedAdPassword"
         @update:visible="changeAdPasswordDialog = false"/>
 
     <Dialog :header="$t('settings.server_settings.directory_server_settings.update_settings')" v-model:visible="showDialog" 
@@ -192,7 +214,9 @@ export default {
             adAdminUserFullDN:'',
             showDialog: false,
             changePasswordDialog: false,
-            changeAdPasswordDialog: false
+            changeAdPasswordDialog: false,
+            ldapUsernameDefine: false,
+            adUsernameDefine: false
         }
     },
     components: {
@@ -222,6 +246,12 @@ export default {
               this.adAdminUserName = newVal.adAdminUserName;
               this.adAdminUserFullDN = newVal.adAdminUserFullDN;
               this.cbShowADSettings = this.adHostName ? true : false;
+          }
+          if(this.serverSettings && this.serverSettings.ldapUsername){
+                this.ldapUsernameDefine = true
+          }
+          if(this.serverSettings && this.serverSettings.adAdminUserName){
+                this.adUsernameDefine = true
           }
         }
     },
@@ -267,8 +297,10 @@ export default {
             }
             this.showDialog = false;
         },
-        updatedPassword() {
+        updatedLdapPassword() {
             this.changePasswordDialog = false;
+        },
+        updatedAdPassword() {
             this.changeAdPasswordDialog = false;
         }
     },
