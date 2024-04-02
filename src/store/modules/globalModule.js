@@ -1,6 +1,7 @@
 import axios from 'axios';
 import strophe from '@/services/strophe.js';
 import router from '../../router';
+import {getLiderWs} from '@/libs/liderws';
 
 
 const state = {
@@ -65,11 +66,12 @@ const actions = {
                         axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
                         axios.post("/api/lider-console/profile", {}).then((userresponse) => {
                             commit('auth_success', {token:token,user:userresponse.data});
-                            if(!strophe.isConnected) {
-                                strophe.getInstance().connect();
-                            }
+                            // if(!strophe.isConnected) {
+                            //     strophe.getInstance().connect();
+                            // }
                             resolve(userresponse);
                         });
+                        getLiderWs().connect();
                     } else {
                         reject("Error");
                     }

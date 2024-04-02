@@ -148,6 +148,7 @@
 import { mapGetters } from "vuex"
 import axios from "axios";
 import XmppClientManager  from '@/services/strophe.js';
+import { getLiderWs } from "@/libs/liderws";
 
 
 export default {
@@ -391,13 +392,14 @@ export default {
   mounted(){
     let toastSummary = this.$t('computer.task.toast_summary');
     let toastLife = this.toastLife;
-    XmppClientManager.getInstance().addListener(this.listenerName, (msg) => {
+
+    getLiderWs().subscribe((response) => {
+     
       let selectedDn = null;
       let nodeType = null;
       if (this.selectedNodeType == "computer") {
         if (this.selectedLiderNode) {
-          selectedDn = this.selectedLiderNode.distinguishedName;
-          nodeType 
+          selectedDn = this.selectedLiderNode.distinguishedName; 
           nodeType = this.selectedLiderNode.type;
         }
       } else if (this.selectedNodeType == "computerGroup") {
@@ -406,45 +408,91 @@ export default {
           nodeType = this.selectedComputerGroupNode.type;
         }
       }
-      var to = msg.getAttribute("to");
-      var from = msg.getAttribute("from");
-      var type = msg.getAttribute("type");
-      var elems = msg.getElementsByTagName("body");
-      if (type == "chat" && elems.length > 0) {
-        var body = elems[0];
-        var data = Strophe.xmlunescape(Strophe.getText(body));
-        var response = JSON.parse(data);
-        let responseMessage = response.result.responseMessage;
-        if (response.commandClsId === this.pluginTask.commandId) {
-          if (response.result.responseCode === "TASK_PROCESSED") {
-            this.$toast.add({
-              severity:'success', 
-              detail: responseMessage, 
-              summary: toastSummary, 
-              life: toastLife
-            });
-          } else if (response.result.responseCode === "TASK_ERROR") {
-            this.$toast.add({
-              severity:'error', 
-              detail: responseMessage, 
-              summary: toastSummary, 
-              life: toastLife
-            });
-          }
-          this.loading = false;
-          if (response.commandExecution.dn === selectedDn) {
-            this.$emit("taskResponse", response);
-          }
-          if (nodeType === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
-            this.$emit("taskResponse", response);
-          }
+
+      let responseMessage = response.result.responseMessage;
+      if (response.commandClsId === this.pluginTask.commandId) {
+        if (response.result.responseCode === "TASK_PROCESSED") {
+          this.$toast.add({
+            severity:'success', 
+            detail: responseMessage, 
+            summary: toastSummary, 
+            life: toastLife
+          });
+        } else if (response.result.responseCode === "TASK_ERROR") {
+          this.$toast.add({
+            severity:'error', 
+            detail: responseMessage, 
+            summary: toastSummary, 
+            life: toastLife
+          });
+        }
+        this.loading = false;
+        if (response.commandExecution.dn === selectedDn) {
+          this.$emit("taskResponse", response);
+        }
+        if (nodeType === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
+          this.$emit("taskResponse", response);
         }
       }
+
     });
+
+    // XmppClientManager.getInstance().addListener(this.listenerName, (msg) => {
+    //   console.log('XMPP TASK GELDIIII',msg)
+    //   let selectedDn = null;
+    //   let nodeType = null;
+    //   if (this.selectedNodeType == "computer") {
+    //     if (this.selectedLiderNode) {
+    //       selectedDn = this.selectedLiderNode.distinguishedName;
+    //       nodeType 
+    //       nodeType = this.selectedLiderNode.type;
+    //     }
+    //   } else if (this.selectedNodeType == "computerGroup") {
+    //     if (this.selectedComputerGroupNode) {
+    //       selectedDn = this.selectedComputerGroupNode.distinguishedName;
+    //       nodeType = this.selectedComputerGroupNode.type;
+    //     }
+    //   }
+    //   var to = msg.getAttribute("to");
+    //   var from = msg.getAttribute("from");
+    //   var type = msg.getAttribute("type");
+    //   var elems = msg.getElementsByTagName("body");
+    //   if (type == "chat" && elems.length > 0) {
+    //     var body = elems[0];
+    //     var data = Strophe.xmlunescape(Strophe.getText(body));
+    //     var response = JSON.parse(data);
+    //     let responseMessage = response.result.responseMessage;
+    //     if (response.commandClsId === this.pluginTask.commandId) {
+    //       if (response.result.responseCode === "TASK_PROCESSED") {
+    //         this.$toast.add({
+    //           severity:'success', 
+    //           detail: responseMessage, 
+    //           summary: toastSummary, 
+    //           life: toastLife
+    //         });
+    //       } else if (response.result.responseCode === "TASK_ERROR") {
+    //         this.$toast.add({
+    //           severity:'error', 
+    //           detail: responseMessage, 
+    //           summary: toastSummary, 
+    //           life: toastLife
+    //         });
+    //       }
+    //       this.loading = false;
+    //       if (response.commandExecution.dn === selectedDn) {
+    //         this.$emit("taskResponse", response);
+    //       }
+    //       if (nodeType === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
+    //         this.$emit("taskResponse", response);
+    //       }
+    //     }
+    //   }
+    // });
   },
 
   unmounted () {
-    XmppClientManager.getInstance().removeListener(this.listenerName, () => {});
+    // XmppClientManager.getInstance().removeListener(this.listenerName, () => {});
+    
   }
 };
 </script>
