@@ -14,7 +14,6 @@ class LiderWs {
         this.stompClient = Stomp.over(this.socket);
         this.stompClient.connect({}, (frame) => {
             this.stompClient.subscribe('/liderws/task', (task) => {
-                console.log('Web socker mesaj geldi', JSON.parse(task.body));
                 this.subscribers.forEach(subscriber => subscriber(JSON.parse(task.body)));
             });
           });
@@ -28,7 +27,6 @@ class LiderWs {
     }
 
     subscribe = (subscriber) => {
-        console.log('Subscribe olunduuuu')
         this.subscribers.add(subscriber);
     }
 
