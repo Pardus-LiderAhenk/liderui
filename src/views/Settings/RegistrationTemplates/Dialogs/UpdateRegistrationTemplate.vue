@@ -169,8 +169,6 @@ export default {
     computed: {
         showDialog: {
             get () {
-                // this.copyTemplate();
-                this.setTemplateData();
                 return this.updateTemplateDialog;
             },
 
@@ -308,6 +306,10 @@ export default {
                 delete this.validationErrors['authorizedUserGroupDN'];
             }
         },
+
+    },
+    mounted() {
+        this.setTemplateData();
     }
 }
 </script>

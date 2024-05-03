@@ -12,6 +12,7 @@ class LiderWs {
     connect = () => {
         this.socket = new SockJS('/liderws');
         this.stompClient = Stomp.over(this.socket);
+        this.stompClient.debug = () => {};
         this.stompClient.connect({}, (frame) => {
             this.stompClient.subscribe('/liderws/task', (task) => {
                 this.subscribers.forEach(subscriber => subscriber(JSON.parse(task.body)));
