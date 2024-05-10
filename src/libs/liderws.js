@@ -29,6 +29,7 @@ class LiderWs {
 
     subscribe = (subscriber) => {
         this.subscribers.add(subscriber);
+        return subscriber;
     }
 
     unsubscribe = (subscriber) => {
