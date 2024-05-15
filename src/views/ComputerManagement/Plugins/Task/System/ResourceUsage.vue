@@ -22,11 +22,10 @@
       </template>
       <template #default>
           <div class="p-grid">
-            <div class="p-col-6">
+            <div class="p-col-12 p-md-6 p-lg-6">
               <div>
                 <Chart 
-                  type="pie" 
-                  :width="400" :height="250"
+                  type="pie" class="chart"
                   :data="chartDiskData" 
                   :options="diskChartOptions"
                   :plugins="plugins">
@@ -66,11 +65,10 @@
                 </OverlayPanel>
               </div>
             </div>
-            <div class="p-col-6">
+            <div class="p-col-12 p-md-6 p-lg-6">
               <div>
-                <Chart type="pie"
-                 :data="chartMemoryData" 
-                  :width="400" :height="250" 
+                <Chart type="pie" class="chart"
+                 :data="chartMemoryData"
                   :options="memoryChartOptions"
                   :plugins="plugins">
                 </Chart>
@@ -348,5 +346,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .chart {
+    width: 400px;
+    height: 250px;
+  }
 </style>
