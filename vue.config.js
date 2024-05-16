@@ -13,6 +13,11 @@ module.exports = {
             target: guacClient,
             changeOrigin: true,
             ws: true
+          },
+          '/liderws': {
+            target: guacClient,
+            changeOrigin: true,
+            ws: true
           }
         }
       }

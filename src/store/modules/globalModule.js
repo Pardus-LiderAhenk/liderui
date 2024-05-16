@@ -1,6 +1,7 @@
 import axios from 'axios';
 import strophe from '@/services/strophe.js';
 import router from '../../router';
+import {getLiderWs} from '@/libs/liderws';
 
 
 const state = {
@@ -36,12 +37,13 @@ const actions = {
             axios.post(process.env.VUE_APP_URL + "/api/auth/logout", user).then(
                 (response) => {
                     if(response){
-                        commit('/api/auth/logout')
+                        commit('logout')
                         localStorage.removeItem('vuex')
                         localStorage.removeItem('auth_token')
                         localStorage.removeItem('_secure__ls__metadata')
                         delete axios.defaults.headers.common['Authorization']
-                        strophe.getInstance().disconnect();
+                        // strophe.getInstance().disconnect();
+                        getLiderWs().disconnect();
                         router.push('/login')
                         resolve()
                     }
@@ -65,11 +67,9 @@ const actions = {
                         axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
                         axios.post("/api/lider-console/profile", {}).then((userresponse) => {
                             commit('auth_success', {token:token,user:userresponse.data});
-                            if(!strophe.isConnected) {
-                                strophe.getInstance().connect();
-                            }
                             resolve(userresponse);
                         });
+                        getLiderWs().connect();
                     } else {
                         reject("Error");
                     }

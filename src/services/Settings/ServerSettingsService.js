@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 const liderSettingsUpdateEmailUrl = '/api/lider/settings/update/email-settings';
+const liderSettingsUpdateSettingsPasswordUrl = '/api/lider/settings/update/settings-password';
+const liderSettingsSaveSettingsPasswordUrl = '/api/lider/settings/save/settings-password'
 const liderSettingsUpdateFileServerUrl = '/api/lider/settings/update/file-server';
 const liderSettingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
 const liderSettingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
@@ -19,15 +21,32 @@ class ServerSettingsService{
         try{
             const response =  await axios.post(liderSettingsUpdateEmailUrl,data);
             return { response };
-        }
-        catch(error){
+        } catch(error){
             return { error: error };
         }
     }
 
-    async updateFileServer(params) {
+    async changePassword(data){
+        try{
+            const response =  await axios.post(liderSettingsUpdateSettingsPasswordUrl,data);
+            return { response };
+        } catch(error){
+            return { error: error };
+        }
+    }
+
+    async savePassword(data){
+        try{
+            const response =  await axios.post(liderSettingsSaveSettingsPasswordUrl,data);
+            return { response };
+        } catch(error){
+            return { error: error };
+        }
+    }
+
+    async updateFileServer(data) {
         try {
-            const response = await axios.post(liderSettingsUpdateFileServerUrl, params);
+            const response = await axios.post(liderSettingsUpdateFileServerUrl, data);
             return { response };
         } catch (error) {
             return { error: error }

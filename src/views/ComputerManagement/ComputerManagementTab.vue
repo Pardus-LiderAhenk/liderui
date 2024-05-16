@@ -19,6 +19,13 @@
                             :label="$t('menu.computer_group_management')"
                         >
                         </Button>
+                        <Button
+                            icon="fa fa-clock"
+                            :class="selectedTab == 'scheduledTask' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
+                            @click="setSelectedTab('scheduledTask')"
+                            :label="$t('menu.scheduled_tasks')"
+                        >
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -30,13 +37,15 @@
 <script>
 import ComputerManagement from "@/views/ComputerManagement/ComputerManagement.vue";
 import ComputerGroupManagement from "@/views/ComputerManagement/ComputerGroupManagement/ComputerGroupManagement.vue";
+import ScheduledTask from "@/views/ComputerManagement/ScheduledTask.vue";
 import { mapActions } from "vuex"
 import {roleManagement} from "../../services/Roles/RoleManagement"
 
 export default {
     components: {
         ComputerGroupManagement,
-        ComputerManagement
+        ComputerManagement,
+        ScheduledTask
     },
 
     data() {
@@ -55,8 +64,10 @@ export default {
         setSelectedTab(tab) {
             if (tab == "computer-management") {
                 this.setSelectedNodeType("computer");
-            } else {
+            } else if ( tab == "computer-group-management" ) {
                 this.setSelectedNodeType("computerGroup");
+            } else {
+                this.setSelectedNodeType("scheduledTask")
             }
             this.selectedTab = tab;
         },

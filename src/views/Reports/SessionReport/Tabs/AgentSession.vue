@@ -1,51 +1,18 @@
 <template>
-<!-- Dialogs Start -->
-  <add-group-dialog v-if="addGroupDialog"
-    :filter="filter"
-    :addGroupDialog="addGroupDialog" 
-    @close-group-dialog="addGroupDialog=false;">
-  </add-group-dialog>
-  <add-to-exist-group-dialog v-if="addExistGroupDialog"
-    :filter="filter"
-    :addExistGroupDialog="addExistGroupDialog" 
-    @close-group-dialog="addExistGroupDialog=false;">
-  </add-to-exist-group-dialog>
-  <agent-detail-dialog v-if="agentDetailDialog"
-    :agentDetailDialog="agentDetailDialog"
-    :selectedAgent="selectedAgent"
-    @close-agent-detail-dialog="agentDetailDialog=false;">
-  </agent-detail-dialog>
-  <Dialog :header="$t('reports.detailed_agent_report.select_folder')"
-    v-model:visible="agentOuDialog" 
-    :style="{width: '30vw'}" :modal="true"
-  >
-    <tree-component 
-      ref="agentTree"
-      loadNodeUrl="/api/lider/computer/computers"
-      loadNodeOuUrl="/api/lider/computer/ou-details"
-      :treeNodeClick="node => filter.dn = node.distinguishedName"
-      :searchFields="[{key: this.$t('tree.folder'), value: 'ou'}]"
-      :isMove="true"
-      :scrollHeight="40"
-    />
-    <template #footer>
-      <Button :label="$t('reports.detailed_agent_report.cancel')"
-        icon="pi pi-times" @click="agentOuDialog = false"
-        class="p-button-text p-button-sm"
-      />
-      <Button :label="$t('reports.detailed_agent_report.select')" icon="pi pi-check" 
-          @click="selectAgentOuDn" class="p-button-sm"
-      />
-    </template>
-  </Dialog>
-  <!-- Dialogs End -->
+  <div>
+  <user-session-dialog v-if="userSessisonDialog"
+    :userSessionDialog="userSessisonDialog"
+    :selectedAgentId="selectedAgentId"
+    @close-user-session-dialog="userSessisonDialog=false;">
+  </user-session-dialog>
+
   <Panel :toggleable="true" class="p-m-3">
     <template #header>
-      <h4 class="p-pt-2">{{$t('reports.detailed_agent_report.detailed_agent_report')}}</h4>
+      <h4 class="p-pt-2">{{$t('reports.session_report.client_session_report')}}</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputComputerName">{{$t('reports.detailed_agent_report.computer_name')}}</label>
+        <label for="inputComputerName">{{$t('reports.session_report.computer_name')}}</label>
         <InputText
           id="inputComputerName"
           type="text"
@@ -53,11 +20,11 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputIPAdress">{{$t('reports.detailed_agent_report.ip_address')}}</label>
+        <label for="inputIPAdress">{{$t('reports.session_report.ip_address')}}</label>
         <InputText id="inputIPAdress" type="text" v-model="filter.ipAddress" />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputMacAddress">{{$t('reports.detailed_agent_report.mac_address')}}</label>
+        <label for="inputMacAddress">{{$t('reports.session_report.mac_address')}}</label>
         <InputText
           id="inputMacAddress"
           type="text"
@@ -65,7 +32,7 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputDN">{{$t('reports.detailed_agent_report.dn')}}</label>
+        <label for="inputDN">{{$t('reports.session_report.dn')}}</label>
          <div class="p-inputgroup ">
             <InputText id="inputDN" type="text" v-model="filter.dn" />
             <Button icon="pi pi-sitemap" class="p-button-warning" 
@@ -74,7 +41,7 @@
         </div>
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputRegistrationDate">{{$t('reports.detailed_agent_report.create_date')}}</label>
+        <label for="inputRegistrationDate">{{$t('reports.session_report.create_date')}}</label>
         <Calendar
           v-model="filter.registrationDate"
           selectionMode="range"
@@ -88,7 +55,7 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputStatus">{{$t('reports.detailed_agent_report.status')}}</label>
+        <label for="inputStatus">{{$t('reports.session_report.status')}}</label>
         <Dropdown
           v-model="filter.status"
           :options="statuses"
@@ -97,108 +64,106 @@
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectBrand">{{$t('reports.detailed_agent_report.brand')}}</label>
+        <label for="selectBrand">{{$t('reports.session_report.brand')}}</label>
         <Dropdown
           id="selectBrand"
           v-model="filter.brand"
           :options="brands"
-          :placeholder="$t('reports.detailed_agent_report.select')"
+          :placeholder="$t('reports.session_report.select')"
           showClear="true"
           @change="clearEvent($event, 'brand')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectModel">{{$t('reports.detailed_agent_report.model')}}</label>
+        <label for="selectModel">{{$t('reports.session_report.model')}}</label>
         <Dropdown
           id="selectModel"
           v-model="filter.model"
           :options="models"
-          :placeholder="$t('reports.detailed_agent_report.select')"
+          :placeholder="$t('reports.session_report.select')"
           showClear="true"
           @change="clearEvent($event, 'model')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectProcessor">{{$t('reports.detailed_agent_report.processor')}}</label>
+        <label for="selectProcessor">{{$t('reports.session_report.processor')}}</label>
         <Dropdown
           id="selectProcessor"
           v-model="filter.processor"
           :options="processors"
-          :placeholder="$t('reports.detailed_agent_report.select')"
+          :placeholder="$t('reports.session_report.select')"
           showClear="true"
           @change="clearEvent($event, 'processor')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectOSVersion">{{$t('reports.detailed_agent_report.operating_system_version')}}</label>
+        <label for="selectOSVersion">{{$t('reports.session_report.operating_system_version')}}</label>
         <Dropdown
           id="selectOSVersion"
           v-model="filter.osVersion"
           :options="osVersions"
-          :placeholder="$t('reports.detailed_agent_report.select')"
+          :placeholder="$t('reports.session_report.select')"
           showClear="true"
           @change="clearEvent($event, 'osVersion')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectAgentVersion">{{$t('reports.detailed_agent_report.ahenk_version')}}</label>
+        <label for="selectAgentVersion">{{$t('reports.session_report.ahenk_version')}}</label>
         <Dropdown
           id="selectAgentVersion"
           v-model="filter.agentVersion"
           :options="agentVersions"
-          :placeholder="$t('reports.detailed_agent_report.all')"
+          :placeholder="$t('reports.session_report.all')"
           :showClear="true"
           @change="clearEvent($event, 'agentVersion')"
         />
       </div>
       <!-- <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="selectSessionVersion">{{$t('reports.detailed_agent_report.session')}}</label>
+        <label for="selectSessionVersion">{{$t('reports.session_report.session')}}</label>
         <Dropdown
           id="selectSessionVersion"
           v-model="filter.sessionReportType"
           :options="sessionReportTypes" 
           optionLabel="name" 
           optionValue="value"
-          :placeholder="$t('reports.detailed_agent_report.all')"
+          :placeholder="$t('reports.session_report.all')"
           showClear="true"
           @change="clearEvent($event, 'sessionReportType')"
         />
       </div> -->
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="">{{$t('reports.detailed_agent_report.disk_type')}}</label>
+        <label for="">{{$t('reports.session_report.disk_type')}}</label>
         <Dropdown
           v-model="filter.diskType"
           :options="diskTypes"
           optionLabel="name"
           optionValue="value"
-          :placeholder="$t('reports.detailed_agent_report.all')"
+          :placeholder="$t('reports.session_report.all')"
           showClear="true"
           @change="clearEvent($event, 'diskType')"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="">{{$t('reports.detailed_agent_report.client_status')}}</label>
+        <label for="">{{$t('İstemci reports.session_report.client_status')}}</label>
         <Dropdown
           v-model="filter.agentStatus"
           :options="agentStatuses"
           optionLabel="name"
           optionValue="value"
-          :placeholder="$t('reports.detailed_agent_report.all')"
-
         />
       </div>
       <div class="p-field p-col-12 p-text-right">
         <div class="p-d-flex p-jc-end">
           <div>
             <Button
-              :label="$t('reports.detailed_agent_report.clear')"
+              :label="$t('reports.session_report.clear')"
               icon="fas fa-backspace"
               @click="clearFilterFields"
             />
           </div>
           <div class="p-ml-2">
             <Button
-              :label="$t('reports.detailed_agent_report.search')"
+              :label="$t('reports.session_report.search')"
               icon="fas fa-search" 
               @click="filterAgents" 
               />
@@ -210,30 +175,19 @@
   <Card class="p-m-3 p-mb-7">
     <template #title>
       <div class="p-d-flex p-jc-between">
-        <div>{{$t('reports.detailed_agent_report.results')}}</div>
-        <div  v-if="agents.length > 0">
-          <SplitButton class="p-mr-2"
-             :label="$t('reports.detailed_agent_report.create_computer_group')" icon="fa fa-users"
-            @click="addGroupDialog=true;" :model="items">
-          </SplitButton>
-          <Button
-            :label="$t('reports.detailed_agent_report.export')"
-            icon="fas fa-file-excel"
-            @click="exportToExcel()"
-          />
-        </div>
+        <div>{{$t('reports.session_report.results')}}</div>
       </div>
     </template>
     <template #content>
       <DataTable :value="agents" responsiveLayout="scroll" dataKey="id" :loading="loading">
         <template #empty>
           <div class="p-d-flex p-jc-center">
-            <span>{{$t('reports.detailed_agent_report.agent_not_found')}}</span>
+            <span>{{$t('reports.session_report.agent_not_found')}}</span>
           </div>
         </template>
         <template #loading>
           <div class="p-d-flex p-jc-center">
-            <span>{{$t('reports.detailed_agent_report.loading')}}...</span>
+            <span>{{$t('reports.session_report.loading')}}...</span>
           </div>
         </template>
         <Column header="#">
@@ -241,31 +195,31 @@
             <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
           </template>
         </Column>
-        <Column field="hostname" :header="$t('reports.detailed_agent_report.computer_name')"></Column>
-        <Column :header="$t('reports.detailed_agent_report.mac_address')">
+        <Column field="hostname" :header="$t('reports.session_report.computer_name')"></Column>
+        <Column :header="$t('reports.session_report.mac_address')">
           <template #body="{ data }">
             {{ data.macAddresses.replace(/'/g, "") }}
           </template>
         </Column>
-        <Column :header="$t('reports.detailed_agent_report.ip_address')">
+        <Column :header="$t('reports.session_report.ip_address')">
           <template #body="{ data }">
             {{ data.ipAddresses.replace(/'/g, "") }}
           </template>
         </Column>
-        <Column field="isOnline" :header="$t('reports.detailed_agent_report.status')">
+        <Column field="isOnline" :header="$t('reports.session_report.status')">
           <template #body="{ data }">
             <Badge
               v-if="data.isOnline"
-              :value="$t('reports.detailed_agent_report.online')"
+              :value="$t('reports.session_report.online')"
               severity="success"
             ></Badge>
             <Badge v-else 
-            :value="$t('reports.detailed_agent_report.offline')" 
+            :value="$t('reports.session_report.offline')" 
             severity="danger"
             ></Badge>
           </template>
         </Column>
-        <Column :header="$t('reports.detailed_agent_report.brand')">
+        <Column :header="$t('reports.session_report.brand')">
           <template #body="{ data }">
             {{
               getPropertyValue(
@@ -275,26 +229,26 @@
             }}
           </template>
         </Column>
-        <Column :header="$t('reports.detailed_agent_report.operating_system')">
+        <Column :header="$t('reports.session_report.operating_system')">
           <template #body="{ data }">
             {{ getPropertyValue(data.properties, "os.distributionName") }}
           </template>
         </Column>
-        <Column :header="$t('reports.detailed_agent_report.operating_system_version')">
+        <Column :header="$t('reports.session_report.operating_system_version')">
           <template #body="{ data }">
             {{ getPropertyValue(data.properties, "os.version") }}
           </template>
         </Column>
-        <Column field="createDate" :header="$t('reports.detailed_agent_report.create_date')"></Column>
+        <Column field="createDate" :header="$t('reports.session_report.create_date')"></Column>
         <Column>
           <template #body="{ data }">
             <div class="p-d-flex p-jc-end">
               <div>
                 <Button
                   class="p-button-sm p-button-raised p-button-rounded"
-                  icon="pi pi-list"
-                  v-tooltip.left="$t('reports.detailed_agent_report.agent_detail')"
-                  @click="showAgentDetailDialog(data.id)"
+                  icon="pi pi-users"
+                  v-tooltip.left="$t('reports.session_report.user_list')"
+                  @click.prevent="showUserSessionDialog(data)"
                 />
               </div>
             </div>
@@ -302,34 +256,35 @@
         </Column>
       </DataTable>
       <Paginator
-        ref="paging"
-        :first="offset"
         :rows="10"
         :totalRecords="totalElements"
         :rowsPerPageOptions="[10, 25, 50, 100]"
         @page="onPage($event)"
       >
-        <template> Toplam Sonuç: {{ totalElements }} </template>
+        <template> {{$t('reports.session_report.total_result')}} : {{ totalElements }} </template>
       </Paginator>
     </template>
   </Card>
+</div>
 </template>
 
 <script>
 /**
- * Detailed Agent Report.
+ * Detailed user sessions report by agent.
  * @see {@link http://www.liderahenk.org/}
  */
+import UserSessionDialog from '../Dialogs/UserSessionDialog.vue';
 import moment from "moment";
-import AddGroupDialog from './Dialogs/AddGroupDialog.vue'
-import AddToExistGroupDialog from './Dialogs/AddToExistGroupDialog.vue'
-import AgentDetailDialog from './Dialogs/AgentDetailDialog.vue'
-import { agentInfoReportService } from "../../../services/Reports/AgentInfoReportService.js";
+import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
 
 export default {
+  components: {
+    UserSessionDialog
+  },
   data() {
     return {
       agents: [],
+      agentDetailList: [],
       totalElements: 0,
       showedTotalElementCount: 10,
       currentPage: 1,
@@ -345,72 +300,72 @@ export default {
       agentVersions: [],
       diskTypes: [
         {
-          name: this.$t('reports.detailed_agent_report.all'),
+          name: this.$t('reports.session_report.all'),
           value: ""
           },
         {
-          name: this.$t('reports.detailed_agent_report.hdd_title'),
+          name: this.$t('reports.session_report.hdd_title'),
           value: "hardware.disk.hdd.info"
           },
         {
-          name: this.$t('reports.detailed_agent_report.ssd_title'),
+          name: this.$t('reports.session_report.ssd_title'),
           value: "hardware.disk.ssd.info",
         }
         
       ],
       sessionReportTypes: [
         {
-          name: this.$t('reports.detailed_agent_report.not_logged_one_mounth'),
+          name: this.$t('reports.session_report.not_logged_one_mounth'),
           value: "LAST_ONE_MONTH_NO_SESSIONS",
         },
         {
-          name: this.$t('reports.detailed_agent_report.not_logged_two_mounth'),
+          name: this.$t('reports.session_report.not_logged_two_mounth'),
           value: "LAST_TWO_MONTHS_NO_SESSIONS",
         },
         {
-          name: this.$t('reports.detailed_agent_report.not_logged_three_mounth'),
+          name: this.$t('reports.session_report.not_logged_three_mounth'),
           value: "LAST_THREE_MONTHS_NO_SESSIONS",
         },
         {
-          name: this.$t('reports.detailed_agent_report.logged_one_mounth'),
+          name: this.$t('reports.session_report.logged_one_mounth'),
           value: "LAST_ONE_MONTH_SESSIONS",
         },
         {
-          name: this.$t('reports.detailed_agent_report.logged_two_mounth'),
+          name: this.$t('reports.session_report.logged_two_mounth'),
           value: "LAST_TWO_MONTHS_SESSIONS",
         },
         {
-          name: this.$t('reports.detailed_agent_report.logged_three_mounth'),
+          name: this.$t('reports.session_report.logged_three_mounth'),
           value: "LAST_THREE_MONTHS_SESSIONS",
         },
       ],
       getFilterData: true,
-      selectedAgent: null,
+      selectedAgentId: null,
       statuses: [
         {
-          name: this.$t('reports.detailed_agent_report.all'),
+          name: this.$t('reports.session_report.all'),
           value: "ALL",
         },
         {
-          name: this.$t('reports.detailed_agent_report.online'),
+          name: this.$t('reports.session_report.online'),
           value: "ONLINE",
         },
         {
-          name: this.$t('reports.detailed_agent_report.offline'),
+          name: this.$t('reports.session_report.offline'),
           value: "OFFLINE",
         },
       ],
       agentStatuses: [
         {
-          name: this.$t('reports.detailed_agent_report.all'),
+          name: this.$t('reports.session_report.all'),
           value:"",
         },
         {
-          name: this.$t('reports.detailed_agent_report.active'),
+          name: this.$t('reports.session_report.active'),
           value: 1,
         },
         {
-          name: this.$t('reports.detailed_agent_report.passive'),
+          name: this.$t('reports.session_report.passive'),
           value: 0,
         },
       ],
@@ -434,37 +389,37 @@ export default {
       },
       items: [
         {
-          label: this.$t('reports.detailed_agent_report.add_existing_group'),
+          label: this.$t('reports.session_report.add_existing_group'),
           icon: 'pi pi-plus',
           command: () => {
               this.addExistGroupDialog = true;
           }
         },
       ],
-      addGroupDialog: false,
       addExistGroupDialog: false,
-      agentDetailDialog: false,
+      userSessisonDialog: false,
       filterData: null,
       agentOuDialog: false,
     };
   },
 
-  components: {
-    AddGroupDialog,
-    AddToExistGroupDialog,
-    AgentDetailDialog
-  },
+  
 
   mounted() {
     this.getAgents();
   },
 
   methods: {
+    showUserSessionDialog(data) {
+      this.selectedAgentId = data.id;
+      this.userSessisonDialog = true;
+    },
+
     selectAgentOuDn() {
       if (!this.filter.dn.trim()) {
         this.$toast.add({
             severity:'warn', 
-            detail: this.$t('reports.detailed_agent_report.please_select_folder'),
+            detail: this.$t('reports.session_report.please_select_folder'),
             summary:this.$t("computer.task.toast_summary"), 
             life: 3000
         });
@@ -473,12 +428,6 @@ export default {
       this.agentOuDialog = false;
     },
 
-    showAgentDetailDialog(agentID) {
-      this.selectedAgent = this.agents.filter(
-        (agent) => agent.id === agentID
-      )[0];
-      this.agentDetailDialog = true;
-    },
     getPropertyValue(properties, propertyName) {
       var propertyValue = "";
       const filteredProperties = properties.filter(
@@ -490,7 +439,15 @@ export default {
       }
       return propertyValue;
     },
+
+    clearCalendar() {
+      this.filter.registrationStartDate = "";
+      this.filter.registrationEndDate = "";
+      this.filter.registrationDate = "";
+    },
+
     async getAgents() {
+      
       this.loading = true;
       this.currentPage = this.pageNumber;
       var data = new FormData();
@@ -535,11 +492,11 @@ export default {
         );
       }
 
-      const { response, error } = await agentInfoReportService.agentInfoList(data);
+      const { response, error } = await agentSessionReportService.agentSessionInfoList(data);
       if (error){
             this.$toast.add({
             severity:'error',
-            detail: this.$t('reports.task_report.agent_info_report_error'),
+            detail: this.$t('reports.session_report.agent_info_report_error'),
             summary:this.$t("computer.task.toast_summary"),
             life:3600
           });
@@ -557,7 +514,7 @@ export default {
         } else if (response.status == 417) {
           this.$toast.add({
             severity:'error',
-            detail: this.$t('reports.task_report.error_417_agent_info_list'),
+            detail: this.$t('reports.session_report.error_417_agent_info_list'),
             summary:this.$t("computer.task.toast_summary"),
             life:3600
           });
@@ -568,13 +525,7 @@ export default {
       
     },
 
-    clearCalendar() {
-      this.filter.registrationStartDate = "";
-      this.filter.registrationEndDate = "";
-      this.filter.registrationDate = "";
-    },
-
-
+  
     clearEvent(event, name){
       if (!event.value) {
         this.filter[name] = "";
@@ -610,78 +561,7 @@ export default {
           .set("second", 59)
           .format("DD/MM/YYYY HH:mm:ss");
       }
-      this.offset = 0;
-      this.$refs.paging.$emit('page', {
-        page: 0,
-        rows: 10,
-        first: 0,
-      });
       this.getAgents(this.currentPage, this.showedTotalElementCount);
-    },
-    async exportToExcel() {
-      this.loading = true;
-      var data = new FormData();
-      data.append("status", this.filter.status);
-      data.append("dn", this.filter.dn);
-      data.append("hostname", this.filter.hostname);
-      data.append("ipAddress", this.filter.ipAddress);
-      data.append("macAddress", this.filter.macAddress);
-      ///data.append("registrationStartDate", this.filter.registrationStartDate);
-      //data.append("registrationEndDate", this.filter.registrationEndDate);
-      data.append("brand", this.filter.brand);
-      data.append("model", this.filter.model);
-      data.append("processor", this.filter.processor);
-      data.append("osVersion", this.filter.osVersion);
-      data.append("diskType",this.filter.diskType);
-      data.append("agentVersion", this.filter.agentVersion);
-      data.append("sessionReportType", this.filter.sessionReportType);
-      data.append("agentStatus",this.filter.agentStatus);
-      if (this.filter.registrationDate && this.filter.registrationDate[0] != null) {
-        data.append(
-          "registrationStartDate",
-          moment(this.filter.registrationDate[0])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
-            .format("DD/MM/YYYY HH:mm:ss")
-        );
-      }
-      if (this.filter.registrationDate && this.filter.registrationDate[1] != null) {
-        data.append(
-          "registrationEndDate",
-          moment(this.filter.registrationDate[1])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
-            .format("DD/MM/YYYY HH:mm:ss")
-        );
-      }
-      const { response, error } = await agentInfoReportService.agentInfoExport(data)
-      if (error){
-            this.$toast.add({
-            severity:'error',
-            detail:this.$t('reports.task_report.agent_info_report_export_error'),
-            summary:this.$t("computer.toast_summary"),
-            life:3600
-          });
-
-      }else{
-        if(response.status == 200){
-          let blob = new Blob([response.data])
-          let link = document.createElement("a");
-          link.href = window.URL.createObjectURL(blob);
-          link.download = "Agent Report.xlsx";
-          this.loading = false;
-          link.click();
-        }
-        else if(response.status == 400)
-        this.$toast.add({
-            severity:'error',
-            detail:this.$t('reports.task_report.error_400_agent_info_report'),
-            summary:this.$t("computer.toast_summary"),
-            life:3600
-          });      
-        }
     },
 
     clearFilterFields() {
@@ -701,8 +581,7 @@ export default {
         agentVersion: "",
         diskType:"ALL",
         sessionReportType: "",
-        agentStatus:"",
-        
+        agentStatus: "",
       };
     },
   },

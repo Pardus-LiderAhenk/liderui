@@ -4,6 +4,8 @@
 
 <script>
 import strope from './services/strophe';
+import { getLiderWs } from '@/libs/liderws';
+
 export default {
   data() {
     return {
@@ -12,8 +14,12 @@ export default {
   },
 
   mounted() {
-    if(!strope.getInstance().isConnected()) {
-      strope.getInstance().connect();
+    // if(!strope.getInstance().isConnected()) {
+    //   strope.getInstance().connect();
+    // }
+
+    if (!getLiderWs().isConnected()) {
+      getLiderWs().connect();
     }
   }
 
@@ -21,7 +27,8 @@ export default {
 
 
 window.addEventListener("beforeunload", function(event) {
-  strope.getInstance().disconnect();
+  //strope.getInstance().disconnect();
+  getLiderWs().disconnect();
 });
 
 
