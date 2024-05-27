@@ -114,6 +114,7 @@ export default {
       defaultRdpPort: 3389,
       selectedIpAddress: null,
       ipAddresses: [],
+      retryCount: 0,
     };
   },
   computed: {
@@ -152,7 +153,7 @@ export default {
         this.title = this.$t("computer.plugins.remote_access.remote_destktop_access") + " - " + message.commandExecution.uid;
         if (ipList.length == 1) {
           this.selectedIpAddress = ipList[0];
-          this.start_connection();
+          // this.start_connection();
         }
       }
     },
@@ -203,7 +204,7 @@ export default {
         this.title = this.$t("computer.plugins.remote_access.ssh_connection") + " - " + hostResponse.data;
       }
       data.append("host", hostResponse.data);
-      const sremoteResponse = await axios.post('/sendremote', data);
+      const remoteResponse = await axios.post('/sendremote', data)
       this.connect();
       if (this.permission == "yes") {
         this.status_messages.push({ severity: 'success', content: this.$t("computer.plugins.remote_access.waiting_response") },);
@@ -268,10 +269,13 @@ export default {
         this.display.scale(scale);
       }, 100);
     },
-    connect() {
+    async connect() {
+      
+      this.connectionState = states.DISCONNECTED;
       let params = {};
       this.tunnel = new Guacamole.HTTPTunnel(httpUrl, true, params);
 
+      // this.tunnel.states.
       if (this.client) {
         this.display.scale(0);
         this.uninstallKeyboard();

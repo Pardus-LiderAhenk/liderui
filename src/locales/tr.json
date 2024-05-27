@@ -535,7 +535,7 @@
                 "select_ip_address":"IP Adresi Seçiniz",
                 "connection_error":"VNC bağlantısı sırasında hata oluştu",
                 "getting_access":"Bağlantı bilgileri alındı",
-                "client_warning":"Ahenkten bağlantı bilgileri alındı uzak erişimi için lütfen IP adresi seçiniz",
+                "client_warning":"Ahenkten bağlantı bilgileri alındı uzak erişimi için lütfen IP adresi seçiniz ve Bağlan butonuna tıklayınız",
                 "connection_information":"Bağlantı Bilgileri",
                 "registered_connections":"Kayıtlı Bağlantılar",
                 "registered_client_will_be_deleted_are_you_sure":"Kayıtlı bağlantı silinecektir, emin misiniz?",

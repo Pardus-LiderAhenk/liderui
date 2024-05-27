@@ -538,7 +538,7 @@
                 "select_ip_address":"Select IP Address",
                 "connection_error":"An unexpected error occurred while VNC connection",
                 "getting_access":"Connection information received",
-                "client_warning":"Ahenk connection information received, please select IP address for remote access",
+                "client_warning":"Ahenk connection information received, please select IP address for remote access and press Connect Button",
                 "connection_information":"Connection Information",
                 "registered_connections":"Registered Connections",
                 "registered_client_will_be_deleted_are_you_sure":"The registered connection will be deleted, are you sure?",
