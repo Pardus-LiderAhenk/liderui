@@ -1,63 +1,61 @@
 <template>
-  <base-plugin
-    :pluginUrl="pluginUrl"
-    :pluginDescription="pluginDescription"
+  <base-plugin 
+    :pluginUrl="pluginUrl" 
+    :pluginDescription="pluginDescription" 
     :showTaskDialog="false"
-    @close-task-dialog="showTaskDialog = false"
-    :pluginTask="task"
+    @close-task-dialog="showTaskDialog = false" 
+    :pluginTask="task" 
     @task-response="remoteAccessResponse"
-    :executeTask="executeTask"
-  >
+    :executeTask="executeTask">
     <template #pluginTitleButton>
       <div>
-        <label class="p-mr-2" style="font-size:15px;" >{{$t("computer.plugins.remote_access.select_ip_address")}}</label>
-        <Dropdown
-          v-model="selectedIpAddress" :options="ipAddresses" 
-          optionLabel="name" optionValue="value" 
+        <label class="p-mr-2" style="font-size:15px;">{{ $t("computer.plugins.remote_access.select_ip_address") }}</label>
+        <Dropdown 
+          v-model="selectedIpAddress" 
+          :options="ipAddresses" 
+          optionLabel="name" 
+          optionValue="value"
           placeholder="Lütfen IP seçiniz " 
-          :class="selectedIpAddress ? 'p-mr-2': 'p-invalid p-mr-2'"
-          
+          :class="selectedIpAddress ? 'p-mr-2' : 'p-invalid p-mr-2'" 
         />
-        <Button :label="$t('computer.plugins.remote_access.connect')" 
+        <Button v-if="this.$route.query.protocol !== 'rdp'" 
+          :label="$t('computer.plugins.remote_access.connect')"
           class="p-button-raised p-button-sm  p-button-success p-mr-2" 
-          @click="start_connection();"
+          @click="start_connection();" 
         />
-        <!-- <Button :label="$t('computer.plugins.remote_access.reconnect')" 
-          class="p-button-raised  p-button-sm  p-button-info p-mr-2"    class="p-mr-2"
-          @click="reconnect();"
-        /> -->
-        <Button :label="$t('computer.plugins.remote_access.close_connection')" 
+        <Button :label="$t('computer.plugins.remote_access.close_connection')"
           class="p-button-raised  p-button-sm p-button-danger" 
-          @click="closeConnection();"
+          @click="closeConnection();" 
         />
       </div>
     </template>
     <template #pluginTitle>
-     <div>
-        <ProgressSpinner v-show="!connected"
-          style="width: 20px; height: 20px"
+      <div>
+        <ProgressSpinner v-show="!connected" 
+          style="width: 20px; 
+          height: 20px" 
           strokeWidth="8"
-          fill="var(--surface-ground)"
-          animationDuration=".5s"
+          fill="var(--surface-ground)" 
+          animationDuration=".5s" 
         />
         {{ title }}
-      </div> 
+      </div>
     </template>
     <template #default>
       <div style="height: 90vh">
         <div v-show="!connected" class="infoDiv">
-            <div class="p-grid" style="width:50vw">
-              <div class="p-col-12">
-                <transition-group name="p-message" tag="div">
-                  <Message v-for="msg of status_messages" 
-                    :severity="msg.severity" 
-                    :key="msg.content"  
-                    :closable="false">
-                    {{msg.content}}
-                  </Message>
-                </transition-group>
-              </div>
+          <div class="p-grid" style="width:50vw">
+            <div class="p-col-12">
+              <transition-group name="p-message" tag="div">
+                <Message v-for="msg of status_messages" 
+                  :severity="msg.severity" 
+                  :key="msg.content" 
+                  :closable="false">
+                  {{ msg.content }}
+                </Message>
+              </transition-group>
             </div>
+          </div>
         </div>
         <div v-show="connected">
           <div class="viewport" ref="viewport">
@@ -107,14 +105,16 @@ export default {
       connectionState: states.IDLE,
       errorMessage: "",
       arguments: {},
-      status:'',
-      connection_info:null,
-      selectedProtocol:'vnc',
-      tunnel:null,
-      connectionData:null,
+      status: '',
+      connection_info: null,
+      selectedProtocol: 'vnc',
+      tunnel: null,
+      connectionData: null,
       defaultSshPort: 22,
+      defaultRdpPort: 3389,
       selectedIpAddress: null,
       ipAddresses: [],
+      retryCount: 0,
     };
   },
   computed: {
@@ -122,14 +122,13 @@ export default {
   },
   methods: {
     sendTaskRemoteAccess() {
-        this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.request_message")});
-        this.task = { ...this.pluginTask };
-        this.task.commandId = "SETUP-VNC-SERVER";
-        this.task.parameterMap = {
-          permission: this.connectionData.permission,
-        };
-        this.executeTask = true;
-        // this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.connection_request_sent")});
+      this.status_messages.push({ severity: 'info', content: this.$t("computer.plugins.remote_access.request_message") });
+      this.task = { ...this.pluginTask };
+      this.task.commandId = "SETUP-VNC-SERVER";
+      this.task.parameterMap = {
+        permission: this.connectionData.permission,
+      };
+      this.executeTask = true;
     },
 
     remoteAccessResponse(message) {
@@ -141,72 +140,74 @@ export default {
         for (let index = 0; index < ipList.length; index++) {
           const element = ipList[index];
           this.ipAddresses.push({
-            name:element,
-            value:element
+            name: element,
+            value: element
           })
         }
         if (message.result.responseCode === "TASK_PROCESSED") {
-          // this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.getting_access")},);
-          this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.client_warning")},);
+          this.status_messages.push({ severity: 'info', content: this.$t("computer.plugins.remote_access.client_warning") },);
         }
-        else{
-          this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.connection_error")},);
+        else {
+          this.status_messages.push({ severity: 'error', content: this.$t("computer.plugins.remote_access.connection_error") },);
         }
-        // this.status_messages.push({severity: 'info', content: this.$t("computer.plugins.remote_access.checking_access")},);
-        // this.status_messages.push({severity: 'warning', content: this.$t("computer.plugins.remote_access.checking_access")},);
-        // this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
-        this.title =  this.$t("computer.plugins.remote_access.remote_destktop_access") + " - " + message.commandExecution.uid;
-        if(ipList.length == 1){
+        this.title = this.$t("computer.plugins.remote_access.remote_destktop_access") + " - " + message.commandExecution.uid;
+        if (ipList.length == 1) {
           this.selectedIpAddress = ipList[0];
-          this.start_connection();
+          // this.start_connection();
         }
       }
     },
 
-    reconnect(){
+    reconnect() {
       location.reload();
     },
 
-    async start_connection(){
-      
+    async start_connection() {
+
       let data = new FormData();
       if (this.connectionData && this.connectionData.protocol == 'ssh') {
-        
+
         this.selectedIpAddress = this.connection_info.host;
         data.append("protocol", this.connectionData.protocol);
         data.append("port", this.defaultSshPort);
-        data.append("password", this.connectionData.sshPassword);
-        data.append("username", this.connectionData.sshUsername);
+        data.append("password", this.connectionData.password);
+        data.append("username", this.connectionData.username);
+        data.append("lideruser", this.connectionData.lideruser);
+
+      } else if (this.connectionData && this.connectionData.protocol == 'rdp') {
+        this.selectedIpAddress = this.connection_info.host;
+        data.append("protocol", this.connectionData.protocol);
+        data.append("port", this.defaultRdpPort);
+        data.append("password", this.connectionData.password);
+        data.append("username", this.connectionData.username);
+        data.append("lideruser", this.connectionData.lideruser);
+
       } else {
-        if(!this.selectedIpAddress){
-          this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
+        if (!this.selectedIpAddress) {
+          this.status_messages.push({ severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning") },);
           return;
         }
-        this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.connection_request_sent")});
+        this.status_messages.push({ severity: 'success', content: this.$t("computer.plugins.remote_access.connection_request_sent") });
         data.append("protocol", this.connectionData.protocol);
         data.append("port", this.connection_info.port);
         data.append("password", this.connection_info.password);
         data.append("username", '');
+        data.append("lideruser", this.connectionData.lideruser);
       }
-
-      // if(!this.selectedIpAddress){
-      //   this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning")},);
-      //   return;
-      // }
 
       let checkhostFormdata = new FormData();
       checkhostFormdata.append('host', this.selectedIpAddress);
       checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? this.defaultSshPort : this.connection_info.port);
-      const hostResponse = await axios.post('/checkhost',checkhostFormdata);
-      this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.client_access") + hostResponse.data },);
+      const hostResponse = await axios.post('/checkhost', checkhostFormdata);
+      this.status_messages.push({ severity: 'success', content: this.$t("computer.plugins.remote_access.client_access") + hostResponse.data },);
       if (this.connectionData.protocol == 'ssh') {
-        this.title = this.$t("computer.plugins.remote_access.ssh_connection") +" - " + hostResponse.data;
-      }  
+        this.title = this.$t("computer.plugins.remote_access.ssh_connection") + " - " + hostResponse.data;
+      }
       data.append("host", hostResponse.data);
-      const sremoteResponse = await  axios.post('/sendremote', data);
+      const remoteResponse = await axios.post('/sendremote', data)
       this.connect();
       if (this.permission == "yes") {
-          this.status_messages.push({severity: 'success', content: this.$t("computer.plugins.remote_access.waiting_response")},);
+        this.status_messages.push({ severity: 'success', content: this.$t("computer.plugins.remote_access.waiting_response") },);
       }
     },
 
@@ -268,10 +269,13 @@ export default {
         this.display.scale(scale);
       }, 100);
     },
-    connect() {
+    async connect() {
+      
+      this.connectionState = states.DISCONNECTED;
       let params = {};
       this.tunnel = new Guacamole.HTTPTunnel(httpUrl, true, params);
 
+      // this.tunnel.states.
       if (this.client) {
         this.display.scale(0);
         this.uninstallKeyboard();
@@ -306,7 +310,7 @@ export default {
           // Connection has closed
           case Guacamole.Tunnel.State.CLOSED:
             this.connectionState = states.DISCONNECTED;
-            this.status_messages.push({severity: 'error', content: this.$t("computer.plugins.remote_access.connection_error")},);
+            this.status_messages.push({ severity: 'error', content: this.$t("computer.plugins.remote_access.connection_error") },);
             break;
         }
       };
@@ -322,7 +326,6 @@ export default {
           case 2:
             this.connectionState = states.WAITING;
             this.status = this.$t("computer.plugins.remote_access.waiting_for_the_user_to_give_permission");
-            //this.connected = false;
             break;
           case 3:
             this.connectionState = states.CONNECTED;
@@ -333,7 +336,7 @@ export default {
 
             clipboard.setRemoteClipboard(this.client);
             this.status = "";
-            
+
 
           // eslint-disable-next-line no-fallthrough
           case 4:
@@ -353,7 +356,7 @@ export default {
         this.connectionState = states.CLIENT_ERROR;
       };
 
-      this.client.onsync = () => {};
+      this.client.onsync = () => { };
 
       // Test for argument mutability whenever an argument value is received
       this.client.onargv = (stream, mimetype, name) => {
@@ -424,10 +427,9 @@ export default {
       this.mouse.onmousedown =
         this.mouse.onmouseup =
         this.mouse.onmousemove =
-          this.handleMouseState;
+        this.handleMouseState;
       setTimeout(() => {
         this.resize();
-        //displayElm.focus();
       }, 1000); // $nextTick wasn't enough
     },
     installKeyboard() {
@@ -439,22 +441,22 @@ export default {
       };
     },
     uninstallKeyboard() {
-      this.keyboard.onkeydown = this.keyboard.onkeyup = () => {};
+      this.keyboard.onkeydown = this.keyboard.onkeyup = () => { };
     },
 
     async getConnectionData() {
       this.remoteConnections.map(item => {
         if (item.uid == this.$route.query.uid && (item.protocol == this.$route.query.protocol)) {
           this.connectionData = item;
-        } 
+        }
       });
     }
   },
   async mounted() {
     if (this.$route.query.protocol == "vnc") {
       await this.getConnectionData();
-      const{response,error} = await taskService.pluginTaskList();
-      if(response.status == 200){
+      const { response, error } = await taskService.pluginTaskList();
+      if (response.status == 200) {
         for (let index = 0; index < response.data.length; index++) {
           const element = response.data[index];
           if (element.page == "remote-access") {
@@ -463,10 +465,10 @@ export default {
             this.sendTaskRemoteAccess();
           }
         }
-      }else{
+      } else {
         return "error";
       }
-        
+
     } else if (this.$route.query.protocol == "ssh") {
       this.connectionData = this.$route.query;
       this.connection_info = {
@@ -474,8 +476,20 @@ export default {
         "port": this.defaultSshPort
       };
       this.ipAddresses.push({
-        name:this.connection_info.host,
-        value:this.connection_info.host
+        name: this.connection_info.host,
+        value: this.connection_info.host
+      })
+      this.start_connection();
+    } else if (this.$route.query.protocol == "rdp") {
+
+      this.connectionData = this.$route.query;
+      this.connection_info = {
+        "host": this.$route.query.host,
+        "port": this.defaultRdpPort,
+      };
+      this.ipAddresses.push({
+        name: this.connection_info.host,
+        value: this.connection_info.host
       })
       this.start_connection();
     }
@@ -496,7 +510,9 @@ export default {
 } 
 
 <style scoped>
-.dropdown-menu { background-color: #FF0000; }
+.dropdown-menu {
+  background-color: #FF0000;
+}
 
 .display {
   overflow: hidden;

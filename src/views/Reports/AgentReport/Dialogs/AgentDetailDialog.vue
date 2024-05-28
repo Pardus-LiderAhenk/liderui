@@ -11,6 +11,9 @@
                 <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.computer_name')}}</b></div>
                 <div class="p-col-8">{{ selectedAgent.hostname }}</div>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.dn_information')}}</b></div>
+                <div class="p-col-8">{{ selectedAgent.dn}}</div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
                 <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.mac_address')}}</b></div>
                 <div class="p-col-8">
                     {{ selectedAgent.macAddresses.replace(/'/g, "") }}
@@ -36,11 +39,15 @@
                     {{ getPropertyValue(selectedAgent.properties, "agentVersion") }}
                 </div>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
+                <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.active_or_passive')}}</b></div>
+                <div v-if="selectedAgent.agentStatus == 'Active'" class="p-col-8">{{$t('reports.detailed_agent_report.active')}}</div>
+                <div v-if="selectedAgent.agentStatus == 'Passive'" class="p-col-8">{{$t('reports.detailed_agent_report.passive')}}</div>
+                <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
                 <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.create_date')}}</b></div>
                 <div class="p-col-8">{{ selectedAgent.createDate }}</div>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
                 <div class="p-col-4"><b>{{$t('reports.detailed_agent_report.update_date')}}</b></div>
-                <div class="p-col-8">{{ selectedAgent.updateDate }}</div>
+                <div class="p-col-8">{{ selectedAgent.eventDate }}</div>
                 <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
             </div>
 

@@ -1,39 +1,5 @@
 <template>
 <div>
-  <Dialog 
-    :header="$t('computer.plugins.execute_script.use_parameter')" 
-    v-model:visible="scriptParameterDialog" 
-    :modal="true" 
-    :style="{width: '30vw'}"
-    >
-      <div class="p-fluid">
-        <div class="p-field">
-          <label for="scriptParams">{{$t('computer.plugins.execute_script.define_parameter')}}</label>
-          <InputText 
-          type="text"
-          v-model="scriptParams" 
-          :class="validationScriptParams ? 'p-invalid': ''" 
-          />
-          <small v-if="validationScriptParams" class="p-error">
-            {{$t('computer.plugins.execute_script.valiadation_script_params')}}
-          </small>
-        </div>
-      </div>
-      <template #footer>
-        <Button 
-        :label="$t('computer.plugins.execute_script.no')" 
-        icon="pi pi-times" 
-        @click.prevent="sendTaskExecuteScript(false)" 
-        class="p-button-text p-button-sm"
-        />
-        <Button 
-        :label="$t('computer.plugins.execute_script.yes')" 
-        icon="pi pi-check" 
-        @click.prevent="sendTaskExecuteScript(true)" 
-        class="p-button-sm" 
-        />
-      </template>
-    </Dialog>
     <base-plugin
       :pluginUrl="pluginUrl"
       :pluginDescription="pluginDescription"
@@ -47,7 +13,7 @@
      <template #default>
         <script-definitions
          :scriptDefinitionTitle="false"
-         :executeScriptButton="true"
+         :isExecuteScript="true"
          @execute-script="executeScript"
         >
         </script-definitions>
@@ -85,9 +51,6 @@ export default {
     return {
       task: null,
       showTaskDialog: false,
-      scriptParameterDialog: false,
-      validationScriptParams: false,
-      scriptParams: "",
       selectedScript: "",
       pluginDescription: this.$t("computer.plugins.execute_script.description"),
       pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/script/",
@@ -101,37 +64,20 @@ export default {
   methods: {
     executeScript(data){
       this.selectedScript = data;
-      this.scriptParams = "";
-      this.validationScriptParams = false;
-      this.scriptParameterDialog = true;
+      this.sendTaskExecuteScript();
     },
   
-    sendTaskExecuteScript(useParameter) {
-      if (useParameter) {
-        if (!this.scriptParams.trim()){
-          this.validationScriptParams = true;
-          return;
-        }
-      }
-      this.scriptParameterDialog = false;
+    sendTaskExecuteScript() {
       this.task.commandId = "EXECUTE_SCRIPT"
       this.task.parameterMap={
         "SCRIPT_FILE_ID": this.selectedScript.id,
         "SCRIPT_TYPE": this.selectedScript.scriptType,
         "SCRIPT_CONTENTS": this.selectedScript.contents,
-        "SCRIPT_PARAMS": this.scriptParams
+        "SCRIPT_PARAMS": this.selectedScript.scriptParams
       };
       this.showTaskDialog = true;
     },
   },
-
-  watch: {
-    scriptParams(){
-      if (this.scriptParams.trim()){
-        this.validationScriptParams = false;
-      }      
-    }      
-  }
 }
 </script>
 

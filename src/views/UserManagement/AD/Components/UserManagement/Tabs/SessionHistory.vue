@@ -5,28 +5,18 @@
         </div>
         <div class="p-field">
             <DataTable :value="sessions" class="p-datatable-sm" v-model:filters="filters"
-                :paginator="true" :rows="10" ref="dt" :loading="loading"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-                :rowsPerPageOptions="[10,25,50,100]"  style="margin-top: 2em">
+                :rows="10" ref="dt" :loading="loading"
+                style="margin-top: 2em">
                 <template #header>
-                    <div class="p-d-flex p-jc-between">
-                        <div style="text-align: left">
-                            <Button v-if="sessions"
-                                class="p-button-sm" icon="pi pi-download"
-                                :label="$t('user_management.export')"
-                                @click="exportCSV($event)">
-                            </Button>
-                        </div>
-                        <div class="p-d-flex p-jc-end">
-                            <span class="p-input-icon-left">
-                            <i class="pi pi-search" />
-                            <InputText 
-                                v-model="filters['global'].value" 
-                                class="p-inputtext-sm" 
-                                :placeholder="$t('user_management.search')" 
-                            />
-                            </span>
-                        </div>
+                    <div class="p-d-flex p-jc-end">
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search" />
+                        <InputText 
+                            v-model="filters['global'].value" 
+                            class="p-inputtext-sm" 
+                            :placeholder="$t('user_management.search')" 
+                        />
+                        </span>
                     </div>
                 </template>
                 <template #empty>
@@ -34,7 +24,12 @@
                         <span>{{$t('user_management.session_history_table_empty_message')}}</span>
                     </div>
                 </template>
-                <Column field="rowIndex" header="#" style="width:5%">
+                <Column header="#">
+                    <template #body="{index}">
+                    <span>{{ ((pageNumber - 1)*rowNumber) + index + 1 }}</span>
+                    </template>
+                </Column>
+                <Column  header="#" style="width:5%">
                     <template #body>
                         <i class="fab fa-linux" style="color:#000000;"></i>
                     </template>
@@ -63,6 +58,15 @@
                     </template>
                 </Column>
             </DataTable>
+            <Paginator
+                ref="paging"
+                :first="offset"
+                :rows="10"
+                :totalRecords="totalElements"
+                :rowsPerPageOptions="[10, 25, 50, 100]"
+                @page="onPage($event)"
+            >
+            </Paginator>
         </div>
     </div>
 </template>
@@ -87,6 +91,11 @@ export default {
             filters: {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
             },
+            totalElements: 0,
+            currentPage: 1,
+            offset: 1,
+            pageNumber: 1,
+            rowNumber: 10,
         }
     },
 
@@ -103,9 +112,7 @@ export default {
         
         async getSessionHistory() {
             this.loading = true;
-            let params = new FormData();
-            params.append("uid", this.selectedUser.attributes.sAMAccountName);
-            const{response,error} = await userService.userSession(this.selectedUser.attributes.sAMAccountName);
+            const{response,error} = await userService.userSession(this.selectedUser.attributes.sAMAccountName, this.pageNumber, this.rowNumber);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -117,7 +124,8 @@ export default {
             else{
                 if(response.status == 200){
                     if (response.data) {
-                        this.sessions = response.data;
+                        this.sessions = response.data.content;
+                        this.totalElements = response.data.totalElements;
                     }
                 }
                 else if(response.status == 417){
@@ -132,6 +140,13 @@ export default {
                 
             
             this.loading = false;
+        },
+
+        onPage(event) {
+            this.loading = true;
+            this.pageNumber = event.page + 1;
+            this.rowNumber = event.rows;
+            this.getSessionHistory();
         },
 
         getFormattedDate(date) {
@@ -159,15 +174,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep(.p-paginator) {
-    .p-paginator-current {
-        margin-left: auto;
-    }
-}
 
-::v-deep(.p-datatable.p-datatable-customers) {
-    .p-paginator {
-        padding: 1rem;
+::v-deep(.p-paginator) {
+    .p-component {
+        margin-left: auto;
     }
 }
 </style>

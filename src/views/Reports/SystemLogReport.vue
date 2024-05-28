@@ -4,7 +4,6 @@
       <h4 class="p-pt-2">{{$t('reports.system_log_report.system_log')}}</h4>
     </template>
     <div class="p-fluid p-formgrid p-grid">
-      
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
         <label for="inputRegistrationDate">{{$t('reports.system_log_report.logs_date')}}</label>
         <Calendar
@@ -16,6 +15,7 @@
           :showIcon="true"
           :hideOnDateTimeSelect="true"
           :manualInput="false"
+          @clear-click="clearCalendar"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
@@ -28,44 +28,34 @@
           :filter="true" 
           :showClear="true" 
           :placeholder="$t('reports.system_log_report.select')"
+          @change="clearOpType"
         />
       </div>
       <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-        <label for="inputDN">{{$t('reports.system_log_report.filter_area')}}</label>
-        <Dropdown  
-          v-model="filter.field" 
-          :options="filterTextType" 
-          optionLabel="text" 
-          :showClear="true" 
-          optionValue="value"
-          :placeholder="$t('reports.system_log_report.select')"
-        ></Dropdown>
+          <label>{{$t('reports.system_log_report.ip_address')}}</label>
+          <InputText :placeholder="$t('reports.system_log_report.ip_address')" v-model="filter.requestIp" />
       </div>
-        <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
-            <label for="inputDN">{{
-                filter.field !== 'requestIp' ? $t('reports.system_log_report.username') : $t('reports.system_log_report.ip_address')
-              }}</label>
-            <div class="p-inputgroup">
-                <InputText :placeholder="filter.field !== 'requestIp' ? $t('reports.system_log_report.username'): $t('reports.system_log_report.ip_address') " v-model="filter.searchText" />
-                <Button v-show="filter.field !== 'requestIp' "  icon="pi pi-sitemap" class="p-button-primary" @click="searchTextDialog = true"/>
-            </div>
-        </div>
-      <div class="p-field p-col-12 p-text-right">
-        <div class="p-d-flex p-jc-end">
-          <div>
-            <Button
-            :label="$t('reports.system_log_report.clear')"
-              icon="fas fa-backspace"
-              @click="clearFilterFields"
-            />
+      <div class="p-field p-col-12 p-lg-3 p-md-6 p-sm-12">
+          <label>{{$t('reports.system_log_report.username')}}</label>
+          <div class="p-inputgroup">
+            <InputText :placeholder="$t('reports.system_log_report.username')" v-model="filter.userId" />
+            <Button icon="pi pi-sitemap" class="p-button-primary" @click="searchTextDialog = true"/>
           </div>
-          <div class="p-ml-2">
-            <Button 
-            :label="$t('reports.system_log_report.search')"
-            icon="fas fa-search" 
-            @click="filterAgents" />
-          </div>
-        </div>
+      </div>
+    </div>
+    <div class="p-d-flex p-jc-end">
+      <div>
+        <Button
+        :label="$t('reports.system_log_report.clear')"
+          icon="fas fa-backspace"
+          @click="clearFilterFields"
+        />
+      </div>
+      <div class="p-ml-2">
+        <Button 
+        :label="$t('reports.system_log_report.search')"
+        icon="fas fa-search" 
+        @click="filterAgents" />
       </div>
     </div>
   </Panel>
@@ -120,6 +110,8 @@
         </Column>
       </DataTable>
       <Paginator
+        ref="paging"
+        :first="offset"
         :rows="10"
         :totalRecords="totalElements"
         :rowsPerPageOptions="[10, 25, 50, 100]"
@@ -129,7 +121,6 @@
       </Paginator>
     </template>
   </Card>
- 
 
   <Dialog
     v-model:visible="logDetailDialog"
@@ -182,7 +173,6 @@
         @click="logDetailDialog = false"
       />
     </template>
-
   </Dialog>
 
   <Dialog :header="$t('reports.system_log_report.select_user_group')" v-model:visible="searchTextDialog" :style="{width: '50vw'}" :modal="true">
@@ -211,7 +201,7 @@ export default {
       showedTotalElementCount: 10,
       currentPage: 1,
       offset: 1,
-      loading: true,
+      loading: false,
       getFilterData: true,
       logDetailDialog: false,
       selectedLog: null,
@@ -223,12 +213,13 @@ export default {
             {value: 'requestIp', text:this.$t('reports.system_log_report.ip_address')}
       ],
       filter: {
-          logCreateDate: '',
-          logCreateStartDate:'',
-          logCreateEndDate:'',
-          operationType:'ALL',
-          searchText:null,
-          field:null,
+          logCreateDate: "",
+          logCreateStartDate: "",
+          logCreateEndDate: "",
+          operationType: "ALL",
+          userId: "",
+          requestIp: "",
+          searchText: ""
       },
       selectedNode: null,
       pageNumber: 1,
@@ -245,7 +236,7 @@ export default {
     },
     selectsearchText() {
       if(this.selectedNode) {
-        this.filter.searchText = this.selectedNode.distinguishedName;
+        this.filter.userId = this.selectedNode.distinguishedName;
         this.searchTextDialog = false;
         this.selectedNode = null;
       }
@@ -257,24 +248,19 @@ export default {
       this.logDetailDialog = true;
     },
     async getLogs() {
+      this.loading = true;
       this.currentPage = this.pageNumber;
       var data = new FormData();
       data.append("pageNumber", this.pageNumber);
       data.append("pageSize", this.rowNumber);
       data.append('operationType',this.filter.operationType);
-      if(this.filter.searchText != null) {
-        data.append("searchText", this.filter.searchText);
-      }
-       if(this.filter.field != null) {
-        data.append("field", this.filter.field);
-      }
-      if (this.pageNumber == 1) {
-        data.append("getFilterData", true);
-      }
-      if (this.filter.logCreateStartDate[0] != null) {
+      data.append('userId',this.filter.userId);
+      data.append('requestIp',this.filter.requestIp);
+  
+      if (this.filter.logCreateDate && this.filter.logCreateDate[0] != null) {
         data.append(
           "startDate",
-          moment(this.filter.logCreateStartDate[0])
+          moment(this.filter.logCreateDate[0])
             .set("hour", 0)
             .set("minute", 0)
             .set("second", 0)
@@ -282,10 +268,10 @@ export default {
         );
       }
       
-      if (this.filter.logCreateEndDate[1] != null) {
+      if (this.filter.logCreateDate && this.filter.logCreateDate[1] != null) {
         data.append(
           "endDate",
-          moment(this.filter.logCreateEndDate[1])
+          moment(this.filter.logCreateDate[1])
             .set("hour", 0)
             .set("minute", 0)
             .set("second", 0)
@@ -329,23 +315,28 @@ export default {
       this.getLogs();
     },
     filterAgents() {
+      this.offset = 0;
+      this.$refs.paging.$emit('page', {
+        page: 0,
+        rows: 10,
+        first: 0,
+      });
       this.getLogs(this.currentPage, this.showedTotalElementCount);
     },
     async exportToExcel() {
       this.loading = true;
       var data = new FormData();
       data.append('operationType',this.filter.operationType);
+      data.append('userId',this.filter.userId);
+      data.append('requestIp',this.filter.requestIp);
       if(this.filter.searchText != null) {
         data.append("searchText", this.filter.searchText);
       }
-       if(this.filter.field != null) {
-        data.append("field", this.filter.field);
-      }
      
-      if (this.filter.logCreateStartDate[0] != null) {
+      if (this.filter.logCreateDate && this.filter.logCreateDate[0] != null) {
         data.append(
           "startDate",
-          moment(this.filter.logCreateStartDate[0])
+          moment(this.filter.logCreateDate[0])
             .set("hour", 0)
             .set("minute", 0)
             .set("second", 0)
@@ -353,10 +344,10 @@ export default {
         );
       }
       
-      if (this.filter.logCreateEndDate[1] != null) {
+      if (this.filter.logCreateDate && this.filter.logCreateDate[1] != null) {
         data.append(
           "endDate",
-          moment(this.filter.logCreateEndDate[1])
+          moment(this.filter.logCreateDate[1])
             .set("hour", 0)
             .set("minute", 0)
             .set("second", 0)
@@ -387,9 +378,20 @@ export default {
             summary:this.$t("computer.task.toast_summary"),
             life:3600
           });
-          console.log("Could not create operation log report.")
         }
       }            
+    },
+
+    clearCalendar() {
+      this.filter.logCreateDate = "";
+      this.filter.logCreateStartDate = "";
+      this.filter.logCreateEndDate = "";
+    },
+
+    clearOpType(event) {
+      if (!event.value) {
+        this.filter.operationType = "ALL";
+      }
     },
 
     clearFilterFields() {
@@ -398,8 +400,9 @@ export default {
           logCreateStartDate:'',
           logCreateEndDate:'',
           operationType:'ALL',
-          field:null,
-          searchText:null
+          searchText:null,
+          userId: "",
+          requestIp: ""
       };
     },
 

@@ -131,7 +131,7 @@
                       <li>{{ $t('password.lowercase_message') }}</li>
                       <li>{{ $t('password.uppercase_message') }}</li>
                       <li>{{ $t('password.number_message') }}</li>
-                      <li>{{ $t('password.password_length_message') }}</li>
+                      <li>{{ $t('password.password_length_message') + " "+ passwordLength}}</li>
                       <li>{{ $t('password.does_not_support_message') }}</li>
                     </ul>
                   </template>
@@ -163,7 +163,7 @@
                 :class="validationErrors.confirmPassword ? 'p-invalid p-inputtext-sm': 'p-inputtext-sm'" 
                 onpaste="return false"
                 strongRegex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})" 
-                :weakLabel="$t('computer.plugins.password.weak')"
+                :weakLabel="$t('password.weak')"
                 :mediumLabel="$t('password.medium')"
                 :strongLabel="$t('password.strong')"
                 :promptLabel="$t('password.password_prompt')"
@@ -175,7 +175,7 @@
                       <li>{{ $t('password.lowercase_message') }}</li>
                       <li>{{ $t('password.uppercase_message') }}</li>
                       <li>{{ $t('password.number_message') }}</li>
-                      <li>{{ $t('password.password_length_message') }}</li>
+                      <li>{{ $t('password.password_length_message') + " "+ passwordLength}}</li>
                       <li>{{ $t('password.does_not_support_message') }}</li>
                     </ul>
                   </template>
@@ -299,6 +299,12 @@ export default {
         type: Object,
         description: "Plugin task object",
       },
+
+      passwordLength: {
+            type: Number,
+            default: 6,
+            description: "Password length"
+        },
     },
   
     data() {
@@ -447,7 +453,7 @@ export default {
             this.passwordErrorMessage = this.$t('password.does_not_support_message');
             return;
           } else if (this.userForm.password.length < 6) {
-            this.passwordErrorMessage = this.$t('password.password_length_message');
+            this.passwordErrorMessage = this.$t('password.password_length_message')+" "+ this.passwordLength;
             return;
           } else {
             this.passwordErrorMessage = '';

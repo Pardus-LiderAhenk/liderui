@@ -175,47 +175,29 @@ export default {
         let responseData = message.result.responseDataStr.split("\n");
         let arrg = JSON.parse(responseData);
         if (arrg) {
-          let responseMessage = message.result.responseMessage;
-          let responsePackageName = responseMessage.split("-")[0].trim();
-          let responsePackageResult = responseMessage.split("-")[1].trim()
           if (this.isExistPackage("dn", arrg.dn)){
             this.packages = this.packages.filter(clientPackage => clientPackage.dn != arrg.dn);
           }
-          this.pushPackageList(arrg, responsePackageName, responsePackageResult);
+          this.pushPackageList(arrg);
         }
-
-
-        // if (this.isExistPackage("packageName", responsePackageName)) {
-        //   this.packages = [];
-        //   if (!this.isExistPackage("dn", arrg.dn)) {
-        //     this.packages = [];
-        //     this.pushPackageList(arrg, responsePackageName, responsePackageResult);
-        //   }
-
-        // } else{
-        //   this.packages = [];
-        //   if (!this.isExistPackage("dn", arrg.dn)) {
-        //     this.pushPackageList(arrg, responsePackageName, responsePackageResult);
-        //   }
-        // }
       }
     },
 
-    pushPackageList(arrg, responsePackageName, responsePackageResult) {
+    pushPackageList(arrg) {
       let result = arrg.res;
       if (result == 0) {
-          result = "Paket yüklü değil"
+          result = this.$t('computer.plugins.check_package.uninstalled')
       }
         if (result == 1) {
-          result = "Paket yüklü"
+          result = this.$t('computer.plugins.check_package.installed')
       }
         if (result == 2) {
-          result = "Paket farklı versiyonla yüklü"
+          result = this.$t('computer.plugins.check_package.different_version')
       }
       this.packages.push({
-          "packageName": responsePackageName,
+          "packageName": this.packageName,
           "dn": arrg.dn,
-          "result": responsePackageResult,
+          "result": result,
           "version": arrg.version ? arrg.version.trim("\n"): null
       });
     },

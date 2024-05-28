@@ -140,7 +140,9 @@ export default {
         },
 
         user() {
-            this.pwdChangeTime = this.getFormattedDate(this.user.attributes.pwdChangedTime);
+            if (this.user.attributes.pwdChangedTime) {
+                this.pwdChangeTime = this.getFormattedDate(this.user.attributes.pwdChangedTime);
+            }
         }
     }
 }

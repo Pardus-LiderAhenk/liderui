@@ -62,15 +62,16 @@ axios.interceptors.response.use(
         return response;
     },
     (error) => {
+        if (error.response.status === 404 && error.response.data.path == "/index.html") {
+            store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+            
+        }
         if (error.response.status === 400) {
             store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
         }
         return Promise.reject(error);
     }
  );
-
-
-//XmppClientManager.getInstance().connect();
 
 
 app.mount('#app');

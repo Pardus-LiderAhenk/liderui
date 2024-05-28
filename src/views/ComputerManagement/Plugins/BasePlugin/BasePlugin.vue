@@ -10,18 +10,25 @@
     :modal="true" 
     @hide="closeTaskDialog('cancel')"
   >
-    <div class="confirmation-content"  v-if="scheduledParam == null">
-      <i class="pi pi-info-circle mr-3" style="font-size: 1.5rem"></i>&nbsp;
-      <span>
-        {{ $t('computer.plugins.base_plugin.task_confirm_question') }}
-      </span>
+    <div class="p-field">
+      <div class="confirmation-content"  v-if="scheduledParam == null">
+        <i class="pi pi-info-circle mr-3" style="font-size: 1.5rem"></i>&nbsp;
+        <span>
+          {{ $t('computer.plugins.base_plugin.task_confirm_question') }}
+        </span>
+      </div>
+      <div class="confirmation-content"  v-if="scheduledParam">
+        <i class="pi pi-clock mr-3" style="font-size: 1.5rem"></i>&nbsp;
+        <span>
+          {{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}
+        </span>
+      </div>
     </div>
-    <div class="confirmation-content"  v-if="scheduledParam">
-      <i class="pi pi-clock mr-3" style="font-size: 1.5rem"></i>&nbsp;
-      <span>
-        {{ $t('computer.plugins.base_plugin.scheduled_task_confirm_question') }}
-      </span>
+    <div class=" confirmation-content" v-if="selectedNodeType == 'computerGroup'">
+      <Checkbox  id="taskParts" v-model="taskParts" :binary="true" />&nbsp;&nbsp;
+        <label  for="taskParts">{{$t("computer.plugins.base_plugin.send_part_task")}}</label>
     </div>
+        
     <template #footer>
       <Button 
         :label="$t('computer.plugins.base_plugin.no')" 
@@ -147,7 +154,7 @@
 
 import { mapGetters } from "vuex"
 import axios from "axios";
-import XmppClientManager  from '@/services/strophe.js';
+import { getLiderWs } from "@/libs/liderws";
 
 
 export default {
@@ -161,7 +168,8 @@ export default {
       toastLife: 5000,
       loading: false,
       selectedNode: null,
-      
+      taskParts: false,
+      wsSubscription: null,
     }
   },
 
@@ -282,6 +290,7 @@ export default {
       task.entryList = entryList;
       task.cronExpression = this.scheduledParam;
       task.dnType = this.selectedNode.type;
+      task.taskParts = this.taskParts;
       
       axios.post(this.executeTaskUrl,task).then((response) => {
         if (response.data.status == 'OK') {
@@ -388,16 +397,15 @@ export default {
    * taskResponse event emit when response from client
    * @event taskResponse
    */
-  mounted(){
+  mounted() {
     let toastSummary = this.$t('computer.task.toast_summary');
     let toastLife = this.toastLife;
-    XmppClientManager.getInstance().addListener(this.listenerName, (msg) => {
+    this.wsSubscription = getLiderWs().subscribe((response) => {
       let selectedDn = null;
       let nodeType = null;
       if (this.selectedNodeType == "computer") {
         if (this.selectedLiderNode) {
-          selectedDn = this.selectedLiderNode.distinguishedName;
-          nodeType 
+          selectedDn = this.selectedLiderNode.distinguishedName; 
           nodeType = this.selectedLiderNode.type;
         }
       } else if (this.selectedNodeType == "computerGroup") {
@@ -406,45 +414,40 @@ export default {
           nodeType = this.selectedComputerGroupNode.type;
         }
       }
-      var to = msg.getAttribute("to");
-      var from = msg.getAttribute("from");
-      var type = msg.getAttribute("type");
-      var elems = msg.getElementsByTagName("body");
-      if (type == "chat" && elems.length > 0) {
-        var body = elems[0];
-        var data = Strophe.xmlunescape(Strophe.getText(body));
-        var response = JSON.parse(data);
-        let responseMessage = response.result.responseMessage;
-        if (response.commandClsId === this.pluginTask.commandId) {
-          if (response.result.responseCode === "TASK_PROCESSED") {
-            this.$toast.add({
-              severity:'success', 
-              detail: responseMessage, 
-              summary: toastSummary, 
-              life: toastLife
-            });
-          } else if (response.result.responseCode === "TASK_ERROR") {
-            this.$toast.add({
-              severity:'error', 
-              detail: responseMessage, 
-              summary: toastSummary, 
-              life: toastLife
-            });
-          }
-          this.loading = false;
-          if (response.commandExecution.dn === selectedDn) {
-            this.$emit("taskResponse", response);
-          }
-          if (nodeType === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
-            this.$emit("taskResponse", response);
-          }
+
+      let responseMessage = response.result.responseMessage;
+      if (response.commandClsId === this.pluginTask.commandId) {
+        if (response.result.responseCode === "TASK_PROCESSED") {
+          this.$toast.add({
+            severity:'success', 
+            detail: responseMessage, 
+            summary: toastSummary, 
+            life: toastLife
+          });
+        } else if (response.result.responseCode === "TASK_ERROR") {
+          this.$toast.add({
+            severity:'error', 
+            detail: responseMessage, 
+            summary: toastSummary, 
+            life: toastLife
+          });
+        }
+        this.loading = false;
+        if (response.commandExecution.dn === selectedDn) {
+          this.$emit("taskResponse", response);
+        }
+        if (nodeType === "GROUP" && response.commandClsId === "CHECK_PACKAGE") {
+          this.$emit("taskResponse", response);
         }
       }
     });
   },
 
   unmounted () {
-    XmppClientManager.getInstance().removeListener(this.listenerName, () => {});
+    if (this.wsSubscription) {
+      getLiderWs().unsubscribe(this.wsSubscription);
+      this.wsSubscription = null;
+    }
   }
 };
 </script>

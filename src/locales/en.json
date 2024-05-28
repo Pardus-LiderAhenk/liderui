@@ -68,9 +68,11 @@
         "console_user_settings": "Console User Settings",
         "ad_synchronization": "AD Synchronization",
         "scheduled_task_report": "Scheduled Task Report",
+        "system_session_report":"User Session Report",
         "view_profile": "View Profile",
         "logout": "Logout",
-        "privilege_warning": "An error occurred while getting user privileges"
+        "privilege_warning": "An error occurred while getting user privileges",
+        "scheduled_tasks": "Scheduled Tasks"
     },
     "tree":{
         "tree": "Tree",
@@ -147,6 +149,19 @@
         "password_input_message": "Please enter a new password",
         "confirm_password_input_message": "Please enter a password again"
     },
+    "settings_password": {
+        "update_password":"Update Password",
+        "old_password":"Old Password",
+        "change_password":"Change Password",
+        "cancel":"Cancel",
+        "error_403_changed_settings_password":"Setting password could not be changed because your old password was incorrect.",
+        "error_changed_settings_password":"An error occurred while updating setting password",
+        "settings_password_successfully_update":"Setting password has been successfully updated",
+        "password_input_message":"Please enter your old password",
+        "create_password":"Create Password",
+        "settings_password_error_save":"Your password could not be created. Error code: 500"
+
+    },
     "computer": {
         "total": "Total",
         "online":"Online",
@@ -176,7 +191,9 @@
                 "scheduled_task_confirm_question": "The scheduled task will be sent, are you sure?",
                 "warning": "Warning",
                 "yes": "Yes",
-                "no": "No"
+                "no": "No",
+                "send_part_task":"Submit task in parts"
+
             },
             "resource_usage": {
                 "header": "Resource Usage",
@@ -365,8 +382,12 @@
                 "table_empty_message":"Package not found",
                 "search":"Search",
                 "package_name_warn": "Package name is not available",
-                "export":"Export"
+                "export":"Export",
+                "installed": "Package installed",
+                "uninstalled": "Package uninstalled",
+                "different_version": "installed with different version"
             },
+
             "service_management": {
                 "header": "Service Management",
                 "description": "The status of services is observed on the client. Allows to status of listed services to be changed as start, stop, enable or disable",
@@ -521,7 +542,35 @@
                 "select_ip_address":"Select IP Address",
                 "connection_error":"An unexpected error occurred while VNC connection",
                 "getting_access":"Connection information received",
-                "client_warning":"Ahenk connection information received, please select IP address for remote access"
+                "client_warning":"Connection information received fron agent. Please select IP address for remote access and press Connect button",
+                "connection_information":"Connection Information",
+                "registered_connections":"Registered Connections",
+                "registered_client_will_be_deleted_are_you_sure":"The registered connection will be deleted, are you sure?",
+                "rdp_connection":"RDP Connection",
+                "select_registered_connection":"Select If You Want to Use Registered Connection",
+                "clear":"Clear",
+                "add_new_client":"Add New Client",
+                "edit_client":"Edit Client",
+                "hostname":"Hostname",
+                "hostname_cannot_be_null":"Hostname cannot be null",
+                "edit":"Edit",
+                "delete":"Delete",
+                "delete_registered_client":"Delete Registered Client",
+                "connect_with_rdp":"Connect with RDP",
+                "connection":"Connection",
+                "registered_clients":"Registered Clients",
+                "client_added_successfully":"Client added successfully",
+                "client_updated_successfully":"Client updated successfully",
+                "client_deleted_successfully":"Client deleted successfully",
+                "description_field":"Description",
+                "cancel":"Cancel",
+                "save":"Save",
+                "update":"Update",
+                "error_fetching_the_saved_clients":"An error occurred while fetching the saved clients",
+                "error_adding_the_client":"An error occurred while adding the client",
+                "yes": "Yes",
+                "find_client":"Find Client",
+                "client_already_exists":"This client already exists"
             }
         },
         "agent_info": {
@@ -540,6 +589,7 @@
             "error_message": "Not found client information.",
             "online": "Online",
             "offline": "Offline",
+            "passive": "Passive",
             "attributes": "Attributes",
             "node_detail":"Node Detail",
             "client_detail": "Client Detail",
@@ -908,8 +958,9 @@
                 "cancel":"Cancel",
                 "directory_server_notify":"Directory server settings will be updated and you will be redirected to login page, are you sure?",
                 "directory_server_settings_successfully_update":"Directory server settings updated successfully",
-                "error_417_update_directory_server_settings":"An error occurred while updating the directory server settings"
-
+                "error_417_update_directory_server_settings":"An error occurred while updating the directory server settings",
+                "update_password":"Update Password",
+                "change_password":"Change Password"
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Server Information",
@@ -929,7 +980,10 @@
                 "update_settings":"Update Settings",
                 "messaging_server_notify":"The XMPP server settings will be updated and you will be redirected to the login page, are you sure?",
                 "messaging_server_settings_successfully_update":"XMPP server settings updated successfully",
-                "error_update_messaging_server_settings": "An error occurred while updating the XMPP server settings"
+                "error_update_messaging_server_settings": "An error occurred while updating the XMPP server settings",
+                "update_password":"Update Password",
+                "change_password":"Change Password"
+
             },
             "file_server_settings":{
                 "file_server_information":"File Server Information",
@@ -946,7 +1000,9 @@
                 "update_settings":"Update Settings",
                 "file_server_notify":"File server settings will be updated and you will be redirected to login page, are you sure?",
                 "file_server_settings_successfully_update":"File server settings updated successfully",
-                "error_417_update_file_server_settings": "Error updating file server settings"
+                "error_417_update_file_server_settings": "Error updating file server settings",
+                "update_password":"Update Password",
+                "change_password":"Change Password"
 
             },
             "mail_server_settings":{
@@ -964,7 +1020,9 @@
                 "no":"No",
                 "update_settings":"Update Settings",
                 "cancel":"Cancel",
-                "error_updating_mail_settings" : "An unexpected error occurred while updating the e-mail settings. Error code : 417"
+                "error_updating_mail_settings" : "An unexpected error occurred while updating the e-mail settings. Error code : 417",
+                "update_password":"Update Password",
+                "change_password":"Change Password"
 
             },
             "other_settings":{
@@ -990,7 +1048,12 @@
                 "default": "Default(Clients are saved under the Agents folder as default)",
                 "ip_address": "IP Address(It is registered according to the entered IP address rule)",
                 "hostname": "Hostname(It is registered according to the entered hostname rule)",
-                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu"
+                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu",
+                "show_machine_status":"Show status of Active/Passive machines",
+                "enabled_machine_status":"Enable Active/Inactive feature of machines",
+                "machine_status_days":"Enter the number of days after which you want to deactivate your clients",
+                "task_part_client_size":"Enter the number of client groups to which the tasks will be sent",
+                "send_task_parts":"Sending a Partial Task"
 
             }
         },
@@ -1791,7 +1854,14 @@
             "logged_one_mounth":"Logged In Last 1 Month",
             "logged_two_mounth":"Logged In Last 2 Months",
             "logged_three_mounth":"Logged In Last 3 Months",
-            "error_417_adding_computer_to_group":"An unexpected error occurred while adding clients to the group. Error code : 417"
+            "error_417_adding_computer_to_group":"An unexpected error occurred while adding clients to the group. Error code : 417",
+            "ssd":"SSD",
+            "hdd":"HDD",
+            "client_status":"Active/Passive",
+            "active":"Active",
+            "passive":"Passive",
+            "dn_information":"DN",
+            "active_or_passive":"Active/Passive" 
 
         },
         "task_report":{
@@ -1882,7 +1952,9 @@
 
         },
         "scheduled_task_report":{
+            "agents":"Agents",
             "scheduled_task_report":"Scheduled Task Report",
+            "scheduled_active_task":"Active Scheduled Tasks",
             "task":"Task",
             "posted_date":"Posted Date",
             "results":"Results",
@@ -1923,6 +1995,76 @@
             "error_scheduled_update":"Scheduled task id not found!!",
             "success_scheduled_cancel":"Scheduled task canceled successfully",
             "error_scheduled_cancel":"Error canceling scheduled task"
+        },
+        "session_report":{
+            "agent_sessions":"Client Sessions",
+            "user_sessions":"User Sessions",
+            "client_session_report":"Client Session Report",
+            "cancel":"Cancel",
+            "select":"Select",
+            "computer_name":"Computer Name",
+            "ip_address":"IP Address",
+            "mac_address":"MAC Address",
+            "dn":"DN",
+            "registiration_date":"Registiration Date",
+            "status":"Status",
+            "brand":"Brand",
+            "model":"Model",
+            "processor":"Processor",
+            "operating_system_version":"Operating System Version",
+            "operating_system":"Operating System",
+            "ahenk_version":"Ahenk Version",
+            "results":"Results",
+            "all":"All",
+            "clear":"Clear",
+            "search":"Search",
+            "export":"Export",
+            "version":"Version",
+            "create_date":"Create Date",
+            "session_date":"Date",
+            "session":"Session",
+            "disk_type":"Disk Type",
+            "login":"Login",
+            "logout":"Logout",
+            "agent_not_found":"Agents doesn't exist",
+            "loading":"Loading",
+            "online":"Online",
+            "offline":"Offline",
+            "session_cant_find":"Session Can't Find",
+            "close":"Close",
+            "agent_session_information":"Agent Session Information",
+            "agent_detail":"Agent Detail",
+            "hdd_title":"HDD (Hard Disk Drive)",
+            "ssd_title":"SSD (Solid-State Drive)",
+            "general_information":"General Information",
+            "not_logged_one_mounth":"Not Logged In Last 1 Month",
+            "not_logged_two_mounth":"Not Logged In Last 2 Months",
+            "not_logged_three_mounth":"Not Logged In Last 3 Months",
+            "logged_one_mounth":"Logged In Last 1 Month",
+            "logged_two_mounth":"Logged In Last 2 Months",
+            "logged_three_mounth":"Logged In Last 3 Months",
+            "add_existing_group":"Add Existing Group",
+            "please_select_folder":"Please select folder",
+            "agent_info_report_error":"Could not retrieve agent info list",
+            "error_417_agent_info_list":"Could not retrieve agents list. Error code : 417",
+            "agent_info_report_export_error":"Could not create agent task report.",
+            "error_400_agent_info_report":"Could not create agent session task report. Error code : 400",
+            "user_session_reports":"User Session Report ",
+            "session_type":"Session Type",
+            "username":"Username",
+            "client_name":"Client Name",
+            "total_result":"Total Result",
+            "client_select":"Select Client",
+            "user_select":"User Select",
+            "error_session_list":"Could not retrieve user session list.",
+            "error_417_session_list":"Could not retrieve user session list. Error Code: 417",
+            "error_user_session_report":"An error occurred while generating the User Session report.",
+            "error_417_user_session_report":"An error occurred while generating the User Session report. Error Code: 400",
+            "active":"Active",
+            "passive":"Passive",
+            "user_list":"User List",
+            "client_status": "Active/Passive"
+
         }
     },
     "profile":{

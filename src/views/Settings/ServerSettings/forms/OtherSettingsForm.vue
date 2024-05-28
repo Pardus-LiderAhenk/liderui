@@ -71,6 +71,29 @@
                     />
                 </div>
             </Fieldset>
+            <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.show_machine_status')" >
+                <div class="p-field-checkbox p-col-12 p-md-12">
+                    <InputSwitch v-model="machineEventStatus" />
+                    <label>{{$t('settings.server_settings.other_settings.enabled_machine_status')}}</label>
+                </div>
+                <div class="p-field p-col-12" v-if="machineEventStatus == true">
+                    <label for="machineEventDay">{{$t('settings.server_settings.other_settings.machine_status_days')}}</label>
+                    <InputText
+                        id="machineEventDay"
+                        type="text"
+                        v-model="machineEventDay"
+                    />
+                </div>
+            </Fieldset>
+            <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.send_task_parts')" >
+                <div class="p-field p-col-12">
+                    <label for="clientSize">{{$t('settings.server_settings.other_settings.task_part_client_size')}}</label>
+                    <InputNumber :min="1"
+                        id="clientSize"
+                        v-model="clientSize"
+                    />
+                </div>
+            </Fieldset>
             <div class="p-field p-col-12 p-text-right">
                 <div class="p-d-flex p-jc-end">
                     <div>
@@ -113,7 +136,10 @@ export default {
             ahenkRepoAddress:'',
             ahenkRepoKeyAddress:'',
             showDialog: false,
-            selectedRegistrationType: 'DEFAULT'
+            selectedRegistrationType: 'DEFAULT',
+            machineEventStatus: false,
+            machineEventDay:'',
+            clientSize:''
         }
     },
     watch: { 
@@ -126,7 +152,10 @@ export default {
             this.ahenkRepoKeyAddress = newVal.ahenkRepoKeyAddress;
             this.emailUsername = newVal.emailUsername;
             this.emailPassword = newVal.emailPassword;
-            this.selectedRegistrationType = newVal.selectedRegistrationType
+            this.selectedRegistrationType = newVal.selectedRegistrationType;
+            this.machineEventStatus = newVal.machineEventStatus;
+            this.machineEventDay = newVal.machineEventDay;
+            this.clientSize = newVal.clientSize;
           }
         }
     },
@@ -140,6 +169,9 @@ export default {
             data.append("ahenkRepoAddress",this.ahenkRepoAddress);
             data.append("ahenkRepoKeyAddress",this.ahenkRepoKeyAddress);
             data.append("selectedRegistrationType", this.selectedRegistrationType);
+            data.append("machineEventStatus", this.machineEventStatus);
+            data.append("machineEventDay", this.machineEventDay);
+            data.append("clientSize", this.clientSize);
 
             const { response,error } = await serverSettingService.updateOtherSettings(data);
             if(error){

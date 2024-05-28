@@ -68,9 +68,11 @@
         "console_user_settings": "Arayüz Kullanıcı Ayarları",
         "ad_synchronization": "AD Senkronizasyonu",
         "scheduled_task_report": "Zamanlanmış Görev Raporu",
+        "system_session_report":"Kullanıcı Oturum Raporu",
         "view_profile": "Profil Görüntüle",
         "logout": "Çıkış",
-        "privilege_warning": "Kullanıcı yetkileri getiriliken hata oluştu"
+        "privilege_warning": "Kullanıcı yetkileri getiriliken hata oluştu",
+        "scheduled_tasks": "Zamanlanmış Görevler"
     },
     "tree":{
         "tree": "Ağaç",
@@ -146,6 +148,19 @@
         "confirm_password_input_message": "Lütfen parolayı tekrar giriniz"
         
     },
+    "settings_password": {
+        "update_password":"Parola Güncelle",
+        "old_password":"Eski Parola",
+        "change_password":"Parola Değiştir",
+        "cancel":"İptal",
+        "error_403_changed_settings_password":"Eski parolanız hatalı olduğu için parolanız değiştirilemedi",
+        "error_changed_settings_password":"Parolanız güncellenirken hata oluştu",
+        "settings_password_successfully_update":"Parolanız başarıyla güncellendi",
+        "password_input_message":"Lütfen eski parolanızı giriniz",
+        "create_password":"Parola Oluştur",
+        "settings_password_error_save":"Parolanız oluşturulamadı. Hata kodu: 500"
+
+    },
     "computer": {
         "total": "Toplam",
         "online":"Çevrimiçi",
@@ -175,7 +190,8 @@
                 "scheduled_task_confirm_question": "Zamanlanmış görev gönderilecek, emin misiniz?",
                 "warning": "Uyarı",
                 "yes": "Evet",
-                "no": "Hayır"
+                "no": "Hayır",
+                "send_part_task":"Görevi parçalı olarak gönder"
             },
             "resource_usage": {
                 "header": "Kaynak Kullanımı",
@@ -364,7 +380,10 @@
                 "table_empty_message":"Paket bulunamadı",
                 "search":"Ara",
                 "package_name_warn": "Paket adı boş bırakılamaz",
-                "export":"Dışa Aktar"
+                "export":"Dışa Aktar",
+                "installed": "Paket yüklü",
+                "uninstalled": "Paket yüklü değil",
+                "different_version": "Paket faklı versiyonla yüklü"
             },
             "service_management": {
                 "header": "Servis Yönetimi",
@@ -519,7 +538,35 @@
                 "select_ip_address":"IP Adresi Seçiniz",
                 "connection_error":"VNC bağlantısı sırasında hata oluştu",
                 "getting_access":"Bağlantı bilgileri alındı",
-                "client_warning":"Ahenkten bağlantı bilgileri alındı uzak erişimi için lütfen IP adresi seçiniz"
+                "client_warning":"Ahenkten bağlantı bilgileri alındı. Uzak erişim için lütfen IP adresi seçiniz ve Bağlan butonuna tıklayınız",
+                "connection_information":"Bağlantı Bilgileri",
+                "registered_connections":"Kayıtlı Bağlantılar",
+                "registered_client_will_be_deleted_are_you_sure":"Kayıtlı bağlantı silinecektir, emin misiniz?",
+                "rdp_connection":"RDP Bağlantı",
+                "select_registered_connection":"Kayıtlı Bağlantı Kullanmak İstiyorsanız Seçiniz",
+                "clear":"Temizle",
+                "add_new_client":"Yeni İstemci Ekle",
+                "edit_client":"İstemciyi Düzenle",
+                "hostname":"Bilgisayar Adı",
+                "hostname_cannot_be_null":"Bilgisayar adı boş bırakılamaz",
+                "edit":"Düzenle",
+                "delete":"Sil",
+                "delete_registered_client":"Kayıtlı İstemciyi Sil",
+                "connect_with_rdp":"RDP İle Bağlan",
+                "connection":"Bağlantı",
+                "registered_clients":"Kayıtlı İstemciler",
+                "client_added_successfully":"İstemci başarıyla eklendi",
+                "client_updated_successfully":"İstemci başarıyla güncellendi",
+                "client_deleted_successfully":"İstemci başarıyla silindi",
+                "description_field":"Açıklama",
+                "cancel":"İptal",
+                "save":"Kaydet",
+                "update":"Güncelle",
+                "error_fetching_the_saved_clients":"Kayıtlı istemciler getirilirken hata oluştu",
+                "error_adding_the_client":"İstemci eklenirken hata oluştu",
+                "yes": "Evet",
+                "find_client":"İstemci Bul",
+                "client_already_exists":"Bu istemci zaten kayıtlı"
             }
         },
         "agent_info": {
@@ -538,6 +585,7 @@
             "error_message": "İstemci bilgileri bulunamadı.",
             "online": "Çevrimiçi",
             "offline": "Çevrimdışı",
+            "passive": "Pasif",
             "attributes": "Öznitelikler",
             "node_detail":"Kayıt Detayı",
             "client_detail": "İstemci Detayı",
@@ -878,7 +926,7 @@
                 "port":"Port",
                 "domain_name":"Domain Adı",
                 "ldap_user_dn":"LDAP Kullanıcı DN",
-                "ldap_user_password":"LDAP Kullanıcı Şifresi",
+                "ldap_user_password":"LDAP Kullanıcı Parolası",
                 "ahenk_folder":"Ahenk Klasörü",
                 "user_folder":"Kullanıcı Klasörü",
                 "group_folder":"Grup Klasörü",
@@ -904,14 +952,16 @@
                 "cancel":"İptal",
                 "directory_server_notify":"Dizin sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "directory_server_settings_successfully_update":"Dizin sunucu ayarları başarıyla güncellendi",
-                "error_417_update_directory_server_settings":"Dizin sunucusu ayarları güncellenirken hata oluştu"
+                "error_417_update_directory_server_settings":"Dizin sunucusu ayarları güncellenirken hata oluştu",
+                "change_password":"Parola Değiştir"
+
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Sunucusu Bilgileri",
                 "xmpp_server_address":"XMPP Sunucu Adresi",
                 "port":"Port",
                 "xmpp_username":"XMPP Kullanıcı Adı",
-                "xmpp_password":"XMPP Kullanıcı Şifresi",
+                "xmpp_password":"XMPP Kullanıcı Parolası",
                 "xmpp_source_name":"XMPP Kaynak Adı",
                 "xmpp_service_name":"XMPP Servis Adı",
                 "xmpp_retry_connection_count":"XMPP Retry Connection Count",
@@ -924,7 +974,9 @@
                 "update_settings":"Ayarları Güncelle",
                 "messaging_server_notify":"XMPP sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "messaging_server_settings_successfully_update":"XMPP sunucu ayarları başarıyla güncellendi",
-                "error_update_messaging_server_settings": "XMPP sunucu ayarları güncellenirken hata oluştu"
+                "error_update_messaging_server_settings": "XMPP sunucu ayarları güncellenirken hata oluştu",
+                "change_password":"Parola Değiştir"
+
             },
             "file_server_settings":{
                 "file_server_information":"Dosya Sunucusu Bilgileri",
@@ -932,7 +984,7 @@
                 "file_server_address":"Dosya Sunucu Adresi",
                 "port":"Port",
                 "username":"Kullanıcı Adı",
-                "password":"Kullanıcı Şifresi",
+                "password":"Kullanıcı Parolası",
                 "agent_file_directory":"Ajan Dosya Dizini",
                 "save":"Değişiklikleri Kaydet",
                 "yes":"Evet",
@@ -941,7 +993,10 @@
                 "update_settings":"Ayarları Güncelle",
                 "file_server_notify":"Dosya sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "file_server_settings_successfully_update":"Dosya sunucu ayarları başarıyla güncellendi",
-                "error_417_update_file_server_settings": "Dosya sunucu ayarları güncellenirken hata oluştu"
+                "error_417_update_file_server_settings": "Dosya sunucu ayarları güncellenirken hata oluştu",
+                "change_password":"Parola Değiştir"
+
+
             },
             "mail_server_settings":{
                 "mail_notify":"Email ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
@@ -950,7 +1005,7 @@
                 "mail_host_address":"Email Host Adresi",
                 "port":"Email Port",
                 "mail_username":"Email Kullanıcı Adresi",
-                "mail_password":"Email Şifresi",
+                "mail_password":"Email Parolası",
                 "smtp_verification":"SMTP Doğrulama",
                 "tls_activation":"TLS Aktif",
                 "save":"Değişiklikleri Kaydet",
@@ -958,7 +1013,9 @@
                 "no":"Hayır",
                 "cancel":"İptal",
                 "update_settings":"Ayarları Güncelle",
-                "error_updating_mail_settings" : "E-mail ayarları güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417"
+                "error_updating_mail_settings" : "E-mail ayarları güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
+                "change_password":"Parola Değiştir"
+                
             },
             "other_settings":{
                 "other_settings":"Diğer Ayarlar",
@@ -983,7 +1040,13 @@
                 "default": "Varsayılan(İstemciler, varsayılan olarak Agents klasörü altına kaydedilir)",
                 "ip_address": "IP Adresi(Girilen IP adresi kuralına göre kaydedilir)",
                 "hostname": "Bilgisayar Adı(Girilen bilgisayar adı kuralına göre kaydedilir)",
-                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu"
+                "error_update_other_settings":"Ayarlar güncellenirken hata oluştu",
+                "show_machine_status":"Aktif/Pasif makinelerin durumunu göster",
+                "enabled_machine_status":"Makinelerin Aktif/Pasif olma özelliğini etkinleştir",
+                "machine_status_days":"İstemcilerinizin kaç gün sonra pasif duruma çekmek istediğinizi giriniz",
+                "task_part_client_size":"Görevlerin gönderileceği istemci grubunun sayısını yazınız",
+                "send_task_parts":"Parçalı Görev Gönderme"
+
             }
         },
         "registiration_template":{
@@ -1789,7 +1852,13 @@
             "logged_three_mounth":"Son 3 Ay Oturum Açan",
             "error_417_adding_computer_to_group":"İstemciler gruba eklenirken beklenmeyen bir hata oluştu. Hata kodu : 417",
             "ssd":"SSD",
-            "hdd":"HDD"
+            "hdd":"HDD",
+            "client_status":"Aktif/Pasif",
+            "active":"Aktif",
+            "passive":"Pasif",
+            "an_error_occurred_while_creating_the_computer_group": "Grup oluşturulurken hata oluştu",
+            "dn_information":"DN",
+            "active_or_passive":"Aktif/Pasif"            
 
 
         },
@@ -1827,7 +1896,7 @@
             "close":"Kapat",
             "agent_info_report_error":"İstemci listesi getirilemedi.",
             "error_417_agent_info_list":"İstemci listesi getirilemedi. Hata kodu : 417",
-            "agent_info_report_export_error":"İstemci kaporu oluşturulurken hata oluştu",
+            "agent_info_report_export_error":"İstemci raporu oluşturulurken hata oluştu",
             "error_400_agent_info_report":"İstemci raporu oluşturuluken hata alındı. Hata kodu : 400",
             "error_get_operation_log_list":"Sistem güncesi listesi getirilirken hata oluştu.",
             "error_417_operation_log":"Sistem güncesi listesi getirilirken beklenmedik hata alındı. Hata kodu : 417",
@@ -1880,7 +1949,9 @@
             "log_details":"Log Detayları"
         },
         "scheduled_task_report":{
+            "agents":"İstemciler",
             "scheduled_task_report":"Zamanlanmış Görev Raporu",
+            "scheduled_active_task":"Aktif Zamanlanmış Görevler",
             "task":"Görev",
             "posted_date":"Gönderilme Tarihi",
             "results":"Sonuçlar",
@@ -1921,8 +1992,77 @@
             "error_scheduled_update":"Zamanlanmış görev kimliği bulunamadı!",
             "success_scheduled_cancel":"Zamanlanmış görev başarıyla iptal edildi",
             "error_scheduled_cancel":"Zamanlanmış görev iptal edilirken hata oluştu!"
-
-
+        },
+        "session_report":{
+            "agent_sessions":"İstemci Oturumları",
+            "user_sessions":"Kullanıcı Oturumları",
+            "client_session_report":"İstemci Oturum Raporu",
+            "cancel":"Kapat",
+            "select":"Seç",
+            "computer_name":"Bilgisayar Adı",
+            "ip_address":"IP Adresi",
+            "mac_address":"MAC Adresi",
+            "dn":"DN",
+            "registiration_date":"Kayıt Tarihi",
+            "status":"Durum",
+            "brand":"Marka",
+            "model":"Model",
+            "processor":"İşlemci",
+            "operating_system_version":"İşletim Sistemi Versiyonu",
+            "operating_system":"İşletim Sistemi",
+            "ahenk_version":"Ahenk Versiyon",
+            "results":"Sonuçlar",
+            "all":"Hepsi",
+            "clear":"Temizle",
+            "search":"Ara",
+            "export":"Dışa Aktar",
+            "version":"Versiyon",
+            "create_date":"Oluşturma Tarihi",
+            "session_date":"Tarih",
+            "session":"Oturum",
+            "disk_type":"Disk Tipi",
+            "login":"Oturum Açıldı",
+            "logout":"Oturum Kapatıldı",
+            "agent_not_found":"İstemciler Bulunamıyor",
+            "loading":"Yükleniyor",
+            "online":"Çevrimiçi",
+            "offline":"Çevrimdışı",
+            "close":"Kapat",
+            "agent_session_information":"İstemci Oturum Bilgileri",
+            "session_cant_find":"Kullanıcılar Bulunamıyor",
+            "agent_detail":"İstemci Detayları",
+            "hdd_title":"HDD (Hard Disk Drive)",
+            "ssd_title":"SSD (Solid-State Drive)",
+            "general_information":"Genel Bilgiler",
+            "not_logged_one_mounth":"Son 1 Ay Oturum Açmayan",
+            "not_logged_two_mounth":"Son 2 Ay Oturum Açmayan",
+            "not_logged_three_mounth":"Son 3 Ay Oturum Açmayan",
+            "logged_one_mounth":"Son 1 Ay Oturum Açan",
+            "logged_two_mounth":"Son 2 Ay Oturum Açan",
+            "logged_three_mounth":"Son 3 Ay Oturum Açan",
+            "add_existing_group":"Mevcut Gruba Ekle",
+            "please_select_folder":"Lütfen klasör seçiniz",
+            "agent_info_report_error":"İstemci listesi getirilemedi.",
+            "error_417_agent_info_list":"İstemci listesi getirilemedi. Hata kodu : 417",
+            "agent_info_report_export_error":"İstemci raporu oluşturulurken hata oluştu",
+            "error_400_agent_info_report":"İstemci raporu oluşturuluken hata alındı. Hata kodu : 400",
+            "user_session_reports":"Kullanıcı Oturum Raporu",
+            "session_type":"Oturum Tipi",
+            "username":"Kullanıcı Adı",
+            "client_name":"İstemci Adı",
+            "total_result":"Toplam Sonuç",
+            "client_select":"İstemci Seç",
+            "user_select":"Kullanıcı Seç",
+            "error_session_list":"Kullanıcı oturum listesi getirilirken hata oluştu.",
+            "error_417_session_list":"Kullanıcı oturum listesi getirilirken hata oluştu. Hata Kodu:417",
+            "error_get_not_agent_session_report":",İstemci oturum bilgisi getirilemedi",
+            "error_417_get_not_agent_session_report":",İstemci oturum bilgisi getirilemedi. Hata Kodu :417",
+            "error_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu.",
+            "error_417_user_session_report":"Kullanıcı Oturum raporu oluşturulurken hata oluştu. Hata Kodu : 400",
+            "active":"Aktif",
+            "passive":"Pasif",
+            "user_list":"Kullanıcı Listesi",
+            "client_status": "Aktif/Pasif"
         }
     },
     "profile":{

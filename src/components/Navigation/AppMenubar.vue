@@ -185,9 +185,9 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_AGENT_INFO") ||
-                this.isExistPrivilege("ROLE_COMPUTERS") || this.isExistPrivilege("ROLE_EXECUTED_TASK") || 
-                this.isExistPrivilege("ROLE_OPERATION_LOG")) {
+            if (this.isExistPrivilege("ROLE_AGENT_INFO") || this.isExistPrivilege("ROLE_SCHEDULE_TASK") 
+            || this.isExistPrivilege("ROLE_EXECUTED_TASK") || this.isExistPrivilege("ROLE_OPERATION_LOG")
+            || this.isExistPrivilege("ROLE_USER_SESSION_REPORT")) {
                 this.items.push(
                     {
                         label: this.$t('menu.reports'),
@@ -272,11 +272,19 @@ export default {
                     }
                 );
             }
-            if (this.isExistPrivilege("ROLE_COMPUTERS") || this.isExistPrivilege('ROLE_SCHEDULE_TASK')) {
+            if (this.isExistPrivilege('ROLE_SCHEDULE_TASK')) {
                 reportsItems.push(
                     {
                         label: this.$t('menu.scheduled_task_report'),
                         to: '/reports/scheduled'
+                    }
+                );
+            }
+            if (this.isExistPrivilege("ROLE_USER_SESSION_REPORT")) {
+                reportsItems.push(
+                    {
+                        label: this.$t('menu.system_session_report'),
+                        to: '/reports/session'
                     }
                 );
             }
