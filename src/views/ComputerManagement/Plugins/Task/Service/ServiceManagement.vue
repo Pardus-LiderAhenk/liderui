@@ -61,9 +61,11 @@
               </div>
               </template>
               <Column selectionMode="multiple" headerStyle="width: 3em"></Column>
-              <Column field="id" header="#" style="width: 7%"></Column>
-              <Column field="serviceName" :header="$t('computer.plugins.service_management.service_name')" style="width: 40%"></Column>
-              <Column field="serviceStatus" :header="$t('computer.plugins.service_management.status')" style="width: 10%">
+              <Column field="serviceName" sortable
+                :header="$t('computer.plugins.service_management.service_name')">
+              </Column>
+              <Column field="serviceStatus" sortable
+                :header="$t('computer.plugins.service_management.status')">
                 <template #body="slotProps">
                   <Badge
                     :value="slotProps.data.serviceStatus == 'active' || slotProps.data.serviceStatus == 'start'? 
@@ -73,9 +75,9 @@
                   </Badge>
                 </template>
               </Column>
-              <Column field="serviceStatus" 
+              <Column field="serviceStatus"
               :exportable="false" 
-              :header="$t('computer.plugins.service_management.change')" style="width: 10%"
+              :header="$t('computer.plugins.service_management.change')"
               >
                 <template #body="slotProps">
                   <Dropdown 
@@ -96,8 +98,8 @@
                   />
                 </template>
               </Column>
-              <Column style="width: 10%"></Column>
-              <Column field="startAuto" :header="$t('computer.plugins.service_management.auto_start')" style="width: 10%">
+              <Column field="startAuto" sortable
+                :header="$t('computer.plugins.service_management.auto_start')">
                 <template #body="slotProps">
                   <Badge
                     :value="slotProps.data.startAuto == 'enabled' ? $t('computer.plugins.service_management.enabled'): 
@@ -106,10 +108,9 @@
                   </Badge>
                 </template>
               </Column>
-              <Column field="startAuto" 
+              <Column field="startAuto"
                 :exportable="false" 
-                :header="$t('computer.plugins.service_management.change')" 
-                style="width: 10%">
+                :header="$t('computer.plugins.service_management.change')">
                 <template #body="slotProps">
                   <Dropdown 
                     v-model="slotProps.data.startAuto" 
