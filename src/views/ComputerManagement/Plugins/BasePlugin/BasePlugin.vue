@@ -223,7 +223,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["selectedLiderNode", "selectedNodeType", "selectedComputerGroupNode"]),
+    ...mapGetters(["selectedLiderNode", "selectedNodeType", "selectedComputerGroupNode", "getUser"]),
   },
 
   methods: {
@@ -416,7 +416,7 @@ export default {
       }
 
       let responseMessage = response.result.responseMessage;
-      if (response.commandClsId === this.pluginTask.commandId) {
+      if (response.commandClsId === this.pluginTask.commandId && this.getUser.uid === response.recipient) {
         if (response.result.responseCode === "TASK_PROCESSED") {
           this.$toast.add({
             severity:'success', 
