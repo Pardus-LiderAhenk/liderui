@@ -18,6 +18,15 @@
               />
             </div>
           </div>
+          agahhh
+          <div>
+            <p>{{ minuteOld }}</p>
+            <p>{{ hourOld }}</p>
+            <p>{{ dayOfMonthOld }}</p>
+            <p>{{ monthOld }}</p>
+            <p>{{ dayOfWeekOld }}</p>
+          </div>
+
           <div class="p-field p-grid">
             <label class="p-col-12 p-mb-2 p-md-4 p-mb-md-0" >{{ $t('computer.scheduled.minute') }}</label>
             <div class="p-col-12 p-md-8">
@@ -188,12 +197,22 @@ export default {
       default: false,
       description: "New policy added",
     },
+    scheduleFormOld: {
+      type: String,
+      required: false,
+      description: "Old cronexpression detail"
+    }
   },
 
   data() {
     return {
       scheduledParam: null,
       validationErrors: {},
+      minuteOld: null,
+      hourOld: null,
+      dayOfMonthOld: null,
+      monthOld: null,
+      dayOfWeekOld: null,
       scheduleForm: {
         minute: "",
         hour: "",
@@ -229,22 +248,34 @@ export default {
     }
   },
 
-  // mounted() {
-  //   this.scheduleForm.minute = "";
-  //   this.scheduleForm.hour = "";
-  //   this.scheduleForm.dayOfMonth = "";
-  //   this.scheduleForm.month = "";
-  //   this.scheduleForm.dayOfWeek = "";
-  //   Object.keys(this.validationErrors).forEach(key => {
-  //     delete this.validationErrors[key];
-  //   });
-  // },
+  mounted() {
+    this.splitScheduleString();
+  },
   
   methods: {
     /**
      * saveScheduled and closeScheduled event emit when click Save and Cancel buttons.
      * @event saveScheduled
      */
+
+    splitScheduleString() {
+      console.log("tuncay") 
+      console.log(this.scheduleFormOld)
+      if (this.scheduleFormOld) {
+        const parts = this.scheduleFormOld.split(' ');
+      if (parts.length === 5) {
+        this.scheduleForm.minute = parts[0];
+        this.scheduleForm.hour = parts[1];
+        this.scheduleForm.dayOfMonth = parts[2];
+        this.scheduleForm.month = parts[3];
+        this.scheduleForm.dayOfWeek = parts[4];
+      } else {
+        console.error('The schedule string does not have exactly 5 parts');
+      }    
+      }
+     
+    },
+
     scheduledTaskOperation() {
       if (this.validateForm()) {
         this.$emit("saveScheduled", this.getScheduleParam());
