@@ -417,14 +417,14 @@ export default {
 
       let responseMessage = response.result.responseMessage;
       if (response.commandClsId === this.pluginTask.commandId && this.getUser.uid === response.recipient) {
-        if (response.result.responseCode === "TASK_PROCESSED") {
+        if (response.result.responseCode === "TASK_PROCESSED" && this.selectedNodeType == "computer") {
           this.$toast.add({
             severity:'success', 
             detail: responseMessage, 
             summary: toastSummary, 
             life: toastLife
           });
-        } else if (response.result.responseCode === "TASK_ERROR") {
+        } else if (response.result.responseCode === "TASK_ERROR" && this.selectedNodeType == "computer") {
           this.$toast.add({
             severity:'error', 
             detail: responseMessage, 

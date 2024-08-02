@@ -265,6 +265,30 @@
       </Paginator>
     </template>
   </Card>
+
+  <Dialog :header="$t('reports.detailed_agent_report.select_folder')"
+      v-model:visible="agentOuDialog" 
+      :style="{width: '30vw'}" :modal="true"
+    >
+      <tree-component 
+        ref="agentTree"
+        loadNodeUrl="/api/lider/computer/computers"
+        loadNodeOuUrl="/api/lider/computer/ou-details"
+        :treeNodeClick="node => filter.dn = node.distinguishedName"
+        :searchFields="[{key: this.$t('tree.folder'), value: 'ou'}]"
+        :isMove="true"
+        :scrollHeight="40"
+      />
+      <template #footer>
+        <Button :label="$t('reports.detailed_agent_report.cancel')"
+          icon="pi pi-times" @click="agentOuDialog = false"
+          class="p-button-text p-button-sm"
+        />
+        <Button :label="$t('reports.detailed_agent_report.select')" icon="pi pi-check" 
+            @click="selectAgentOuDn" class="p-button-sm"
+        />
+      </template>
+    </Dialog>
 </div>
 </template>
 
