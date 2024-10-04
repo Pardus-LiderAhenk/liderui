@@ -96,7 +96,7 @@
                 </Card>
             </div>
             <div class="p-col-12 p-md-6 p-lg-7">
-                <assigned-policies :selectedNode="selectedNode"></assigned-policies>
+                <assigned-policies :selectedNode="selectedNode" :parentType="'ACTIVE_DIRECTORY'"></assigned-policies>
             </div>
         </div>
     </div>  

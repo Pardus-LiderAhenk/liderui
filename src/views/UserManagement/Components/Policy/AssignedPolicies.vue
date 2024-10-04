@@ -3,6 +3,7 @@
         <apply-policy v-if="applyPolicyDialog" 
             :selectedNode="selectedNode"
             :applyPolicyDialog="applyPolicyDialog"
+            :parentType="parentType"
             @close-policy-dialog="applyPolicyDialog = false"
             @applied-policy="getAssignedPolices">
         </apply-policy>
@@ -181,6 +182,10 @@ export default {
         selectedNode: {
             type: Object,
             description: "selected node",
+        },
+        parentType: {
+            type: String,
+            description: "parent type",
         },
     },
 
