@@ -35,11 +35,12 @@
                             <div class="p-d-flex p-jc-end">
                                 <span class="p-input-icon-left">
                                     <i class="pi pi-search"/>
-                                    <InputText v-model="filters['global'].value" 
+                                    <InputText v-model="filters.scriptName" 
                                     class="p-inputtext-sm" 
                                     :placeholder="$t('settings.script_definition.search')" 
                                     />
                                 </span>
+                                <Button label="Ara" icon="pi pi-search" class="p-ml-2 p-button-sm" @click="getScripts" />
                             </div>
                         </template>
                         <template #empty>
@@ -220,7 +221,7 @@ export default {
             scripts: [],
             selectedScript: null,
             filters: {
-                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+                scriptName: "",
             },
             showTemplateDialog: false,
             scriptTypes: [
@@ -271,12 +272,8 @@ export default {
             this.$emit('executeScript', params)
         },
 
-        async getScripts(){
-            var data = new FormData();
-            data.append("pageNumber", this.pageNumber);
-            data.append("pageSize", this.rowNumber);            
-
-            const { response,error } = await scriptService.scriptList(this.rowNumber,this.pageNumber);
+        async getScripts() {
+            const { response,error } = await scriptService.scriptList(this.rowNumber,this.pageNumber, this.filters);
             if(error){
                 this.$toast.add({
                     severity:'error', 

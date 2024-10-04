@@ -12,9 +12,9 @@ class ScriptService{
         this.axios = axios
     }
 
-    async scriptList(pageSize,pageNumber) {
+    async scriptList(pageSize,pageNumber,params) {
         try {
-            const response = await axios.get(scriptListUrl + "/page-size/" + pageSize + "/page-number/" + pageNumber);
+            const response = await axios.post(scriptListUrl + "/page-size/" + pageSize + "/page-number/" + pageNumber, params);
             return { response };
         } catch (error) {
             return { error: error }
