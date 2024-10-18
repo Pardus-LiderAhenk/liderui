@@ -922,6 +922,7 @@
             "directory_server_settings":{
                 "directory_server_settings":"Dizin Sunucusu Ayarları",
                 "ldap_server_informations":"LDAP Sunucusu Bilgileri",
+                "open_ldap_settings":"OpenLDAP Ayarları",
                 "ldap_server_address":"LDAP Sunucu Adresi",
                 "port":"Port",
                 "domain_name":"Domain Adı",
@@ -933,13 +934,13 @@
                 "agent_group_folder":"İstemci Grubu Klasörü",
                 "user_group_folder":"Kullanıcı Grubu Klasörü",
                 "authority_group_folder":"Yetki Grubu Klasörü(Sudo)",
-                "active_directory_settings":"Aktif Dizin ayarları (Hibrit yapılı kurulumlar için bu ayarlar yapılmalıdır)",
+                "active_directory_settings":"Aktif Dizin Ayarları",
                 "active_directory_address":"AD Sunucu Adresi",
                 "active_directory_port":"AD Port",
                 "active_directory_domain_name":"AD Domain Adı",
                 "active_directory_admin_username":"AD Yönetici Kullanıcı Adı",
                 "active_directory_admin_dn":"AD Yönetici Kullanıcı Tam DN",
-                "active_directory_admin_password":"AD Yönetici Şifresi",
+                "active_directory_admin_password":"AD Yönetici Kulanıcı Parolası",
                 "active_directory_hostname":"AD Host Adresi",
                 "ssl_certification":"SSL Kullan",
                 "tls_certification":"TLS Kullan",
@@ -953,8 +954,20 @@
                 "directory_server_notify":"Dizin sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "directory_server_settings_successfully_update":"Dizin sunucu ayarları başarıyla güncellendi",
                 "error_417_update_directory_server_settings":"Dizin sunucusu ayarları güncellenirken hata oluştu",
-                "change_password":"Parola Değiştir"
-
+                "password":"Parola",
+                "password_empty":"Lütfen bir parola giriniz",
+                "change_password":"Parola Değiştir",
+                "confirm_password":"Parolayı Onayla",
+                "check_connection":"Bağlantıyı Kontrol Et",
+                "connection_success":"Doğrulama başarılı! Değişiklikleri kayıt edebilirsiniz",
+                "connection_failed":"Doğrulama başarısız, lütfen bilgilerinizi kontrol ediniz",
+                "connection_missing_credentials":"Eksik bilgiler mevcut, lütfen tüm gerekli alanları doldurunuz",
+                "ad_popover":{
+                    "title":"Ayar Hakkında",
+                    "description":"Bu ayar hibrit sistemlerde kullanılır.",
+                    "check_connection":"Gerekli alanları doldurduktan sonra bağlantıyı kontrol edebilirsiniz.",
+                    "save_settings":"Değişiklikleri kaydetmek için tüm alanları doldurduğunuzdan ve bağlantıyı kontrol ettiğinizden emin olunuz."
+                }
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Sunucusu Bilgileri",

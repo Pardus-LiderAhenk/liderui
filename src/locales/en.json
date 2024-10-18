@@ -928,6 +928,7 @@
             "directory_server_settings":{
                 "directory_server_settings":"Directory Server Settings",
                 "ldap_server_informations":"LDAP Server Information",
+                "open_ldap_settings":"OpenLDAP Settings",
                 "ldap_server_address":"LDAP Server Address",
                 "port":"Port",
                 "domain_name":"Domain Name",
@@ -939,13 +940,13 @@
                 "agent_group_folder":"Computer Group Folder",
                 "user_group_folder":"User Group Folder",
                 "authority_group_folder":"Authority Group Folder(Sudo)",
-                "active_directory_settings":"Active Directory Settings (These settings must be made for hybrid installations.)",
+                "active_directory_settings":"Active Directory Settings",
                 "active_directory_address":"Active Directory IP",
                 "active_directory_port":"Active Directory Port",
                 "active_directory_domain_name":"Active Directory Domain Name",
                 "active_directory_admin_username":"Active Directory Admin Username",
                 "active_directory_admin_dn":"Active Directory Admin Username Full DN",
-                "active_directory_admin_password":"Active Directory Admin Password",
+                "active_directory_admin_password":"Active Directory Username Admin Password",
                 "active_directory_hostname":"Active Directory Hostname",
                 "ssl_certification":"SSL Activation",
                 "tls_certification":"TLS Activation",
@@ -959,8 +960,20 @@
                 "directory_server_notify":"Directory server settings will be updated and you will be redirected to login page, are you sure?",
                 "directory_server_settings_successfully_update":"Directory server settings updated successfully",
                 "error_417_update_directory_server_settings":"An error occurred while updating the directory server settings",
-                "update_password":"Update Password",
-                "change_password":"Change Password"
+                "password":"Password",
+                "password_empty":"Please enter a password",
+                "change_password":"Change Password",
+                "confirm_password":"Confirm Password",
+                "check_connection":"Check Connection",
+                "connection_success":"Verification successful! You can save the changes",
+                "connection_failed":"Verification failed! Please check your information",
+                "connection_missing_credentials":"There is missing information, please fill in all required fields",
+                "ad_popover":{
+                    "title":"About Setting",
+                    "description":"This setting is used in hybrid systems.",
+                    "check_connection":"After filling in the required fields, you can check the connection.",
+                    "save_settings":"Make sure you fill in all fields and check the connection to save the changes."
+                }
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Server Information",
