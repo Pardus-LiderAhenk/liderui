@@ -286,13 +286,13 @@ export default {
         },
     },
 
-    // mounted() {
-    //     if (this.selectedNode && this.selectedNode.type == "GROUP") {
-    //         this.getAssignedPolices();
-    //     } else {
-    //         this.policies = [];
-    //     }
-    // },
+    mounted() {
+        if (this.selectedNode && this.selectedNode.type == "GROUP") {
+            this.getAssignedPolices();
+        } else {
+            this.policies = [];
+        }
+    },
 
     watch: {
         selectedNode() {
