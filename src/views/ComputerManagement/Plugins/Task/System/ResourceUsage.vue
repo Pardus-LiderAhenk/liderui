@@ -349,5 +349,6 @@ export default {
   .chart {
     width: 400px;
     height: 250px;
+    max-width: 100%;
   }
 </style>
