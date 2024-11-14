@@ -18,7 +18,7 @@
               />
             </div>
           </div>
-          agahhh
+          
           <div>
             <p>{{ minuteOld }}</p>
             <p>{{ hourOld }}</p>
