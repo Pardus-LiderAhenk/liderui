@@ -12,6 +12,9 @@
             <TabPanel :header="$t('settings.server_settings.mail_server_setting')">
             <email-server-settings-form :serverSettings="serverSettings"></email-server-settings-form>
         </TabPanel>
+        <TabPanel :header="$t('settings.server_settings.notification_server_setting')">
+            <notification-settings-form :serverSettings="serverSettings"></notification-settings-form>
+        </TabPanel>
             <TabPanel :header="$t('settings.server_settings.other_setting')">
             <other-settings-form :serverSettings="serverSettings"></other-settings-form>
         </TabPanel>
@@ -25,6 +28,7 @@ import XmppSettingsForm from './forms/XmppSettingsForm.vue';
 import FileserverSettingsForm from './forms/FileserverSettingsForm.vue';
 import EmailServerSettingsForm from './forms/EmailServerSettingsForm.vue';
 import OtherSettingsForm from './forms/OtherSettingsForm.vue';
+import NotificationSettingsForm from './forms/NotificationSettingsForm.vue';
 import { serverSettingService } from '../../../services/Settings/ServerSettingsService.js';
 
 export default {
@@ -33,7 +37,8 @@ export default {
         XmppSettingsForm,
         FileserverSettingsForm,
         EmailServerSettingsForm,
-        OtherSettingsForm
+        OtherSettingsForm,
+        NotificationSettingsForm
     },
     data() {
         return {

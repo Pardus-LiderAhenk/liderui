@@ -1,7 +1,7 @@
 import axios from 'axios';
 import strophe from '@/services/strophe.js';
 import router from '../../router';
-import {getLiderWs} from '@/libs/liderws';
+import { getLiderWs } from '@/libs/liderws';
 
 
 const state = {
@@ -9,7 +9,7 @@ const state = {
     selectedComputerGroupNode: null,
     selectedNodeType: null,
     status: '',
-	token: localStorage.getItem('token') || '',
+    token: localStorage.getItem('token') || '',
     user: {},
 }
 
@@ -32,11 +32,11 @@ const actions = {
     setSelectedNodeType({ commit }, node) {
         commit("setSelectedNodeType", node);
     },
-    logout({ commit },user) {
+    logout({ commit }, user) {
         return new Promise((resolve, reject) => {
             axios.post(process.env.VUE_APP_URL + "/api/auth/logout", user).then(
                 (response) => {
-                    if(response){
+                    if (response) {
                         commit('logout')
                         localStorage.removeItem('vuex')
                         localStorage.removeItem('auth_token')
@@ -66,7 +66,7 @@ const actions = {
                         localStorage.setItem("auth_token", token);
                         axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
                         axios.post("/api/lider-console/profile", {}).then((userresponse) => {
-                            commit('auth_success', {token:token,user:userresponse.data});
+                            commit('auth_success', { token: token, user: userresponse.data });
                             resolve(userresponse);
                         });
                         getLiderWs().connect();
@@ -80,7 +80,7 @@ const actions = {
             );
         })
     },
-    updateUserLang({commit}, lang) {
+    updateUserLang({ commit }, lang) {
         commit('update_user_lang', lang);
     }
 }
@@ -92,7 +92,7 @@ const mutations = {
     auth_request(state) {
         state.status = 'loading'
     },
-    auth_success(state, {token, user}) {
+    auth_success(state, { token, user }) {
         state.status = 'success';
         state.token = token;
         state.user = user;
@@ -110,7 +110,14 @@ const mutations = {
     },
     update_user_lang(state, lang) {
         if (state.user) {
-            state.user.attributesMultiValues.preferredLanguage[0] = lang;
+            if (!state.user.attributesMultiValues) {
+                state.user.attributesMultiValues = {};
+            }
+            if (!state.user.attributesMultiValues.preferredLanguage) {
+                state.user.attributesMultiValues.preferredLanguage = [lang];
+            } else {
+                state.user.attributesMultiValues.preferredLanguage[0] = lang;
+            }
         }
     },
 }

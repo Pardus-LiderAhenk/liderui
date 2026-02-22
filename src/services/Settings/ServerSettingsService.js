@@ -7,7 +7,10 @@ const liderSettingsUpdateFileServerUrl = '/api/lider/settings/update/file-server
 const liderSettingsUpdateLdapUrl = "/api/lider/settings/update/ldap";
 const liderSettingsUpdateOtherSettingsUrl = "/api/lider/settings/update/other-settings";
 const liderSettingsUpdateXmppUrl = '/api/lider/settings/update/xmpp';
+const liderSettingsUpdateNotificationSettingsUrl = '/api/lider/settings/update/notification-settings';
 const liderSettingsConfigurationsUrl = "/api/lider/settings/configurations";
+const liderSettingsNotificationSettingsUrl = "/api/lider/settings/notification-settings";
+const liderSettingsTestNotificationServiceUrl = "/api/lider/settings/test/notification-service";
 const liderSettingsChangeLanguageUrl = "/api/lider/change-language";
 
 
@@ -86,6 +89,33 @@ class ServerSettingsService{
             return { response };
         } catch (error) {
             return { error: error }
+        }
+    }
+
+    async getNotificationSettings() {
+        try {
+            const response = await axios.get(liderSettingsNotificationSettingsUrl);
+            return { response };
+        } catch (error) {
+            return { error: error };
+        }
+    }
+
+    async updateNotificationSettings(payload) {
+        try {
+            const response = await axios.post(liderSettingsUpdateNotificationSettingsUrl, payload);
+            return { response };
+        } catch (error) {
+            return { error: error };
+        }
+    }
+
+    async testNotificationService(payload) {
+        try {
+            const response = await axios.post(liderSettingsTestNotificationServiceUrl, payload);
+            return { response };
+        } catch (error) {
+            return { error: error };
         }
     }
 
