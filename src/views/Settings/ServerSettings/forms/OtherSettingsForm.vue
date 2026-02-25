@@ -59,14 +59,14 @@
                 <div class="p-field p-col-12">
                     <label for="ahenkRepoAddress">{{$t('settings.server_settings.other_settings.repo_address')}}</label>
                     <InputText id="ahenkRepoAddress" type="text" v-model="ahenkRepoAddress"
-                        placeholder="deb [arch=amd64] https://repo.liderahenk.org/liderahenk stable main"
+                        placeholder="deb [arch=amd64] https://repo.liderahenk.org.tr/liderahenk stable main"
                         class="p-inputtext-sm"
                     />
                 </div>
                 <div class="p-field p-col-12">
                     <label for="ahenkRepoKeyAddress">{{$t('settings.server_settings.other_settings.repo_key_address')}}</label>
                     <InputText id="ahenkRepoKeyAddress" type="text" v-model="ahenkRepoKeyAddress"
-                        placeholder="https://repo.liderahenk.org/liderahenk-archive-keyring.asc"
+                        placeholder="https://repo.liderahenk.org.tr/liderahenk-archive-keyring.asc"
                         class="p-inputtext-sm"
                     />
                 </div>
@@ -92,6 +92,22 @@
                         id="clientSize"
                         v-model="clientSize"
                     />
+                </div>
+            </Fieldset>
+             <Fieldset class="p-field" :legend="$t('settings.server_settings.other_settings.2fa')" >
+                <div class="p-field p-col-12">
+                    <div class="p-field-checkbox p-col-12 p-md-12">
+                        <InputSwitch v-model="isTwoFactorEnabled" />
+                        <label>{{$t('settings.server_settings.other_settings.2fa_enable')}}</label>
+                    </div>
+                    <div class="p-field p-col-12" v-if="isTwoFactorEnabled == true">
+                        <label for="suspendAccess">{{$t('settings.server_settings.other_settings.otp_expiry_duration')}}</label>
+                        <InputNumber min="0"
+                            id="suspendAccess"
+                            v-model="otpExpiryDuration"
+                            placeholder="300000"
+                        />
+                    </div>
                 </div>
             </Fieldset>
             <div class="p-field p-col-12 p-text-right">
@@ -139,7 +155,9 @@ export default {
             selectedRegistrationType: 'DEFAULT',
             machineEventStatus: false,
             machineEventDay:'',
-            clientSize:''
+            clientSize:'',
+            isTwoFactorEnabled: false,
+            otpExpiryDuration: 0
         }
     },
     watch: { 
@@ -156,6 +174,8 @@ export default {
             this.machineEventStatus = newVal.machineEventStatus;
             this.machineEventDay = newVal.machineEventDay;
             this.clientSize = newVal.clientSize;
+            this.isTwoFactorEnabled = newVal.isTwoFactorEnabled;
+            this.otpExpiryDuration = newVal.otpExpiryDuration;
           }
         }
     },
@@ -172,6 +192,8 @@ export default {
             data.append("machineEventStatus", this.machineEventStatus);
             data.append("machineEventDay", this.machineEventDay);
             data.append("clientSize", this.clientSize);
+            data.append("isTwoFactorEnabled", this.isTwoFactorEnabled);
+            data.append("otpExpiryDuration", this.otpExpiryDuration);
 
             const { response,error } = await serverSettingService.updateOtherSettings(data);
             if(error){
@@ -190,11 +212,7 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                    setTimeout(() => {
-                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                    }, 3000);
                 }
-                
             }
             
         this.showDialog = false;

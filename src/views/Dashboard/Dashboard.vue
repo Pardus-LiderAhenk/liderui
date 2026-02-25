@@ -110,7 +110,7 @@
 <script>
 /**
  * Dashboard page
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";

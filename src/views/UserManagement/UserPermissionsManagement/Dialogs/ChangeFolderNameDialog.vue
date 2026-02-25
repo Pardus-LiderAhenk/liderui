@@ -29,7 +29,7 @@
 <script>
 /**
  * Change Folder Name Dialog
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import { sudoGroupsService } from "../../../../services/UserManagement/UserPermissionsManagement/SudoGroups.js";

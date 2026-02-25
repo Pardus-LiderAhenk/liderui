@@ -46,6 +46,7 @@
       @task-response="repositoryManagementResponse"
       :pluginTask="task"
       :executeTask="executeTask"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.repositories.header") }}
@@ -180,7 +181,7 @@ import {FilterMatchMode} from 'primevue/api';
 /**
  * Allows to list repositories and deleted repository on client
  * commandId: REPOSITORIES, PACKAGE_SOURCES
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -213,7 +214,8 @@ export default {
       filters: {},
       addRepoAddrDialog: false,
       pluginDescription: this.$t('computer.plugins.repositories.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/repositoryManagement/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/repositoryManagement/",
+      executeTaskUrl: "/api/lider/task/execute/repositories",
     }
   },
 

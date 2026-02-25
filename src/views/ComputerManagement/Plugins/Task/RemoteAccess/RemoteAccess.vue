@@ -352,7 +352,7 @@
 /**
  * Remote access with guacd
  * commandId: SETUP-VNC-SERVER
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -368,7 +368,7 @@ export default {
   data() {
     return {
       pluginDescription: this.$t("computer.plugins.remote_access.description"),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/remoteAccess/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/remoteAccess/",
       permission: "yes",
       protocols: [
         { label: this.$t('computer.plugins.remote_access.connect_with_vnc'), value: 'vnc' },

@@ -32,7 +32,7 @@
 <script>
 /**
  * System Management Page. This page include all system plugins
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 import AgentInfo from "@/views/ComputerManagement/Plugins/Task/System/AgentInfo.vue";

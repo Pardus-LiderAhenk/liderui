@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const operationLogsUrl = "/api/operation/logs";
 const operationExportUrl = "/api/operation/export";
-const operationTypesUrl = "/api/operation/types";
+const operationTypesUrl = "/api/lider/operation-log-type";
 const operationLoginUrl = "/api/operation/login";
 
 

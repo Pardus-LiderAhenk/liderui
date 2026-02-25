@@ -84,7 +84,7 @@
 
 /**
  * Return password when called getPassword method by ref. 
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 export default {

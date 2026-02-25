@@ -117,7 +117,7 @@
 <script>
 
 /**
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 

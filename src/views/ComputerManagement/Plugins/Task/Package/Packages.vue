@@ -6,6 +6,7 @@
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="showTaskDialog = false;"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.packages.header") }}
@@ -189,7 +190,7 @@ import { taskService } from "../../../../../services/Task/TaskService.js";
 /**
  * Allows to install or remove selected package or packages in package repository which entered address
  * commandId: PACKAGES
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -225,9 +226,10 @@ export default {
       },
       packageInfoList: [],
       pluginDescription: this.$t('computer.plugins.packages.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/packageInstallUninstall/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/packageInstallUninstall/",
       taskValidation: false,
-      repoValidation: {}
+      repoValidation: {},
+      executeTaskUrl: "/api/lider/task/execute/package-install-remove",
     }
   },
 

@@ -7,6 +7,7 @@
       @close-task-dialog="showTaskDialog = false;"
       @task-response="checkPackageResponse"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.check_package.header") }}
@@ -92,7 +93,7 @@
 /**
  * Checks whether the package whose name and version information entered is installed in the selected Agent or Agents
  * commandId: CHECK_PACKAGE
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  *
  */
 
@@ -124,7 +125,8 @@ export default {
       filters: {},
       validationPackageName: false,
       pluginDescription: this.$t('computer.plugins.check_package.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/packageControl/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/packageControl/",
+      executeTaskUrl: "/api/lider/task/execute/check-package",
     }
   },
 

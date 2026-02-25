@@ -35,11 +35,12 @@
                             <div class="p-d-flex p-jc-end">
                                 <span class="p-input-icon-left">
                                     <i class="pi pi-search"/>
-                                    <InputText v-model="filters['global'].value" 
+                                    <InputText v-model="filters.scriptName" 
                                     class="p-inputtext-sm" 
                                     :placeholder="$t('settings.script_definition.search')" 
                                     />
                                 </span>
+                                <Button label="Ara" icon="pi pi-search" class="p-ml-2 p-button-sm" @click="getScripts" />
                             </div>
                         </template>
                         <template #empty>
@@ -56,6 +57,7 @@
                         <Column field="scriptType" :header="$t('settings.script_definition.type')" ></Column>
                         <Column field="createDate" :header="$t('settings.script_definition.created_date')" ></Column>
                         <Column field="modifyDate" :header="$t('settings.script_definition.modified_date')" ></Column>
+                        <Column field="createdBy" :header="$t('settings.script_definition.created_by')" style="width:10%" />
                         <Column :exportable="false">
                             <template #body="slotProps">
                                 <div class="p-d-flex p-jc-end">
@@ -195,7 +197,7 @@
  * Script definition page. The script added, updated or deleted
  * emit executeScript event for send task to agent
  * @event executeScript
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -220,7 +222,7 @@ export default {
             scripts: [],
             selectedScript: null,
             filters: {
-                'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
+                scriptName: "",
             },
             showTemplateDialog: false,
             scriptTypes: [
@@ -260,7 +262,6 @@ export default {
     },
 
     methods: {
-
         executeScript() {
             let params = {
                 scriptParams: this.scriptParams,
@@ -271,12 +272,8 @@ export default {
             this.$emit('executeScript', params)
         },
 
-        async getScripts(){
-            var data = new FormData();
-            data.append("pageNumber", this.pageNumber);
-            data.append("pageSize", this.rowNumber);            
-
-            const { response,error } = await scriptService.scriptList(this.rowNumber,this.pageNumber);
+        async getScripts() {
+            const { response,error } = await scriptService.scriptList(this.rowNumber,this.pageNumber, this.filters);
             if(error){
                 this.$toast.add({
                     severity:'error', 
@@ -367,22 +364,25 @@ export default {
 
             const {response,error} = await scriptService.scriptDelete(this.selectedScript.id);
             if(error){
-                this.$toast.add({
-                    severity:'error', 
-                    detail: this.$t('settings.script_definition.deleted_script_error_message')+ " \n"+error, 
-                    summary:this.$t("computer.task.toast_summary"), 
-                    life: 3000
-                });
+                if(error.response && error.response.status === 403){
+                    this.$toast.add({
+                        severity:'error',
+                        detail: this.$t('settings.script_definition.error_403_delete_script'),
+                        summary: this.$t("computer.task.toast_summary"),
+                        life: 3000
+                    });
+                } else {
+                    this.$toast.add({
+                        severity:'error', 
+                        detail: this.$t('settings.script_definition.deleted_script_error_message')+ " \n"+error, 
+                        summary:this.$t("computer.task.toast_summary"), 
+                        life: 3000
+                    });
+                }
             }
             else{
                 if(response.status == 200){
                     if (response.data != null) {
-                        // var index = this.scripts.findIndex(function(item, i){
-                        //     return item.id === response.data.id;
-                        // });
-                        // if (index > -1) {
-                        //     this.scripts.splice(index, 1);
-                        // }
                         this.reset();
                         this.selectedScript = null; 
                         this.$toast.add({
@@ -417,27 +417,27 @@ export default {
                 };
 
                 const { response,error } = await scriptService.scriptUpdate(params);
-                if(error){
-                    this.$toast.add({
-                        severity:'error', 
-                        detail: this.$t('settings.script_definition.updated_script_error_message')+ " \n"+error, 
-                        summary:this.$t("computer.task.toast_summary"), 
-                        life: 3000
+                if (error) {
+                    if (error.response && error.response.status === 403) {
+                        this.$toast.add({
+                            severity: 'error',
+                            detail: this.$t('settings.script_definition.error_403_update_script'),
+                            summary: this.$t("computer.task.toast_summary"),
+                            life: 3000
                         });
+                    } else {
+                        this.$toast.add({
+                            severity: 'error',
+                            detail: this.$t('settings.script_definition.updated_script_error_message') + " \n" + error,
+                            summary: this.$t("computer.task.toast_summary"),
+                            life: 3000
+                        });
+                    }
                 }
                 else{
                     if(response.status == 200){
                         if (response.data != null) {
                             this.showTemplateDialog = false;
-                            // for (let index = 0; index < this.scripts.length; index++) {
-                            //     const element = this.scripts[index];
-                            //     if (response.data.id === element.id) {
-                            //         element.label = response.data.label;
-                            //         element.contents = response.data.contents;
-                            //         element.scriptType = response.data.scriptType;
-                            //         element.modifyDate = response.data.modifyDate;
-                            //     }
-                            // }
                             this.reset();
                             this.$toast.add({
                                 severity:'success', 
@@ -481,7 +481,6 @@ export default {
                     if(response.status == 200){
                         if (response.data != null) {
                             this.showTemplateDialog = false;
-                            // this.scripts.push(response.data);
                             this.reset();
                             this.$toast.add({
                                 severity:'success', 

@@ -91,7 +91,7 @@
 
 /**
  * User Group Management. Member Of User Group component
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 

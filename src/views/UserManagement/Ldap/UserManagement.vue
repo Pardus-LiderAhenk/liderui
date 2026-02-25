@@ -237,7 +237,7 @@
 
 /**
  * User management in OpenLDAP
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import TreeComponent from '@/components/Tree/TreeComponent.vue';

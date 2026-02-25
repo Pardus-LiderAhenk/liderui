@@ -100,7 +100,7 @@
 <script>
 /**
  * Agent Detail Dialog
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
  import { agentSessionReportService } from "../../../../services/Reports/AgentSessionReportService.js";
 

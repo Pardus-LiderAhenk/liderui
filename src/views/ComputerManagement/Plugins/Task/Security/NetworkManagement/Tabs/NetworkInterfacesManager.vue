@@ -172,7 +172,7 @@
 /**
  * Network Interfaces Management Component.
  * commandId: ADD_NETWORK, DELETE_NETWORK
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * @event sendNetworkInterfacesTask
  *
  */

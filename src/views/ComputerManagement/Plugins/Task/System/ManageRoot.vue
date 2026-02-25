@@ -6,6 +6,7 @@
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.manage_root.header") }}
@@ -62,7 +63,8 @@ export default {
         confirmPassword: '',
       },
       pluginDescription: this.$t('computer.plugins.manage_root.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/rootPasswordManagement/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/rootPasswordManagement/",
+      executeTaskUrl: "/api/lider/task/execute/manage-root",
     };
   },
 

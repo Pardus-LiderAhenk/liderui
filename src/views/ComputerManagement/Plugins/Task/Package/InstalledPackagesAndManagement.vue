@@ -8,6 +8,7 @@
       @task-response="installedPackageManagementResponse"
       :pluginTask="task"
       :executeTask="executeTask"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.installed_packages.header") }}
@@ -107,7 +108,7 @@ import {FilterMatchMode} from 'primevue/api';
 /**
  * Allows to list and uninstall installed packages on client
  * commandId: INSTALLED_PACKAGES, PACKAGE_MANAGEMENT
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -135,7 +136,8 @@ export default {
       packageInfoList: [],
       filters: {},
       pluginDescription: this.$t('computer.plugins.installed_packages.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/installedPackageManagement/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/installedPackageManagement/",
+      executeTaskUrl: "/api/lider/task/execute/installed-packages",
     }
   },
 

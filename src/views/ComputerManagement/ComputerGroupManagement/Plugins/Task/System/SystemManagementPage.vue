@@ -33,7 +33,7 @@
 <script>
 /**
  * System Management Page. This page include all system plugins
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 import axios from 'axios';

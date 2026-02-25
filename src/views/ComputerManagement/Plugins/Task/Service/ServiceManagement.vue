@@ -8,6 +8,7 @@
       @task-response="serviceManagementResponse"
       :pluginTask="task"
       :executeTask="executeTask"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.service_management.header") }}
@@ -187,7 +188,7 @@ import {FilterMatchMode} from 'primevue/api';
 /**
  * Allows to list, active, inactive, enabled and disabled services on client
  * commandId: GET_SERVICES, SERVICE_LIST
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -215,7 +216,8 @@ export default {
       filters: {},
       serviceRequestParameters: [],
       pluginDescription: this.$t('computer.plugins.service_management.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/serviceManagement/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/serviceManagement/",
+      executeTaskUrl: "/api/lider/task/execute/service-management",
     }
   },
 

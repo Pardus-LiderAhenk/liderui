@@ -122,7 +122,7 @@
 <script>
 /**
  * Base Profile Component. This component is child for other profile. Use to base-profile for created user profile.
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
 * emits this event
 * @event addProfile used to add new profile. Show add profile dialog
 * @event saveProfile used to save new profile

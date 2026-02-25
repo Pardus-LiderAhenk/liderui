@@ -100,7 +100,7 @@
 <script>
 /**
  * Create user to AD
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';

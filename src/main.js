@@ -47,31 +47,104 @@ axios.interceptors.request.use(function(config) {
 }, function(error) {
     return Promise.reject(error);
 });
+let isRefreshing = false;
+let failedQueue = [];
 
+const processQueue = (error, token = null) => {
+    failedQueue.forEach(prom => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+    
+    failedQueue = [];
+};
+
+const retryOriginalRequest = (originalRequest, token) => {
+    const config = {
+        ...originalRequest,
+        headers: {
+            ...originalRequest.headers,
+            'Authorization': 'Bearer ' + token
+        }
+    };
+
+    delete config._retry;
+    
+    return axios(config);
+};
 
 axios.interceptors.response.use(
     (response) => {
         if (typeof response.data === 'string' || response.data instanceof String) {
             if (response.data.startsWith("<!DOCTYPE html>" || response.data == "logout")) {
-                store.dispatch("logout").then(() => this.$router.push("/login") ).catch(err => console.log(err))
+                const currentUser = store.getters.getUser;
+                store.dispatch("logout", { username: currentUser?.uid }).then(() => this.$router.push("/login") ).catch(err => console.log(err))
             }
-        }
-        if(response.status === 401) {
-            store.dispatch("logout").then(() => this.$router.push("/login") ).catch(err => console.log(err))
         }
         return response;
     },
-    (error) => {
+    async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/api/auth/refresh-token')) {
+            originalRequest._retry = true;
+
+            if (isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    failedQueue.push({ resolve, reject });
+                }).then(token => {
+                    return retryOriginalRequest(originalRequest, token);
+                }).catch(err => {
+                    return Promise.reject(err);
+                });
+            }
+
+            isRefreshing = true;
+
+            try {
+                const refreshToken = localStorage.getItem('refresh_token');
+                if (!refreshToken) {
+                    throw new Error('No refresh token available');
+                }
+
+                const response = await axios.post(
+                    `${process.env.VUE_APP_URL}/api/auth/refresh-token?refreshToken=${refreshToken}`
+                );
+
+                if (response.data.token) {
+                    localStorage.removeItem('auth_token');
+                    localStorage.setItem('auth_token', response.data.token);
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+
+                    processQueue(null, response.data.token);
+
+
+                    return retryOriginalRequest(originalRequest, response.data.token);
+                }
+            } catch (refreshError) {
+
+                processQueue(refreshError, null);
+                const currentUser = store.getters.getUser;
+                store.dispatch("logout", { username: currentUser?.uid }).then(() => this.$router.push("/login")).catch(err => console.log(err));
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
+            }
+        }
+
         if (error.response.status === 404 && error.response.data.path == "/index.html") {
-            store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-            
+            const currentUser = store.getters.getUser;
+            store.dispatch("logout", { username: currentUser?.uid }).then(() => this.$router.push("/login")).catch(err => console.log(err))
         }
         if (error.response.status === 400) {
-            store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+            const currentUser = store.getters.getUser;
+            store.dispatch("logout", { username: currentUser?.uid }).then(() => this.$router.push("/login")).catch(err => console.log(err))
         }
         return Promise.reject(error);
     }
- );
-
+);
 
 app.mount('#app');

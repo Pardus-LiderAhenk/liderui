@@ -7,6 +7,7 @@
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
       @task-response="usbRuleManagementResponse"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.usb.usb_rule_header") }}
@@ -142,7 +143,7 @@
 /**
  * USB Rule Management as white or black list
  * commandId: MANAGE-USB-RULE
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  *
  */
 
@@ -164,7 +165,7 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.usb.description_usb_rule"),
-      pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/usbManagement/",
+      pluginUrl:"https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/usbManagement/",
       storageCb: false,
       storage: 1,
       printerCb: false,
@@ -173,6 +174,7 @@ export default {
       webcam: 1,
       mouseKeyboardCb: false,
       mouseKeyboard: 1,
+      executeTaskUrl: "/api/lider/task/execute/usb-rule-management",
       form: {
         vendor: "",
         model: "",

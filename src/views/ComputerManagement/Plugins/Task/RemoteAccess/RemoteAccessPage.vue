@@ -10,7 +10,7 @@
 <script>
 /**
  * Remote Access Page. 
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 

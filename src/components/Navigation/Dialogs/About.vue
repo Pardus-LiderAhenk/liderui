@@ -21,7 +21,7 @@
                     <div class="p-field">
                         <span>
                             <i class="pi pi-link"></i>&nbsp;
-                            <a href="https://liderahenk.org/" type="primary" target="_blank">
+                            <a href="https://liderahenk.org.tr/" type="primary" target="_blank">
                                 {{$t('about.more_information')}}
                             </a>
                         </span>

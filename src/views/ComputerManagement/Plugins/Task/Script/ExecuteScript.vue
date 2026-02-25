@@ -6,6 +6,7 @@
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
     <template #pluginTitle>
         {{ $t("computer.plugins.execute_script.header") }}
@@ -28,7 +29,7 @@
 /**
  * Script Plugin. Allows to execute custom script file as python, bash, perl and ruby 
  * commandId: EXECUTE_SCRIPT
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * use to ScriptDefinition component
  *
  */
@@ -53,7 +54,8 @@ export default {
       showTaskDialog: false,
       selectedScript: "",
       pluginDescription: this.$t("computer.plugins.execute_script.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/script/",
+      pluginUrl:"https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/script/",
+      executeTaskUrl: "/api/lider/task/execute/script",
     };
   },
 

@@ -27,7 +27,7 @@
                             type="text"
                             v-model="dnsName" 
                             :class="validationDnsName ? 'p-invalid': ''" 
-                            :placeholder="type.value=='nameserver' ? '192.168.*.*': 'liderahenk.org'">
+                            :placeholder="type.value=='nameserver' ? '192.168.*.*': 'liderahenk.org.tr'">
                         </InputText>
                         <small v-if="validationDnsName" class="p-error">
                             {{$t('computer.plugins.network_management.dns_name_warn')}}
@@ -122,7 +122,7 @@
 /**
  * DNS Management Component.
  * commandId: ADD_DNS, ADD_DOMAIN, DELETE_DNS, DELETE_DOMAIN
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * @event sendDnsTask
  *
  */

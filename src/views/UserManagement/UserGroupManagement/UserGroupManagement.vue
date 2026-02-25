@@ -33,7 +33,7 @@
                     <member-of-user-group @delete-member="updateSelectedNode"></member-of-user-group>
                 </div>
                 <div class="p-col-12 p-md-6 p-lg-7">
-                    <assigned-policies :selectedNode="selectedNode"></assigned-policies>
+                    <assigned-policies :selectedNode="selectedNode" :parentType="'LDAP'"></assigned-policies>
                 </div>
             </div>
         </div>
@@ -286,7 +286,7 @@
 
 /**
  * User Group Management.
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 

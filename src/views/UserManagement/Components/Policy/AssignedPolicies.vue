@@ -3,6 +3,7 @@
         <apply-policy v-if="applyPolicyDialog" 
             :selectedNode="selectedNode"
             :applyPolicyDialog="applyPolicyDialog"
+            :parentType="parentType"
             @close-policy-dialog="applyPolicyDialog = false"
             @applied-policy="getAssignedPolices">
         </apply-policy>
@@ -168,7 +169,7 @@
 <script>
 /**
  * Active policy list for apply to selected user group
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
 */
 
 import {FilterMatchMode} from 'primevue/api';
@@ -181,6 +182,10 @@ export default {
         selectedNode: {
             type: Object,
             description: "selected node",
+        },
+        parentType: {
+            type: String,
+            description: "parent type",
         },
     },
 
@@ -281,13 +286,13 @@ export default {
         },
     },
 
-    // mounted() {
-    //     if (this.selectedNode && this.selectedNode.type == "GROUP") {
-    //         this.getAssignedPolices();
-    //     } else {
-    //         this.policies = [];
-    //     }
-    // },
+    mounted() {
+        if (this.selectedNode && this.selectedNode.type == "GROUP") {
+            this.getAssignedPolices();
+        } else {
+            this.policies = [];
+        }
+    },
 
     watch: {
         selectedNode() {

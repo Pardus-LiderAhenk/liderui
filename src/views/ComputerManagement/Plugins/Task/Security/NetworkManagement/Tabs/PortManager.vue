@@ -73,7 +73,7 @@
 /**
  * Port Management Component.
  * commandId: ALLOW_PORT, BLOCK_PORT
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * @event sendPortTask
  *
  */

@@ -22,9 +22,9 @@
         <label for="inputStatus">{{$t('reports.system_log_report.logs_type')}}</label>
         <Dropdown
           v-model="filter.operationType"
-          :options="operationTypes"
-          optionLabel="text"
-          optionValue="value"
+          :options="operationTypesWithLabels"
+          optionLabel="description"
+          optionValue="operationTypeId"
           :filter="true" 
           :showClear="true" 
           :placeholder="$t('reports.system_log_report.select')"
@@ -87,7 +87,7 @@
         </Column>
         <Column :header="$t('reports.system_log_report.logs_type')">
           <template #body="{ data }">
-              {{ getOpetarionType(data.crudType)}}
+              {{ getOperationType(data.crudType)}}
           </template>
         </Column>
         <Column field="createDate" :header="$t('reports.system_log_report.create_date')"></Column>
@@ -140,7 +140,7 @@
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b> {{$t('reports.system_log_report.logs_type')}}</b></div>
       <div class="p-col-8">
-        {{ getOpetarionType(selectedLog.crudType) }}
+        {{ getOperationType(selectedLog.crudType) }}
       </div>
       <Divider class="p-mt-0 p-pt-0 p-mb-0 p-pb-0" />
       <div class="p-col-4"><b> {{$t('reports.system_log_report.create_date')}}</b></div>
@@ -206,7 +206,6 @@ export default {
       logDetailDialog: false,
       selectedLog: null,
       searchTextDialog:false,
-      operationTypesResponse:[],
       operationTypes:[],
       filterTextType: [
             {value: 'userId', text:this.$t('reports.system_log_report.username')},
@@ -229,6 +228,15 @@ export default {
   mounted() {
     this.getLogs();
     this.getOperationTypes();
+  },
+  computed: {
+    operationTypesWithLabels() {
+      const locale = this.$i18n.locale || 'tr';
+      return this.operationTypes.map(type => ({
+        ...type,
+        description: locale === 'tr' ? type.descriptionTr : type.descriptionEn
+      }));
+    }
   },
   methods: {
     treeNodeClick(node){
@@ -272,9 +280,9 @@ export default {
         data.append(
           "endDate",
           moment(this.filter.logCreateDate[1])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
+            .set("hour", 23)
+            .set("minute", 59)
+            .set("second", 59)
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
@@ -348,9 +356,9 @@ export default {
         data.append(
           "endDate",
           moment(this.filter.logCreateDate[1])
-            .set("hour", 0)
-            .set("minute", 0)
-            .set("second", 0)
+            .set("hour", 23)
+            .set("minute", 59)
+            .set("second", 59)
             .format("DD/MM/YYYY HH:mm:ss")
         );
       }
@@ -417,46 +425,25 @@ export default {
             life:3600
           });
       }else{
-          this.operationTypesResponse = response.data;
-          this.operationTypes = this.operationTypesResponse.map((otype, index) => {
-              return {
-                text: this.getOpetarionType(otype),
-                value: index + 1
-              }
-            });
+          this.operationTypes = response.data;
       }                      
     },
 
-    getOpetarionType(type) {
-      var typeText = type;
-      if (type == "CREATE") {
-        typeText = this.$t('reports.system_log_report.create');
-      } else if (type == "READ") {
-        typeText = this.$t('reports.system_log_report.read');
-      } else if (type == "UPDATE") {
-        typeText = this.$t('reports.system_log_report.update');
-      } else if (type == "DELETE") {
-        typeText = this.$t('reports.system_log_report.delete');
-      } else if (type == "LOGIN") {
-        typeText = this.$t('reports.system_log_report.login');
-      } else if (type == "LOGOUT") {
-        typeText = this.$t('reports.system_log_report.logout');
-      } else if (type == "EXECUTE_TASK") {
-        typeText = this.$t('reports.system_log_report.execute_task');
-      } else if (type == "EXECUTE_POLICY") {
-        typeText = this.$t('reports.system_log_report.execute_policy');
-      } else if (type == "CHANGE_PASSWORD") {
-        typeText = this.$t('reports.system_log_report.change_password');
-      } else if (type == "MOVE") {
-        typeText =this.$t('reports.system_log_report.move');
-      } else if (type == "UNASSIGMENT_POLICY") {
-        typeText = this.$t('reports.system_log_report.cancel_policy');
-      }else if (type == "CANCEL_SCHEDULED_TASK") {
-        typeText = this.$t('reports.system_log_report.scheduled_task_cancel');
-      }else if (type == "UPDATE_SCHEDULED_TASK") {
-        typeText = this.$t('reports.system_log_report.scheduled_task_update');
+    getOperationType(type) {
+      if (!type) {
+        return type;
       }
-      return typeText;
+
+      const operationType = this.operationTypes.find(
+            (ot) => ot.type === type || ot.operationTypeId === type
+      );
+
+      if (!operationType) {
+        return type;
+      }
+
+      const locale = this.$i18n.locale || 'tr';
+      return locale === 'tr' ? operationType.descriptionTr : operationType.descriptionEn;
     },
   },
 };

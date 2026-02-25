@@ -41,7 +41,7 @@
 <script>
 /**
  * Give console access to selected user
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 import PasswordComponent from '@/components/Password/PasswordComponent.vue';
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement";

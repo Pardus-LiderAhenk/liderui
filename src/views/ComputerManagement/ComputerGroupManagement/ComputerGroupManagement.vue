@@ -42,6 +42,10 @@
                         :class="selectedPluginTab == 'package-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                         @click="setSelectedPluginTab('package-management')"
                         :label="$t('computer.plugins.button.package')"
+                        v-if="isExistPrivilege([
+                            'ROLE_PACKAGE_INSTALL_REMOVE',
+                            'ROLE_PACKAGE_CONTROL'
+                        ])"
                     >
                     </Button>
                     <Button
@@ -49,6 +53,9 @@
                         :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                         @click="setSelectedPluginTab('script-management')"
                         :label="$t('computer.plugins.button.script')"
+                        v-if="isExistPrivilege([
+                            'ROLE_SCRIPT',
+                        ])"
                     >
                     </Button>
                     <Button
@@ -56,6 +63,10 @@
                         :class="selectedPluginTab == 'security-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                         @click="setSelectedPluginTab('security-management')"
                         :label="$t('computer.plugins.button.security')"
+                        v-if="isExistPrivilege([
+                            'ROLE_DEVICE_MANAGEMENT',
+                            'ROLE_USB_RULE'
+                        ])"
                     >
                     </Button>
                 </div>
@@ -330,7 +341,7 @@
 
 /**
  * Computer Group Management.
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -344,6 +355,7 @@ import { mapActions } from "vuex"
 import {ref} from 'vue';
 import {FilterMatchMode} from 'primevue/api';
 import { computerGroupsManagementService } from '../../../services/ComputerManagement/ComputerGroupManagement.js';
+import { roleManagement } from "../../../services/Roles/RoleManagement.js"
 
 export default {
     setup(){
@@ -434,6 +446,11 @@ export default {
 
     methods: {
         ...mapActions(["setSelectedComputerGroupNode"]),
+
+        isExistPrivilege(roles) {
+            return roleManagement.hasAnyRole(roles)
+        },  
+
         
         treeNodeClick(node) {
             this.selectedNode = node;

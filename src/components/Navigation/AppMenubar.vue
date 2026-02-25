@@ -36,7 +36,7 @@
 <script>
 /**
  * App Menu bar. Shows menu bar by logon user role base
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
  
 import { profileService } from '../../services/Profile/ProfileService';
@@ -97,7 +97,8 @@ export default {
                         label: this.$t('menu.logout'),
                         icon:'pi pi-sign-out',
                         command: () => {
-                            this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err));
+                            const currentUser = this.$store.getters.getUser;
+                            this.$store.dispatch("logout", { username: currentUser?.uid }).then(() => this.$router.push("/login")).catch(err => console.log(err));
                         }
                     }
                 ]
@@ -112,7 +113,7 @@ export default {
                         label: this.$t('about.document'),
                         icon:'pi pi-book',
                         command: () => {
-                            window.open("https://docs.liderahenk.org", '_blank').focus();
+                            window.open("https://docs.liderahenk.org.tr", '_blank').focus();
                         }
                     },
                     {

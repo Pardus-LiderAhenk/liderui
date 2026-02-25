@@ -41,7 +41,7 @@
 <script>
 /**
  * Delete Selected Node in AD tree
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import { adManagementService } from "../../../../services/UserManagement/AD/AdManagement.js";

@@ -49,7 +49,7 @@
 <script>
 /**
  * AD User information component
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 export default {

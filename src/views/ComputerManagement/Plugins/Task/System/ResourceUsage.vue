@@ -7,6 +7,7 @@
       @close-task-dialog="showTaskDialog = false"
       @task-response="getResourceUsage"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{$t("computer.plugins.resource_usage.header")}}
@@ -107,7 +108,7 @@
 <script>
 /**
  * Resource usage plugin 
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import { mapGetters } from "vuex"
@@ -164,7 +165,8 @@ export default {
         ],
       
       pluginDescription: this.$t("computer.plugins.resource_usage.description"),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/resourcesUsage/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/resourcesUsage/",
+      executeTaskUrl: "/api/lider/task/execute/resource-usage",
     };
   },
 
@@ -349,5 +351,6 @@ export default {
   .chart {
     width: 400px;
     height: 250px;
+    max-width: 100%;
   }
 </style>

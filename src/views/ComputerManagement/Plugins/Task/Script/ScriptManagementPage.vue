@@ -10,7 +10,7 @@
 <script>
 /**
  * Service Management Page. This page include all service plugins
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 

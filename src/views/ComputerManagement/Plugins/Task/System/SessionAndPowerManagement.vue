@@ -6,6 +6,7 @@
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.session_and_power_management.header") }}
@@ -54,7 +55,7 @@
 
 /**
  * Sessoin and power management plugin 
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 export default {
@@ -70,7 +71,8 @@ export default {
       showTaskDialog: false,
       task: null,
       pluginDescription: this.$t('computer.plugins.session_and_power_management.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/sessionPowerManagement/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/sessionPowerManagement/",
+      executeTaskUrl: "api/lider/task/execute/session-power",
     }
   },
 

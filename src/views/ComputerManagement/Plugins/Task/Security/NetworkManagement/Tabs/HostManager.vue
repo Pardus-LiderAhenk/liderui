@@ -30,7 +30,7 @@
                             type="text"
                             v-model="hostForm.hostname" 
                             :class="validationForm.hostname ? 'p-invalid': ''" 
-                            placeholder="liderahenk.org">
+                            placeholder="liderahenk.org.tr">
                         </InputText>
                         <small v-if="validationForm.hostname" class="p-error">
                             {{$t('computer.plugins.network_management.domain_name_warn')}}
@@ -124,7 +124,7 @@
 /**
  * Server(host) Management Component.
  * commandId: ADD_HOST, DELETE_HOST
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * @event sendHostTask
  *
  */

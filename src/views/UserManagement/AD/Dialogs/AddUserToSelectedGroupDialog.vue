@@ -81,7 +81,7 @@
 <script>
 /**
  * Add member to selected group as user in AD tree
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import {FilterMatchMode} from 'primevue/api';

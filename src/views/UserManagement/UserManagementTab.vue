@@ -65,6 +65,9 @@ export default {
     },
 
     async created() {
+        if (!this.isExistPrivilege('ROLE_AD_SYNC')){
+            return;
+        }
         const{ response,error } =  await adManagementService.configuration();
         if(error){
             this.$toast.add({

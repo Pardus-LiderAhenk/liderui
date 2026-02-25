@@ -21,7 +21,7 @@
 <script>
 /**
  * Security Management Page. This page include all usb plugins
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 

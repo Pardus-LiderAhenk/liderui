@@ -88,7 +88,7 @@
 <script>
 /**
  * Updated selected policy dialog. Added profile, updated policy with this dialog
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * emits these events
  * @event closePolicyDialog
  * @event updatedPolicy

@@ -6,6 +6,7 @@
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.usb.header") }}
@@ -128,7 +129,7 @@
 /**
  * USB Device Plugin. Allows management of client's device I/O
  * commandId: MANAGE-USB
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  *
  */
 
@@ -150,7 +151,7 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.usb.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/usbManagement/",
+      pluginUrl:"https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/usbManagement/",
       storageCb: false,
       storage: 1,
       printerCb: false,
@@ -159,6 +160,7 @@ export default {
       webcam: 1,
       mouseKeyboardCb: false,
       mouseKeyboard: 1,
+      executeTaskUrl: "/api/lider/task/execute/device-management",
     };
   },
   

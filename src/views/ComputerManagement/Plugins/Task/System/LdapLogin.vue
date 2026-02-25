@@ -87,7 +87,7 @@
 /**
  * Ldap login plugin. This page authentication to OpenLDAP or Active Directory and cancel authentication from directory manager
  * commandId: EXECUTE_LDAP_LOGIN, EXECUTE_AD_LOGIN, EXECUTE_CANCEL_LDAP_LOGIN
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 import { mapGetters } from "vuex"
@@ -120,7 +120,7 @@ export default {
       disableLocalUser: null,
       allowDynamicDNSUpdate: false,
       pluginDescription: this.$t('computer.plugins.ldap_login.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/computerLoginSettings/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/computerLoginSettings/",
     };
   },
 

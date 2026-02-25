@@ -3,11 +3,9 @@ import store from "../../store/store"
 class RoleManagement {
     getUserRole() {
         try {
-            let roles = null;
-            roles = store.getters.getUser.priviliges;
-            return roles;
+            return store.getters.getUser?.priviliges || [];
         } catch {
-            return null
+            return [];
         }
     }
 
@@ -21,6 +19,12 @@ class RoleManagement {
             isExist = true;   
         } 
         return isExist;
+    }
+
+    hasAnyRole(requiredRoles = [], allowAdminOverride = true) {
+        const roles = this.getUserRole();
+        if (allowAdminOverride && roles.includes('ROLE_ADMIN')) return true;
+        return requiredRoles.some(r => roles.includes(r));
     }
 }
 

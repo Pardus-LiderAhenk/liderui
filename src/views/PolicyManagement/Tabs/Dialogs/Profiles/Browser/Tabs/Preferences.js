@@ -1,6 +1,6 @@
 /**
  * Firefox global preferences
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 export const Preferences = {

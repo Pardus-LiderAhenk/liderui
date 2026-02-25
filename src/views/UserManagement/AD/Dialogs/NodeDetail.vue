@@ -38,7 +38,7 @@
 /**
  * This component, node detail in tree by selectedNode for AD tree. Emit closeNodeDetailDialog event when closed showDetailDialog
  * @event closeNodeDetailDialog
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import {FilterMatchMode} from 'primevue/api';

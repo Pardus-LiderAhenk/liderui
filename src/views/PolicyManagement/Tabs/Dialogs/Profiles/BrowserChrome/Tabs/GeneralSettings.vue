@@ -25,7 +25,7 @@
                 <InputText class="p-inputtext-sm p-col" type="text" 
                     :disabled="HomepageIsNewTabPage == 'true'"
                     v-model="HomepageLocationString" 
-                    :placeholder="$t('https://liderahenk.org/')"/>
+                    :placeholder="$t('https://liderahenk.org.tr/')"/>
             </div>
 
 
@@ -41,7 +41,7 @@
                 <InputText class="p-inputtext-sm p-col" type="text" 
                     :disabled="useDownloadDir == 'false'"
                     v-model="downloadDir" 
-                    :placeholder="$t('https://liderahenk.org/')"/>
+                    :placeholder="$t('https://liderahenk.org.tr/')"/>
             </div> -->
             <h6>{{$t('policy_management.profile.chrome_browser.downloads')}}</h6>
             <div class="p-field p-grid">

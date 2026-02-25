@@ -79,7 +79,7 @@
                     <Column :exportable="false">
                         <template #body="slotProps">
                             <div class="p-d-flex p-jc-end" >
-                                <Button  class="p-button-sm p-button-rounded"  v-if="domainType=='LDAP'"
+                                <Button  class="p-button-sm p-button-rounded"  v-if="domainType==parentType"
                                     icon="pi pi-play"
                                     :title="$t('group_management.apply_policy')" 
                                     @click.prevent="applyPolicyConfirmDialog= true; selectedPolicy = slotProps.data">
@@ -111,7 +111,7 @@
 <script>
 /**
  * Active policy list for apply to selected user group
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
 */
 
 import {FilterMatchMode} from 'primevue/api';
@@ -131,6 +131,10 @@ export default {
         selectedNode: {
             type: Object,
             description: "selected node",
+        },
+        parentType: {
+            type: String,
+            description: "selected node type",
         },
     },
 

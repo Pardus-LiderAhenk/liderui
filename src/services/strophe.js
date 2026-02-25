@@ -90,7 +90,8 @@ class XmppClinet {
     } else if (status == Strophe.Status.CONNFAIL) {
       this.isXmppConnected = false;
       console.log("Conn Fail");
-      store.dispatch("logout").then(() => router.push('/login')).catch(err => console.log(err))
+      const currentUser = store.getters.getUser;
+      store.dispatch("logout", { username: currentUser?.uid }).then(() => router.push('/login')).catch(err => console.log(err))
     } else if (status == Strophe.Status.DISCONNECTING) {
       this.isXmppConnected = false;
       console.log("Disconnecting");
@@ -129,7 +130,8 @@ class XmppClinet {
       );
       this.connection.send($pres().tree());
     } else {
-      store.dispatch("logout").then(() => router.push('/login')).catch(err => console.log(err))
+      const currentUser = store.getters.getUser;
+      store.dispatch("logout", { username: currentUser?.uid }).then(() => router.push('/login')).catch(err => console.log(err))
     }
   
     return this.isXmppConnected;

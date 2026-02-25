@@ -96,7 +96,7 @@
                 </Card>
             </div>
             <div class="p-col-12 p-md-6 p-lg-7">
-                <assigned-policies :selectedNode="selectedNode"></assigned-policies>
+                <assigned-policies :selectedNode="selectedNode" :parentType="'ACTIVE_DIRECTORY'"></assigned-policies>
             </div>
         </div>
     </div>  
@@ -106,7 +106,7 @@
 
 /**
  * User Group Management. Member Of User Group component
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 

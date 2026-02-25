@@ -6,6 +6,7 @@
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="showTaskDialog = false;"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{$t("computer.plugins.xmessage.header")}}
@@ -40,7 +41,7 @@
 /**
  * Xmessage Plugin. Send instant message to client
  * commandId: EXECUTE_XMESSAGE
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -61,9 +62,10 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t('computer.plugins.xmessage.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/instantMessage/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/instantMessage/",
       message: '',
-      messageValidation: false
+      messageValidation: false,
+      executeTaskUrl: "/api/lider/task/execute/instant-message",
     }
   },
 

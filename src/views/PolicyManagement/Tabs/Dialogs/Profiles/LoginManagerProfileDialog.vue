@@ -62,7 +62,7 @@
 <script>
 /**
  * Login Manager profile dialog
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
 * emits this event
 * @event closePolicyDialog
 */

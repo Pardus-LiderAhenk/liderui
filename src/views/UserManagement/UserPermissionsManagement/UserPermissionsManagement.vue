@@ -188,7 +188,7 @@
 <script>
 /**
  * User Permission management as sudoUser, sudoCommand and sudoHost
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 

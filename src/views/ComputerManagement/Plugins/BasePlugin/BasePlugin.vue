@@ -149,7 +149,7 @@
 /**
  * base-plugin component for liderahenk plugins. This component is child for other plugins. Use to base-plugin for send task to agent. 
  * @author Tuncay Çolak <tuncay.colak@tubitak.gov.tr>
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import { mapGetters } from "vuex"
@@ -181,7 +181,7 @@ export default {
     },
     pluginUrl: {
       type: String,
-      default: "https://www.liderahenk.org/",
+      default: "https://www.liderahenk.org.tr/",
       description: "url for plugin docs"
     },
     popoverWidth: {
@@ -417,14 +417,14 @@ export default {
 
       let responseMessage = response.result.responseMessage;
       if (response.commandClsId === this.pluginTask.commandId && this.getUser.uid === response.recipient) {
-        if (response.result.responseCode === "TASK_PROCESSED") {
+        if (response.result.responseCode === "TASK_PROCESSED" && this.selectedNodeType == "computer") {
           this.$toast.add({
             severity:'success', 
             detail: responseMessage, 
             summary: toastSummary, 
             life: toastLife
           });
-        } else if (response.result.responseCode === "TASK_ERROR") {
+        } else if (response.result.responseCode === "TASK_ERROR" && this.selectedNodeType == "computer") {
           this.$toast.add({
             severity:'error', 
             detail: responseMessage, 

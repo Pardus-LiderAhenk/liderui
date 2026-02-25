@@ -211,7 +211,7 @@
 <script>
 /**
  * System Monitoring(Conky) Template definition page. The conky template added, updated or deleted
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  *
  */
 

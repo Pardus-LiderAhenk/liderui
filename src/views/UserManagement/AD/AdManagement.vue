@@ -139,7 +139,7 @@
 <script>
 /**
  * AD management main page. User, group, ou and container operations are applied at this page,
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import { mapActions } from "vuex"
@@ -158,7 +158,7 @@ import DeleteNodeDialog from './Dialogs/DeleteNodeDialog.vue';
 import UserSynchronizationDialog from './Dialogs/UserSynchronizationDialog.vue'
 import GroupSynchronizationDialog from './Dialogs/GroupSynchronizationDialog.vue'
 import { adManagementService } from '../../../services/UserManagement/AD/AdManagement.js'
-
+import {roleManagement} from "../../../services/Roles/RoleManagement"
 
 export default {
 
@@ -257,7 +257,14 @@ export default {
             this.setSelectedLiderNode(node);
         },
 
+        isExistPrivilege(role){
+            return roleManagement.isExistRole(role)
+        },
+
         async configurations(){
+            if (!this.isExistPrivilege('ROLE_AD_SYNC')){
+                return;
+            }
             const{ response,error } =  await adManagementService.configuration();
             if(error){
             this.$toast.add({

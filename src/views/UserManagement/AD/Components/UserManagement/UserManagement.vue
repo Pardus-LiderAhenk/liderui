@@ -24,7 +24,7 @@
 <script>
 /**
  * This page is user operations. This page contain tabs as GeneralInformations, PasswordChange, SessionHistory and UserGroups
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import GeneralInformations from './Tabs/GeneralInformations.vue';

@@ -35,6 +35,8 @@ import RemoteAccessScreem from '@/views/ComputerManagement/Plugins/Task/RemoteAc
 import ForgotPassword from '@/views/Login/ForgotPassword.vue';
 import ResetPassword from '@/views/Login/ResetPassword.vue';
 
+import {roleManagement} from "@/services/Roles/RoleManagement"
+
 const routes = [
     {
         path:'/remote-access',
@@ -60,6 +62,7 @@ const routes = [
                 components: { default: ComputerManagementTab },
                 meta: {
                     requiresAuth: true,
+                    roles: ['ROLE_COMPUTERS']
                 }
             },
             {
@@ -68,6 +71,7 @@ const routes = [
                 components: { default: UserManagementTab },
                 meta: {
                     requiresAuth: true,
+                    roles: ['ROLE_USERS']
                 }
             },
             {
@@ -76,6 +80,7 @@ const routes = [
                 components: { default: AgentReport },
                 meta: {
                     requiresAuth: true,
+                    roles: ['ROLE_AGENT_INFO']
                 }
             },
             {
@@ -84,6 +89,7 @@ const routes = [
                 components: { default: TaskReport },
                 meta: {
                     requiresAuth: true,
+                    roles: ['ROLE_EXECUTED_TASK']
                 }
             },
             {
@@ -92,6 +98,7 @@ const routes = [
                 components: { default: LogReport },
                 meta: {
                     requiresAuth: true,
+                    roles: ['ROLE_OPERATION_LOG']
                 }
             },
             {
@@ -100,6 +107,7 @@ const routes = [
                 components: { default: ScheduledTaskReport },
                 meta: {
                     requiresAuth: true,
+                    roles: ['ROLE_SCHEDULE_TASK_REPORT']
                 }
             },
             {
@@ -108,6 +116,7 @@ const routes = [
                 components: { default: SessionReport },
                 meta: {
                     requiresAuth: true,
+                    roles: ['ROLE_USER_SESSION_REPORT']
                 }
             },
             {
@@ -115,7 +124,8 @@ const routes = [
                 name: 'ServerSettings',
                 components: {default: ServerSettings},
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    roles: ['ROLE_SERVER_SETTINGS']
                 }
             },
             {
@@ -123,7 +133,8 @@ const routes = [
                 name: 'SystemMonitoringDefinitions',
                 components: {default: SystemMonitoringDefinitions},
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    roles: ['ROLE_CONKY_DEFINITION']
                 }
             },
             {
@@ -131,7 +142,8 @@ const routes = [
                 name: 'ScriptDefinitions',
                 components: {default: ScriptDefinitions},
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    roles: ['ROLE_SCRIPT_DEFINITION']
                 }
             },
             {
@@ -139,7 +151,8 @@ const routes = [
                 name: 'RegistrationTemplates',
                 components: {default: RegistrationTemplates},
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    roles:['ROLE_REGISTRATION_TEMPLATE']
                 }
             },
             {
@@ -147,7 +160,8 @@ const routes = [
                 name: 'ConsoleUserSettings',
                 components: {default: ConsoleUserSettings},
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    roles: ['ROLE_CONSOLE_ACCESS_SETTINGS']
                 }
             },
             {
@@ -155,7 +169,8 @@ const routes = [
                 name: 'ServerInformations',
                 components: {default: ServerInformations},
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    roles: ['ROLE_SERVER_INFORMATION']
                 }
             },
             {
@@ -163,7 +178,8 @@ const routes = [
                 name: 'User Profile',
                 components: {default: UserProfile},
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    roles: ['ROLE_USER']
                 }
             },
             {
@@ -171,7 +187,8 @@ const routes = [
                 name: 'Policy Management',
                 components: {default: PolicyManagement},
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    roles:['ROLE_POLICY']
                 }
             }
            
@@ -211,24 +228,31 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    //history: createWebHashHistory(),
+    // history: createWebHistory(),
+    history: createWebHashHistory(),
     linkActiveClass: "active",
     routes,
 });
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if ( localStorage.getItem('auth_token') !== undefined 
-                && localStorage.getItem('auth_token') !== null 
-                && localStorage.getItem('auth_token') !== '') {
-            next()
-            return
-        } 
-        next('/login')
-    }  else {
-        next()
+        if (localStorage.getItem('auth_token') !== undefined 
+            && localStorage.getItem('auth_token') !== null 
+            && localStorage.getItem('auth_token') !== '') {
+            const requiredRole = to.meta.roles;
+            if (requiredRole && requiredRole.length > 0) {
+                const hasRole = roleManagement.hasAnyRole(requiredRole);
+                if (!hasRole) {
+                    return next('/dashboard');
+                }
+            }
+            next();
+        } else {
+            next('/login');
+        }
+    } else {
+        next();
     }
-})
+});
 
 export default router;

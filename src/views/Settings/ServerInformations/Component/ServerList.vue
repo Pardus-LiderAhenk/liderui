@@ -128,7 +128,7 @@
 
 <script>
 /**
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * emits these events
  * @event closeServerDialog
  * @event deleteServer

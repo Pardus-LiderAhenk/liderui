@@ -40,6 +40,12 @@
                     :class="selectedPluginTab == 'package-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedPluginTab('package-management')"
                     :label="$t('computer.plugins.button.package')"
+                    v-if="isExistPrivilege([
+                        'ROLE_PACKAGE_REPO',
+                        'ROLE_PACKAGE_LIST',
+                        'ROLE_PACKAGE_INSTALL_REMOVE',
+                        'ROLE_PACKAGE_CONTROL'
+                    ])"
                 >
                 </Button>
                 <Button
@@ -47,6 +53,9 @@
                     :class="selectedPluginTab == 'service-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedPluginTab('service-management')"
                     :label="$t('computer.plugins.button.service')"
+                    v-if="isExistPrivilege([
+                        'ROLE_SERVICE_MANAGEMENT',
+                    ])"
                 >
                 </Button>
                 <Button
@@ -54,6 +63,9 @@
                     :class="selectedPluginTab == 'script-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedPluginTab('script-management')"
                     :label="$t('computer.plugins.button.script')"
+                    v-if="isExistPrivilege([
+                        'ROLE_SCRIPT',
+                    ])"
                 >
                 </Button>
                 <Button
@@ -61,6 +73,11 @@
                     :class="selectedPluginTab == 'security-management' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedPluginTab('security-management')"
                     :label="$t('computer.plugins.button.security')"
+                    v-if="isExistPrivilege([
+                        'ROLE_NETWORK_MANAGER',
+                        'ROLE_DEVICE_MANAGEMENT',
+                        'ROLE_USB_RULE'
+                    ])"
                 >
                 </Button>
                 <Button
@@ -68,6 +85,9 @@
                     :class="selectedPluginTab == 'remote-access' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedPluginTab('remote-access')"
                     :label="$t('computer.plugins.button.remote_access')"
+                    v-if="isExistPrivilege([
+                        'ROLE_REMOTE_ACCESS',
+                    ])"
                 >
                 </Button>
                 <Button
@@ -75,6 +95,9 @@
                     :class="selectedPluginTab == 'task-history' ? 'p-button-raised p-button-sm p-mr-2 p-mb-2':'p-button-text p-button-sm p-mr-2 p-mb-2'"
                     @click="setSelectedPluginTab('task-history')"
                     :label="$t('computer.plugins.button.history')"
+                    v-if="isExistPrivilege([
+                        'ROLE_TASK_HISTORY',
+                    ])"
                 >
                 </Button>
         </div>
@@ -108,6 +131,7 @@ import { mapActions, mapGetters } from "vuex";
 import Dashboardbox from "@/components/Dashboardbox/Dashboardbox.vue";
 import { computerManagementService } from '../../services/ComputerManagement/ComputerManagement.js';
 import { profileService } from '../../services/Profile/ProfileService';
+import { roleManagement } from "../../services/Roles/RoleManagement.js"
 
 export default {
     components: {
@@ -171,6 +195,10 @@ export default {
     methods: {
         ...mapActions(["setSelectedLiderNode"]),
         
+        isExistPrivilege(roles) {
+            return roleManagement.hasAnyRole(roles)
+        },  
+
         setSelectedPluginTab(tab) {
             this.selectedPluginTab = tab;
         },

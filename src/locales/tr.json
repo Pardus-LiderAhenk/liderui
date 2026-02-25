@@ -41,7 +41,16 @@
         "reset_password_inline_message_warn": "Liderahenk MYS' ye giriş yapabilmeniz için parolanızı sıfırlamalısınız",
         "reset_password_inline_message_error": "Parolanız sıfırlanırken hata oluştu",
         "reset_password_inline_message_success": "Parolanız başarıyla sıfırlandı",
-        "login_message": "Şimdi giriş yapabilisiniz"
+        "login_message": "Şimdi giriş yapabilisiniz",
+        "login_email_error": "Kullanıcının e-posta adresi eksik",
+        "login_in_progress": "Giriş yapılıyor, lütfen bekleyiniz.",
+        "otp_check_header": "Tek Kullanımlık Şifre Kontrolü",
+        "otp_prompt": "Tek Kullanımlık Şifrenizi Giriniz",
+        "otp_info": "Tek kullanımlık şifreniz sistemde kayıtlı mail adresinize gönderilmiştir!",
+        "otp_error": "Şifre doğrulama hatası!",
+        "otp_expiry": "OTP Geçerlilik Süresi(dk)",
+        "confirm": "Onayla",
+        "otp_expired": "OTP süresi doldu. Tekrar giriş yapın."
     },
     "menu": {
         "dashboard": "Ön Panel",
@@ -922,6 +931,7 @@
             "directory_server_settings":{
                 "directory_server_settings":"Dizin Sunucusu Ayarları",
                 "ldap_server_informations":"LDAP Sunucusu Bilgileri",
+                "open_ldap_settings":"OpenLDAP Ayarları",
                 "ldap_server_address":"LDAP Sunucu Adresi",
                 "port":"Port",
                 "domain_name":"Domain Adı",
@@ -933,13 +943,13 @@
                 "agent_group_folder":"İstemci Grubu Klasörü",
                 "user_group_folder":"Kullanıcı Grubu Klasörü",
                 "authority_group_folder":"Yetki Grubu Klasörü(Sudo)",
-                "active_directory_settings":"Aktif Dizin ayarları (Hibrit yapılı kurulumlar için bu ayarlar yapılmalıdır)",
+                "active_directory_settings":"Aktif Dizin Ayarları",
                 "active_directory_address":"AD Sunucu Adresi",
                 "active_directory_port":"AD Port",
                 "active_directory_domain_name":"AD Domain Adı",
                 "active_directory_admin_username":"AD Yönetici Kullanıcı Adı",
                 "active_directory_admin_dn":"AD Yönetici Kullanıcı Tam DN",
-                "active_directory_admin_password":"AD Yönetici Şifresi",
+                "active_directory_admin_password":"AD Yönetici Kulanıcı Parolası",
                 "active_directory_hostname":"AD Host Adresi",
                 "ssl_certification":"SSL Kullan",
                 "tls_certification":"TLS Kullan",
@@ -953,8 +963,20 @@
                 "directory_server_notify":"Dizin sunucu ayarları güncellenecek ve giriş sayfasına yönlendirileceksiniz, emin misiniz?",
                 "directory_server_settings_successfully_update":"Dizin sunucu ayarları başarıyla güncellendi",
                 "error_417_update_directory_server_settings":"Dizin sunucusu ayarları güncellenirken hata oluştu",
-                "change_password":"Parola Değiştir"
-
+                "password":"Parola",
+                "password_empty":"Lütfen bir parola giriniz",
+                "change_password":"Parola Değiştir",
+                "confirm_password":"Parolayı Onayla",
+                "check_connection":"Bağlantıyı Kontrol Et",
+                "connection_success":"Doğrulama başarılı! Değişiklikleri kayıt edebilirsiniz",
+                "connection_failed":"Doğrulama başarısız, lütfen bilgilerinizi kontrol ediniz",
+                "connection_missing_credentials":"Eksik bilgiler mevcut, lütfen tüm gerekli alanları doldurunuz",
+                "ad_popover":{
+                    "title":"Ayar Hakkında",
+                    "description":"Bu ayar hibrit sistemlerde kullanılır.",
+                    "check_connection":"Gerekli alanları doldurduktan sonra bağlantıyı kontrol edebilirsiniz.",
+                    "save_settings":"Değişiklikleri kaydetmek için tüm alanları doldurduğunuzdan ve bağlantıyı kontrol ettiğinizden emin olunuz."
+                }
             },
             "messaging_server_settings":{
                 "xmpp_server_information":"XMPP Sunucusu Bilgileri",
@@ -1045,8 +1067,10 @@
                 "enabled_machine_status":"Makinelerin Aktif/Pasif olma özelliğini etkinleştir",
                 "machine_status_days":"İstemcilerinizin kaç gün sonra pasif duruma çekmek istediğinizi giriniz",
                 "task_part_client_size":"Görevlerin gönderileceği istemci grubunun sayısını yazınız",
-                "send_task_parts":"Parçalı Görev Gönderme"
-
+                "send_task_parts":"Parçalı Görev Gönderme",
+                "2fa": "İki Aşamalı Doğrulama",
+                "2fa_enable": "İki aşamalı doğrulamayı etkinleştir",
+                "otp_expiry_duration": "OTP'nin geçerlilik süresini giriniz(ms)"
             }
         },
         "registiration_template":{
@@ -1111,6 +1135,7 @@
             "create_script": "Betik Oluştur",
             "update_script": "Betik Güncelle",
             "select": "Seç",
+            "created_by": "Oluşturan Kişi",
             "get_scripts_error_message": "Betikler getirilirken hata oluştu",
             "deleted_script_success_message": "Betik başarı ile silindi",
             "deleted_script_error_message": "Betik silinirken hata oluştu",
@@ -1127,7 +1152,9 @@
             "error_417_get_scripts" : "Betikler getirilirken beklenmedik bir hata oluştu. Hata kodu : 417",
             "error_417_delete_script": "Betik silinirken beklenmedik bir hata oluştu. Hata kodu : 417",
             "error_417_update_script": "Betik güncellenirken beklenmedik bir hata oluştu. Hata kodu : 417",
-            "error_417_saved_script": "Betik kaydedilirken beklenmedik bir hata oluştu. Hata kodu : 417"
+            "error_417_saved_script": "Betik kaydedilirken beklenmedik bir hata oluştu. Hata kodu : 417",
+            "error_403_delete_script": "Bu betiği silme yetkiniz bulunmamaktadır.",
+            "error_403_update_script": "Bu betiği güncelleme yetkiniz bulunmamaktadır."
         },
 
         "system_monitoring_definitions": {

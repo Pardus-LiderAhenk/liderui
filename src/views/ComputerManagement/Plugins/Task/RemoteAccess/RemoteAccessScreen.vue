@@ -6,6 +6,7 @@
     @close-task-dialog="showTaskDialog = false" 
     :pluginTask="task" 
     @task-response="remoteAccessResponse"
+    :executeTaskUrl="executeTaskUrl"
     :executeTask="executeTask">
     <template #pluginTitleButton>
       <div>
@@ -80,7 +81,7 @@ import { taskService } from "../../../../../services/Task/TaskService.js";
 
 Guacamole.Mouse = GuacMouse.mouse;
 
-const httpUrl = `http://${location.host}/tunnel`;
+// const httpUrl = `http://${location.host}/tunnel?authId=`;
 
 export default {
   data() {
@@ -88,7 +89,7 @@ export default {
       title: "Remote Access",
       task: null,
       showTaskDialog: false,
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/remoteAccess/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/remoteAccess/",
       pluginDescription: this.$t("computer.plugins.remote_access.description"),
       pluginTask: null,
       remoteAccessState: false,
@@ -115,6 +116,9 @@ export default {
       selectedIpAddress: null,
       ipAddresses: [],
       retryCount: 0,
+      executeTaskUrl: "/api/lider/task/execute/remote-access",
+      uuid: null
+
     };
   },
   computed: {
@@ -172,50 +176,82 @@ export default {
         data.append("port", this.defaultSshPort);
         data.append("password", this.connectionData.password);
         data.append("username", this.connectionData.username);
-        data.append("lideruser", this.connectionData.lideruser);
+        //data.append("lideruser", this.connectionData.lideruser);
 
       } else if (this.connectionData && this.connectionData.protocol == 'rdp') {
-        this.selectedIpAddress = this.connection_info.host;
-        data.append("protocol", this.connectionData.protocol);
-        data.append("port", this.defaultRdpPort);
-        data.append("password", this.connectionData.password);
-        data.append("username", this.connectionData.username);
-        data.append("lideruser", this.connectionData.lideruser);
-
+          this.selectedIpAddress = this.connection_info.host;
+          data.append("protocol", this.connectionData.protocol);
+          data.append("port", this.defaultRdpPort);
+          data.append("password", this.connectionData.password);
+          data.append("username", this.connectionData.username);
+          //data.append("lideruser", this.connectionData.lideruser);
       } else {
         if (!this.selectedIpAddress) {
           this.status_messages.push({ severity: 'error', content: this.$t("computer.plugins.remote_access.select_ip_address_warning") },);
           return;
         }
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        let selectedProtocol = this.connection_info?.protocol || 'vnc';
+        if (selectedProtocol === 'rdp') {
+          await sleep(2000); 
+        }
+
         this.status_messages.push({ severity: 'success', content: this.$t("computer.plugins.remote_access.connection_request_sent") });
-        data.append("protocol", this.connectionData.protocol);
+        data.append("protocol", selectedProtocol); // from agent message
         data.append("port", this.connection_info.port);
         data.append("password", this.connection_info.password);
-        data.append("username", '');
-        data.append("lideruser", this.connectionData.lideruser);
+        data.append("username", this.connection_info.username);
+        //data.append("lideruser", this.connectionData.lideruser);
       }
 
       let checkhostFormdata = new FormData();
       checkhostFormdata.append('host', this.selectedIpAddress);
       checkhostFormdata.append('port', this.selectedProtocol && this.selectedProtocol == 'ssh' ? this.defaultSshPort : this.connection_info.port);
-      const hostResponse = await axios.post('/checkhost', checkhostFormdata);
+      const hostResponse = await axios.post('/api/guacamole/checkhost', checkhostFormdata);
       this.status_messages.push({ severity: 'success', content: this.$t("computer.plugins.remote_access.client_access") + hostResponse.data },);
       if (this.connectionData.protocol == 'ssh') {
         this.title = this.$t("computer.plugins.remote_access.ssh_connection") + " - " + hostResponse.data;
       }
-      data.append("host", hostResponse.data);
-      const remoteResponse = await axios.post('/sendremote', data)
-      this.connect();
+      data.append("host", this.selectedIpAddress);
+      const remoteResponse = await axios.post('/api/guacamole/sendremote', data)
+      this.uuid = remoteResponse.data;
+      this.connect(remoteResponse.data);
       if (this.permission == "yes") {
         this.status_messages.push({ severity: 'success', content: this.$t("computer.plugins.remote_access.waiting_response") },);
       }
     },
 
-    closeConnection() {
-      this.$store.dispatch('removeConnectionInfo', this.connectionData);
-      this.client.disconnect();
-      this.connected = false;
-      window.close();
+    async closeConnection(event) {
+      const isUnload = event && event.type === 'beforeunload';
+
+      let data = new FormData();
+      data.append("connectionId", this.uuid);
+
+      try {
+        if (isUnload) {
+          const token = localStorage.getItem('auth_token');
+          fetch('/api/guacamole/close-connection', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token },
+            body: data,
+            keepalive: true
+          }).catch(console.error);
+        } else {
+          const remoteResponse = await axios.post('/api/guacamole/close-connection', data);
+        }
+      } catch (e) {
+        console.error("Error closing connection:", e);
+      } finally {
+        if (this.client) {
+          this.client.disconnect();
+        }
+        this.connected = false;
+        this.$store.dispatch('removeConnectionInfo', this.connectionData);
+        
+        if (!isUnload) {
+          window.close();
+        }
+      }
     },
 
     send(cmd) {
@@ -269,11 +305,24 @@ export default {
         this.display.scale(scale);
       }, 100);
     },
-    async connect() {
-      
-      this.connectionState = states.DISCONNECTED;
-      let params = {};
-      this.tunnel = new Guacamole.HTTPTunnel(httpUrl, true, params);
+    async connect(uuid) {
+
+          const token = localStorage.getItem('auth_token'); // Anahtar adını kendi kullandığınızla değiştirin
+
+      // const httpUrl = `${location.protocol}//${location.host}/tunnel?authId=${uuid}`;
+
+      // this.tunnel = new Guacamole.HTTPTunnel(httpUrl, false, null);
+
+       const extraHeaders = {
+        'Authorization': 'Bearer ' + token
+    };
+
+    // 3. Adım: HTTPTunnel'i bu ekstra başlıkla birlikte oluşturun
+    const httpUrl = `${location.protocol}//${location.host}/tunnel?authId=${uuid}`;
+    
+    // 'null' yerine 'extraHeaders' nesnesini verin
+    this.tunnel = new Guacamole.HTTPTunnel(httpUrl, false, extraHeaders);
+
 
       // this.tunnel.states.
       if (this.client) {
@@ -453,6 +502,7 @@ export default {
     }
   },
   async mounted() {
+    window.addEventListener('beforeunload', this.closeConnection);
     if (this.$route.query.protocol == "vnc") {
       await this.getConnectionData();
       const { response, error } = await taskService.pluginTaskList();
@@ -496,6 +546,7 @@ export default {
   },
 
   unmounted() {
+    window.removeEventListener('beforeunload', this.closeConnection);
     this.$store.dispatch('removeConnectionInfo', this.connectionData);
   },
 };

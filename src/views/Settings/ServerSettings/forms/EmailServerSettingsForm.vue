@@ -13,7 +13,7 @@
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="mailUsername">{{$t('settings.server_settings.mail_server_settings.mail_username')}}</label>
-            <InputText id="mailUsername" type="text" v-model="mailUsername" placeholder="lider@liderahenk.org"/>
+            <InputText id="mailUsername" type="text" v-model="mailUsername" placeholder="lider@liderahenk.org.tr"/>
         </div>
         <div class="p-field p-col-12 p-md-4">
             <label for="mailPassword">{{$t('settings.server_settings.mail_server_settings.mail_password')}}</label>
@@ -149,9 +149,6 @@ export default {
                         summary:this.$t("computer.task.toast_summary"), 
                         life: 3000
                     });
-                    setTimeout(() => {
-                        this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
-                    }, 3000)
                 }
             }
             this.showDialog = false;

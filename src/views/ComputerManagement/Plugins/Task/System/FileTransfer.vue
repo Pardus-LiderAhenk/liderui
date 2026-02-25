@@ -111,7 +111,7 @@
 <script>
 /**
  * File Transfer Plugin. You can share file to client. File size should be smaller than 20 MB
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 export default {
@@ -146,7 +146,7 @@ export default {
       writeOther: false,
       executeOther: false,
       pluginDescription: this.$t("computer.plugins.file_transfer.description"),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/fileShare/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/fileShare/",
       };
     },
 

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import strophe from '@/services/strophe.js';
 import router from '../../router';
 import {getLiderWs} from '@/libs/liderws';
 
@@ -10,6 +9,7 @@ const state = {
     selectedNodeType: null,
     status: '',
 	token: localStorage.getItem('token') || '',
+    refreshToken: localStorage.getItem('refresh_token') || '',
     user: {},
 }
 
@@ -32,54 +32,89 @@ const actions = {
     setSelectedNodeType({ commit }, node) {
         commit("setSelectedNodeType", node);
     },
-    logout({ commit },user) {
+    logout({ commit, state }, user = null) {
         return new Promise((resolve, reject) => {
-            axios.post(process.env.VUE_APP_URL + "/api/auth/logout", user).then(
-                (response) => {
-                    if(response){
-                        commit('logout')
-                        localStorage.removeItem('vuex')
-                        localStorage.removeItem('auth_token')
-                        localStorage.removeItem('_secure__ls__metadata')
-                        delete axios.defaults.headers.common['Authorization']
-                        // strophe.getInstance().disconnect();
-                        getLiderWs().disconnect();
-                        router.push('/login')
-                        resolve()
-                    }
-                    else {
-                        reject("Error");
-                    }
-                },
-                (error) => {
+
+            const username = user?.username || state.user?.username || null;
+
+            let logoutUrl = process.env.VUE_APP_URL + "/api/auth/logout";
+            if (username) {
+                logoutUrl += `?username=${encodeURIComponent(username)}`;
+            }
+
+            axios.post(logoutUrl)
+                .then((response) => {
+                    commit('logout')
+                    localStorage.removeItem('vuex')
+                    localStorage.removeItem('auth_token')
+                    localStorage.removeItem('refresh_token')
+                    localStorage.removeItem('_secure__ls__metadata')
+                    delete axios.defaults.headers.common['Authorization']
+                    getLiderWs().disconnect();
+                    router.push('/login')
+                    resolve(response)
+                })
+                .catch((error) => {
+                    // Even if logout request fails, clean up local state
+                    commit('logout')
+                    localStorage.removeItem('vuex')
+                    localStorage.removeItem('auth_token')
+                    localStorage.removeItem('refresh_token')
+                    localStorage.removeItem('_secure__ls__metadata')
+                    delete axios.defaults.headers.common['Authorization']
+                    getLiderWs().disconnect();
+                    router.push('/login')
                     reject(error);
-                }
-            );
+                });
         })
     },
+
+
     login({ commit }, user) {
         return new Promise((resolve, reject) => {
-            axios.post(process.env.VUE_APP_URL + "/api/auth/signin", user).then(
-                (response) => {
+            axios
+                .post(process.env.VUE_APP_URL + '/api/auth/signin', user)
+                .then((response) => {
                     if (response) {
-                        let token = response.data.token;
-                        localStorage.setItem("auth_token", token);
-                        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
-                        axios.post("/api/lider-console/profile", {}).then((userresponse) => {
-                            commit('auth_success', {token:token,user:userresponse.data});
-                            resolve(userresponse);
-                        });
-                        getLiderWs().connect();
+                        if (response.data.isTwoFactorEnabled) {
+                            resolve(response);
+                        } else {
+                            handleAuthResponse(commit, response)
+                            .then(resolve)
+                            .catch(reject);
+                        }
                     } else {
-                        reject("Error");
+                        reject('Error during login');
                     }
-                },
-                (error) => {
+                })
+                .catch((error) => {
                     reject(error);
-                }
-            );
-        })
+                });
+        });
     },
+
+    verifyOTP({ commit }, { loginParams, otpCode }) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(
+                    process.env.VUE_APP_URL + '/api/auth/verify-otp?otp=' + otpCode,
+                    loginParams
+                )
+                .then((response) => {
+                    if (response) {
+                        handleAuthResponse(commit, response)
+                        .then(resolve)
+                        .catch(reject);
+                    } else {
+                        reject('OTP verification failed');
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    },
+
     updateUserLang({commit}, lang) {
         commit('update_user_lang', lang);
     }
@@ -92,9 +127,10 @@ const mutations = {
     auth_request(state) {
         state.status = 'loading'
     },
-    auth_success(state, {token, user}) {
+    auth_success(state, {token, refreshToken, user}) {
         state.status = 'success';
         state.token = token;
+        state.refreshToken = refreshToken;
         state.user = user;
     },
     auth_error(state) {
@@ -103,6 +139,7 @@ const mutations = {
     logout(state) {
         state.status = ''
         state.token = ''
+        state.refreshToken = ''
         state.user = {}
         state.selectedLiderNode = null
         state.selectedComputerGroupNode = null
@@ -114,5 +151,25 @@ const mutations = {
         }
     },
 }
+
+const handleAuthResponse = (commit, response) => {
+    return new Promise((resolve, reject) => {
+        if (response.data.token) {
+            let token = response.data.token;
+            let refreshToken = response.data.refreshToken;
+            localStorage.setItem('auth_token', token);
+            localStorage.setItem('refresh_token', refreshToken);
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+            axios.post('/api/lider-console/profile').then((userresponse) => {
+                commit('auth_success', { token, refreshToken, user: userresponse.data });
+                getLiderWs().connect(userresponse.data.uid);
+                resolve(userresponse);
+            }).catch(reject);
+        } else {
+            reject('Authentication failed');
+        }
+    });
+};
 
 export default { state, getters, actions, mutations }

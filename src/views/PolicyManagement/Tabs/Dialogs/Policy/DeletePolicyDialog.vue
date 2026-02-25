@@ -25,7 +25,7 @@
 <script>
 /**
  * Create user policy dialog
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * emits these events
  * @event closePolicyDialog
  * @event deletePolicy

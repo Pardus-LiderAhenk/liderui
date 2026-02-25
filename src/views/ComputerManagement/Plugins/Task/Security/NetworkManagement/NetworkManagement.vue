@@ -7,6 +7,7 @@
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
       @task-response="networkManagementResponse"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.network_management.header") }}
@@ -87,7 +88,7 @@
  * commandId: GET_NETWORK_INFORMATION, ADD_DNS, ADD_DOMAIN, ADD_NETWORK,
  * commandId: ALLOW_PORT, BLOCK_PORT, CHANGE_HOSTNAME, DELETE_DOMAIN, DELETE_HOST
  * commandId: DELETE_DNS, DELETE_NETWORK, ADD_HOST
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  *
  */
 
@@ -120,12 +121,13 @@ export default {
         task: null,
         showTaskDialog: false,
         pluginDescription: this.$t("computer.plugins.network_management.description"),
-        pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/networkManagement/",
+        pluginUrl:"https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/networkManagement/",
         filters: {},
         dnsMessage: null,
         hostMessage: null,
         networkMessage: null,
-        portMessage: null
+        portMessage: null,
+        executeTaskUrl: "/api/lider/task/execute/network-management",
     };
   },
   

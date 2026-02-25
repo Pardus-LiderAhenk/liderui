@@ -2,7 +2,8 @@
     <base-scheduled v-if="showScheduled"
       @close-scheduled="showScheduled = false" 
       @save-scheduled="updateScheduledTask"
-      :showScheduled="showScheduled">
+      :showScheduled="showScheduled"
+      :scheduleFormOld="scheduleFormOld">
     </base-scheduled>
     <Panel :toggleable="true" class="p-m-3">
       <template #header>
@@ -440,7 +441,7 @@
   
   /**
    * Scheduled task report. Update and cancel scheduled task with this page
-   * @see {@link http://www.liderahenk.org/}
+   * @see {@link http://www.liderahenk.org.tr/}
    */
   
   import {FilterMatchMode} from 'primevue/api';
@@ -474,6 +475,7 @@
           taskSendEndDate:'',
           task:null
         },
+        scheduleFormOld: null,
         filters: {
           'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
         },
@@ -493,6 +495,18 @@
         this.selectedCommand = this.tasks.filter(
           (task) => task.id === taskId
         )[0];
+
+
+
+        console.log(this.selectedCommand.task)
+
+        this.scheduleFormOld = this.selectedCommand.task.cronExpression
+
+        // this.scheduleFormOld.minute = this.selectedCommand.task.cronExpression
+        // this.scheduleFormOld.hour = this.selectedCommand.task.cronExpression
+        // this.scheduleFormOld.dayOfMonth = this.selectedCommand.task.cronExpression
+        // this.scheduleFormOld.month = this.selectedCommand.task.cronExpression
+        // this.scheduleFormOld.dayOfWeek = this.selectedCommand.task.cronExpression
 
       },
 

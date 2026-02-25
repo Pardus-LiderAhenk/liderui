@@ -88,7 +88,7 @@
 <script>
 /**
  * Active policy list for apply to selected user group
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
 */
 
 import {FilterMatchMode} from 'primevue/api';

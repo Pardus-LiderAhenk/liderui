@@ -6,6 +6,7 @@
       :showTaskDialog="showTaskDialog"
       @close-task-dialog="showTaskDialog = false"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.conky.header") }}
@@ -93,7 +94,7 @@
 /**
  * Conky Plugin. Allows to text-based information to be displayed on desktop of users
  * commandId: EXECUTE_CONKY
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  *
  */
 
@@ -116,12 +117,13 @@ export default {
       task: null,
       showTaskDialog: false,
       pluginDescription: this.$t("computer.plugins.conky.description"),
-      pluginUrl:"https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/systemMonitoring/",
+      pluginUrl:"https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/systemMonitoring/",
       conkyMessage: "",
       conkyValidation: false,
       templates: [],
       selectedTemplate: "",
       activeIndex: 0,
+      executeTaskUrl: "api/lider/task/execute/conky"
     };
   },
 

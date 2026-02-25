@@ -67,7 +67,7 @@
 
 /**
  * Add policy exception dialog
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 

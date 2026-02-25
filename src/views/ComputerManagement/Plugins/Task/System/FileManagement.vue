@@ -7,6 +7,7 @@
       @close-task-dialog="showTaskDialog = false;"
       @task-response="fileManagementResponse"
       :pluginTask="task"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{$t("computer.plugins.file_management.header")}}
@@ -70,7 +71,7 @@
 /**
  * File Managament Plugin. Get file content of entered file path and create new file with file content
  * commandId: GET_FILE_CONTENT, WRITE_TO_FILE
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -93,7 +94,7 @@ export default {
       lockRootUser: true,
       pathValidation: false,
       pluginDescription: this.$t('computer.plugins.file_management.description'),
-      pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/fileManagement/",
+      pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/fileManagement/",
       selectedFilePath: '',
       filePath: '',
       fileContent: '',
@@ -105,6 +106,7 @@ export default {
         {label: 'sshd_config', value: '/etc/ssh/sshd_config'}
       ],
       selectedTextType: {label: 'text', value: 'textValue'},
+      executeTaskUrl: "/api/lider/task/execute/file-management",
     }
   },
 

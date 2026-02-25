@@ -1,7 +1,7 @@
 /**
  * Return generated password by password length parameter.
  * @author Tuncay Çolak <tuncay.colak@tubitak.gov.tr>
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 export const GeneratePassword = {

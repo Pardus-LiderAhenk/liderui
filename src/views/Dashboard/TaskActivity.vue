@@ -28,7 +28,7 @@
 <script>
 /**
  * executed tasks by logged in user with total count for each
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 export default {
     props: {

@@ -38,7 +38,7 @@
 <script>
 /**
  * Add client to existing group in LDAP
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 
 import { computerGroupsManagementService } from "../../../../services/ComputerManagement/ComputerGroupManagement.js";

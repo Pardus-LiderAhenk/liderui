@@ -120,7 +120,8 @@ export default {
                             life: 3000
                         });
                         setTimeout(() => {
-                            this.$store.dispatch("logout").then(() => this.$router.push("/login")).catch(err => console.log(err))
+                            const currentUser = this.$store.getters.getUser;
+                            this.$store.dispatch("logout", { username: currentUser?.uid }).then(() => this.$router.push("/login")).catch(err => console.log(err))
                         }, 3000);
                     });
                 } else {

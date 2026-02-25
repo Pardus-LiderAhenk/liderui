@@ -130,7 +130,7 @@
 <script>
 /**
  * User of group policy management. This page contain update, enable or disable, create new policy and delete policy dialogs.
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  */
 import {FilterMatchMode} from 'primevue/api';
 import AddPolicyDialog from './Dialogs/Policy/AddPolicyDialog.vue'

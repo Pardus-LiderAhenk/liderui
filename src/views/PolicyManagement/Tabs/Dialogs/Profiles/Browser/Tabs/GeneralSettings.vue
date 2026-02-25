@@ -22,7 +22,7 @@
                     </div>
                     <div class="p-field p-col-12 p-md-6">
                         <label>{{$t('policy_management.profile.browser.homepage')}}</label>
-                        <InputText class="p-inputtext-sm" type="text" v-model="homePage" placeholder="https://liderahenk.org/"/>
+                        <InputText class="p-inputtext-sm" type="text" v-model="homePage" placeholder="https://liderahenk.org.tr/"/>
                     </div>
                 </div>
             </div>

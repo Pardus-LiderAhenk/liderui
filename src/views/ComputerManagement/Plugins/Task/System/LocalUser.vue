@@ -217,6 +217,7 @@
       @task-response="localUserManagementResponse"
       :pluginTask="task"
       :executeTask="executeTask"
+      :executeTaskUrl="executeTaskUrl"
     >
       <template #pluginTitle>
         {{ $t("computer.plugins.local_user.header") }}
@@ -287,7 +288,7 @@
 /**
  * local user management plugin. Get user list, edit and delete on the client. Add user to client
  * commandId: GET_USERS, ADD_USER, EDIT_USER, DELETE_USER
- * @see {@link http://www.liderahenk.org/}
+ * @see {@link http://www.liderahenk.org.tr/}
  * 
  */
 
@@ -317,7 +318,7 @@ export default {
         selectedUser: null,
         showUserDialog: false,
         pluginDescription: this.$t('computer.plugins.local_user.description'),
-        pluginUrl: "https://docs.liderahenk.org/lider3.0/computerManagement/computerManagement/localUserManagement/",
+        pluginUrl: "https://docs.liderahenk.org.tr/lider3.0/computerManagement/computerManagement/localUserManagement/",
         userForm: {
           username: '',
           home: '',
@@ -330,6 +331,7 @@ export default {
         status: false,
         showPasswordForm: false,
         groups: [],
+        executeTaskUrl: "/api/lider/task/execute/local-user",
       }
     },
 
